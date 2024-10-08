@@ -1,279 +1,76 @@
-import React, { Suspense } from "react";
+import React from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
-// Dynamic import of the Tree and TreeNode components
-const Tree = dynamic(
-  () => import("react-organizational-chart").then((mod) => mod.Tree),
-  { ssr: false }
-);
-const TreeNode = dynamic(
-  () => import("react-organizational-chart").then((mod) => mod.TreeNode),
-  { ssr: false }
-);
+const MediaGrid: React.FC = () => {
+  const items = [
+    {
+      label: "Shiksha Kumbh 2023",
+      children: [
+        { label: "Digital Media", link: "/shikshakumbh2023digitalmedia" },
+        { label: "Print Media", link: "/printmediashikshakumbh2023" },
+      ],
+    },
+    {
+      label: "Shiksha Kumbh 2024",
+      children: [
+        { label: "Digital Media", link: "/shikshakumbh2024digitalmedia" },
+        { label: "Print Media", link: "/printmediashikshakumbh2024" },
+      ],
+    },
+    {
+      label: "Shiksha MahaKumbh 2023",
+      children: [
+        { label: "Digital Media", link: "/shikshamahakumbh2023digitalmedia" },
+        { label: "Print Media", link: "/printmediashikshamahakumbh2023" },
+      ],
+    },
+    {
+      label: "Shiksha MahaKumbh 2024",
+      children: [
+        { label: "Digital Media", link: "/commingsoon" },
+        { label: "Print Media", link: "/printmediashikshamahakumbh2024" },
+      ],
+    },
+  ];
 
-const MediaTree: React.FC = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Tree
-        lineWidth={"2px"}
-        lineColor={"black"}
-        lineBorderRadius={"10px"}
-        label={
-          <div className="text-center p-2 ">
-            <Link href="" passHref>
-              <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                RASE
-                <br />
-                CONFERENCES
-                <br />
-                MEDIA
-              </button>
-            </Link>
+    <div className="p-4">
+      <h1 className="text-center font-bold text-2xl mb-4">
+        <Link href="/" passHref>
+          <button className="bg-transparent text-primary tracking-widest hover:text-blue-600">
+            RASE CONFERENCES MEDIA
+          </button>
+        </Link>
+      </h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {items.map((item, index) => (
+          <div key={index} className="border p-4 rounded-lg bg-white shadow-md">
+            <h2 className="text-center font-bold text-lg mb-2 text-gray-800">
+              {item.label}
+            </h2>
+            {item.children && (
+              <div className="flex flex-col gap-2">
+                {item.children.map((child, childIndex) => (
+                  child.link ? (
+                    <Link key={childIndex} href={child.link} passHref>
+                      <div className="text-center">
+                        <button className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700">
+                          {child.label}
+                        </button>
+                      </div>
+                    </Link>
+                  ) : (
+                    <span key={childIndex}>{child.label}</span>
+                  )
+                ))}
+              </div>
+            )}
           </div>
-        }
-      >
-        <TreeNode
-          label={
-            <div className="text-center p-2">
-              <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                Shiksha
-                <br />
-                Kumbh
-              </button>
-            </div>
-          }
-        >
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sk23.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    2023
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-           <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/shikshakumbh2023digitalmedia" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Digital<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-          </TreeNode>
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/printmediashikshakumbh2023" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Print<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          ></TreeNode> 
-          </TreeNode>
-
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sk24.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    2024
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-            <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/shikshakumbh2024digitalmedia" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Digital<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-          </TreeNode>
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/printmediashikshakumbh2024" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Print<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          ></TreeNode>
-          </TreeNode>
-          {/* <TreeNode
-            label={
-              <div className="text-center p-2">
-                <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                  <a href="/commingsoon">2025</a>
-                </button>
-              </div>
-            }
-          >
-            <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sk23.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Digital<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-          </TreeNode>
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sk23.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Print<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          ></TreeNode>
-          </TreeNode> */}
-
-          {/* Add more TreeNodes as needed */}
-        </TreeNode>
-
-        <TreeNode
-          label={
-            <div className="text-center p-2">
-              <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                Shiksha
-                <br />
-                MahaKumbh
-              </button>
-            </div>
-          }
-        >
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sm23.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    2023
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-            <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/shikshamahakumbh2023digitalmedia" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Digital<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-          </TreeNode>
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/printmediashikshamahakumbh2023" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Print<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          ></TreeNode>
-          </TreeNode>
-
-          {/* Add more TreeNodes as needed */}
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sm24.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    2024
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-            <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/commingsoon" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Digital<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-          </TreeNode>
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="/printmediashikshamahakumbh2024" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Print<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          ></TreeNode>
-          </TreeNode>
-          {/* <TreeNode
-            label={
-              <div className="text-center p-2">
-                <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                  <a href="/commingsoon">2025</a>
-                </button>
-              </div>
-            }
-          >
-            <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sk23.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Digital<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          >
-          </TreeNode>
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <Link href="https://sk23.rase.co.in" passHref>
-                  <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2">
-                    Print<br /> Media
-                  </button>
-                </Link>
-              </div>
-            }
-          ></TreeNode>
-          </TreeNode> */}
-
-          {/* Add more TreeNodes as needed */}
-        </TreeNode>
-      </Tree>
-    </Suspense>
+        ))}
+      </div>
+    </div>
   );
 };
 
-export default MediaTree;
+export default MediaGrid;
