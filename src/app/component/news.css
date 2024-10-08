@@ -1,0 +1,38 @@
+*{
+    color: black;
+}
+.newcntt{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+    margin: 0 20px 40px 20px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+.newlstcnt{
+    width: 100%;
+    background-color: #fff8ad;
+    height: 200px;
+    padding: 0 20px 0 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 17px;
+    box-shadow: 2px 2px 5px gray;
+}
+
+@media only screen and (max-width:496px){
+    .newcntt{
+    margin: 0 ;
+    margin: 20px 0 0 0;
+
+
+    }
+    .newlstcnt{
+        padding: 0;
+        width: 90%;
+    }
+
+}
