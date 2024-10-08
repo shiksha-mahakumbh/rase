@@ -1,183 +1,76 @@
 "use client";
 import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 
-// Dynamic import of the Tree and TreeNode components
-const Tree = dynamic(
-  () => import("react-organizational-chart").then((mod) => mod.Tree),
-  { ssr: false }
-);
-const TreeNode = dynamic(
-  () => import("react-organizational-chart").then((mod) => mod.TreeNode),
-  { ssr: false }
-);
-
-// Define the props interface to accept onSelect
 interface CommitteeTreeProps {
   onSelect: (committee: string) => void;
 }
 
-const CommitteeTree: React.FC<CommitteeTreeProps> = ({ onSelect }) => {
+const CommitteeGrid: React.FC<CommitteeTreeProps> = ({ onSelect }) => {
+  const committees = [
+    {
+      title: "Shiksha Kumbh 2023",
+      link: "https://sk23.rase.co.in",
+      committeeLink: "/committee/shikshakumbh2023",
+      onCommitteeSelect: "Shiksha Kumbh 2023 Committee",
+    },
+    {
+      title: "Shiksha Kumbh 2024",
+      link: "https://sk24.rase.co.in",
+      committeeLink: "/committee/shikshakumbh2024",
+      onCommitteeSelect: "Shiksha Kumbh 2024 Committee",
+    },
+    {
+      title: "Shiksha MahaKumbh 2023",
+      link: "https://sm23.rase.co.in",
+      committeeLink: "/committee/shikshamahakumbh2023",
+      onCommitteeSelect: "Shiksha MahaKumbh 2023 Committee",
+    },
+    {
+      title: "Shiksha MahaKumbh 2024",
+      link: "https://sm24.rase.co.in",
+      committeeLink: "/committee/shikshamahakumbh2024",
+      onCommitteeSelect: "Shiksha MahaKumbh 2024 Committee",
+    },
+  ];
+
   return (
     <div style={{ overflow: "auto", maxHeight: "80vh", padding: "10px" }}>
       <Suspense fallback={<div>Loading...</div>}>
-        <Tree
-          lineWidth={"2px"}
-          lineColor={"black"}
-          lineBorderRadius={"10px"}
-          label={
-            <div className="text-center p-2">
-              <Link href="">
-                <button className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2 text-xs sm:text-sm md:text-base">
-                  RASE
-                  <br />
-                  CONFERENCES
-                  <br />
-                  COMMITTEES
-                </button>
-              </Link>
+        <h1 className="text-center font-bold text-2xl mb-4">
+          RASE CONFERENCES COMMITTEES
+        </h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {committees.map((committee, index) => (
+            <div
+              key={index}
+              className="border p-4 rounded-lg bg-white shadow-md"
+            >
+              <h2 className="text-center font-bold text-lg mb-2 text-gray-800">
+                {committee.title}
+              </h2>
+              <div className="flex flex-col gap-2">
+                <Link href={committee.link}>
+                  <button className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700">
+                    View {committee.title}
+                  </button>
+                </Link>
+                <Link href={committee.committeeLink}>
+                  <button
+                    className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700"
+                    onClick={() => onSelect(committee.onCommitteeSelect)}
+                  >
+                    Committee
+                  </button>
+                </Link>
+              </div>
             </div>
-          }
-        >
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <button
-                  className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2 text-xs sm:text-sm md:text-base"
-                  onClick={() => onSelect("Shiksha Kumbh")}
-                >
-                  Shiksha
-                  <br />
-                  Kumbh
-                </button>
-              </div>
-            }
-          >
-            <TreeNode
-              label={
-                <div className="text-center p-2">
-                  <Link href="https://sk23.rase.co.in">
-                    <button className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2 text-xs sm:text-sm md:text-base">
-                      2023
-                    </button>
-                  </Link>
-                </div>
-              }
-            >
-              <TreeNode
-                label={
-                  <div className="text-center p-2">
-                    <Link href="/committee/shikshakumbh2023">
-                      <button className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover-border-2 text-xs sm:text-sm md:text-base">
-                        Committee
-                      </button>
-                    </Link>
-                  </div>
-                }
-              />
-            </TreeNode>
-
-            <TreeNode
-              label={
-                <div className="text-center p-2">
-                  <Link href="https://sk24.rase.co.in">
-                    <button className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2 text-xs sm:text-sm md:text-base">
-                      2024
-                    </button>
-                  </Link>
-                </div>
-              }
-            >
-              <TreeNode
-                label={
-                  <div className="text-center p-2">
-                    <Link href="/committee/shikshakumbh2024">
-                      <button
-                        className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2 text-xs sm:text-sm md:text-base"
-                        onClick={() => onSelect("Shiksha Kumbh 2024 Committee")}
-                      >
-                        Committee
-                      </button>
-                    </Link>
-                  </div>
-                }
-              />
-            </TreeNode>
-          </TreeNode>
-
-          <TreeNode
-            label={
-              <div className="text-center p-2">
-                <button
-                  className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover:border-2 text-xs sm:text-sm md:text-base"
-                  onClick={() => onSelect("Shiksha MahaKumbh")}
-                >
-                  Shiksha
-                  <br />
-                  MahaKumbh
-                </button>
-              </div>
-            }
-          >
-            <TreeNode
-              label={
-                <div className="text-center p-2">
-                  <Link href="https://sm23.rase.co.in">
-                    <button className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover-border-2 text-xs sm:text-sm md:text-base">
-                      2023
-                    </button>
-                  </Link>
-                </div>
-              }
-            >
-              <TreeNode
-                label={
-                  <div className="text-center p-2">
-                    <Link href="/committee/shikshamahakumbh2023">
-                      <button
-                        className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover:border-primary hover-border-2 text-xs sm:text-sm md:text-base"
-                        onClick={() => onSelect("Shiksha MahaKumbh 2023 Committee")}
-                      >
-                        Committee
-                      </button>
-                    </Link>
-                  </div>
-                }
-              />
-            </TreeNode>
-
-            <TreeNode
-              label={
-                <div className="text-center p-2">
-                  <Link href="https://sm24.rase.co.in">
-                    <button className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover-border-primary hover-border-2 text-xs sm:text-sm md:text-base">
-                      2024
-                    </button>
-                  </Link>
-                </div>
-              }
-            >
-              <TreeNode
-                label={
-                  <div className="text-center p-2">
-                    <Link href="/committee/shikshamahakumbh2024">
-                      <button
-                        className="bg-primary text-white p-2 rounded-lg tracking-widest hover:bg-gray-200 hover:text-primary hover-border-primary hover-border-2 text-xs sm:text-sm md:text-base"
-                        onClick={() => onSelect("Shiksha MahaKumbh 2024 Committee")}
-                      >
-                        Committee
-                      </button>
-                    </Link>
-                  </div>
-                }
-              />
-            </TreeNode>
-          </TreeNode>
-        </Tree>
+          ))}
+        </div>
       </Suspense>
     </div>
   );
 };
 
-export default CommitteeTree;
+export default CommitteeGrid;
