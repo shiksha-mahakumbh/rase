@@ -51,16 +51,16 @@ const CommitteeGrid: React.FC<CommitteeTreeProps> = ({ onSelect }) => {
       className="flex justify-center items-center"
     >
       <Suspense fallback={<div>Loading...</div>}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto w-full">
           <h1 className="text-center font-bold text-2xl mb-4">
             RASE CONFERENCES COMMITTEES
           </h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 justify-center items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 justify-center items-center">
             {committees.map((committee, index) => (
               <div
                 key={index}
-                className="border p-4 rounded-lg bg-white shadow-md"
+                className="border p-4 rounded-lg bg-white shadow-md transition-transform transform hover:scale-105"
               >
                 <h2 className="text-center font-bold text-lg mb-4 text-gray-800">
                   {committee.title}
@@ -74,14 +74,14 @@ const CommitteeGrid: React.FC<CommitteeTreeProps> = ({ onSelect }) => {
                         {yearData.year}
                       </span>
                       <div className="flex flex-col gap-2">
-                        <Link href={yearData.link}>
-                          <button className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700">
+                        <Link href={yearData.link} passHref>
+                          <button className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700 transition duration-300">
                             View {committee.title} {yearData.year}
                           </button>
                         </Link>
-                        <Link href={yearData.committeeLink}>
+                        <Link href={yearData.committeeLink} passHref>
                           <button
-                            className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700"
+                            className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700 transition duration-300"
                             onClick={() =>
                               onSelect(yearData.onCommitteeSelect)
                             }
