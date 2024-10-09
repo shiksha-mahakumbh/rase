@@ -49,7 +49,7 @@ const MediaGrid: React.FC = () => {
       style={{ overflow: "auto", maxHeight: "80vh", padding: "10px" }}
       className="flex justify-center items-center"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto w-full">
         <h1 className="text-center font-bold text-2xl mb-4">
           <Link href="/" passHref>
             <button className="bg-transparent text-primary tracking-widest hover:text-blue-600">
@@ -58,11 +58,11 @@ const MediaGrid: React.FC = () => {
           </Link>
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 justify-center items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center items-center">
           {items.map((item, index) => (
             <div
               key={index}
-              className="border p-4 rounded-lg bg-white shadow-md"
+              className="border p-4 rounded-lg bg-white shadow-md transition-transform transform hover:scale-105"
             >
               <h2 className="text-center font-bold text-lg mb-4 text-gray-800">
                 {item.label}
@@ -75,11 +75,11 @@ const MediaGrid: React.FC = () => {
                         {yearData.year}
                       </span>
                       <div className="flex flex-col gap-2">
-                        {yearData.children.map((child, childIndex) => (
+                        {yearData.children.map((child, childIndex) =>
                           child.link ? (
                             <Link key={childIndex} href={child.link} passHref>
                               <div className="text-center">
-                                <button className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700">
+                                <button className="bg-blue-600 text-white p-2 rounded-lg tracking-widest hover:bg-blue-700 transition duration-300">
                                   {child.label}
                                 </button>
                               </div>
@@ -87,7 +87,7 @@ const MediaGrid: React.FC = () => {
                           ) : (
                             <span key={childIndex}>{child.label}</span>
                           )
-                        ))}
+                        )}
                       </div>
                     </div>
                   ))}

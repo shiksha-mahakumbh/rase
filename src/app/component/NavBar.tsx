@@ -13,11 +13,7 @@ const NavBar: React.FC = () => {
     { path: "/", title: "Home" },
     { path: "/registration", title: "Registration",
       subMenu: [
-        { path: "/registration/talent", title: "Talent" },
-        { path: "/registration/conclave", title: "Conclave" },
-        { path: "/registration/ngo", title: "NGO" },
-        { path: "/registration/institution", title: "Projects" },
-        { path: "/registration/volunteer", title: "Volunteer" },
+        { path: "/registration/Single_Registration", title: "Registration" },
         { path: "/registration/organization", title: "Organization" },
         { path: "/registration/accomodation", title: "Accomodation" },
       ], },
