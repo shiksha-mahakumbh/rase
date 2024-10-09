@@ -1,0 +1,40 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "next.config.js",
+        "use": "@vercel/next"
+      }
+    ],
+    "env": {
+      "NEXT_PUBLIC_API_URL": "https://your-api-url.com",
+      "NEXT_PUBLIC_TAILWIND_THEME": "custom" 
+    },
+    "static": {
+      "headers": [
+        {
+          "source": "/bg.png",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=31536000, immutable"
+            }
+          ]
+        }
+      ]
+    },
+    "rewrites": [
+      {
+        "source": "/old-path",
+        "destination": "/new-path"
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/old-page",
+        "destination": "/new-page",
+        "statusCode": 301
+      }
+    ]
+  }
+  
