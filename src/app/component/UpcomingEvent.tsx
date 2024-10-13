@@ -15,13 +15,13 @@ const events: Event[] = [
     title: "Indian Education System for Global Development",
     date: "October 4–6, 2024",
     venue: "Indian Institute of Technology Ropar",
-    link: "https://sm24.rase.co.in"
+    link: "upcoming_events/sm24"
   },
   {
     title: "Shiksha Kumbh 2025",
     date: "Will be updated soon",
     venue: "Indian Institute of Technology Jammu",
-    link: "https://sk25.rase.co.in"
+    link: "upcoming_events/sk25"
   },
   {
     title: "Shiksha Mahakumbh 2025",

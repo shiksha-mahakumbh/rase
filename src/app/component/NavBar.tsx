@@ -11,7 +11,7 @@ type Menu = {
 const NavBar: React.FC = () => {
   const menus: Menu[] = [
     { path: "/", title: "Home" },
-    { path: "/registration", title: "Registration",
+    { path: "/", title: "Registration",
       subMenu: [
         { path: "/registration/Single_Registration", title: "Registration" },
         { path: "/registration/organization", title: "Organization" },
@@ -30,7 +30,7 @@ const NavBar: React.FC = () => {
         { path: "/academiccouncil", title: "Academic Council" },
       ],
     },
-    { path: "/", title: "Publication",
+    { path: "https://pub.rase.co.in", title: "Publication",
       subMenu: [
         { path: "/journals", title: "Journals" },
         { path: "/books", title: "Books" },
