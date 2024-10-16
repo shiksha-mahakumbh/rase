@@ -32,13 +32,13 @@ const pastEvents = [
     title: "Role of Academic-driven Startups in Economy",
     date: "December 20, 2023",
     venue: "National Institute of Technology Kurukshetra",
-    link: "past_event/sm23",
+    link: "past_event/sk23",
   },
   {
     title: "Recent Advances in School Education",
     date: "June 09-11, 2023",
     venue: "National Institute of Technology Jalandhar",
-    link: "past_event/sk23",
+    link: "past_event/sm23",
   },
 ];
 

@@ -2,7 +2,7 @@
 import CompanyInfo from "../../component/CompanyInfo";
 import Footer from "../../component/Footer";
 import NavBar from "../../component/NavBar";
-import SM23 from "../../component/SM23";
+import SM23 from "../../component/sm23/SM23";
 
 
 export default function Structure() {
