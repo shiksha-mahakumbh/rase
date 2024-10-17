@@ -15,19 +15,19 @@ const events: Event[] = [
     title: "Indian Education System for Global Development",
     date: "October 4–6, 2024",
     venue: "Indian Institute of Technology Ropar",
-    link: "upcoming_events/sm24"
+    link: "/registration/Single_Registration"
   },
   {
     title: "Shiksha Kumbh 2025",
     date: "Will be updated soon",
     venue: "Indian Institute of Technology Jammu",
-    link: "upcoming_events/sk25"
+    link: "/registration/Single_Registration"
   },
   {
     title: "Shiksha Mahakumbh 2025",
     date: "Will be updated soon",
     venue: "Jawaharlal Nehru University",
-    link: "/commingsoon"
+    link: "/registration/Single_Registration"
   }
 ];
 
@@ -73,7 +73,7 @@ const UpcomingEvent: React.FC<UpcomingEventProps> = ({ events }) => {
                 </td>
                 <td className="w-full sm:w-1/5 px-1 py-2 border text-left text-black">
                   <Link href={event.link} className="text-primary font-bold hover:text-blue-950">
-                    Click here
+                    Click here to register
                   </Link>
                 </td>
               </tr>
