@@ -5,32 +5,22 @@ import "slick-carousel/slick/slick-theme.css";
 
 // Sample event data
 const eventDetails = {
-  title: "Shiksha MahaKumbh 2024",
-  introduction: `"Role of Academic driven Startups in Economy" is to explore and discuss the crucial role that academic-driven startups play in contributing to the economy. This includes examining how educational institutions, particularly technical and technology-focused institutions, can foster a culture of entrepreneurship and innovation, helping students and society benefit from startup ventures.
-
-    The main objectives of the conference include:
-    1. Highlighting the Importance of Academic-driven Startups: Showcasing the impact that startups originating from academic institutions can have on the economy, job creation, and innovation.
-    2. Fostering Collaboration: Encouraging collaboration between educational institutions, government bodies, and industry to create a conducive ecosystem for startups.
-    3. Promoting Skill Development: Discussing the relevance of skill education tailored to meet the demands of the modern economy and how academic-driven startups can facilitate this.
-    4. Exploring Incubation Support: Evaluating the role of incubation centers in nurturing and shaping academic-driven startups.
-    5. Expanding the Reach: Investigating how various educational institutions, including ITIs, schools, NITs, and others, can work together to support and nurture startups.
-    6. Rural Development: Exploring the potential for tech institutions to adopt villages and create a startup-friendly atmosphere in rural areas.
-    7. Cultivating a Startup Culture: Delving into introducing startup culture at the school level to encourage entrepreneurship from an early age.
-    8. Infrastructure Utilization: Discussing how socially grown startups can leverage the infrastructure and resources of educational institutions.`,
+  title: "Spoken English Workshop",
+  introduction: `A dynamic and progressive institution committed to empowering educators, fostering pedagogical innovation, and preparing teachers for excellence in their educational endeavors. VB Institute of Training and Research is conceptualised by Dr Thakur SKR - A Visionary ISRO Scientist and Prominent Social Worker under the guidance of Mr. Vijay Nadda - A Forward Thinking RSS Pracharak and Educationist to develop School Teachers to meet the Challenging Needs of the time. It serves as a guiding light for educators, offering a comprehensive platform that blends advanced teaching methodologies with robust research practices. We are dedicated to shaping teachers who not only impart knowledge effectively but also inspire and guide students towards academic success and holistic development.`,
   venue: {
-    name: "NIT Srinagar",
-    address: "Srinagar, India",
-    date: "30th June 2024",
+    name: "	Gita Niketan, Kurukshetra",
+    address: "Kurukshetra, India",
+    date: "January 25-31, 2024",
     description:
-      "The National Institute of Technology, Srinagar, is a prestigious educational institution located in the northern region of India. Established in 1960, it was one of the eighteen Regional Engineering Colleges sponsored by the Government of India during the 2nd Five-Year Plan. In August 2003, the institute gained the status of a National Institute of Technology with deemed-to-be University status and achieved full academic autonomy.",
+      `Foundation & Aim : Founded on 21st Jan. 1973 by reverend Madhav Sadashiv Rao Golvalkar and run by Vidya Bharti, an all India educational organisation which runs more than 24,000 schools, Gita Niketan Awasiya Vidyalaya aims at providing quality education based on Indian moral values to the students. Besides having made manifold progress since its inception, the school enjoys the reputation of being a prestigious institution in North India.`,
   },
   images: [
-    "/2024K/k1.jpeg", // Ensure these images exist in the public folder
-    "/2024K/k2.jpeg",
-    "/2024K/k3.jpg",
-    "/2024K/k4.jpg", // Ensure these images exist in the public folder
-    "/2024K/k6.jpg",
-    "/2024K/k7.png",
+    "/english_event/k1.jpeg", // Ensure these images exist in the public folder
+    "/english_event/k2.jpeg",
+    "/english_event/k3.jpeg",
+    "/english_event/k4.jpeg", // Ensure these images exist in the public folder
+    "/english_event/k6.jpeg",
+    
   ],
 };
 
@@ -48,9 +38,8 @@ const EventPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen p-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-
+    <div className="bg-gray-50 min-h-screen p-8 flex items-center justify-center">
+      <div className="w-full max-w-2xl"> {/* Set a max width for centering content */}
         {/* Event Title Above the Slider */}
         <h1 className="text-3xl font-bold text-center text-blue-700 mb-4 p-4 border-b-2 border-blue-300">
           {eventDetails.title}
@@ -74,21 +63,23 @@ const EventPage: React.FC = () => {
         {/* Event Venue */}
         <div className="p-6 mb-6">
           <h2 className="text-2xl font-semibold mb-2 text-center text-blue-600">{eventDetails.venue.name}</h2>
-          <p className="text-gray-700 leading-relaxed mb-4 text-center text-lg"> {/* Changed to text-lg */}
-            {eventDetails.venue.description}
-          </p>
-          <p className="text-gray-700 text-center text-lg"> {/* Changed to text-lg */}
+          <div className="overflow-auto max-h-60"> {/* Added overflow-auto for scrolling */}
+            <p className="text-gray-700 leading-relaxed mb-4 text-center text-lg"> {/* Increased font size to text-lg */}
+              {eventDetails.venue.description}
+            </p>
+          </div>
+          <p className="text-gray-700 text-center text-lg"> {/* Increased font size to text-lg */}
             <strong>Address:</strong> {eventDetails.venue.address}
           </p>
-          <p className="text-gray-700 text-center text-lg"> {/* Changed to text-lg */}
+          <p className="text-gray-700 text-center text-lg"> {/* Increased font size to text-lg */}
             <strong>Date:</strong> {eventDetails.venue.date}
           </p>
         </div>
 
         {/* Conference Objective */}
         <div className="bg-white p-6 mb-6">
-          <h2 className="text-2xl text-center font-semibold mb-2 text-blue-600">Conference Objective</h2>
-          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg"> {/* Keep text-lg */}
+          <h2 className="text-2xl text-center font-semibold mb-2 text-blue-600">VB INSTITUTE OF TRAINING & RESEARCH</h2>
+          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg"> {/* Increased font size to text-lg */}
             {eventDetails.introduction}
           </p>
         </div>

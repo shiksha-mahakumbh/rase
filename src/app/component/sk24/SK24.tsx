@@ -6,17 +6,17 @@ import "slick-carousel/slick/slick-theme.css";
 // Sample event data
 const eventDetails = {
   title: "Shiksha Kumbh 2024",
-  introduction: `"Role of Academic driven Startups in Economy" is to explore and discuss the crucial role that academic-driven startups play in contributing to the economy. This includes examining how educational institutions, particularly technical and technology-focused institutions, can foster a culture of entrepreneurship and innovation, helping students and society benefit from startup ventures.
-
-    The main objectives of the conference include:
-    1. Highlighting the Importance of Academic-driven Startups: Showcasing the impact that startups originating from academic institutions can have on the economy, job creation, and innovation.
-    2. Fostering Collaboration: Encouraging collaboration between educational institutions, government bodies, and industry to create a conducive ecosystem for startups.
-    3. Promoting Skill Development: Discussing the relevance of skill education tailored to meet the demands of the modern economy and how academic-driven startups can facilitate this.
-    4. Exploring Incubation Support: Evaluating the role of incubation centers in nurturing and shaping academic-driven startups.
-    5. Expanding the Reach: Investigating how various educational institutions, including ITIs, schools, NITs, and others, can work together to support and nurture startups.
-    6. Rural Development: Exploring the potential for tech institutions to adopt villages and create a startup-friendly atmosphere in rural areas.
-    7. Cultivating a Startup Culture: Delving into introducing startup culture at the school level to encourage entrepreneurship from an early age.
-    8. Infrastructure Utilization: Discussing how socially grown startups can leverage the infrastructure and resources of educational institutions.`,
+  introduction: `"Role of Academic driven Startups in Economy" is to explore and discuss the crucial role that academic-driven startups play in contributing to the economy. This includes examining how educational institutions, particularly technical and technology-focused institutions, can foster a culture of entrepreneurship and innovation, helping students and society benefit from startup ventures.`,
+  objectives: [
+    "Highlighting the Importance of Academic-driven Startups: Showcasing the impact that startups originating from academic institutions can have on the economy, job creation, and innovation.",
+    "Fostering Collaboration: Encouraging collaboration between educational institutions, government bodies, and industry to create a conducive ecosystem for startups.",
+    "Promoting Skill Development: Discussing the relevance of skill education tailored to meet the demands of the modern economy and how academic-driven startups can facilitate this.",
+    "Exploring Incubation Support: Evaluating the role of incubation centers in nurturing and shaping academic-driven startups.",
+    "Expanding the Reach: Investigating how various educational institutions, including ITIs, schools, NITs, and others, can work together to support and nurture startups.",
+    "Rural Development: Exploring the potential for tech institutions to adopt villages and create a startup-friendly atmosphere in rural areas.",
+    "Cultivating a Startup Culture: Delving into introducing startup culture at the school level to encourage entrepreneurship from an early age.",
+    "Infrastructure Utilization: Discussing how socially grown startups can leverage the infrastructure and resources of educational institutions.",
+  ],
   venue: {
     name: "NIT Srinagar",
     address: "Srinagar, India",
@@ -48,11 +48,10 @@ const EventPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen p-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-
-        {/* Event Title Above the Slider */}
-        <h1 className="text-3xl font-bold text-center text-blue-700 mb-4 p-4 border-b-2 border-blue-300">
+    <div className="bg-gray-50 min-h-screen p-8 flex justify-center">
+      <div className="max-w-4xl w-full">
+        {/* Event Title */}
+        <h1 className="text-2xl font-bold text-center text-blue-700 mb-4">
           {eventDetails.title}
         </h1>
 
@@ -64,7 +63,7 @@ const EventPage: React.FC = () => {
                 <img
                   src={image}
                   alt={`Event Slide ${index + 1}`}
-                  className="w-full h-80 object-contain rounded-lg" // Use object-contain for optimal fitting
+                  className="w-full h-80 object-contain rounded-lg"
                 />
               </div>
             ))}
@@ -72,32 +71,43 @@ const EventPage: React.FC = () => {
         </div>
 
         {/* Event Venue */}
-        <div className="p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-center text-blue-600">{eventDetails.venue.name}</h2>
-          <p className="text-gray-700 leading-relaxed mb-4 text-center text-lg"> {/* Changed to text-lg */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold mb-2 text-center text-blue-600">
+            {eventDetails.venue.name}
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4 text-center text-base text-justify">
             {eventDetails.venue.description}
           </p>
-          <p className="text-gray-700 text-center text-lg"> {/* Changed to text-lg */}
+          <p className="text-gray-700 text-center text-base text-justify">
             <strong>Address:</strong> {eventDetails.venue.address}
           </p>
-          <p className="text-gray-700 text-center text-lg"> {/* Changed to text-lg */}
+          <p className="text-gray-700 text-center text-base text-justify">
             <strong>Date:</strong> {eventDetails.venue.date}
           </p>
         </div>
 
         {/* Conference Objective */}
-        <div className="bg-white p-6 mb-6">
-          <h2 className="text-2xl text-center font-semibold mb-2 text-blue-600">Conference Objective</h2>
-          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg"> {/* Keep text-lg */}
+        <div className="mb-6">
+          <h2 className="text-xl text-center font-semibold mb-4 text-blue-600">
+            Conference Objective
+          </h2>
+          <p className="text-gray-700 text-base leading-relaxed text-justify mb-4">
             {eventDetails.introduction}
           </p>
+          <ul className="list-decimal list-inside text-base text-gray-700 leading-relaxed text-justify">
+            {eventDetails.objectives.map((objective, index) => (
+              <li key={index} className="mb-2">
+                {objective}
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Visit Gallery CTA */}
         <div className="text-center mb-6">
           <a
             href="https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ"
-            className="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
+            className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
           >
             Visit Gallery
           </a>
