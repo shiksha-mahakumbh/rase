@@ -9,25 +9,25 @@ const pastEvents = [
     venue: "National Institute of Technology Srinagar",
     link: "past_event/sk24",
   },
-  {
-    title:
-      "Innovation and Entrepreneurship for School Students, Teachers and Atal Tinkering Labs Co-ordinators",
-    date: "May 10, 2024",
-    venue: "CSIO Chandigarh",
-    link: "past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
-  },
-  {
-    title: "Teacher Development Program in Collaboration with NITTTER",
-    date: "March 12-17, 2024",
-    venue: "NITTTER Chandigarh",
-    link: "past_event/Teacher_Development_Program",
-  },
-  {
-    title: "Spoken English Workshop",
-    date: "January 25-31, 2024",
-    venue: "Gita Niketan, Kurukshetra",
-    link: "past_event/Spoken_English_Workshop",
-  },
+  // {
+  //   title:
+  //     "Innovation and Entrepreneurship for School Students, Teachers and Atal Tinkering Labs Co-ordinators",
+  //   date: "May 10, 2024",
+  //   venue: "CSIO Chandigarh",
+  //   link: "past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
+  // },
+  // {
+  //   title: "Teacher Development Program in Collaboration with NITTTER",
+  //   date: "March 12-17, 2024",
+  //   venue: "NITTTER Chandigarh",
+  //   link: "past_event/Teacher_Development_Program",
+  // },
+  // {
+  //   title: "Spoken English Workshop",
+  //   date: "January 25-31, 2024",
+  //   venue: "Gita Niketan, Kurukshetra",
+  //   link: "past_event/Spoken_English_Workshop",
+  // },
   {
     title: "Role of Academic-driven Startups in Economy",
     date: "December 20, 2023",
