@@ -15,7 +15,7 @@ const NavBar: React.FC = () => {
       subMenu: [
         { path: "/registration/Single_Registration", title: "Registration" },
         { path: "/registration/organization", title: "Organization" },
-        { path: "/registration/accomodation", title: "Accomodation" },
+        { path: "/registration/Accomodation", title: "Accomodation" },
       ], },
     {
       path: "/",
