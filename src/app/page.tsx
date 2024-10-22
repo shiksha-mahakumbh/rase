@@ -9,6 +9,7 @@ import Info from "./component/Info";
 import Footer from "./component/Footer";
 import Marquees from "./component/Marquees";
 import Organiger from "./component/organiger";
+import Media_Partners from "./component/Media_Partners";
 import { CustomCard } from "./component/card";
 import Announcement from "./component/Annoucement";
 import UpcomingEvent from "./component/UpcomingEvent";
@@ -147,6 +148,11 @@ const MobileView = () => (
     </div>
     <div className="w-full">
       <TransitionWrapper>
+        <Media_Partners />
+      </TransitionWrapper>
+    </div>
+    <div className="w-full">
+      <TransitionWrapper>
         <Organiger />
       </TransitionWrapper>
     </div>
@@ -175,7 +181,9 @@ const DesktopView = () => (
       <TransitionWrapper>
         <Info />
       </TransitionWrapper>
-
+      <TransitionWrapper>
+        <Media_Partners />
+      </TransitionWrapper>
       <TransitionWrapper>
         <Organiger />
       </TransitionWrapper>
