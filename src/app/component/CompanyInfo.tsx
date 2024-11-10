@@ -20,11 +20,13 @@ const CompanyInfo: React.FC = () => {
         
         
         <h3 className="text-l mb-2 md:text-xl font-semibold text-[#4d1414]">
-          शिक्षा कुंभ/महाकुंभ अभियान
+        शिक्षा महाकुंभ अभियान
+
+
         </h3>
         
         <h3 className="text-l mb-2 md:text-xl  font-bold text-[#4d1414]">
-          Shiksha Kumbh/MahaKumbh Abhiyan
+        Shiksha MahaKumbh Abhiyan
         </h3>
       </div>
       <a href="https://dhe.org.in" target="_blank" rel="noopener noreferrer">
