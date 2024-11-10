@@ -17,11 +17,11 @@ const contactData: ContactInfo = {
   title: "Event Management Cell,",
   organization: "Department of Holistic Education",
   address: "\nPlot No. 1, Sector 71, SAS Nagar (Mohali) – 160071",
-  emails: ["director@dhe.org.in", "shikshamahakumbh23@gmail.com"],
+  emails: ["info@rase.co.in", "shikshamahakumbh23@gmail.com"],
   phones: ["7903431900", "9417050631"],
   websites: [
+    "https://shikshakumbh.com",
     "https://rase.co.in",
-    "https://dhe.org.in",
     "https://pub.rase.co.in",
   ],
 };
