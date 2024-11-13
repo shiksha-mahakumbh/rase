@@ -16,7 +16,7 @@ const items: Item[] = [
   },
   {
     imageUrl: "/new.gif",
-    text: "2nd Edition of Shiksha Mahakumbh is postponed due to unavoidable circumstances. All registrations and papers submitted will be valid in the rescheduled programme. Further the process of registrations and invitations will continue as earlier. Inconvenience caused due to postponement of the programme is deeply regretted. Stay tuned with us at our website and social media handles for more updates.",
+    text: "The date of शिक्षा महाकुंभ 2.0 is finalised and now it’s going to happen on December 14-15, 2024. Register to participate at shikshamahakumbh.com & rase.co.in",
     link: "https://www.youtube.com/watch?v=73I3Knmqun4&ab_channel=ShikshaMahakumbh",
   },
 

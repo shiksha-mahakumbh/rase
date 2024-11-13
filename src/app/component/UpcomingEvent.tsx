@@ -13,8 +13,8 @@ interface Event {
 const events: Event[] = [
   {
     title: "Indian Education System for Global Development",
-    date: "October 4–6, 2024",
-    venue: "Indian Institute of Technology Ropar",
+    date: "Dec 14-15, 2024",
+    venue: "Gita Niketan Awasiya Vidyalaya, Kurukshetra",
     link: "/registration/Single_Registration"
   },
   {
