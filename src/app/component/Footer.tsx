@@ -139,7 +139,7 @@ const Footer: React.FC = () => {
         <div className="bg-[#2a2a2a] flex flex-wrap justify-between items-center text-center border-b-2 border-gray-700 p-2 lg:justify-between">
           <hr />
           <div className=" text-lg items-start mr-auto ml-2 lg:block text-white font-bold justify-center">
-            <span className="text-white">Department of Holistic Education</span>
+            <span className="text-white"></span>
           </div>
           {/* Logos */}
           <div className="flex justify-center flex-wrap">
@@ -502,7 +502,7 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
             >
               
-              2024 Department of Holistic Education. All rights reserved.
+              2024 All rights reserved.
             </a>
           </span>
         </div>

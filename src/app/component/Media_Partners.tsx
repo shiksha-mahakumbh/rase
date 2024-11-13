@@ -11,6 +11,8 @@ const MediaPartners: React.FC = () => {
 
   const mediaPartners: Item[] = [
     { imageUrl: '/2024K/BW.jpg', link: 'https://businessworld.in/' },
+    { imageUrl: '/2024K/dainik.jpg', link: 'https://epaper.dainiksaveratimes.in/' },
+    { imageUrl: '/2024K/utam.png', link: 'https://www.uttamhindu.com/' }
     // { imageUrl: '/media/partner2.png', link: 'https://example.com' },
     // { imageUrl: '/media/partner3.png', link: 'https://example.com' },
     // { imageUrl: '/media/partner4.png', link: 'https://example.com' },
