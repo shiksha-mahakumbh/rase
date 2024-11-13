@@ -13,16 +13,16 @@ interface ContactInfo {
 }
 
 const contactData: ContactInfo = {
-  name: "Shiksha Kumbh / MahaKumbh Administrative Office",
+  name: "Shiksha Mahakumbh Abhiyan Administrative Office",
   title: "Event Management Cell,",
   organization: "Department of Holistic Education",
   address: "\nPlot No. 1, Sector 71, SAS Nagar (Mohali) – 160071",
-  emails: ["info@rase.co.in", "shikshamahakumbh23@gmail.com"],
-  phones: ["7903431900", "9417050631"],
+  emails: ["info@shikshamahakumbh.com", "shikshamahakumbh23@gmail.com"],
+  phones: ["7903431900", "9463231250"],
   websites: [
-    "https://shikshakumbh.com",
+    "https://shikshamahakumbh.com",
     "https://rase.co.in",
-    "https://pub.rase.co.in",
+    
   ],
 };
 
