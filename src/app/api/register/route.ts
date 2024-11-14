@@ -13,6 +13,7 @@ const pool = mysql.createPool({
 // Define the handler
 export async function POST(req: Request) {
   const body = await req.json(); // Get the JSON body
+
   const {
     name,
     type,
@@ -34,13 +35,28 @@ export async function POST(req: Request) {
     event_type,
     address,
     views,
+    // Organizer-specific fields
+    organizerName,
+    organizerPhone,
+    organizerDesignation,
+    organizerInstitution,
+    organizerDuty,
+    organizerEmail,
+    organizerAccommodation,
+    state,
+    stateCode,
   } = body;
 
   try {
     // Insert the form data into the database
     const [result] = await pool.query<ResultSetHeader>(
-      `INSERT INTO registrations (name, type, website, cont, role, email, contactNumber, feeReceipt, vb, feeAmount, category, description, services, registrationNumber, contribution, designation, institutionName, event_type, address, views)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO registrations (
+        name, type, website, cont, role, email, contactNumber, feeReceipt, vb, feeAmount,
+        category, description, services, registrationNumber, contribution, designation,
+        institutionName, event_type, address, views, organizerName, organizerPhone,
+        organizerDesignation, organizerInstitution, organizerDuty, organizerEmail,
+        organizerAccommodation, state, stateCode
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         name,
         type,
@@ -62,12 +78,28 @@ export async function POST(req: Request) {
         event_type,
         address,
         views,
+        organizerName,
+        organizerPhone,
+        organizerDesignation,
+        organizerInstitution,
+        organizerDuty,
+        organizerEmail,
+        organizerAccommodation,
+        state,
+        stateCode,
       ]
     );
 
-    return NextResponse.json({ message: 'Registration successful!', id: result.insertId }, { status: 201 });
+    // Send a success response back to the client
+    return NextResponse.json(
+      { message: 'Registration successful!', id: result.insertId },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Database error:', error);
-    return NextResponse.json({ message: 'Internal server error.' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal server error.' },
+      { status: 500 }
+    );
   }
 }

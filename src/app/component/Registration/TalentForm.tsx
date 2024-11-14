@@ -20,6 +20,20 @@ const TalentForm = ({ formData, handleInputChange, handleImageChange, imageUrl }
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
+          Institution Name:
+          <input
+            type="text"
+            name="institutionName"
+            value={formData.institutionName}
+            onChange={handleInputChange}
+            required
+            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+          />
+        </label>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">
           Category:
           <input
             type="text"
