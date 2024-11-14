@@ -79,7 +79,7 @@ const ShikshaMahaKumbh2024 = () => {
       <div className="container mx-auto p-4">
         <h1 className="text-3xl text-center font-bold mb-8">Shiksha Maha Kumbh 2024</h1>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold">National Advisory Committee</h2>
+          <h2 className="text-2xl font-semibold">Conference Director</h2>
           <ul>
             {data. ConferenceDirector.map((member) => (
               <li key={member.id} className="flex justify-between p-1">
@@ -90,7 +90,7 @@ const ShikshaMahaKumbh2024 = () => {
           </ul>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold">National Advisory Committee</h2>
+          <h2 className="text-2xl font-semibold">Conference Secretaries</h2>
           <ul>
             {data. ConferenceSecretaries.map((member) => (
               <li key={member.id} className="flex justify-between p-1">
@@ -101,7 +101,7 @@ const ShikshaMahaKumbh2024 = () => {
           </ul>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold">National Advisory Committee</h2>
+          <h2 className="text-2xl font-semibold">Conference Joint Secretaries</h2>
           <ul>
             {data. ConferenceJointSecretaries.map((member) => (
               <li key={member.id} className="flex justify-between p-1">
