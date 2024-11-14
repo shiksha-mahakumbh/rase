@@ -16,7 +16,7 @@ const items: Item[] = [
   },
   {
     imageUrl: "/new.gif",
-    text: "The date of शिक्षा महाकुंभ 2.0 is finalised and now it’s going to happen on December 14-15, 2024. Register to participate at shikshamahakumbh.com & rase.co.in",
+    text: "The date of शिक्षा महाकुंभ 2.0 is finalised and now it’s going to happen on December 16-17, 2024. Register to participate at shikshamahakumbh.com & rase.co.in",
     link: "https://www.youtube.com/watch?v=73I3Knmqun4&ab_channel=ShikshaMahakumbh",
   },
 

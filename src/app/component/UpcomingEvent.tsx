@@ -13,8 +13,8 @@ interface Event {
 const events: Event[] = [
   {
     title: "Indian Education System for Global Development",
-    date: "Dec 14-15, 2024",
-    venue: "Gita Niketan Awasiya Vidyalaya, Kurukshetra",
+    date: "Dec 16-17, 2024",
+    venue: "Kurukshetra University, Thanesar,Kurukshetra, Haryana",
     link: "/registration/Single_Registration"
   },
   {
