@@ -90,7 +90,7 @@ export default function RootLayout({
         {/* Modal Component */}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <div className="text-white p-2 rounded-lg flex justify-center text-center text-base md:text-xl font-semibold bg-primary">
-            The date of शिक्षा महाकुंभ 2.0 is finalised and now it’s going to happen on December 14-15, 2024. Register to participate at shikshamahakumbh.com & rase.co.in
+            The date of शिक्षा महाकुंभ 2.0 is finalised and now it’s going to happen on December 16-17, 2024. Register to participate at shikshamahakumbh.com & rase.co.in
           </div>
         </Modal>
 

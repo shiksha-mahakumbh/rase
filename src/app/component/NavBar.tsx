@@ -15,7 +15,7 @@ const NavBar: React.FC = () => {
       subMenu: [
         { path: "/registration/Single_Registration", title: "Registration" },
         { path: "/registration/organization", title: "Organization" },
-        { path: "/registration/Accomodation", title: "Accomodation" },
+        { path: "https://ac.shikshamahakumbh.com/", title: "Accomodation" },
       ], },
     {
       path: "/",
@@ -30,7 +30,7 @@ const NavBar: React.FC = () => {
         { path: "/academiccouncil", title: "Academic Council" },
       ],
     },
-    { path: "https://pub.rase.co.in", title: "Publication",
+    { path: "https://pub.dhe.org.in", title: "Publication",
       subMenu: [
         { path: "/journals", title: "Journals" },
         { path: "/books", title: "Books" },
@@ -55,7 +55,7 @@ const NavBar: React.FC = () => {
 
     { path: "/media", title: "Media" },
     { path: "/committeepage", title: "Committee" },
-    { path: "https://ac.rase.co.in/", title: "Accommodation" },
+    { path: "/2024K/SM24 Brochure.pdf", title: "Brochure" },
     { path: "/merchandise", title: "Merchandise" },
     { path: "/ContactUs", title: "Contact Us" },
     { path: "/feedback", title: "Feedback" },
