@@ -9,103 +9,103 @@ import Commites from "../component/AcademicCouncil"
 const LocalAdvisoryCommitee = [
     {
       "name": "Prof. Praveen Kumar",
-      "affiliation": "IACS, Kolkata",
+      "designation": "IACS, Kolkata",
       "contact": "6290260756",
       "sNo": "1"
     },
     {
       "name": "Dr. Pooja D.",
-      "affiliation": "CSIR-CSIO, Chandigarh",
+      "designation": "CSIR-CSIO, Chandigarh",
       "contact": "7837907516",
       "sNo": "2"
     },
     {
       "name": "Ms. Shiksha Sharma",
-      "affiliation": "Vidya Bharti",
+      "designation": "Vidya Bharti",
       "contact": "98788 90303",
       "sNo": "3"
     },
     {
       "name": "Dr. Praveen Sharma",
-      "affiliation": "Central University Jammu",
+      "designation": "Central University Jammu",
       "contact": "9988625485",
       "sNo": "4"
     },
     {
       "name": "Dr. Vijay Sharma",
-      "affiliation": "NIT Srinagar",
+      "designation": "NIT Srinagar",
       "contact": "6005495506",
       "sNo": "5"
     },
     {
       "name": "Dr. Neelesh Kumar",
-      "affiliation": "CSIR-CSIO, Chandigarh",
+      "designation": "CSIR-CSIO, Chandigarh",
       "contact": "9478515278",
       "sNo": "6"
     },
     {
       "name": "Dr. Krishna Pandey",
-      "affiliation": "UIET",
+      "designation": "UIET",
       "contact": "74190 89987",
       "sNo": "7"
     },
     {
       "name": "Dr. Samayveer Singh",
-      "affiliation": "NIT Jalandhar",
+      "designation": "NIT Jalandhar",
       "contact": "99537 41966",
       "sNo": "8"
     },
     {
       "name": "Dr. Karan Veer",
-      "affiliation": "NIT Jalandhar",
+      "designation": "NIT Jalandhar",
       "contact": "94180 03227",
       "sNo": "9"
     },
     {
       "name": "Dr. Kiran",
-      "affiliation": "NIT Jalandhar",
+      "designation": "NIT Jalandhar",
       "contact": "93403 94248",
       "sNo": "10"
     },
     {
       "name": "Dr. Neeraj Gupta",
-      "affiliation": "NIT Srinagar",
+      "designation": "NIT Srinagar",
       "contact": "89580 54648",
       "sNo": "11"
     },
     {
       "name": "Dr. Jitender Gujar",
-      "affiliation": "NIT Srinagar",
+      "designation": "NIT Srinagar",
       "contact": "89897 16185",
       "sNo": "12"
     },
     {
       "name": "Dr. Ankit Tyagi",
-      "affiliation": "LLRUVAS",
+      "designation": "LLRUVAS",
       "contact": "9466747047",
       "sNo": "13"
     },
     {
       "name": "Prof. Kaushal",
-      "affiliation": "JNU",
+      "designation": "JNU",
       "contact": "7903431900",
       "sNo": "14"
     },
     {
       "name": "Dr. Manoj Kumar Teotia",
-      "affiliation": "CRRID Chandigarh",
+      "designation": "CRRID Chandigarh",
       "contact": "82838 25534",
       "sNo": "15"
     },
     {
       "name": "Dr. Jitesh Pandey",
-      "affiliation": "Punjab Local Bodies",
+      "designation": "Punjab Local Bodies",
       "contact": "8360990494",
       "sNo": "16"
     },
     {
       "name": "Dr. Vipin Jain",
-      "affiliation": "CBLU, Bhiwani",
+      "designation": "CBLU, Bhiwani",
       "contact": "9828117678",
       "sNo": "17"
     }
