@@ -16,7 +16,12 @@ const ShikshaMahaKumbh2024 = () => {
         { id: 8, name: "Dr. Pooja D.", designation: "CSIR-CSIO, Chandigarh" },
         { id: 9, name: "Dr. Praveen Kumar", designation: "IACS, Kolkata" },
         { id: 10, name: "Dr. Jitesh Kumar Pandey", designation: "PMIDC, DLG, Punjab" },
-        { id: 11, name: "Mr. Manoj Singhal", designation: "Scientific Advisor, DHE" },
+        { id: 11, name: "Mr. Manoj Kumar Teotia", designation: "CRRID, Chandigarh" },
+        { id: 12, name: "Mr. Pankaj Kumar", designation: " HCS, CEO, KBD Kurukshetra" },
+        { id: 13, name: "Prof. Kartar Singh Dhiman ", designation: "VC, SKAU Kurukshetra" },
+        { id: 14, name: "Prof. Somnath Sachdeva", designation: "VC, KU" },
+        { id: 15, name: "Mr. Sanjay Chowdhary", designation: "Vidya Bharti Hayana" },
+        { id: 16, name: "Prof. Deepti Dharman", designation: "VC, CBLU, Bhiwani" },
       ],
     
       OrganizingCommittee: [
@@ -33,12 +38,13 @@ const ShikshaMahaKumbh2024 = () => {
         { id: 11, name: "Dr. Anshul", designation: "Delhi University" },
         { id: 12, name: "Dr. Nitya Sharma", designation: "IKGPTU" },
         { id: 13, name: "Dr. Neelum", designation: "LPU" },
-        { id: 14, name: "Mr. Saurabh Sharma", designation: "IKGPTU" },
         { id: 15, name: "Prof. Anish Sachdeva", designation: "NIT Jalandhar" },
         { id: 16, name: "Dr. Praveen Sharma", designation: "CU, Jammu" },
-        { id: 17, name: "Dr. Ravi Prakash", designation: "CBLU, Haryana" },
-        { id: 18, name: "Dr. Shamsher Singh", designation: "AB College Pathankot" },
-        { id: 19, name: "Dr. Ankit", designation: "LLRUVAS, Hisar, Haryana" },
+        { id: 18, name: "Dr. Pooja Mahajan", designation: "Arya Mahila College Dinanagar" },
+        { id: 20, name: "Dr. Vikash Garg", designation: "S.L.I.E.T. Longowal" },
+        { id: 21, name: "Dr. Gaurav", designation: "IIT Delhi" },
+        { id: 22, name: "Dr. Ashwini Rana", designation: " NIT Hamirpur" },
+        { id: 23, name: "Dr. Ankit", designation: "LLRUVAS, Hisar, Haryana" },
       ],
     
       ConferenceDirector: [
