@@ -47,7 +47,7 @@ const GridComponent: React.FC = () => {
                   </div>
                   <div className="text-center">
                     <p className="font-semibold">Campaign Photos:</p>
-                    <Link href="https://drive.google.com/drive/folders/1T5HOcgbHQs6MNouIiWb0i4DGkrRd23vY" passHref>
+                    <Link href="https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
                       </button>
@@ -55,7 +55,7 @@ const GridComponent: React.FC = () => {
                   </div>
                   <div className="text-center">
                     <p className="font-semibold">Day 1 Photos:</p>
-                    <Link href="https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ" passHref>
+                    <Link href="https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
                       </button>
