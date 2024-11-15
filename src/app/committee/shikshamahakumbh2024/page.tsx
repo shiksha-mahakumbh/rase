@@ -84,6 +84,7 @@ const ShikshaMahaKumbh2024 = () => {
             {data. ConferenceDirector.map((member) => (
               <li key={member.id} className="flex justify-between p-1">
                 <span>{member.name}</span>
+                
                 <span>{member.designation}</span>
               </li>
             ))}
