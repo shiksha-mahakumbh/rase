@@ -18,7 +18,7 @@ const contactData: ContactInfo = {
   organization: "Department of Holistic Education",
   address: "\nPlot No. 1, Sector 71, SAS Nagar (Mohali) – 160071",
   emails: ["info@shikshamahakumbh.com", "shikshamahakumbh23@gmail.com"],
-  phones: ["7903431900", "9463231250"],
+  phones: ["7903431900", "9463231250","172 408 7787"],
   websites: [
     "https://shikshamahakumbh.com",
     "https://rase.co.in",
