@@ -33,7 +33,7 @@ const NavBar: React.FC = () => {
     { path: "https://pub.dhe.org.in", title: "Publication",
       subMenu: [
         { path: "/journals", title: "Journals" },
-        { path: "/books", title: "Books" },
+        { path: "/pub.dhe.org.in", title: "Books" },
         { path: "/proceedings", title: "Proceedings" },
         
       ],
@@ -55,7 +55,7 @@ const NavBar: React.FC = () => {
 
     { path: "/media", title: "Media" },
     { path: "/committeepage", title: "Committee" },
-    { path: "/2024K/SM24 Brochure.pdf", title: "Brochure" },
+    { path: "/2024K/SM24Brochure.pdf", title: "Brochure" },
     { path: "/merchandise", title: "Merchandise" },
     { path: "/ContactUs", title: "Contact Us" },
     { path: "/feedback", title: "Feedback" },
