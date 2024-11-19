@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from "react";
 import {
   List,
@@ -14,6 +15,11 @@ import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import { useRouter } from "next/navigation";
+
+
+
+
+
 
 type Event = {
   id: string;
@@ -234,7 +240,7 @@ const EventsComponent: React.FC = () => {
         <span className="text-lg p-2 flex text-center font-semibold justify-center border-b border-gray-300 items-center">
           <img src="new.gif" alt="" />&nbsp;
           <a
-            href="https://sm24.rase.co.in/Sponsors"
+            href="/donate"
             className="text-base text-blue-600 hover:text-primary"
           >
             Click Here to Sponsor

@@ -43,7 +43,7 @@ const Announcement = () => {
           <h2 className="mb-4 text-l font-semibold">Register to Participate in Shiksha Mahakumbh 2024</h2>
           <button 
             className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
-            onClick={() => window.location.href = 'https://sm24.rase.co.in/register'}>
+            onClick={() => window.location.href = '/registration/Single_Registration'}>
             Click Here
           </button>
         </div>
@@ -52,7 +52,7 @@ const Announcement = () => {
           <h2 className="mb-4 text-xl font-semibold">Call for Papers</h2>
           <button 
             className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
-            onClick={() => window.location.href = 'https://sm24.rase.co.in/PaperSubmission'}>
+            onClick={() => window.location.href = '/registration/Single_Registration'}>
             Click Here
           </button>
         </div>

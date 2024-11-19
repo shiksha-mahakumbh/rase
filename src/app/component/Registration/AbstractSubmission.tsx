@@ -119,10 +119,10 @@ const AbstractSubmission = () => {
     }
   };
   return (
-    <div className="bg-white mb-5">
-      <div className="shadow-md rounded-md md:w-1/3 mx-auto pt-8 bg-white text-black">
+    <div className="bg-white mb-5 ">
+      <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black ">
         <h1 className="text-primary text-center text-xl ">
-          Abstract Submission Form
+         Paper Submission Form
         </h1>
         <form onSubmit={handleSubmit} className="bg-white p-4">
           <div className="mb-4">
