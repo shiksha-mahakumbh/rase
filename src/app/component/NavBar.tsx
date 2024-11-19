@@ -11,12 +11,13 @@ type Menu = {
 const NavBar: React.FC = () => {
   const menus: Menu[] = [
     { path: "/", title: "Home" },
-    { path: "/", title: "Registration",
-      subMenu: [
-        { path: "/registration/Single_Registration", title: "Registration" },
-        { path: "/registration/organization", title: "Organization" },
-        { path: "https://ac.shikshamahakumbh.com/", title: "Accomodation" },
-      ], },
+    { path: "/registration/Single_Registration", title: "Registration",
+      // subMenu: [
+      //   { path: "/registration/Single_Registration", title: "Registration" },
+      //   { path: "/registration/organization", title: "Organization" },
+      //   { path: "https://ac.shikshamahakumbh.com/", title: "Accomodation" },
+      // ],
+     },
     {
       path: "/",
       title: "About Us",
@@ -55,7 +56,13 @@ const NavBar: React.FC = () => {
 
     { path: "/media", title: "Media" },
     { path: "/committeepage", title: "Committee" },
-    { path: "/2024K/SM24Brochure.pdf", title: "Brochure" },
+    // { path: "/2024K/SM24Brochure.pdf", title: "Brochure" },
+    { path: "/", title: "Brochure",
+      subMenu: [
+            { path: "/2024K/SM24 Brochure.pdf", title: "Conference" },
+            { path: "/2024K/Shiksha Mahakumbh-sponsorship.pdf", title: "Sponsor" }
+      ],
+  },
     { path: "/merchandise", title: "Merchandise" },
     { path: "/ContactUs", title: "Contact Us" },
     { path: "/feedback", title: "Feedback" },

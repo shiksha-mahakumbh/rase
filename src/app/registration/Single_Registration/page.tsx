@@ -4,6 +4,7 @@ import CompanyInfo from "../../component/CompanyInfo";
 import NavBar from "../../component/NavBar";
 import Footer from "../../component/Footer";
 
+
 import Single_Registration  from '../../component/Registration/Single_Registration'
 const ImageUploader: React.FC = () => {
   
