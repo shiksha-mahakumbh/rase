@@ -103,7 +103,9 @@ const TalentForm = ({ formData, handleInputChange, handleImageChange, imageUrl }
       {imageUrl && (
         <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />
       )}
+      
     </>
+    
   );
 };
 
