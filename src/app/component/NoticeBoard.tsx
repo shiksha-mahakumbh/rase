@@ -240,7 +240,7 @@ const EventsComponent: React.FC = () => {
         <span className="text-lg p-2 flex text-center font-semibold justify-center border-b border-gray-300 items-center">
           <img src="new.gif" alt="" />&nbsp;
           <a
-            href="/donate"
+            href=""
             className="text-base text-blue-600 hover:text-primary"
           >
             Click Here to Sponsor
