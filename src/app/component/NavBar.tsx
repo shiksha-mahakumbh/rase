@@ -27,8 +27,11 @@ const NavBar: React.FC = () => {
         { path: "/shikshamahakumbh", title: "Shiksha MahaKumbh" },
         { path: "/abhiyanphotoframe.pdf", title: "Abhiyan in Photo Frames" },
         { path: "/commingsoon", title: "Governing Council" },
-        { path: "/commingsoon", title: "Advisory Council" },
-        { path: "/academiccouncil", title: "Academic Council" },
+        { path: "/commingsoon", title: " शैक्षिक विभाग - Shaikshik Vibha" },
+        { path: "/commingsoon", title: "वित्त विभाग - Vitt Vibhag" },
+        { path: "/commingsoon", title: "प्रचार विभाग - Prachar Vibhag" },
+        { path: "/commingsoon", title: "संपर्क विभाग - Sampark Vibhag" },
+
       ],
     },
     { path: "https://pub.dhe.org.in", title: "Publication",

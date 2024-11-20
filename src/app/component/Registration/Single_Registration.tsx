@@ -189,7 +189,7 @@ const RegistrationPage = () => {
             />
           )}
 
-          <button
+          {/* <button
             type="submit"
             className={`w-full py-3 rounded-lg text-white font-semibold transition-all ${
               loading ? "bg-gray-400" : "bg-indigo-500 hover:bg-indigo-600"
@@ -202,9 +202,10 @@ const RegistrationPage = () => {
                 <span>Submitting...</span>
               </div>
             ) : (
-              "Submit"
-            )}
-          </button>
+              Submit
+            )
+            }
+          </button> */}
         </form>
         
         <Toaster />
