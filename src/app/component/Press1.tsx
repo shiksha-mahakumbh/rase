@@ -1,30 +1,24 @@
 import React from 'react';
 
-// Define the types
-interface Paper {
-  // id: string;
+type Paper = {
   title: string;
-  // authors: string[]; // Always an array of authors
   contact: string | string[];
-  // abstract: string;
   keywords: string[];
-}
+};
 
-interface Section {
+type Section = {
   title: string;
-  content?: (string | React.JSX.Element)[];
-  // sessionChairs?: string[];
-  // papers?: Paper[];
-}
+  content?: (string | React.JSX.Element)[]; // Allow both string and JSX elements
+  sessionChairs?: string[];
+  papers?: Paper[];
+};
 
-interface Data {
-//   chapter: string;
+type Data = {
   title: string;
-//   pageStart: number;
   sections: Section[];
-}
+};
 
-// Define the Proceeding3 component
+// Define the Press1 component
 const Press1: React.FC<{ data: Data }> = ({ data }) => {
   if (!data) {
     return <div>Error: No data available</div>;
@@ -34,8 +28,6 @@ const Press1: React.FC<{ data: Data }> = ({ data }) => {
     <div className="proceeding-container p-6 bg-gray-100 rounded-lg shadow-lg">
       <h1 className="text-4xl font-bold text-center mb-8">Baton Ceremony</h1>
       <h2 className="text-3xl font-semibold text-gray-800 mb-4">{data.title}</h2>
-      {/* <h3 className="text-2xl font-medium text-gray-700 mb-2">Chapter: {data.chapter}</h3> */}
-      {/* <h4 className="text-xl text-gray-600 mb-6">Page Start: {data.pageStart}</h4> */}
 
       {data.sections.map((section, index) => (
         <div key={index} className="section mb-12 p-4 bg-white rounded-lg shadow-md">
@@ -52,35 +44,30 @@ const Press1: React.FC<{ data: Data }> = ({ data }) => {
             </div>
           )}
 
-          {/* {section.sessionChairs && section.sessionChairs.length > 0 && ( */}
+          {section.sessionChairs && section.sessionChairs.length > 0 && (
             <div className="session-chairs mb-4">
-              {/* <h4 className="text-xl font-semibold text-gray-700">Session Chairs:</h4> */}
+              <h4 className="text-xl font-semibold text-gray-700">Session Chairs:</h4>
               <ul className="list-disc ml-5 text-gray-600">
-                {/* {section.sessionChairs.map((chair, idx) => (
+                {section.sessionChairs.map((chair, idx) => (
                   <li key={idx} className="mb-2">{chair}</li>
-                ))} */}
+                ))}
               </ul>
             </div>
-          {/* ) */}
-          {/* } */}
+          )}
 
-          {/* {section.papers && section.papers.length > 0 && ( */}
-            {/* <div className="papers mt-6">
+          {section.papers && section.papers.length > 0 && (
+            <div className="papers mt-6">
               <h4 className="text-xl font-semibold text-gray-700 mb-4">Papers:</h4>
               <ul className="space-y-6">
-                {section.papers.map((paper) => (
-                  <li  className="p-4 bg-gray-50 rounded-lg shadow-sm">
-                    <h5 className="text-lg font-bold text-purple-600">Paper ID: {paper.id}</h5>
+                {section.papers.map((paper, idx) => (
+                  <li key={idx} className="p-4 bg-gray-50 rounded-lg shadow-sm">
                     <h6 className="text-lg font-semibold text-gray-800 mt-2">Title: {paper.title}</h6>
-                    <p className="text-gray-700 mt-1">Authors: {paper.authors ? paper.authors.join(', ') : 'No authors listed'}</p>
-                    <p className="text-gray-700 mt-1">Contact: {typeof paper.contact === 'string' ? paper.contact : (paper.contact ? paper.contact.join(', ') : 'No contact listed')}</p>
-                    <p className="text-gray-700 mt-1">Abstract: {paper.abstract}</p>
                     <p className="text-gray-700 mt-1">Keywords: {paper.keywords ? paper.keywords.join(', ') : 'No keywords listed'}</p>
                   </li>
                 ))}
               </ul>
-            </div> */}
-          {/* )} */}
+            </div>
+          )}
         </div>
       ))}
     </div>
