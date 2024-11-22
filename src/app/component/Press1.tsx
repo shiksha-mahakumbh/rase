@@ -2,19 +2,19 @@ import React from 'react';
 
 // Define the types
 interface Paper {
-  id: string;
+  // id: string;
   title: string;
-  authors: string[]; // Always an array of authors
+  // authors: string[]; // Always an array of authors
   contact: string | string[];
-  abstract: string;
+  // abstract: string;
   keywords: string[];
 }
 
 interface Section {
   title: string;
-  content?: string[];
-  sessionChairs?: string[];
-  papers?: Paper[];
+  content?: (string | React.JSX.Element)[];
+  // sessionChairs?: string[];
+  // papers?: Paper[];
 }
 
 interface Data {
@@ -52,23 +52,24 @@ const Press1: React.FC<{ data: Data }> = ({ data }) => {
             </div>
           )}
 
-          {section.sessionChairs && section.sessionChairs.length > 0 && (
+          {/* {section.sessionChairs && section.sessionChairs.length > 0 && ( */}
             <div className="session-chairs mb-4">
-              <h4 className="text-xl font-semibold text-gray-700">Session Chairs:</h4>
+              {/* <h4 className="text-xl font-semibold text-gray-700">Session Chairs:</h4> */}
               <ul className="list-disc ml-5 text-gray-600">
-                {section.sessionChairs.map((chair, idx) => (
+                {/* {section.sessionChairs.map((chair, idx) => (
                   <li key={idx} className="mb-2">{chair}</li>
-                ))}
+                ))} */}
               </ul>
             </div>
-          )}
+          {/* ) */}
+          {/* } */}
 
-          {section.papers && section.papers.length > 0 && (
-            <div className="papers mt-6">
+          {/* {section.papers && section.papers.length > 0 && ( */}
+            {/* <div className="papers mt-6">
               <h4 className="text-xl font-semibold text-gray-700 mb-4">Papers:</h4>
               <ul className="space-y-6">
                 {section.papers.map((paper) => (
-                  <li key={paper.id} className="p-4 bg-gray-50 rounded-lg shadow-sm">
+                  <li  className="p-4 bg-gray-50 rounded-lg shadow-sm">
                     <h5 className="text-lg font-bold text-purple-600">Paper ID: {paper.id}</h5>
                     <h6 className="text-lg font-semibold text-gray-800 mt-2">Title: {paper.title}</h6>
                     <p className="text-gray-700 mt-1">Authors: {paper.authors ? paper.authors.join(', ') : 'No authors listed'}</p>
@@ -78,8 +79,8 @@ const Press1: React.FC<{ data: Data }> = ({ data }) => {
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
+            </div> */}
+          {/* )} */}
         </div>
       ))}
     </div>
