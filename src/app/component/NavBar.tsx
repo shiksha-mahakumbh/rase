@@ -67,6 +67,10 @@ const NavBar: React.FC = () => {
       ],
   },
     { path: "/merchandise", title: "Merchandise" },
+    { path: "/Press_Release", title: "Press Release" },
+
+
+
     { path: "/ContactUs", title: "Contact Us" },
     { path: "/feedback", title: "Feedback" },
   ];
