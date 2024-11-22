@@ -55,13 +55,13 @@ const data = {
       content: [
         "Shri Krishna Pandey, Co-convener, DHE, Haryana, announced that Shiksha Mahakumbh 2.0 will host a series of academic and cultural activities on December 16-17, 2024, at Kurukshetra University. These include:",
 
-        <b key="upcoming-1">Vice-Chancellors and Directors' Conclave</b>,
-        "Scientists' Conclave",
-        "YouTubers' Conclave",
-        "Principals' Conclave",
+        <b key="upcoming-1">Vice-Chancellors and Directors Conclave</b>,
+        "Scientists Conclave",
+        "YouTubers Conclave",
+        "Principals Conclave",
         "Media Conclave",
 
-        <b key="upcoming-2">Entrepreneurs/Administrative Officers' Conclave</b>,
+        <b key="upcoming-2">Entrepreneurs/Administrative Officers Conclave</b>,
 
         "Student Leadership Workshops",
         "Project & Exhibition Displays",
@@ -70,7 +70,7 @@ const data = {
     },
 
     {
-      title: "Invitations :-",
+      title: "Invitations:-",
       content: [
         "Honorable member of the Finance Committee of Shiksha Mahakumbh, Shri Sanjay Chaudhary, along with Prof. Sunil Dhingra, Director, UIET, Kurukshetra University, extended an open invitation to all educators, students, and organizations to actively participate in the upcoming sessions of Shiksha Mahakumbh 2.0.",
       ]
