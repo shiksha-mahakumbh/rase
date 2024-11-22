@@ -5,6 +5,13 @@ import Footer from "../component/Footer";
 import NavBar from "../component/NavBar";
 import Press1 from "../component/Press1";
 
+
+
+const shareUrl = encodeURIComponent("https://www.rase.co.in/Press1"); // Replace with your actual page URL
+const shareText = encodeURIComponent(
+  "Check out this amazing event details for Shiksha Mahakumbh 2.0!"
+);
+
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "1",
@@ -169,20 +176,54 @@ const data = {
 export default function Home() {
   return (
     <div className="bg-white">
-      <CompanyInfo />
-      <NavBar />
-      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0">
-        <div className="w-full sm:w-1/5">
-          {/* Left sidebar or additional content */}
-        </div>
-        <div className="w-full sm:w-3/5">
-          <Press1 data={data} />
-        </div>
-        <div className="w-full sm:w-1/5">
-          {/* Right sidebar or additional content */}
+    <CompanyInfo />
+    <NavBar />
+    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 pb-6">
+
+      <div className="w-full sm:w-1/5">
+        {/* Left sidebar or additional content */}
+      </div>
+      <div className="w-full sm:w-3/5">
+        <Press1 data={data} />
+        {/* Social Media Sharing Section */}
+        <div className="mt-6 flex justify-center space-x-4">
+          <a
+            href={`https://wa.me/?text=${shareText}%20${shareUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            WhatsApp
+          </a>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Facebook
+          </a>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 bg-blue-400 text-white rounded hover:bg-blue-500"
+          >
+           Twitter
+          </a>
+          <a
+            href={`mailto:?subject=Shiksha Mahakumbh 2.0&body=${shareText}%20${shareUrl}`}
+            className="p-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+             Email
+          </a>
         </div>
       </div>
-      <Footer />
+      <div className="w-full sm:w-1/5">
+        {/* Right sidebar or additional content */}
+      </div>
     </div>
-  );
+    <Footer />
+  </div>
+);
 }
