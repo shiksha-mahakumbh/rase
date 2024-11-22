@@ -9,7 +9,7 @@ import Press1 from "../component/Press1";
 
 const shareUrl = encodeURIComponent("https://www.rase.co.in/Press1"); // Replace with your actual page URL
 const shareText = encodeURIComponent(
-  "Check out this amazing event details for Shiksha Mahakumbh 2.0!"
+  "A Grand Start to Shiksha Mahakumbh 2.0! Witness the Baton Ceremony's success & join us Dec 16-17 for an educational revolution at Kurukshetra University!"
 );
 
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
