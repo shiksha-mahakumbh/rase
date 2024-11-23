@@ -1,9 +1,29 @@
 import { ChangeEvent } from "react";
 import { FormData, TalentFormProps } from "../Types";
 
-const TalentForm = ({ formData, handleInputChange, handleImageChange, imageUrl }: TalentFormProps) => {
+const TalentForm = ({
+  formData,
+  handleInputChange,
+  handleImageChange,
+  imageUrl,
+}: TalentFormProps) => {
   return (
     <>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+          />
+        </label>
+      </div>
+
+
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
           Talent Name:
@@ -103,9 +123,17 @@ const TalentForm = ({ formData, handleInputChange, handleImageChange, imageUrl }
       {imageUrl && (
         <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />
       )}
-      
+
+      {/* Submit Button */}
+      <div>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white font-semibold py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          Submit
+        </button>
+      </div>
     </>
-    
   );
 };
 

@@ -4,6 +4,8 @@ import { FormData, ConclaveFormProps } from "../Types";
 const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
   return (
     <>
+      
+
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
           Full Name:
@@ -98,7 +100,15 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
         </label>
+<br></br>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white font-semibold py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-gray-300 pt-4"
+        >
+          Submit
+        </button>
       </div>
+      
     </>
   );
 };
