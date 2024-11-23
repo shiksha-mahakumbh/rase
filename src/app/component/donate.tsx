@@ -13,12 +13,12 @@ const Donate: React.FC = () => {
             <div className="bg-gray-100 p-6 rounded-lg shadow-md text-black text-left">
                 <h3 className="text-lg font-semibold mb-2">Account Details:</h3>
                 <p className="whitespace-pre-line leading-6">
-                    <strong>Account Name:</strong> Shiksha Kumbh<br />
+                    <strong>Account Name:</strong> Shiksha Mahakumbh<br />
                     <strong>Account No.:</strong> 42563560855<br />
                     <strong>Bank:</strong> State Bank of India<br />
                     <strong>Branch:</strong> Chandigarh Main Branch<br />
                     <strong>IFSC Code:</strong> SBIN0000628<br />
-                    <strong>UPI ID:</strong> shikshakhumbh@sbi
+                    <strong>UPI ID:</strong> shikshamahakumbh@sbi
                 </p>
             </div>
 
