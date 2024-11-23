@@ -238,7 +238,7 @@ const PaperSubmission = () => {
           </b>
           The filled-in registration form along with the payment receipt should
           be sent to Convener <b>शिक्षा महाकुंभ 2024,</b> Central Secretariat of
-          शिक्षा महाकुंभ, IIT Ropar, Rupnagar, Punjab-140001.
+          शिक्षा महाकुंभ, Punjab-140001.
         </p>
       </div>
     </div>
