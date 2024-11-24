@@ -427,7 +427,7 @@ const Footer: React.FC = () => {
                   />
                 </a>
                 <a
-                  href="https://www.facebook.com/raseconferences"
+                  href="https://www.facebook.com/shikshamahakumbh?mibextid=ZbWKwL"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -438,7 +438,7 @@ const Footer: React.FC = () => {
                   />
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/shiksha-kumb-mahakumbh-3a134a283/"
+                  href="https://www.linkedin.com/in/shiksha-mahakumbh-abhiyan-3a134a283?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -449,7 +449,7 @@ const Footer: React.FC = () => {
                   />
                 </a>
                 <a
-                  href="https://www.instagram.com/shikshamahakumbh"
+                  href="https://www.instagram.com/shikshamahakumbh/profilecard/?igsh=NnljejByOXo4OTZr"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -460,7 +460,7 @@ const Footer: React.FC = () => {
                   />
                 </a>
                 <a
-                  href="https://x.com/raseconferences"
+                  href="https://x.com/shikshamahakumb?t=9ZRwSFPF-PWT8m641Aoqfg&s=08"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
