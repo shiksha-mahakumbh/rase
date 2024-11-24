@@ -138,7 +138,7 @@ const EventsComponent: React.FC = () => {
               <List.Item className="border-b-2 border-gray-500 py-4 flex items-start">
                 <div className="flex-grow flex flex-col justify-center w-2/3 pr-4">
                   <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
-                    {event.title}
+                    {event.title} 
                   </Typography.Title>
                 </div>
                 <div className="relative w-1/3">
