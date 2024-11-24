@@ -37,7 +37,6 @@ const Fulllengthpaper = () => {
   const MAX_WORD_SIZE = 50 * 1024; // 50 KB
   const MAX_PDF_SIZE = 1 * 1024 * 1024; // 1 MB
 
-  // Validation function to check if all required fields are filled
   const isFormValid = () => {
     return (
       formData.PaperTitle &&
@@ -116,12 +115,12 @@ const Fulllengthpaper = () => {
   };
 
   return (
-    <div className="bg-white mb-5">
-      <div className="shadow-md rounded-md md:w-1/3 mx-auto pt-8 bg-white text-black">
-        <h1 className="text-primary text-center text-xl">
+    <div className="bg-white mb-5 ">
+      <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black ">
+        <h1 className="text-2xl font-semibold text-primary text-center mb-6">
           Full Length Paper Submission Form
         </h1>
-        <form onSubmit={handleSubmit} className="bg-white p-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
               Corresponding Author Name
@@ -135,7 +134,7 @@ const Fulllengthpaper = () => {
               placeholder="*Your full name*"
               value={formData.CorrespondingAuthorName}
               onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -152,7 +151,7 @@ const Fulllengthpaper = () => {
               value={formData.CorrespondingAuthorEmail}
               placeholder="*your@example.com*"
               onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -169,7 +168,7 @@ const Fulllengthpaper = () => {
               value={formData.PaperTitle}
               placeholder="*Title*"
               onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -185,7 +184,7 @@ const Fulllengthpaper = () => {
               name="AttachmentsWord"
               accept=".doc, .docx"
               onChange={(e) => handleFileChange(e, "AttachmentsWord")}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
             />
           </div>
 
@@ -201,7 +200,7 @@ const Fulllengthpaper = () => {
               name="AttachmentsPdf"
               accept=".pdf"
               onChange={(e) => handleFileChange(e, "AttachmentsPdf")}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
             />
           </div>
 
@@ -217,7 +216,7 @@ const Fulllengthpaper = () => {
               name="AttachmentsPpt"
               accept=".ppt, .pptx"
               onChange={(e) => handleFileChange(e, "AttachmentsPpt")}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
             />
           </div>
 
@@ -231,7 +230,7 @@ const Fulllengthpaper = () => {
               value={formData.CoauthorNames}
               placeholder="*Co-author names*"
               onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -245,7 +244,7 @@ const Fulllengthpaper = () => {
               value={formData.CoauthorEmail}
               placeholder="*coauthor@example.com*"
               onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -262,7 +261,7 @@ const Fulllengthpaper = () => {
               value={formData.Keywords}
               placeholder="*Keywords*"
               onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -279,7 +278,7 @@ const Fulllengthpaper = () => {
               value={formData.ContactNumber}
               placeholder="*Contact Number*"
               onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -295,13 +294,13 @@ const Fulllengthpaper = () => {
               name="FeeReceipt"
               accept="image/*"
               onChange={(e) => handleFileChange(e, "FeeReceipt")}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
             />
           </div>
 
           <button
             type="submit"
-            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-color transition duration-300 mt-4 w-full"
+            className="w-full bg-primary text-white p-3 rounded-md hover:bg-primary-color focus:ring-2 focus:ring-indigo-500 transition duration-300"
             disabled={loading}
           >
             {loading ? "Submitting..." : "Submit Paper"}

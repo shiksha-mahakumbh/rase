@@ -56,6 +56,15 @@ const Announcement = () => {
             Click Here
           </button>
         </div>
+        <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center w-11/12`}>
+          <span className='text-red-700 text-sm'><img src="new.gif" alt="" />&nbsp;Note&#58; Visit and view our upcoming conclaves with destinations</span>
+          <h2 className="mb-4 text-xl font-semibold">Call for Conclave</h2>
+          <button 
+            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
+            onClick={() => window.location.href = '/conclave'}>
+            Click Here
+          </button>
+        </div>
       </div>
     </div>
   );

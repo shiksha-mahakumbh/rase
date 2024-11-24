@@ -124,8 +124,11 @@ const RegistrationPage = () => {
             <option value="volunteer">Volunteer</option>
             <option value="ngo">NGO</option>
             <option value="conclave">Conclave</option>
-            <option value="Abstract">Paper Submission</option>
-            {/* <option value="FullLengthPaper">Full-Length Paper</option> */}
+            
+   <optgroup label="Submission Type">
+    <option value="Abstract">Submit Abstract</option>
+    <option value="FullLengthPaper">Submit Full-Length Paper</option>
+  </optgroup>
             <option value="OrganizerReg">Organizer</option>
             <option value="Accomodation">Accommodation</option>
           </select>
