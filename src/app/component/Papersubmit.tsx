@@ -114,10 +114,10 @@ const PaperSubmission = () => {
           Paper Guidelines
         </h2>
         <p className="text-black text-base mb-4">
-          Click on the below button to view the paper Guidelines <br />
+          Click on the below button to view the <b>Paper Guidelines</b> <br />
           <a href="/Guideline.docx">
             <button className="border mt-2 border-primary hover:bg-primary hover:text-white p-2 rounded-md">
-              Click here
+            Click Here
             </button>
           </a>
         </p>
@@ -240,6 +240,23 @@ const PaperSubmission = () => {
           be sent to Convener <b>शिक्षा महाकुंभ 2024,</b> Central Secretariat of
           शिक्षा महाकुंभ, Punjab-140001.
         </p>
+
+        <div>
+          <br></br>
+          <br></br>
+
+        <h1 className="text-xl font-semibold mb-3 text-primary">
+          For Paper Submission
+        </h1>
+        <p className="text-black text-base mb-4">
+          Click on the below button to <b>Submit Paper</b> <br />
+          <a href="/registration/Single_Registration">
+            <button className="border mt-2 border-primary hover:bg-primary hover:text-white p-2 rounded-md">
+              Click here
+            </button>
+          </a>
+        </p>
+      </div>
       </div>
     </div>
   );
