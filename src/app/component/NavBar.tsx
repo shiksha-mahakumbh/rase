@@ -64,14 +64,9 @@ const NavBar: React.FC = () => {
         { path: "/2024K/SM24 Brochure.pdf", title: "Conference" },
       
             {
-              path: "/2024K/Shiksha Mahakumbh-sponsorship 2.pdf (1).pdf",
-              title: "Sponsor 1",
-            },
-            {
-              path: "/2024K/Shiksha Mahakumbh-sponsorship 3.pdf (2).pdf",
-              title: "Sponsor 2",
-            },
-          
+              path: "https://www.rase.co.in/donation",
+              title: "Sponsor",
+            }
         
       ],
     },

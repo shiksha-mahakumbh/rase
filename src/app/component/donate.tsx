@@ -35,9 +35,20 @@ const Donate: React.FC = () => {
 
             {/* Sponsorship Link */}
             <p className="mt-6 text-black text-center">
-                For more details about sponsorship,{" "}
+                For more details about sponsorship 1,{" "}
                 <a
-                    href="/2024K/Shiksha Mahakumbh-sponsorship.pdf" // Ensure this file exists in the public folder
+                    href="/2024K/Shiksha Mahakumbh-sponsorship 2.pdf (1).pdf" // Ensure this file exists in the public folder
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-primary underline hover:text-blue-600"
+                >
+                    click here
+                </a>.
+            </p>
+            <p className="mt-6 text-black text-center">
+                For more details about sponsorship 2,{" "}
+                <a
+                    href="/2024K/Shiksha Mahakumbh-sponsorship 3.pdf (2).pdf" // Ensure this file exists in the public folder
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-semibold text-primary underline hover:text-blue-600"
