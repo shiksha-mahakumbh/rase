@@ -73,11 +73,11 @@ const NavBar: React.FC = () => {
     { path: "/merchandise", title: "Merchandise" },
     { path: "/Press_Release", title: "Press Release" },
     { path: "/paper", title: "Paper Submission" },
-    { path: "/ContactUs", title: "Contact Us",
-      subMenu: [
-        { path: "/feedback", title: "Feedback" },
+    { path: "/ContactUs", title: "Contact Us"},
+    
+    { path: "/feedback", title: "Feedback" },
       
-    ], },
+     
     { path: "/Wishes_Received", title: "Wishes Received" },
   ];
 
