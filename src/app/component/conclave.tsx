@@ -1,171 +1,60 @@
-'use client';
-import { useState, ChangeEvent, FormEvent } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/app/firebase';
-import toast from "react-hot-toast";
+import React from "react";
 
-interface ConclaveData {
-    category: string;
-    name: string;
-    designation: string;
-    institutionName: string;
-    email: string;
-    number: string;
-    address: string;
-    views: string;
-}
+const Conclaves: React.FC = () => {
+  const conclaves = [
+    {
+      date: "December 16, 2024",
+      time: "14:30",
+      events: [
+        "VC/Directors' Conclave",
+        "Principals' Conclave",
+        "Entrepreneurs/Bureaucrats' Conclave",
+        "Student Leaders' Conclave",
+      ],
+    },
+    {
+      date: "December 17, 2024",
+      time: "10:00",
+      events: [
+        "Scientists' Conclave",
+        "Social Media Influencers' Conclave",
+        "Media Conclave",
+      ],
+    },
+  ];
 
-const ConclaveReg = () => {
-    const initialFormData: ConclaveData = {
-        category: '',
-        name: '',
-        designation: '',
-        institutionName: '',
-        email: '',
-        number: '',
-        address: '',
-        views: ''
-    };
-
-    const [formData, setFormData] = useState<ConclaveData>(initialFormData);
-    const [loading, setLoading] = useState(false); // Add loading state
-
-    // Updated handleInputChange function to handle all types of inputs, selects, and textareas
-    const handleInputChange = (
-        event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value } = event.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = async (event: FormEvent) => {
-        event.preventDefault();
-        setLoading(true);
-
-        try {
-            const docRef = await addDoc(collection(db, 'ConclaveRegistration'), formData);
-            console.log('Document added with ID:', docRef.id);
-            setLoading(false);
-            setFormData(initialFormData);
-            toast.success("Successfully Registered!");
-        } catch (error) {
-            setLoading(false);
-            toast.error("Something went wrong during registration!");
-            console.error('Error adding document:', error);
-        }
-    };
-
-    return (
-        <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
-            <h1 className='text-primary text-center text-xl'>Conclave Registration Form</h1>
-            <form onSubmit={handleSubmit} className='bg-white p-4'>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Select Category:</label>
-                    <select
-                        name="category"
-                        value={formData.category}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                    >
-                        <option value="">Select a category</option>
-                        <option value="Principal">Principal</option>
-                        <option value="VC/Director">VC/Director</option>
-                        <option value="Bureaucrates">Bureaucrates</option>
-                        <option value="Entrepreneurs">Entrepreneurs</option>
-                        <option value="Scientists">Scientists</option>
-                    </select>
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Name:</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Designation:</label>
-                    <input
-                        type="text"
-                        name="designation"
-                        value={formData.designation}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Institution Name:</label>
-                    <input
-                        type="text"
-                        name="institutionName"
-                        value={formData.institutionName}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Email:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Number:</label>
-                    <input
-                        type="tel"
-                        name="number"
-                        value={formData.number}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Address:</label>
-                    <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600">Write your views (200 words):</label>
-                    <textarea
-                        name="views"
-                        value={formData.views}
-                        onChange={handleInputChange} // This now works for textarea as well
-                        required
-                        className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-                        rows={5}
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-4 w-full"
-                    disabled={loading} // Disable the button when loading
-                >
-                    Submit
-                </button>
-            </form>
+  return (
+    <div className="flex flex-col items-center bg-gray-50 p-6 rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold text-primary mb-8">
+        Conclaves for Leadership and Vision
+      </h1>
+      {conclaves.map((conclave, index) => (
+        <div
+          key={index}
+          className="w-full max-w-3xl mb-8 bg-white p-6 rounded-lg shadow-md"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">
+              {conclave.date}
+            </h2>
+            <span className="text-sm font-medium text-gray-600">
+              Time: {conclave.time}
+            </span>
+          </div>
+          <ul className="list-disc list-inside text-gray-700">
+            {conclave.events.map((event, idx) => (
+              <li
+                key={idx}
+                className="py-2 px-4 bg-gray-50 border border-gray-200 rounded-md mb-2 hover:bg-gray-100"
+              >
+                {event}
+              </li>
+            ))}
+          </ul>
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
-export default ConclaveReg;
+export default Conclaves;
