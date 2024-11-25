@@ -98,56 +98,48 @@ const ShikshaMahaKumbh2023 = () => {
       };
     
   
-
+      const renderTable = (title: string, members: { id: number; name: string; designation: string }[]) => (
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold text-center mb-4">{title}</h2>
+          <table className="table-auto w-full max-w-4xl mx-auto border border-gray-300">
+            <thead>
+              <tr className="bg-primary text-white">
+                <th className="p-2 border border-gray-300 text-center">Name</th>
+                <th className="p-2 border border-gray-300 text-center">Designation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member, index) => (
+                <tr
+                  key={member.id}
+                  className={`${index % 2 === 0 ? "bg-white" : "bg-gray-100"} hover:bg-gray-200`}
+                >
+                  <td className="p-2 border border-gray-300 text-center">{member.name}</td>
+                  <td className="p-2 border border-gray-300 text-center">{member.designation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      );
+    
       return (
         <>
-        <CompanyInfo />
+          <CompanyInfo />
           <NavBar />
-          
-          <div className="container mx-auto p-4">
-            <h1 className="text-3xl text-center font-bold mb-8">Shiksha Maha Kumbh 2024</h1>
-    
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold">National Advisory Committee</h2>
-              <ul>
-                {data.NationalAdvisoryCommittee.map((member) => (
-                  <li key={member.id} className="flex justify-between p-2">
-                    <span>{member.name}</span>
-                    <span>{member.designation}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-    
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold">Local Advisory Committee</h2>
-              <ul>
-                {data.LocalAdvisoryCommittee.map((member) => (
-                  <li key={member.id} className="flex justify-between p-2">
-                    <span>{member.name}</span>
-                    <span>{member.designation}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-    
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold">Organizing Committee</h2>
-              <ul>
-                {data.OrganizingCommittee.map((member) => (
-                  <li key={member.id} className="flex justify-between p-2">
-                    <span>{member.name}</span>
-                    <span>{member.designation}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
+          <div className="container mx-auto p-6">
+            <h1 className="text-3xl font-bold text-center mb-8">Shiksha Maha Kumbh 2023</h1>
+            {renderTable("National Advisory Committee", data.NationalAdvisoryCommittee)}
+            {renderTable("Local Advisory Committee", data.LocalAdvisoryCommittee)}
+            {renderTable("Organizing Committee", data.OrganizingCommittee)}
+            {renderTable("Organizing Secretaries", data.OrganizingSecretaries)}
+            {renderTable("Conference Joint Secretaries", data.ConferenceJointSecretaries)}
+            {renderTable("Conference Conveners", data.ConferenceConveners)}
+            {renderTable("Conference Coordinators", data.ConferenceCoordinators)}
           </div>
-          
           <Footer />
         </>
       );
     };
     
- export default ShikshaMahaKumbh2023;
-    
+    export default ShikshaMahaKumbh2023;

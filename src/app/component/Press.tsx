@@ -4,8 +4,9 @@ import { Card, Button } from 'antd';
 import Image from 'next/image';
 import proceeding1 from '/public/2024M/press2.jpg';
 import proceeding2 from '/public/2024M/press1.jpg';
+import proceeding3 from '/public/2024M/press3.jpg';
 
-import proceeding3 from '/public/proceeding3.jpg';
+
 const { Meta } = Card;
 
 const Proceedings: React.FC = () => {
@@ -24,6 +25,14 @@ const Proceedings: React.FC = () => {
   }, []);
 
   const cardData = [
+    {
+      title: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण)",
+      description: "आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम",
+      image: proceeding3,
+      // previewLink: '/Press1.pdf',
+      // downloadLink: '/Press1.pdf',
+      readLink: '/Press3' // Link to the TSX file or page
+    },
     {
       title: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।",
       description: "आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन किया जाएगा ",
