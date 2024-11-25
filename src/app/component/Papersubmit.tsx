@@ -98,7 +98,7 @@ const PaperSubmission = () => {
       label: "Industry",
       date: "₹ 5100",
       late: " ₹ 5501",
-    },,
+    },
     {
       label: "Students",
       date: "₹ 500",
