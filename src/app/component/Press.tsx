@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button } from 'antd';
 import Image from 'next/image';
-import proceeding1 from '/public/proceeding1.jpg';
-import proceeding2 from '/public/press1.jpg';
+import proceeding1 from '/public/2024M/press2.jpg';
+import proceeding2 from '/public/2024M/press1.jpg';
+
 import proceeding3 from '/public/proceeding3.jpg';
 const { Meta } = Card;
 
@@ -23,6 +24,14 @@ const Proceedings: React.FC = () => {
   }, []);
 
   const cardData = [
+    {
+      title: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।",
+      description: "आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन किया जाएगा ",
+      image: proceeding1,
+      // previewLink: '/Press1.pdf',
+      // downloadLink: '/Press1.pdf',
+      readLink: '/Press2' // Link to the TSX file or page
+    },
     {
       title: "Baton Ceremony",
       description: "A Grand Start to Shiksha Mahakumbh 2.0: Baton CeremonySuccessfully Concluded  Kurukshetra, November 20, 2024",
