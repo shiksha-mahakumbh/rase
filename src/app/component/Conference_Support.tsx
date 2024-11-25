@@ -39,7 +39,7 @@ const Conference_Support: React.FC = () => {
   return (
     <div className='flex flex-col w-full'>
       <h1 className='flex font-semibold p-2 text-primary text-center text-xl justify-center'>
-        Our Partners
+         Academic Partners
       </h1>
 
       <Marquee pauseOnHover={true} pauseOnClick={true}>
