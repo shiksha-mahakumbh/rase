@@ -83,7 +83,7 @@ const PaperSubmission = () => {
   ];
 
   const [topics] = useState(initialTopics);
-  const dates: DateInfo[] = [
+ const dates: DateInfo[] = [
     {
       label: "Research Scholars and Students",
       date: "₹ 2100",
@@ -98,14 +98,18 @@ const PaperSubmission = () => {
       label: "Industry",
       date: "₹ 5100",
       late: " ₹ 5501",
-    },
+    },,
+    {
+      label: "Students",
+      date: "₹ 500",
+      late: " ₹ 551",
+    }
   ];
-
   const about = `Selected papers post peer review by Conference Editorial Board and concerned Journal Editorial Board will be published in Scopus/UGC Care indexed journals. The papers not selected in any of the above two will be given space either in emerging peer reviewed Viksit Bharat & Viksit India journals or Book Chapter in a peer reviewed ISBN number book. All the received abstracts within time limit and with registration fee will be published in peer reviewed Conference Proceeding with ISBN number.
   
   For more information about Viksit Bharat & Viksit India journls, visit <a href="https://pub.dhe.org.in/" target="_blank" rel="noopener noreferrer" class="font-bold text-primary hover:underline">pub.dhe.org.in</a> .
   
-  <b>1st, 2nd and 3rd prize of ₹21000, ₹11000 & ₹5100 will be given. Consolation prizes of ₹1100 each will be provided.</b>`;
+  <b>1st, 2nd and 3rd prize of ₹11000, ₹5100 , ₹2100 & ₹1100 consolation  will be given. Consolation prizes of ₹1100 each will be provided.</b>`;
 
   return (
     <div className="bg-white p-6">

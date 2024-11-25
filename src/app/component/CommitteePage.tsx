@@ -3,7 +3,7 @@ import React from "react";
 interface AdvisoryMember {
   name: string;
   designation: string;
-  sNo: string;
+  
 }
 
 interface AdvisoryCouncilProps {
@@ -13,23 +13,27 @@ interface AdvisoryCouncilProps {
 
 const Commites: React.FC<AdvisoryCouncilProps> = ({ title, members }) => {
   return (
-    <div className="flex flex-col items-center bg-white p-4">
-      <h2 className="text-xl font-semibold mb-4 mt-4 text-primary">{title}</h2>
-      <table className="table-fixed max-width my-5">
+    <div className="flex flex-col items-center bg-gray-50 p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-semibold mb-6 mt-4 text-primary">{title}</h2>
+      <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
-          <tr className="bg-primary">
-          <th className=" p-2 border text-left text-white">S.No</th>
-            <th className=" p-2 border text-left text-white">Name</th>
-            <th className=" p-2 border text-left text-white">Designation</th>
+          <tr className="bg-primary text-white">
+           
+            <th className="p-3 border border-gray-300 text-left">Name</th>
+            <th className="p-3 border border-gray-300 text-left">Designation</th>
           </tr>
         </thead>
         <tbody>
           {members.map((member, index) => (
-            <tr key={index}>
-                     <td className="p-2 border text-left text-black">{member.sNo}</td>
-              <td className="p-2 border text-left text-black">{member.name}</td>
-              <td className="p-2 border text-left text-black">{member.designation}</td>
-         
+            <tr
+              key={index}
+              className={`${
+                index % 2 === 0 ? "bg-white" : "bg-gray-100"
+              } hover:bg-gray-200`}
+            >
+           
+              <td className="p-3 border border-gray-300 text-black">{member.name}</td>
+              <td className="p-3 border border-gray-300 text-black">{member.designation}</td>
             </tr>
           ))}
         </tbody>
