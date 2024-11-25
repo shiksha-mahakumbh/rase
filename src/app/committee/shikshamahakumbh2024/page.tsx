@@ -8,6 +8,7 @@ const ShikshaMahaKumbh2024 = () => {
     LocalAdvisoryCommittee: [
       { id: 1, name: "Mr. Vijay Nadda", designation: "Org. Secretary, Vidya Bharti (NZ)" },
       { id: 2, name: "Mr. Balkishan", designation: "Jt. Org. Secretary, Vidya Bharti (NZ)" },
+      { id: 2, name: "Dr. Sanjeev Sharma", designation: "Registrar, Kurukshetra University" },
       { id: 3, name: "Prof.Deepti Dharmani", designation: "VC,CBLU, Bhiwani" },
       { id: 4, name: "Dr. Ashok Pal", designation: "President, Vidya Bharti (NZ)" },
       { id: 5, name: "Mr. Surendar Attri", designation: "Vice President, VidyaBharti(NZ)" },
@@ -19,6 +20,8 @@ const ShikshaMahaKumbh2024 = () => {
       { id: 11, name: "Mrs. Pratibha Gupta", designation: " President, DHE" },
       { id: 12, name: "Mr. Chandra Has Gupta", designation: "Treasurer, DHE" },
       { id: 13, name: "Prof. Sathans", designation: "NIT Kurukshetra" },
+      { id: 13, name: "Prof. Dinesh Kumar", designation: "CBLU Bhiwani" },
+      { id: 13, name: "Prof. Y.K. Vijay", designation: "IIS University , Jaipur" },
       { id: 14, name: "Dr. Manoj Kumar Teotia", designation: "CRRID, Chandigarh" },
       { id: 15, name: "Dr. Pooja D.", designation: "CSIR-CSIO, Chandigarh" },
       { id: 16, name: "Dr. Praveen Kumar", designation: "IACS, Kolkata" },
@@ -47,7 +50,7 @@ const ShikshaMahaKumbh2024 = () => {
       { id: 15, name: "Dr. Y. Dwivedi", designation: "NIT Kurukshetra" },
       { id: 16, name: "Dr. Vijay Kumar Sharma ", designation: " NIT Srinagar" },
       { id: 17, name: "Dr. Vikash Garg", designation: "S.L.I.E.T. Longowal" },
-      { id: 18, name: "Dr. Gaurav", designation: "IIT Delhi" },
+      { id: 18, name: "Dr. Gaurav Sharma", designation: "IIT Delhi" },
       { id: 19, name: "Dr. Ashwini Rana", designation: "NIT Hamirpur" },
       { id: 20, name: "Dr. Surjeet Chandel", designation: "Bilaspur Himachal" },
       { id: 21, name: "Dr. Pooja Mahajan", designation: "Arya Mahila College Dinanagar" },
@@ -68,8 +71,9 @@ const ShikshaMahaKumbh2024 = () => {
     ],
   
     ConferenceSecretaries: [
-      { id: 1, name: "Dr. Jatinder Garg", designation: " BHSBIET, Lehragaga" },
-      { id: 2, name: "Dr. Ravi Prakash", designation: "CBLU, Bhiwani" },
+      { id: 1, name: "Prof. Sunil Dhingra", designation: " Director, UIET, KU" },
+      { id: 2, name: "Dr. Jatinder Garg", designation: " BHSBIET, Lehragaga" },
+      { id: 3, name: "Dr. Ravi Prakash", designation: "CBLU, Bhiwani" },
     ],
     ConferenceJointSecretaries: [
       { id: 1, name: "Mr. Mandeep Tiwari", designation: "Business Advisior, DHE" },
@@ -128,7 +132,7 @@ const ShikshaMahaKumbh2024 = () => {
         {renderTable("Conference Secretaries", data.ConferenceSecretaries)}
         {renderTable("Conference Joint Secretaries", data.ConferenceJointSecretaries)}
         {renderTable("Conference Conveners", data.ConferenceConveners)}
-        {renderTable("Local Advisory Committee", data.LocalAdvisoryCommittee)}
+        {renderTable("Advisory Committee", data.LocalAdvisoryCommittee)}
         {renderTable("Organizing Committee", data.OrganizingCommittee)}
       </div>
       <Footer />
