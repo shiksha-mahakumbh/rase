@@ -84,29 +84,32 @@ const PaperSubmission = () => {
 
   const [topics] = useState(initialTopics);
  const dates: DateInfo[] = [
+  {
+    label: "Students",
+    date: "₹ 500",
+    late: " ₹ 551",
+  },
     {
       label: "Research Scholars and Students",
+      date: "₹ 1100",
+      late: " ₹ 1501",
+    },
+    {
+      label: "Academics, R&D and Institutions",
       date: "₹ 2100",
       late: " ₹ 2501",
     },
     {
-      label: "Academics, R&D and Institutions",
+      label: "Industry",
       date: "₹ 3100",
       late: " ₹ 3501",
     },
-    {
-      label: "Industry",
-      date: "₹ 5100",
-      late: " ₹ 5501",
-    },
-    {
-      label: "Students",
-      date: "₹ 500",
-      late: " ₹ 551",
-    }
+    
   ];
-  const about = `Selected papers post peer review by Conference Editorial Board and concerned Journal Editorial Board will be published in Scopus/UGC Care indexed journals. The papers not selected in any of the above two will be given space either in emerging peer reviewed Viksit Bharat & Viksit India journals or Book Chapter in a peer reviewed ISBN number book. All the received abstracts within time limit and with registration fee will be published in peer reviewed Conference Proceeding with ISBN number.
-  
+  const about = `An effort will be made to publish the selected papers in Scopus Indexed/UGC  care listed journals after apeer review process by Conference Editorial Board and concerned Journal Editorial Board. The paperswhich are not selected in the Journals of above categories, will be considered for emerging ‘Viksit Bharat’& ‘Viksit India’ journals or Book Chapter with ISBN number after a peer review process. All the acceptedabstracts (Who paid registration fee) will be published in Conference Proceeding with ISBN number. 
+
+  <b>Note:</b> There is no cash prize for other categories. Only trophies will be awarded in categories other than paper submission.
+
   For more information about Viksit Bharat & Viksit India journls, visit <a href="https://pub.dhe.org.in/" target="_blank" rel="noopener noreferrer" class="font-bold text-primary hover:underline">pub.dhe.org.in</a> .
   
   <b>1st, 2nd and 3rd prize of ₹11000, ₹5100 , ₹2100 & ₹1100 consolation  will be given. Consolation prizes of ₹1100 each will be provided.</b>`;
@@ -235,9 +238,7 @@ const PaperSubmission = () => {
         </table>
         <p className="mt-4 text-justify text-black">
           The registration fee is to be paid online through RTGS/NEFT/IMPS/UPI/
-          any other mode in favour of “Shiksha Mahakumbh”,
-          <b>
-            Account No. 42563560855 of State Bank of India, Chandigarh Branch
+          any other mode in favour of “Shiksha Mahakumbh”, <b>Account No. 42563560855 of State Bank of India, Chandigarh Branch
             (IFSC Code: SBIN0000628).
           </b>
           The filled-in registration form along with the payment receipt should
