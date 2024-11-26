@@ -172,22 +172,7 @@ const RegistrationPage = () => {
           {category === "OrganizerReg" && <OrganizerRegForm />}
           {category === "Accomodation" && <AccomodationForm />}
 
-          <button
-            type="submit"
-            className={`w-full py-3 rounded-lg text-white font-semibold transition-all ${
-              loading ? "bg-gray-400" : "bg-indigo-500 hover:bg-indigo-600"
-            }`}
-            disabled={loading}
-          >
-            {loading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-4 h-4 border-b-2 border-white rounded-full animate-spin"></div>
-                <span>Submitting...</span>
-              </div>
-            ) : (
-              "Submit"
-            )}
-          </button>
+       
         </form>
 
         <Toaster />
