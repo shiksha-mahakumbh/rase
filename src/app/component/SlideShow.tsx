@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
 
 interface Slide {
@@ -29,46 +29,38 @@ const SlideShow: React.FC<SlideShowProps> = ({ slides }) => {
 
   useEffect(() => {
     const intervalId = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-
     return () => clearInterval(intervalId);
   }, [currentIndex]);
 
   return (
-    <div className='m-4'> 
+    <div className="m-4">
       <Carousel
         selectedItem={currentIndex}
         showStatus={false} // Hide status indicator
-        showThumbs={false} 
+        showThumbs={false} // Hide thumbnails
         onChange={(index) => setCurrentIndex(index)}
+        className="max-w-full"
       >
         {slides.map((slide, index) => (
-          <div key={index}>
+          <div key={index} className="relative">
             <Image
               src={slide.src}
               alt={slide.alt}
-              style={{ maxWidth: '100%', maxHeight: '60vh' }}
-              width = "1000"
-              height= "1000"
+              className="w-full h-auto object-cover"
+              width={1200}
+              height={800}
+              sizes="(max-width: 768px) 100vw, 768px" // Makes it responsive
+              priority
             />
-         
-         <div className='invisible lg:visible'>
-{slide.legend!=="" &&
-            <div className="absolute bottom-0 px-4 py-3 bg-gray-500/50 w-full">
-    
-      <p className="text-gray-200">
-      {
-        slide.legend
-      }
-      <br />
-      <br />
-      </p>
-      </div>
-}</div>
+
+            {slide.legend && (
+              <div className="absolute bottom-0 w-full bg-gray-800 bg-opacity-60 text-gray-200 px-4 py-3 text-sm sm:text-base lg:text-lg">
+                <p className="text-center">{slide.legend}</p>
+              </div>
+            )}
           </div>
-          
         ))}
       </Carousel>
-      
     </div>
   );
 };
