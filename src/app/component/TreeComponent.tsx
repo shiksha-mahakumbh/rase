@@ -18,7 +18,7 @@ const GridComponent: React.FC = () => {
       <div className="container mx-auto p-4">
         {/* Heading at the top with background color */}
         <div className="text-center mb-8 bg-primary p-4 rounded-lg">
-          <h1 className="text-4xl font-bold text-white">RASE Conferences</h1>
+          <h1 className="text-4xl font-bold text-white">Shiksha MahaKumbh Abhiyan</h1>
         </div>
 
         {/* Grid layout for Shiksha Kumbh and Shiksha MahaKumbh */}

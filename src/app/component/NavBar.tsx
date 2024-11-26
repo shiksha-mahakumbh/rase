@@ -32,12 +32,7 @@ const NavBar: React.FC = () => {
     },
     {
       path: "https://pub.dhe.org.in",
-      title: "Publication",
-      subMenu: [
-        { path: "/journals", title: "Journals" },
-        { path: "/pub.dhe.org.in", title: "Books" },
-        { path: "/proceedings", title: "Proceedings" },
-      ],
+      title: "Publication"
     },
     {
       path: "/",

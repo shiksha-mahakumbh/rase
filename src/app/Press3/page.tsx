@@ -4,14 +4,14 @@ import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
 import NavBar from "../component/NavBar";
 import Press3 from "../component/Press3";
-
+import proceeding3 from '/public/2024M/press3.jpg';
 
 
 const shareUrl = encodeURIComponent("https://www.rase.co.in/Press2"); // Replace with your actual page URL
 const shareText = encodeURIComponent(
   "आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम"
 );
-
+const shareImage = proceeding3;
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "3",

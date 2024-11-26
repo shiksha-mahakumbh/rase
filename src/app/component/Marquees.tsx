@@ -11,8 +11,8 @@ interface Item {
 const items: Item[] = [
   {
     imageUrl: "/new.gif",
-    text: "Shiksha Kumbh 2024 Successfully Completed on June 30, 2024 @ NIT Srinagar, To Watch the Event Click Here.",
-    link: "https://www.youtube.com/watch?v=73I3Knmqun4&ab_channel=ShikshaMahakumbh",
+    text: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024। आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन किया जाएगा",
+    link: "https://www.rase.co.in/Press2",
   },
   {
     imageUrl: "/new.gif",
@@ -22,13 +22,13 @@ const items: Item[] = [
 
   {
     imageUrl: "/new.gif",
-    text: "To view the photos of RASE conferences 2024 Day-1, Click Here.",
-    link: "https://drive.google.com/drive/folders/1PpyJY91vF-ldoS9d2sdPWcBVvscXRq_0",
+    text: "Baton Ceremony: A Grand Start to Shiksha Mahakumbh 2.0! Witness the Baton Ceremony's success, Click Here.",
+    link: "https://www.rase.co.in/Press1",
   },
   {
     imageUrl: "/new.gif",
-    text: "To view the photos of RASE conferences 2024 Day-2, Click Here.",
-    link: "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
+    text: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण),आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम, Click Here.",
+    link: "https://www.rase.co.in/Press3",
   },
 ];
 
