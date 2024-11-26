@@ -189,9 +189,7 @@ export default function Home() {
         {/* Social Media Sharing Section */}
         <div className="mt-6 flex justify-center space-x-4">
           <a
-            href={`https://wa.me/?text=${shareText}%20${shareUrl}&picture=${encodeURIComponent(
-      `https://www.rase.co.in${shareImage}`
-    )}`}
+            href={`https://wa.me/?text=${shareText}%20${shareUrl}&picture=${shareImage}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -199,9 +197,7 @@ export default function Home() {
             WhatsApp
           </a>
           <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}&picture=${encodeURIComponent(
-      `https://www.rase.co.in${shareImage}`
-    )}`}
+            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}&picture=${shareImage}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -209,9 +205,7 @@ export default function Home() {
             Facebook
           </a>
           <a
-            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}&picture=${encodeURIComponent(
-      `https://www.rase.co.in${shareImage}`
-    )}`}
+            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}&picture=${shareImage}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-blue-400 text-white rounded hover:bg-blue-500"
@@ -219,9 +213,7 @@ export default function Home() {
            Twitter
           </a>
           <a
-            href={`mailto:?subject=Shiksha Mahakumbh 2.0&body=${shareText}%20${shareUrl}&picture=${encodeURIComponent(
-      `https://www.rase.co.in${shareImage}`
-    )}`}
+            href={`mailto:?subject=Shiksha Mahakumbh 2.0&body=${shareText}%20${shareUrl}&picture=${shareImage}`}
             className="p-2 bg-gray-500 text-white rounded hover:bg-gray-600"
           >
              Email
