@@ -4,13 +4,14 @@ import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
 import NavBar from "../component/NavBar";
 import Press2 from "../component/Press2";
-
+import proceeding1 from '/public/2024M/press2.jpg';
 
 
 const shareUrl = encodeURIComponent("https://www.rase.co.in/Press2"); // Replace with your actual page URL
 const shareText = encodeURIComponent(
   "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।"
 );
+const shareImage = proceeding1;
 
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
