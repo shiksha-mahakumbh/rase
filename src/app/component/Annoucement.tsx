@@ -1,4 +1,3 @@
-// pages/announcements.tsx
 "use client"
 import { useState, useEffect } from 'react';
 import { css, Global } from '@emotion/react';
@@ -36,10 +35,11 @@ const Announcement = () => {
   `;
 
   return (
-    <div className="flex md:flex-col items-center justify-center h-auto bg-white w-full">
+    <div className="flex flex-col items-center justify-center h-auto bg-white w-full">
       <Global styles={shadowAnimation} />
-      <div className="w-full flex md:flex-col items-center">
-        <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center w-11/12`}>
+      <div className="flex flex-col items-center justify-center w-full">
+        {/* First Component */}
+        <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
           <h2 className="mb-4 text-l font-semibold">Register to Participate in Shiksha Mahakumbh 2024</h2>
           <button 
             className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
@@ -47,8 +47,11 @@ const Announcement = () => {
             Click Here
           </button>
         </div>
-        <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center w-11/12`}>
-          <span className='text-red-700 text-sm'><img src="new.gif" alt="" />&nbsp;Note&#58; The Last Date for Abstract Submission has been extended to  December 05, 2024.</span>
+        {/* Second Component */}
+        <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
+          <span className='text-red-700 text-sm'>
+            <img src="new.gif" alt="" />&nbsp;Note&#58; The Last Date for Abstract Submission has been extended to  December 05, 2024.
+          </span>
           <h2 className="mb-4 text-xl font-semibold">Call for Papers</h2>
           <button 
             className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
@@ -56,8 +59,11 @@ const Announcement = () => {
             Click Here
           </button>
         </div>
-        <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center w-11/12`}>
-          <span className='text-red-700 text-sm'><img src="new.gif" alt="" />&nbsp;Note&#58; Visit and view our upcoming conclaves with destinations</span>
+        {/* Third Component */}
+        <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
+          <span className='text-red-700 text-sm'>
+            <img src="new.gif" alt="" />&nbsp;Note&#58; Visit and view our upcoming conclaves with destinations
+          </span>
           <h2 className="mb-4 text-xl font-semibold">Call for Conclave</h2>
           <button 
             className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
