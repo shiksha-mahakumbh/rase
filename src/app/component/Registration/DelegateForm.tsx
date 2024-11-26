@@ -1,12 +1,16 @@
 'use client'
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { toast } from "react-hot-toast";
+import { useState,useEffect, ChangeEvent, FormEvent } from 'react';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/app/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
+import  toast , { Toaster } from "react-hot-toast";
 
 interface FormData {
   name: string;
-  type: string;
-  Websitelink: string;
-  contribution: string;
+  type:string;
+  Websitelink:string;
+  contribution:string;
   role: string;
   email: string;
   contactNumber: string;
@@ -17,11 +21,11 @@ interface FormData {
 }
 
 const RegistrationForm = () => {
-  const initialFormData: FormData = {
+ const initialFormData:FormData ={
     name: '',
-    type: '',
-    Websitelink: '',
-    contribution: '',
+    type:'',
+    Websitelink:'',
+    contribution:'',
     role: '',
     email: '',
     contactNumber: '',
@@ -30,11 +34,22 @@ const RegistrationForm = () => {
     feeAmount: 0,
     accommodation: '',
   };
-
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    type:'',
+    Websitelink:'',
+    contribution:'',
+    role: '',
+    email: '',
+    contactNumber: '',
+    feeReceipt: '',
+    vb: '',
+    feeAmount: 0,
+    accommodation: '',
+  });
   const [image, setImage] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null); // Define the image URL
-  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -42,34 +57,93 @@ const RegistrationForm = () => {
       ...prevData,
       [name]: value,
     }));
+   
   };
 
-  const handleRoleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handletype = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    
-    // Set feeAmount based on the role
-    if (formData.vb === "nvb") {
-      if (value === 'teacher') {
-        setFormData((prevData) => ({ ...prevData, feeAmount: 1000 }));
-      } else if (value === 'principle') {
-        setFormData((prevData) => ({ ...prevData, feeAmount: 2000 }));
-      } else if (value === 'dirVcCP') {
-        setFormData((prevData) => ({ ...prevData, feeAmount: 3000 }));
-      } else if (value === 'DelegatesFromIndustry') {
-        setFormData((prevData) => ({ ...prevData, feeAmount: 8000 }));
-      } else if (value === 'ResearchScholar') {
-        setFormData((prevData) => ({ ...prevData, feeAmount: 2000 }));
-      } else {
-        setFormData((prevData) => ({ ...prevData, feeAmount: 0 }));
-      }
-    } else {
-      setFormData((prevData) => ({ ...prevData, feeAmount: 0 }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      feeAmount: 0,
+    }));
+    setFormData((prevData) => ({
+      ...prevData,
+      role: '',
+    }));
   };
+  const handlevb = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setFormData((prevData) => ({
+      ...prevData,
+      feeAmount: 0,
+    }));
+    setFormData((prevData) => ({
+      ...prevData,
+      role: '',
+    }));
+  };
+  
+  const handleRole = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    console.log(formData.vb)
+    if(formData.vb==="nvb"){
+    if (value === 'teacher' ) {
+        setFormData((prevData) => ({
+          ...prevData,
+          feeAmount: 1000,
+        }));
+    }
+    else  if (value === 'principle' ) {
+      setFormData((prevData) => ({
+        ...prevData,
+        feeAmount: 2000,
+      }));
+  }
+  else  if (value === 'dirVcCP' ) {
+    setFormData((prevData) => ({
+      ...prevData,
+      feeAmount: 3000,
+    }));
+}
+else  if (value === 'DelegatesFromIndustry' ) {
+  setFormData((prevData) => ({
+    ...prevData,
+    feeAmount: 8000,
+  }));
+}
+else  if (value === 'ResearchScholar' ) {
+  setFormData((prevData) => ({
+    ...prevData,
+    feeAmount: 2000,
+  }));
+}
+    else {
+      setFormData((prevData) => ({
+        ...prevData,
+        feeAmount: 0,
+      }));
+    }
+  }
+    else {
+      setFormData((prevData) => ({
+        ...prevData,
+        feeAmount: 0,
+      }));
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedImage = e.target.files?.[0];
@@ -78,65 +152,65 @@ const RegistrationForm = () => {
     }
   };
 
+  const handleAddDocument = async (downloadURL: string | null) => {
+    try {
+      const docRef = await addDoc(collection(db, 'ParticipantRegsm24'), { ...formData, feeReceipt: downloadURL });
+      console.log('Document added with ID:', docRef.id);
+      setLoading(false);
+      toast.success("Suceessfully Registered!");
+      setFormData(initialFormData)
+    } catch (error) {
+      setLoading(false);
+      toast.error("Something broke while registration!")
+      console.error('Error adding document:', error);
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
-
-    // If an image is provided, upload it and get the URL
-    const formDataWithImage = { ...formData };
-
+   
     if (image) {
       try {
-        const formData = new FormData();
-        formData.append('image', image);
+        const imageRef = ref(storage, `images/${image.name}`);
+        await uploadBytes(imageRef, image);
 
-        // Send image to backend for storage (e.g., save to a server or cloud storage)
-        const imageUploadResponse = await fetch('/api/uploadImage', {
-          method: 'POST',
-          body: formData,
-        });
+        const downloadURL = await getDownloadURL(imageRef);
 
-        if (!imageUploadResponse.ok) {
-          throw new Error('Error uploading image');
-        }
+       
+        setFormData((prevData) => ({
+          ...prevData,
+          feeReceipt: downloadURL || '', 
+        }));
 
-        const imageResponse = await imageUploadResponse.json();
-        const imageUrl = imageResponse.url;
-
-        formDataWithImage.feeReceipt = imageUrl; // Set the image URL in form data
-        setImageUrl(imageUrl); // Store the image URL in the state
+     
+        handleAddDocument(downloadURL);
       } catch (error) {
-        setLoading(false);
-        toast.error("Error uploading image");
-        return;
+        console.error('Error uploading image:', error);
+        setLoading(false); 
       }
+    } else {
+     
+      handleAddDocument(null);
     }
 
-    // Send form data to backend to save to MySQL database
-    try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataWithImage),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Successfully Registered!");
-        setFormData(initialFormData);
-        setImageUrl(null); // Reset the image URL after successful submission
-      } else {
-        toast.error(data.message || "Something went wrong!");
-      }
-    } catch (error) {
-      toast.error("Error submitting form!");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    
+    console.log(formData);
   };
+  useEffect(() => {
+    // Check if we are on the client side before running analytics-related code
+    if (typeof window !== 'undefined') {
+      import('firebase/analytics')
+        .then(({ getAnalytics }) => {
+          const analytics = getAnalytics();
+          // Add your Firebase Analytics code here
+          // For example: analytics.logEvent('page_view');
+        })
+        .catch((error) => {
+          console.error('Error importing Firebase Analytics:', error);
+        });
+    }
+  }, []);
   return (
     <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
       <h1 className='text-primary text-center text-xl'>Participant Registration</h1>
@@ -151,7 +225,7 @@ const RegistrationForm = () => {
             <select
               name='type'
               value={formData.type}
-              onChange={handleInputChange}
+              onChange={handletype}
               required
               className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
             >
@@ -161,36 +235,7 @@ const RegistrationForm = () => {
             </select>
           </label>
         </div>
-         {/* Accommodation Field */}
-         <div className='mb-4'>
-          <label className='block text-sm font-medium text-gray-600'>
-            Do you require accommodation?<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            <select
-              name='accommodation'
-              value={formData.accommodation}
-              onChange={handleInputChange}
-              required
-              className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-            >
-              <option value=''>Select</option>
-              <option value='Yes'>Yes</option>
-              <option value='No'>No</option>
-            </select>
-          </label>
-        </div>
-
-        {/* Conditionally show the accommodation booking button */}
-        {formData.accommodation === 'Yes' && (
-          <div className='mb-4'>
-            <button
-              type="button"
-              onClick={() => window.open('https://ac.rase.co.in/', '_blank')}  // Replace with actual booking link
-              className='bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary-dark transition duration-300 mt-4 w-full'
-            >
-              Book Accommodation
-            </button>
-          </div>
-        )}
+       
 
         {formData.type === 'Delegate' && (
           <>
@@ -214,7 +259,7 @@ const RegistrationForm = () => {
                 <select
                   name='vb'
                   value={formData.vb}
-                  onChange={handleInputChange}
+                  onChange={handlevb}
                   required
                   className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
                 >
@@ -232,7 +277,7 @@ const RegistrationForm = () => {
                 <select
                   name='role'
                   value={formData.role}
-                  onChange={handleInputChange}
+                  onChange={handleRole}
                   required
                   className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
                 >
@@ -331,7 +376,7 @@ const RegistrationForm = () => {
                 <select
                   name='role'
                   value={formData.role}
-                  onChange={handleInputChange}
+                  onChange={handleRole}
                   required
                   className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'>
                   <option value=''>Select Type</option>
