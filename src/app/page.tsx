@@ -28,70 +28,7 @@ const slides1 = [
     legend:
       "Shiksha Mahakumbh team inviting Hon’ble Chief Minister, UP to 2nd Edition",
   },
-  {
-    src: "/2023M/banwari_lal_purohit.JPG",
-    alt: "Image 1",
-    legend:
-      "Shri Banwari Lal Purohit, the Hon'ble Governor of Punjab, addressed the crowd",
-  },
-  {
-    src: "/2023M/bandaru_dattareya.jpg",
-    alt: "Image 1",
-    legend:
-      "Shri Bandaru Dattatreya, the Hon'ble Governor of Haryana, addressed the crowd",
-  },
-  {
-    src: "/2023M/anurag_singh_thakur.JPG",
-    alt: "Image 1",
-    legend:
-      "Shri Anurag Singh Thakur, the Hon'ble Cabinet Minister, Minister of Sports and Youth Affair, addressed the crowd",
-  },
-  {
-    src: "/2023M/raghunandan.JPG",
-    alt: "Image 1",
-    legend:
-      "Shri Raghunandan, Organising Secretary, Vidya Bharti - Ucch Shiksha Sansthan",
-  },
-  {
-    src: "/2023M/shankarananda.JPG",
-    alt: "Image 1",
-    legend:
-      "Shri Shankarananda, Organising Secretary, Bhartiya Shikshan Mandal",
-  },
-
-  {
-    src: "/2023M/kashmiri_lal.JPG",
-    alt: "Image 1",
-    legend: "Shri Kashmiri Lal, Organising Secretary, Swadeshi Jagran Manch",
-  },
-  {
-    src: "/2023M/satish_kumar.JPG",
-    alt: "Image 1",
-    legend:
-      "Shri Satish Kumar, Joint Organising Secretary, Swadeshi Jagran Manch",
-  },
-
-  {
-    src: "/2023K/bandaru_dattareya.JPG",
-    alt: "Image 1",
-    legend:
-      "Shri Bandaru Dattatreya, the Hon'ble Governor of Haryana, released the proceeding of Shiksha Kumbh 2023",
-  },
-  {
-    src: "/2023K/Shri Aswini Updhaya.JPG",
-    alt: "Image 1",
-    legend: "Adv. Aswini Updhaya, PIL Man  of Bharat, addressed the crowd",
-  },
-  {
-    src: "/2024K/k12.png",
-    alt: "Image 1",
-    legend: "Shri Manoj Sinha, Hon’ble Lieutenant Governor, J&K",
-  },
-  {
-    src: "/2024K/k7.png",
-    alt: "Image 1",
-    legend: "Dr. Jitendra Singh, Hon’ble MoS (IC), Science and Technology",
-  },
+  // Add more slides as needed
 ];
 
 const pageVariants = {
@@ -127,64 +64,62 @@ const TransitionWrapper: React.FC<{ children: React.ReactNode }> = ({
 };
 
 const MobileView = () => (
-  <div className="flex flex-col space-y-4 items-center">
-    <div className="flex flex-col w-full">
-      <div className="flex items-center justify-center">
+  <div className="flex flex-col space-y-4 items-center w-full">
+    <div className="relative flex flex-col w-full">
+      <div className="relative flex items-center justify-center w-full">
         <TransitionWrapper>
           <SlideShow slides={slides1} />
         </TransitionWrapper>
       </div>
-      <div className="flex items-center justify-center">
+      <div className="relative flex items-center justify-center">
         <Announcement />
       </div>
       <TransitionWrapper>
-        
         <NoticeBoard />
       </TransitionWrapper>
     </div>
-    <div className="w-full">
+    <div className="relative w-full">
       <TransitionWrapper>
         <Info />
       </TransitionWrapper>
     </div>
-    <div className="w-full">
+    <div className="relative w-full">
       <TransitionWrapper>
         <Conference_Support />
       </TransitionWrapper>
     </div>
-    <div className="w-full">
+    <div className="relative w-full">
       <TransitionWrapper>
         <Media_Partners />
       </TransitionWrapper>
     </div>
-    <div className="w-full">
+    <div className="relative w-full">
       <TransitionWrapper>
         <Organiger />
       </TransitionWrapper>
     </div>
-    
   </div>
 );
 
 const DesktopView = () => (
-  <div className="flex flex-col items-center space-x-4">
-    <div className="w-1/5"></div>
-    <div className="flex ">
-      <div className="w-1/5 flex items-center justify-center">
+  <div className="flex flex-col items-center w-full">
+    <div className="relative w-1/5"></div>
+    <div className="relative flex w-full">
+      <div className="relative w-1/5 flex items-center justify-center">
         <Announcement />
       </div>
-      <div className="w-3/5 flex items-center justify-center">
+      <div className="relative w-3/5 flex items-center justify-center">
         <TransitionWrapper>
           <SlideShow slides={slides1} />
         </TransitionWrapper>
       </div>
-      <div className="w-1/4 flex items-center justify-center">
+      <div className="relative w-1/4 flex items-center justify-center">
         <TransitionWrapper>
           <NoticeBoard />
         </TransitionWrapper>
       </div>
     </div>
-    <div className="w-3/5">
+    <div className="relative w-3/5">
       <TransitionWrapper>
         <Info />
       </TransitionWrapper>
@@ -203,12 +138,11 @@ const DesktopView = () => (
 
 export default function Home() {
   return (
-    <div className="bg-white">
+    <div className="bg-white relative">
       <CompanyInfo />
       <NavBar />
       <Marquees />
-
-      <div>
+      <div className="relative">
         <div className="sm:hidden">
           <MobileView />
         </div>
