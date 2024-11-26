@@ -261,6 +261,9 @@ const AbstractSubmission = () => {
                 className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
               >
                 <option value="">Select Delegates Type</option>
+                <option value=" Students">
+                 Students
+                </option>
                 <option value="Research Scholars and Students">
                   Research Scholars and Students
                 </option>
@@ -284,16 +287,20 @@ const AbstractSubmission = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-600">
-                  <b>
-                    ₹&#58;{" "}
-                    {formData.type === "Research Scholars and Students"
-                      ? 1100
-                      : formData.type ===
-                        "Delegates from Academics, R&D and Institutions"
-                      ? 2100
-                      : 3100}
-                  </b>
-                  <img className="p-2" src="2023K/fee.png" alt="Fee" />
+                <b>
+  ₹&#58;{" "}
+  {formData.type === "Students"
+    ? 500
+    : formData.type === "Research Scholars and Students"
+    ? 1100
+    : formData.type === "Delegates from Academics, R&D and Institutions"
+    ? 2100
+    : formData.type === "Delegates from Industry"
+    ? 3100
+    : "Unknown Type"} {/* Default value if no condition matches */}
+</b>
+                  
+                  <img className="p-2" src="/fee.png" alt="Fee" />
                   <span className="text-sm text-red-600 mb-4">
                 UPI ID&#58; shikshamahakhumb@sbi
               </span>

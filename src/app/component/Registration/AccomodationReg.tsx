@@ -217,13 +217,13 @@ const Forms = () => {
               required
             >
               <option value="">Select Date</option>
-              <option value="4">4 October</option>
-              <option value="5">5 October</option>
-              <option value="6">6 October</option>
-              <option value="4,5">4,5 October</option>
-              <option value="5,6">5,6 October</option>
-              <option value="4,6">4,6 October</option>
-              <option value="4,5,6">4,5,6 October</option>
+              <option value="4">15 November</option>
+              <option value="5">16 November</option>
+              <option value="6">17 November</option>
+              <option value="4,5">15,16 November</option>
+              <option value="5,6">15,17 November</option>
+              <option value="4,6">16,17 November</option>
+              <option value="4,5,6">15,16,17 November</option>
             </select>
           </div>
 

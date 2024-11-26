@@ -1,49 +1,21 @@
 import { ChangeEvent } from "react";
-import { FormData, TalentFormProps } from "../Types";
+import { FormData, BestPracticesFormProps } from "../Types";
 
-const TalentForm = ({
+const BestPracticesForm = ({
   formData,
   handleInputChange,
   handleImageChange,
   imageUrl,
-}: TalentFormProps) => {
+}: BestPracticesFormProps) => {
   return (
     <>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-          />
-        </label>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Talent Name:
-          <input
-            type="text"
-            name="talentName"
-            value={formData.talentName}
-            onChange={handleInputChange}
-            required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-          />
-        </label>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Institution Name:
+          Institution/Organization/Ministry/State/NGO Name:
           <input
             type="text"
             name="institutionName"
-            value={formData.institutionName}
+            value={formData?.institutionName || ""}
             onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
@@ -51,24 +23,31 @@ const TalentForm = ({
         </label>
       </div>
 
-      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">
+          About Practices (250 words):
+          <textarea
+            name="aboutPractices"
+            value={formData?.aboutPractices || ""}
+            onChange={handleInputChange}
+            required
+            maxLength={250}
+            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+          />
+        </label>
+      </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
-          Category:
-          <select
-            name="talentType"
-            value={formData.talentType}
-           
+          Key Person:
+          <input
+            type="text"
+            name="keyPerson"
+            value={formData?.keyPerson || ""}
+            onChange={handleInputChange}
+            required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-          >
-            <option value="">Select Talent Type</option>
-            <option value="musician">Student</option>
-            <option value="dancer">Pricipal</option>
-            <option value="singer">Teacher</option>
-           
-            <option value="other">Other</option>
-          </select>
+          />
         </label>
       </div>
 
@@ -78,7 +57,7 @@ const TalentForm = ({
           <input
             type="email"
             name="email"
-            value={formData.email}
+            value={formData?.email || ""}
             onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
@@ -92,7 +71,7 @@ const TalentForm = ({
           <input
             type="tel"
             name="contactNumber"
-            value={formData.contactNumber}
+            value={formData?.contactNumber || ""}
             onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
@@ -102,10 +81,10 @@ const TalentForm = ({
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
-          Description:
+          Address:
           <textarea
-            name="description"
-            value={formData.description}
+            name="address"
+            value={formData?.address || ""}
             onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
@@ -115,11 +94,10 @@ const TalentForm = ({
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
-          Upload Attachments:
+          Upload Attachments (Optional):
           <input
             type="file"
             accept=".pdf, .png, .jpg"
-            required
             onChange={handleImageChange}
             className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black"
           />
@@ -143,4 +121,4 @@ const TalentForm = ({
   );
 };
 
-export default TalentForm;
+export default BestPracticesForm;

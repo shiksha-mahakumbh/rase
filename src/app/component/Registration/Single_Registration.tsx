@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { useState, FormEvent, ChangeEvent } from "react";
 import DelegateForm from "./DelegateForm";
 import ProjectDisplaySubmission from "./ProjectDisplaySubmission";
@@ -10,6 +10,7 @@ import AbstractSubmissionForm from "./AbstractSubmission";
 import FullLengthPaperForm from "./FulllengthPaper";
 import OrganizerRegForm from "./OrganizerReg";
 import AccomodationForm from "./AccomodationReg";
+import BestPracticesForm from "./Best_Practices";
 import { storage } from "@/app/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import toast, { Toaster } from "react-hot-toast";
@@ -37,6 +38,12 @@ const RegistrationPage = () => {
     event_type: "",
     address: "",
     views: "",
+    talentName: "",
+    typeofConclave: "",
+    talentType: "",
+    aboutPractices: "",
+    keyPerson: "",
+    imageUrl: null,
   };
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -46,7 +53,8 @@ const RegistrationPage = () => {
   const [eventCategory, setEventCategory] = useState<string>("conference");
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Updated to handle events from HTMLSelectElement as well
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -124,28 +132,20 @@ const RegistrationPage = () => {
             <option value="volunteer">Volunteer</option>
             <option value="ngo">NGO</option>
             <option value="conclave">Conclave</option>
-            
-   <optgroup label="Submission Type">
-    <option value="Abstract">Submit Abstract</option>
-    <option value="FullLengthPaper">Submit Full-Length Paper</option>
-  </optgroup>
+
+            <optgroup label="Submission Type">
+              <option value="Abstract">Submit Abstract</option>
+              <option value="FullLengthPaper">Submit Full-Length Paper</option>
+            </optgroup>
+            <option value="BestPractices">Best Practices</option>
             <option value="OrganizerReg">Organizer</option>
             <option value="Accomodation">Accommodation</option>
           </select>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {category === "delegate" && (
-            <DelegateForm
-             
-             
-            />
-          )}
-          {category === "institution" && (
-            <ProjectDisplaySubmission
-            
-            />
-          )}
+          {category === "delegate" && <DelegateForm />}
+          {category === "institution" && <ProjectDisplaySubmission />}
           {category === "talent" && (
             <TalentForm
               formData={formData}
@@ -154,45 +154,25 @@ const RegistrationPage = () => {
               imageUrl={imageUrl}
             />
           )}
-          {category === "volunteer" && (
-            <VolunteerForm
-             
-            />
-          )}
-          {category === "ngo" && (
-            <NGOForm
-             
-            />
-          )}
+          {category === "volunteer" && <VolunteerForm />}
+          {category === "ngo" && <NGOForm />}
           {category === "conclave" && (
-            <ConclaveForm
+            <ConclaveForm formData={formData} handleInputChange={handleInputChange} />
+          )}
+          {category === "Abstract" && <AbstractSubmissionForm />}
+          {category === "FullLengthPaper" && <FullLengthPaperForm />}
+          {category === "BestPractices" && (
+            <BestPracticesForm
               formData={formData}
               handleInputChange={handleInputChange}
+              handleImageChange={handleImageChange}
+              imageUrl={imageUrl}
             />
           )}
-          {category === "Abstract" && (
-            <AbstractSubmissionForm
-            
-            />
-          )}
-          {category === "FullLengthPaper" && (
-            <FullLengthPaperForm
-   
-            />
-          )}
-          {category === "OrganizerReg" && (
-            <OrganizerRegForm
-           
-            />
-          )}
-          {category === "Accomodation" && (
-            <AccomodationForm
-              
-             
-            />
-          )}
+          {category === "OrganizerReg" && <OrganizerRegForm />}
+          {category === "Accomodation" && <AccomodationForm />}
 
-          {/* <button
+          <button
             type="submit"
             className={`w-full py-3 rounded-lg text-white font-semibold transition-all ${
               loading ? "bg-gray-400" : "bg-indigo-500 hover:bg-indigo-600"
@@ -205,12 +185,11 @@ const RegistrationPage = () => {
                 <span>Submitting...</span>
               </div>
             ) : (
-              Submit
-            )
-            }
-          </button> */}
+              "Submit"
+            )}
+          </button>
         </form>
-        
+
         <Toaster />
       </div>
     </div>
