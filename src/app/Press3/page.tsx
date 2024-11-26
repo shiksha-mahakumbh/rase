@@ -11,7 +11,7 @@ const shareUrl = encodeURIComponent("https://www.rase.co.in/Press2"); // Replace
 const shareText = encodeURIComponent(
   "आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम"
 );
-const shareImage = proceeding3;
+const shareImage = "/public/2024M/press3.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "3",
@@ -157,7 +157,7 @@ export default function Home() {
         {/* Social Media Sharing Section */}
         <div className="mt-6 flex justify-center space-x-4">
           <a
-            href={`https://wa.me/?text=${shareText}%20${shareUrl}`}
+            href={`https://wa.me/?text=${shareText}%20${shareUrl}&picture=${encodeURIComponent(shareImage)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -165,7 +165,7 @@ export default function Home() {
             WhatsApp
           </a>
           <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}`}
+            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}&picture=${encodeURIComponent(shareImage)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -173,7 +173,7 @@ export default function Home() {
             Facebook
           </a>
           <a
-            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}&picture=${encodeURIComponent(shareImage)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-blue-400 text-white rounded hover:bg-blue-500"
@@ -181,7 +181,7 @@ export default function Home() {
            Twitter
           </a>
           <a
-            href={`mailto:?subject=Shiksha Mahakumbh 2.0&body=${shareText}%20${shareUrl}`}
+            href={`mailto:?subject=Shiksha Mahakumbh 2.0&body=${shareText}%20${shareUrl}&picture=${encodeURIComponent(shareImage)}`}
             className="p-2 bg-gray-500 text-white rounded hover:bg-gray-600"
           >
              Email
