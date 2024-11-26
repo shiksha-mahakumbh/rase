@@ -11,7 +11,7 @@ const Conference_Support: React.FC = () => {
 
   const Conference_Support: Item[] = [
     { imageUrl: '/2024M/our partners/1.png', link: '' },
-    { imageUrl: '/2024M/our partners/2.png', link: '' },
+    // { imageUrl: '/2024M/our partners/2.png', link: '' },
     { imageUrl: '/2024M/our partners/3.png', link: '' },
     { imageUrl: '/2024M/our partners/4.png', link: '' },
     { imageUrl: '/2024M/our partners/5.png', link: '' },
