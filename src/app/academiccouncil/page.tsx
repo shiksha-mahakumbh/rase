@@ -4,7 +4,7 @@ import Info from '../component/Info';
 import NavBar from '../component/NavBar';
 import SlideShow from '../component/SlideShow';
 import ContactUs from '../component/ContactUs';
-import Commites from "../component/academicCouncil"
+import Commites from "../component/AcademicCouncil"
 
 const LocalAdvisoryCommitee = [
     {
