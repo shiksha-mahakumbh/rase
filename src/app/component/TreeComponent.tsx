@@ -136,16 +136,16 @@ const GridComponent: React.FC = () => {
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Campaign Photos:</p>
-                    <Link href="https://drive.google.com/drive/folders/1u_rgXNeYBuwnLae7irG4NiHgEil69j16?usp=sharing" passHref>
+                    <p className="font-semibold">Baton Ceremony Photos:</p>
+                    <Link href="/BatonCeremony" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
                       </button>
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Day 1 Photos:</p>
-                    <Link href="https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq" passHref>
+                    <p className="font-semibold">Residential Camp Photos:</p>
+                    <Link href="ResidentialCamp" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
                       </button>
