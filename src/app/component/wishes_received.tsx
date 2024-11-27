@@ -1,6 +1,9 @@
-"use client";
-import React from "react";
-
+"use client"
+import React, { useEffect, useState } from "react";
+import Guest from "../component/Guest";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import {firebaseConfig} from "@/app/firebase";
 const speakers = [
   {
     id: 1,
@@ -74,38 +77,47 @@ const speakers = [
   },
 ];
 
-const Guest: React.FC<{
-  name: string;
-  designation: string;
-  place: string;
-  imageSrc: string;
-}> = ({ name, designation, place, imageSrc }) => (
-  <div className="border rounded-lg p-4 shadow-md flex flex-col items-center">
-    <div className="w-full h-60 overflow-hidden rounded-lg">
-      <img
-        src={imageSrc}
-        alt={name}
-        className="w-full h-full object-cover"
-      />
-    </div>
-    <h3 className="text-lg font-bold mt-4 text-center">{name}</h3>
-    <p className="text-sm text-gray-600 text-center">{designation}</p>
-    <p className="mt-2 text-gray-800 text-center">{place}</p>
-  </div>
-);
 
 const WishesReceived: React.FC = () => {
+  const [firebaseSpeakers, setFirebaseSpeakers] = useState<any[]>([]);
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  useEffect(() => {
+    // Fetch data from Firebase Firestore
+    const fetchSpeakers = async () => {
+      const querySnapshot = await getDocs(collection(db, "wishesReceived")); // Use your collection name
+      const fetchedSpeakers: any[] = [];
+      querySnapshot.forEach((doc) => {
+        fetchedSpeakers.push({ id: doc.id, ...doc.data() });
+      });
+      setFirebaseSpeakers(fetchedSpeakers);
+    };
+  
+    fetchSpeakers();
+  }, []);
+
   return (
     <div className="p-4">
-      <p className="text-xl md:text-2xl text-primary text-center uppercase font-bold mb-8">
-        Wishes Received for the success of Shiksha Mahakumbh 2024
-      </p>
-      <div className="flex flex-wrap justify-center">
-        {speakers.map((guest) => (
-          <div key={guest.id} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4">
-            <Guest {...guest} />
-          </div>
-        ))}
+      <div className="p-4">
+      <p className="text-xl md:text-2xl text-primary text-center uppercase font-bold mb-4">Wishes Received for the success of Shiksha Mahakumbh 2024</p>
+      <div className="flex flex-wrap">
+          {/* Hardcoded speakers */}
+          {speakers.map((guest) => (
+            <div key={guest.id} className="w-full sm:w-1/2 lg:w-1/3 p-2">
+              <Guest {...guest} />
+            </div>
+          ))}
+
+          {/* Firebase speakers */}
+          {firebaseSpeakers.map((guest) => (
+            <div key={guest.id} className="w-full sm:w-1/2 lg:w-1/3 p-2">
+              <Guest {...guest} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

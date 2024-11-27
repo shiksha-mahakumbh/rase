@@ -1,21 +1,25 @@
-// firebase.ts
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage"; // Import storage
+import { getStorage } from "firebase/storage";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAnxFHB9rz60iStUZ70zop6rBlqkTSl2zI",
-  authDomain: "rase-c8594.firebaseapp.com",
-  projectId: "rase-c8594",
-  storageBucket: "rase-c8594.appspot.com",
-  messagingSenderId: "428952546898",
-  appId: "1:428952546898:web:ccf223d18fe876cbce798b",
-  measurementId: "G-VL5Z20KGVR"
+  apiKey: "AIzaSyAB6FJEBNv-4QtqQ4FR3-Jj6Y0r1sVu030",
+  authDomain: "dhe-sm.firebaseapp.com",
+  projectId: "dhe-sm",
+  storageBucket: "dhe-sm.appspot.com",
+  messagingSenderId: "59719303159",
+  appId: "1:59719303159:web:b2917b02e61eb1f76c38f2",
+  measurementId: "G-Q7GLHKCFZB"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+// Initialize Firestore and Storage
 export const db = getFirestore(app);
-export const storage = getStorage(app); // Initialize storage
+const storage = getStorage(app);
+
+// Export initialized instances and configuration
+export { firebaseConfig, app, storage };
