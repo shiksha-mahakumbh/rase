@@ -5,7 +5,7 @@ import Footer from "../component/Footer";
 import NavBar from "../component/NavBar";
 import Press1 from "../component/Press1";
 import proceeding2 from '/public/2024M/press1.jpg';
-
+import Image from "next/image"; 
 
 const shareUrl = encodeURIComponent("https://www.rase.co.in/Press1"); // Replace with your actual page URL
 const shareText = encodeURIComponent(
@@ -16,6 +16,7 @@ const shareImage ="/2024M/press1.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "1",
+  image:"/2024M/press1.jpg",
   title: "A Grand Start to Shiksha Mahakumbh 2.0: Baton Ceremony Successfully Concluded Kurukshetra, November 20, 2024",
   sections: [
     {
@@ -179,6 +180,7 @@ export default function Home() {
     <div className="bg-white">
     <CompanyInfo />
     <NavBar />
+    
     <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 pb-6">
 
       <div className="w-full sm:w-1/5">
