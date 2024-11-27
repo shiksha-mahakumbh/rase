@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Image from 'next/image';
 type Paper = {
   title: string;
   contact: string | string[];
@@ -15,6 +15,7 @@ type Section = {
 
 type Data = {
   title: string;
+  image:string;
   sections: Section[];
 };
 
@@ -28,7 +29,15 @@ const Press3: React.FC<{ data: Data }> = ({ data }) => {
     <div className="proceeding-container p-6 bg-gray-100 rounded-lg shadow-lg">
       <h1 className="text-4xl font-bold text-center mb-8">शिक्षा महाकुंभ-2024 (द्वितीय संस्करण)</h1>
       <h2 className="text-3xl font-semibold text-gray-800 mb-4">{data.title}</h2>
-
+      <div className="image-container mb-8 flex justify-center">
+        <Image 
+          src={data.image} 
+          alt="Press Event" 
+          width={400}  // Set the desired width
+          height={200} // Set the desired height
+          className="rounded-lg shadow-md"
+        />
+      </div>
       {data.sections.map((section, index) => (
         <div key={index} className="section mb-12 p-4 bg-white rounded-lg shadow-md">
           <h3 className="text-2xl font-semibold text-blue-600 mb-4">{section.title}</h3>

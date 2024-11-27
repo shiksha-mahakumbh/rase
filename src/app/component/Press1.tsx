@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 type Paper = {
   title: string;
@@ -15,6 +16,7 @@ type Section = {
 
 type Data = {
   title: string;
+  image: string; // Add image field to the data type
   sections: Section[];
 };
 
@@ -28,6 +30,17 @@ const Press1: React.FC<{ data: Data }> = ({ data }) => {
     <div className="proceeding-container p-6 bg-gray-100 rounded-lg shadow-lg">
       <h1 className="text-4xl font-bold text-center mb-8">Baton Ceremony</h1>
       <h2 className="text-3xl font-semibold text-gray-800 mb-4">{data.title}</h2>
+
+      {/* Display the image */}
+      <div className="image-container mb-8 flex justify-center">
+        <Image 
+          src={data.image} 
+          alt="Press Event" 
+          width={800}  // Set the desired width
+          height={400} // Set the desired height
+          className="rounded-lg shadow-md"
+        />
+      </div>
 
       {data.sections.map((section, index) => (
         <div key={index} className="section mb-12 p-4 bg-white rounded-lg shadow-md">
