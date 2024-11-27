@@ -64,9 +64,7 @@ const Guest: React.FC<{
 
 const BatonCeremony: React.FC = () => {
   return (
-    <div className="bg-white min-h-screen">
-    <CompanyInfo />
-    <NavBar />
+  
     <div className="p-4">
       <p className="text-xl md:text-2xl text-primary text-center uppercase font-bold mb-8">
         Baton Ceremony Shiksha Mahakumbh 2024
@@ -79,8 +77,7 @@ const BatonCeremony: React.FC = () => {
         ))}
       </div>
     </div>
-    <Footer/>
-    </div>
+    
   );
 };
 

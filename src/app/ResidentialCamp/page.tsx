@@ -3,7 +3,7 @@ import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
 import NavBar from "../component/NavBar";
 
-import ResidentialCamp from "../component/ResidentialCamp";
+import ResidentialCamp from "../component/Residential_Camp";
 
 const page = () => {
   return (
