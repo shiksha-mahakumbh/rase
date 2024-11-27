@@ -3,7 +3,6 @@ import React from "react";
 import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
 import NavBar from "../component/NavBar";
-
 const speakers = [
   {
     id: 1,
@@ -91,11 +90,11 @@ const Guest: React.FC<{
   </div>
 );
 
-const ResidentialCamp: React.FC = () => {
+const Residential_Camp: React.FC = () => {
   return (
     <div className="bg-white min-h-screen">
-      <CompanyInfo />
-      <NavBar />
+    <CompanyInfo />
+    <NavBar />
     <div className="p-4">
       <p className="text-xl md:text-2xl text-primary text-center uppercase font-bold mb-8">
         Residential Camp Shiksha Mahakumbh 2024
@@ -107,10 +106,10 @@ const ResidentialCamp: React.FC = () => {
           </div>
         ))}
       </div>
-    </div>
-    <Footer/>
+      <Footer/>
+      </div>
     </div>
   );
 };
 
-export default ResidentialCamp;
+export default Residential_Camp;
