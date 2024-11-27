@@ -3,7 +3,7 @@ import Footer from '../component/Footer';
 import Info from '../component/Info';
 import NavBar from '../component/NavBar';
 import SlideShow from '../component/SlideShow';
-import AcademicCouncil from '../component/academicCouncil';
+import AcademicCouncil from '../component/AcademicCouncil';
 
 
 
