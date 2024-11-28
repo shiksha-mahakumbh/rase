@@ -8,7 +8,7 @@ interface Member {
 
 const VittVibhag: React.FC = () => {
   const members: Member[] = [
-    { name: "Shri Mandeep Tiwar", position: "Entrepreneur, Jalandhar", contact: "9814978666" },
+    { name: "Shri Mandeep Tiwari", position: "Entrepreneur, Jalandhar", contact: "9814978666" },
     { name: "Dr. Jatinder Garg", position: "Associate Professor, Government College, Sangrur", contact: "9501956000" },
   ];
 

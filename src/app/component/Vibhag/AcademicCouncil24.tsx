@@ -32,9 +32,9 @@ const AcademicCouncil: React.FC = () => {
       members: [
         { title: "Chairperson", names: "Dr. Ravi Prakash", address: "Chaudhary Bansi Lal University, Haryana" },
         { title: "Vice-Chairperson", names: "Prof. Brahmjit Singh", address: "NIT Kurukshetra, Haryana" },
-        { title: "Members", names: "Prof. Bala Lakhendra, BHU Varanasi, U.P.", address: "BHU Varanasi, U.P." },
-        { title: "Members", names:  "Prof. Sathans, NIT Kurukshetra, Haryana", address: " NIT Kurukshetra, Haryana" },
-        { title: "Members", names:  "Prof. Anish Sachdeva, NIT Jalandhar, Punjab",address: "NIT Jalandhar, Punjab" },
+        { title: "Members", names: "Prof. Bala Lakhendra", address: "BHU Varanasi, U.P." },
+        { title: "Members", names:  "Prof. Sathans", address: " NIT Kurukshetra, Haryana" },
+        { title: "Members", names:  "Prof. Anish Sachdeva",address: "NIT Jalandhar, Punjab" },
       ],
     },
     {
