@@ -118,11 +118,12 @@ const AbstractSubmission = () => {
       toast.error("Something went wrong!");
     }
   };
+
   return (
     <div className="bg-white mb-5 ">
       <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black ">
-        <h1 className="text-primary text-center text-xl ">
-         Paper Submission Form
+        <h1 className="text-primary text-center text-xl">
+          Paper Submission Form
         </h1>
         <form onSubmit={handleSubmit} className="bg-white p-4">
           <div className="mb-4">
@@ -244,84 +245,52 @@ const AbstractSubmission = () => {
             <input
               type="tel"
               name="ContactNumber"
-              placeholder="*1234567890*"
               value={formData.ContactNumber}
+              placeholder="*Contact number*"
               onChange={handleInputChange}
               className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
           <div className="mb-4">
-  <label className="block text-sm font-medium text-gray-600">
-    Select Type &#40;Fee&#41;<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-    <select
-      name="type"
-      value={formData.type}
-      onChange={handleInputChange}
-      className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-    >
-      <option value="">Select Delegates Type</option>
-      <option value="Student">Students</option> {/* Removed the leading space */}
-      <option value="Research Scholars and Students">Research Scholars and Students</option>
-      <option value="Delegates from Academics and R&D, Institutions">Academics, R&D and Institutions</option>
-      <option value="Delegates from Industry">Industry</option>
-    </select>
-  </label>
-</div>
+            <label className="block text-sm font-medium text-gray-600">
+              Upload Fee Receipt <span className="text-red-600 text-xs">(Max size: 5 MB)</span>
+              <span className="text-red-700 text-base"><sup>&#42;</sup></span>
+            </label>
+            <input
+              type="file"
+              name="FeeReceipt"
+              accept=".jpg, .jpeg, .png, .pdf"
+              onChange={(e) => handleFileChange(e, "FeeReceipt", MAX_FILE_SIZE_RECEIPT)}
+              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+            />
+          </div>
 
-{formData.type && (
-  <>
-    <div className="text-sm text-red-600 mb-4">
-      Note&#58; Abstract Submission will be valid only if you upload the payment
-      receipt successfully. The Fee amount displayed above
-      the &#34;Payment QR Code&#34; must be paid. Without that, the
-      Submission will be canceled.
-    </div>
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-600">
-      <b>
-      ₹&#58;{" "}
-        {formData.type === "Student"
-          ? 500
-          : formData.type === "Research Scholars and Students"
-          ? 1100
-          : formData.type === "Delegates from Academics and R&D, Institutions"
-          ? 2100
-          : formData.type === "Delegates from Industry"
-          ? 3100
-          : "Unknown Type"} {/* Default value if no condition matches */}
-      </b>
-            
-                  <img className="p-2" src="/fee.png" alt="Fee" />
-                  <span className="text-sm text-red-600 mb-4">
-                UPI ID&#58; shikshamahakhumb@sbi
-              </span>
-                </label>
-              </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-600">
+              Type of Submission<span className="text-red-700 text-base"><sup>&#42;</sup></span>
+            </label>
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleInputChange}
+              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black"
+            >
+              <option value="">Select Submission Type</option>
+              <option value="Research Paper">Research Paper</option>
+              <option value="Review Paper">Review Paper</option>
+            </select>
+          </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">
-                  Upload Payment Receipt<span className="text-red-600 text-xs">(Max size: 5 MB)</span>
-                  <span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                </label>
-                <input
-                  type="file"
-                  name="FeeReceipt"
-                  accept=".pdf, .png, .jpg"
-                  onChange={(e) => handleFileChange(e, "FeeReceipt", MAX_FILE_SIZE_RECEIPT)}
-                  className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
-                />
-              </div>
-            </>
-          )}
-
-          <button
-            type="submit"
-            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-color transition duration-300 mt-4 w-full"
-            disabled={loading}
-          >
-            Submit
-          </button>
+          <div className="mb-4">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-primary text-white py-2 px-4 rounded-md mt-4 disabled:bg-gray-400"
+            >
+              {loading ? "Submitting..." : "Submit"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
