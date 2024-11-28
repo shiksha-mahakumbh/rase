@@ -1,9 +1,60 @@
 import { useState, ChangeEvent } from "react";
-import { FormData, InstitutionFormProps } from "../Types";
+import axios from "axios";
+import { InstitutionFormProps } from "../Types";
 
-const InstitutionForm = ({ formData, handleInputChange, handleRole, handleImageChange, imageUrl }: InstitutionFormProps) => {
+const InstitutionForm = ({
+  formData,
+  handleInputChange,
+  handleRole,
+  handleImageChange,
+  imageUrl,
+}: InstitutionFormProps) => {
+  // State to manage form submission status (loading, success, error)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    // Create a FormData object to send the form data (including file) to the backend
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("role", formData.role);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("contactNumber", formData.contactNumber);
+    formDataToSend.append("website", formData.website);
+    formDataToSend.append("cont", formData.cont);
+    formDataToSend.append("feeAmount", formData.feeAmount.toString());
+    
+    if (formData.feeAmount !== 0 && imageUrl) {
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      if (fileInput?.files?.[0]) {
+        formDataToSend.append("feeReceipt", fileInput.files[0]);
+      }
+    }
+
+    try {
+      // Send the form data to the backend
+      const response = await axios.post("http://localhost:5000/api/submitInstitution", formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      
+      setMessage("Institution data submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting institution data:", error);
+      setMessage("Failed to submit institution data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">
           Institution Name:
@@ -107,10 +158,26 @@ const InstitutionForm = ({ formData, handleInputChange, handleRole, handleImageC
         </div>
       )}
 
-      {imageUrl && (
-        <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />
+      {imageUrl && <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />}
+
+      <div className="mb-4">
+        {loading ? (
+          <button type="submit" disabled className="p-2 bg-gray-400 text-white rounded-md w-full">
+            Submitting...
+          </button>
+        ) : (
+          <button type="submit" className="p-2 bg-blue-600 text-white rounded-md w-full">
+            Submit
+          </button>
+        )}
+      </div>
+
+      {message && (
+        <div className="mb-4 text-center text-sm font-medium text-gray-600">
+          {message}
+        </div>
       )}
-    </>
+    </form>
   );
 };
 
