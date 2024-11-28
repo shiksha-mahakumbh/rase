@@ -25,7 +25,7 @@ const NavBar: React.FC = () => {
         { path: "/abhiyanphotoframe.pdf", title: "Abhiyan in Photo Frames" },
         { path: "/commingsoon", title: "Governing Council" },
         
-        { path: "/VinhagRoute/AcademicCouncil24", title: " शैक्षिक विभाग - Shaikshik Vibha" },
+        { path: "/VibhagRoute/AcademicCouncil24", title: " शैक्षिक विभाग - Shaikshik Vibha" },
         { path: "/VibhagRoute/Vitt24", title: "वित्त विभाग - Vitt Vibhag" },
         { path: "/VibhagRoute/Prachar24", title: "प्रचार विभाग - Prachar Vibhag" },
         { path: "/VibhagRoute/Sampark24", title: "संपर्क विभाग - Sampark Vibhag" },
