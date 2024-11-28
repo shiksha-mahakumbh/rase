@@ -1,31 +1,28 @@
 'use client'
-import { useState,useEffect, ChangeEvent, FormEvent } from 'react';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/app/firebase';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/app/firebase';
-import  toast , { Toaster } from "react-hot-toast";
+
+import { useState, ChangeEvent, FormEvent } from 'react'
+import toast from 'react-hot-toast'
 
 interface FormData {
-  name: string;
-  type:string;
-  Websitelink:string;
-  contribution:string;
-  role: string;
-  email: string;
-  contactNumber: string;
-  feeReceipt: string;
-  vb: string;
-  feeAmount: number;
-  accommodation: string;
+  name: string
+  type: string
+  Websitelink: string
+  contribution: string
+  role: string
+  email: string
+  contactNumber: string
+  feeReceipt: string
+  vb: string
+  feeAmount: number
+  accommodation: string
 }
 
 const RegistrationForm = () => {
- const initialFormData:FormData ={
+  const initialFormData: FormData = {
     name: '',
-    type:'',
-    Websitelink:'',
-    contribution:'',
+    type: '',
+    Websitelink: '',
+    contribution: '',
     role: '',
     email: '',
     contactNumber: '',
@@ -33,456 +30,242 @@ const RegistrationForm = () => {
     vb: '',
     feeAmount: 0,
     accommodation: '',
-  };
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    type:'',
-    Websitelink:'',
-    contribution:'',
-    role: '',
-    email: '',
-    contactNumber: '',
-    feeReceipt: '',
-    vb: '',
-    feeAmount: 0,
-    accommodation: '',
-  });
-  const [image, setImage] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false); // Add loading state
+  }
+  const [formData, setFormData] = useState<FormData>(initialFormData)
+  const [image, setImage] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-   
-  };
-
-  const handletype = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-    setFormData((prevData) => ({
-      ...prevData,
-      feeAmount: 0,
-    }));
-    setFormData((prevData) => ({
-      ...prevData,
-      role: '',
-    }));
-  };
-  const handlevb = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-    setFormData((prevData) => ({
-      ...prevData,
-      feeAmount: 0,
-    }));
-    setFormData((prevData) => ({
-      ...prevData,
-      role: '',
-    }));
-  };
-  
-  const handleRole = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    console.log(formData.vb)
-    if(formData.vb==="nvb"){
-    if (value === 'teacher' ) {
-        setFormData((prevData) => ({
-          ...prevData,
-          feeAmount: 1000,
-        }));
-    }
-    else  if (value === 'principle' ) {
-      setFormData((prevData) => ({
-        ...prevData,
-        feeAmount: 2000,
-      }));
+    }))
   }
-  else  if (value === 'dirVcCP' ) {
-    setFormData((prevData) => ({
-      ...prevData,
-      feeAmount: 3000,
-    }));
-}
-else  if (value === 'DelegatesFromIndustry' ) {
-  setFormData((prevData) => ({
-    ...prevData,
-    feeAmount: 8000,
-  }));
-}
-else  if (value === 'ResearchScholar' ) {
-  setFormData((prevData) => ({
-    ...prevData,
-    feeAmount: 2000,
-  }));
-}
-    else {
-      setFormData((prevData) => ({
-        ...prevData,
-        feeAmount: 0,
-      }));
-    }
-  }
-    else {
-      setFormData((prevData) => ({
-        ...prevData,
-        feeAmount: 0,
-      }));
-    }
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedImage = e.target.files?.[0];
+    const selectedImage = e.target.files?.[0]
     if (selectedImage) {
-      setImage(selectedImage);
+      setImage(selectedImage)
     }
-  };
-
-  const handleAddDocument = async (downloadURL: string | null) => {
-    try {
-      const docRef = await addDoc(collection(db, 'ParticipantRegsm24'), { ...formData, feeReceipt: downloadURL });
-      console.log('Document added with ID:', docRef.id);
-      setLoading(false);
-      toast.success("Suceessfully Registered!");
-      setFormData(initialFormData)
-    } catch (error) {
-      setLoading(false);
-      toast.error("Something broke while registration!")
-      console.error('Error adding document:', error);
-    }
-  };
+  }
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    setLoading(true);
-   
+    event.preventDefault()
+    setLoading(true)
+  
+    const formDataToSend = new FormData()
+  
+    // Use Object.entries() to iterate over the formData and append each key-value pair
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataToSend.append(key, value)
+    })
+  
+    // Append the image file if present
     if (image) {
-      try {
-        const imageRef = ref(storage, `images/${image.name}`);
-        await uploadBytes(imageRef, image);
-
-        const downloadURL = await getDownloadURL(imageRef);
-
-       
-        setFormData((prevData) => ({
-          ...prevData,
-          feeReceipt: downloadURL || '', 
-        }));
-
-     
-        handleAddDocument(downloadURL);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        setLoading(false); 
+      formDataToSend.append('feeReceipt', image)
+    }
+  
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        body: formDataToSend,
+      })
+  
+      if (response.ok) {
+        toast.success('Successfully Registered!')
+        setFormData(initialFormData)
+        setImage(null)
+      } else {
+        toast.error('Something went wrong!')
       }
-    } else {
-     
-      handleAddDocument(null);
+    } catch (error) {
+      toast.error('Error during registration')
+      console.error('Error during registration:', error)
+    } finally {
+      setLoading(false)
     }
-
-    
-    console.log(formData);
-  };
-  useEffect(() => {
-    // Check if we are on the client side before running analytics-related code
-    if (typeof window !== 'undefined') {
-      import('firebase/analytics')
-        .then(({ getAnalytics }) => {
-          const analytics = getAnalytics();
-          // Add your Firebase Analytics code here
-          // For example: analytics.logEvent('page_view');
-        })
-        .catch((error) => {
-          console.error('Error importing Firebase Analytics:', error);
-        });
-    }
-  }, []);
+  }
   return (
-    <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
-      <h1 className='text-primary text-center text-xl'>Participant Registration</h1>
-      <form onSubmit={handleSubmit} className='bg-white p-4'>
-     
-        {/* Name Field */}
-       
-        <div className='mb-4'>
-        
-          <label className='block text-sm font-medium text-gray-600'>
-            Type<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            <select
-              name='type'
-              value={formData.type}
-              onChange={handletype}
-              required
-              className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-            >
-              <option value=''>Select Type</option>
-              <option value='Delegate'>Delegate</option>
-              <option value='Institutions'>Institutions</option>
-            </select>
+    <div className="shadow-md rounded-md max-w-md mx-auto mt-8">
+      <h1 className="text-primary text-center text-xl">Participant Registration</h1>
+      <form onSubmit={handleSubmit} className="bg-white p-4">
+        <div className="mb-4">
+          <label htmlFor="name" className="block font-medium text-gray-700">
+            Name
           </label>
-        </div>
-       
-
-        {formData.type === 'Delegate' && (
-          <>
-           <div className='mb-4'>
-          <label className='block text-sm font-medium text-gray-600'>
-            Name<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            <input
-              type='text'
-              name='name'
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-              className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-            />
-          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
         </div>
 
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-                Delegate Type<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                <select
-                  name='vb'
-                  value={formData.vb}
-                  onChange={handlevb}
-                  required
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                >
-                  <option value=''>Select Type</option>
-                  <option value='vb'>Vidya Bharti</option>
-                  <option value='nvb'>Non Vidya Bharti</option>
-                </select>
-              </label>
-            </div>
-
-            {/* Role Dropdown */}
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-                Delegate<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                <select
-                  name='role'
-                  value={formData.role}
-                  onChange={handleRole}
-                  required
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                >
-                  <option value=''>Select Role</option>
-                  <option value='DelegatesFromIndustry'>Delegates from Industry</option>
-                  <option value='student'>Student</option>
-                  <option value='teacher'>Teacher</option>
-                  <option value='principle'>Principle</option>
-                  <option value='dirVcCP'>Director/VC/ChairPersion</option>
-                  <option value='ResearchScholar'>Research scholar</option>
-                </select>
-              </label>
-            </div>
-
-            {/* Display fee amount if it's non-zero */}
-            {formData.feeAmount !== 0 && (
-              <div className='mb-4'>
-                <label className='block text-sm font-medium  text-black'>
-                  <b>Fees: {formData.feeAmount}</b>
-                  <br />
-                  <img className='p-2 h-50 w-50' src='/fee.png' alt='Fee' />
-                </label>
-              </div>
-            )}
-
-            {/* Email Field */}
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-                Email<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                <input
-                  type='email'
-                  name='email'
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                />
-              </label>
-            </div>
-
-            {/* Contact Number Field */}
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-                Contact Number<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                <input
-                  type='tel'
-                  name='contactNumber'
-                  value={formData.contactNumber}
-                  onChange={handleInputChange}
-                  required
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                />
-              </label>
-            </div>
-
-            {formData.feeAmount !== 0 && (
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600 '>
-                  Upload Fee Receipt<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                  <input
-                    type='file'
-                    accept='.pdf, .png, .jpg'
-                    required={formData.feeAmount !== 0}
-                    onChange={handleImageChange}
-                    className='mt-4 p-2 block w-full rounded-md border-gray-300 text-black'
-                  />
-                </label>
-              </div>
-            )}
-
-            {imageUrl && <img src={imageUrl} alt='Uploaded' style={{ maxWidth: '100%' }} />}
-          </>
-        )}
-    {formData.type === 'Institutions' && (
-          <>
-           <div className='mb-4'>
-          <label className='block text-sm font-medium text-gray-600'>
-          Institutions Name<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            <input
-              type='text'
-              name='name'
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-              className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-            />
+        <div className="mb-4">
+          <label htmlFor="type" className="block font-medium text-gray-700">
+            Type
           </label>
+          <select
+            id="type"
+            name="type"
+            value={formData.type}
+            onChange={handleInputChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          >
+            <option value="">Select Type</option>
+            <option value="speaker">Speaker</option>
+            <option value="attendee">Attendee</option>
+            <option value="sponsor">Sponsor</option>
+          </select>
         </div>
 
-            
+        <div className="mb-4">
+          <label htmlFor="role" className="block font-medium text-gray-700">
+            Role
+          </label>
+          <input
+            type="text"
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleInputChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-            {/* Role Dropdown */}
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-              Institution Type<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                <select
-                  name='role'
-                  value={formData.role}
-                  onChange={handleRole}
-                  required
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'>
-                  <option value=''>Select Type</option>
-                  <option value='Academica'>Academia</option>
-                  <option value='Industry'>Industry</option>
-                  <option value='teacher'>NGO/Society/Trust</option>
-                 
-                </select>
-              </label>
-            </div>
+        <div className="mb-4">
+          <label htmlFor="email" className="block font-medium text-gray-700">
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-            {/* Display fee amount if it's non-zero */}
-            {formData.feeAmount !== 0 && (
-              <div className='mb-4'>
-                <label className='block text-sm font-medium  text-black'>
-                  <b>Fees: {formData.feeAmount}</b>
-                  <br />
-                  <img className='p-2' src='/fee.png' alt='Fee' />
-                </label>
-              </div>
-            )}
+        <div className="mb-4">
+          <label htmlFor="contactNumber" className="block font-medium text-gray-700">
+            Contact Number
+          </label>
+          <input
+            type="tel"
+            id="contactNumber"
+            name="contactNumber"
+            value={formData.contactNumber}
+            onChange={handleInputChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-            {/* Email Field */}
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-                Email<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                <input
-                  type='email'
-                  name='email'
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                />
-              </label>
-            </div>
+        <div className="mb-4">
+          <label htmlFor="feeReceipt" className="block font-medium text-gray-700">
+            Fee Receipt (Upload)
+          </label>
+          <input
+            type="file"
+            id="feeReceipt"
+            name="feeReceipt"
+            accept="image/*"
+            onChange={handleImageChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-            {/* Contact Number Field */}
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-                Contact Number<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                <input
-                  type='tel'
-                  name='contactNumber'
-                  value={formData.contactNumber}
-                  onChange={handleInputChange}
-                  required
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                />
-              </label>
-            </div>
-            <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-              Website
-                <input  
-                  name='Websitelink'
-                  value={formData.Websitelink}
-                  onChange={handleInputChange}
-                  
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                />
-              </label>
-            </div> <div className='mb-4'>
-              <label className='block text-sm font-medium text-gray-600'>
-              Contribution
-                <input
-                  name='contribution'
-                  value={formData.contribution}
-                  onChange={handleInputChange}
-                  
-                  className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-                />
-              </label>
-            </div>
-            {formData.feeAmount !== 0 && (
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600 '>
-                  Upload Fee Receipt<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-                  <input
-                    type='file'
-                    accept='.pdf, .png, .jpg'
-                    required={formData.feeAmount !== 0}
-                    onChange={handleImageChange}
-                    className='mt-4 p-2 block w-full rounded-md border-gray-300 text-black'
-                  />
-                </label>
-              </div>
-            )}
+        <div className="mb-4">
+          <label htmlFor="feeAmount" className="block font-medium text-gray-700">
+            Fee Amount
+          </label>
+          <input
+            type="number"
+            id="feeAmount"
+            name="feeAmount"
+            value={formData.feeAmount}
+            onChange={handleInputChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-            {imageUrl && <img src={imageUrl} alt='Uploaded' style={{ maxWidth: '100%' }} />}
-          </>
-        )}
-        <label className='block text-sm font-medium text-red-900'>Note:There is no regestration fee for  non-Indian delegates.</label>
-        <br/>
-        <label className='block text-sm font-medium text-red-900'>Note: Due to the large number of registrations, accommodation will be provided on a first-come, first-served basis. Once accommodation is arranged, we will let you know.</label>
+        <div className="mb-4">
+          <label htmlFor="vb" className="block font-medium text-gray-700">
+            VB
+          </label>
+          <input
+            type="text"
+            id="vb"
+            name="vb"
+            value={formData.vb}
+            onChange={handleInputChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-        {/* Submit Button */}
+        <div className="mb-4">
+          <label htmlFor="Websitelink" className="block font-medium text-gray-700">
+            Website Link
+          </label>
+          <input
+            type="url"
+            id="Websitelink"
+            name="Websitelink"
+            value={formData.Websitelink}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="contribution" className="block font-medium text-gray-700">
+            Contribution
+          </label>
+          <input
+            type="text"
+            id="contribution"
+            name="contribution"
+            value={formData.contribution}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="accommodation" className="block font-medium text-gray-700">
+            Accommodation
+          </label>
+          <input
+            type="text"
+            id="accommodation"
+            name="accommodation"
+            value={formData.accommodation}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
         <button
-          type='submit'
-          className='bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-4 w-full'
-          disabled={loading} // Disable the button when loading
+          type="submit"
+          className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-4 w-full"
+          disabled={loading}
         >
-          Submit
+          {loading ? 'Submitting...' : 'Submit'}
         </button>
       </form>
-    </div>)
-};
+    </div>
+  )
+}
 
-export default RegistrationForm;
+export default RegistrationForm

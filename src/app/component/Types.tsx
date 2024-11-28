@@ -50,7 +50,7 @@ export interface InstitutionFormProps {
 
 export interface TalentFormProps {
   formData: FormData;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void; // Updated here
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   imageUrl: string | null; // Optional: to store image URL if needed
 }
