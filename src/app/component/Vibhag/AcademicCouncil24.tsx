@@ -5,8 +5,8 @@ const AcademicCouncil: React.FC = () => {
     {
       heading: "ACADEMIC COUNCIL",
       members: [
-        { title: "Patron", names: ["Mr. Vijay Kumar Nadda"] },
-        { title: "Patron", names: [  "Dr. Ashok Pal"] }
+        { title: "Patron", names: [ "Dr. Ashok Pal"],address: "President, Vidya Bharti - North Zone"  },
+        { title: "Patron", names: [  "Mr. Vijay Kumar Nadda"] ,address:"Organising Secratery, Vidya Bharti - North Zone"},
       ],
     },
     {
@@ -32,7 +32,9 @@ const AcademicCouncil: React.FC = () => {
       members: [
         { title: "Chairperson", names: "Dr. Ravi Prakash", address: "Chaudhary Bansi Lal University, Haryana" },
         { title: "Vice-Chairperson", names: "Prof. Brahmjit Singh", address: "NIT Kurukshetra, Haryana" },
-        { title: "Members", names: ["Prof. Bala Lakhendra, BHU Varanasi, U.P.", "Prof. Sathans, NIT Kurukshetra, Haryana", "Prof. Anish Sachdeva, NIT Jalandhar, Punjab"] },
+        { title: "Members", names: "Prof. Bala Lakhendra, BHU Varanasi, U.P.", address: "BHU Varanasi, U.P." },
+        { title: "Members", names:  "Prof. Sathans, NIT Kurukshetra, Haryana", address: " NIT Kurukshetra, Haryana" },
+        { title: "Members", names:  "Prof. Anish Sachdeva, NIT Jalandhar, Punjab",address: "NIT Jalandhar, Punjab" },
       ],
     },
     {
@@ -43,7 +45,10 @@ const AcademicCouncil: React.FC = () => {
           president: "Prof. Brahmjit Singh, NIT Kurukshetra, Haryana",
           members: [
             "Dr. Vipin Sharma, Technical Consultant, HCL Technologies, Noida",
-            "Dr. Mukesh Khandelwal, Department of Electronics, Delhi University",
+            "Dr. Mukesh Khandelwal,  Delhi University",
+            "Dr. Jitender Garg , BHSBIET,Lehragaga",
+            "Dr. Shamsher Singh, AB College , Pathankot",
+            "Dr. Gaurav Sharma, IIT Delhi"
           ],
         },
         {
@@ -54,7 +59,10 @@ const AcademicCouncil: React.FC = () => {
         {
           title: "Social Sciences",
           president: "Prof. S. P. Kaushik, Kurukshetra University, Haryana",
-          members: [],
+          members: [
+            "Dr. Atryee Saha, JNU ,Delhi",
+            "Dr . Pankaj , Centeral University , H.P."
+          ],
         },
         {
           title: "Humanities",
@@ -83,17 +91,17 @@ const AcademicCouncil: React.FC = () => {
         },
         {
           title: "Medicine",
-          president: "Dr. Naresh Bhargava, Associate Professor, & Controller of Examination, BPS Women University, Sonepat",
+          president: "Dr. Naresh Bhargava, BPS Women University, Sonepat",
           members: [],
         },
         {
           title: "Fundamental Sciences",
           president: "Prof. Anand, Kurukshetra University, Haryana",
-          members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University Haryana"],
+          members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University Haryana",],
         },
         {
           title: "Environment and Water Conservation",
-          president: "Dr. Updesh Verma, Mayavar Kanshiram Government Degree College, Ghaziabad, UP",
+          president: "Dr. Updesh Verma, Manyavar Kanshiram Government Degree College, Ghaziabad, UP",
           members: [],
         },
         {
@@ -144,7 +152,7 @@ const AcademicCouncil: React.FC = () => {
                 <tr className="bg-gray-200">
                   <th className="border px-4 py-2 text-left">Title/Role</th>
                   <th className="border px-4 py-2 text-left">Name</th>
-                  <th className="border px-4 py-2 text-left">Address</th>
+                  <th className="border px-4 py-2 text-left">Affiliation</th>
                 </tr>
               </thead>
               <tbody>

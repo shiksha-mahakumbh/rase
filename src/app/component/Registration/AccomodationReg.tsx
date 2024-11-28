@@ -331,7 +331,7 @@ const Forms = () => {
                   </p>
                   <Image
                     className="p-2"
-                    src="/mahakumbh.png"
+                    src="/fee.png"
                     alt="Fee"
                     height={500}
                     width={500}
@@ -355,7 +355,7 @@ const Forms = () => {
                   </p>
                   <Image
                     className="p-2"
-                    src="/kumbh.png"
+                    src="/fee.png"
                     alt="Fee"
                     height={500}
                     width={500}
