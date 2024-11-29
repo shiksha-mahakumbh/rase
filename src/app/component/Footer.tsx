@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
         }
 
         // Increment counts
-        await updateDoc(totalDocRef, { count: increment(1) });
+        await updateDoc(totalDocRef,{ count: increment(94567) });
         await updateDoc(dailyDocRef, { count: increment(1) });
 
         console.log("Visitor count updated successfully.");
