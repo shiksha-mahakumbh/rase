@@ -62,7 +62,7 @@ const AcademicCouncil: React.FC = () => {
           president: "Prof. S. P. Kaushik, Kurukshetra University, Haryana",
           members: [
             "Dr. Atryee Saha, JNU, Delhi",
-            "Dr. Pankaj, Centeral University, H.P."
+            "Dr. Pankaj, Centeral University of Himachal Pradesh."
           ],
         },
         {
