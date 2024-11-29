@@ -23,6 +23,9 @@ const Footer: React.FC = () => {
   const [dailyVisitors, setDailyVisitors] = useState<number | null>(null);
   const [totalVisitors, setTotalVisitors] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+ 
+  
   useEffect(() => {
     const totalDocRef = doc(db, "visitors", "total");
     const dailyDocRef = doc(db, "visitors", "daily");
@@ -69,7 +72,7 @@ const Footer: React.FC = () => {
         }
 
         // Increment counts
-        await updateDoc(totalDocRef,{ count: increment(94567) });
+        await updateDoc(totalDocRef, { count: increment(1) });
         await updateDoc(dailyDocRef, { count: increment(1) });
 
         console.log("Visitor count updated successfully.");
@@ -484,7 +487,7 @@ const Footer: React.FC = () => {
                     <span className="text-lg font-semibold text-white">
                       Total Visitors:
                     </span>
-                    {loading ? <Spin className="ml-2" /> : ` ${totalVisitors}`}
+                    {loading ? <Spin className="ml-2" /> : ` ${Number(totalVisitors)+94567 }`}
                   </p>
                 </div>
               </div>
