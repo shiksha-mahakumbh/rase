@@ -71,7 +71,7 @@ const PrabandhanVibhag: React.FC = () => {
         { name: "Shri Chander Has Gupta", position: "DHE", contact: "9417050631" },
         { name: "Smt. Pratibha Gupta", position: "DHE", contact: "9814738016" },
         { name: "Shri Ramendra Singh", position: "DHE", contact: "7903431900" },
-        { name: "Ms. Sonal Kumar", position: "DHE", contact: "9816941951" }
+        { name: "Shushri Sonal Kandari", position: "DHE", contact: "9816941951" },
       ]
     }
   ];
