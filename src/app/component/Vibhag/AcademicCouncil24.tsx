@@ -46,8 +46,9 @@ const AcademicCouncil: React.FC = () => {
           members: [
             "Dr. Vipin Sharma, Technical Consultant, HCL Technologies, Noida",
             "Dr. Mukesh Khandelwal,  Delhi University",
-            "Dr. Jitender Garg , BHSBIET,Lehragaga",
-            "Dr. Shamsher Singh, AB College , Pathankot",
+            "Dr. Sonu Bala Garg, IKG Punjab Technical University, Jalandhar",
+            "Dr. Vikash Kumar Garg, SLIET, Longowal",
+            
             "Dr. Gaurav Sharma, IIT Delhi"
           ],
         },
@@ -60,8 +61,8 @@ const AcademicCouncil: React.FC = () => {
           title: "Social Sciences",
           president: "Prof. S. P. Kaushik, Kurukshetra University, Haryana",
           members: [
-            "Dr. Atryee Saha, JNU ,Delhi",
-            "Dr . Pankaj , Centeral University , H.P."
+            "Dr. Atryee Saha, JNU, Delhi",
+            "Dr. Pankaj, Centeral University, H.P."
           ],
         },
         {
@@ -97,7 +98,9 @@ const AcademicCouncil: React.FC = () => {
         {
           title: "Fundamental Sciences",
           president: "Prof. Anand, Kurukshetra University, Haryana",
-          members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University Haryana",],
+          members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University, Haryana",
+                    "Dr. Vipin Jain, CLBU, Bhiwani",
+          ],
         },
         {
           title: "Environment and Water Conservation",
