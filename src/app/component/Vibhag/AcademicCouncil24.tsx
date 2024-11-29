@@ -35,6 +35,8 @@ const AcademicCouncil: React.FC = () => {
         { title: "Members", names: "Prof. Bala Lakhendra", address: "BHU Varanasi, U.P." },
         { title: "Members", names:  "Prof. Sathans", address: " NIT Kurukshetra, Haryana" },
         { title: "Members", names:  "Prof. Anish Sachdeva",address: "NIT Jalandhar, Punjab" },
+        { title: "Members", names:  "Prof. Anish Sachdeva",address: "NIT Jalandhar, Punjab" },
+        { title: "Members", names:  "Dr. Rajeev Arya, Assistant Professor",address: "NIT Patna, Bihar" },
       ],
     },
     {
@@ -62,7 +64,7 @@ const AcademicCouncil: React.FC = () => {
           president: "Prof. S. P. Kaushik, Kurukshetra University, Haryana",
           members: [
             "Dr. Atryee Saha, JNU, Delhi",
-            "Dr. Pankaj, Centeral University of Himachal Pradesh."
+           
           ],
         },
         {
@@ -100,6 +102,8 @@ const AcademicCouncil: React.FC = () => {
           president: "Prof. Anand, Kurukshetra University, Haryana",
           members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University, Haryana",
                     "Dr. Vipin Jain, CLBU, Bhiwani",
+                     "Dr. Pankaj, Centeral University of Himachal Pradesh.",
+                     "Dr. Kapil Sood, GDC Dhaliara, HP",
           ],
         },
         {
