@@ -1,9 +1,22 @@
 import { ChangeEvent, useState } from "react";
 import { FormData, ConclaveFormProps } from "../Types";
 
-const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
+const ConclaveForm = ({ formData }: ConclaveFormProps) => {
   const [formDataState, setFormDataState] = useState<FormData>(formData);
 
+  // Handle input changes
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setFormDataState((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
@@ -34,7 +47,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
           <select
             name="typeofConclave"
             value={formDataState.typeofConclave}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           >
@@ -57,7 +70,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
             type="text"
             name="name"
             value={formDataState.name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
@@ -71,7 +84,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
             type="text"
             name="designation"
             value={formDataState.designation}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
@@ -85,7 +98,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
             type="text"
             name="institutionName"
             value={formDataState.institutionName}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
@@ -99,7 +112,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
             type="email"
             name="email"
             value={formDataState.email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
@@ -113,7 +126,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
             type="tel"
             name="contactNumber"
             value={formDataState.contactNumber}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
@@ -126,7 +139,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
           <textarea
             name="address"
             value={formDataState.address}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
@@ -139,7 +152,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
           <textarea
             name="views"
             value={formDataState.views}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange(e)}
+            onChange={handleInputChange}
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
