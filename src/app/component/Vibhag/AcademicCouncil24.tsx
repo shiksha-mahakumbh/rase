@@ -32,9 +32,11 @@ const AcademicCouncil: React.FC = () => {
       members: [
         { title: "Chairperson", names: "Dr. Ravi Prakash", address: "Chaudhary Bansi Lal University, Haryana" },
         { title: "Vice-Chairperson", names: "Prof. Brahmjit Singh", address: "NIT Kurukshetra, Haryana" },
-        { title: "Members", names: "Prof. Bala Lakhendra, BHU Varanasi, U.P.", address: "BHU Varanasi, U.P." },
-        { title: "Members", names:  "Prof. Sathans, NIT Kurukshetra, Haryana", address: " NIT Kurukshetra, Haryana" },
-        { title: "Members", names:  "Prof. Anish Sachdeva, NIT Jalandhar, Punjab",address: "NIT Jalandhar, Punjab" },
+        { title: "Members", names: "Prof. Bala Lakhendra", address: "BHU Varanasi, U.P." },
+        { title: "Members", names:  "Prof. Sathans", address: " NIT Kurukshetra, Haryana" },
+        { title: "Members", names:  "Prof. Anish Sachdeva",address: "NIT Jalandhar, Punjab" },
+        { title: "Members", names:  "Prof. Anish Sachdeva",address: "NIT Jalandhar, Punjab" },
+        { title: "Members", names:  "Dr. Rajeev Arya, Assistant Professor",address: "NIT Patna, Bihar" },
       ],
     },
     {
@@ -46,8 +48,9 @@ const AcademicCouncil: React.FC = () => {
           members: [
             "Dr. Vipin Sharma, Technical Consultant, HCL Technologies, Noida",
             "Dr. Mukesh Khandelwal,  Delhi University",
-            "Dr. Jitender Garg , BHSBIET,Lehragaga",
-            "Dr. Shamsher Singh, AB College , Pathankot",
+            "Dr. Sonu Bala Garg, IKG Punjab Technical University, Jalandhar",
+            "Dr. Vikash Kumar Garg, SLIET, Longowal",
+            
             "Dr. Gaurav Sharma, IIT Delhi"
           ],
         },
@@ -60,8 +63,8 @@ const AcademicCouncil: React.FC = () => {
           title: "Social Sciences",
           president: "Prof. S. P. Kaushik, Kurukshetra University, Haryana",
           members: [
-            "Dr. Atryee Saha, JNU ,Delhi",
-            "Dr . Pankaj , Centeral University , H.P."
+            "Dr. Atryee Saha, JNU, Delhi",
+           
           ],
         },
         {
@@ -97,7 +100,11 @@ const AcademicCouncil: React.FC = () => {
         {
           title: "Fundamental Sciences",
           president: "Prof. Anand, Kurukshetra University, Haryana",
-          members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University Haryana",],
+          members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University, Haryana",
+                    "Dr. Vipin Jain, CLBU, Bhiwani",
+                     "Dr. Pankaj, Centeral University of Himachal Pradesh.",
+                     "Dr. Kapil Sood, GDC Dhaliara, HP",
+          ],
         },
         {
           title: "Environment and Water Conservation",
