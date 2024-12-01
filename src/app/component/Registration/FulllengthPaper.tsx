@@ -73,7 +73,7 @@ const Fulllengthpaper = () => {
       try {
         const formDataObj = new FormData();
         formDataObj.append("file", file);
-        const response = await axios.post("/api/upload", formDataObj, {
+        const response = await axios.post("http://localhost:5000/FullPaper", formDataObj, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 

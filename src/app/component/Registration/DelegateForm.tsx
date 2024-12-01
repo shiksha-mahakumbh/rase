@@ -126,25 +126,32 @@ const RegistrationForm = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
-
+  
     try {
-      let imageUrl = '';  // Initialize imageUrl as an empty string
-      
+      console.log("Submitting form data:", formData); // Log form data before submission
+  
+      let imageUrl = ''; // Initialize imageUrl as an empty string
+  
       if (image) {
+        console.log("Uploading image..."); // Log image upload process
         const formDataImage = new FormData();
         formDataImage.append('image', image);
-
+  
         const imageResponse = await axios.post('/api/upload-image', formDataImage, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-
-        imageUrl = imageResponse.data.imageUrl || '';  // Ensure imageUrl is set after successful upload
+  
+        imageUrl = imageResponse.data.imageUrl || '';
+        console.log("Image uploaded successfully:", imageUrl); // Log image URL after upload
       }
-
+  
       const formDataToSubmit = { ...formData, feeReceipt: imageUrl };
-
-      const response = await axios.post('/api/register', formDataToSubmit);
-
+      console.log("Form data to submit:", formDataToSubmit); // Log final data being sent to the server
+  
+      const response = await axios.post('https://localhost:5000/delegate', formDataToSubmit);
+  
+      console.log("Server response:", response); // Log response from the server
+  
       if (response.status === 200) {
         setFormData(initialFormData);
         toast.success('Successfully Registered!');
@@ -152,24 +159,14 @@ const RegistrationForm = () => {
         toast.error('Something went wrong!');
       }
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error('Error during registration:', error); // Log any errors during the request
       toast.error('Registration failed!');
     } finally {
       setLoading(false);
     }
-};
+  };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      import('firebase/analytics')
-        .then(({ getAnalytics }) => {
-          const analytics = getAnalytics();
-        })
-        .catch((error) => {
-          console.error('Error importing Firebase Analytics:', error);
-        });
-    }
-  }, []);
+
   return (
     <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
       <h1 className='text-primary text-center text-xl'>Participant Registration</h1>
@@ -195,22 +192,8 @@ const RegistrationForm = () => {
           </label>
         </div>
          {/* Accommodation Field */}
-         <div className='mb-4'>
-          <label className='block text-sm font-medium text-gray-600'>
-            Do you require accommodation?<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            <select
-              name='accommodation'
-              value={formData.accommodation}
-              onChange={handleInputChange}
-              required
-              className='mt-4 p-2 block w-full rounded-md border border-gray-300 text-black'
-            >
-              <option value=''>Select</option>
-              <option value='Yes'>Yes</option>
-              <option value='No'>No</option>
-            </select>
-          </label>
-        </div>
+      
+         
 
         {/* Conditionally show the accommodation booking button */}
         {formData.accommodation === 'Yes' && (

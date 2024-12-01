@@ -84,7 +84,7 @@ const SchoolProjectForm: React.FC = () => {
       formDataForSubmission.append("feeUpload", formData.feeUpload!);
 
       // Assuming API endpoint that handles form submission and MySQL database storage
-      const response = await axios.post("http://localhost:5000/api/schoolProject", formDataForSubmission, {
+      const response = await axios.post("http://localhost:5000/school", formDataForSubmission, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

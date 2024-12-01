@@ -59,7 +59,7 @@ const VolReg = () => {
     }
 
     try {
-      const response = await fetch('/api/volunteer-registration', {
+      const response = await fetch('http://localhost:5000/volunteer', {
         method: 'POST',
         body: formDataWithImage,
       });
@@ -194,7 +194,7 @@ const VolReg = () => {
         {showAccommodationButton && (
           <div className="mt-4 text-center mb-4">
             <a
-              href="https://ac.rase.co.in/"
+              href="/Accomodation"
               className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
               target="_blank"
               rel="noopener noreferrer"

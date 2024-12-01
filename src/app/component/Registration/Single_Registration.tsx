@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, FormEvent, ChangeEvent } from "react";
 import DelegateForm from "./DelegateForm";
 import ProjectDisplaySubmission from "./ProjectDisplaySubmission";
@@ -11,105 +11,41 @@ import FullLengthPaperForm from "./FulllengthPaper";
 import OrganizerRegForm from "./OrganizerReg";
 import AccomodationForm from "./AccomodationReg";
 import BestPracticesForm from "./Best_Practices";
-import { storage } from "@/app/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import toast, { Toaster } from "react-hot-toast";
-import { FormData } from "../Types";
+import { Toaster } from "react-hot-toast";
 
 const RegistrationPage = () => {
-  const initialFormData: FormData = {
-    name: "",
-    type: "",
-    website: "",
-    cont: "",
-    role: "",
-    email: "",
-    contactNumber: "",
-    feeReceipt: "",
-    vb: "",
-    feeAmount: 0,
-    category: "",
-    description: "",
-    services: "",
-    registrationNumber: "",
-    contribution: "",
-    designation: "",
-    institutionName: "",
-    event_type: "",
-    address: "",
-    views: "",
-    talentName: "",
-    typeofConclave: "",
-    talentType: "",
-    aboutPractices: "",
-    keyPerson: "",
-    imageUrl: null,
-  };
-
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [image, setImage] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [category, setCategory] = useState<string>("delegate");
-  const [eventCategory, setEventCategory] = useState<string>("conference");
-  const [loading, setLoading] = useState(false);
-
-  // Updated to handle events from HTMLSelectElement as well
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
 
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setCategory(e.target.value);
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-    }
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    let downloadURL = "";
-    if (image) {
-      const imageRef = ref(storage, `images/${image.name}`);
-      await uploadBytes(imageRef, image);
-      downloadURL = await getDownloadURL(imageRef);
-      setImageUrl(downloadURL);
-    }
-
-    try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          feeReceipt: downloadURL || "",
-          event_type: eventCategory,
-        }),
-      });
-
-      if (response.ok) {
-        toast.success("Form submitted successfully!");
-        setFormData(initialFormData);
-        setImage(null);
-      } else {
-        toast.error("Submission failed. Please try again.");
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error("Submission failed. Please try again.");
-    } finally {
-      setLoading(false);
+  const renderForm = () => {
+    switch (category) {
+      case "delegate":
+        return <DelegateForm />;
+      case "institution":
+        return <ProjectDisplaySubmission />;
+      case "talent":
+        return <TalentForm/>;
+      case "volunteer":
+        return <VolunteerForm />;
+      case "ngo":
+        return <NGOForm />;
+      case "conclave":
+        return <ConclaveForm />;
+      case "Abstract":
+        return <AbstractSubmissionForm />;
+      case "FullLengthPaper":
+        return <FullLengthPaperForm />;
+      case "BestPractices":
+        return <BestPracticesForm />;
+      case "OrganizerReg":
+        return <OrganizerRegForm />;
+      case "Accomodation":
+        return <AccomodationForm />;
+      default:
+        return <div>Select a registration type to get started.</div>;
     }
   };
 
@@ -121,9 +57,9 @@ const RegistrationPage = () => {
         {/* Form Category Selection */}
         <div className="mb-6">
           <label className="block text-gray-600 mb-2 font-medium">Select Registration Type</label>
-          <select 
-            value={category} 
-            onChange={handleCategoryChange} 
+          <select
+            value={category}
+            onChange={handleCategoryChange}
             className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-500"
           >
             <option value="delegate">Delegate</option>
@@ -132,7 +68,6 @@ const RegistrationPage = () => {
             <option value="volunteer">Volunteer</option>
             <option value="ngo">NGO</option>
             <option value="conclave">Conclave</option>
-
             <optgroup label="Submission Type">
               <option value="Abstract">Submit Abstract</option>
               <option value="FullLengthPaper">Submit Full-Length Paper</option>
@@ -143,37 +78,8 @@ const RegistrationPage = () => {
           </select>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {category === "delegate" && <DelegateForm />}
-          {category === "institution" && <ProjectDisplaySubmission />}
-          {category === "talent" && (
-            <TalentForm
-              formData={formData}
-              handleInputChange={handleInputChange}
-              handleImageChange={handleImageChange}
-              imageUrl={imageUrl}
-            />
-          )}
-          {category === "volunteer" && <VolunteerForm />}
-          {category === "ngo" && <NGOForm />}
-          {category === "conclave" && (
-            <ConclaveForm formData={formData} handleInputChange={handleInputChange} />
-          )}
-          {category === "Abstract" && <AbstractSubmissionForm />}
-          {category === "FullLengthPaper" && <FullLengthPaperForm />}
-          {category === "BestPractices" && (
-            <BestPracticesForm
-              formData={formData}
-              handleInputChange={handleInputChange}
-              handleImageChange={handleImageChange}
-              imageUrl={imageUrl}
-            />
-          )}
-          {category === "OrganizerReg" && <OrganizerRegForm />}
-          {category === "Accomodation" && <AccomodationForm />}
-
-       
-        </form>
+        {/* Render the selected form */}
+        {renderForm()}
 
         <Toaster />
       </div>

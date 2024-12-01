@@ -58,7 +58,7 @@ const NGOReg = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/submit-ngo", {
+      const response = await fetch("http://localhost:5000/NGO", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -218,7 +218,7 @@ const NGOReg = () => {
       {showBookingButton && (
         <div className="mt-4 text-center">
           <a
-            href="https://www.ac.rase.co.in"
+            href="/Accomodation"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300"

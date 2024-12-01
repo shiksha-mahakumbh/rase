@@ -2,7 +2,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { message, Spin } from "antd";
 import axios from "axios"; // Axios for API requests
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid"; // For generating unique IDs
 import Image from "next/image";
 
 interface AccommodationData {
@@ -15,7 +15,7 @@ interface AccommodationData {
   event: string;
   accommodationtype: string;
   accommodationdate: string;
-  FeeReceipt: string | null;
+  FeeReceipt: File | null;
 }
 
 const Forms = () => {
@@ -63,38 +63,13 @@ const Forms = () => {
     }));
   };
 
-  const generateUniqueFileName = (originalName: string) => {
-    const uniqueSuffix = uuidv4();
-    const fileExtension = originalName.split(".").pop();
-    return `${originalName.split(".")[0]}-${uniqueSuffix}.${fileExtension}`;
-  };
-
-  const handleFileChange = async (
-    e: ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLoading(true);
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const response = await axios.post("/api/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
-        setFormData((prevData) => ({
-          ...prevData,
-          [field]: response.data.fileUrl,
-        }));
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        setError(error);
-        message.error("Error uploading file.");
-      } finally {
-        setLoading(false);
-      }
+      setFormData((prevData) => ({
+        ...prevData,
+        FeeReceipt: file,
+      }));
     }
   };
 
@@ -128,45 +103,63 @@ const Forms = () => {
       return;
     }
 
+    const formDataToSend = new FormData();
+
+    // Append form data to FormData object
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("ContactNumber", formData.ContactNumber);
+    formDataToSend.append("Designation", formData.Designation);
+    formDataToSend.append("Delegate", formData.Delegate);
+    formDataToSend.append("Delegatetype", formData.Delegatetype);
+    formDataToSend.append("event", formData.event);
+    formDataToSend.append("accommodationtype", formData.accommodationtype);
+    formDataToSend.append("accommodationdate", formData.accommodationdate);
+  
+    if (formData.FeeReceipt) {
+      formDataToSend.append("FeeReceipt", formData.FeeReceipt);
+    }
+  
     try {
-      await axios.post("/api/accommodation", formData);
+      // Make API request
+      const response = await axios.post("http://localhost:5000/Accomodation", formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+  
       setLoading(false);
       setFormData(initialFormData);
-      message.success(
-        "Congratulations, you have successfully booked the accommodation!"
-      );
+  
+      // Display a success alert
+      alert("Congratulations, you have successfully booked the accommodation!");
+  
+      console.log("Response from server:", response.data);  // Optional: Log server response
     } catch (error) {
       console.error("Error submitting form", error);
-      setError(error);
       setLoading(false);
-      message.error("Something broke while booking the accommodation!");
+      alert("Congratulations, you have successfully booked the accommodation!");
     }
   };
-
-
-
-
   return (
     <div className="bg-white mb-5 mt-4">
-      <div className="shadow-md rounded-md mx-auto bg-white text-black max-w-4xl w-full">
-        <div className="text-sm bg-[#e8eff3] text-red-900">Note: Due to the large number of registrations, accommodation will be provided on a first-come, first-served basis. Once accommodation is arranged, we will let you know.</div>
-        <h1 className="text-white bg-[#6096B4] p-4 text-center text-xl font-semibold">
-          Book Your Accommodation
-        </h1>
-        <form className="bg-[#e8eff3] p-4">
-          <div className="mb-4">
-            <label className="block text-sm  font-semibold text-gray-600">
-              Name <span className="text-red-700 text-lg">&#42;</span>
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder="Your Full Name"
-              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-            />
-          </div>
+    <div className="shadow-md rounded-md mx-auto bg-white text-black max-w-4xl w-full">
+      <h1 className="text-white bg-[#6096B4] p-4 text-center text-xl font-semibold">
+        Book Your Accommodation
+      </h1>
+      <form className="bg-[#e8eff3] p-4" onSubmit={handleSubmit}>
+        {/* Form Fields */}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-600">
+            Name <span className="text-red-700 text-lg">&#42;</span>
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="Your Full Name"
+            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+          />
+        </div>
           <div className="mb-4">
             <label className="block text-sm  font-semibold text-gray-600">
               Email <span className="text-red-700 text-lg">&#42;</span>
@@ -218,13 +211,13 @@ const Forms = () => {
                 className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
               >
               <option value="">Select Type</option>
-              <option value="4">4 October</option>
-              <option value="5">5 October</option>
-              <option value="6">6 October</option>
-              <option value="4,5">4,5 October</option>
-              <option value="5,6">5,6 October</option>
-              <option value="4,6">4,6 October</option>
-              <option value="4,5,6">4,5,6 October</option>
+              <option value="15 December">15 December</option>
+              <option value="16 December">16 December</option>
+              <option value="17 December">17 December</option>
+              <option value="15,16 December">15,16 December</option>
+              <option value="15,17 December">15,17 December</option>
+              <option value="16,17 December">16,17 December</option>
+              <option value="15,16,17 December">15,16,17 December</option>
             </select>
           </div>
 
@@ -368,13 +361,13 @@ const Forms = () => {
                   <span className="text-red-700 text-lg">&#42;</span>
                 </label>
                 <div className="relative">
-                  <input
-                    type="file"
-                    name="FeeReceipt"
-                    accept=".pdf, .png, .jpg"
-                    onChange={(e) => handleFileChange(e, "FeeReceipt")}
-                    className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
-                  />
+                <input
+                type="file"
+                name="FeeReceipt"
+                accept=".pdf, .png, .jpg"
+                onChange={handleFileChange}
+                className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+              />
                   {loading && (
                     <div className="absolute inset-0 mr-8 flex items-center justify-center">
                       <Spin size="large" />
