@@ -258,7 +258,7 @@ else  if (value === 'ResearchScholar' ) {
           <div className='mb-4'>
             <button
               type="button"
-              onClick={() => window.open('https://ac.rase.co.in/', '_blank')}  // Replace with actual booking link
+              onClick={() => window.open('/Accomodation', '_blank')}  // Replace with actual booking link
               className='bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary-dark transition duration-300 mt-4 w-full'
             >
               Book Accommodation
