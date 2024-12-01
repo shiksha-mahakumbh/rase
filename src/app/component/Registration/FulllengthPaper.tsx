@@ -1,7 +1,10 @@
 "use client";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "@/app/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/app/firebase";
 import toast from "react-hot-toast";
-import axios from "axios";
 
 interface FullLengthPaperFormDataSM {
   PaperTitle: string;
@@ -37,6 +40,7 @@ const Fulllengthpaper = () => {
   const MAX_WORD_SIZE = 50 * 1024; // 50 KB
   const MAX_PDF_SIZE = 1 * 1024 * 1024; // 1 MB
 
+  // Validation function to check if all required fields are filled
   const isFormValid = () => {
     return (
       formData.PaperTitle &&
@@ -71,16 +75,12 @@ const Fulllengthpaper = () => {
         return;
       }
       try {
-        const formDataObj = new FormData();
-        formDataObj.append("file", file);
-        const response = await axios.post("http://localhost:5000/FullPaper", formDataObj, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
-        const fileUrl = response.data.fileUrl;
+        const fileRef = ref(storage, `files/${file.name}`);
+        await uploadBytes(fileRef, file);
+        const downloadURL = await getDownloadURL(fileRef);
         setFormData((prevData) => ({
           ...prevData,
-          [field]: fileUrl,
+          [field]: downloadURL,
         }));
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -100,27 +100,31 @@ const Fulllengthpaper = () => {
     }
 
     try {
-      const response = await axios.post("/api/submit-paper", formData);
-      toast.success(
-        "Congratulations! You have successfully submitted the Full Length Paper!"
-      );
-      setFormData(initialFormData); // reset the form
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setError(error);
-      toast.error("Something went wrong while submitting the Full Length Paper!");
-    } finally {
+      // Add document to Firestore
+      const docRef = await addDoc(collection(db, "FullLengthSubmissionDataSM24"), {
+        ...formData,
+      });
+      console.log("Document added with ID:", docRef.id);
       setLoading(false);
+      setFormData(initialFormData);
+      toast.success(
+        "Congratulations you have successfully submitted the Full length paper!"
+      );
+    } catch (error) {
+      console.error("Error adding document:", error);
+      setError(error);
+      setLoading(false);
+      toast.error("Something broke while submitting the Full Length Paper!");
     }
   };
 
   return (
-    <div className="bg-white mb-5 ">
-      <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black ">
-        <h1 className="text-2xl font-semibold text-primary text-center mb-6">
+    <div className="bg-white mb-5">
+      <div className="shadow-md rounded-md md:w-1/3 mx-auto pt-8 bg-white text-black">
+        <h1 className="text-primary text-center text-xl">
           Full Length Paper Submission Form
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white p-4">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
               Corresponding Author Name
@@ -134,7 +138,7 @@ const Fulllengthpaper = () => {
               placeholder="*Your full name*"
               value={formData.CorrespondingAuthorName}
               onChange={handleInputChange}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
@@ -151,7 +155,7 @@ const Fulllengthpaper = () => {
               value={formData.CorrespondingAuthorEmail}
               placeholder="*your@example.com*"
               onChange={handleInputChange}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
@@ -168,7 +172,7 @@ const Fulllengthpaper = () => {
               value={formData.PaperTitle}
               placeholder="*Title*"
               onChange={handleInputChange}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
@@ -184,7 +188,7 @@ const Fulllengthpaper = () => {
               name="AttachmentsWord"
               accept=".doc, .docx"
               onChange={(e) => handleFileChange(e, "AttachmentsWord")}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
+              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
             />
           </div>
 
@@ -200,7 +204,7 @@ const Fulllengthpaper = () => {
               name="AttachmentsPdf"
               accept=".pdf"
               onChange={(e) => handleFileChange(e, "AttachmentsPdf")}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
+              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
             />
           </div>
 
@@ -216,7 +220,7 @@ const Fulllengthpaper = () => {
               name="AttachmentsPpt"
               accept=".ppt, .pptx"
               onChange={(e) => handleFileChange(e, "AttachmentsPpt")}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
+              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
             />
           </div>
 
@@ -230,7 +234,7 @@ const Fulllengthpaper = () => {
               value={formData.CoauthorNames}
               placeholder="*Co-author names*"
               onChange={handleInputChange}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
@@ -244,7 +248,7 @@ const Fulllengthpaper = () => {
               value={formData.CoauthorEmail}
               placeholder="*coauthor@example.com*"
               onChange={handleInputChange}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
@@ -261,7 +265,7 @@ const Fulllengthpaper = () => {
               value={formData.Keywords}
               placeholder="*Keywords*"
               onChange={handleInputChange}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
@@ -273,18 +277,18 @@ const Fulllengthpaper = () => {
               </span>
             </label>
             <input
-              type="text"
+              type="tel"
               name="ContactNumber"
+              placeholder="*1234567890*"
               value={formData.ContactNumber}
-              placeholder="*Contact Number*"
               onChange={handleInputChange}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
           </div>
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Upload Fee Receipt
+              Upload Payment Receipt
               <span className="text-red-700 text-base">
                 <sup>&#42;</sup>
               </span>
@@ -292,18 +296,23 @@ const Fulllengthpaper = () => {
             <input
               type="file"
               name="FeeReceipt"
-              accept="image/*"
+              accept=".pdf, .png, .jpg"
               onChange={(e) => handleFileChange(e, "FeeReceipt")}
-              className="mt-2 p-3 block w-full rounded-md border border-gray-300"
+              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
             />
+          </div>
+          <div className="text-sm text-red-600 mb-4">
+            Note&#58; Please ensure to attach the fee receipt which you have
+            paid during abstract submission&#59; failure to do so will render
+            the full-length paper ineligible for consideration.
           </div>
 
           <button
             type="submit"
-            className="w-full bg-primary text-white p-3 rounded-md hover:bg-primary-color focus:ring-2 focus:ring-indigo-500 transition duration-300"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-color transition duration-300 mt-4 w-full"
             disabled={loading}
           >
-            {loading ? "Submitting..." : "Submit Paper"}
+            Submit
           </button>
         </form>
       </div>
