@@ -10,9 +10,9 @@ interface AbstractFormData {
   CoauthorEmail?: string;
   Keywords: string;
   ContactNumber: string;
-  AttachmentsWord: string | null;
-  AttachmentsPdf: string | null;
-  FeeReceipt: string | null;
+  AttachmentsWord: File | null;
+  AttachmentsPdf: File | null;
+  FeeReceipt: File | null;
   type: string;
 }
 
@@ -27,6 +27,8 @@ const AbstractSubmission = () => {
     AttachmentsPdf: null,
     FeeReceipt: null,
     type: "",
+    CoauthorNames: "", // Optional field with default value
+    CoauthorEmail: "", // Optional field with default value
   };
 
   const [formData, setFormData] = useState<AbstractFormData>(initialFormData);
@@ -39,14 +41,15 @@ const AbstractSubmission = () => {
   // Validation function to check if all required fields are filled
   const isFormValid = () => {
     return (
-      formData.PaperTitle &&
-      formData.CorrespondingAuthorEmail &&
-      formData.CorrespondingAuthorName &&
-      formData.Keywords &&
-      formData.ContactNumber &&
-      formData.AttachmentsWord &&
-      formData.AttachmentsPdf &&
-      formData.type
+      formData.PaperTitle?.trim() &&
+      formData.CorrespondingAuthorEmail?.trim() &&
+      formData.CorrespondingAuthorName?.trim() &&
+      formData.Keywords?.trim() &&
+      formData.ContactNumber?.trim() &&
+      formData.AttachmentsWord !== null &&
+      formData.AttachmentsPdf !== null &&
+      formData.FeeReceipt !== null &&
+      formData.type?.trim()
     );
   };
 
@@ -62,7 +65,7 @@ const AbstractSubmission = () => {
 
   const handleFileChange = (
     e: ChangeEvent<HTMLInputElement>,
-    field: string,
+    field: keyof AbstractFormData,
     maxSize: number
   ) => {
     const file = e.target.files?.[0];
@@ -80,6 +83,8 @@ const AbstractSubmission = () => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    console.log('Form data before submission:', formData); // Debugging step
+
     setLoading(true);
 
     if (!isFormValid()) {
@@ -95,12 +100,16 @@ const AbstractSubmission = () => {
       formDataToSubmit.append("CorrespondingAuthorName", formData.CorrespondingAuthorName);
       formDataToSubmit.append("Keywords", formData.Keywords);
       formDataToSubmit.append("ContactNumber", formData.ContactNumber);
-      formDataToSubmit.append("AttachmentsWord", formData.AttachmentsWord as any);
-      formDataToSubmit.append("AttachmentsPdf", formData.AttachmentsPdf as any);
-      formDataToSubmit.append("FeeReceipt", formData.FeeReceipt as any);
       formDataToSubmit.append("type", formData.type);
 
-      const response = await fetch("/api/submitAbstract", {
+      if (formData.CoauthorNames) formDataToSubmit.append("CoauthorNames", formData.CoauthorNames);
+      if (formData.CoauthorEmail) formDataToSubmit.append("CoauthorEmail", formData.CoauthorEmail);
+
+      if (formData.AttachmentsWord) formDataToSubmit.append("AttachmentsWord", formData.AttachmentsWord);
+      if (formData.AttachmentsPdf) formDataToSubmit.append("AttachmentsPdf", formData.AttachmentsPdf);
+      if (formData.FeeReceipt) formDataToSubmit.append("FeeReceipt", formData.FeeReceipt);
+
+      const response = await fetch("http://localhost:5000/AbstractSubmission", {
         method: "POST",
         body: formDataToSubmit,
       });
@@ -110,7 +119,7 @@ const AbstractSubmission = () => {
       }
 
       setLoading(false);
-      setFormData(initialFormData);
+      setFormData(initialFormData); // Reset form after successful submission
       toast.success("Abstract submitted successfully!");
     } catch (error) {
       console.error("Error submitting abstract:", error);
@@ -120,11 +129,9 @@ const AbstractSubmission = () => {
   };
 
   return (
-    <div className="bg-white mb-5 ">
-      <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black ">
-        <h1 className="text-primary text-center text-xl">
-          Paper Submission Form
-        </h1>
+    <div className="bg-white mb-5">
+      <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black">
+        <h1 className="text-primary text-center text-xl">Paper Submission Form</h1>
         <form onSubmit={handleSubmit} className="bg-white p-4">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
@@ -226,7 +233,7 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Keywords<span className="text-red-700 text-base"><sup>&#42;</sup></span>
+              Keywords <span className="text-red-700 text-base"><sup>&#42;</sup></span>
             </label>
             <input
               type="text"
@@ -240,13 +247,13 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Contact Number<span className="text-red-700 text-base"><sup>&#42;</sup></span>
+              Contact Number <span className="text-red-700 text-base"><sup>&#42;</sup></span>
             </label>
             <input
-              type="tel"
+              type="text"
               name="ContactNumber"
               value={formData.ContactNumber}
-              placeholder="*Contact number*"
+              placeholder="*Your contact number*"
               onChange={handleInputChange}
               className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
@@ -254,13 +261,13 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Upload Fee Receipt <span className="text-red-600 text-xs">(Max size: 5 MB)</span>
+              Payment Receipt <span className="text-red-600 text-xs">(Max size: 5 MB)</span>
               <span className="text-red-700 text-base"><sup>&#42;</sup></span>
             </label>
             <input
               type="file"
               name="FeeReceipt"
-              accept=".jpg, .jpeg, .png, .pdf"
+              accept=".jpg, .png, .pdf"
               onChange={(e) => handleFileChange(e, "FeeReceipt", MAX_FILE_SIZE_RECEIPT)}
               className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
             />
@@ -268,7 +275,7 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Type of Submission<span className="text-red-700 text-base"><sup>&#42;</sup></span>
+              Type of Paper <span className="text-red-700 text-base"><sup>&#42;</sup></span>
             </label>
             <select
               name="type"
@@ -276,21 +283,20 @@ const AbstractSubmission = () => {
               onChange={handleInputChange}
               className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black"
             >
-              <option value="">Select Submission Type</option>
-              <option value="Research Paper">Research Paper</option>
-              <option value="Review Paper">Review Paper</option>
+              <option value="">Select Paper Type</option>
+              <option value="Research">Research</option>
+              <option value="Review">Review</option>
+              <option value="Short Paper">Short Paper</option>
             </select>
           </div>
 
-          <div className="mb-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary text-white py-2 px-4 rounded-md mt-4 disabled:bg-gray-400"
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full py-3 px-4 mt-4 rounded-md bg-primary text-white"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit Abstract"}
+          </button>
         </form>
       </div>
     </div>

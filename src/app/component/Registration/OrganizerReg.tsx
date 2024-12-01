@@ -54,7 +54,7 @@ const OrganiserRegistration = () => {
     }
 
     try {
-      const response = await fetch('/api/register', {
+      const response = await fetch('http://localhost:5000/organizer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -230,17 +230,17 @@ const OrganiserRegistration = () => {
 
           {/* Submit Button */}
           <button
-            type="submit"
-            className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark"
-          >
-            Submit Registration
-          </button>
+  type="submit"
+  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+>
+  Submit Registration
+</button>
         </form>
       ) : (
         <div className="text-center">
           <h2 className="text-lg font-semibold">Thank you for registering!</h2>
           <p>Your registration has been successfully submitted.</p>
-          <a href="https://sm24.rase.co.in/" className="p-4">
+          <a href="https://rase.co.in/" className="p-4">
             <button className="bg-primary text-white rounded-md P-4 mt-2 mb-2">Home</button>
           </a>
         </div>
