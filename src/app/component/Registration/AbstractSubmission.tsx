@@ -1,5 +1,9 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "@/app/firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { db } from "@/app/firebase";
 import toast from "react-hot-toast";
 
 interface AbstractFormData {
@@ -10,9 +14,9 @@ interface AbstractFormData {
   CoauthorEmail?: string;
   Keywords: string;
   ContactNumber: string;
-  AttachmentsWord: File | null;
-  AttachmentsPdf: File | null;
-  FeeReceipt: File | null;
+  AttachmentsWord: string | null;
+  AttachmentsPdf: string | null;
+  FeeReceipt: string | null;
   type: string;
 }
 
@@ -27,12 +31,11 @@ const AbstractSubmission = () => {
     AttachmentsPdf: null,
     FeeReceipt: null,
     type: "",
-    CoauthorNames: "", // Optional field with default value
-    CoauthorEmail: "", // Optional field with default value
   };
 
   const [formData, setFormData] = useState<AbstractFormData>(initialFormData);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
 
   const MAX_FILE_SIZE_WORD = 200 * 1024; // 200 KB
   const MAX_FILE_SIZE_PDF = 1 * 1024 * 1024; // 1 MB
@@ -41,15 +44,14 @@ const AbstractSubmission = () => {
   // Validation function to check if all required fields are filled
   const isFormValid = () => {
     return (
-      formData.PaperTitle?.trim() &&
-      formData.CorrespondingAuthorEmail?.trim() &&
-      formData.CorrespondingAuthorName?.trim() &&
-      formData.Keywords?.trim() &&
-      formData.ContactNumber?.trim() &&
-      formData.AttachmentsWord !== null &&
-      formData.AttachmentsPdf !== null &&
-      formData.FeeReceipt !== null &&
-      formData.type?.trim()
+      formData.PaperTitle &&
+      formData.CorrespondingAuthorEmail &&
+      formData.CorrespondingAuthorName &&
+      formData.Keywords &&
+      formData.ContactNumber &&
+      formData.AttachmentsWord &&
+      formData.AttachmentsPdf &&
+      formData.type
     );
   };
 
@@ -63,9 +65,9 @@ const AbstractSubmission = () => {
     }));
   };
 
-  const handleFileChange = (
+  const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
-    field: keyof AbstractFormData,
+    field: string,
     maxSize: number
   ) => {
     const file = e.target.files?.[0];
@@ -74,17 +76,23 @@ const AbstractSubmission = () => {
         toast.error(`File size exceeds the limit of ${maxSize / (1024 * 1024)} MB.`);
         return;
       }
-      setFormData((prevData) => ({
-        ...prevData,
-        [field]: file,
-      }));
+      try {
+        const fileRef = ref(storage, `files/${file.name}`);
+        await uploadBytes(fileRef, file);
+        const downloadURL = await getDownloadURL(fileRef);
+        setFormData((prevData) => ({
+          ...prevData,
+          [field]: downloadURL,
+        }));
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        setError(error);
+      }
     }
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    console.log('Form data before submission:', formData); // Debugging step
-
     setLoading(true);
 
     if (!isFormValid()) {
@@ -94,44 +102,29 @@ const AbstractSubmission = () => {
     }
 
     try {
-      const formDataToSubmit = new FormData();
-      formDataToSubmit.append("PaperTitle", formData.PaperTitle);
-      formDataToSubmit.append("CorrespondingAuthorEmail", formData.CorrespondingAuthorEmail);
-      formDataToSubmit.append("CorrespondingAuthorName", formData.CorrespondingAuthorName);
-      formDataToSubmit.append("Keywords", formData.Keywords);
-      formDataToSubmit.append("ContactNumber", formData.ContactNumber);
-      formDataToSubmit.append("type", formData.type);
-
-      if (formData.CoauthorNames) formDataToSubmit.append("CoauthorNames", formData.CoauthorNames);
-      if (formData.CoauthorEmail) formDataToSubmit.append("CoauthorEmail", formData.CoauthorEmail);
-
-      if (formData.AttachmentsWord) formDataToSubmit.append("AttachmentsWord", formData.AttachmentsWord);
-      if (formData.AttachmentsPdf) formDataToSubmit.append("AttachmentsPdf", formData.AttachmentsPdf);
-      if (formData.FeeReceipt) formDataToSubmit.append("FeeReceipt", formData.FeeReceipt);
-
-      const response = await fetch("http://localhost:5000/AbstractSubmission", {
-        method: "POST",
-        body: formDataToSubmit,
+      // Add document to Firestore with submission timestamp
+      const docRef = await addDoc(collection(db, "AbstractSubmissionDataSM24"), {
+        ...formData,
+        submissionDate: Timestamp.now(), // Automatically add date and time
       });
-
-      if (!response.ok) {
-        throw new Error("Submission failed!");
-      }
-
+      console.log("Document added with ID:", docRef.id);
       setLoading(false);
-      setFormData(initialFormData); // Reset form after successful submission
-      toast.success("Abstract submitted successfully!");
+      setFormData(initialFormData);
+      toast.success("Congratulations you have successfully submitted the Abstract!");
     } catch (error) {
-      console.error("Error submitting abstract:", error);
+      console.error("Error adding document:", error);
+      setError(error);
       setLoading(false);
-      toast.error("Something went wrong!");
+      toast.error("Something broke while submitting the Abstract!");
     }
   };
 
   return (
     <div className="bg-white mb-5">
-      <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black">
-        <h1 className="text-primary text-center text-xl">Paper Submission Form</h1>
+      <div className="shadow-md rounded-md md:w-1/3 mx-auto pt-8 bg-white text-black">
+        <h1 className="text-primary text-center text-xl ">
+          Abstract Submission Form
+        </h1>
         <form onSubmit={handleSubmit} className="bg-white p-4">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
@@ -233,7 +226,7 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Keywords <span className="text-red-700 text-base"><sup>&#42;</sup></span>
+              Keywords<span className="text-red-700 text-base"><sup>&#42;</sup></span>
             </label>
             <input
               type="text"
@@ -247,13 +240,13 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Contact Number <span className="text-red-700 text-base"><sup>&#42;</sup></span>
+              Contact Number<span className="text-red-700 text-base"><sup>&#42;</sup></span>
             </label>
             <input
-              type="text"
+              type="tel"
               name="ContactNumber"
+              placeholder="*1234567890*"
               value={formData.ContactNumber}
-              placeholder="*Your contact number*"
               onChange={handleInputChange}
               className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
@@ -261,41 +254,75 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Payment Receipt <span className="text-red-600 text-xs">(Max size: 5 MB)</span>
-              <span className="text-red-700 text-base"><sup>&#42;</sup></span>
+              Select Type &#40;Fee&#41;<span className="text-red-700 text-base"><sup>&#42;</sup></span>
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleInputChange}
+                className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+              >
+                <option value="">Select Delegates Type</option>
+                <option value="Research Scholars and Students">
+                  Research Scholars and Students
+                </option>
+                <option value="Delegates from Academics and R&D Institutions">
+                  Academics, R&D and Institutions
+                </option>
+                <option value="Delegates from Industry">
+                  Industry
+                </option>
+              </select>
             </label>
-            <input
-              type="file"
-              name="FeeReceipt"
-              accept=".jpg, .png, .pdf"
-              onChange={(e) => handleFileChange(e, "FeeReceipt", MAX_FILE_SIZE_RECEIPT)}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
-            />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-600">
-              Type of Paper <span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            </label>
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black"
-            >
-              <option value="">Select Paper Type</option>
-              <option value="Research">Research</option>
-              <option value="Review">Review</option>
-              <option value="Short Paper">Short Paper</option>
-            </select>
-          </div>
+          {formData.type && (
+            <>
+              <div className="text-sm text-red-600 mb-4">
+                Note&#58; Abstract Submission will be valid only if you upload the payment
+                receipt successfully. The Fee amount displayed above
+                the &#34;Payment QR Code&#34; must be paid. Without that, the
+                Submission will be canceled.
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600">
+                  <b>
+                    ₹&#58;{" "}
+                    {formData.type === "Research Scholars and Students"
+                      ? 1100
+                      : formData.type ===
+                        "Delegates from Academics, R&D and Institutions"
+                      ? 2100
+                      : 3100}
+                  </b>
+                  <img className="p-2" src="2023K/fee.png" alt="Fee" />
+                  <span className="text-sm text-red-600 mb-4">
+                UPI ID&#58; shikshamahakhumb@sbi
+              </span>
+                </label>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600">
+                  Upload Payment Receipt<span className="text-red-600 text-xs">(Max size: 5 MB)</span>
+                  <span className="text-red-700 text-base"><sup>&#42;</sup></span>
+                </label>
+                <input
+                  type="file"
+                  name="FeeReceipt"
+                  accept=".pdf, .png, .jpg"
+                  onChange={(e) => handleFileChange(e, "FeeReceipt", MAX_FILE_SIZE_RECEIPT)}
+                  className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+                />
+              </div>
+            </>
+          )}
 
           <button
             type="submit"
-            className="w-full py-3 px-4 mt-4 rounded-md bg-primary text-white"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-color transition duration-300 mt-4 w-full"
             disabled={loading}
           >
-            {loading ? "Submitting..." : "Submit Abstract"}
+            Submit
           </button>
         </form>
       </div>
