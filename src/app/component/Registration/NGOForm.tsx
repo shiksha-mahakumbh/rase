@@ -1,5 +1,9 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "@/app/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/app/firebase";
 import toast, { Toaster } from "react-hot-toast";
 
 interface NgoData {
@@ -10,7 +14,7 @@ interface NgoData {
   PhoneNumber: string;
   Contribution: string;
   Attachments: string;
-  accommodation: string;
+  accommodation: string; // New field for accommodation option
 }
 
 const NGOReg = () => {
@@ -22,13 +26,13 @@ const NGOReg = () => {
     PhoneNumber: "",
     Contribution: "",
     Attachments: "",
-    accommodation: "",
+    accommodation: "", // Initialize with an empty string
   };
 
   const [formData, setFormData] = useState<NgoData>(initialFormData);
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showBookingButton, setShowBookingButton] = useState(false);
+  const [showBookingButton, setShowBookingButton] = useState(false); // New state for the booking button
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -47,49 +51,60 @@ const NGOReg = () => {
     }
   };
 
+  const handleAddDocument = async (downloadURL: string | null) => {
+    try {
+      const docRef = await addDoc(collection(db, "RegestrationNGOsm24"), {
+        ...formData,
+        feeReceipt: downloadURL,
+      });
+      console.log("Document added with ID:", docRef.id);
+      setLoading(false);
+      setFormData(initialFormData);
+      setShowBookingButton(formData.accommodation === "yes"); // Show booking button if user selected "yes"
+      toast.success("Successfully Registered!");
+    } catch (error) {
+      setLoading(false);
+      toast.error("Something broke while registration!");
+      console.error("Error adding document:", error);
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
-    // Prepare the data for the backend
-    const formPayload = {
-      ...formData,
-      Attachments: image ? URL.createObjectURL(image) : "",
-    };
+    if (image) {
+      try {
+        const imageRef = ref(storage, `images/${image.name}`);
+        await uploadBytes(imageRef, image);
 
-    try {
-      const response = await fetch("http://localhost:5000/NGO", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formPayload),
-      });
+        const downloadURL = await getDownloadURL(imageRef);
+        setFormData((prevData) => ({
+          ...prevData,
+          feeReceipt: downloadURL || "",
+        }));
 
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success("Successfully Registered!");
-        setShowBookingButton(formData.accommodation === "yes");
-        setFormData(initialFormData);
-      } else {
-        toast.error(data.message || "Something went wrong!");
+        handleAddDocument(downloadURL);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        setLoading(false);
       }
-    } catch (error) {
-      toast.error("An error occurred while submitting the form.");
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
+    } else {
+      handleAddDocument(null);
     }
   };
 
   return (
     <div className="shadow-md rounded-md max-w-md mx-auto mt-8">
       <Toaster />
-      <h1 className="text-primary text-center text-xl">NGO Registration Form</h1>
+      <h1 className="text-primary text-center text-xl">
+        NGO Registration Form
+      </h1>
       <form onSubmit={handleSubmit} className="bg-white p-4">
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Name:</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Name:
+          </label>
           <input
             type="text"
             name="name"
@@ -101,7 +116,9 @@ const NGOReg = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Registration Number:</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Registration Number:
+          </label>
           <input
             type="text"
             name="RegistrationNo"
@@ -113,7 +130,9 @@ const NGOReg = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Email:</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Email:
+          </label>
           <input
             type="email"
             name="email"
@@ -125,7 +144,9 @@ const NGOReg = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Website:</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Website:
+          </label>
           <input
             type="text"
             name="Website"
@@ -137,7 +158,9 @@ const NGOReg = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Phone Number:</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Phone Number:
+          </label>
           <input
             type="tel"
             name="PhoneNumber"
@@ -149,7 +172,9 @@ const NGOReg = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Contribution:</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Contribution:
+          </label>
           <input
             name="Contribution"
             value={formData.Contribution}
@@ -160,7 +185,9 @@ const NGOReg = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Attachments:</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Attachments:
+          </label>
           <input
             type="file"
             name="Attachments"
@@ -172,7 +199,9 @@ const NGOReg = () => {
 
         {/* Accommodation option */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Do you require accommodation?</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Do you require accommodation?
+          </label>
           <div className="flex mt-2">
             <label className="mr-4">
               <input
@@ -198,7 +227,6 @@ const NGOReg = () => {
             </label>
           </div>
         </div>
-
         <div className="text-xs text-red-600">
           Note: Due to the large number of registrations, accommodation will be
           provided on a first-come, first-served basis. Once accommodation is
@@ -210,7 +238,7 @@ const NGOReg = () => {
           className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-4 w-full"
           disabled={loading}
         >
-          {loading ? "Submitting..." : "Submit"}
+          Submit
         </button>
       </form>
 
@@ -218,7 +246,7 @@ const NGOReg = () => {
       {showBookingButton && (
         <div className="mt-4 text-center">
           <a
-            href="/Accomodation"
+            href="https://rase.co.in/Accomodation"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300"
