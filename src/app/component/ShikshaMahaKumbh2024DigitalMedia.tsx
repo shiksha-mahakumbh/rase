@@ -51,7 +51,7 @@ const ShikshaMahaKumbh2023DigitalMedia: React.FC = () => {
   return (
     <div className="bg-[url('/pattern3.png')] bg-repeat justify-center p-8">
       <h1 className="text-2xl text-primary font-bold text-shadow-lg mb-12">
-        RASE 2023 1<sup>st</sup> Edition Digital Media
+        Shiksha MahaKumbh 2024 2<sup>st</sup> Edition Digital Media
       </h1>
       <div className="mb-4 grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-5 gap-8">
         {displayedMedia.map((item: MediaItem, index: number) => (
