@@ -7,6 +7,13 @@ import {firebaseConfig} from "@/app/firebase";
 const speakers = [
   {
     id: 1,
+    name: " Lt.Gen.Kaiwalya Trivikram Parnaik, PVSM,UYSM,YSM (Retd.)",
+    designation: "Hon'ble Governor of Arunachal Pradesh",
+    place: "The Hon'ble Governor extends his Best wishes for success of the event",
+    imageSrc: "/2024M/cheifguests/governer.jpg",
+  },
+  {
+    id: 1,
     name: "Shri Rajendra Arlekar",
     designation: "Hon'ble Governor of Bihar",
     place: "माननीय राज्यपाल, बिहार के द्वारा शिक्षा महाकुंभ के द्वितीय संस्करण की कामयाबी के लिए शुभकामनाएँ व्यक्त की है",
