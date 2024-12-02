@@ -4,7 +4,7 @@ import { Card, Button } from 'antd';
 import Image from 'next/image';
 import proceeding1 from '/public/2024M/press2.jpg';
 import proceeding2 from '/public/2024M/press1.jpg';
-import proceeding3 from '/public/2024M/press3.jpg';
+import proceeding3 from '/public/2024M/res/res9.jpg';
 
 
 const { Meta } = Card;

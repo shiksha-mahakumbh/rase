@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import Link from "next/link";
 
@@ -11,18 +12,12 @@ const MediaGrid: React.FC = () => {
       label: "Shiksha Kumbh",
       years: [
         {
-          year: "2024",
+          year: "2025",
           children: [
-            { label: "Digital Media", link: "/shikshakumbh2024digitalmedia" },
-            { label: "Print Media", link: "/printmediashikshakumbh2024" },
+            { label: "Wishes Received", link: "/comingsoon" },
+            
           ],
-        },
-        {
-          year: "2023",
-          children: [
-            { label: "Digital Media", link: "/shikshakumbh2023digitalmedia" },
-            { label: "Print Media", link: "/printmediashikshakumbh2023" },
-          ],
+        
         },
       ],
     },
@@ -32,16 +27,10 @@ const MediaGrid: React.FC = () => {
         {
           year: "2024",
           children: [
-            { label: "Digital Media", link: "/shikshamahakumbh2024digitalmedia" },
-            { label: "Print Media", link: "/printmediashikshamahakumbh2024" },
+            { label: "Wishes Received", link: "/Wishes_Received" },
+            
           ],
-        },
-        {
-          year: "2023",
-          children: [
-            { label: "Digital Media", link: "/shikshamahakumbh2023digitalmedia" },
-            { label: "Print Media", link: "/printmediashikshamahakumbh2023" },
-          ],
+        
         },
       ],
     },
@@ -61,7 +50,7 @@ const MediaGrid: React.FC = () => {
         <h1 className="text-center font-bold text-2xl mb-4">
           <Link href="/" passHref>
             <button className="bg-transparent text-primary tracking-widest hover:text-blue-600">
-               MEDIA
+               Wishes
             </button>
           </Link>
         </h1>

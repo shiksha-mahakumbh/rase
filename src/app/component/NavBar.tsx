@@ -75,7 +75,7 @@ const NavBar: React.FC = () => {
     { path: "/feedback", title: "Feedback" },
       
      
-    { path: "/Wishes_Received", title: "Wishes Received" },
+    { path: "/Best_Wishes", title: "Wishes Received" },
   ];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
