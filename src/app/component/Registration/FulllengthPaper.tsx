@@ -119,9 +119,9 @@ const Fulllengthpaper = () => {
   };
 
   return (
-    <div className="bg-white mb-5">
-      <div className="shadow-md rounded-md md:w-1/3 mx-auto pt-8 bg-white text-black">
-        <h1 className="text-primary text-center text-xl">
+    <div className="bg-white mb-5 px-4">
+      <div className="shadow-md rounded-md max-w-screen-md mx-auto pt-8 bg-white text-black">
+        <h1 className="text-primary text-center text-2xl mb-4">
           Full Length Paper Submission Form
         </h1>
         <form onSubmit={handleSubmit} className="bg-white p-4">
