@@ -11,11 +11,21 @@ type AccountDetails = {
     upiId: string;
 };
 
+// Define a type for sponsorship links
+type SponsorshipLinks = {
+    link1: string;
+    link1Text: string;
+    link2: string;
+    link2Text: string;
+};
+
 const Donate: React.FC = () => {
-    // Function to render each section with its custom account details
+    // Function to render each section with its custom account details, image, and sponsorship links
     const renderSection = (
         heading: string,
-        accountDetails: AccountDetails
+        accountDetails: AccountDetails,
+        imageSrc: string,
+        sponsorshipLinks: SponsorshipLinks
     ) => (
         <div className="flex flex-col items-center justify-center px-4 lg:px-8 py-6">
             <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-6 text-center">
@@ -39,33 +49,33 @@ const Donate: React.FC = () => {
 
             {/* Sponsorship Links */}
             <p className="mt-6 text-black text-center text-sm lg:text-base">
-                For more details about sponsorship 1,{" "}
+                For more details about sponsorship,{" "}
                 <a
-                    href="/2024K/Shiksha Mahakumbh-sponsorship 2.pdf (1).pdf"
+                    href={sponsorshipLinks.link1}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-semibold text-primary underline hover:text-blue-600"
                 >
-                    click here
+                    {sponsorshipLinks.link1Text}
                 </a>.
             </p>
             <p className="mt-4 text-black text-center text-sm lg:text-base">
-                For more details about sponsorship 2,{" "}
+                For more details about sponsorship,{" "}
                 <a
-                    href="/2024K/Shiksha Mahakumbh-sponsorship 3.pdf (2).pdf"
+                    href={sponsorshipLinks.link2}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-semibold text-primary underline hover:text-blue-600"
                 >
-                    click here
+                    {sponsorshipLinks.link2Text}
                 </a>.
             </p>
 
             {/* Sponsor Image */}
             <div className="mt-6 w-full max-w-sm flex justify-center">
                 <Image
-                    src="/2024K/Sponsor.png" // Ensure the image path exists in the public folder
-                    alt="Support Shiksha Kumbh"
+                    src={imageSrc} // Use the imageSrc parameter
+                    alt={`${heading} Support`}
                     width={300}
                     height={300}
                     className="rounded-lg object-cover"
@@ -74,7 +84,7 @@ const Donate: React.FC = () => {
         </div>
     );
 
-    // Define the account details for each section
+    // Define the account details, images, and links for each section
     const accountDetailsLeft: AccountDetails = {
         accountName: "Shiksha Mahakumbh",
         accountNumber: "42563560855",
@@ -85,12 +95,26 @@ const Donate: React.FC = () => {
     };
 
     const accountDetailsRight: AccountDetails = {
-        accountName: "Shiksha Mahakumbh Foundation",
-        accountNumber: "9876543210",
-        bank: "Punjab National Bank",
-        branch: "Sector 17 Chandigarh",
-        ifscCode: "PUNB0998765",
-        upiId: "shikshamahakumbh@pnb",
+        accountName: "Shiksha Kumbh",
+        accountNumber: "42563561350",
+        bank: "State Bank of India",
+        branch: "Chandigarh Main Branch",
+        ifscCode: "SBIN0000628",
+        upiId: "shikshakhumb@sbi",
+    };
+
+    const sponsorshipLinksLeft: SponsorshipLinks = {
+        link1: "/2024K/ShikshaMahakumbh-Sponsorship1.pdf",
+        link1Text: "Sponsorship 1",
+        link2: "/2024K/ShikshaMahakumbh-Sponsorship2.pdf",
+        link2Text: "Sponsorship 2",
+    };
+
+    const sponsorshipLinksRight: SponsorshipLinks = {
+        link1: "/2024K/ShikshaKumbh-Sponsorship1.pdf",
+        link1Text: "Sponsorship 1",
+        link2: "/2024K/ShikshaKumbh-Sponsorship2.pdf",
+        link2Text: "Sponsorship 2",
     };
 
     return (
@@ -104,12 +128,22 @@ const Donate: React.FC = () => {
             <div className="flex flex-col lg:flex-row items-stretch w-full">
                 {/* Left Section */}
                 <div className="flex-1 bg-gray-50">
-                    {renderSection("Shiksha MahaKumbh", accountDetailsLeft)}
+                    {renderSection(
+                        "Shiksha Mahakumbh",
+                        accountDetailsLeft,
+                        "/2024K/Sponsor.png",
+                        sponsorshipLinksLeft
+                    )}
                 </div>
 
                 {/* Right Section */}
                 <div className="flex-1 bg-gray-50">
-                    {renderSection("Shiksha Kumbh", accountDetailsRight)}
+                    {renderSection(
+                        "Shiksha Kumbh",
+                        accountDetailsRight,
+                        "/sk.png",
+                        sponsorshipLinksRight
+                    )}
                 </div>
             </div>
         </div>
