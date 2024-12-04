@@ -25,6 +25,11 @@ const media: MediaItem[] = [
     name: "Necessity To Establish A Global Platform For Education",
     url: "https://www.businessworld.in/article/necessity-to-establish-a-global-platform-for-education-akin-to-the-olympics-and-option-in-the-form-of-shiksha-mahakumbh-abhiyan-540875",
     description: "Necessity To Establish A Global Platform For Education Akin To The Olympics And Option In The Form Of Shiksha Mahakumbh Abhiyan ",
+  },
+  {
+    name: "यदि बनना चाहते है शिक्षा के महाकुंभ का हिस्सा ",
+    url: "https://www.facebook.com/Bharatnewsptk/videos/%E0%A4%AF%E0%A4%A6%E0%A4%BF-%E0%A4%AC%E0%A4%A8%E0%A4%A8%E0%A4%BE-%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%A4%E0%A5%87-%E0%A4%B9%E0%A5%88-%E0%A4%B6%E0%A4%BF%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A4%BE-%E0%A4%95%E0%A5%87-%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%95%E0%A5%81%E0%A4%82%E0%A4%AD-%E0%A4%95%E0%A4%BE-%E0%A4%B9%E0%A4%BF%E0%A4%B8%E0%A5%8D%E0%A4%B8%E0%A4%BE-%E0%A4%A4%E0%A5%8B-%E0%A4%9C%E0%A4%B2%E0%A5%8D%E0%A4%A6-%E0%A4%95%E0%A4%B0%E0%A5%87-wwwshikshamahakumbhcom/986021730019759/?mibextid=qi2Omg&rdid=6NNaywVz5BSFHtSF",
+    description: "यदि बनना चाहते है शिक्षा के महाकुंभ का हिस्सा तो जल्द करे www.shikshamahakumbh.com & www.rase.co.in पर पंजीकरण ",
   }
 ];
 
