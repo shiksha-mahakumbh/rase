@@ -38,7 +38,7 @@ const PrabandhanVibhag: React.FC = () => {
       members: [
         { name: "Dr. Parveen Sharma", position: "Associate Professor, CU Jammu", contact: "9988625485" },
         { name: "Dr. Shiksha Sharma", position: "DHE", contact: "9878890303" },
-        { name: "Shri Aman Kumar", position: "DHE", contact: "79054 16059}
+        { name: "Shri Aman Kumar", position: "DHE", contact: "79054 16059"}
       ]
     },
     {
