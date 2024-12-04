@@ -22,6 +22,11 @@ interface MediaItem1 {
 
 const media: MediaItem[] = [
   {
+    name: "Shiksha Mahakumbh Abhiyan",
+    url: "https://www.businessworld.in/article/shiksha-mahakumbh-abhiyan-a-torch-bearer-platform-for-educational-dialogue-and-ecosystem-to-implement-nep-2020-539335",
+    description: " A Torch Bearer Platform For Educational Dialogue And Ecosystem To Implement NEP 2020 ",
+  },
+  {
     name: "Necessity To Establish A Global Platform For Education",
     url: "https://www.businessworld.in/article/necessity-to-establish-a-global-platform-for-education-akin-to-the-olympics-and-option-in-the-form-of-shiksha-mahakumbh-abhiyan-540875",
     description: "Necessity To Establish A Global Platform For Education Akin To The Olympics And Option In The Form Of Shiksha Mahakumbh Abhiyan ",
