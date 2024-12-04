@@ -27,7 +27,7 @@ const MediaGrid: React.FC = () => {
       ],
     },
     {
-      label: "Shiksha MahaKumbh",
+      label: "Shiksha Mahakumbh",
       years: [
         {
           year: "2024",
