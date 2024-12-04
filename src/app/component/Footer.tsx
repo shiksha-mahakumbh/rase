@@ -342,7 +342,7 @@ const Footer: React.FC = () => {
                     </Link>
                   </p>
                   <p className="text-white mb-3">
-                    <Link href="https://ac.rase.co.in" className="hover:text-white">
+                    <Link href="/Accomodation" className="hover:text-white">
                       Accomodation
                     </Link>
                   </p>
