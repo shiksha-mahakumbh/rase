@@ -7,6 +7,13 @@ import {firebaseConfig} from "@/app/firebase";
 const speakers = [
   {
     id: 1,
+    name: "Admiral D K Joshi, PVSM, AVSM, YSM, NM, VSM (Retd.)",
+    designation: "Hon'ble Governor of Andaman & Nicobar Islands",
+    place: "The Hon'ble Lt. Governor conveyed his Best wishes for success of the event",
+    imageSrc: "/2024M/cheifguests/andaman.jpg",
+  },
+  {
+    id: 1,
     name: " Lt.Gen.Kaiwalya Trivikram Parnaik, PVSM,UYSM,YSM (Retd.)",
     designation: "Hon'ble Governor of Arunachal Pradesh",
     place: "The Hon'ble Governor extends his Best wishes for success of the event",
