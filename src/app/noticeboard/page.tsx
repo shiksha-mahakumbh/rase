@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/app/firebase1";
+import { db } from "@/app/firebase";
 import CompanyInfo from "../component/CompanyInfo";
 import NavBar from "../component/NavBar";
 
