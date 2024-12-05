@@ -326,6 +326,20 @@ const AbstractSubmission = () => {
           >
             Submit
           </button>
+          {/* Accommodation Booking Button */}
+<div className="mt-6 text-center">
+  <h2>For Accomodation click the below button</h2>
+  <button
+    type="button"
+    onClick={() => {
+      window.location.href = "/Accomodation"; // Adjust path as needed
+    }}
+    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary-dark transition duration-300"
+  >
+    Accommodation Booking
+  </button>
+</div>
+
         </form>
       </div>
     </div>
