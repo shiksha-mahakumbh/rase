@@ -22,6 +22,11 @@ interface MediaItem1 {
 
 const media: MediaItem[] = [
   {
+    name: "कुरुक्षेत्र में 16-17 आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024",
+    url: "https://www.facebook.com/share/v/2t8ZUL8ADqb6vFM7/",
+    description: "खबरनामा हरियाणा/विद्या भारती अखिल भारतीय शिक्षा संस्थान एवं कुरुक्षेत्र विश्वविद्यालय कुरुक्षेत्र के संयुक्त तत्वावधान में आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन किया जाएगा।",
+  },
+  {
     name: "Shiksha Mahakumbh Abhiyan",
     url: "https://www.businessworld.in/article/shiksha-mahakumbh-abhiyan-a-torch-bearer-platform-for-educational-dialogue-and-ecosystem-to-implement-nep-2020-539335",
     description: " A Torch Bearer Platform For Educational Dialogue And Ecosystem To Implement NEP 2020 ",
