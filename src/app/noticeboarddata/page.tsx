@@ -1,45 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import {
-  addDoc,
-  collection,
-  doc,
-  updateDoc,
-  deleteDoc,
-  getDocs,
-} from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc, deleteDoc, getDocs } from "firebase/firestore";
 import { toast } from "react-hot-toast";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  getAuth,
-  User,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut, getAuth, User } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { auth, db, storage } from "@/app/firebase"; // Adjust import based on your Firebase setup
 import CompanyInfo from "../component/CompanyInfo";
 import NavBar from "../component/NavBar";
-
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAnxFHB9rz60iStUZ70zop6rBlqkTSl2zI",
-  authDomain: "rase-c8594.firebaseapp.com",
-  projectId: "rase-c8594",
-  storageBucket: "rase-c8594.appspot.com",
-  messagingSenderId: "428952546898",
-  appId: "1:428952546898:web:ccf223d18fe876cbce798b",
-  measurementId: "G-VL5Z20KGVR"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
 
 const allowedEmail = "amansrivastava3516@gmail.com";
 
@@ -49,9 +17,7 @@ const AddEventForm: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [events, setEvents] = useState<
-    Array<{ id: string; title: string; date: string; imageUrl?: string }>
-  >([]);
+  const [events, setEvents] = useState<Array<{ id: string; title: string; date: string; imageUrl?: string }>>([]);
   const [showForm, setShowForm] = useState(false);
   const [showManageEvents, setShowManageEvents] = useState(false);
   const [editEventId, setEditEventId] = useState<string | null>(null);
@@ -59,7 +25,21 @@ const AddEventForm: React.FC = () => {
   const [editDate, setEditDate] = useState("");
   const [editImageUrl, setEditImageUrl] = useState<string | null>(null);
 
-  // Remaining logic remains unchanged...
+  useEffect(() => {
+    const auth = getAuth();
+    auth.signOut(); // Ensure user is signed out on page load
+
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (user && user.email === allowedEmail) {
+      fetchEvents();
+    }
+  }, [user]);
 
   const fetchEvents = async () => {
     try {
@@ -74,7 +54,6 @@ const AddEventForm: React.FC = () => {
       toast.error("Error fetching events.");
     }
   };
-
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
