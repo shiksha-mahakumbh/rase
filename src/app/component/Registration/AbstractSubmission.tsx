@@ -254,46 +254,48 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Select Type &#40;Fee&#41;<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-              <select
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-              >
-                <option value="">Select Delegates Type</option>
-                <option value="Research Scholars and Students">
-                  Research Scholars and Students
-                </option>
-                <option value="Delegates from Academics and R&D Institutions">
-                  Academics, R&D and Institutions
-                </option>
-                <option value="Delegates from Industry">
-                  Industry
-                </option>
-              </select>
-            </label>
-          </div>
+            Select Type &#40;Fee&#41;<span className="text-red-700 text-base"><sup>&#42;</sup></span>
+    <select
+      name="type"
+      value={formData.type}
+      onChange={handleInputChange}
+      className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+    >
+      <option value="">Select Delegates Type</option>
+      <option value="Students">Students</option>
+      <option value="Research Scholars and Students">
+        Research Scholars and Students
+      </option>
+      <option value="Delegates from Academics and R&D Institutions">
+        Delegates from Academics and R&D Institutions
+      </option>
+      <option value="Delegates from Industry">Delegates from Industry</option>
+    </select>
+  </label>
+</div>
 
-          {formData.type && (
-            <>
-              <div className="text-sm text-red-600 mb-4">
-                Note&#58; Abstract Submission will be valid only if you upload the payment
-                receipt successfully. The Fee amount displayed above
-                the &#34;Payment QR Code&#34; must be paid. Without that, the
-                Submission will be canceled.
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">
-                  <b>
-                    ₹&#58;{" "}
-                    {formData.type === "Research Scholars and Students"
-                      ? 1100
-                      : formData.type ===
-                        "Delegates from Academics, R&D and Institutions"
-                      ? 2100
-                      : 3100}
-                  </b>
+{formData.type && (
+  <>
+    <div className="text-sm text-red-600 mb-4">
+      Note&#58; Abstract Submission will be valid only if you upload the payment
+      receipt successfully. The Fee amount displayed above
+      the &#34;Payment QR Code&#34; must be paid. Without that, the
+      Submission will be canceled.
+    </div>
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-600">
+        <b>
+          ₹&#58;{" "}
+          {formData.type === "Students"
+            ? 500
+            : formData.type === "Research Scholars and Students"
+            ? 1100
+            : formData.type === "Delegates from Academics and R&D Institutions"
+            ? 2100
+            : formData.type === "Delegates from Industry"
+            ? 3100
+            : "not known"}
+        </b>
                   <img className="p-2" src="/fee.png" alt="Fee" />
                   <span className="text-sm text-red-600 mb-4">
                 UPI ID&#58; shikshamahakhumb@sbi

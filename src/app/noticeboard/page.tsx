@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import {
   List,
@@ -11,10 +11,25 @@ import {
   Spin,
 } from "antd";
 import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/app/firebase";
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import CompanyInfo from "../component/CompanyInfo";
 import NavBar from "../component/NavBar";
+
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAnxFHB9rz60iStUZ70zop6rBlqkTSl2zI",
+  authDomain: "rase-c8594.firebaseapp.com",
+  projectId: "rase-c8594",
+  storageBucket: "rase-c8594.appspot.com",
+  messagingSenderId: "428952546898",
+  appId: "1:428952546898:web:ccf223d18fe876cbce798b",
+  measurementId: "G-VL5Z20KGVR"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 type Event = {
   id: string;
@@ -133,12 +148,6 @@ const EventsComponent: React.FC = () => {
                   <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
                     {event.title}
                   </Typography.Title>
-                  {/* <Typography.Text
-                    style={{ fontSize: '0.875rem' }} // Adjust the size as needed
-                    className="text-gray-600"
-                  >
-                    {event.date}
-                  </Typography.Text> */}
                 </div>
                 <div className="relative w-1/3">
                   {imageLoading[event.id] && (
@@ -181,12 +190,6 @@ const EventsComponent: React.FC = () => {
                   <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
                     {event.title}
                   </Typography.Title>
-                  {/* <Typography.Text
-                    style={{ fontSize: '0.875rem' }} // Adjust the size as needed
-                    className="text-gray-600"
-                  >
-                    {event.date}
-                  </Typography.Text> */}
                 </div>
                 <div className="relative w-1/3">
                   {imageLoading[event.id] && (
@@ -214,57 +217,56 @@ const EventsComponent: React.FC = () => {
 
   return (
     <>
-    <CompanyInfo />
-    <NavBar />
-    <div className="p-6 text-primary">
-      <div className="bg-white shadow-lg rounded-lg  mx-auto">
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <span className="text-lg font-semibold flex items-center">
-            Notice Board
-            <CalendarOutlined className="ml-2 text-primary" />
-          </span>
-          <Button
-            icon={<ReloadOutlined />}
-            onClick={handleRefresh}
-            className="ml-2"
-            size="small"
-            type="text"
-          />
-        </div>
-       
-        {error && (
-          <Alert
-            message="Error"
-            description={error}
-            type="error"
-            showIcon
-            className="m-4"
-          />
-        )}
-        <Tabs defaultActiveKey="1" className="p-4">
-          {tabItems.map((item) => (
-            <Tabs.TabPane tab={item.label} key={item.key}>
-              {item.children}
-            </Tabs.TabPane>
-          ))}
-        </Tabs>
-        <div className="border-t border-gray-200 mt-4" />
-        {/* Single HR line after all content */}
-        <Modal
-          visible={isModalVisible}
-          footer={null}
-          onCancel={handleCancel}
-          className="modal-image"
-        >
-          <img src={modalImage} alt="Larger view" className="w-full h-auto" />
-        </Modal>
-        <div className="text-center p-3">
-          <span className="text-xs text-red-600">
-            Note: Click on an image for a larger view
-          </span>
+      <CompanyInfo />
+      <NavBar />
+      <div className="p-6 text-primary">
+        <div className="bg-white shadow-lg rounded-lg mx-auto">
+          <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+            <span className="text-lg font-semibold flex items-center">
+              Notice Board
+              <CalendarOutlined className="ml-2 text-primary" />
+            </span>
+            <Button
+              icon={<ReloadOutlined />}
+              onClick={handleRefresh}
+              className="ml-2"
+              size="small"
+              type="text"
+            />
+          </div>
+
+          {error && (
+            <Alert
+              message="Error"
+              description={error}
+              type="error"
+              showIcon
+              className="m-4"
+            />
+          )}
+          <Tabs defaultActiveKey="1" className="p-4">
+            {tabItems.map((item) => (
+              <Tabs.TabPane tab={item.label} key={item.key}>
+                {item.children}
+              </Tabs.TabPane>
+            ))}
+          </Tabs>
+          <div className="border-t border-gray-200 mt-4" />
+          <Modal
+            visible={isModalVisible}
+            footer={null}
+            onCancel={handleCancel}
+            className="modal-image"
+          >
+            <img src={modalImage} alt="Larger view" className="w-full h-auto" />
+          </Modal>
+          <div className="text-center p-3">
+            <span className="text-xs text-red-600">
+              Note: Click on an image for a larger view
+            </span>
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
