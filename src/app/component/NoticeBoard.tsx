@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/app/firebase";
+import { db } from "@/app/firebase1";
 import { useRouter } from "next/navigation";
 
 

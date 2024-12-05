@@ -5,7 +5,7 @@ import { addDoc, collection, doc, updateDoc, deleteDoc, getDocs } from "firebase
 import { toast } from "react-hot-toast";
 import { GoogleAuthProvider, signInWithPopup, signOut, getAuth, User } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { auth, db, storage } from "@/app/firebase"; // Adjust import based on your Firebase setup
+import { auth, db, storage } from "@/app/firebase1"; // Adjust import based on your Firebase setup
 import CompanyInfo from "../component/CompanyInfo";
 import NavBar from "../component/NavBar";
 
