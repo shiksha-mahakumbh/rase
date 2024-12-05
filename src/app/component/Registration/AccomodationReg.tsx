@@ -312,7 +312,7 @@ const Forms = () => {
                   <p>
                     <b>Account Name:</b> Shiksha Mahakumbh
                     <br />
-                    <b>Account No.:</b> 42529022841
+                    <b>Account No.:</b> 42563560855
                     <br />
                     <b>Bank:</b> State Bank of India
                     <br />
