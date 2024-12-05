@@ -294,7 +294,7 @@ const AbstractSubmission = () => {
                       ? 2100
                       : 3100}
                   </b>
-                  <img className="p-2" src="2023K/fee.png" alt="Fee" />
+                  <img className="p-2" src="/fee.png" alt="Fee" />
                   <span className="text-sm text-red-600 mb-4">
                 UPI ID&#58; shikshamahakhumb@sbi
               </span>
