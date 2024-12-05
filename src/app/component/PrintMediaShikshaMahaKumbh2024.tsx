@@ -11,6 +11,8 @@ const images: ImageData[] = [
   { src: "/sm24printmedia/2.jpg", column: 2 },
   { src: "/sm24printmedia/3.jpg", column: 3 },
   { src: "/sm24printmedia/4.jpg", column: 4 },
+  { src: "/sm24printmedia/5.jpg", column: 5 },
+  { src: "/sm24printmedia/6.jpg", column: 6 },
  
 ];
 
