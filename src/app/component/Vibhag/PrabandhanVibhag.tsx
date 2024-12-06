@@ -56,7 +56,7 @@ const PrabandhanVibhag: React.FC = () => {
     {
       category: "Photography",
       members: [
-        { name: "Shri Praveen Chandel", position: "DHE", contact: "6230462733" }
+        { name: "Shri Praveen Chandel", position: "DHE", contact: "8725050733" }
       ]
     },
     {
