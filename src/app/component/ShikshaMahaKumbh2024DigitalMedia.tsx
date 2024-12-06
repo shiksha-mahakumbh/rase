@@ -22,6 +22,11 @@ interface MediaItem1 {
 
 const media: MediaItem[] = [
   {
+    name: "Shiksha Mahakumbh: A Global Platform For Holistic Education",
+    url: "https://www.businessworld.in/article/shiksha-mahakumbh-a-global-platform-for-holistic-education-534917",
+    description: "Dr. Thakur Sudesh Kumar Raunija, a distinguished ISRO scientist and committed social worker who is the man behind the world’s unique platform i.e. Shiksha Mahakumbh Abhiyan in conversation with BW Team, sharing his views on this Abhiyan",
+  },
+  {
     name: "कुरुक्षेत्र में 16-17 आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024",
     url: "https://www.facebook.com/share/v/2t8ZUL8ADqb6vFM7/",
     description: "खबरनामा हरियाणा/विद्या भारती अखिल भारतीय शिक्षा संस्थान एवं कुरुक्षेत्र विश्वविद्यालय कुरुक्षेत्र के संयुक्त तत्वावधान में आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन किया जाएगा।",
