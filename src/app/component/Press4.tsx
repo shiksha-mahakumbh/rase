@@ -28,7 +28,7 @@ const Press4: React.FC<{ data: Data }> = ({ data }) => {
 
   return (
     <div className="proceeding-container p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-4xl font-bold text-center mb-8">"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">हवन रश्म के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन</h1>
       <h2 className="text-3xl font-semibold text-gray-800 mb-4">{data.title}</h2>
       <div className="image-container mb-8 flex justify-center">
         <Image
