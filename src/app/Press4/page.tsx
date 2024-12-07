@@ -14,7 +14,7 @@ const shareImage = "/2024M/press3.jpg";
 const data = {
   Press: "4",
   image:"/2024M/press4.jpg",
-  title: `"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन"`,
+  title: ``,
   sections: [
     {
       title: "कुरुक्षेत्र, 7 दिसंबर 2024:",
