@@ -21,6 +21,9 @@ const page: React.FC = () => {
     <a href="/participantregistrationdatadekh" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Participants Registration Data</button></a>
     <a href="/heiprojectregistrationdata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>HEI Project Registration Data</button></a>
     <a href="/organiserdatadekh" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Organiser Registration Data</button></a>
+    <a href="/Bestpracticedata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Best Practices Data</button></a>
+    <a href="/Conclavedata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Conclave  Data</button></a>
+    <a href="/Talentdata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Talent Data</button></a>
     </div>
     <Footer/>
  
