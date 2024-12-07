@@ -16,42 +16,38 @@ type Section = {
 
 type Data = {
   title: string;
-  image: string; // Add image field to the data type
+  image: string;
   sections: Section[];
 };
 
-// Define the Press1 component
-const Press1: React.FC<{ data: Data }> = ({ data }) => {
+// Define the Press4 component
+const Press4: React.FC<{ data: Data }> = ({ data }) => {
   if (!data) {
     return <div>Error: No data available</div>;
   }
 
   return (
     <div className="proceeding-container p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-4xl font-bold text-center mb-8">Baton Ceremony</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन</h1>
       <h2 className="text-3xl font-semibold text-gray-800 mb-4">{data.title}</h2>
-
-      {/* Display the image */}
       <div className="image-container mb-8 flex justify-center">
-        <Image 
-          src={data.image} 
-          alt="Press Event" 
-          width={800}  // Set the desired width
-          height={400} // Set the desired height
+        <Image
+          src={data.image}
+          alt="Press Event"
+          width={400} // Set the desired width
+          height={200} // Set the desired height
           className="rounded-lg shadow-md"
         />
       </div>
-
       {data.sections.map((section, index) => (
         <div key={index} className="section mb-12 p-4 bg-white rounded-lg shadow-md">
           <h3 className="text-2xl font-semibold text-blue-600 mb-4">{section.title}</h3>
 
           {section.content && section.content.length > 0 && (
             <div className="content mb-4">
-              
               <ul className="list-disc ml-5 text-gray-600">
                 {section.content.map((item, idx) => (
-                  <ul key={idx} className="mb-2">{item}</ul>
+                  <li key={idx} className="mb-2">{item}</li>
                 ))}
               </ul>
             </div>
@@ -87,4 +83,4 @@ const Press1: React.FC<{ data: Data }> = ({ data }) => {
   );
 };
 
-export default Press1;
+export default Press4;
