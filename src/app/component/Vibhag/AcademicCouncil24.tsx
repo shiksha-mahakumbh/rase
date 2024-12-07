@@ -56,7 +56,7 @@ const AcademicCouncil: React.FC = () => {
         },
         {
           title: "Management & International Relations",
-          president: "Dr. Samriti Mahajan, Lingayas Vidyapeeth, Faridabad, Haryana",
+          president: "Dr. Samriti Mahajan, Lingaya’s Vidyapeeth, Faridabad, Haryana",
           members: [],
         },
         {
@@ -108,8 +108,8 @@ const AcademicCouncil: React.FC = () => {
         },
         {
           title: "Environment and Water Conservation",
-          president: "Dr. Updesh Verma, Manyavar Kanshiram Government Degree College, Ghaziabad, UP",
-          members: [],
+          president: "Dr. Vivek Kumar, Prof & Head, Centre for Rural Development and Technology, Indian Institute of Technology Delhi",
+          members: ["Dr. Updesh Verma, Manyavar Kanshiram Government Degree College, Ghaziabad, UP"],
         },
         {
           title: "Culture",

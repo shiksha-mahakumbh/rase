@@ -5,6 +5,7 @@ import Image from 'next/image';
 import proceeding1 from '/public/2024M/press2.jpg';
 import proceeding2 from '/public/2024M/press1.jpg';
 import proceeding3 from '/public/2024M/res/res9.jpg';
+import proceeding4 from '/public/2024M/press4.jpg';
 
 
 const { Meta } = Card;
@@ -25,6 +26,14 @@ const Proceedings: React.FC = () => {
   }, []);
 
   const cardData = [
+    {
+      title: `"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन"`,
+      description: `शिक्षा महाकुंभ 2.0 की तैयारियों के अंतर्गत सुबह 7:30 बजे UIET, कुरुक्षेत्र विश्वविद्यालय में "हवन रश्म" का आयोजन किया गया।`,
+      image: proceeding4,
+      // previewLink: '/Press1.pdf',
+      // downloadLink: '/Press1.pdf',
+      readLink: '/Press4' // Link to the TSX file or page
+    },
     {
       title: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण)",
       description: "आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम",
