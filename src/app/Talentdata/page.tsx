@@ -127,14 +127,7 @@ const TalentDataPage: React.FC = () => {
               <td className="border px-4 py-2">{item.email}</td>
               <td className="border px-4 py-2">{item.contactNumber}</td>
               <td className="border px-4 py-2">{item.accommodation}</td>
-              <td className="border px-4 py-2">
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                  onClick={() => generateQRCode(item)}
-                >
-                  Generate QR
-                </button>
-              </td>
+             
             </tr>
           ))}
         </tbody>
