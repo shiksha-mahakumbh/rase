@@ -1,82 +1,102 @@
-import { ChangeEvent, useState } from "react";
+'use client';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/app/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
+import toast, { Toaster } from "react-hot-toast";
+
+interface BestPracticeData {
+  institutionName: string;
+  aboutPractices: string;
+  keyPerson: string;
+  email: string;
+  contactNumber: string;
+  address: string;
+  attachmentURL: string;
+  accommodation: string; // Field for accommodation preference
+}
 
 const BestPracticesForm = () => {
-  const [formData, setFormData] = useState({
-    institutionName: "",
-    aboutPractices: "",
-    keyPerson: "",
-    email: "",
-    contactNumber: "",
-    address: "",
-  });
-  const [attachment, setAttachment] = useState<File | null>(null); // Store file directly
+  const initialFormData: BestPracticeData = {
+    institutionName: '',
+    aboutPractices: '',
+    keyPerson: '',
+    email: '',
+    contactNumber: '',
+    address: '',
+    attachmentURL: '',
+    accommodation: '', // Initialize empty
+  };
 
-  // Handle input changes
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+  const [formData, setFormData] = useState<BestPracticeData>(initialFormData);
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [showAccommodationButton, setShowAccommodationButton] = useState(false); // To show the booking button
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
 
-  // Handle file upload
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setAttachment(file); // Store file directly
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setAttachment(selectedFile);
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-  
-    const formDataForSubmission = new FormData();
-    formDataForSubmission.append("institutionName", formData.institutionName);
-    formDataForSubmission.append("aboutPractices", formData.aboutPractices);
-    formDataForSubmission.append("keyPerson", formData.keyPerson);
-    formDataForSubmission.append("email", formData.email);
-    formDataForSubmission.append("contactNumber", formData.contactNumber);
-    formDataForSubmission.append("address", formData.address);
-  
-    if (attachment) {
-      formDataForSubmission.append("attachment", attachment); // Append the file directly
-    }
-  
+  const handleAddDocument = async (downloadURL: string | null) => {
     try {
-      const response = await fetch("http://localhost:5000/api/best-practices", {
-        method: "POST",
-        body: formDataForSubmission,
+      const docRef = await addDoc(collection(db, 'BestPractices'), {
+        ...formData,
+        attachmentURL: downloadURL,
       });
-  
-      // Check if response is ok (status 2xx)
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      // Try to parse the response as JSON
-      const data = await response.json();
-  
-      // Check if the expected data format is returned
-      if (data && data.success) {
-        alert("Best practice submitted successfully!");
-      } else {
-        alert("Submitting form: " + (data.message || "Unknown error"));
+      console.log('Document added with ID:', docRef.id);
+      setLoading(false);
+      setFormData(initialFormData);
+      setAttachment(null);
+      toast.success("Best Practice Submitted Successfully!");
+
+      if (formData.accommodation === 'yes') {
+        setShowAccommodationButton(true); // Show the button if 'Yes' is selected
       }
     } catch (error) {
-      // Improved error handling for both fetch and response parsing
-      console.error("Error submitting form:", error);
-      alert("An error occurred while submitting the form. Please try again.");
+      setLoading(false);
+      toast.error("Error while submitting the form!");
+      console.error('Error adding document:', error);
     }
   };
-  
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+
+    if (attachment) {
+      try {
+        const fileRef = ref(storage, `attachments/${attachment.name}`);
+        await uploadBytes(fileRef, attachment);
+        const downloadURL = await getDownloadURL(fileRef);
+        handleAddDocument(downloadURL);
+      } catch (error) {
+        console.error('Error uploading attachment:', error);
+        setLoading(false);
+      }
+    } else {
+      handleAddDocument(null);
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Institution/Organization/Ministry/State/NGO Name:
+    <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
+      <h1 className='text-primary text-center text-xl'>Submit Best Practices</h1>
+      <form onSubmit={handleSubmit} className='bg-white p-4'>
+        
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Institution Name:</label>
           <input
             type="text"
             name="institutionName"
@@ -85,26 +105,22 @@ const BestPracticesForm = () => {
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          About Practices (250 words):
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">About Practices (250 words):</label>
           <textarea
             name="aboutPractices"
             value={formData.aboutPractices}
             onChange={handleInputChange}
-            required
             maxLength={250}
+            required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Key Person:
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Key Person:</label>
           <input
             type="text"
             name="keyPerson"
@@ -113,12 +129,10 @@ const BestPracticesForm = () => {
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Email:
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Email:</label>
           <input
             type="email"
             name="email"
@@ -127,12 +141,10 @@ const BestPracticesForm = () => {
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Contact Number:
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Contact Number:</label>
           <input
             type="tel"
             name="contactNumber"
@@ -141,12 +153,10 @@ const BestPracticesForm = () => {
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Address:
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Address:</label>
           <textarea
             name="address"
             value={formData.address}
@@ -154,42 +164,67 @@ const BestPracticesForm = () => {
             required
             className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Upload Attachments (Optional):
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Upload Attachment (Optional):</label>
           <input
             type="file"
-            accept=".pdf, .png, .jpg"
+            name="attachment"
+            accept=".pdf, .jpg, .png"
             onChange={handleFileChange}
             className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Do you need accommodation?</label>
+          <div className="mt-2">
+            <input
+              type="radio"
+              id="yes"
+              name="accommodation"
+              value="yes"
+              onChange={handleInputChange}
+              required
+            />
+            <label htmlFor="yes" className="ml-2">Yes</label>
+          </div>
+          <div className="mt-2">
+            <input
+              type="radio"
+              id="no"
+              name="accommodation"
+              value="no"
+              onChange={handleInputChange}
+              required
+            />
+            <label htmlFor="no" className="ml-2">No</label>
+          </div>
+        </div>
+
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-3 rounded-md shadow-md hover:bg-blue-600"
+          className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-4 w-full"
+          disabled={loading}
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </button>
-        <div className="mt-6 text-center">
-  <h2>For Accomodation click the below button</h2>
-  <button
-    type="button"
-    onClick={() => {
-      window.location.href = "/Accomodation"; // Adjust path as needed
-    }}
-    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary-dark transition duration-300"
-  >
-    Accommodation Booking
-  </button>
-</div>
-      </div>
-    </form>
+
+        {showAccommodationButton && (
+          <div className="mt-4 text-center mb-4">
+            <a
+              href="https://ac.rase.co.in/"
+              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Book Your Accommodation
+            </a>
+          </div>
+        )}
+      </form>
+    </div>
   );
 };
 
