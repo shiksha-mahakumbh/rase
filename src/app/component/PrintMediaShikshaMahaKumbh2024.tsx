@@ -7,13 +7,17 @@ interface ImageData {
 }
 
 const images: ImageData[] = [
-  { src: "/sm24printmedia/5.jpg", column: 1},
-  { src: "/sm24printmedia/6.jpg", column: 2 },
-  { src: "/sm24printmedia/7.jpg", column: 3 },
-  { src: "/sm24printmedia/1.jpg", column: 4 },
-  { src: "/sm24printmedia/2.jpg", column: 5 },
-  { src: "/sm24printmedia/3.jpg", column: 6 },
-  { src: "/sm24printmedia/4.jpg", column: 7 },
+  { src: "/sm24printmedia/8.jpg", column: 1},
+  { src: "/sm24printmedia/9.jpg", column: 2 },
+  { src: "/sm24printmedia/10.jpg", column: 3 },
+  { src: "/sm24printmedia/11.jpg", column: 4},
+  { src: "/sm24printmedia/5.jpg", column: 5},
+  { src: "/sm24printmedia/6.jpg", column: 6 },
+  { src: "/sm24printmedia/7.jpg", column: 7 },
+  { src: "/sm24printmedia/1.jpg", column: 8 },
+  { src: "/sm24printmedia/2.jpg", column: 9 },
+  { src: "/sm24printmedia/3.jpg", column: 10 },
+  { src: "/sm24printmedia/4.jpg", column: 11 },
 
  
 ];
