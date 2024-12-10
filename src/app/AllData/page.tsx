@@ -24,6 +24,7 @@ const page: React.FC = () => {
     <a href="/Bestpracticedata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Best Practices Data</button></a>
     <a href="/Conclavedata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Conclave  Data</button></a>
     <a href="/Talentdata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Talent Data</button></a>
+    <a href="/schooldata" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>School Data</button></a>
     </div>
     <Footer/>
  
