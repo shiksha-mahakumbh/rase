@@ -19,7 +19,6 @@ const merchandiseItems = [
     title: "Mug",
     slides: [
       { src: "/merchandise/mug/1.jpg", alt: "Mug Image 1", legend: "" },
-      { src: "/merchandise/mug/2.jpg", alt: "Mug Image 2", legend: "" },
     ],
     price: 120,
   },
