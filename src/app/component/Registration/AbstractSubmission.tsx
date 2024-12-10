@@ -263,8 +263,8 @@ const AbstractSubmission = () => {
     >
       <option value="">Select Delegates Type</option>
       <option value="Students">Students</option>
-      <option value="Research Scholars and Students">
-        Research Scholars and Students
+      <option value="Research Scholars">
+        Research Scholars 
       </option>
       <option value="Delegates from Academics and R&D Institutions">
         Delegates from Academics and R&D Institutions
@@ -288,7 +288,7 @@ const AbstractSubmission = () => {
           ₹&#58;{" "}
           {formData.type === "Students"
             ? 500
-            : formData.type === "Research Scholars and Students"
+            : formData.type === "Research Scholars"
             ? 1100
             : formData.type === "Delegates from Academics and R&D Institutions"
             ? 2100
