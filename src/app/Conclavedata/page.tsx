@@ -55,6 +55,7 @@ const ConclaveDataPage: React.FC = () => {
     const doc = new jsPDF('landscape');
     const tableColumn = [
       'Serial',
+      'Type',
       'Institution Name',
       'Name',
       'Designation',
@@ -66,6 +67,7 @@ const ConclaveDataPage: React.FC = () => {
     dataList.forEach((data) => {
       tableRows.push([
         data.serial,
+        data.typeofConclave,
         data.institutionName,
         data.name,
         data.designation,
@@ -110,6 +112,7 @@ const ConclaveDataPage: React.FC = () => {
         <thead>
           <tr>
             <th className="border px-4 py-2">Serial</th>
+            <th className="border px-4 py-2">Type</th>
             <th className="border px-4 py-2">Institution Name</th>
             <th className="border px-4 py-2">Name</th>
             <th className="border px-4 py-2">Designation</th>
@@ -123,6 +126,7 @@ const ConclaveDataPage: React.FC = () => {
           {dataList.map((item) => (
             <tr key={item.serial}>
               <td className="border px-4 py-2">{item.serial}</td>
+              <td className="border px-4 py-2">{item.typeofConclave}</td>
               <td className="border px-4 py-2">{item.institutionName}</td>
               <td className="border px-4 py-2">{item.name}</td>
               <td className="border px-4 py-2">{item.designation}</td>
