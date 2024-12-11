@@ -7,6 +7,13 @@ import {firebaseConfig} from "@/app/firebase";
 const speakers = [
   {
     id: 1,
+    name: "Shri Dharmendra Pradhan ",
+    designation: "Hon'ble Education Minister",
+    place: "The Hon'ble minister conveys best wishes for the success of the programme ",
+    imageSrc: "/2024M/cheifguests/educationminister.jpg",
+  },
+  {
+    id: 1,
     name: "Admiral D K Joshi, PVSM, AVSM, YSM, NM, VSM (Retd.)",
     designation: "Hon'ble Governor of Andaman & Nicobar Islands",
     place: "The Hon'ble Lt. Governor conveyed his Best wishes for success of the event",
