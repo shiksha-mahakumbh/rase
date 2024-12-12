@@ -10,35 +10,37 @@ import { useQRCode } from "next-qrcode";
 import QRCode from "qrcode";
 import toast, { Toaster } from "react-hot-toast";
 
-interface FullLengthPaperFormDataSM {
-    serial?: number;
-    PaperTitle: string;
-    CorrespondingAuthorEmail: string;
-    CorrespondingAuthorName: string;
-    CoauthorNames?: string;
-    CoauthorEmail?: string;
-    Keywords: string;
-    ContactNumber: string;
-    AttachmentsWord: string | null;
-    AttachmentsPdf: string | null;
-    AttachmentsPpt: string | null;
-    FeeReceipt: string | null;
-  }
+interface AbstractFormData {
+  PaperTitle: string;
+  CorrespondingAuthorEmail: string;
+  CorrespondingAuthorName: string;
+  CoauthorNames: string;
+  CoauthorEmail: string;
+  Keywords: string;
+  ContactNumber: string;
+  AttachmentsWord: string | null;
+  AttachmentsPdf: string | null;
+  FeeReceipt: string | null;
+  select: string;
+  type: string;
+  serial?: number;
+}
+
 const Page: React.FC = () => {
   const { Canvas } = useQRCode();
-  const [formDataList, setFormDataList] = useState<FullLengthPaperFormDataSM[]>([]);
+  const [formDataList, setFormDataList] = useState<AbstractFormData[]>([]);
   const [emailsSent, setEmailsSent] = useState<boolean[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const colRef = collection(db, "FullLengthSubmissionDataSM24");
+        const colRef = collection(db, "AbstractSubmissionDataSM24");
         const querySnapshot = await getDocs(colRef);
 
-        const dataList: FullLengthPaperFormDataSM[] = [];
+        const dataList: AbstractFormData[] = [];
 
         querySnapshot.forEach((doc) => {
-          const data = doc.data() as FullLengthPaperFormDataSM;
+          const data = doc.data() as AbstractFormData;
           dataList.push(data);
         });
 
@@ -57,22 +59,22 @@ const Page: React.FC = () => {
     fetchData();
   }, []);
 
-  const sendEmail = async (email: string, formData: FullLengthPaperFormDataSM) => {
+  const sendEmail = async (CorrespondingAuthorEmail: string, formData: AbstractFormData) => {
     try {
       const response = await fetch("/api/sendMail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, formData }), // Include formData in the request body
+        body: JSON.stringify({ CorrespondingAuthorEmail, formData }), // Include formData in the request body
       });
       const data = await response.json();
       console.log(data);
-      toast.success(`Email sent to ${email}`);
+      toast.success(`CorrespondingAuthorEmail sent to ${CorrespondingAuthorEmail}`);
       // Handle success or error response from the server
     } catch (error) {
-      console.error("Error sending email:", error);
-      toast.error(`Failed to send email to ${email}`);
+      console.error("Error sending CorrespondingAuthorEmail:", error);
+      toast.error(`Failed to send CorrespondingAuthorEmail to ${CorrespondingAuthorEmail}`);
       // Handle error
     }
   };
@@ -91,11 +93,11 @@ const Page: React.FC = () => {
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(formDataList);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "FullLengthSubmissionData");
-    XLSX.writeFile(workbook, "Full_Length_Paper_Data.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "AbstractSubmissionDataSM24");
+    XLSX.writeFile(workbook, "workshop_data.xlsx");
   };
 
-  const downloadAsPDF = async (formDataList: FullLengthPaperFormDataSM[]) => {
+  const downloadAsPDF = async (formDataList: AbstractFormData[]) => {
     const doc = new jsPDF("landscape");
 
     const tableColumn = ["serial", "name", "email", "ContactNumber"];
@@ -114,7 +116,7 @@ const Page: React.FC = () => {
     let currentY = 40;
     let currentRow = 0;
 
-    const addQRCodeForRow = async (formData: FullLengthPaperFormDataSM, yPos: number) => {
+    const addQRCodeForRow = async (formData: AbstractFormData, yPos: number) => {
       const qrCanvas = document.createElement("canvas");
       await QRCode.toCanvas(qrCanvas, JSON.stringify(formData), {
         errorCorrectionLevel: "M",
@@ -147,7 +149,7 @@ const Page: React.FC = () => {
       }
     }
 
-    doc.save("FullLengthPaper_data.pdf");
+    doc.save("Abstract_data.pdf");
   };
 
   const downloadPDF = () => {
@@ -155,10 +157,10 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="bg-white w-auto min-h-screen flex flex-col justify-center items-center mt-4 flex-wrap">
+    <div className="bg-white min-h-screen flex flex-col justify-center items-center mt-4 flex-wrap">
       <Toaster />
       <h2 className="text-primary text-xl font-bold">
-        Full Length Paper Submission Data
+        Abstract Submission Data
       </h2>
       <table className="border-collapse border m-6">
         <thead>
@@ -195,12 +197,11 @@ const Page: React.FC = () => {
               AbstractPdf
             </th>
             <th className="border bg-primary text-white font-bold text-base p-3">
-              AbstractPpt
-            </th>
-            <th className="border bg-primary text-white font-bold text-base p-3">
               FeeReceipt
             </th>
-            
+            <th className="border bg-primary text-white font-bold text-base p-3">
+              Type
+            </th>
             <th className="border bg-primary text-white font-bold text-base p-3">
               QR
             </th>
@@ -226,9 +227,8 @@ const Page: React.FC = () => {
               <td className="border text-black p-3">{formData.Keywords}</td>
               <td className="border text-black p-3">{formData.AttachmentsWord}</td>
               <td className="border text-black p-3">{formData.AttachmentsPdf}</td>
-              <td className="border text-black p-3">{formData.AttachmentsPpt}</td>
               <td className="border text-black p-3">{formData.FeeReceipt}</td>
-              
+              <td className="border text-black p-3">{formData.type}</td>
               <td className="border text-black p-3">
                 {formData.CorrespondingAuthorName ? (
                   <Canvas
