@@ -1,5 +1,5 @@
 "use client";
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import DelegateForm from "./DelegateForm";
 import ProjectDisplaySubmission from "./ProjectDisplaySubmission";
 import TalentForm from "./TalentForm";
@@ -14,20 +14,36 @@ import BestPracticesForm from "./Best_Practices";
 import { Toaster } from "react-hot-toast";
 
 const RegistrationPage = () => {
-  const [category, setCategory] = useState<string>("delegate");
+  const [event, setEvent] = useState<string>("ShikshaMahakumbh2");
+  const [subcategory, setSubcategory] = useState<string>("");
 
-  const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
+  const handleEventChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setEvent(e.target.value);
+    setSubcategory(""); // Reset subcategory when event changes
+  };
+
+  const handleSubcategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSubcategory(e.target.value);
   };
 
   const renderForm = () => {
-    switch (category) {
+    if (event === "ShikshaMahakumbh3") {
+      return (
+        <div className="text-center text-lg text-gray-700 mt-4">
+          <p className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 px-6 rounded-lg shadow-lg">
+            🚧 Coming Soon! Stay tuned for exciting updates on Shiksha Mahakumbh 3.0! 🚀
+          </p>
+        </div>
+      );
+    }
+
+    switch (subcategory) {
       case "delegate":
         return <DelegateForm />;
       case "institution":
         return <ProjectDisplaySubmission />;
       case "talent":
-        return <TalentForm/>;
+        return <TalentForm />;
       case "volunteer":
         return <VolunteerForm />;
       case "ngo":
@@ -45,41 +61,77 @@ const RegistrationPage = () => {
       case "Accomodation":
         return <AccomodationForm />;
       default:
-        return <div>Select a registration type to get started.</div>;
+        return (
+          <div className="text-center text-gray-500">Please select a registration type to proceed.</div>
+        );
     }
   };
 
-  return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Event Registration</h1>
+  const subcategories = {
+    ShikshaMahakumbh2: [
+      { value: "delegate", label: "Delegate" },
+      { value: "institution", label: "Project Display" },
+      { value: "talent", label: "Talent" },
+      { value: "volunteer", label: "Volunteer" },
+      { value: "ngo", label: "NGO" },
+      { value: "conclave", label: "Conclave" },
+      { value: "Abstract", label: "Submit Abstract" },
+      { value: "FullLengthPaper", label: "Submit Full-Length Paper" },
+      { value: "BestPractices", label: "Best Practices" },
+      { value: "OrganizerReg", label: "Organizer" },
+      { value: "Accomodation", label: "Accommodation" },
+    ],
+  };
 
-        {/* Form Category Selection */}
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100">
+      <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-3xl transform transition-all duration-300 hover:scale-105">
+        <h1 className="text-4xl font-extrabold text-center text-gradient mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+          Event Registration
+        </h1>
+
+        {/* Event Selection */}
         <div className="mb-6">
-          <label className="block text-gray-600 mb-2 font-medium">Select Registration Type</label>
+          <label className="block text-gray-700 mb-2 font-semibold text-lg">
+            Select Event
+          </label>
           <select
-            value={category}
-            onChange={handleCategoryChange}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-500"
+            value={event}
+            onChange={handleEventChange}
+            className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-300 focus:border-purple-500 shadow-sm transition duration-200"
           >
-            <option value="delegate">Delegate</option>
-            <option value="institution">Project Display</option>
-            <option value="talent">Talent</option>
-            <option value="volunteer">Volunteer</option>
-            <option value="ngo">NGO</option>
-            <option value="conclave">Conclave</option>
-            <optgroup label="Submission Type">
-              <option value="Abstract">Submit Abstract</option>
-              <option value="FullLengthPaper">Submit Full-Length Paper</option>
-            </optgroup>
-            <option value="BestPractices">Best Practices</option>
-            <option value="OrganizerReg">Organizer</option>
-            <option value="Accomodation">Accommodation</option>
+            <option value="ShikshaMahakumbh2">Shiksha Mahakumbh 2.0</option>
+            <option value="ShikshaMahakumbh3">Shiksha Mahakumbh 3.0</option>
           </select>
         </div>
 
-        {/* Render the selected form */}
-        {renderForm()}
+        {/* Subcategory Dropdown for Shiksha Mahakumbh 2.0 */}
+        {event === "ShikshaMahakumbh2" && (
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-2 font-semibold text-lg">
+              Select Registration Type
+            </label>
+            <select
+              value={subcategory}
+              onChange={handleSubcategoryChange}
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-300 focus:border-purple-500 shadow-sm transition duration-200"
+            >
+              <option value="" disabled>
+                -- Select an option --
+              </option>
+              {subcategories[event]?.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Render the selected form or message */}
+        <div className="mt-6">
+          {renderForm()}
+        </div>
 
         <Toaster />
       </div>
