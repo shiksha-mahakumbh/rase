@@ -8,11 +8,20 @@ import autoTable from "jspdf-autotable";
 import QRCode from "qrcode";
 import toast, { Toaster } from "react-hot-toast";
 
+interface Participant {
+  name: string;
+  phone: string;
+  email: string;
+  class: string;
+}
+
 interface NgoData {
   projectName: string;
   projectDescription: string;
-  instituteName: string;
-  instituteAddress: string;
+  schoolName: string;
+  schoolAddress: string;
+  teamSize: number;
+  participants: Participant[];
   projectPpt: File | null;
   projectVideo: File | null;
   feeUpload: File | null;
@@ -53,12 +62,14 @@ const Page: React.FC = () => {
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(
-      formDataList.map(({ projectName, projectDescription, instituteName, instituteAddress, projectPpt, projectVideo, feeUpload, serial }) => ({
+      formDataList.map(({ projectName, projectDescription, schoolName, schoolAddress, teamSize, participants, projectPpt, projectVideo, feeUpload, serial }) => ({
         serial,
         projectName,
         projectDescription,
-        instituteName,
-        instituteAddress,
+        schoolName,
+        schoolAddress,
+        teamSize,
+        participants: participants.map(p => p.name).join(", "), // Join participant names
         projectPpt: projectPpt ? projectPpt.name : "",
         projectVideo: projectVideo ? projectVideo.name : "",
         feeUpload: feeUpload ? feeUpload.name : "",
@@ -71,7 +82,7 @@ const Page: React.FC = () => {
 
   const downloadAsPDF = async () => {
     const doc = new jsPDF();
-    const tableColumn = ["Sr. No.", "Project Name", "Description", "Institute Name", "Address", "PPT", "Video", "Fee Upload"];
+    const tableColumn = ["Sr. No.", "Project Name", "Description", "School Name", "Address", "Team Size", "Participants", "PPT", "Video", "Fee Upload"];
     const tableRows: any[][] = [];
 
     formDataList.forEach((formData) => {
@@ -79,8 +90,10 @@ const Page: React.FC = () => {
         formData.serial,
         formData.projectName,
         formData.projectDescription,
-        formData.instituteName,
-        formData.instituteAddress,
+        formData.schoolName,
+        formData.schoolAddress,
+        formData.teamSize,
+        formData.participants.map(p => p.name).join(", "), // Join participant names
         formData.projectPpt ? formData.projectPpt.name : "",
         formData.projectVideo ? formData.projectVideo.name : "",
         formData.feeUpload ? formData.feeUpload.name : "",
@@ -106,40 +119,36 @@ const Page: React.FC = () => {
             <th className="border bg-primary text-white font-bold text-base p-3">Sr. No.</th>
             <th className="border bg-primary text-white font-bold text-base p-3">Project Name</th>
             <th className="border bg-primary text-white font-bold text-base p-3">Description</th>
-            <th className="border bg-primary text-white font-bold text-base p-3">Institute Name</th>
-            <th className="border bg-primary text-white font-bold text-base p-3">Address</th>
-            <th className="border bg-primary text-white font-bold text-base p-3">Project PPT</th>
-            <th className="border bg-primary text-white font-bold text-base p-3">Project Video</th>
+            <th className="border bg-primary text-white font-bold text-base p-3">School Name</th>
+            <th className="border bg-primary text-white font-bold text-base p-3">School Address</th>
+            <th className="border bg-primary text-white font-bold text-base p-3">Team Size</th>
+            <th className="border bg-primary text-white font-bold text-base p-3">Participants</th>
+            <th className="border bg-primary text-white font-bold text-base p-3">PPT</th>
+            <th className="border bg-primary text-white font-bold text-base p-3">Video</th>
             <th className="border bg-primary text-white font-bold text-base p-3">Fee Upload</th>
           </tr>
         </thead>
         <tbody>
           {formDataList.map((formData, index) => (
             <tr key={index} className="border">
-              <td className="border text-black p-3">{index + 1}</td>
+              <td className="border text-black p-3">{formData.serial}</td>
               <td className="border text-black p-3">{formData.projectName}</td>
               <td className="border text-black p-3">{formData.projectDescription}</td>
-              <td className="border text-black p-3">{formData.instituteName}</td>
-              <td className="border text-black p-3">{formData.instituteAddress}</td>
-              <td className="border text-black p-3">
-                {formData.projectPpt ? formData.projectPpt.name : "No File"}
-              </td>
-              <td className="border text-black p-3">
-                {formData.projectVideo ? formData.projectVideo.name : "No File"}
-              </td>
-              <td className="border text-black p-3">
-                {formData.feeUpload ? formData.feeUpload.name : "No File"}
-              </td>
+              <td className="border text-black p-3">{formData.schoolName}</td>
+              <td className="border text-black p-3">{formData.schoolAddress}</td>
+              <td className="border text-black p-3">{formData.teamSize}</td>
+              <td className="border text-black p-3">{formData.participants.map(p => p.name).join(", ")}</td>
+              <td className="border text-black p-3">{formData.projectPpt ? formData.projectPpt.name : "No file"}</td>
+              <td className="border text-black p-3">{formData.projectVideo ? formData.projectVideo.name : "No file"}</td>
+              <td className="border text-black p-3">{formData.feeUpload ? formData.feeUpload.name : "No file"}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={exportToExcel} className="bg-primary text-white font-bold py-2 px-4 rounded mt-4">
-        Export to Excel
-      </button>
-      <button onClick={downloadAsPDF} className="bg-primary text-white font-bold py-2 px-4 rounded mt-4 cursor-pointer">
-        Export to PDF
-      </button>
+      <div className="space-x-4">
+        <button onClick={exportToExcel} className="bg-primary text-white px-4 py-2 rounded-md">Export to Excel</button>
+        <button onClick={downloadAsPDF} className="bg-primary text-white px-4 py-2 rounded-md">Download as PDF</button>
+      </div>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { message, Spin } from "antd";
-import axios from "axios"; // Axios for API requests
-import { v4 as uuidv4 } from "uuid"; // For generating unique IDs
+import { message, Spin } from "antd"; // Import message from Ant Design
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage, db } from "@/app/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
 interface AccommodationData {
@@ -15,7 +17,7 @@ interface AccommodationData {
   event: string;
   accommodationtype: string;
   accommodationdate: string;
-  FeeReceipt: File | null;
+  FeeReceipt: string | null;
 }
 
 const Forms = () => {
@@ -36,7 +38,8 @@ const Forms = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [selectedEvent, setSelectedEvent] = useState<string>("");
-  const [selectedAccommodation, setSelectedAccommodation] = useState<string>("");
+  const [selectedAccommodation, setSelectedAccommodation] =
+    useState<string>("");
 
   const isFormValid = () => {
     return (
@@ -63,26 +66,49 @@ const Forms = () => {
     }));
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const generateUniqueFileName = (originalName: string) => {
+    const uniqueSuffix = uuidv4();
+    const fileExtension = originalName.split(".").pop();
+    return `${originalName.split(".")[0]}-${uniqueSuffix}.${fileExtension}`;
+  };
+  const handleFileChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData((prevData) => ({
-        ...prevData,
-        FeeReceipt: file,
-      }));
+      setLoading(true); // Start loading
+      try {
+        const uniqueFileName = generateUniqueFileName(file.name);
+        const fileRef = ref(storage, `files/${uniqueFileName}`);
+        await uploadBytes(fileRef, file);
+        const downloadURL = await getDownloadURL(fileRef);
+        setFormData((prevData) => ({
+          ...prevData,
+          [field]: downloadURL,
+        }));
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        setError(error);
+        message.error("Error uploading file.");
+      } finally {
+        setLoading(false); // End loading
+      }
     }
   };
 
   const handleEventChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setSelectedEvent(selectedValue);
+    // Reset accommodation type when event changes
     setSelectedAccommodation("");
     setFormData((prevData) => ({
       ...prevData,
       event: selectedValue,
-      accommodationtype: "",
+      accommodationtype: "", // Reset accommodation type
     }));
   };
+ 
 
   const handleAccommodationChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
@@ -92,6 +118,7 @@ const Forms = () => {
       accommodationtype: selectedValue,
     }));
   };
+  
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -103,63 +130,45 @@ const Forms = () => {
       return;
     }
 
-    const formDataToSend = new FormData();
-
-    // Append form data to FormData object
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("email", formData.email);
-    formDataToSend.append("ContactNumber", formData.ContactNumber);
-    formDataToSend.append("Designation", formData.Designation);
-    formDataToSend.append("Delegate", formData.Delegate);
-    formDataToSend.append("Delegatetype", formData.Delegatetype);
-    formDataToSend.append("event", formData.event);
-    formDataToSend.append("accommodationtype", formData.accommodationtype);
-    formDataToSend.append("accommodationdate", formData.accommodationdate);
-  
-    if (formData.FeeReceipt) {
-      formDataToSend.append("FeeReceipt", formData.FeeReceipt);
-    }
-  
     try {
-      // Make API request
-      const response = await axios.post("http://localhost:5000/Accomodation", formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
+      await addDoc(collection(db, "Accomodation"), {
+        ...formData,
       });
-  
+      console.log("Document added successfully");
       setLoading(false);
       setFormData(initialFormData);
-  
-      // Display a success alert
-      alert("Congratulations, you have successfully booked the accommodation!");
-  
-      console.log("Response from server:", response.data);  // Optional: Log server response
+      message.success(
+        "Congratulations, you have successfully Booked the Accomodation!"
+      );
     } catch (error) {
-      console.error("Error submitting form", error);
+      console.error("Error adding document", error);
+      setError(error);
       setLoading(false);
-      alert("Congratulations, you have successfully booked the accommodation!");
+      message.error("Something broke while Booking the Accomodation!");
     }
   };
+
   return (
     <div className="bg-white mb-5 mt-4">
-    <div className="shadow-md rounded-md mx-auto bg-white text-black max-w-4xl w-full">
-      <h1 className="text-white bg-[#6096B4] p-4 text-center text-xl font-semibold">
-        Book Your Accommodation
-      </h1>
-      <form className="bg-[#e8eff3] p-4" onSubmit={handleSubmit}>
-        {/* Form Fields */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold text-gray-600">
-            Name <span className="text-red-700 text-lg">&#42;</span>
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="Your Full Name"
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
-          />
-        </div>
+      <div className="shadow-md rounded-md mx-auto bg-white text-black max-w-4xl w-full">
+        <div className="text-sm bg-[#e8eff3] text-red-900">Note: Due to the large number of registrations, accommodation will be provided on a first-come, first-served basis. Once accommodation is arranged, we will let you know.</div>
+        <h1 className="text-white bg-[#6096B4] p-4 text-center text-xl font-semibold">
+          Book Your Accommodation
+        </h1>
+        <form className="bg-[#e8eff3] p-4">
+          <div className="mb-4">
+            <label className="block text-sm  font-semibold text-gray-600">
+              Name <span className="text-red-700 text-lg">&#42;</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Your Full Name"
+              className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-sm  font-semibold text-gray-600">
               Email <span className="text-red-700 text-lg">&#42;</span>
@@ -211,13 +220,13 @@ const Forms = () => {
                 className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
               >
               <option value="">Select Type</option>
-              <option value="15 December">15 December</option>
-              <option value="16 December">16 December</option>
-              <option value="17 December">17 December</option>
-              <option value="15,16 December">15,16 December</option>
-              <option value="15,17 December">15,17 December</option>
-              <option value="16,17 December">16,17 December</option>
-              <option value="15,16,17 December">15,16,17 December</option>
+              <option value="4">15 December</option>
+              <option value="5">16 December</option>
+              <option value="6">17 December</option>
+              <option value="4,5">15,16 December</option>
+              <option value="5,6">15,17 December</option>
+              <option value="4,6">16,17 December</option>
+              <option value="4,5,6">15,16,17 December</option>
             </select>
           </div>
 
@@ -304,7 +313,7 @@ const Forms = () => {
               <div className="mb-4">
                 <p>
                   <b>Amount:</b>{" "}
-                  {selectedAccommodation === "Single" ? "Rs. 1500" : "Rs. 3000"}
+                  {selectedAccommodation === "Single" ? "Rs. 3000" : "Rs. 6000"}
                 </p>
               </div>
               {selectedEvent === "Shiksha MahaKumbh 2024" && (
@@ -312,7 +321,7 @@ const Forms = () => {
                   <p>
                     <b>Account Name:</b> Shiksha Mahakumbh
                     <br />
-                    <b>Account No.:</b> 42563560855
+                    <b>Account No.:</b> 42529022841
                     <br />
                     <b>Bank:</b> State Bank of India
                     <br />
@@ -324,7 +333,7 @@ const Forms = () => {
                   </p>
                   <Image
                     className="p-2"
-                    src="/fee.png"
+                    src="/mahakumbh.png"
                     alt="Fee"
                     height={500}
                     width={500}
@@ -336,7 +345,7 @@ const Forms = () => {
                   <p>
                     <b>Account Name:</b> Shiksha Kumbh
                     <br />
-                    <b>Account No.:</b> 42563561350
+                    <b>Account No.:</b> 42563560855
                     <br />
                     <b>Bank:</b> State Bank of India
                     <br />
@@ -348,7 +357,7 @@ const Forms = () => {
                   </p>
                   <Image
                     className="p-2"
-                    src="/fee.png"
+                    src="/kumbh.png"
                     alt="Fee"
                     height={500}
                     width={500}
@@ -361,13 +370,13 @@ const Forms = () => {
                   <span className="text-red-700 text-lg">&#42;</span>
                 </label>
                 <div className="relative">
-                <input
-                type="file"
-                name="FeeReceipt"
-                accept=".pdf, .png, .jpg"
-                onChange={handleFileChange}
-                className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
-              />
+                  <input
+                    type="file"
+                    name="FeeReceipt"
+                    accept=".pdf, .png, .jpg"
+                    onChange={(e) => handleFileChange(e, "FeeReceipt")}
+                    className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+                  />
                   {loading && (
                     <div className="absolute inset-0 mr-8 flex items-center justify-center">
                       <Spin size="large" />

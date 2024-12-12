@@ -18,6 +18,7 @@ interface ConclaveData {
   email: string;
   contactNumber: string;
   address: string;
+  views: string;
   accommodation: string;
 }
 
@@ -61,6 +62,7 @@ const ConclaveDataPage: React.FC = () => {
       'Designation',
       'Email',
       'Contact Number',
+      'Views',
       'Accommodation',
     ];
     const tableRows: any[][] = [];
@@ -73,6 +75,7 @@ const ConclaveDataPage: React.FC = () => {
         data.designation,
         data.email,
         data.contactNumber,
+        data.views,
         data.accommodation,
       ]);
     });
@@ -118,6 +121,7 @@ const ConclaveDataPage: React.FC = () => {
             <th className="border px-4 py-2">Designation</th>
             <th className="border px-4 py-2">Email</th>
             <th className="border px-4 py-2">Contact Number</th>
+            <th className="border px-4 py-2">Views</th>
             <th className="border px-4 py-2">Accommodation</th>
             <th className="border px-4 py-2">QR Code</th>
           </tr>
@@ -132,6 +136,7 @@ const ConclaveDataPage: React.FC = () => {
               <td className="border px-4 py-2">{item.designation}</td>
               <td className="border px-4 py-2">{item.email}</td>
               <td className="border px-4 py-2">{item.contactNumber}</td>
+              <td className="border px-4 py-2">{item.views}</td>
               <td className="border px-4 py-2">{item.accommodation}</td>
               
             </tr>
