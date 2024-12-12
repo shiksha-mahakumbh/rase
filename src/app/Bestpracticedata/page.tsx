@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import React, { useEffect, useState } from "react";
 import { db } from "@/app/firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -18,7 +17,7 @@ interface BestPracticeData {
   contactNumber: string;
   address: string;
   attachmentURL: string;
-  accommodation: string;
+  accommodation: string; // Field for accommodation preference
 }
 
 const BestPracticesPage: React.FC = () => {
@@ -62,8 +61,11 @@ const BestPracticesPage: React.FC = () => {
     const tableColumn = [
       "Serial",
       "Institution Name",
+      "About Practices",
       "Key Person",
       "Email",
+      "Address",
+      "Attachment",
       "Contact Number",
       "Accommodation",
     ];
@@ -73,8 +75,11 @@ const BestPracticesPage: React.FC = () => {
       tableRows.push([
         data.serial,
         data.institutionName,
+        data.aboutPractices,
         data.keyPerson,
         data.email,
+        data.address,
+        data.attachmentURL,
         data.contactNumber,
         data.accommodation,
       ]);
@@ -116,8 +121,11 @@ const BestPracticesPage: React.FC = () => {
           <tr>
             <th className="border px-4 py-2">Serial</th>
             <th className="border px-4 py-2">Institution Name</th>
+            <th className="border px-4 py-2">About Practices</th>
             <th className="border px-4 py-2">Key Person</th>
             <th className="border px-4 py-2">Email</th>
+            <th className="border px-4 py-2">Address</th>
+            <th className="border px-4 py-2">Attachment</th>
             <th className="border px-4 py-2">Contact Number</th>
             <th className="border px-4 py-2">Accommodation</th>
             <th className="border px-4 py-2">QR Code</th>
@@ -128,11 +136,29 @@ const BestPracticesPage: React.FC = () => {
             <tr key={item.serial}>
               <td className="border px-4 py-2">{item.serial}</td>
               <td className="border px-4 py-2">{item.institutionName}</td>
+              <td className="border px-4 py-2">{item.aboutPractices}</td>
               <td className="border px-4 py-2">{item.keyPerson}</td>
               <td className="border px-4 py-2">{item.email}</td>
+              <td className="border px-4 py-2">{item.address}</td>
+              <td className="border px-4 py-2">
+                {item.attachmentURL ? (
+                  <a href={item.attachmentURL} target="_blank" rel="noopener noreferrer">
+                    View Attachment
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
+              </td>
               <td className="border px-4 py-2">{item.contactNumber}</td>
               <td className="border px-4 py-2">{item.accommodation}</td>
-            
+              <td className="border px-4 py-2">
+                <button
+                  onClick={() => generateQRCode(item)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Generate QR
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

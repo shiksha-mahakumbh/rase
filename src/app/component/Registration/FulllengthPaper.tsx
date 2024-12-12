@@ -178,7 +178,7 @@ const Fulllengthpaper = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Upload Abstract &#40;Word&#41;
+              Upload Full-Length Paper &#40;Word&#41;
               <span className="text-red-700 text-base">
                 <sup>&#42;</sup> (Max 50KB)
               </span>
@@ -194,7 +194,7 @@ const Fulllengthpaper = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Upload Abstract &#40;PDF&#41;
+              Upload Full-Length Paper &#40;PDF&#41;
               <span className="text-red-700 text-base">
                 <sup>&#42;</sup> (Max 1MB)
               </span>
@@ -210,7 +210,7 @@ const Fulllengthpaper = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Upload Abstract &#40;PPT&#41;
+              Upload Full-Length Paper &#40;PPT&#41;
               <span className="text-red-700 text-base">
                 <sup>&#42;</sup>
               </span>

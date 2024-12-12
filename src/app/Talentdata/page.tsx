@@ -12,10 +12,13 @@ import toast, { Toaster } from 'react-hot-toast';
 interface TalentData {
   serial?: number;
   name: string;
-  talentType: string;
+  talentName: string;
   institutionName: string;
+  talentType: string;
   email: string;
   contactNumber: string;
+  description: string;
+  attachment?: string; // The URL for the uploaded file
   accommodation: string;
 }
 
@@ -54,10 +57,13 @@ const TalentDataPage: React.FC = () => {
     const tableColumn = [
       'Serial',
       'Name',
+      'Talent Name',
       'Talent Type',
       'Institution Name',
       'Email',
       'Contact Number',
+      'Description',
+      'Attachment',
       'Accommodation',
     ];
     const tableRows: any[][] = [];
@@ -65,10 +71,13 @@ const TalentDataPage: React.FC = () => {
       tableRows.push([
         data.serial,
         data.name,
+        data.talentName,
         data.talentType,
         data.institutionName,
         data.email,
         data.contactNumber,
+        data.description,
+        data.attachment ? `<a href="${data.attachment}" target="_blank">View</a>` : 'No Attachment',
         data.accommodation,
       ]);
     });
@@ -109,10 +118,13 @@ const TalentDataPage: React.FC = () => {
           <tr>
             <th className="border px-4 py-2">Serial</th>
             <th className="border px-4 py-2">Name</th>
+            <th className="border px-4 py-2">Talent Name</th>
             <th className="border px-4 py-2">Talent Type</th>
             <th className="border px-4 py-2">Institution Name</th>
             <th className="border px-4 py-2">Email</th>
             <th className="border px-4 py-2">Contact Number</th>
+            <th className="border px-4 py-2">Description</th>
+            <th className="border px-4 py-2">Attachment</th>
             <th className="border px-4 py-2">Accommodation</th>
             <th className="border px-4 py-2">QR Code</th>
           </tr>
@@ -122,12 +134,30 @@ const TalentDataPage: React.FC = () => {
             <tr key={item.serial}>
               <td className="border px-4 py-2">{item.serial}</td>
               <td className="border px-4 py-2">{item.name}</td>
+              <td className="border px-4 py-2">{item.talentName}</td>
               <td className="border px-4 py-2">{item.talentType}</td>
               <td className="border px-4 py-2">{item.institutionName}</td>
               <td className="border px-4 py-2">{item.email}</td>
               <td className="border px-4 py-2">{item.contactNumber}</td>
+              <td className="border px-4 py-2">{item.description}</td>
+              <td className="border px-4 py-2">
+                {item.attachment ? (
+                  <a href={item.attachment} target="_blank" className="text-blue-500">
+                    View
+                  </a>
+                ) : (
+                  'No Attachment'
+                )}
+              </td>
               <td className="border px-4 py-2">{item.accommodation}</td>
-             
+              <td className="border px-4 py-2">
+                <button
+                  className="text-blue-500"
+                  onClick={() => generateQRCode(item)}
+                >
+                  Generate QR
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
