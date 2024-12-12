@@ -15,7 +15,9 @@ const page: React.FC = () => {
     <a href="/addvcdirector" className='items-center justify-center mr-auto ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg mb-4  '>Add VC Director</button></a>
     <a href="/addwishesreceived" className='items-center justify-center mr-auto ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg mb-4  '>Add Wishes Received</button></a>
     <a href="/abstractdatadekh" className='items-center justify-center mr-auto ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Abstract Data</button></a>
+    <a href="/abstractdatadekhsm24" className='items-center justify-center mr-auto ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Abstract Data SM24</button></a>
     <a href="/fulllengthpaperdatadekh" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Full Length Paper Data</button></a>
+    <a href="/fulllengthdatadekhsm24" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Full Length Paper Data SM 24</button></a>
     <a href="/volunteerdatadekh" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'> Volunteer Registration Data</button></a>
     <a href="/ngoregistrationdatadekh" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'> NGO Registration Data</button></a>
     <a href="/participantregistrationdatadekh" className='items-center justify-center mr-auto mt-4 ml-auto'><button className='p-4 bg-primary text-white text-lg rounded-lg'>Participants Registration Data</button></a>
