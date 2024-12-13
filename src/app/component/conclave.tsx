@@ -21,7 +21,7 @@ const Conclaves: React.FC = () => {
         "Social Media Influencers' Conclave",
         "Media Conclave",
         "Student Leaders' Conclave",
-        "Principals and Innovative Teachers' Conclave"
+        "Principals and Innovative Teachers' Conclave",
       ],
     },
   ];
