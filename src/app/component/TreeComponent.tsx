@@ -116,7 +116,7 @@ const GridComponent: React.FC = () => {
           {/* Shiksha MahaKumbh Box */}
           <div className="p-4 bg-gray-100 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold text-center mb-4 text-primary">
-              Shiksha MahaKumbh
+              Shiksha Mahakumbh
             </h2>
             <div className="space-y-4 ">
               {/* Most recent event with campaign and day photos */}

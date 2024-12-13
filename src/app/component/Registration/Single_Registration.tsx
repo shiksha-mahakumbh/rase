@@ -1,5 +1,5 @@
-"use client"
-import { useState, FormEvent, ChangeEvent } from "react";
+"use client";
+import { useState, ChangeEvent } from "react";
 import DelegateForm from "./DelegateForm";
 import ProjectDisplaySubmission from "./ProjectDisplaySubmission";
 import TalentForm from "./TalentForm";
@@ -11,169 +11,127 @@ import FullLengthPaperForm from "./FulllengthPaper";
 import OrganizerRegForm from "./OrganizerReg";
 import AccomodationForm from "./AccomodationReg";
 import BestPracticesForm from "./Best_Practices";
-import { storage } from "@/app/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import toast, { Toaster } from "react-hot-toast";
-import { FormData } from "../Types";
+import { Toaster } from "react-hot-toast";
 
 const RegistrationPage = () => {
-  const initialFormData: FormData = {
-    name: "",
-    type: "",
-    website: "",
-    cont: "",
-    role: "",
-    email: "",
-    contactNumber: "",
-    feeReceipt: "",
-    vb: "",
-    feeAmount: 0,
-    category: "",
-    description: "",
-    services: "",
-    registrationNumber: "",
-    contribution: "",
-    designation: "",
-    institutionName: "",
-    event_type: "",
-    address: "",
-    views: "",
-    talentName: "",
-    typeofConclave: "",
-    talentType: "",
-    aboutPractices: "",
-    keyPerson: "",
-    imageUrl: null,
+  const [event, setEvent] = useState<string>("ShikshaMahakumbh2");
+  const [subcategory, setSubcategory] = useState<string>("");
+
+  const handleEventChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setEvent(e.target.value);
+    setSubcategory(""); // Reset subcategory when event changes
   };
 
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [image, setImage] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [category, setCategory] = useState<string>("delegate");
-  const [eventCategory, setEventCategory] = useState<string>("conference");
-  const [loading, setLoading] = useState(false);
-
-  // Updated to handle events from HTMLSelectElement as well
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+  const handleSubcategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSubcategory(e.target.value);
   };
 
-  const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
-  };
+  const renderForm = () => {
+    if (event === "ShikshaMahakumbh3") {
+      return (
+        <div className="text-center text-lg text-gray-700 mt-4">
+          <p className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 px-6 rounded-lg shadow-lg">
+            🚧 Coming Soon! Stay tuned for exciting updates on Shiksha Mahakumbh 3.0! 🚀
+          </p>
+        </div>
+      );
+    }
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
+    switch (subcategory) {
+      case "delegate":
+        return <DelegateForm />;
+      case "institution":
+        return <ProjectDisplaySubmission />;
+      case "talent":
+        return <TalentForm />;
+      case "volunteer":
+        return <VolunteerForm />;
+      case "ngo":
+        return <NGOForm />;
+      case "conclave":
+        return <ConclaveForm />;
+      case "Abstract":
+        return <AbstractSubmissionForm />;
+      case "FullLengthPaper":
+        return <FullLengthPaperForm />;
+      case "BestPractices":
+        return <BestPracticesForm />;
+      case "OrganizerReg":
+        return <OrganizerRegForm />;
+      case "Accomodation":
+        return <AccomodationForm />;
+      default:
+        return (
+          <div className="text-center text-gray-500">Please select a registration type to proceed.</div>
+        );
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    let downloadURL = "";
-    if (image) {
-      const imageRef = ref(storage, `images/${image.name}`);
-      await uploadBytes(imageRef, image);
-      downloadURL = await getDownloadURL(imageRef);
-      setImageUrl(downloadURL);
-    }
-
-    try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          feeReceipt: downloadURL || "",
-          event_type: eventCategory,
-        }),
-      });
-
-      if (response.ok) {
-        toast.success("Form submitted successfully!");
-        setFormData(initialFormData);
-        setImage(null);
-      } else {
-        toast.error("Submission failed. Please try again.");
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error("Submission failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+  const subcategories = {
+    ShikshaMahakumbh2: [
+      { value: "delegate", label: "Delegate" },
+      { value: "institution", label: "Project Display" },
+      { value: "talent", label: "Talent" },
+      { value: "volunteer", label: "Volunteer" },
+      { value: "ngo", label: "NGO" },
+      { value: "conclave", label: "Conclave" },
+      { value: "Abstract", label: "Submit Abstract" },
+      { value: "FullLengthPaper", label: "Submit Full-Length Paper" },
+      { value: "BestPractices", label: "Best Practices" },
+      { value: "OrganizerReg", label: "Organizer" },
+      { value: "Accomodation", label: "Accommodation" },
+    ],
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Event Registration</h1>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100">
+      <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-3xl transform transition-all duration-300 hover:scale-105">
+        <h1 className="text-4xl font-extrabold text-center text-gradient mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+          Event Registration
+        </h1>
 
-        {/* Form Category Selection */}
+        {/* Event Selection */}
         <div className="mb-6">
-          <label className="block text-gray-600 mb-2 font-medium">Select Registration Type</label>
-          <select 
-            value={category} 
-            onChange={handleCategoryChange} 
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-500"
+          <label className="block text-gray-700 mb-2 font-semibold text-lg">
+            Select Event
+          </label>
+          <select
+            value={event}
+            onChange={handleEventChange}
+            className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-300 focus:border-purple-500 shadow-sm transition duration-200"
           >
-            <option value="delegate">Delegate</option>
-            <option value="institution">Project Display</option>
-            <option value="talent">Talent</option>
-            <option value="volunteer">Volunteer</option>
-            <option value="ngo">NGO</option>
-            <option value="conclave">Conclave</option>
-
-            <optgroup label="Submission Type">
-              <option value="Abstract">Submit Abstract</option>
-              <option value="FullLengthPaper">Submit Full-Length Paper</option>
-            </optgroup>
-            <option value="BestPractices">Best Practices</option>
-            <option value="OrganizerReg">Organizer</option>
-            <option value="Accomodation">Accommodation</option>
+            <option value="ShikshaMahakumbh2">Shiksha Mahakumbh 2.0</option>
+            <option value="ShikshaMahakumbh3">Shiksha Mahakumbh 3.0</option>
           </select>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {category === "delegate" && <DelegateForm />}
-          {category === "institution" && <ProjectDisplaySubmission />}
-          {category === "talent" && (
-            <TalentForm
-              formData={formData}
-              handleInputChange={handleInputChange}
-              handleImageChange={handleImageChange}
-              imageUrl={imageUrl}
-            />
-          )}
-          {category === "volunteer" && <VolunteerForm />}
-          {category === "ngo" && <NGOForm />}
-          {category === "conclave" && (
-            <ConclaveForm formData={formData} handleInputChange={handleInputChange} />
-          )}
-          {category === "Abstract" && <AbstractSubmissionForm />}
-          {category === "FullLengthPaper" && <FullLengthPaperForm />}
-          {category === "BestPractices" && (
-            <BestPracticesForm
-              formData={formData}
-              handleInputChange={handleInputChange}
-              handleImageChange={handleImageChange}
-              imageUrl={imageUrl}
-            />
-          )}
-          {category === "OrganizerReg" && <OrganizerRegForm />}
-          {category === "Accomodation" && <AccomodationForm />}
+        {/* Subcategory Dropdown for Shiksha Mahakumbh 2.0 */}
+        {event === "ShikshaMahakumbh2" && (
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-2 font-semibold text-lg">
+              Select Registration Type
+            </label>
+            <select
+              value={subcategory}
+              onChange={handleSubcategoryChange}
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-300 focus:border-purple-500 shadow-sm transition duration-200"
+            >
+              <option value="" disabled>
+                -- Select an option --
+              </option>
+              {subcategories[event]?.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
-       
-        </form>
+        {/* Render the selected form or message */}
+        <div className="mt-6">
+          {renderForm()}
+        </div>
 
         <Toaster />
       </div>

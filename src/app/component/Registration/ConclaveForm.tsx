@@ -1,12 +1,56 @@
-import { ChangeEvent, useState } from "react";
-import { FormData, ConclaveFormProps } from "../Types";
+'use client';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
+import toast, { Toaster } from 'react-hot-toast';
 
-const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
-  const [formDataState, setFormDataState] = useState<FormData>(formData);
+interface ConclaveData {
+  typeofConclave: string;
+  name: string;
+  designation: string;
+  institutionName: string;
+  email: string;
+  contactNumber: string;
+  address: string;
+  views: string;
+  accommodation: string;
+}
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+const ConclaveForm = () => {
+  const initialFormData: ConclaveData = {
+    typeofConclave: '',
+    name: '',
+    designation: '',
+    institutionName: '',
+    email: '',
+    contactNumber: '',
+    address: '',
+    views: '',
+    accommodation: '',
+  };
+
+  const [formData, setFormData] = useState<ConclaveData>(initialFormData);
+  const [loading, setLoading] = useState(false);
+  const [showAccommodationButton, setShowAccommodationButton] = useState(false); // To show the booking button
+
+  // Handle input changes
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
+<<<<<<< HEAD
       const response = await fetch("http://localhost:5000/Conclave", {
         method: "POST",
         headers: {
@@ -19,26 +63,46 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
         alert("Form submitted successfully!");
       } else {
         alert("Error submitting form");
+=======
+      await addDoc(collection(db, 'ConclaveRegistrations'), formData);
+      toast.success('Form submitted successfully!');
+      setFormData(initialFormData); // Reset the form after successful submission
+      if (formData.accommodation === 'yes') {
+        setShowAccommodationButton(true); // Show the button if 'Yes' is selected
+>>>>>>> ea14b588a85cb3495bb4a589e1210b4e17acf787
       }
     } catch (error) {
-      alert("Network error");
-      console.error(error);
+      console.error('Error submitting form:', error);
+      toast.error('Failed to submit the form. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Select Conclave Type:
+    <div className="max-w-lg mx-auto mt-8 p-6 shadow-md rounded-md bg-white">
+      <h1 className="text-center text-xl font-semibold text-primary">
+        Conclave Registration Form
+      </h1>
+      <form onSubmit={handleSubmit} className="mt-4">
+        <Toaster />
+
+        {/* Type of Conclave */}
+        <div className="mb-4">
+          <label htmlFor="typeofConclave" className="block text-sm font-medium text-gray-600">
+            Select Conclave Type:
+          </label>
           <select
+            id="typeofConclave"
             name="typeofConclave"
-            value={formDataState.typeofConclave}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(e)}
+            value={formData.typeofConclave}
+            onChange={handleInputChange}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           >
-            <option value="">Select Conclave Type</option>
+            <option value="" disabled>
+              Select Conclave Type
+            </option>
             <option value="academic">VC/Directors&apos; Conclave</option>
             <option value="industry">Principals&apos; Conclave</option>
             <option value="research">Entrepreneurs/Bureaucrats&apos; Conclave</option>
@@ -47,114 +111,171 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
             <option value="industry">Social Media Influencers&apos; Conclave</option>
             <option value="research">Electronic and Print Media Conclave</option>
           </select>
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Full Name:
+        {/* Name */}
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-600">
+            Full Name:
+          </label>
           <input
+            id="name"
             type="text"
             name="name"
-            value={formDataState.name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            value={formData.name}
+            onChange={handleInputChange}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Designation:
+        {/* Designation */}
+        <div className="mb-4">
+          <label htmlFor="designation" className="block text-sm font-medium text-gray-600">
+            Designation:
+          </label>
           <input
+            id="designation"
             type="text"
             name="designation"
-            value={formDataState.designation}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            value={formData.designation}
+            onChange={handleInputChange}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Institution/Organization Name:
+        {/* Institution/Organization */}
+        <div className="mb-4">
+          <label htmlFor="institutionName" className="block text-sm font-medium text-gray-600">
+            Institution/Organization Name:
+          </label>
           <input
+            id="institutionName"
             type="text"
             name="institutionName"
-            value={formDataState.institutionName}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            value={formData.institutionName}
+            onChange={handleInputChange}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Email:
+        {/* Email */}
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-600">
+            Email:
+          </label>
           <input
+            id="email"
             type="email"
             name="email"
-            value={formDataState.email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            value={formData.email}
+            onChange={handleInputChange}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Contact Number:
+        {/* Contact Number */}
+        <div className="mb-4">
+          <label htmlFor="contactNumber" className="block text-sm font-medium text-gray-600">
+            Contact Number:
+          </label>
           <input
+            id="contactNumber"
             type="tel"
             name="contactNumber"
-            value={formDataState.contactNumber}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+            value={formData.contactNumber}
+            onChange={handleInputChange}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Address:
+        {/* Address */}
+        <div className="mb-4">
+          <label htmlFor="address" className="block text-sm font-medium text-gray-600">
+            Address:
+          </label>
           <textarea
+            id="address"
             name="address"
-            value={formDataState.address}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange(e)}
+            value={formData.address}
+            onChange={handleInputChange}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           />
-        </label>
-      </div>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">
-          Your Views: (In 200 Words)
+        {/* Views */}
+        <div className="mb-4">
+          <label htmlFor="views" className="block text-sm font-medium text-gray-600">
+            Your Views (200 words max):
+          </label>
           <textarea
+            id="views"
             name="views"
-            value={formDataState.views}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange(e)}
+            value={formData.views}
+            onChange={handleInputChange}
+            maxLength={200}
             required
-            className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+            className="mt-2 block w-full rounded-md border border-gray-300 p-2 text-black"
           />
-        </label>
-      </div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-600">Do you need accommodation?</label>
+          <div className="mt-2">
+            <input
+              type="radio"
+              id="yes"
+              name="accommodation"
+              value="yes"
+              onChange={handleInputChange}
+              required
+            />
+            <label htmlFor="yes" className="ml-2">Yes</label>
+          </div>
+        <div className="mt-2">
+            <input
+              type="radio"
+              id="no"
+              name="accommodation"
+              value="no"
+              onChange={handleInputChange}
+              required
+            />
+            <label htmlFor="no" className="ml-2">No</label>
+          </div>
+          </div>
 
-      <div className="mb-4">
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-gray-300 pt-4"
+          disabled={loading}
+          className={`w-full py-2 text-white rounded-md ${
+            loading ? 'bg-gray-500' : 'bg-primary hover:bg-blue-600'
+          }`}
         >
-          Submit
+          {loading ? 'Submitting...' : 'Submit'}
         </button>
-      </div>
-    </form>
+        {showAccommodationButton && (
+          <div className="mt-4 text-center mb-4">
+            <a
+              href="https://ac.rase.co.in/"
+              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Book Your Accommodation
+            </a>
+          </div>
+        )}
+      </form>
+    </div>
+      
+     
+  
   );
 };
 

@@ -1,6 +1,9 @@
-// `VolReg.tsx`
 'use client';
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/app/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
 import toast, { Toaster } from "react-hot-toast";
 
 interface NgoData {
@@ -9,7 +12,8 @@ interface NgoData {
   email: string;
   PhoneNumber: string;
   Services: string;
-  accommodation: string;
+  Attachments: string;
+  accommodation: string; // New field for accommodation
 }
 
 const VolReg = () => {
@@ -19,13 +23,14 @@ const VolReg = () => {
     email: '',
     PhoneNumber: '',
     Services: '',
-    accommodation: '',
+    Attachments: '',
+    accommodation: '', // Initialize empty
   };
 
   const [formData, setFormData] = useState<NgoData>(initialFormData);
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showAccommodationButton, setShowAccommodationButton] = useState(false);
+  const [showAccommodationButton, setShowAccommodationButton] = useState(false); // To show the booking button
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -42,51 +47,53 @@ const VolReg = () => {
     }
   };
 
+  const handleAddDocument = async (downloadURL: string | null) => {
+    try {
+      const docRef = await addDoc(collection(db, 'RegestrationVolsm24'), {
+        ...formData,
+        feeReceipt: downloadURL,
+      });
+      console.log('Document added with ID:', docRef.id);
+      setLoading(false);
+      setFormData(initialFormData);
+      toast.success("Successfully Registered!");
+
+      if (formData.accommodation === 'yes') {
+        setShowAccommodationButton(true); // Show the button if 'Yes' is selected
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error("Something broke while registering!");
+      console.error('Error adding document:', error);
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
-    const formDataWithImage = new FormData();
-    formDataWithImage.append('name', formData.name);
-    formDataWithImage.append('Affiliation', formData.Affiliation);
-    formDataWithImage.append('email', formData.email);
-    formDataWithImage.append('PhoneNumber', formData.PhoneNumber);
-    formDataWithImage.append('Services', formData.Services);
-    formDataWithImage.append('accommodation', formData.accommodation);
-
     if (image) {
-      formDataWithImage.append('Attachments', image);
-    }
-
-    try {
-      const response = await fetch('/api/volunteer-registration', {
-        method: 'POST',
-        body: formDataWithImage,
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        toast.success("Successfully Registered!");
-        setLoading(false);
-        setFormData(initialFormData);
-        if (formData.accommodation === 'yes') {
-          setShowAccommodationButton(true);
-        }
-      } else {
-        toast.error("Registration failed.");
+      try {
+        const imageRef = ref(storage, `images/${image.name}`);
+        await uploadBytes(imageRef, image);
+        const downloadURL = await getDownloadURL(imageRef);
+        handleAddDocument(downloadURL);
+      } catch (error) {
+        console.error('Error uploading image:', error);
         setLoading(false);
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error("An error occurred.");
-      setLoading(false);
+    } else {
+      handleAddDocument(null);
     }
+
+    console.log(formData);
   };
 
   return (
     <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
       <h1 className='text-primary text-center text-xl'>Volunteer Registration Form</h1>
       <form onSubmit={handleSubmit} className='bg-white p-4'>
+        
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-600">Name:</label>
           <input
@@ -183,6 +190,10 @@ const VolReg = () => {
           </div>
         </div>
 
+        <div className='text-xs text-red-600'>
+          Note: Due to the large number of registrations, accommodation will be provided on a first-come, first-served basis. Once accommodation is arranged, we will let you know.
+        </div>
+
         <button
           type="submit"
           className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-4 w-full"
@@ -190,19 +201,21 @@ const VolReg = () => {
         >
           Submit
         </button>
+      
 
-        {showAccommodationButton && (
-          <div className="mt-4 text-center mb-4">
-            <a
-              href="https://ac.rase.co.in/"
-              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Book Your Accommodation
-            </a>
-          </div>
-        )}
+      {/* Show the "Book Your Accommodation" button if user selects "Yes" */}
+      {showAccommodationButton && (
+        <div className="mt-4 text-center mb-4">
+          <a
+            href="https://ac.rase.co.in/"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Book Your Accommodation
+          </a>
+        </div>
+      )}
       </form>
     </div>
   );

@@ -1,20 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { message } from "antd";
+import { message } from "antd"; // Import Ant Design's message component
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore"; // Modular Firestore imports
+import { initializeApp } from "firebase/app"; // Import initializeApp
+import { getFirestore as getFirestoreFromApp } from "firebase/firestore"; // Import getFirestore
+import { firebaseConfig } from "../../firebase"; // Import your Firebase configuration
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig); // Ensure firebaseConfig is correctly exported from your firebaseConfig file
+const firestore = getFirestoreFromApp(app); // Initialize Firestore with the configured app
 
 const OrganiserRegistration = () => {
+  // Define allowed state codes
   const stateCodes = {
     PB001: "Punjab",
     HR001: "Haryana",
     HP001: "Himachal Pradesh",
     JK001: "J&K",
     DL001: "Delhi",
-  } as const;
+  } as const; // Using 'as const' to ensure state codes are strictly typed.
 
+  // State management
   type StateCode = keyof typeof stateCodes | "";
-  const [stateCode, setStateCode] = useState<StateCode>(""); // To store state code
-  const [isCodeValid, setIsCodeValid] = useState(false); // To check if state code is valid
+  const [stateCode, setStateCode] = useState<StateCode>(""); // StateCode type includes the valid codes or empty string
+  const [isCodeValid, setIsCodeValid] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -24,9 +34,9 @@ const OrganiserRegistration = () => {
     email: "",
     accommodation: "",
   });
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false); // New state to manage form submission
 
-  // Handler to validate the state code
+  // Handle form submission for state code validation
   const handleCodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (stateCode in stateCodes) {
@@ -37,7 +47,7 @@ const OrganiserRegistration = () => {
     }
   };
 
-  // Handle input changes for the form fields
+  // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -45,7 +55,17 @@ const OrganiserRegistration = () => {
     });
   };
 
-  // Handler for form submission
+  // Check if phone number already exists in Firestore
+  const isPhoneNumberRegistered = async (phone: string) => {
+    const q = query(
+      collection(firestore, "organiserregistration"),
+      where("phone", "==", phone)
+    );
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  };
+
+  // Submit form to Firebase
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.designation || !formData.institution || !formData.duty || !formData.accommodation) {
@@ -54,39 +74,37 @@ const OrganiserRegistration = () => {
     }
 
     try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          state: stateCodes[stateCode as keyof typeof stateCodes],
-          stateCode,
-        }),
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        message.success(result.message);
-        setFormData({
-          name: "",
-          phone: "",
-          designation: "",
-          institution: "",
-          duty: "",
-          email: "",
-          accommodation: "",
-        });
-        setStateCode("");
-        setIsCodeValid(false);
-        setFormSubmitted(true);
-      } else {
-        message.error(result.message);
+      // Check if the phone number is already registered
+      const phoneExists = await isPhoneNumberRegistered(formData.phone);
+      if (phoneExists) {
+        message.error("This phone number is already registered.");
+        return;
       }
+
+      // Add the form data to Firestore using the modular API
+      await addDoc(collection(firestore, "organiserregistration"), {
+        ...formData,
+        state: stateCodes[stateCode as keyof typeof stateCodes],
+        stateCode,
+      });
+      message.success("Registration successful!");
+
+      // Clear the form fields and state code
+      setFormData({
+        name: "",
+        phone: "",
+        designation: "",
+        institution: "",
+        duty: "",
+        email: "",
+        accommodation: "",
+      });
+      setStateCode("");
+      setIsCodeValid(false); // Reset the code validation
+      setFormSubmitted(true); // Set formSubmitted to true to hide the form
     } catch (error) {
       message.error("Error while submitting the form. Please try again.");
-      console.error("Error:", error);
+      console.error("Error adding document: ", error);
     }
   };
 
@@ -96,7 +114,6 @@ const OrganiserRegistration = () => {
         Shiksha Mahakumbh 2024 Organiser Registration
       </h1>
 
-      {/* State Code Validation Form */}
       {!formSubmitted && !isCodeValid ? (
         <form onSubmit={handleCodeSubmit} className="shadow-md rounded-md m-auto md:w-1/2 p-4">
           <label className="block mb-2 text-lg">
@@ -106,7 +123,7 @@ const OrganiserRegistration = () => {
             type="text"
             value={stateCode}
             onChange={(e) => {
-              const code = e.target.value.toUpperCase() as StateCode;
+              const code = e.target.value.toUpperCase() as StateCode; // Convert to uppercase
               setStateCode(code);
             }}
             className="border border-gray-300 p-2 w-full mb-4"
@@ -125,9 +142,10 @@ const OrganiserRegistration = () => {
         </form>
       ) : !formSubmitted && isCodeValid ? (
         <form onSubmit={handleFormSubmit} className="shadow-md rounded-md m-auto md:w-1/2 p-4">
-          {/* State Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">State</label>
+            <label className="block mb-2 text-lg">
+              State
+            </label>
             <input
               type="text"
               value={stateCodes[stateCode as keyof typeof stateCodes]}
@@ -136,9 +154,10 @@ const OrganiserRegistration = () => {
             />
           </div>
 
-          {/* Name Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">Name</label>
+            <label className="block mb-2 text-lg">
+              Name <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="name"
@@ -149,11 +168,12 @@ const OrganiserRegistration = () => {
             />
           </div>
 
-          {/* Phone Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">Phone</label>
+            <label className="block mb-2 text-lg">
+              Phone Number <span className="text-red-500">*</span>
+            </label>
             <input
-              type="tel"
+              type="text"
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
@@ -162,9 +182,10 @@ const OrganiserRegistration = () => {
             />
           </div>
 
-          {/* Designation Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">Designation</label>
+            <label className="block mb-2 text-lg">
+              Designation <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="designation"
@@ -174,10 +195,10 @@ const OrganiserRegistration = () => {
               required
             />
           </div>
-
-          {/* Institution Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">Institution</label>
+            <label className="block mb-2 text-lg">
+            Institution <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="institution"
@@ -188,9 +209,10 @@ const OrganiserRegistration = () => {
             />
           </div>
 
-          {/* Duty Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">Duty</label>
+            <label className="block mb-2 text-lg">
+              Duty Assigned <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="duty"
@@ -201,9 +223,10 @@ const OrganiserRegistration = () => {
             />
           </div>
 
-          {/* Email Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">Email</label>
+            <label className="block mb-2 text-lg">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -213,37 +236,36 @@ const OrganiserRegistration = () => {
             />
           </div>
 
-          {/* Accommodation Field */}
           <div className="mb-4">
-            <label className="block mb-2 text-lg">Accommodation</label>
+            <label className="block mb-2 text-lg">
+              Accommodation Needed? <span className="text-red-500">*</span>
+            </label>
             <select
               name="accommodation"
               value={formData.accommodation}
               onChange={handleInputChange}
               className="border border-gray-300 p-2 w-full"
+              required
             >
               <option value="">Select</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark"
           >
-            Submit Registration
+            Submit
           </button>
         </form>
       ) : (
         <div className="text-center">
-          <h2 className="text-lg font-semibold">Thank you for registering!</h2>
-          <p>Your registration has been successfully submitted.</p>
-          <a href="https://sm24.rase.co.in/" className="p-4">
-            <button className="bg-primary text-white rounded-md P-4 mt-2 mb-2">Home</button>
-          </a>
-        </div>
+        <h2 className="text-lg font-semibold">Thank you for registering!</h2>
+        <p>Your registration has been successfully submitted.</p>
+        <a href="/rase.co.in" className="p-4"><button className="bg-primary text-white rounded-md P-4 mt-2 mb-2">Home</button></a>
+      </div>
       )}
     </div>
   );

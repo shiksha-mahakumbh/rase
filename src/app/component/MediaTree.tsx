@@ -27,12 +27,12 @@ const MediaGrid: React.FC = () => {
       ],
     },
     {
-      label: "Shiksha MahaKumbh",
+      label: "Shiksha Mahakumbh",
       years: [
         {
           year: "2024",
           children: [
-            { label: "Digital Media", link: "/comingsoon" },
+            { label: "Digital Media", link: "/shikshamahakumbh2024digitalmedia" },
             { label: "Print Media", link: "/printmediashikshamahakumbh2024" },
           ],
         },

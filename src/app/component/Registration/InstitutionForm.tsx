@@ -38,7 +38,7 @@ const InstitutionForm = ({
 
     try {
       // Send the form data to the backend
-      const response = await axios.post("http://localhost:5000/api/submitInstitution", formDataToSend, {
+      const response = await axios.post("http://localhost:5000/Institution", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

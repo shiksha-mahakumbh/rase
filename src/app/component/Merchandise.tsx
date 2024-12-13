@@ -18,8 +18,7 @@ const merchandiseItems = [
     id: 2,
     title: "Mug",
     slides: [
-      { src: "/merchandise/mug/2.jpg", alt: "Mug Image 1", legend: "" },
-      { src: "/merchandise/mug/1.jpg", alt: "Mug Image 2", legend: "" },
+      { src: "/merchandise/mug/1.jpg", alt: "Mug Image 1", legend: "" },
     ],
     price: 120,
   },
@@ -45,8 +44,8 @@ const merchandiseItems = [
     id: 5,
     title: "Bag",
     slides: [
-      { src: '/merchandise/bag/1.png', alt: 'Bag Image 1', legend: '' },
-      { src: '/merchandise/bag/1.png', alt: 'Bag Image 2', legend: '' },
+      { src: '/merchandise/bag/1.jpg', alt: 'Bag Image 1', legend: '' },
+      { src: '/merchandise/bag/1.jpg', alt: 'Bag Image 2', legend: '' },
     ],
     price: 400,
   },

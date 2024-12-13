@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios"; // You'll use axios for making HTTP requests
+import { db, storage } from "../../firebase"; // Adjust the path based on your setup
+import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { toast } from "react-hot-toast";
 
 const HeiProjectForm: React.FC = () => {
@@ -24,10 +26,11 @@ const HeiProjectForm: React.FC = () => {
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-
   // Handle form field changes
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -62,6 +65,26 @@ const HeiProjectForm: React.FC = () => {
     }
   };
 
+  // File upload to Firebase Storage
+  const uploadFile = (file: File, path: string) => {
+    return new Promise<string>((resolve, reject) => {
+      const storageRef = ref(storage, path);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        null,
+        (error) => {
+          reject(error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        }
+      );
+    });
+  };
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,41 +106,40 @@ const HeiProjectForm: React.FC = () => {
         return;
       }
 
-      // Create a FormData object to send files and form data to the backend
-      const form = new FormData();
-      form.append("projectName", formData.projectName);
-      form.append("projectDescription", formData.projectDescription);
-      form.append("instituteName", formData.instituteName);
-      form.append("instituteAddress", formData.instituteAddress);
-      form.append("teamSize", teamSize.toString());
-      form.append("participants", JSON.stringify(participants));
+      // Upload files
+      const pptPath = `heiProjects/${formData.projectName}/ppt`;
+      const videoPath = `heiProjects/${formData.projectName}/video`;
+      const feePath = `heiProjects/${formData.projectName}/feeReceipt`;
 
-      // Append the files to FormData
-      form.append("projectPpt", formData.projectPpt!);
-      form.append("projectVideo", formData.projectVideo!);
-      form.append("feeUpload", formData.feeUpload!);
+      const [pptUrl, videoUrl, feeUrl] = await Promise.all([
+        uploadFile(formData.projectPpt!, pptPath),
+        uploadFile(formData.projectVideo!, videoPath),
+        uploadFile(formData.feeUpload!, feePath),
+      ]);
 
-      // Send data to the backend
-      const response = await axios.post("http://localhost:5000/api/submitProject", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      // Store form data in Firestore
+      const docRef = await addDoc(collection(db, "heiprojectformdata"), {
+        projectName: formData.projectName,
+        projectDescription: formData.projectDescription,
+        instituteName: formData.instituteName,
+        instituteAddress: formData.instituteAddress,
+        teamSize: teamSize,
+        participants: participants,
+        projectPptUrl: pptUrl,
+        projectVideoUrl: videoUrl,
+        feeReceiptUrl: feeUrl,
       });
 
-      if (response.status === 200) {
-        toast.success("Project submitted successfully!");
-        setFormData({
-          projectName: "",
-          projectDescription: "",
-          instituteName: "",
-          instituteAddress: "",
-          projectPpt: null,
-          projectVideo: null,
-          feeUpload: null,
-        });
-        setParticipants([{ name: "", phone: "", email: "", course: "" }]);
-        setTeamSize(0);
-      }
+      toast.success("Project submitted successfully!");
+      setFormData({
+        projectName: "",
+        projectDescription: "",
+        instituteName: "",
+        instituteAddress: "",
+        projectPpt: null,
+        projectVideo: null,
+        feeUpload: null,
+      });
     } catch (error) {
       console.error("Error submitting form: ", error);
       toast.error("Failed to submit the form.");
@@ -157,7 +179,7 @@ const HeiProjectForm: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200">
       <h1 className="text-2xl font-bold mb-6 text-primary text-center">
-        Project Display Registration for HEI
+        Project Display Registraion for HEI
       </h1>
       <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Project Name */}
@@ -191,7 +213,7 @@ const HeiProjectForm: React.FC = () => {
           />
         </div>
 
-        {/* File Uploads */}
+        {/* Project PPT Upload */}
         <div>
           <label className="block text-sm font-semibold text-gray-700">
             Project PPT Upload <span className="text-red-500">&#42;</span>
@@ -204,8 +226,13 @@ const HeiProjectForm: React.FC = () => {
             className="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold file:bg-gray-50 hover:file:bg-gray-100"
             required
           />
+          {loading && formData.projectPpt && (
+            <p className="text-xs text-gray-500 mt-1">Uploading...</p>
+          )}
+          <p className="text-xs text-gray-500 mt-1">Max size: 40 MB</p>
         </div>
 
+        {/* Project Video Upload */}
         <div>
           <label className="block text-sm font-semibold text-gray-700">
             Project Video Upload <span className="text-red-500">&#42;</span>
@@ -218,9 +245,14 @@ const HeiProjectForm: React.FC = () => {
             className="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold file:bg-gray-50 hover:file:bg-gray-100"
             required
           />
+          {loading && formData.projectVideo && (
+            <p className="text-xs text-gray-500 mt-1">Uploading...</p>
+          )}
+          <p className="text-xs text-gray-500 mt-1">Max size: 40 MB</p>
         </div>
 
         {/* Institute Name */}
+
         <div>
           <label className="block text-sm font-semibold text-gray-700">
             Institute Name <span className="text-red-500">&#42;</span>
@@ -240,12 +272,12 @@ const HeiProjectForm: React.FC = () => {
           <label className="block text-sm font-semibold text-gray-700">
             Institute Address <span className="text-red-500">&#42;</span>
           </label>
-          <input
-            type="text"
+          <textarea
             name="instituteAddress"
             value={formData.instituteAddress}
             onChange={handleChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            rows={3}
             required
           />
         </div>
@@ -253,84 +285,162 @@ const HeiProjectForm: React.FC = () => {
         {/* Team Size */}
         <div>
           <label className="block text-sm font-semibold text-gray-700">
-            Team Size <span className="text-red-500">&#42;</span>
+            Select Team Size
           </label>
           <select
-            value={teamSize}
+            value={teamSize} // teamSize state will control the selected option
             onChange={handleTeamSizeChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
-            <option value="0">Select Team Size</option>
-            <option value="1">1 Member</option>
-            <option value="2">2 Members</option>
-            <option value="3">3 Members</option>
-            <option value="4">4 Members</option>
+            <option value={0}>Select Team Size</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
           </select>
         </div>
 
         {/* Participants */}
-        {participants.map((_, index) => (
-          <div key={index}>
-            <h3 className="font-semibold text-lg mt-4">Participant {index + 1}</h3>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={participants[index].name}
-                  onChange={(e) => handleParticipantChange(index, "name", e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  value={participants[index].phone}
-                  onChange={(e) => handleParticipantChange(index, "phone", e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={participants[index].email}
-                  onChange={(e) => handleParticipantChange(index, "email", e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700">
-                  Course
-                </label>
-                <input
-                  type="text"
-                  value={participants[index].course}
-                  onChange={(e) => handleParticipantChange(index, "course", e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
+        {[...Array(teamSize)].map((_, index) => (
+          <div key={index} className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">
+                Participant {index + 1} Name
+              </label>
+              <input
+                type="text"
+                value={participants[index]?.name}
+                onChange={(e) =>
+                  handleParticipantChange(index, "name", e.target.value)
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">
+                Participant {index + 1} Phone Number
+              </label>
+              <input
+                type="tel"
+                value={participants[index]?.phone}
+                onChange={(e) =>
+                  handleParticipantChange(index, "phone", e.target.value)
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">
+                Participant {index + 1} Email ID
+              </label>
+              <input
+                type="email"
+                value={participants[index]?.email}
+                onChange={(e) =>
+                  handleParticipantChange(index, "email", e.target.value)
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">
+                Participant {index + 1} Course Name
+              </label>
+              <input
+                type="text"
+                value={participants[index]?.course}
+                onChange={(e) =>
+                  handleParticipantChange(index, "course", e.target.value)
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
             </div>
           </div>
         ))}
+
+        {/* Fee Section */}
+        <div className="flex items-center space-x-4">
+          <span className="text-lg font-bold text-gray-700">
+            Fee: &#8360; 200
+          </span>
+          <img src="/fee.png" alt="QR Code" className="w-24 h-24" />
+        </div>
+
+        {/* Fee Receipt Upload */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700">
+            Fee Receipt Upload <span className="text-red-500">&#42;</span>
+          </label>
+          <input
+            type="file"
+            name="feeUpload"
+            onChange={handleFileChange}
+            className="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold file:bg-gray-50 hover:file:bg-gray-100"
+            required
+          />
+          {loading && formData.feeUpload && (
+            <p className="text-xs text-gray-500 mt-1">Uploading...</p>
+          )}
+        </div>
+
         {/* Submit Button */}
         <button
           type="submit"
+          className="w-full bg-primary text-white py-2 px-4 rounded-md shadow-sm hover:bg-gradient-to-l focus:ring focus:ring-offset-1 focus:ring-indigo-600 transition duration-300 ease-in-out"
           disabled={loading}
-          className={`w-full py-2 px-4 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600 focus:outline-none ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
         >
-          {loading ? "Submitting..." : "Submit Project"}
+          {loading ? "Submitting..." : "Submit"}
         </button>
+        <div className="mt-6 text-center">
+  <h2>For Accomodation click the below button</h2>
+  <button
+    type="button"
+    onClick={() => {
+      window.location.href = "/Accomodation"; // Adjust path as needed
+    }}
+    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary-dark transition duration-300"
+  >
+    Accommodation Booking
+  </button>
+</div>
       </form>
+      <div className="mt-8 bg-black p-6 rounded-md shadow-md border border-gray-200">
+        <h2 className="text-xl font-semibold text-white mb-4">FAQ</h2>
+        <div className="space-y-4">
+          {faqData.map((faq, index) => (
+            <div key={index} className="border-b border-gray-300">
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full flex justify-between items-center py-3 px-4 text-left text-white font-semibold focus:outline-none"
+              >
+                {faq.question}
+                <svg
+                  className={`w-5 h-5 transition-transform duration-200 ${
+                    openIndex === index ? "transform rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              {openIndex === index && (
+                <div className="px-4 py-2 text-primary">{faq.answer}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

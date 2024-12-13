@@ -7,6 +7,27 @@ import {firebaseConfig} from "@/app/firebase";
 const speakers = [
   {
     id: 1,
+    name: "Shri Dharmendra Pradhan ",
+    designation: "Hon'ble Education Minister ,Bharat",
+    place: "The Hon'ble minister conveys best wishes for the success of the programme ",
+    imageSrc: "/2024M/cheifguests/educationminister.jpg",
+  },
+  {
+    id: 1,
+    name: "Admiral D. K. Joshi, PVSM, AVSM, YSM, NM, VSM (Retd.)",
+    designation: "Hon'ble Governor of Andaman & Nicobar Islands",
+    place: "The Hon'ble Lt. Governor conveyed his Best wishes for success of the event",
+    imageSrc: "/2024M/cheifguests/andaman.jpg",
+  },
+  {
+    id: 1,
+    name: " Lt. Gen. Kaiwalya Trivikram Parnaik, PVSM,UYSM,YSM (Retd.)",
+    designation: "Hon'ble Governor of Arunachal Pradesh",
+    place: "The Hon'ble Governor extends his Best wishes for success of the event",
+    imageSrc: "/2024M/cheifguests/governer.jpg",
+  },
+  {
+    id: 1,
     name: "Shri Rajendra Arlekar",
     designation: "Hon'ble Governor of Bihar",
     place: "माननीय राज्यपाल, बिहार के द्वारा शिक्षा महाकुंभ के द्वितीय संस्करण की कामयाबी के लिए शुभकामनाएँ व्यक्त की है",
@@ -14,7 +35,7 @@ const speakers = [
   },
   {
     id: 2,
-    name: "Shri La Ganesan",
+    name: "Shri L. A. Ganesan",
     designation: "Hon'ble Governor of Nagaland",
     place: "Hon'ble Governor sends his best wishes for the success of the programme",
     imageSrc: "/2024M/cheifguests/nagalandgovernor.png",

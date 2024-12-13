@@ -1,5 +1,9 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "@/app/firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { db } from "@/app/firebase";
 import toast from "react-hot-toast";
 
 interface AbstractFormData {
@@ -31,6 +35,7 @@ const AbstractSubmission = () => {
 
   const [formData, setFormData] = useState<AbstractFormData>(initialFormData);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
 
   const MAX_FILE_SIZE_WORD = 200 * 1024; // 200 KB
   const MAX_FILE_SIZE_PDF = 1 * 1024 * 1024; // 1 MB
@@ -60,7 +65,7 @@ const AbstractSubmission = () => {
     }));
   };
 
-  const handleFileChange = (
+  const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
     field: string,
     maxSize: number
@@ -71,10 +76,18 @@ const AbstractSubmission = () => {
         toast.error(`File size exceeds the limit of ${maxSize / (1024 * 1024)} MB.`);
         return;
       }
-      setFormData((prevData) => ({
-        ...prevData,
-        [field]: file,
-      }));
+      try {
+        const fileRef = ref(storage, `files/${file.name}`);
+        await uploadBytes(fileRef, file);
+        const downloadURL = await getDownloadURL(fileRef);
+        setFormData((prevData) => ({
+          ...prevData,
+          [field]: downloadURL,
+        }));
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        setError(error);
+      }
     }
   };
 
@@ -89,41 +102,28 @@ const AbstractSubmission = () => {
     }
 
     try {
-      const formDataToSubmit = new FormData();
-      formDataToSubmit.append("PaperTitle", formData.PaperTitle);
-      formDataToSubmit.append("CorrespondingAuthorEmail", formData.CorrespondingAuthorEmail);
-      formDataToSubmit.append("CorrespondingAuthorName", formData.CorrespondingAuthorName);
-      formDataToSubmit.append("Keywords", formData.Keywords);
-      formDataToSubmit.append("ContactNumber", formData.ContactNumber);
-      formDataToSubmit.append("AttachmentsWord", formData.AttachmentsWord as any);
-      formDataToSubmit.append("AttachmentsPdf", formData.AttachmentsPdf as any);
-      formDataToSubmit.append("FeeReceipt", formData.FeeReceipt as any);
-      formDataToSubmit.append("type", formData.type);
-
-      const response = await fetch("/api/submitAbstract", {
-        method: "POST",
-        body: formDataToSubmit,
+      // Add document to Firestore with submission timestamp
+      const docRef = await addDoc(collection(db, "AbstractSubmissionDataSM24"), {
+        ...formData,
+        submissionDate: Timestamp.now(), // Automatically add date and time
       });
-
-      if (!response.ok) {
-        throw new Error("Submission failed!");
-      }
-
+      console.log("Document added with ID:", docRef.id);
       setLoading(false);
       setFormData(initialFormData);
-      toast.success("Abstract submitted successfully!");
+      toast.success("Congratulations you have successfully submitted the Abstract!");
     } catch (error) {
-      console.error("Error submitting abstract:", error);
+      console.error("Error adding document:", error);
+      setError(error);
       setLoading(false);
-      toast.error("Something went wrong!");
+      toast.error("Something broke while submitting the Abstract!");
     }
   };
 
   return (
-    <div className="bg-white mb-5 ">
-      <div className="shadow-md rounded-md md:w-1/0 mx-auto pt-8 bg-white text-black ">
-        <h1 className="text-primary text-center text-xl">
-          Paper Submission Form
+    <div className="bg-white mb-5 px-4">
+    <div className="shadow-md rounded-md max-w-screen-md mx-auto pt-8 bg-white text-black">
+      <h1 className="text-primary text-center text-2xl mb-4">
+          Abstract Submission Form
         </h1>
         <form onSubmit={handleSubmit} className="bg-white p-4">
           <div className="mb-4">
@@ -245,8 +245,8 @@ const AbstractSubmission = () => {
             <input
               type="tel"
               name="ContactNumber"
+              placeholder="*1234567890*"
               value={formData.ContactNumber}
-              placeholder="*Contact number*"
               onChange={handleInputChange}
               className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
             />
@@ -254,43 +254,92 @@ const AbstractSubmission = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
-              Upload Fee Receipt <span className="text-red-600 text-xs">(Max size: 5 MB)</span>
-              <span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            </label>
-            <input
-              type="file"
-              name="FeeReceipt"
-              accept=".jpg, .jpeg, .png, .pdf"
-              onChange={(e) => handleFileChange(e, "FeeReceipt", MAX_FILE_SIZE_RECEIPT)}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
-            />
-          </div>
+            Select Type &#40;Fee&#41;<span className="text-red-700 text-base"><sup>&#42;</sup></span>
+    <select
+      name="type"
+      value={formData.type}
+      onChange={handleInputChange}
+      className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
+    >
+      <option value="">Select Delegates Type</option>
+      <option value="Students">Students</option>
+      <option value="Research Scholars">
+        Research Scholars 
+      </option>
+      <option value="Delegates from Academics and R&D Institutions">
+        Delegates from Academics and R&D Institutions
+      </option>
+      <option value="Delegates from Industry">Delegates from Industry</option>
+    </select>
+  </label>
+</div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-600">
-              Type of Submission<span className="text-red-700 text-base"><sup>&#42;</sup></span>
-            </label>
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleInputChange}
-              className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black"
-            >
-              <option value="">Select Submission Type</option>
-              <option value="Research Paper">Research Paper</option>
-              <option value="Review Paper">Review Paper</option>
-            </select>
-          </div>
+{formData.type && (
+  <>
+    <div className="text-sm text-red-600 mb-4">
+      Note&#58; Abstract Submission will be valid only if you upload the payment
+      receipt successfully. The Fee amount displayed above
+      the &#34;Payment QR Code&#34; must be paid. Without that, the
+      Submission will be canceled.
+    </div>
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-600">
+        <b>
+          ₹&#58;{" "}
+          {formData.type === "Students"
+            ? 500
+            : formData.type === "Research Scholars"
+            ? 1100
+            : formData.type === "Delegates from Academics and R&D Institutions"
+            ? 2100
+            : formData.type === "Delegates from Industry"
+            ? 3100
+            : "not known"}
+        </b>
+                  <img className="p-2" src="/fee.png" alt="Fee" />
+                  <span className="text-sm text-red-600 mb-4">
+                UPI ID&#58; shikshamahakhumb@sbi
+              </span>
+                </label>
+              </div>
 
-          <div className="mb-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary text-white py-2 px-4 rounded-md mt-4 disabled:bg-gray-400"
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-          </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600">
+                  Upload Payment Receipt<span className="text-red-600 text-xs">(Max size: 5 MB)</span>
+                  <span className="text-red-700 text-base"><sup>&#42;</sup></span>
+                </label>
+                <input
+                  type="file"
+                  name="FeeReceipt"
+                  accept=".pdf, .png, .jpg"
+                  onChange={(e) => handleFileChange(e, "FeeReceipt", MAX_FILE_SIZE_RECEIPT)}
+                  className="mt-4 p-2 block w-full rounded-md border-gray-300 text-black bg-white"
+                />
+              </div>
+            </>
+          )}
+
+          <button
+            type="submit"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-color transition duration-300 mt-4 w-full"
+            disabled={loading}
+          >
+            Submit
+          </button>
+          {/* Accommodation Booking Button */}
+<div className="mt-6 text-center">
+  <h2>For Accomodation click the below button</h2>
+  <button
+    type="button"
+    onClick={() => {
+      window.location.href = "/Accomodation"; // Adjust path as needed
+    }}
+    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary-dark transition duration-300"
+  >
+    Accommodation Booking
+  </button>
+</div>
+
         </form>
       </div>
     </div>
