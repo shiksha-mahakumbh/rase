@@ -154,25 +154,8 @@ else  if (value === 'ResearchScholar' ) {
 
   const handleAddDocument = async (downloadURL: string | null) => {
     try {
-<<<<<<< HEAD
-     // const response = await fetch("http://localhost:5000/Conclave", {
-
-      const response = await axios.post('http://localhost:5000/delegate', submissionData);
-      if (response.status === 200) {
-        toast.success('Successfully Registered!');
-        setFormData(initialFormData);
-        setImage(null);
-      } else {
-        toast.error('Failed to Register. Try Again!');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('An error occurred. Please try again.');
-    } finally {
-=======
       const docRef = await addDoc(collection(db, 'ParticipantRegsm24'), { ...formData, feeReceipt: downloadURL });
       console.log('Document added with ID:', docRef.id);
->>>>>>> ea14b588a85cb3495bb4a589e1210b4e17acf787
       setLoading(false);
       toast.success("Suceessfully Registered!");
       setFormData(initialFormData)
