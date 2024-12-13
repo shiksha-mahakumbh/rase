@@ -1,11 +1,12 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
-import { db } from "@/app/firebase";
+import { db, storage } from "@/app/firebase"; // Ensure your firebase config includes storage
 import { collection, getDocs } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import QRCode from "qrcode";
 import toast, { Toaster } from "react-hot-toast";
 
 interface Participant {
@@ -22,15 +23,14 @@ interface NgoData {
   schoolAddress: string;
   teamSize: number;
   participants: Participant[];
-  projectPpt: File | null;
-  projectVideo: File | null;
-  feeUpload: File | null;
+  projectPptUrl?: string | null;
+  projectVideoUrl?: string | null;
+  feeReceiptUrl?: string | null;
   serial?: number;
 }
 
 const Page: React.FC = () => {
   const [formDataList, setFormDataList] = useState<NgoData[]>([]);
-  const [emailsSent, setEmailsSent] = useState<boolean[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,11 +39,32 @@ const Page: React.FC = () => {
         const querySnapshot = await getDocs(colRef);
 
         const dataList: NgoData[] = [];
+        const downloadURLPromises: Promise<void>[] = [];
 
         querySnapshot.forEach((doc) => {
           const data = doc.data() as NgoData;
-          dataList.push(data);
+
+          // Update file URLs
+          downloadURLPromises.push(
+            (async () => {
+              if (data.projectPptUrl) {
+                const pptRef = ref(storage, data.projectPptUrl);
+                data.projectPptUrl = await getDownloadURL(pptRef);
+              }
+              if (data.projectVideoUrl) {
+                const videoRef = ref(storage, data.projectVideoUrl);
+                data.projectVideoUrl = await getDownloadURL(videoRef);
+              }
+              if (data.feeReceiptUrl) {
+                const feeRef = ref(storage, data.feeReceiptUrl);
+                data.feeReceiptUrl = await getDownloadURL(feeRef);
+              }
+              dataList.push(data);
+            })()
+          );
         });
+
+        await Promise.all(downloadURLPromises);
 
         const dataListWithSerial = dataList.map((data, index) => ({
           ...data,
@@ -51,7 +72,6 @@ const Page: React.FC = () => {
         }));
 
         setFormDataList(dataListWithSerial);
-        setEmailsSent(Array(dataListWithSerial.length).fill(false));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -62,17 +82,17 @@ const Page: React.FC = () => {
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(
-      formDataList.map(({ projectName, projectDescription, schoolName, schoolAddress, teamSize, participants, projectPpt, projectVideo, feeUpload, serial }) => ({
+      formDataList.map(({ projectName, projectDescription, schoolName, schoolAddress, teamSize, participants, projectPptUrl, projectVideoUrl, feeReceiptUrl, serial }) => ({
         serial,
         projectName,
         projectDescription,
         schoolName,
         schoolAddress,
         teamSize,
-        participants: participants.map(p => p.name).join(", "), // Join participant names
-        projectPpt: projectPpt ? projectPpt.name : "",
-        projectVideo: projectVideo ? projectVideo.name : "",
-        feeUpload: feeUpload ? feeUpload.name : "",
+        participants: participants.map((p) => p.name).join(", "),
+        projectPptUrl: projectPptUrl || "No link",
+        projectVideoUrl: projectVideoUrl || "No link",
+        feeReceiptUrl: feeReceiptUrl || "No link",
       }))
     );
     const workbook = XLSX.utils.book_new();
@@ -93,10 +113,10 @@ const Page: React.FC = () => {
         formData.schoolName,
         formData.schoolAddress,
         formData.teamSize,
-        formData.participants.map(p => p.name).join(", "), // Join participant names
-        formData.projectPpt ? formData.projectPpt.name : "",
-        formData.projectVideo ? formData.projectVideo.name : "",
-        formData.feeUpload ? formData.feeUpload.name : "",
+        formData.participants.map((p) => p.name).join(", "),
+        formData.projectPptUrl || "No file",
+        formData.projectVideoUrl || "No file",
+        formData.feeReceiptUrl || "No file",
       ];
       tableRows.push(data);
     });
@@ -137,10 +157,16 @@ const Page: React.FC = () => {
               <td className="border text-black p-3">{formData.schoolName}</td>
               <td className="border text-black p-3">{formData.schoolAddress}</td>
               <td className="border text-black p-3">{formData.teamSize}</td>
-              <td className="border text-black p-3">{formData.participants.map(p => p.name).join(", ")}</td>
-              <td className="border text-black p-3">{formData.projectPpt ? formData.projectPpt.name : "No file"}</td>
-              <td className="border text-black p-3">{formData.projectVideo ? formData.projectVideo.name : "No file"}</td>
-              <td className="border text-black p-3">{formData.feeUpload ? formData.feeUpload.name : "No file"}</td>
+              <td className="border text-black p-3">{formData.participants.map((p) => p.name).join(", ")}</td>
+              <td className="border text-black p-3">
+                {formData.projectPptUrl ? <a href={formData.projectPptUrl} target="_blank" rel="noopener noreferrer">Download</a> : "No file"}
+              </td>
+              <td className="border text-black p-3">
+                {formData.projectVideoUrl ? <a href={formData.projectVideoUrl} target="_blank" rel="noopener noreferrer">Download</a> : "No file"}
+              </td>
+              <td className="border text-black p-3">
+                {formData.feeReceiptUrl ? <a href={formData.feeReceiptUrl} target="_blank" rel="noopener noreferrer">Download</a> : "No file"}
+              </td>
             </tr>
           ))}
         </tbody>

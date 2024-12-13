@@ -1,11 +1,11 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { db } from "@/app/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import QRCode from "qrcode";
 import toast, { Toaster } from "react-hot-toast";
 
 interface NgoData {
@@ -13,15 +13,14 @@ interface NgoData {
   projectDescription: string;
   instituteName: string;
   instituteAddress: string;
-  projectPpt: File | null;
-  projectVideo: File | null;
-  feeUpload: File | null;
+  projectPptUrl: string | null;
+  projectVideoUrl: string | null;
+  feeReceiptUrl: string | null;
   serial?: number;
 }
 
 const Page: React.FC = () => {
   const [formDataList, setFormDataList] = useState<NgoData[]>([]);
-  const [emailsSent, setEmailsSent] = useState<boolean[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,7 +41,6 @@ const Page: React.FC = () => {
         }));
 
         setFormDataList(dataListWithSerial);
-        setEmailsSent(Array(dataListWithSerial.length).fill(false));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -53,15 +51,15 @@ const Page: React.FC = () => {
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(
-      formDataList.map(({ projectName, projectDescription, instituteName, instituteAddress, projectPpt, projectVideo, feeUpload, serial }) => ({
+      formDataList.map(({ projectName, projectDescription, instituteName, instituteAddress, projectPptUrl, projectVideoUrl, feeReceiptUrl, serial }) => ({
         serial,
         projectName,
         projectDescription,
         instituteName,
         instituteAddress,
-        projectPpt: projectPpt ? projectPpt.name : "",
-        projectVideo: projectVideo ? projectVideo.name : "",
-        feeUpload: feeUpload ? feeUpload.name : "",
+        projectPptUrl: projectPptUrl || "No link",
+        projectVideoUrl: projectVideoUrl || "No link",
+        feeReceiptUrl: feeReceiptUrl || "No link",
       }))
     );
     const workbook = XLSX.utils.book_new();
@@ -71,7 +69,7 @@ const Page: React.FC = () => {
 
   const downloadAsPDF = async () => {
     const doc = new jsPDF();
-    const tableColumn = ["Sr. No.", "Project Name", "Description", "Institute Name", "Address", "PPT", "Video", "Fee Upload"];
+    const tableColumn = ["Sr. No.", "Project Name", "Description", "Institute Name", "Address", "PPT", "Video", "Fee Receipt"];
     const tableRows: any[][] = [];
 
     formDataList.forEach((formData) => {
@@ -81,9 +79,9 @@ const Page: React.FC = () => {
         formData.projectDescription,
         formData.instituteName,
         formData.instituteAddress,
-        formData.projectPpt ? formData.projectPpt.name : "",
-        formData.projectVideo ? formData.projectVideo.name : "",
-        formData.feeUpload ? formData.feeUpload.name : "",
+        formData.projectPptUrl || "No link",
+        formData.projectVideoUrl || "No link",
+        formData.feeReceiptUrl || "No link",
       ];
       tableRows.push(data);
     });
@@ -93,7 +91,7 @@ const Page: React.FC = () => {
       body: tableRows,
     });
 
-    doc.save("ParticipantRegistrationData.pdf");
+    doc.save("HeiProjectRegistrationData.pdf");
   };
 
   return (
@@ -110,7 +108,7 @@ const Page: React.FC = () => {
             <th className="border bg-primary text-white font-bold text-base p-3">Address</th>
             <th className="border bg-primary text-white font-bold text-base p-3">Project PPT</th>
             <th className="border bg-primary text-white font-bold text-base p-3">Project Video</th>
-            <th className="border bg-primary text-white font-bold text-base p-3">Fee Upload</th>
+            <th className="border bg-primary text-white font-bold text-base p-3">Fee Receipt</th>
           </tr>
         </thead>
         <tbody>
@@ -122,13 +120,13 @@ const Page: React.FC = () => {
               <td className="border text-black p-3">{formData.instituteName}</td>
               <td className="border text-black p-3">{formData.instituteAddress}</td>
               <td className="border text-black p-3">
-                {formData.projectPpt ? formData.projectPpt.name : "No File"}
+                {formData.projectPptUrl ? <a href={formData.projectPptUrl} target="_blank" rel="noopener noreferrer">Download</a> : "No File"}
               </td>
               <td className="border text-black p-3">
-                {formData.projectVideo ? formData.projectVideo.name : "No File"}
+                {formData.projectVideoUrl ? <a href={formData.projectVideoUrl} target="_blank" rel="noopener noreferrer">Download</a> : "No File"}
               </td>
               <td className="border text-black p-3">
-                {formData.feeUpload ? formData.feeUpload.name : "No File"}
+                {formData.feeReceiptUrl ? <a href={formData.feeReceiptUrl} target="_blank" rel="noopener noreferrer">Download</a> : "No File"}
               </td>
             </tr>
           ))}
