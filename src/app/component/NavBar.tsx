@@ -23,7 +23,7 @@ const NavBar: React.FC = () => {
         { path: "/shikshakumbh", title: "Shiksha Kumbh" },
         { path: "/shikshamahakumbh", title: "Shiksha MahaKumbh" },
         { path: "/abhiyanphotoframe.pdf", title: "Abhiyan in Photo Frames" },
-        { path: "/commingsoon", title: "Governing Council" },
+        { path: "/2024M/Shiksha Maha Khumbh Final.pdf", title: "Shiksha Mahakumbh 3.0 in Photo Frame" },
         
         { path: "/VibhagRoute/AcademicCouncil24", title: " शैक्षिक विभाग - Shaikshik Vibha" },
         { path: "/VibhagRoute/Vitt24", title: "वित्त विभाग - Vitt Vibhag" },
@@ -75,7 +75,7 @@ const NavBar: React.FC = () => {
     { path: "/feedback", title: "Feedback" },
       
      
-    { path: "/Wishes_Received", title: "Wishes Received" },
+    { path: "/Best_Wishes", title: "Wishes Received" },
   ];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);

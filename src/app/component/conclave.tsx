@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 
 const Conclaves: React.FC = () => {
@@ -30,6 +31,7 @@ const Conclaves: React.FC = () => {
       <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-6 sm:mb-8 text-center">
         Conclaves for Leadership and Vision
       </h1>
+
       <div className="flex flex-wrap justify-center gap-6">
         {conclaves.map((conclave, index) => (
           <div
@@ -57,6 +59,14 @@ const Conclaves: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* Redirect Link */}
+      <a
+        href="/registration/Single_Registration" // Replace with your actual URL
+        className="mt-8 text-lg font-semibold text-primary hover:text-primary-dark underline"
+      >
+        Click here to register for the conclave
+      </a>
     </div>
   );
 };

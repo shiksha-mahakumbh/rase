@@ -37,7 +37,8 @@ const PrabandhanVibhag: React.FC = () => {
       category: "Accommodation",
       members: [
         { name: "Dr. Parveen Sharma", position: "Associate Professor, CU Jammu", contact: "9988625485" },
-        { name: "Dr. Shiksha Sharma", position: "DHE", contact: "9878890303" }
+        { name: "Dr. Shiksha Sharma", position: "DHE", contact: "9878890303" },
+        { name: "Shri Aman Kumar", position: "DHE", contact: "79054 16059"}
       ]
     },
     {
@@ -55,14 +56,15 @@ const PrabandhanVibhag: React.FC = () => {
     {
       category: "Photography",
       members: [
-        { name: "Shri Praveen Chandel", position: "DHE", contact: "6230462733" }
+        { name: "Shri Praveen Chandel", position: "DHE", contact: "8725050733" }
       ]
     },
     {
       category: "Exhibition",
       members: [
         { name: "Shri Aman Shrivastav", position: "DHE", contact: "7905416059" },
-        { name: "Shri Sanjay Soni", position: "DHE", contact: "9355542751" }
+        { name: "Shri Sanjay Soni", position: "DHE", contact: "9355542751" },
+        { name: "Shri Vinay Kumar", position: "DHE", contact: "82904 63378" }
       ]
     },
     {
@@ -72,6 +74,7 @@ const PrabandhanVibhag: React.FC = () => {
         { name: "Smt. Pratibha Gupta", position: "DHE", contact: "9814738016" },
         { name: "Shri Ramendra Singh", position: "DHE", contact: "7903431900" },
         { name: "Shushri Sonal Kandari", position: "DHE", contact: "9816941951" },
+        { name: "Shri Deepak Kumar", position: "DHE", contact: "70183 18078" },
       ]
     }
   ];

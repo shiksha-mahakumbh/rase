@@ -44,7 +44,7 @@ const Press3: React.FC<{ data: Data }> = ({ data }) => {
 
           {section.content && section.content.length > 0 && (
             <div className="content mb-4">
-              <h4 className="text-xl font-semibold text-gray-700">Content:</h4>
+              
               <ul className="list-disc ml-5 text-gray-600">
                 {section.content.map((item, idx) => (
                   <ul key={idx} className="mb-2">{item}</ul>

@@ -9,7 +9,7 @@ import { auth, db, storage } from "@/app/firebase"; // Adjust import based on yo
 import CompanyInfo from "../component/CompanyInfo";
 import NavBar from "../component/NavBar";
 
-const allowedEmail = "amansrivastava3516@gmail.com";
+const allowedEmail = "kandarisonal21200@gmail.com";
 
 const AddEventForm: React.FC = () => {
   const [title, setTitle] = useState("");

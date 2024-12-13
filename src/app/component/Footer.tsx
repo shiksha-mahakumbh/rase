@@ -337,12 +337,12 @@ const Footer: React.FC = () => {
                     </Link>
                   </p>
                   <p className="text-white mb-3">
-                    <Link href="/academiccouncil" className="hover:text-white">
+                    <Link href="/VibhagRoute/AcademicCouncil24" className="hover:text-white">
                       Academic Council
                     </Link>
                   </p>
                   <p className="text-white mb-3">
-                    <Link href="https://ac.rase.co.in" className="hover:text-white">
+                    <Link href="/Accomodation" className="hover:text-white">
                       Accomodation
                     </Link>
                   </p>

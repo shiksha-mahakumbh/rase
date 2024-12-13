@@ -17,6 +17,12 @@ import UpcomingEvent from "./component/UpcomingEvent";
 import NoticeBoard from "./component/NoticeBoard";
 const slides1 = [
   {
+    src: "/2024M/baton/baton1.jpg",
+    alt: "Image 1",
+    legend:
+      "Baton Ceremony Shiksha Mahakumbh 2024",
+  },
+  {
     src: "/2024K/k6.jpg",
     alt: "Image 1",
     legend:

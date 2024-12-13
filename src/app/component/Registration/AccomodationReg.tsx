@@ -1,7 +1,9 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { message, Spin } from "antd";
-import axios from "axios"; // Axios for API requests
+import { message, Spin } from "antd"; // Import message from Ant Design
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage, db } from "@/app/firebase";
+import { collection, addDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
@@ -36,7 +38,8 @@ const Forms = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [selectedEvent, setSelectedEvent] = useState<string>("");
-  const [selectedAccommodation, setSelectedAccommodation] = useState<string>("");
+  const [selectedAccommodation, setSelectedAccommodation] =
+    useState<string>("");
 
   const isFormValid = () => {
     return (
@@ -68,32 +71,28 @@ const Forms = () => {
     const fileExtension = originalName.split(".").pop();
     return `${originalName.split(".")[0]}-${uniqueSuffix}.${fileExtension}`;
   };
-
   const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
     field: string
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLoading(true);
+      setLoading(true); // Start loading
       try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const response = await axios.post("/api/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
+        const uniqueFileName = generateUniqueFileName(file.name);
+        const fileRef = ref(storage, `files/${uniqueFileName}`);
+        await uploadBytes(fileRef, file);
+        const downloadURL = await getDownloadURL(fileRef);
         setFormData((prevData) => ({
           ...prevData,
-          [field]: response.data.fileUrl,
+          [field]: downloadURL,
         }));
       } catch (error) {
         console.error("Error uploading file:", error);
         setError(error);
         message.error("Error uploading file.");
       } finally {
-        setLoading(false);
+        setLoading(false); // End loading
       }
     }
   };
@@ -101,13 +100,15 @@ const Forms = () => {
   const handleEventChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setSelectedEvent(selectedValue);
+    // Reset accommodation type when event changes
     setSelectedAccommodation("");
     setFormData((prevData) => ({
       ...prevData,
       event: selectedValue,
-      accommodationtype: "",
+      accommodationtype: "", // Reset accommodation type
     }));
   };
+ 
 
   const handleAccommodationChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
@@ -117,6 +118,7 @@ const Forms = () => {
       accommodationtype: selectedValue,
     }));
   };
+  
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -129,22 +131,22 @@ const Forms = () => {
     }
 
     try {
-      await axios.post("/api/accommodation", formData);
+      await addDoc(collection(db, "Accomodation"), {
+        ...formData,
+      });
+      console.log("Document added successfully");
       setLoading(false);
       setFormData(initialFormData);
       message.success(
-        "Congratulations, you have successfully booked the accommodation!"
+        "Congratulations, you have successfully Booked the Accomodation!"
       );
     } catch (error) {
-      console.error("Error submitting form", error);
+      console.error("Error adding document", error);
       setError(error);
       setLoading(false);
-      message.error("Something broke while booking the accommodation!");
+      message.error("Something broke while Booking the Accomodation!");
     }
   };
-
-
-
 
   return (
     <div className="bg-white mb-5 mt-4">
@@ -218,13 +220,13 @@ const Forms = () => {
                 className="mt-4 p-2 block w-full rounded-md border border-gray-300 text-black"
               >
               <option value="">Select Type</option>
-              <option value="4">4 October</option>
-              <option value="5">5 October</option>
-              <option value="6">6 October</option>
-              <option value="4,5">4,5 October</option>
-              <option value="5,6">5,6 October</option>
-              <option value="4,6">4,6 October</option>
-              <option value="4,5,6">4,5,6 October</option>
+              <option value="4">15 December</option>
+              <option value="5">16 December</option>
+              <option value="6">17 December</option>
+              <option value="4,5">15,16 December</option>
+              <option value="5,6">15,17 December</option>
+              <option value="4,6">16,17 December</option>
+              <option value="4,5,6">15,16,17 December</option>
             </select>
           </div>
 
@@ -311,7 +313,7 @@ const Forms = () => {
               <div className="mb-4">
                 <p>
                   <b>Amount:</b>{" "}
-                  {selectedAccommodation === "Single" ? "Rs. 1500" : "Rs. 3000"}
+                  {selectedAccommodation === "Single" ? "Rs. 3000" : "Rs. 6000"}
                 </p>
               </div>
               {selectedEvent === "Shiksha MahaKumbh 2024" && (
@@ -331,7 +333,7 @@ const Forms = () => {
                   </p>
                   <Image
                     className="p-2"
-                    src="/fee.png"
+                    src="/mahakumbh.png"
                     alt="Fee"
                     height={500}
                     width={500}
@@ -343,7 +345,7 @@ const Forms = () => {
                   <p>
                     <b>Account Name:</b> Shiksha Kumbh
                     <br />
-                    <b>Account No.:</b> 42563561350
+                    <b>Account No.:</b> 42563560855
                     <br />
                     <b>Bank:</b> State Bank of India
                     <br />
@@ -355,7 +357,7 @@ const Forms = () => {
                   </p>
                   <Image
                     className="p-2"
-                    src="/fee.png"
+                    src="/kumbh.png"
                     alt="Fee"
                     height={500}
                     width={500}
