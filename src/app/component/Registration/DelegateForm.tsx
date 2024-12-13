@@ -98,7 +98,9 @@ const RegistrationForm = () => {
     }
 
     try {
-      const response = await axios.post('/api/register', submissionData);
+     // const response = await fetch("http://localhost:5000/Conclave", {
+
+      const response = await axios.post('http://localhost:5000/delegate', submissionData);
       if (response.status === 200) {
         toast.success('Successfully Registered!');
         setFormData(initialFormData);

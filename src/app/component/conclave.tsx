@@ -7,8 +7,8 @@ const Conclaves: React.FC = () => {
       time: "14:30",
       events: [
         "VC/Directors' Conclave",
-        "Principals' Conclave",
-        "Entrepreneurs/Bureaucrats' Conclave",
+        "Principals and Innovative Teachers' Conclave",
+        "Entrepreneurs' Conclave",
         "Student Leaders' Conclave",
       ],
     },
@@ -19,6 +19,8 @@ const Conclaves: React.FC = () => {
         "Scientists' Conclave",
         "Social Media Influencers' Conclave",
         "Media Conclave",
+        "Student Leaders' Conclave",
+        "Principals and Innovative Teachers' Conclave"
       ],
     },
   ];
