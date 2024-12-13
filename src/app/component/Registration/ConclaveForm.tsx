@@ -50,26 +50,11 @@ const ConclaveForm = () => {
     setLoading(true);
 
     try {
-<<<<<<< HEAD
-      const response = await fetch("http://localhost:5000/Conclave", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formDataState),
-      });
-
-      if (response.ok) {
-        alert("Form submitted successfully!");
-      } else {
-        alert("Error submitting form");
-=======
       await addDoc(collection(db, 'ConclaveRegistrations'), formData);
       toast.success('Form submitted successfully!');
       setFormData(initialFormData); // Reset the form after successful submission
       if (formData.accommodation === 'yes') {
         setShowAccommodationButton(true); // Show the button if 'Yes' is selected
->>>>>>> ea14b588a85cb3495bb4a589e1210b4e17acf787
       }
     } catch (error) {
       console.error('Error submitting form:', error);
