@@ -7,7 +7,7 @@ const ConclaveForm = ({ formData, handleInputChange }: ConclaveFormProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await fetch("api/submit-conclave", {
+      const response = await fetch("http://localhost:5000/Conclave", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
