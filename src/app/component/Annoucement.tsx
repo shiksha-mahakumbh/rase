@@ -40,21 +40,36 @@ const Announcement = () => {
       <div className="flex flex-col items-center justify-center w-full">
         {/* First Component */}
         <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
-          <h2 className="mb-4 text-l font-semibold">Register to Participate in Shiksha Mahakumbh 2024</h2>
+         
+         {/* Paper Presentation Schedule */}
+         <span className='text-red-700 text-sm'>
+            <img src="new.gif" alt="" />
+          </span>
+          <h2 className="mb-4 text-l font-semibold">Paper Presentation Schedule</h2>
+          <button 
+           className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
+           onClick={() => window.open('/2024M/Program-Schedule-merged-pages.pdf', '_blank')}>
+           Click Here
+         </button>
+
+         <span className='text-red-700 text-sm'>
+            <img src="new.gif" alt="" />
+          </span>
+          
+          <h2 className="mb-4 text-l font-semibold">Tentative Schedule Shiksha Mahakumbh 2024</h2>
+          <button 
+           className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
+           onClick={() => window.open('/2024M/Tentative Schedule SM24.xlsx', '_blank')}>
+           Click Here
+         </button>
+
+         <h2 className="mb-4 text-l font-semibold">Register to Participate in Shiksha Mahakumbh 2024</h2>
           <button 
             className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
             onClick={() => window.location.href = '/registration/Single_Registration'}>
             Click Here
           </button>
-          <span className='text-red-700 text-sm'>
-            <img src="new.gif" alt="" />
-          </span>
-          <h2 className="mb-4 text-l font-semibold">Tentative Schedule Shiksha Mahakumbh 2024</h2>
-          <button 
-  className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
-  onClick={() => window.open('/2024M/Tentative Schedule SM24.xlsx', '_blank')}>
-  Click Here
-</button>
+         
 
         </div>
         {/* Second Component */}
