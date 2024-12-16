@@ -40,6 +40,7 @@ const NavBar: React.FC = () => {
       path: "/",
       title: "Events",
       subMenu: [
+        
         { path: "/pastevent", title: "Past Events" },
         { path: "/upcomingevent", title: "Upcoming Events" },
       ],
@@ -72,7 +73,7 @@ const NavBar: React.FC = () => {
     { path: "/paper", title: "Paper Submission" },
     { path: "/ContactUs", title: "Contact Us"},
     
-    { path: "/feedback", title: "Feedback" },
+    { path: "/2024M/Abstract Booklet.pdf", title: "Proceeding" },
       
      
     { path: "/Best_Wishes", title: "Wishes Received" },
