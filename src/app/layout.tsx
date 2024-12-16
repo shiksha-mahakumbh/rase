@@ -89,10 +89,20 @@ export default function RootLayout({
 
         {/* Modal Component */}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <div className="text-white p-2 rounded-lg flex justify-center text-center text-base md:text-xl font-semibold bg-primary">
-            The date of शिक्षा महाकुंभ 2.0 is finalised and now it’s going to happen on December 16-17, 2024. Register to participate at shikshamahakumbh.com & rase.co.in
+          <div className="text-white p-4 rounded-lg flex flex-col items-center justify-center text-center text-base md:text-xl font-semibold bg-primary">
+            <p>
+                To watch the live broadcast of <strong>शिक्षा महाकुंभ 2.0</strong>, visit the <strong>अधिकृत यूट्यूब चैनल</strong>:
+            </p>
+            <p>
+             <a href="https://youtube.com/@shikshamahakumbh?si=Q5UUoP5RiG2Dw1y1" className="text-white">
+                youtube.com/@shikshamahakumbh
+             </a>
+            </p>
           </div>
         </Modal>
+
+
+
 
         {/* Toaster for notifications */}
         <Toaster position="top-right" />
