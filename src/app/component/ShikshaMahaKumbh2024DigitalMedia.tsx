@@ -22,6 +22,11 @@ interface MediaItem1 {
 
 const media: MediaItem[] = [
   {
+    name: "Shiksha Mahakumbh",
+    url: "https://www.youtube.com/live/gUWl_xMBU2o?si=qRA1rNUokmE2SbY5",
+    description:"कुरुक्षेत्र: कुरुक्षेत्र विश्वविद्यालय में 2 दिवसीय शिक्षा महाकुंभ की हुई शुरुआत",
+  },
+  {
     name: "Shiksha Mahakumbh: A Global Platform For Holistic Education",
     url: "https://www.businessworld.in/article/shiksha-mahakumbh-a-global-platform-for-holistic-education-534917",
     description: "Dr. Thakur Sudesh Kumar Raunija, a distinguished ISRO scientist and committed social worker who is the man behind the world’s unique platform i.e. Shiksha Mahakumbh Abhiyan in conversation with BW Team, sharing his views on this Abhiyan",
