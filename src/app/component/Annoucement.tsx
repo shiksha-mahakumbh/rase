@@ -48,7 +48,7 @@ const Announcement = () => {
           <h2 className="mb-4 text-l font-semibold">Paper Presentation Schedule</h2>
           <button 
            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
-           onClick={() => window.open('/2024M/Program-Schedule-merged-pages.pdf', '_blank')}>
+           onClick={() => window.open('/2024M/Abstract Booklet.pdf', '_blank')}>
            Click Here
          </button>
 
