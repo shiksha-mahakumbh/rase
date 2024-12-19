@@ -9,11 +9,24 @@ interface Item {
 }
 
 const items: Item[] = [
+  
   {
     imageUrl: "/new.gif",
     text: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024। आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन किया जाएगा",
     link: "https://www.rase.co.in/Press2",
   },
+ 
+  
+  // {
+  // imageUrl: "/new.gif",
+  // text: "To watch live शिक्षा महाकुंभ 2.0, visit अधिकृत यूट्यूब चैनल @ https://youtube.com/@shikshamahakumbh?si=Q5UUoP5RiG2Dw1y1",
+  // link: "https://youtube.com/@shikshamahakumbh?si=Q5UUoP5RiG2Dw1y1",
+  // },
+
+
+  
+
+
   {
     imageUrl: "/new.gif",
     text: "The date of शिक्षा महाकुंभ 2.0 is finalised and now it’s going to happen on December 16-17, 2024. Register to participate at shikshamahakumbh.com & rase.co.in",

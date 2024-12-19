@@ -6,6 +6,7 @@ import proceeding1 from '/public/2024M/press2.jpg';
 import proceeding2 from '/public/2024M/press1.jpg';
 import proceeding3 from '/public/2024M/res/res9.jpg';
 import proceeding4 from '/public/2024M/press4.jpg';
+import proceeding5 from '/public/2024M/press5.jpg';
 
 
 const { Meta } = Card;
@@ -26,6 +27,16 @@ const Proceedings: React.FC = () => {
   }, []);
 
   const cardData = [
+    {
+      title: `राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा`,
+      description: `राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा
+कुवि में डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन, चंडीगढ़ तथा केयू के संयुक्त तत्वावधान में ‘वैश्विक विकास के लिए भारतीय शिक्षा प्रणाली’ विषय पर दो दिवसीय शिक्षा महाकुंभ का हुआ सफल समारोप
+कुरुक्षेत्र, 17 दिसम्बर। `,
+      image: proceeding5,
+      // previewLink: '/Press1.pdf',
+      // downloadLink: '/Press1.pdf',
+      readLink: '/Press5' // Link to the TSX file or page
+    },
     {
       title: `"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन"`,
       description: `शिक्षा महाकुंभ 2.0 की तैयारियों के अंतर्गत सुबह 7:30 बजे UIET, कुरुक्षेत्र विश्वविद्यालय में "हवन रश्म" का आयोजन किया गया।`,

@@ -22,6 +22,32 @@ interface MediaItem1 {
 
 const media: MediaItem[] = [
   {
+    name: "Shiksha Mahakumbh, Kurukshetra",
+    url: "https://www.businessworld.in/article/two-days-shiksha-mahakumbh-2024-concludes-at-kurukshetra-university-542370",
+    description:"Two Days Shiksha Mahakumbh 2024 Concludes At Kurukshetra University",
+  },
+  {
+    name: "Shiksha Mahakumbh, Kurukshetra",
+    url: "https://www.facebook.com/share/v/14i5jXSmQn/?mibextid=qi2Omg",
+    description:"Kurukshetra: दो दिवसीय शिक्षा महाकुंभ का सफल समापन, पूर्व सांसद प्रों राकेश सिन्हा ने की शिरकत",
+  },
+  
+  {
+    name: "Shiksha Mahakumbh, Kurukshetra",
+    url: "https://www.facebook.com/story.php?story_fbid=599799985921691&id=100076750840706&mibextid=wwXIfr&rdid=n1HmhTwuENoqJ3id#",
+    description:"व्यक्ति के निर्माण में शिक्षा का महत्वपूर्ण योगदान : प्रो. राकेश सिन्हा नई शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मान : प्रोफेसर सोमनाथ सचदेवा कुवि में डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन, चंडीगढ़ तथा केयू के संयुक्त तत्वावधान में ‘वैश्विक विकास के लिए भारतीय शिक्षा प्रणाली’ विषय पर दो दिवसीय शिक्षा महाकुंभ का हुआ सफल समारोप",
+  },
+  {
+    name: "Shiksha Mahakumbh, Kurukshetra",
+    url: "https://www.facebook.com/100081554163046/videos/kurukshetra-2-%E0%A4%A6%E0%A4%BF%E0%A4%B5%E0%A4%B8%E0%A5%80%E0%A4%AF-%E0%A4%B6%E0%A4%BF%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A4%BE-%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%95%E0%A5%81%E0%A4%82%E0%A4%AD-%E0%A4%95%E0%A5%80-%E0%A4%B6%E0%A5%81%E0%A4%B0%E0%A5%81%E0%A4%86%E0%A4%A4-30-%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%8D%E0%A4%B5%E0%A4%B5%E0%A4%BF%E0%A4%A6%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%B2%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%95%E0%A5%87-%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A4%E0%A4%BF%E0%A4%A8%E0%A4%BF%E0%A4%A7%E0%A4%BF-%E0%A4%B6%E0%A4%BE/928070072755495/?mibextid=wwXIfr&rdid=t52zSIcfteLdgUpn",
+    description:"Kurukshetra: 2 दिवसीय शिक्षा महाकुंभ की शुरुआत, 30 विश्वविद्यालयों के प्रतिनिधि शामिल",
+  },
+  {
+    name: "Shiksha Mahakumbh",
+    url: "https://www.facebook.com/share/v/19vu47uZeT/",
+    description:"कुरुक्षेत्र: कुरुक्षेत्र विश्वविद्यालय में 2 दिवसीय शिक्षा महाकुंभ की हुई शुरुआत",
+  },
+  {
     name: "Shiksha Mahakumbh",
     url: "https://www.youtube.com/live/gUWl_xMBU2o?si=qRA1rNUokmE2SbY5",
     description:"कुरुक्षेत्र: कुरुक्षेत्र विश्वविद्यालय में 2 दिवसीय शिक्षा महाकुंभ की हुई शुरुआत",
