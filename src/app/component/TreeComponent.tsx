@@ -136,7 +136,7 @@ const GridComponent: React.FC = () => {
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Campaign Photos:</p>
+                    <p className="font-semibold">Shiksha Mahakumbh Photos:</p>
                     <Link href="https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
