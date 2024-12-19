@@ -121,7 +121,7 @@ const GridComponent: React.FC = () => {
             <div className="space-y-4 ">
               {/* Most recent event with campaign and day photos */}
               <div className="text-center bg-primary rounded-lg">
-                <Link href="https://sm24.rase.co.in" passHref>
+                <Link href="https://rase.co.in" passHref>
                   <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                     2024
                   </button>
@@ -132,6 +132,14 @@ const GridComponent: React.FC = () => {
                     <Link href="/RASE_2023_1ST_EDITION_Campaign.pdf" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Details
+                      </button>
+                    </Link>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-semibold">Campaign Photos:</p>
+                    <Link href="https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN" passHref>
+                      <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
+                        View Photos
                       </button>
                     </Link>
                   </div>
