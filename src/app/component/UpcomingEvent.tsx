@@ -12,9 +12,9 @@ interface Event {
 // JSON data
 const events: Event[] = [
   {
-    title: "Indian Education System for Global Development",
-    date: "Dec 16-17, 2024",
-    venue: "Kurukshetra University, Thanesar,Kurukshetra, Haryana",
+    title: "Shiksha Mahakumbh 2025",
+    date: "Will be updated soon",
+    venue: "Jawaharlal Nehru University",
     link: "/registration/Single_Registration"
   },
   {
@@ -23,12 +23,7 @@ const events: Event[] = [
     venue: "Indian Institute of Technology Jammu",
     link: "/registration/Single_Registration"
   },
-  {
-    title: "Shiksha Mahakumbh 2025",
-    date: "Will be updated soon",
-    venue: "Jawaharlal Nehru University",
-    link: "/registration/Single_Registration"
-  }
+  
 ];
 
 // Define the type for props

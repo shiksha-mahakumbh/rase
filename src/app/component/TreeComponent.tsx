@@ -46,7 +46,7 @@ const GridComponent: React.FC = () => {
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Campaign Photos:</p>
+                    <p className="font-semibold">Shiksha Mahakumbh Photos</p>
                     <Link href="https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
@@ -93,7 +93,7 @@ const GridComponent: React.FC = () => {
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Campaign Photos:</p>
+                    <p className="font-semibold">Shiksha Mahakumbh Photos</p>
                     <Link href="https://drive.google.com/drive/folders/1T5HOcgbHQs6MNouIiWb0i4DGkrRd23vY" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
@@ -136,7 +136,7 @@ const GridComponent: React.FC = () => {
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Campaign Photos:</p>
+                    <p className="font-semibold">Shiksha Mahakumbh Photos</p>
                     <Link href="https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
@@ -191,7 +191,7 @@ const GridComponent: React.FC = () => {
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Campaign Photos:</p>
+                    <p className="font-semibold">Shiksha Mahakumbh Photos</p>
                     <Link href="https://drive.google.com/drive/folders/1u_rgXNeYBuwnLae7irG4NiHgEil69j16?usp=sharing" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
