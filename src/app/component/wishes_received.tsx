@@ -5,12 +5,13 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import {firebaseConfig} from "@/app/firebase";
 const speakers = [
+
   {
     id: 1,
-    name: "Shri Dharmendra Pradhan ",
-    designation: "Hon'ble Education Minister, Bharat",
-    place: "The Hon'ble minister conveys best wishes for the success of the programme ",
-    imageSrc: "/2024M/cheifguests/educationminister.jpg",
+    name: "Prof. Abhay Kumar Singh",
+    designation: "Vice Chancellor, Nalanda University",
+    place: "The Hon'ble sir congratulates and wishes best for the event ",
+    imageSrc: "/2024M/cheifguests/nalanda.jpg",
   },
   {
     id: 1,
