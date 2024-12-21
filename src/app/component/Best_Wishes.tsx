@@ -8,19 +8,19 @@ const MediaGrid: React.FC = () => {
 
   // Grouped media items by title with years
   const items = [
-    // {
-    //   label: "Shiksha Kumbh",
-    //   years: [
-    //     {
-    //       year: "2025",
-    //       children: [
-    //         { label: "Wishes Received", link: "/comingsoon" },
+    {
+      label: "Shiksha Kumbh",
+      years: [
+        {
+          year: "2025",
+          children: [
+            { label: "Wishes Received", link: "/comingsoon" },
             
-    //       ],
+          ],
         
-    //     },
-    //   ],
-    // },
+        },
+      ],
+    },
     {
       label: "Shiksha Mahakumbh",
       years: [
