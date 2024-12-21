@@ -4,9 +4,9 @@ import Link from "next/link";
 // Define the table data as an array of objects
 const pastEvents = [
   {
-    title: "Role of Academic-driven Startups in Developing Economy of J&K",
-    date: "June 29-30, 2024",
-    venue: "National Institute of Technology Srinagar",
+    title: "International Conference on the Indian Education System for Global Development",
+    date: "December 16 -17, 2024",
+    venue: "Kurukshetra University",
     link: "past_event/sm24",
   },
 
