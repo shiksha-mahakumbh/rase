@@ -7,6 +7,13 @@ const pastEvents = [
     title: "Role of Academic-driven Startups in Developing Economy of J&K",
     date: "June 29-30, 2024",
     venue: "National Institute of Technology Srinagar",
+    link: "past_event/sm24",
+  },
+
+  {
+    title: "Role of Academic-driven Startups in Developing Economy of J&K",
+    date: "June 29-30, 2024",
+    venue: "National Institute of Technology Srinagar",
     link: "past_event/sk24",
   },
   // {
