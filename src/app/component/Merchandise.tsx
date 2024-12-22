@@ -31,15 +31,7 @@ const merchandiseItems = [
     ],
     price: 200,
   },
-  // {
-  //   id: 4,
-  //   title: "Pen",
-  //   slides: [
-  //     { src: '/merchandise/pen/1.jpg', alt: 'Pen Image 1', legend: '' },
-  //     { src: '/merchandise/pen/2.jpg', alt: 'Pen Image 2', legend: '' },
-  //   ],
-  //   price: 50,
-  // },
+ 
   {
     id: 5,
     title: "Bag",
