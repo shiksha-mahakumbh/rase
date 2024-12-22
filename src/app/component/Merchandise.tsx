@@ -12,7 +12,7 @@ const merchandiseItems = [
       { src: "/merchandise/tshirt/3.jpg", alt: "T-shirt Image 2", legend: "" },
       { src: "/merchandise/tshirt/2.jpg", alt: "T-shirt Image 3", legend: "" },
     ],
-    price: 350,
+    price: 500,
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const merchandiseItems = [
     slides: [
       { src: "/merchandise/mug/1.jpg", alt: "Mug Image 1", legend: "" },
     ],
-    price: 120,
+    price: 200,
   },
   {
     id: 3,
@@ -29,17 +29,17 @@ const merchandiseItems = [
       { src: '/merchandise/cap/1.jpg', alt: 'Cap Image 1', legend: '' },
       { src: '/merchandise/cap/1.jpg', alt: 'Cap Image 2', legend: '' },
     ],
-    price: 150,
+    price: 200,
   },
-  {
-    id: 4,
-    title: "Pen",
-    slides: [
-      { src: '/merchandise/pen/1.jpg', alt: 'Pen Image 1', legend: '' },
-      { src: '/merchandise/pen/2.jpg', alt: 'Pen Image 2', legend: '' },
-    ],
-    price: 50,
-  },
+  // {
+  //   id: 4,
+  //   title: "Pen",
+  //   slides: [
+  //     { src: '/merchandise/pen/1.jpg', alt: 'Pen Image 1', legend: '' },
+  //     { src: '/merchandise/pen/2.jpg', alt: 'Pen Image 2', legend: '' },
+  //   ],
+  //   price: 50,
+  // },
   {
     id: 5,
     title: "Bag",

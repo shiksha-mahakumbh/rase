@@ -37,16 +37,9 @@ const GridComponent: React.FC = () => {
                   </button>
                 </Link>
                 <div className="mt-2">
+                  
                   <div className="text-center">
-                    <p className="font-semibold">Campaign Detailed View:</p>
-                    <Link href="/RASE_2023_2nd_EDITION_Campaign.pdf" passHref>
-                      <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
-                        View Details
-                      </button>
-                    </Link>
-                  </div>
-                  <div className="text-center">
-                    <p className="font-semibold">Shiksha Mahakumbh Photos</p>
+                    <p className="font-semibold">Day 1 Photos:</p>
                     <Link href="https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
@@ -54,7 +47,7 @@ const GridComponent: React.FC = () => {
                     </Link>
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold">Day 1 Photos:</p>
+                    <p className="font-semibold">Day 2 Photos:</p>
                     <Link href="https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk" passHref>
                       <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                         View Photos
@@ -127,14 +120,7 @@ const GridComponent: React.FC = () => {
                   </button>
                 </Link>
                 <div className="mt-2">
-                  <div className="text-center">
-                    <p className="font-semibold">Campaign Detailed View:</p>
-                    <Link href="/RASE_2023_1ST_EDITION_Campaign.pdf" passHref>
-                      <button className="bg-primary p-1 rounded-lg tracking-widest hover:bg-white hover:text-primary">
-                        View Details
-                      </button>
-                    </Link>
-                  </div>
+                
                   <div className="text-center">
                     <p className="font-semibold">Shiksha Mahakumbh Photos:</p>
                     <Link href="https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN" passHref>

@@ -73,7 +73,7 @@ const NavBar: React.FC = () => {
     { path: "/paper", title: "Paper Submission" },
     { path: "/ContactUs", title: "Contact Us"},
     
-    { path: "/2024M/Abstract Booklet.pdf", title: "Proceeding" },
+    // { path: "/2024M/Abstract Booklet.pdf", title: "Proceeding" },
       
      
     { path: "/Best_Wishes", title: "Wishes Received" },
