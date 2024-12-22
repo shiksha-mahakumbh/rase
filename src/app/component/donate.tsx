@@ -100,7 +100,7 @@ const Donate: React.FC = () => {
         bank: "State Bank of India",
         branch: "Chandigarh Main Branch",
         ifscCode: "SBIN0000628",
-        upiId: "shikshakhumb@sbi",
+        upiId: "shikshakhumbh@sbi",
     };
 
     const sponsorshipLinksLeft: SponsorshipLinks = {
