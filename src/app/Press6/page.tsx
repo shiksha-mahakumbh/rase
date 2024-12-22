@@ -9,7 +9,7 @@ import Image from "next/image";
 
 const shareUrl = encodeURIComponent("https://www.rase.co.in/Press6"); // Replace with your actual page URL
 const shareText = encodeURIComponent("Shiksha Mahakumbh 2024 begins at Kurukshetra University");
-const shareImage = "/2024M/press6.jpg";
+const shareImage = "/2024M/Press7.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "6",
