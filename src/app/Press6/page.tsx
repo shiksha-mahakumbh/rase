@@ -3,44 +3,38 @@ import React from "react";
 import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
 import NavBar from "../component/NavBar";
-import Press5 from "../component/Press5";
+import Press5 from "../component/Press6";
 import proceeding5 from '/public/2024M/press5.jpg';
 import Image from "next/image";
 
-const shareUrl = encodeURIComponent("https://www.rase.co.in/Press5"); // Replace with your actual page URL
-const shareText = encodeURIComponent("राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा");
-const shareImage = "/2024M/press5.jpg";
+const shareUrl = encodeURIComponent("https://www.rase.co.in/Press6"); // Replace with your actual page URL
+const shareText = encodeURIComponent("Shiksha Mahakumbh 2024 begins at Kurukshetra University");
+const shareImage = "/2024M/press6.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
-  Press: "5",
-  image:"/2024M/press5.jpg",
+  Press: "6",
+  image:"/2024M/press7.jpg",
   title: ``,
   sections: [
     {
-      title: "राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा",
+      title: 'Human behaviour has indispensable role in Indian education: Swami Gyananand, Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Satish Kumar',
       content: [
-        `राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा
-कुवि में डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन, चंडीगढ़ तथा केयू के संयुक्त तत्वावधान में ‘वैश्विक विकास के लिए भारतीय शिक्षा प्रणाली’ विषय पर दो दिवसीय शिक्षा महाकुंभ का हुआ सफल समारोप
-कुरुक्षेत्र, 17 दिसम्बर। राज्यसभा के पूर्व सांसद प्रो. राकेश सिन्हा ने कहा कि व्यक्ति के निर्माण में शिक्षा का महत्वपूर्ण योगदान है। शिक्षा देना पाठ्यक्रम पढ़ाना नहीं अपितु व्यक्ति निर्माण करना है। यही भारतीय ज्ञान परम्परा का आधार भी रहा है। हमारी परम्परा में न ज्ञान ठहरता है न संस्कृति बल्कि ज्ञान परम्परा का निरंतर चलती रहती है। विद्या भारती शैक्षणिक संस्थानों में शिक्षा ग्रहण कर रहे विद्यार्थियों के व्यवहार और आचरण को देखकर सकारात्मक संचरण हो रहा है। शिक्षा के क्षेत्र में विद्या भारती अद्वितीय कार्य कर रहा है जिससे विद्या भारती की महत्ता और आवश्यकता बढ़ती जा रही है। वे मंगलवार को डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन, चंडीगढ़ तथा कुरुक्षेत्र विश्वविद्यालय के संयुक्त तत्वावधान में कुवि के डॉ. आरके सदन में ‘वैश्विक विकास के लिए भारतीय शिक्षा प्रणाली’ विषय पर आयोजित दो दिवसीय शिक्षा महाकुंभ के समारोप सत्र में बतौर मुख्यातिथि बोल रहे थे। प्रो. राकेश सिन्हा ने कहा कि जिस जानकारी से हमारी सोच, चिंतन व हमारी समझ परिपक्वता पाती है और जिस जानकारी से समाज की आर्थिक, सामाजिक व सांस्कृतिक वातावरण में प्रभाव पड़ने लगता है उसको ज्ञान कहते हैं। ज्ञान के धारक की पात्रता सामान्य लोगों से अलग होती है क्योंकि उसमें निडरता का भाव होता है वह भय मुक्त होता है। वह पढ़ते, सोचते व अभिव्यक्त करते समय सिर्फ आने वाली पीढ़ियों को देखता है वर्तमान को नहीं देखता। उसके शब्दों में पीढ़ियों के लिए उन्नति के मार्ग का बीज होता है। ज्ञान मार्ग पर चलने वाला व्यक्ति हमेशा सर्वंत सुखाय की बात करता है। इस अवसर पर सभी अतिथियों द्वारा दो दिवसीय शिक्षा महाकुंभ की विस्तृत स्मारिका का भी विमोचन किया गया।
-कुरुक्षेत्र विश्वविद्यालय के कुलपति प्रो. सोमनाथ सचदेवा ने सभी अतिथियों का स्वागत करते हुए कहा कि राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मान है तथा यह विद्यार्थियों में देशभक्ति व राष्ट्रीय गौरव की भावना को बढ़ावा देने का काम करती है। राष्ट्रीय शिक्षा नीति-2020 द्वारा दी जा रही शिक्षा छात्रों का बौद्धिक, नैतिक व आध्यात्मिक विकास को पोषित करती है। शिक्षा में भारतीय मूल्यों और संस्कृति को एकीकृत करती है। केयू ने राष्ट्रीय शिक्षा नीति-2020 को इसके सभी प्रावधानों साथ न केवल कैम्पस में बल्कि सभी संबंधित कॉलेजों में पूरे देश में सबसे पहले लगाया है। इस महाकुंभ के अमृत द्वारा हम वैश्विक विकास और विश्व कल्याण के लिए अपना योगदान व प्रयोग करने में सफल होंगे।
-इसरो के प्रतिष्ठित वैज्ञानिक एवं विद्या भारती के सचिव डॉ. सुदेश ठाकुर ने दो दिवसीय शिक्षा महाकुंभ की विस्तृत रिपोर्ट को प्रस्तुत करते हुए बताया कि इसके अंतर्गत 9 कनक्लेव आयोजित की गई व 81 पत्र पढ़े गए तथा हरियाणा, पंजाब व चंडीगढ़ के 25 शैक्षणिक संस्थान इसके सह-आयोजक बने।
-विद्या भारती के अखिल भारतीय संगठन मंत्री गोबिंद चंद महंत ने कहा कि विद्या भारती अपने प्रयासों से विद्यालय के माध्यम से शिक्षा व्यवस्था में परिवर्तन लाने का प्रयास कर रही है। भारतीय जीवन दर्शन एवं भारतीय मनोविज्ञान की दृष्टि से विद्यालय व विश्वविद्यालयों में शिक्षा होनी चाहिए। उन्होंने एनईपी को सही रूप में क्रियान्वित कर सतत् विकास की आरे जाने की बात भी कही।
-पूर्व कुलपति प्रो. केजी सुरेश ने कहा कि विद्या भारती द्वारा उत्कृष्ट राष्ट्र के लिए नागरिकों को तैयार किया जा रहा है। भारत विश्व को ज्योति दिखाने का कार्य कर रहा है। शिक्षा का उद्देश्य मात्र नौकरी, जीवन यापन नहीं हैं हमें इसके मूल भाव को समझना होगा। भारतीय ज्ञान परम्परा में विश्व व भारत की सभी समस्याओं का समाधान निहित है। अंत में डॉ. शमशेर सिंह ने सभी अतिथियों धन्यवाद ज्ञापित किया।
-कार्यक्रम के अंत में कुवि कुलसचिव प्रोफेसर संजीव शर्मा, आरएसएस वरिष्ठ प्रचारक विजय कुमार नड्डा, शिक्षाविद् देशराज शर्मा, सुरेन्द्र अत्री, डॉ. शमशेर सिंह, उपाध्यक्ष चेतराम, ऋषिराज वशिष्ठ, नोडल ऑफिसर एवं यूआईईटी निदेशक प्रो. सुनील ढींगरा, लोक सम्पर्क विभाग के निदेशक प्रो. महासिंह पूनिया,उपनिदेशक डॉ. जिम्मी शर्मा, डॉ. जितेश पांडे, डॉ. अर्चना, डॉ. राजेश अग्निहोत्री, मनोज तेवतिया, संजय चौधरी, विकास शर्मा, शिक्षा शर्मा, डॉ. पवन दीवान, डॉ. धीरेन्द्र, कृष्णा पांडे, डॉ. दिग्विजय सिंह, हरिकेश पपोसा सहित विभिन्न शैक्षणिक संस्थानों के निदेशक, प्रतिनिधि, शिक्षक एवं विद्यार्थी मौजूद रहे।
+        `Indian Knowledge System integral part of NEP 2020: VC KUK
+Kurukshetra, 16 December. Kurukshetra University, Kurukshetra organized the inaugural session of two-day Shiksha Maha Kumbh 2024 on 'Indian Education System for Global Development' under the joint aegis of Department of Holistic Education, Chandigarh. In the inaugural session, the Chief Guest, Gita Manishi Swami Gyananand Maharaj said that the knowledge of books and experiential learning help bring out the inner consciousness and awareness which is usually covered within layers of materialism. Swami added that human behaviour has indispensable role in Indian education system which nurtures the humane values of goodness in a person. The keynote speaker, Sh Satish Kumar, Sah Sanghatak, Swadeshi Jagran Manch said that for the development of Bharat, effective steps should be taken to encourage entrepreneurship and Sah Sanghatak Satish  added that entrepreneurship cells should be established in each college and university so that students become self reliant and job creators. Patron, Shiksha Mahakumbh and Vice Chancellor, Kurukshetra University, Prof Som Nath Sachdeva welcomed the Chief Guest Swami Gyananand Maharaj and all the dignitaries and said that Kurukshetra University is the first university of Haryana to implement NEP 2020 with all its provisions not only in the campus but also in all the affiliated colleges. Prof Sachdeva added that Indian Knowledge System is integrated in the various components of NEP 2020.
 
 ` ]
     },
     {
-      title: "बाक्स",
+      title: "General Secretary, Vidya Bharti, Desh Raj Sharma",
       content: [
         <b key="highlight-2">परिचय सत्र:</b>,
-        'कुलपति प्रो. सोमनाथ सचदेवा ने सफल आयोजन की दी बधाई कुरुक्षेत्र विश्वविद्यालय के कुलपति प्रो. सोमनाथ सचदेवा ने कुवि में डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन, चंडीगढ़ तथा केयू के संयुक्त तत्वावधान में ‘वैश्विक विकास के लिए भारतीय शिक्षा प्रणाली’ विषय पर आयोजित दो दिवसीय शिक्षा महाकुंभ के सफल समारोप के आयोजन के लिए इसके नोडल ऑफिसर एवं यूआईईटी निदेशक प्रो. सुनील ढींगरा सहित पूरी टीम के सभी संकाय सदस्यों को बधाई व शुभकामनाएं दी।',
+        'General Secretary, Vidya Bharti, Desh Raj Sharma gave the outline of Shiksha Mahakumbh. North Zone Sangathan Mantri Vidya Bharti, Vijay Kumar Nadda emphasized the importance of educational collaboration. My Home India Founder Sunil Deodhar said that the meaning of practicality of life was understood through the education system in Gurukul Ashram.',
       ]
     },
     {
-      title: "शिक्षा महाकुंभ बना नवाचार एवं उद्यमिता का केन्द्र",
+      title: "General Secretary, Akhil Bharatiya Vidya Sansthan,  Avnish Bhatnagar ",
       content: [
-        'स्टाल में विद्यार्थियों ने प्रस्तुत किए स्टार्टअप एवं नवाचार के मॉडल कुरुक्षेत्र, 17 दिसम्बर। कुरुक्षेत्र विश्वविद्यालय के डॉ. आरके सदन के प्रांगण में दो दिवसीय शिक्षा महाकुंभ के अतंर्गत लगाए गए स्टाल में स्कूली छात्रों ने स्टार्टअप एवं नवाचार मॉडल प्रस्तुत कर दैनिक जीवन की समस्याओं को निदान किया। गीता निकेतन आवासीय विद्यालय कुरुक्षेत्र के 11वीं कक्षा के छात्र रविन्द्र बराड़ ने रोबो कंस्ट्रक्टर मॉडल के माध्यम से बताया कि उनका यह मॉडल सड़कों के गहरे गड्ढों को भरने का आइडिया है। इस नवाचार के माध्यम से मशीन अपने आप गड्ढों की पहचान कर उसे ठीक करेगी। उन्होंने बताया कि यह नवाचार अभी प्रोटो टाइप स्टेज में है। इसके साथ हेल्दी पोस्चर हैप्पी लाइफ मॉडल में छात्र ने बैठने की सही स्थिति हेतु कुर्सी को प्रदर्शित किया जिसमें यदि व्यक्ति सही स्थिति में आसन ग्रहण नहीं करता तो वह बीप की आवाज देने लगती है। इसके साथ ही विद्यार्थियों द्वारा मूवेबल सोलर सिस्टम को भी प्रदर्शित किया गया।उन्होंने बताया कि वर्तमान में घरों, कार्यालयों में लगे सोलर सिस्टम एक जगह लगे होते है तथा जब धूप निकलती है तब धीरे-धीरे बिजली बनने लगती है। जबकि उनके द्वारा प्रदर्शित मूवेबल सोलर सिस्टम प्रकाश के अधिकतम प्रभाव की जांच कर सोलर सिस्टम सेंसर उसी दिशा में अपने आप घूम जाता है जिससे अधिक ऊर्जा मिल सके। गीता विद्या मंदिर, गोहाना से आए विद्यार्थी सक्षम, सहदेव व सुहानी ने बताया कि आरएफ आईडी तकनीक वर्तमान में बहुत प्रचलित है। उन्होंने इसी आधार पर डोर लॉक सिस्टम को प्रदर्शित किया है। उन्होंने बताया कि इस तकनीक को वर्तमान में टोल बैरियर इस्तेमाल किया जा रहा है जहां फास्टैग की रीडिंग के बाद गेट अपने आप खुल जाता है। वहीं गीता कन्या सीनियर सेकेंडरी स्कूल अमीन रोड़ की छात्रा जाह्न्वी ने बताया कि उनके मॉडल में खेत में मिट्टी की उर्वरता, पानी एवं हवा की नमी का सेंसर के द्वारा पता लगाकर आवश्यक पोषक तत्वों को पूरा किया जा सकता है जिससे खेती द्वारा किसान अच्छी फसल प्राप्त कर सकता है।'
+        `General Secretary, Akhil Bharatiya Vidya Sansthan,  Avnish Bhatnagar said that  Indian education works with the spirit of global welfare. At the end of the programme, KU Registrar Professor Sanjeev Sharma thanked all the guests. Deputy Director Public Relations Department Dr Jimmy Sharma informed that a plenary session was organised. In this session, Vice Chancellor Gurugram University, Prof. Dinesh Kumar,  Vice Chancellor, Central University, Mahendragarh, Prof. Tankeshwar Kumar, Vice Chancellor of CBLU, Prof. Deepti Dharmani were the eminent speakers. Dr Jimmy Sharma added that  VC/Directors' conclave, Principals' and innovative teachers' conclave, bureaucrats and entrepreneurs' conclave and student leaders' conclave were the key features of this programme.`
       ]
     
     },

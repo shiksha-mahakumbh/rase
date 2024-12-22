@@ -28,7 +28,7 @@ const Press5: React.FC<{ data: Data }> = ({ data }) => {
 
   return (
     <div className="proceeding-container p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-4xl font-bold text-center mb-8">व्यक्ति के निर्माण में शिक्षा का महत्वपूर्ण योगदान : प्रो. राकेश सिन्हा</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">Shiksha Mahakumbh 2024 begins at Kurukshetra University</h1>
       <h2 className="text-3xl font-semibold text-gray-800 mb-4">{data.title}</h2>
       <div className="image-container mb-8 flex justify-center">
         <Image
