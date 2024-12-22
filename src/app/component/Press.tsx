@@ -7,7 +7,7 @@ import proceeding2 from '/public/2024M/press1.jpg';
 import proceeding3 from '/public/2024M/res/res9.jpg';
 import proceeding4 from '/public/2024M/press4.jpg';
 import proceeding5 from '/public/2024M/press5.jpg';
-import proceeding6 from '/public/2024M/press7.jpg';
+import proceeding7 from '/public/2024M/press7.jpg';
 
 const { Meta } = Card;
 
@@ -31,7 +31,7 @@ const Proceedings: React.FC = () => {
       title: `Shiksha Mahakumbh 2024 begins at Kurukshetra University`,
       description: `Human behaviour has indispensable role in Indian education: Swami Gyananand
 Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Satish Kumar `,
-      image: proceeding6,
+      image: proceeding7,
       // previewLink: '/Press1.pdf',
       // downloadLink: '/Press1.pdf',
       readLink: '/Press6' // Link to the TSX file or page
