@@ -13,7 +13,7 @@ const shareImage = "/2024M/press6.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "6",
-  image:"/2024M/press7.jpg",
+  image:"/2024M/Press7.jpg",
   title: ``,
   sections: [
     {
