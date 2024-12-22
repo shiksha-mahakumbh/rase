@@ -17,6 +17,24 @@ import UpcomingEvent from "./component/UpcomingEvent";
 import NoticeBoard from "./component/NoticeBoard";
 const slides1 = [
   {
+    src: "/2024M/Press8.jpg",
+    alt: "Image 1",
+    legend:
+      'Release of the official abstract booklet "Indian Education for Global Development" ',
+  },
+  {
+    src: "/2024M/Press7.jpg",
+    alt: "Image 1",
+    legend:
+      "Swami Gyananand inaugrated the event by lighting the jyoti ",
+  },
+  {
+    src: "/2024M/Press6.jpg",
+    alt: "Image 1",
+    legend:
+      "Final closing press conference for the Shiksha Mhakumbh 2.0",
+  },
+  {
     src: "/2024M/baton/baton1.jpg",
     alt: "Image 1",
     legend:
