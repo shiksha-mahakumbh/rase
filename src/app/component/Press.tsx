@@ -7,7 +7,7 @@ import proceeding2 from '/public/2024M/press1.jpg';
 import proceeding3 from '/public/2024M/res/res9.jpg';
 import proceeding4 from '/public/2024M/press4.jpg';
 import proceeding5 from '/public/2024M/press5.jpg';
-import proceeding6 from '/public/2024M/press7.jpg';
+import proceeding6 from '/public/2024M/Press7.jpg';
 
 const { Meta } = Card;
 
