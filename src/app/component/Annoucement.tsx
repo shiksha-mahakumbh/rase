@@ -69,10 +69,13 @@ const Announcement = () => {
             onClick={() => window.location.href = '/registration/Single_Registration'}>
             Click Here
           </button>
+
+
+         
          
 
         </div>
-        {/* Second Component */}
+        {/* Second Component */ }
         {/* <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
           <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />&nbsp;Note&#58; The Last Date for Abstract Submission has been extended to  December 05, 2024.
