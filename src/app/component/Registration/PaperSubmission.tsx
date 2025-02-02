@@ -203,7 +203,7 @@ const PaperSubmission = () => {
         <p className="mt-4 text-justify text-black whitespace-pre-line">
           <div dangerouslySetInnerHTML={{ __html: about || "" }} />
         </p>
-        <table className="table-fixed max-width my-5">
+        {/* <table className="table-fixed max-width my-5">
           <thead>
             <tr className="bg-primary">
               <th className="w-1/3 p-2 border text-left text-white">
@@ -228,8 +228,8 @@ const PaperSubmission = () => {
               </tr>
             ))}
           </tbody>
-        </table>
-        <p className="mt-4 text-justify text-black">
+        </table> */}
+        {/* <p className="mt-4 text-justify text-black">
           The registration fee is to be paid online through RTGS/NEFT/IMPS/UPI/
           any other mode in favour of “Shiksha Mahakumbh”,
           <b>
@@ -239,7 +239,7 @@ const PaperSubmission = () => {
           The filled-in registration form along with the payment receipt should
           be sent to Convener <b>शिक्षा महाकुंभ 2024,</b> Central Secretariat of
           शिक्षा महाकुंभ, IIT Ropar, Rupnagar, Punjab-140001.
-        </p>
+        </p> */}
       </div>
     </div>
   );
