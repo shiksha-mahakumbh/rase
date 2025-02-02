@@ -112,7 +112,7 @@ const PaperSubmission = () => {
 
   For more information about Viksit Bharat & Viksit India journls, visit <a href="https://pub.dhe.org.in/" target="_blank" rel="noopener noreferrer" class="font-bold text-primary hover:underline">pub.dhe.org.in</a> .
   
-  <b>1st, 2nd and 3rd prize of ₹11000, ₹5100 , ₹2100 & ₹1100 consolation  will be given. Consolation prizes of ₹1100 each will be provided.</b>`;
+  `;
 
   return (
     <div className="bg-white p-6">
@@ -210,7 +210,7 @@ const PaperSubmission = () => {
         <p className="mt-4 text-justify text-black whitespace-pre-line">
           <div dangerouslySetInnerHTML={{ __html: about || "" }} />
         </p>
-        <table className="table-fixed max-width my-5">
+        {/* <table className="table-fixed max-width my-5">
           <thead>
             <tr className="bg-primary">
               <th className="w-1/3 p-2 border text-left text-white">
@@ -235,8 +235,8 @@ const PaperSubmission = () => {
               </tr>
             ))}
           </tbody>
-        </table>
-        <p className="mt-4 text-justify text-black">
+        </table> */}
+        {/* <p className="mt-4 text-justify text-black">
           The registration fee is to be paid online through RTGS/NEFT/IMPS/UPI/
           any other mode in favour of “Shiksha Mahakumbh”, <b>Account No. 42563560855 of State Bank of India, Chandigarh Branch
             (IFSC Code: SBIN0000628).
@@ -244,7 +244,7 @@ const PaperSubmission = () => {
           The filled-in registration form along with the payment receipt should
           be sent to Convener <b>शिक्षा महाकुंभ 2024,</b> Central Secretariat of
           शिक्षा महाकुंभ, Punjab-140001.
-        </p>
+        </p> */}
 
         <div>
           <br></br>
