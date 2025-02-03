@@ -46,9 +46,14 @@ const PaperSubmission = () => {
         </Link>
       ),
       chat1: (
-        <span className="mt-4 text-justify text-primary whitespace-pre-line cursor-pointer">
-          Will be uploaded soon
-        </span>
+        // <span className="mt-4 text-justify text-primary whitespace-pre-line cursor-pointer">
+          <Link
+          className="mt-4 text-justify text-primary whitespace-pre-line underline"
+          href="//Guideline.docx"
+        >
+          Click here to view the full length paper guideline
+        </Link>
+        // </span>
       ),
     },
   ];
@@ -175,7 +180,7 @@ const PaperSubmission = () => {
         </div>
       </div>
 
-      <div>
+      {/* <div>
         <h2 className="text-xl font-semibold mb-4 text-primary">
           Paper Topics
         </h2>
@@ -194,7 +199,7 @@ const PaperSubmission = () => {
             </div>
           </Link>
         </div>
-      </div>
+      </div> */}
 
       <div>
         <h2 className="text-xl font-semibold text-primary">
