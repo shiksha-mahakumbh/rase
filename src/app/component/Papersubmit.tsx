@@ -47,7 +47,13 @@ const PaperSubmission = () => {
       ),
       chat1: (
         <span className="mt-4 text-justify text-primary whitespace-pre-line cursor-pointer">
-          Will be uploaded soon
+         
+          <Link
+          className="mt-4 text-justify text-primary whitespace-pre-line underline"
+          href="/Guideline.docx"
+        >
+          Click here to view the full length paper guideline
+        </Link>
         </span>
       ),
     },
@@ -106,12 +112,8 @@ const PaperSubmission = () => {
     },
     
   ];
-  const about = `An effort will be made to publish the selected papers in Scopus Indexed/UGC  care listed journals after apeer review process by Conference Editorial Board and concerned Journal Editorial Board. The paperswhich are not selected in the Journals of above categories, will be considered for emerging ‘Viksit Bharat’& ‘Viksit India’ journals or Book Chapter with ISBN number after a peer review process. All the acceptedabstracts (Who paid registration fee) will be published in Conference Proceeding with ISBN number. 
-
-  <b>Note:</b> There is no cash prize for other categories. Only trophies will be awarded in categories other than paper submission.
-
-  For more information about Viksit Bharat & Viksit India journls, visit <a href="https://pub.dhe.org.in/" target="_blank" rel="noopener noreferrer" class="font-bold text-primary hover:underline">pub.dhe.org.in</a> .
-  
+  const about = `An effort will be made to publish the selected papers in Scopus Indexed/UGC  care listed journals after apeer review process by Conference Editorial Board and concerned Journal Editorial Board. The papers which are not selected in the Journals of above categories, will be considered for emerging ‘Viksit Bharat’ & ‘Viksit India’ journals or Book Chapter with ISBN number after a peer review process. All the accepted abstracts (Who paid registration fee) will be published in Conference Proceeding with ISBN number. 
+    For more information about Viksit Bharat & Viksit India journals, visit <a href="https://pub.dhe.org.in/" target="_blank" rel="noopener noreferrer" class="font-bold text-primary hover:underline">pub.dhe.org.in</a> .
   `;
 
   return (
@@ -182,7 +184,7 @@ const PaperSubmission = () => {
         </div>
       </div>
 
-      <div>
+      {/* <div>
         <h2 className="text-xl font-semibold mb-4 text-primary">
           Paper Topics
         </h2>
@@ -201,7 +203,7 @@ const PaperSubmission = () => {
             </div>
           </Link>
         </div>
-      </div>
+      </div> */}
 
       <div>
         <h2 className="text-xl font-semibold text-primary">

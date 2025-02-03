@@ -104,16 +104,17 @@ const Donate: React.FC = () => {
     };
 
     const sponsorshipLinksLeft: SponsorshipLinks = {
-        link1: "/2024K/ShikshaMahakumbh-Sponsorship1.pdf",
+        link1: "/2024K/Shiksha-Mahakumbh-25-sponsorship2.pdf",
         link1Text: "Sponsorship 1",
-        link2: "/2024K/ShikshaMahakumbh-Sponsorship2.pdf",
+        link2: "/2024K/SM-25-sponsorship-3.pdf (1).pdf",
         link2Text: "Sponsorship 2",
     };
 
     const sponsorshipLinksRight: SponsorshipLinks = {
-        link1: "/2024K/ShikshaKumbh-Sponsorship1.pdf",
+        link1: "/",
+       
         link1Text: "Sponsorship 1",
-        link2: "/2024K/ShikshaKumbh-Sponsorship2.pdf",
+        link2: "/",
         link2Text: "Sponsorship 2",
     };
 
