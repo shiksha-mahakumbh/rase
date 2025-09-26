@@ -85,10 +85,10 @@ export default function RootLayout({
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
 
         {/* ✅ Favicon & Logo */}
-        <link rel="icon" href="/src/app/favicon.ico" type="image/png" />
-        <link rel="apple-touch-icon" href="/src/app/favicon.ico" />
-        <meta property="og:image" content="https://www.rase.co.in/src/app/favicon.ico" />
-        <meta name="twitter:image" content="https://www.rase.co.in/src/app/favicon.ico" />
+        <link rel="icon" href="/public/sLogo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/public/sLogo.png" />
+        <meta property="og:image" content="https://www.rase.co.in/public/sLogo.png" />
+        <meta name="twitter:image" content="https://www.rase.co.in/public/sLogo.png" />
 
         {/* ✅ Social Media Preview (Open Graph) */}
         <meta property="og:title" content="शिक्षा महाकुंभ अभियान | Shiksha Mahakumbh Abhiyan" />
