@@ -4,10 +4,12 @@ import React, { useState, useEffect } from "react";
 const Info = () => {
   const text = `
   <h2 class="text-2xl font-bold text-[#502a2a] mb-4">शिक्षा महाकुंभ अभियान: A National Movement for Global Educational Transformation</h2>
+
   <p>
   शिक्षा महाकुंभ अभियान is a visionary multi-edition national movement conceptualised by visionary ISRO scientist and accomplished author 
   <strong>Dr. Thakur SKR</strong> under the guidance of <strong>Sh. Vijay Nadda</strong>, Visionary Educationist and Social Reformer, that unites leaders from across education, policy, industry, civil society, and the youth to reimagine and reform the <strong>Bhartiya education system</strong>—while contributing to the evolution of a globally equitable, future-ready learning ecosystem.
   </p>
+
   <p class="mt-2">
   Rooted in Bhartiya knowledge systems and aligned with global educational priorities, this initiative serves as a vibrant platform for collaboration, innovation, and action. It is designed to influence educational transformation not only in Bhartiya but across the globe—bringing together insights from local classrooms and global think tanks alike.
   </p>
