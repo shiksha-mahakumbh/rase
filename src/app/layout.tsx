@@ -1,11 +1,11 @@
 "use client";
-import './globals.css';
-import { Inter } from 'next/font/google';
-import { Toaster } from 'react-hot-toast'; // Toaster for notifications
+import "./globals.css";
+import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast"; 
 import { useState, useEffect } from "react";
-import Modal from './component/Modal'; // Import the modal component
+import Modal from "./component/Modal"; 
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 interface CustomWindow extends Window {
   localStream?: MediaStream;
@@ -19,18 +19,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(true); // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
-  // Open and close handlers for modal
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  // Handle microphone permissions
   const handlePermission = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -52,56 +45,94 @@ export default function RootLayout({
   };
 
   useEffect(() => {
-    // You can uncomment this to request permissions automatically
-    // handlePermission();
+    // handlePermission(); // Uncomment if you want auto mic permission
   }, []);
 
   return (
     <html lang="en">
       <head>
-        {process.env.NODE_ENV === 'production' && (
+        {/* ✅ Google AdSense */}
+        {process.env.NODE_ENV === "production" && (
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4330032354977759"
             crossOrigin="anonymous"
           ></script>
         )}
+
+        {/* ✅ Botpress Chatbot */}
         <script async src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
         <script
           async
           src="https://mediafiles.botpress.cloud/e2ba40e6-3b23-4f8d-a2f7-e2fbd8700925/webchat/config.js"
           defer
         ></script>
+
+        {/* ✅ SEO Optimized Metadata */}
+        <title>
+          शिक्षा महाकुंभ अभियान | Shiksha Mahakumbh Abhiyan – Annual International
+          Educational Conference
+        </title>
+        <meta
+          name="description"
+          content="Welcome to शिक्षा महाकुंभ अभियान – An initiative of Department of Holistic Education (DHE) in collaboration with INIs. Annual International Conference on Education, Research, Innovation & Indian Knowledge Systems, aligned with NEP 2020 and Bharat@2047 vision."
+        />
+        <meta
+          name="keywords"
+          content="शिक्षा महाकुंभ 2025, Shiksha Mahakumbh, Education Conference India, International Education Conclave Bharat, Vidya Bharti, Department of Holistic Education, NEP 2020, Indian Knowledge Systems, NIPER Mohali Events, Bharat@2047, Global Education Conference, Innovation in Education, Indian Education System, Holistic Learning"
+        />
+        <meta charSet="utf-8" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+
+        {/* ✅ Social Media Preview (Open Graph) */}
+        <meta property="og:title" content="शिक्षा महाकुंभ अभियान | Shiksha Mahakumbh Abhiyan" />
+        <meta
+          property="og:description"
+          content="Annual International Conference on Education, Research, Innovation & Indian Knowledge Systems, fostering Bharat@2047 vision."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.rase.co.in/" />
+        <meta property="og:image" content="https://www.rase.co.in/banner.jpg" />
+
+        {/* ✅ Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="शिक्षा महाकुंभ अभियान | Shiksha Mahakumbh Abhiyan"
+        />
+        <meta
+          name="twitter:description"
+          content="Annual International Conference on Education, Research, Innovation & Indian Knowledge Systems, fostering Bharat@2047 vision."
+        />
+        <meta name="twitter:image" content="https://www.rase.co.in/banner.jpg" />
+
+        {/* ✅ Caching Control */}
+        <meta httpEquiv="cache-control" content="no-cache" />
+        <meta httpEquiv="pragma" content="no-cache" />
+        <meta httpEquiv="expires" content="-1" />
+
+        {/* ✅ Google AdSense Verification */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-4330032354977759"
+        />
       </head>
-      <meta httpEquiv="refresh" content="1000" />
-      <meta charSet="utf-8" />
-      <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-      <title>Welcome to शिक्षा महाकुंभ अभियान। An initiative of DHE in collaboration with INIs to hold annual शिक्षा महाकुंभ। </title>
-      <meta name="keywords" content="RASE2023, RASE 2023, National Conference on Recent Advances in School Education, rase 2023, r a s e, mahakumbh 2024, mahakumbh 2023, महाकुंभ 2023, महाकुंभ 2024" />
-      <meta name="description" content="Joint Conference" />
-      <meta httpEquiv="cache-control" content="no-cache" />
-      <meta httpEquiv="Pragma" content="no-cache" />
-      <meta httpEquiv="Expires" content="-1" />
-      <meta name="google-adsense-account" content="ca-pub-4330032354977759" />
       <body className={inter.className}>
         {/* Main Content */}
         {children}
 
-        {/* Modal Component */}
+        {/* Modal */}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <div className="text-white p-4 rounded-lg flex flex-col items-center justify-center text-center text-base md:text-xl font-semibold bg-primary">
             <p>
-          <strong>शिक्षा महाकुंभ अभियान </strong>5th Edition is going to be held at NIPER Mohali from 31st October to 2nd November 2025
+              <strong>शिक्षा महाकुंभ अभियान</strong> – 5th Edition is going to be
+              held at <strong>NIPER Mohali</strong> from{" "}
+              <strong>31st October to 2nd November 2025</strong>.
             </p>
-            <p>
-                       </p>
           </div>
         </Modal>
 
-
-
-
-        {/* Toaster for notifications */}
+        {/* Notifications */}
         <Toaster position="top-right" />
       </body>
     </html>
