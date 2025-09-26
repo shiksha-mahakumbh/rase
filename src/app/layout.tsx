@@ -45,7 +45,7 @@ export default function RootLayout({
   };
 
   useEffect(() => {
-    // handlePermission(); // Uncomment if you want auto mic permission
+    // handlePermission(); // Uncomment if auto mic permission needed
   }, []);
 
   return (
@@ -84,6 +84,12 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
 
+        {/* ✅ Favicon & Logo */}
+        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+        <meta property="og:image" content="https://www.rase.co.in/logo.png" />
+        <meta name="twitter:image" content="https://www.rase.co.in/logo.png" />
+
         {/* ✅ Social Media Preview (Open Graph) */}
         <meta property="og:title" content="शिक्षा महाकुंभ अभियान | Shiksha Mahakumbh Abhiyan" />
         <meta
@@ -92,7 +98,6 @@ export default function RootLayout({
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.rase.co.in/" />
-        <meta property="og:image" content="https://www.rase.co.in/banner.jpg" />
 
         {/* ✅ Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -104,7 +109,6 @@ export default function RootLayout({
           name="twitter:description"
           content="Annual International Conference on Education, Research, Innovation & Indian Knowledge Systems, fostering Bharat@2047 vision."
         />
-        <meta name="twitter:image" content="https://www.rase.co.in/banner.jpg" />
 
         {/* ✅ Caching Control */}
         <meta httpEquiv="cache-control" content="no-cache" />
