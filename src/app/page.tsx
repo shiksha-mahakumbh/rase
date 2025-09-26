@@ -10,11 +10,10 @@ import SlideShow from "./component/SlideShow";
 import Info from "./component/Info";
 import Footer from "./component/Footer";
 import Marquees from "./component/Marquees";
-import Organizer from "./component/organiger"; // kept your src name
+import Organizer from "./component/organiger"; // src name unchanged
 import Media_Partners from "./component/Media_Partners";
 import Conference_Support from "./component/Conference_Support";
-import { CustomCard } from "./component/card";
-import Announcement from "./component/Annoucement"; // kept your src name
+import Announcement from "./component/Annoucement"; // src name unchanged
 import UpcomingEvent from "./component/UpcomingEvent";
 import NoticeBoard from "./component/NoticeBoard";
 
@@ -43,7 +42,7 @@ const slides1: Slide[] = [
   },
   {
     src: "/2024M/baton/baton1.jpg",
-    alt: "Baton Ceremony Shiksha Mahakumbh Abhiyan 4.0",
+    alt: "Baton Ceremony of Shiksha Mahakumbh Abhiyan 4.0",
     legend: "Baton Ceremony Shiksha Mahakumbh Abhiyan 4.0",
   },
   {
@@ -54,7 +53,7 @@ const slides1: Slide[] = [
   },
   {
     src: "/2023M/up_cm.jpg",
-    alt: "Shiksha Mahakumbh team inviting Hon’ble Chief Minister of UP to 4th Edition",
+    alt: "Shiksha Mahakumbh team inviting the Hon’ble Chief Minister of Uttar Pradesh",
     legend:
       "Shiksha Mahakumbh team inviting Hon’ble Chief Minister, UP to 4th Edition",
   },
@@ -66,7 +65,7 @@ const slides1: Slide[] = [
   },
   {
     src: "/2023M/bandaru_dattareya.jpg",
-    alt: "Shri Bandaru Dattatreya, Hon'ble Governor of Haryana addressing the crowd",
+    alt: "Shri Bandaru Dattatreya, Hon'ble Governor of Haryana addressing the gathering",
     legend:
       "Shri Bandaru Dattatreya, the Hon'ble Governor of Haryana, addressed the crowd",
   },
@@ -106,32 +105,30 @@ const slides1: Slide[] = [
   },
   {
     src: "/2023K/Shri Aswini Updhaya.JPG",
-    alt: "Adv. Aswini Updhaya, PIL Man of Bharat addressing the crowd",
+    alt: "Adv. Aswini Updhaya addressing the audience",
     legend: "Adv. Aswini Updhaya, PIL Man  of Bharat, addressed the crowd",
   },
   {
     src: "/2024K/k12.png",
-    alt: "Shri Manoj Sinha, Hon’ble Lieutenant Governor of J&K",
+    alt: "Shri Manoj Sinha, Hon’ble Lieutenant Governor of Jammu and Kashmir",
     legend: "Shri Manoj Sinha, Hon’ble Lieutenant Governor, J&K",
   },
   {
     src: "/2024K/k7.png",
-    alt: "Dr. Jitendra Singh, Hon’ble MoS (IC) for Science and Technology",
+    alt: "Dr. Jitendra Singh, Hon’ble MoS (IC) Science and Technology",
     legend: "Dr. Jitendra Singh, Hon’ble MoS (IC), Science and Technology",
   },
 ];
 
 const pageVariants = {
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   hidden: { opacity: 0, y: 20 },
 };
 
-const TransitionWrapper: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const TransitionWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
-    threshold: 0.15,
+    threshold: 0.2,
   });
 
   return (
@@ -147,6 +144,7 @@ const TransitionWrapper: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
+/* ----------- Mobile Layout ----------- */
 const MobileView = () => (
   <main id="main" className="flex flex-col gap-6 px-4 py-6">
     <TransitionWrapper>
@@ -154,9 +152,7 @@ const MobileView = () => (
     </TransitionWrapper>
 
     <section aria-labelledby="announcements-heading">
-      <h2 id="announcements-heading" className="sr-only">
-        Announcements
-      </h2>
+      <h2 id="announcements-heading" className="sr-only">Announcements</h2>
       <Announcement />
     </section>
 
@@ -184,6 +180,7 @@ const MobileView = () => (
   </main>
 );
 
+/* ----------- Desktop Layout ----------- */
 const DesktopView = () => (
   <main id="main" className="w-full max-w-7xl mx-auto px-6 py-8">
     <div className="grid grid-cols-12 gap-6 items-start">
@@ -192,9 +189,7 @@ const DesktopView = () => (
       </aside>
 
       <section className="col-span-12 lg:col-span-7" aria-labelledby="hero-heading">
-        <h1 id="hero-heading" className="sr-only">
-          Shiksha Mahakumbh Highlights
-        </h1>
+        <h1 id="hero-heading" className="sr-only">Shiksha Mahakumbh Highlights</h1>
         <TransitionWrapper>
           <SlideShow slides={slides1} ariaLabel="Shiksha Mahakumbh highlights" />
         </TransitionWrapper>
@@ -265,3 +260,4 @@ export default function Home() {
     </div>
   );
 }
+
