@@ -1,5 +1,3 @@
-// app/(main)/page.tsx  (or components/Home.tsx)
-// "use client" is intentional for framer-motion & client hooks
 "use client";
 
 import React from "react";
@@ -12,11 +10,11 @@ import SlideShow from "./component/SlideShow";
 import Info from "./component/Info";
 import Footer from "./component/Footer";
 import Marquees from "./component/Marquees";
-import Organizer from "./component/Organizer"; // fixed name
+import Organizer from "./component/organiger"; // kept your src name
 import Media_Partners from "./component/Media_Partners";
 import Conference_Support from "./component/Conference_Support";
 import { CustomCard } from "./component/card";
-import Announcement from "./component/Announcement"; // fixed name
+import Announcement from "./component/Annoucement"; // kept your src name
 import UpcomingEvent from "./component/UpcomingEvent";
 import NoticeBoard from "./component/NoticeBoard";
 
@@ -24,83 +22,135 @@ type Slide = {
   src: string;
   alt: string;
   legend: string;
-  caption?: string;
-  loading?: "eager" | "lazy";
 };
 
 const slides1: Slide[] = [
   {
     src: "/2024M/Press8.jpg",
     alt: "Release of the official abstract booklet titled Indian Education for Global Development",
-    legend: 'Release of the official abstract booklet "Indian Education for Global Development"',
-    loading: "lazy",
+    legend:
+      'Release of the official abstract booklet "Indian Education for Global Development"',
   },
   {
     src: "/2024M/Press7.jpg",
-    alt: "Swami Gyananand inaugurates the event by lighting the jyoti",
+    alt: "Swami Gyananand inaugurating the event by lighting the jyoti",
     legend: "Swami Gyananand inaugurated the event by lighting the jyoti",
-    loading: "lazy",
   },
   {
     src: "/2024M/Press6.jpg",
-    alt: "Final closing press conference - Shiksha Mahakumbh Abhiyan 4.0",
+    alt: "Final closing press conference of Shiksha Mahakumbh Abhiyan 4.0",
     legend: "Final closing press conference for the Shiksha Mahakumbh Abhiyan 4.0",
-    loading: "lazy",
   },
   {
     src: "/2024M/baton/baton1.jpg",
-    alt: "Baton ceremony for Shiksha Mahakumbh Abhiyan 4.0",
+    alt: "Baton Ceremony Shiksha Mahakumbh Abhiyan 4.0",
     legend: "Baton Ceremony Shiksha Mahakumbh Abhiyan 4.0",
-    loading: "lazy",
   },
   {
     src: "/2024K/k6.jpg",
-    alt: "Prof. Rajeev Ahuja and Dr. Thakur SKR inviting the Hon'ble President Smt. Droupadi Murmu",
+    alt: "Prof. Rajeev Ahuja and Dr. Thakur SKR inviting the Hon’ble President Smt. Droupadi Murmu",
     legend:
       "Prof. Rajeev Ahuja and Dr. Thakur SKR invited Smt. Droupadi Murmu, the Hon’ble President of Bharat, for the Shiksha Mahakumbh Abhiyan 4.0",
-    loading: "lazy",
   },
-  // ... keep the rest similarly descriptive
+  {
+    src: "/2023M/up_cm.jpg",
+    alt: "Shiksha Mahakumbh team inviting Hon’ble Chief Minister of UP to 4th Edition",
+    legend:
+      "Shiksha Mahakumbh team inviting Hon’ble Chief Minister, UP to 4th Edition",
+  },
+  {
+    src: "/2023M/banwari_lal_purohit.JPG",
+    alt: "Shri Banwari Lal Purohit, Hon'ble Governor of Punjab addressing the crowd",
+    legend:
+      "Shri Banwari Lal Purohit, the Hon'ble Governor of Punjab, addressed the crowd",
+  },
+  {
+    src: "/2023M/bandaru_dattareya.jpg",
+    alt: "Shri Bandaru Dattatreya, Hon'ble Governor of Haryana addressing the crowd",
+    legend:
+      "Shri Bandaru Dattatreya, the Hon'ble Governor of Haryana, addressed the crowd",
+  },
+  {
+    src: "/2023M/anurag_singh_thakur.JPG",
+    alt: "Shri Anurag Singh Thakur, Cabinet Minister of Sports and Youth Affairs addressing the audience",
+    legend:
+      "Shri Anurag Singh Thakur, the Hon'ble Cabinet Minister, Minister of Sports and Youth Affair, addressed the crowd",
+  },
+  {
+    src: "/2023M/raghunandan.JPG",
+    alt: "Shri Raghunandan, Organising Secretary Vidya Bharti Ucch Shiksha Sansthan",
+    legend:
+      "Shri Raghunandan, Organising Secretary, Vidya Bharti - Ucch Shiksha Sansthan",
+  },
+  {
+    src: "/2023M/shankarananda.JPG",
+    alt: "Shri Shankarananda, Organising Secretary Bhartiya Shikshan Mandal",
+    legend: "Shri Shankarananda, Organising Secretary, Bhartiya Shikshan Mandal",
+  },
+  {
+    src: "/2023M/kashmiri_lal.JPG",
+    alt: "Shri Kashmiri Lal, Organising Secretary Swadeshi Jagran Manch",
+    legend: "Shri Kashmiri Lal, Organising Secretary, Swadeshi Jagran Manch",
+  },
+  {
+    src: "/2023M/satish_kumar.JPG",
+    alt: "Shri Satish Kumar, Joint Organising Secretary Swadeshi Jagran Manch",
+    legend:
+      "Shri Satish Kumar, Joint Organising Secretary, Swadeshi Jagran Manch",
+  },
+  {
+    src: "/2023K/bandaru_dattareya.JPG",
+    alt: "Shri Bandaru Dattatreya releasing the proceedings of Shiksha Kumbh 2023",
+    legend:
+      "Shri Bandaru Dattatreya, the Hon'ble Governor of Haryana, released the proceeding of Shiksha Kumbh 2023",
+  },
+  {
+    src: "/2023K/Shri Aswini Updhaya.JPG",
+    alt: "Adv. Aswini Updhaya, PIL Man of Bharat addressing the crowd",
+    legend: "Adv. Aswini Updhaya, PIL Man  of Bharat, addressed the crowd",
+  },
+  {
+    src: "/2024K/k12.png",
+    alt: "Shri Manoj Sinha, Hon’ble Lieutenant Governor of J&K",
+    legend: "Shri Manoj Sinha, Hon’ble Lieutenant Governor, J&K",
+  },
+  {
+    src: "/2024K/k7.png",
+    alt: "Dr. Jitendra Singh, Hon’ble MoS (IC) for Science and Technology",
+    legend: "Dr. Jitendra Singh, Hon’ble MoS (IC), Science and Technology",
+  },
 ];
 
 const pageVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 20 },
 };
 
-const pageTransition = {
-  type: "tween",
-  ease: "easeOut",
-  duration: 0.6,
-};
-
-const TransitionWrapper: React.FC<{
-  children: React.ReactNode;
-  triggerOnce?: boolean;
-}> = ({ children, triggerOnce = true }) => {
+const TransitionWrapper: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { ref, inView } = useInView({
-    triggerOnce,
-    threshold: 0.12,
+    triggerOnce: true,
+    threshold: 0.15,
   });
 
   return (
-    <motion.section
+    <motion.div
       ref={ref}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
       variants={pageVariants}
-      transition={pageTransition}
       aria-live="polite"
     >
       {children}
-    </motion.section>
+    </motion.div>
   );
 };
 
 const MobileView = () => (
   <main id="main" className="flex flex-col gap-6 px-4 py-6">
     <TransitionWrapper>
-      <SlideShow slides={slides1} ariaLabel="Hero slideshow: Shiksha Mahakumbh highlights" />
+      <SlideShow slides={slides1} ariaLabel="Shiksha Mahakumbh highlights" />
     </TransitionWrapper>
 
     <section aria-labelledby="announcements-heading">
@@ -135,30 +185,26 @@ const MobileView = () => (
 );
 
 const DesktopView = () => (
-  <main id="main" className="w-full max-w-6xl mx-auto px-6 py-8">
-    {/* Responsive 12-column grid for better control & symmetry */}
+  <main id="main" className="w-full max-w-7xl mx-auto px-6 py-8">
     <div className="grid grid-cols-12 gap-6 items-start">
-      <aside className="col-span-3 lg:col-span-2" aria-label="Sidebar announcements">
-        <h2 className="text-lg font-semibold mb-4">Announcements</h2>
+      <aside className="col-span-3 lg:col-span-2" aria-label="Announcements">
         <Announcement />
       </aside>
 
       <section className="col-span-12 lg:col-span-7" aria-labelledby="hero-heading">
         <h1 id="hero-heading" className="sr-only">
-          Shiksha Mahakumbh — Highlights and Information
+          Shiksha Mahakumbh Highlights
         </h1>
-
-        <TransitionWrapper triggerOnce={false}>
-          <SlideShow slides={slides1} ariaLabel="Hero slideshow: Shiksha Mahakumbh highlights" />
+        <TransitionWrapper>
+          <SlideShow slides={slides1} ariaLabel="Shiksha Mahakumbh highlights" />
         </TransitionWrapper>
 
-        {/* Info blocks below the hero — keep animation sparingly */}
         <div className="mt-6 space-y-6">
           <TransitionWrapper>
             <Info />
           </TransitionWrapper>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <TransitionWrapper>
               <Conference_Support />
             </TransitionWrapper>
@@ -169,7 +215,7 @@ const DesktopView = () => (
         </div>
       </section>
 
-      <aside className="col-span-12 lg:col-span-3" aria-label="Notices and organizers">
+      <aside className="col-span-12 lg:col-span-3" aria-label="Notices and Organizers">
         <div className="sticky top-20 space-y-6">
           <TransitionWrapper>
             <NoticeBoard />
@@ -206,7 +252,6 @@ export default function Home() {
 
       <Marquees />
 
-      {/* Responsive container */}
       <div className="min-h-screen">
         <div className="sm:hidden">
           <MobileView />
