@@ -76,7 +76,7 @@ export default function RootLayout({
       <meta httpEquiv="refresh" content="1000" />
       <meta charSet="utf-8" />
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-      <title>Welcome to शिक्षा महाकुंभ and शिक्षा कुंभ। An initiative of DHE in collaboration with INIs to hold शिक्षा महाकुंभ annually and शिक्षा कुंभ half yearly.</title>
+      <title>Welcome to शिक्षा महाकुंभ अभियान। An initiative of DHE in collaboration with INIs to hold annual शिक्षा महाकुंभ। </title>
       <meta name="keywords" content="RASE2023, RASE 2023, National Conference on Recent Advances in School Education, rase 2023, r a s e, mahakumbh 2024, mahakumbh 2023, महाकुंभ 2023, महाकुंभ 2024" />
       <meta name="description" content="Joint Conference" />
       <meta httpEquiv="cache-control" content="no-cache" />
@@ -91,13 +91,10 @@ export default function RootLayout({
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <div className="text-white p-4 rounded-lg flex flex-col items-center justify-center text-center text-base md:text-xl font-semibold bg-primary">
             <p>
-          <strong>शिक्षा महाकुंभ अभियान 5.0 </strong>5th Edition is going to be held at NIPER Mohali from 31st October to 2nd November 2025:
+          <strong>शिक्षा महाकुंभ अभियान </strong>5th Edition is going to be held at NIPER Mohali from 31st October to 2nd November 2025
             </p>
             <p>
-             <a href="https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN" className="text-white">
-                Link
-             </a>
-            </p>
+                       </p>
           </div>
         </Modal>
 
