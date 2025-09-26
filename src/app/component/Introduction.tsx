@@ -1,69 +1,126 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-const Introduction = () => {
+const Info = () => {
   const text = `
- Shiksha Mahakumbh Abhiyan is the brainchild of Dr. Thakur SKR, a prominent ISRO Scientist and staunch social worker. The Shiksha Mahakumbh Abhiyan is a visionary initiative aimed at redefining the educational landscape of Bharat and the globe. This monumental campaign is spearheaded by Vidya Bharti, the world's largest educational NGO, through its North Zone wing’s newly carved Vidya Bharti Institute of Training and Research Trust and managed by think tank Department of this trust i.e. Department of Holistic Education which collaborates with esteemed Institutions of National Importance like IITs, IIMs, AIIMS, NIDs, NITs, CUs, etc., to spearhead this very Abhiyan. The primary objective of this initiative is to provide a platform for entire population to have a dialogue on all aspects of education. Dialogue on achievements, hurdles and future directions at a single platform by keeping Panch Koshiya Bhartiya philosophy at the centre. The experts of every field with proper declarations help in enabling the nation on a progressive and prosperous path. One of the unique aspects of the Shiksha Mahakumbh Abhiyan is its commitment to addressing regional disparities and global challenges in education. The encouragement of thousands of school students from neighboring states of the host state to participate in this prestigious event underscores this dedication. By providing school students exposure to Institution of National Importance, the initiative aims to inspire and guide them to harness their potential to excel in various fields. Further this very Abhiyan aid in bridging the gap of school education, higher education, industry and society. The Shiksha Mahakumbh Abhiyan also emphasizes the importance of integrating traditional values with modern education. It seeks to uphold Globe’s rich cultural heritage and knowledge base while addressing contemporary challenges through a holistic approach. This initiative aligns with the broader vision of creating a well-rounded and resilient educational framework that can adapt to the evolving needs of society.  
+  <h2 class="text-2xl font-bold text-[#502a2a] mb-4">शिक्षा महाकुंभ अभियान: A National Movement for Global Educational Transformation</h2>
 
-The Shiksha Mahakumbh Abhiyan commenced its journey with the grand event "शिक्षा महाकुंभ 1.0" which was held at NIT Jalandhar on June 9-11, 2023. It’s themed on Recent Advances in School Education (RASE). It garnered significant attention and participation from Governors, Union Ministers, Directors, Vice-chancellors, Bureaucrats, Media Personalities, Dignitaries from various sectors and Members of the society. This grand event set the stage for an annual gathering in terms of two events i.e. "शिक्षा महाकुंभ" and "शिक्षा कुंभ" aimed at fostering dialogue and collaboration among educators, researchers, students, and industry professionals from across the globe. "शिक्षा महाकुंभ" was designed for global participation and dialogue whereas "शिक्षा कुंभ" was planned to have dialogue on region and subject specific topics. The inaugural edition of "शिक्षा कुंभ" was held at NIT Kurukshetra on December 20, 2023. The event focused on Role of Academic-driven Startups in Economy (RASE 2023) showcasing the potential of education to drive regional economic growth. Building on the success of the 1st edition of "शिक्षा कुंभ", the 2nd Edition of "शिक्षा कुंभ", themed on Role of Academic-driven Startups in developing Economy of Jammu & Kashmir (RASE 2024) held on June 29-30, 2024 at NIT Srinagar further cemented the initiative's impact. The 2nd edition of “शिक्षा महाकुंभ" was held from December 16-17, 2024, at Kurukshetra University Kurukshetra. This event was designed to serve as a global platform for sharing innovative ideas, research findings, and best practices in education along with staging dialogue on the usage of Indian Education System for Global Development. This journey is continued through passing on the baton year on year from one institute to another. IIT Jammu and JNU Delhi are queued up to host both of these events in 2025. 
+  <p>
+  शिक्षा महाकुंभ अभियान is a visionary multi-edition national movement conceptualised by visionary ISRO scientist and accomplished author 
+  <strong>Dr. Thakur SKR</strong> under the guidance of <strong>Sh. Vijay Nadda</strong>, Visionary Educationist and Social Reformer, that unites leaders from across education, policy, industry, civil society, and the youth to reimagine and reform the <strong>Bhartiya education system</strong>—while contributing to the evolution of a globally equitable, future-ready learning ecosystem.
+  </p>
 
-  In recognition of the initiative's significance for shaping the nation through education, it has been decided that "शिक्षा कुंभ" shall be inaugurated by non-political personalities like Hon’ble Governor, Chief Justice, Renowned Entrepreneurs, etc., of the host state and “शिक्षा महाकुंभ” shall be inaugurated by esteemed non-political personalities like President of the Country, Chief Justice of the Country, Renowned Entrepreneurs of the country, etc. This endorsement from the highest office and personalities of the host states and highest office and personalities of the country highlights the campaign's importance in weaving the future of education in Bharat and showing the way to the globe through educational reforms. The Shiksha Mahakumbh Abhiyan is more than just a series of events; it is a movement towards a transformative educational paradigm. By fostering collaboration, innovation, and inclusivity, this initiative aims to create a brighter future for generations to come, not only in Bharat but across the globe. Stay tuned to participate in this revolution and witness the changing wheels of educational landscape in the country and the globe.
+  <p class="mt-2">
+  Rooted in Bhartiya knowledge systems and aligned with global educational priorities, this initiative serves as a vibrant platform for collaboration, innovation, and action. It is designed to influence educational transformation not only in Bhartiya but across the globe—bringing together insights from local classrooms and global think tanks alike.
+  </p>
+
+  <p class="mt-2">
+  At the heart of Shiksha Mahakumbh Abhiyan lies an ambitious yet grounded vision: to help shape an inclusive, interdisciplinary, ethical, and resilient global education framework. It emphasizes:
+  </p>
+
+  <ul class="list-disc pl-6 mt-2 space-y-1">
+    <li>Integration of global best practices with Bhartiya values</li>
+    <li>Innovative pedagogies and future-ready curriculum</li>
+    <li>Harnessing technology and digital learning to enhance accessibility and relevance</li>
+  </ul>
+
+  <p class="mt-2">The initiative focuses on urgent educational priorities including:</p>
+
+  <ul class="list-disc pl-6 mt-2 space-y-1">
+    <li>Inclusivity and universal access to quality learning</li>
+    <li>Teacher training, capacity building, and professional growth</li>
+    <li>Policy alignment with UN SDGs and national development goals</li>
+    <li>Cultural preservation and global exchange</li>
+    <li>Bridging the digital divide through EdTech</li>
+    <li>Flexible, skill-based, and multidisciplinary learning models</li>
+    <li>Promotion of ethical, sustainable, and local-context education</li>
+  </ul>
+
+  <p class="mt-4">
+  Each edition of the Mahakumbh is designed not just for discussion but to generate actionable insights, policy roadmaps, and community-driven solutions. Each edition builds upon the outcomes of the previous, weaving a continuous thread of innovation, implementation, and impact:
+  </p>
+
+  <ul class="list-none mt-4 space-y-3">
+    <li>🔹 <strong>1st Edition – NIT Jalandhar | 9th–11th June 2023</strong><br/>Theme: Recent Advances in School Education (RASE)<br/>Impact: Initiated national dialogue on foundational reforms, introduced community-driven school models, and generated a best practices compendium on K–12 innovations.</li>
+
+    <li>🔹 <strong>2nd Edition – NIT Kurukshetra | 20th December 2023</strong><br/>Theme: Role of Academic-Driven Startups in the Economy (RASE)<br/>Impact: Sparked nationwide collaboration between academia and entrepreneurship, resulting in MoUs, startup incubation, and industry-institution integration plans.</li>
+
+    <li>🔹 <strong>3rd Edition – NIT Srinagar | 29th–30th June 2024</strong><br/>Theme: Academic Innovation for the Economic Development of J&K<br/>Impact: Focused on peace-building and economic empowerment through education in conflict-prone zones; initiated local skilling programs and startup mentorship cells.</li>
+
+    <li>🔹 <strong>4th Edition – Kurukshetra University | 16th–17th December 2024</strong><br/>Theme: Bhartiya Education System for Global Development<br/>Impact: Developed a national vision document for Bhartiya as a global education hub, rooted in NEP 2020 and Bhartiya knowledge systems.</li>
+
+    <li>🔹 <strong>5th Edition – NIPER Mohali | 31st Oct – 2nd Nov 2025</strong><br/>Theme: Empowering Global Health through Pharma Innovation and Education<br/>Expected Impact: Strategic roadmap for linking pharmaceutical education, R&D, and global health; building Bhartiya's role in global medical innovation and knowledge exchange.</li>
+  </ul>
+
+  <p class="mt-4">
+  Shiksha Mahakumbh Abhiyan is not just a conference series—it is a national implementation accelerator. Each edition contributes to:
+  </p>
+
+  <ul class="list-disc pl-6 mt-2 space-y-1">
+    <li>Actionable frameworks for educational institutions and policy bodies</li>
+    <li>Cross-sector partnerships between academia, industry, NGOs, and government</li>
+    <li>White papers, manuals, and policy briefs for stakeholders</li>
+    <li>Formation of task forces and working groups for follow-through and monitoring</li>
+  </ul>
+
+  <p class="mt-4">
+  What sets Shiksha Mahakumbh Abhiyan apart is its commitment to deep inclusion. It moves beyond academic silos to engage:
+  </p>
+
+  <ul class="list-disc pl-6 mt-2 space-y-1">
+    <li>School teachers, principals, and university leaders</li>
+    <li>Youth changemakers, students, and researchers</li>
+    <li>Rural educators, grassroots innovators, and panchayat leaders</li>
+    <li>Policymakers, industry professionals, and technologists</li>
+    <li>NGOs, CSR heads, international diplomats, and media voices</li>
+  </ul>
+
+  <p class="mt-4 font-semibold">
+  This whole-of-society approach ensures that reforms are not only visionary but also practical, inclusive, and community-driven. The Shiksha Mahakumbh Abhiyan is a clarion call to every citizen, policymaker, and thought leader.
+  </p>
   `;
 
   const [isTextExpanded, setIsTextExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(true); // Default to mobile layout
+  const [isMobile, setIsMobile] = useState(true);
 
-  const toggleText = () => {
-    setIsTextExpanded(!isTextExpanded);
-  };
+  const toggleText = () => setIsTextExpanded(!isTextExpanded);
 
   useEffect(() => {
     const handleWindowResize = () => {
-      const isMobileScreen = () => window.innerWidth < 640;
-      // Update isMobile based on screen width
-      setIsMobile(isMobileScreen());
+      setIsMobile(window.innerWidth < 640);
     };
 
-    // Check window size initially
     handleWindowResize();
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, []);
 
-    // Add a listener for window resize events
-    window.addEventListener('resize', handleWindowResize);
+  const textClassHeading = isMobile ? "text-xl" : "text-2xl";
 
-    // Remove the listener when the component unmounts
-    return () => {
-      window.removeEventListener('resize', handleWindowResize);
-    };
-  }, []); // Empty dependency array to run this effect only once
-
-  // Define the text class based on isMobile
-  const textClass = isMobile ? 'text-l' : 'text-l';
-  const textClassHeading = isMobile ? 'text-xl' : 'text-xl';
-
-  // Split text at the point where the "Read More" button should appear
-  const splitIndex = text.indexOf('progressive and prosperous path') + 35; // Length of "progressive and prosperous path"
-
+  const splitIndex = text.indexOf("Rooted in Bhartiya knowledge systems");
   const textBefore = text.slice(0, splitIndex);
   const textAfter = text.slice(splitIndex);
 
   return (
     <div className="bg-white px-4 py-2 flex flex-col justify-between items-start">
-      <h1 className={`${textClassHeading} py-2 text-[#502a2a] font-bold text-2xl`}>
+      <h1 className={`${textClassHeading} py-2 text-[#502a2a] font-bold`}>
         About Shiksha Mahakumbh Abhiyan
       </h1>
-      <div className={`mb-4 whitespace-pre-line text-justify text-black`}>
+      <div className="mb-4 whitespace-pre-line text-justify text-black">
         <div
-          dangerouslySetInnerHTML={{ __html: isTextExpanded ? text : `${textBefore}.....` }}
+          dangerouslySetInnerHTML={{
+            __html: isTextExpanded ? text : `${textBefore}.....`,
+          }}
         />
         <button
           onClick={toggleText}
-          className={`text-[#502a2a] font-bold mt-2`}
+          className="text-[#502a2a] font-bold mt-2 hover:underline"
         >
-          {isTextExpanded ? 'Show Less' : 'Read More'}
+          {isTextExpanded ? "Show Less" : "Read More"}
         </button>
       </div>
     </div>
   );
 };
 
-export default Introduction;
+export default Info;
