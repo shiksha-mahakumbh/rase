@@ -1,25 +1,11 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  List,
-  Typography,
-  Tabs,
-  Alert,
-  Modal,
-  Button,
-  Skeleton,
-  Spin,
-} from "antd";
+import { Tabs, Alert, Button, Spin } from "antd";
 import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import { useRouter } from "next/navigation";
-
-
-
-
-
 
 type Event = {
   id: string;
@@ -36,12 +22,6 @@ const EventsComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>("");
-
-  // State to track the loading status of all images
-  const [imageLoading, setImageLoading] = useState<{ [key: string]: boolean }>(
-    {}
-  );
-  const [allImagesLoaded, setAllImagesLoaded] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -62,41 +42,17 @@ const EventsComponent: React.FC = () => {
     }
   };
 
-  const handleRefresh = () => {
-    fetchEvents();
-  };
-
   useEffect(() => {
     fetchEvents();
   }, []);
 
   useEffect(() => {
-    // Sort events by date in descending order
     const sortedEvents = [...events].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-
-    // Select the latest 5 events as current notices
-    const latestFive = sortedEvents.slice(0, 5);
-
-    // Select all other events as past notices
-    const olderEvents = sortedEvents.slice(5);
-
-    // Set the state
-    setCurrentNotices(latestFive);
-    setPastNotices(olderEvents);
+    setCurrentNotices(sortedEvents.slice(0, 5));
+    setPastNotices(sortedEvents.slice(5));
   }, [events]);
-
-  useEffect(() => {
-    // Check if all images are loaded
-    if (Object.keys(imageLoading).length === 0) {
-      setAllImagesLoaded(true);
-    } else {
-      setAllImagesLoaded(
-        Object.values(imageLoading).every((loading) => !loading)
-      );
-    }
-  }, [imageLoading]);
 
   const handleImageClick = (imageUrl: string) => {
     setModalImage(imageUrl);
@@ -108,65 +64,44 @@ const EventsComponent: React.FC = () => {
     setModalImage("");
   };
 
-  const handleImageLoadStart = (id: string) => {
-    setImageLoading((prev) => ({ ...prev, [id]: true }));
-  };
-
-  const handleImageLoadEnd = (id: string) => {
-    setImageLoading((prev) => {
-      const newLoading = { ...prev };
-      delete newLoading[id];
-      return newLoading;
-    });
-  };
-
   const tabItems = [
     {
       key: "1",
       label: "Current Notices",
       children: loading ? (
-        <div className="max-h-64 overflow-y-auto">
-          <Skeleton active paragraph={{ rows: 4 }} />
+        <div className="flex justify-center py-6">
+          <Spin size="large" />
         </div>
       ) : currentNotices.length === 0 ? (
-        <Typography.Text>No current notices available.</Typography.Text>
+        <div className="text-center py-6 text-gray-500 font-semibold">
+          No current notices available.
+        </div>
       ) : (
-        <div className="max-h-64 overflow-y-auto">
-          <List
-            dataSource={currentNotices}
-            renderItem={(event) => (
-              <List.Item className="border-b-2 border-gray-500 py-4 flex items-start">
-                <div className="flex-grow flex flex-col justify-center w-2/3 pr-4">
-                  <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
-                    {event.title} 
-                  </Typography.Title>
+        <div className="grid md:grid-cols-2 gap-6">
+          {currentNotices.map((event) => (
+            <div
+              key={event.id}
+              className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition duration-300 cursor-pointer"
+              onClick={() => handleImageClick(event.imageUrl)}
+            >
+              <img
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full h-48 object-cover transform hover:scale-105 transition duration-300"
+              />
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-[#502a2a] font-semibold text-lg">
+                    {event.title}
+                  </h3>
+                  <span className="text-sm text-gray-500 flex items-center">
+                    <CalendarOutlined className="mr-1" />
+                    {new Date(event.date).toLocaleDateString()}
+                  </span>
                 </div>
-                <div className="relative w-1/3">
-                  {imageLoading[event.id] && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white opacity-75 z-10">
-                      <Spin />
-                    </div>
-                  )}
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="h-auto w-full object-cover rounded-lg cursor-pointer"
-                    onClick={() => handleImageClick(event.imageUrl)}
-                    onLoad={() => handleImageLoadEnd(event.id)}
-                    onError={() => handleImageLoadEnd(event.id)}
-                    onLoadStart={() => handleImageLoadStart(event.id)}
-                  />
-                </div>
-              </List.Item>
-            )}
-          />
-          {currentNotices.length > 0 && (
-            <div className="text-center mt-4">
-              <Button type="link" onClick={() => router.push('/noticeboard')}>
-                Read More
-              </Button>
+              </div>
             </div>
-          )}
+          ))}
         </div>
       ),
     },
@@ -174,119 +109,106 @@ const EventsComponent: React.FC = () => {
       key: "2",
       label: "Past Notices",
       children: loading ? (
-        <div className="max-h-64 overflow-y-auto">
-          <Skeleton active paragraph={{ rows: 4 }} />
+        <div className="flex justify-center py-6">
+          <Spin size="large" />
         </div>
       ) : pastNotices.length === 0 ? (
-        <Typography.Text>No past notices available.</Typography.Text>
+        <div className="text-center py-6 text-gray-500 font-semibold">
+          No past notices available.
+        </div>
       ) : (
-        <div className="max-h-64 overflow-y-auto">
-          <List
-            dataSource={pastNotices.slice(0, 5)} // Show only the first 5 notices
-            renderItem={(event) => (
-              <List.Item className="border-b-2 border-gray-500 py-4 flex items-start">
-                <div className="flex-grow flex flex-col justify-center w-2/3 pr-4">
-                  <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
+        <div className="grid md:grid-cols-2 gap-6">
+          {pastNotices.slice(0, 5).map((event) => (
+            <div
+              key={event.id}
+              className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition duration-300 cursor-pointer"
+              onClick={() => handleImageClick(event.imageUrl)}
+            >
+              <img
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full h-48 object-cover transform hover:scale-105 transition duration-300"
+              />
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-[#502a2a] font-semibold text-lg">
                     {event.title}
-                  </Typography.Title>
+                  </h3>
+                  <span className="text-sm text-gray-500 flex items-center">
+                    <CalendarOutlined className="mr-1" />
+                    {new Date(event.date).toLocaleDateString()}
+                  </span>
                 </div>
-                <div className="relative w-1/3">
-                  {imageLoading[event.id] && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white opacity-75 z-10">
-                      <Spin />
-                    </div>
-                  )}
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="h-auto w-full object-cover rounded-lg cursor-pointer"
-                    onClick={() => handleImageClick(event.imageUrl)}
-                    onLoad={() => handleImageLoadEnd(event.id)}
-                    onError={() => handleImageLoadEnd(event.id)}
-                    onLoadStart={() => handleImageLoadStart(event.id)}
-                  />
-                </div>
-              </List.Item>
-            )}
-          />
-          {pastNotices.length > 5 && (
-            <div className="text-center mt-4">
-              <Button type="link" onClick={() => router.push('/noticeboard')}>
-                Read More
-              </Button>
+              </div>
             </div>
-          )}
+          ))}
         </div>
       ),
     },
   ];
 
   return (
-    <div className="p-6 text-primary">
-      <div className="bg-white shadow-lg rounded-lg max-w-lg mx-auto">
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <span className="text-lg font-semibold flex items-center">
-            Notice Board
-            <CalendarOutlined className="ml-2 text-primary" />
-          </span>
-          <Button
-            icon={<ReloadOutlined />}
-            onClick={handleRefresh}
-            className="ml-2"
-            size="small"
-            type="text"
+    <div className="p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-gradient-to-r from-[#fef3f3] to-[#fff7f7] rounded-xl shadow-lg overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <h2 className="text-xl md:text-2xl font-bold text-[#502a2a] flex items-center">
+              <CalendarOutlined className="mr-2" />
+              Notice Board
+            </h2>
+            <Button
+              icon={<ReloadOutlined />}
+              onClick={fetchEvents}
+              type="primary"
+              size="small"
+              className="bg-[#502a2a] hover:bg-[#7a4343] border-none"
+            >
+              Refresh
+            </Button>
+          </div>
+
+          <div className="p-4 text-center bg-[#fde8e8] border-b border-gray-200 flex items-center justify-center space-x-3">
+            <img src="/new.gif" alt="New" className="h-6 w-6" />
+            <a
+              href="/donation"
+              className="text-[#502a2a] font-semibold hover:text-[#7a4343] text-lg transition"
+            >
+              Click Here to Sponsor
+            </a>
+            <img src="/new.gif" alt="New" className="h-6 w-6" />
+          </div>
+
+          {error && (
+            <Alert
+              message="Error"
+              description={error}
+              type="error"
+              showIcon
+              className="m-4"
+            />
+          )}
+
+          <Tabs
+            defaultActiveKey="1"
+            className="p-4"
+            tabBarGutter={50}
+            items={tabItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              children: item.children,
+            }))}
           />
         </div>
-        <span className="text-lg p-2 flex text-center font-semibold justify-center border-b border-gray-300 items-center">
-          <img src="new.gif" alt="" />&nbsp;
-          <a
-            href="/donation"
-            className="text-base text-blue-600 hover:text-primary"
-          >
-            Click Here to Sponsor
-          </a>
-          &nbsp;<img src="new.gif" alt="" />
-        </span>
-        {/* <span className="text-lg p-2 flex text-center font-semibold justify-center border-b border-gray-300 items-center">
-          <img src="new.gif" alt="" />&nbsp;
-          <a
-            href="/tentative_schdule.xlsx"
-            className="text-base text-blue-600 hover:text-primary"
-          >
-
-            Tentative Schedule शिक्षा महाकुंभ - 2024
-          </a> 
-          &nbsp;<img src="new.gif" alt="" />
-        </span> */}
-        {error && (
-          <Alert
-            message="Error"
-            description={error}
-            type="error"
-            showIcon
-            className="m-4"
-          />
-        )}
-        <Tabs defaultActiveKey="1" className="p-4">
-          {tabItems.map((item) => (
-            <Tabs.TabPane tab={item.label} key={item.key}>
-              {item.children}
-            </Tabs.TabPane>
-          ))}
-        </Tabs>
       </div>
+
       <Modal
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
         centered
         width="80%"
       >
-        <img
-          src={modalImage}
-          alt="Modal"
-          className="w-full h-auto object-contain"
-        />
+        <img src={modalImage} alt="Modal" className="w-full h-auto object-contain" />
       </Modal>
     </div>
   );
