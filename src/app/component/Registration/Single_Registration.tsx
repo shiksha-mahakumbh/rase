@@ -27,11 +27,11 @@ const RegistrationPage = () => {
   };
 
   const renderForm = () => {
-    if (event === "ShikshaMahakumbh3") {
+    if (event === "ShikshaMahakumbh5") {
       return (
         <div className="text-center text-lg text-gray-700 mt-4">
           <p className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 px-6 rounded-lg shadow-lg">
-            🚧 Coming Soon! Stay tuned for exciting updates on Shiksha Mahakumbh 3.0! 🚀
+            🚧 Stay tuned for exciting updates on Shiksha Mahakumbh Abhiyan 5.0! 🚀
           </p>
         </div>
       );
