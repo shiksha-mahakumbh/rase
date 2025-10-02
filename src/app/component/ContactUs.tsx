@@ -1,5 +1,10 @@
 import React from "react";
-import { MailOutlined, PhoneOutlined, GlobalOutlined } from "@ant-design/icons";
+import {
+  MailOutlined,
+  PhoneOutlined,
+  GlobalOutlined,
+  EnvironmentOutlined,
+} from "@ant-design/icons";
 import "tailwindcss/tailwind.css";
 
 interface ContactInfo {
@@ -14,88 +19,97 @@ interface ContactInfo {
 
 const contactData: ContactInfo = {
   name: "Shiksha Mahakumbh Abhiyan Administrative Office",
-  title: "Event Management Cell,",
+  title: "Event Management Cell",
   organization: "Department of Holistic Education",
-  address: "\nPlot No. 1, Sector 71, SAS Nagar (Mohali) – 160071",
+  address: "Plot No. 1, Sector 71, SAS Nagar (Mohali) – 160071",
   emails: ["info@shikshamahakumbh.com", "shikshamahakumbh23@gmail.com"],
-  phones: ["7903431900", "9463231250","172 408 7787"],
-  websites: [
-    "https://shikshamahakumbh.com",
-    "https://rase.co.in",
-    
-  ],
+  phones: ["+91 79034 31900", "+91 94632 31250", "+91 172 408 7787"],
+  websites: ["https://shikshamahakumbh.com", "https://rase.co.in"],
 };
 
 const ContactUs: React.FC = () => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
-      <h2 className="text-2xl font-semibold pb-4 text-primary text-center animate-fadeIn">
-        Contact Us
+    <div className="bg-gradient-to-br from-[#fdfaf6] via-[#fff] to-[#fdfaf6] p-8 rounded-2xl shadow-2xl max-w-3xl mx-auto text-center border border-gray-200 hover:shadow-3xl transition-all duration-300">
+      {/* Title */}
+      <h2 className="text-3xl md:text-4xl font-extrabold text-[#4d1414] tracking-wide mb-6">
+        📞 Contact Us
       </h2>
-      <div className="flex justify-center mt-4">
-        <a href="tel:+917903431900"><img
-          src="https://www.shutterstock.com/image-vector/phone-handset-speech-bubble-3d-600nw-2101642696.jpg"
-          alt="3D Image"
-          className="w-32 h-32 object-cover rounded-full shadow-lg transform hover:rotate-6 transition-transform duration-300"
-        /></a>
+
+      {/* Image */}
+      <div className="flex justify-center mb-6">
+        <a href="tel:+917903431900">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png"
+            alt="Contact Icon"
+            className="w-28 h-28 md:w-32 md:h-32 object-contain rounded-full bg-white p-4 shadow-lg transform hover:scale-110 hover:rotate-3 transition-transform duration-300"
+          />
+        </a>
       </div>
-      <p className="text-primary text-xl mt-4">
-        <strong>{contactData.name}</strong>
-        <br />
-        {contactData.title}
-        <br />
-        {contactData.organization}
-        <br />
-        {contactData.address}
-        <br />
+
+      {/* Info */}
+      <div className="text-lg text-gray-800 leading-relaxed space-y-4">
+        <p className="font-semibold text-xl">{contactData.name}</p>
+        <p>
+          {contactData.title}, {contactData.organization}
+        </p>
+        <p className="flex justify-center items-center text-gray-700">
+          <EnvironmentOutlined className="mr-2 text-primary text-xl" />
+          {contactData.address}
+        </p>
+
+        {/* Emails */}
         <div className="mt-4">
-          <MailOutlined className="text-2xl mr-2" />
-          Email&#58;
-          {contactData.emails.map((email, index) => (
-            <span key={index}>
+          <MailOutlined className="text-primary text-xl mr-2" />
+          <span className="font-semibold">Email:</span>
+          <div className="flex flex-wrap justify-center gap-3 mt-2">
+            {contactData.emails.map((email, index) => (
               <a
+                key={index}
                 href={`mailto:${email}`}
-                className="text-primary font-semibold transition-colors duration-300 hover:text-blue-500 ml-2"
+                className="text-blue-600 font-medium hover:text-red-600 underline transition-colors"
               >
                 {email}
               </a>
-              {index < contactData.emails.length - 1 && " | "}
-            </span>
-          ))}
+            ))}
+          </div>
         </div>
+
+        {/* Phones */}
         <div className="mt-4">
-          <PhoneOutlined className="text-2xl mr-2" />
-          Mobile/WhatsApp&#58;
-          {contactData.phones.map((phone, index) => (
-            <span key={index}>
+          <PhoneOutlined className="text-primary text-xl mr-2" />
+          <span className="font-semibold">Mobile/WhatsApp:</span>
+          <div className="flex flex-wrap justify-center gap-3 mt-2">
+            {contactData.phones.map((phone, index) => (
               <a
+                key={index}
                 href={`tel:${phone}`}
-                className="text-primary font-semibold transition-colors duration-300 hover:text-blue-500 ml-2"
+                className="text-blue-600 font-medium hover:text-red-600 underline transition-colors"
               >
                 {phone}
               </a>
-              {index < contactData.phones.length - 1 && " | "}
-            </span>
-          ))}
+            ))}
+          </div>
         </div>
+
+        {/* Websites */}
         <div className="mt-4">
-          <GlobalOutlined className="text-2xl mr-2" />
-          Website&#58;
-          {contactData.websites.map((website, index) => (
-            <span key={index}>
+          <GlobalOutlined className="text-primary text-xl mr-2" />
+          <span className="font-semibold">Websites:</span>
+          <div className="flex flex-wrap justify-center gap-3 mt-2">
+            {contactData.websites.map((website, index) => (
               <a
+                key={index}
                 href={website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary font-semibold transition-colors duration-300 hover:text-blue-500 ml-2"
+                className="text-blue-600 font-medium hover:text-red-600 underline transition-colors"
               >
                 {website}
               </a>
-              {index < contactData.websites.length - 1 && " | "}
-            </span>
-          ))}
+            ))}
+          </div>
         </div>
-      </p>
+      </div>
     </div>
   );
 };
