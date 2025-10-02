@@ -9,15 +9,15 @@ import Image from "next/image";
 
 const shareUrl = encodeURIComponent("https://www.rase.co.in/Press1"); // Replace with your actual page URL
 const shareText = encodeURIComponent(
-  "Publish your work in Swadeshi Journals."
+  "A Grand Start to Shiksha Mahakumbh 4.0! Witness the Baton Ceremony's success & join us Dec 16-17 for an educational revolution at Kurukshetra University!"
 );
-const shareImage ="/2024M/Renewable Energy";
+const shareImage ="/2024M/press1.jpg";
 
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "1",
-  image:"/2024M/Office inugration",
-  title: "शिक्षा महाकुंभ अभियान के कार्यालय का NIPER SAS Nagar के परिसर में माननीय देशराज शर्मा जी, राष्ट्रीय महामंत्री, विद्या भारती; डॉ वरिन्दर गर्ग जी, OSD, स्वास्थ्य मंत्री, भारत सरकार; श्री विजय नड्डा जी, क्षेत्रीय संगठन मंत्री, विद्या भारती एवं प्रो दुलाल पांडा, निदेशक NIPER SAS Nagar की गरिमामयी उपस्थिति में हुया उद्घाटन संपन्न।",
+  image:"/2024M/press1.jpg",
+  title: "A Grand Start to Shiksha Mahakumbh 4.0: Baton Ceremony Successfully Concluded Kurukshetra, November 20, 2024",
   sections: [
     {
       title: "Introduction",
