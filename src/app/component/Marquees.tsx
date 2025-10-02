@@ -12,14 +12,14 @@ const items: Item[] = [
   
   {
     imageUrl: "/new.gif",
-    text: "द्वितीय शिक्षा महाकुंभ, 16 तथा 17 दिसंबर 2024 ,व्यक्ति के निर्माण में शिक्षा का महत्वपूर्ण योगदान : प्रो. राकेश सिन्हा",
-    link: "https://www.rase.co.in/Press5",
+    text: "शिक्षा महाकुंभ अभियान – 5th Edition is going to be held at NIPER Mohali from 31st October to 2nd November 2025.",
+    link: "https://www.rase.co.in",
   },
  
   
   {
   imageUrl: "/new.gif",
-  text: "शिक्षा महाकुंभ 2.0 was successfully concluded at Kurukshetra University from December 16-17, 2024. To download photographs click here",
+  text: "शिक्षा महाकुंभ 4.0 was successfully concluded at Kurukshetra University from December 16-17, 2024. To download photographs click here",
   link: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
   },
 
@@ -31,13 +31,13 @@ const items: Item[] = [
 
   {
     imageUrl: "/new.gif",
-    text: "Baton Ceremony: A Grand Start to Shiksha Mahakumbh 2.0! Witness the Baton Ceremony's success, Click Here.",
-    link: "https://www.rase.co.in/Press1",
+    text: "Join the revolution through education at NIPER Mohali, Click Here.",
+    link: "https://www.rase.co.in/registration/Single_Registration",
   },
   {
     imageUrl: "/new.gif",
-    text: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण),आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम, Click Here.",
-    link: "https://www.rase.co.in/Press3",
+    text: "शिक्षा महाकुंभ अभियान के कार्यालय का NIPER SAS Nagar के परिसर मे उद्घाटन संपन्न।, Click Here.",
+    link: "<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fshikshamahakumbh%2Fposts%2Fpfbid02ppA5ShzyHvASa2sEfbBihxkV8b9DGoqz7QhWHDqTLbFra9GmLxa7pxv5mEd6UQQYl&show_text=true&width=500" width="500" height="767" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>",
   },
 ];
 
