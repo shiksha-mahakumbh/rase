@@ -12,9 +12,9 @@ interface ContactInfo {
   title: string;
   organization: string;
   address: string;
-  emails: string[];
+  email: string[];
   phones: string[];
-  websites: string[];
+  website: string[];
 }
 
 const contactData: ContactInfo = {
@@ -22,9 +22,9 @@ const contactData: ContactInfo = {
   title: "Event Management Cell",
   organization: "Department of Holistic Education",
   address: "Plot No. 1, Sector 71, SAS Nagar (Mohali) – 160071",
-  emails: ["info@shikshamahakumbh.com", "shikshamahakumbh23@gmail.com"],
-  phones: ["+91 79034 31900", "+91 94632 31250", "+91 172 408 7787"],
-  websites: ["https://shikshamahakumbh.com", "https://rase.co.in"],
+  email: ["info@shikshamahakumbh.com", "shikshamahakumbh23@gmail.com"],
+  phones: ["+91 79034 31900", "+91 94632 31250"],
+  website: ["https://shikshamahakumbh.com"],
 };
 
 const ContactUs: React.FC = () => {
@@ -60,7 +60,7 @@ const ContactUs: React.FC = () => {
         {/* Emails */}
         <div className="mt-4">
           <MailOutlined className="text-primary text-xl mr-2" />
-          <span className="font-semibold">Email:</span>
+          <span className="font-semibold">Email</span>
           <div className="flex flex-wrap justify-center gap-3 mt-2">
             {contactData.emails.map((email, index) => (
               <a
@@ -77,7 +77,7 @@ const ContactUs: React.FC = () => {
         {/* Phones */}
         <div className="mt-4">
           <PhoneOutlined className="text-primary text-xl mr-2" />
-          <span className="font-semibold">Mobile/WhatsApp:</span>
+          <span className="font-semibold">Mobile/WhatsApp</span>
           <div className="flex flex-wrap justify-center gap-3 mt-2">
             {contactData.phones.map((phone, index) => (
               <a
@@ -94,7 +94,7 @@ const ContactUs: React.FC = () => {
         {/* Websites */}
         <div className="mt-4">
           <GlobalOutlined className="text-primary text-xl mr-2" />
-          <span className="font-semibold">Websites:</span>
+          <span className="font-semibold">Website</span>
           <div className="flex flex-wrap justify-center gap-3 mt-2">
             {contactData.websites.map((website, index) => (
               <a
