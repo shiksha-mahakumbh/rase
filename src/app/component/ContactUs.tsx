@@ -57,12 +57,12 @@ const ContactUs: React.FC = () => {
           {contactData.address}
         </p>
 
-        {/* Emails */}
+        {/* Email */}
         <div className="mt-4">
           <MailOutlined className="text-primary text-xl mr-2" />
           <span className="font-semibold">Email</span>
           <div className="flex flex-wrap justify-center gap-3 mt-2">
-            {contactData.emails.map((email, index) => (
+            {contactData.email.map((email, index) => (
               <a
                 key={index}
                 href={`mailto:${email}`}
@@ -91,12 +91,12 @@ const ContactUs: React.FC = () => {
           </div>
         </div>
 
-        {/* Websites */}
+        {/* Website */}
         <div className="mt-4">
           <GlobalOutlined className="text-primary text-xl mr-2" />
           <span className="font-semibold">Website</span>
           <div className="flex flex-wrap justify-center gap-3 mt-2">
-            {contactData.websites.map((website, index) => (
+            {contactData.website.map((website, index) => (
               <a
                 key={index}
                 href={website}
