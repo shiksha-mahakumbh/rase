@@ -13,14 +13,14 @@ interface Event {
 const events: Event[] = [
   {
     title: "Shiksha Mahakumbh 2025",
-    date: "Will be updated soon",
-    venue: "Jawaharlal Nehru University",
+    date: "31 Oct 2025 - 2nd Nov 2025",
+    venue: "NIPER SAS Nagar",
     link: "/registration/Single_Registration"
   },
   {
-    title: "Shiksha Kumbh 2025",
+    title: "Shiksha Mahakumbh 2026",
     date: "Will be updated soon",
-    venue: "Indian Institute of Technology Jammu",
+    venue: "Indian Institute of Technology Mandi",
     link: "/registration/Single_Registration"
   },
   
