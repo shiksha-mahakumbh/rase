@@ -31,7 +31,7 @@ const RegistrationPage = () => {
       return (
         <div className="text-center text-lg text-gray-700 mt-4">
           <p className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 px-6 rounded-lg shadow-lg">
-            { 🚧 Stay tuned for exciting updates on Shiksha Mahakumbh Abhiyan 6.0! 🚀 */}
+            🚧 Coming Soon! Stay tuned for exciting updates on Shiksha Mahakumbh 3.0! 🚀
           </p>
         </div>
       );
@@ -100,10 +100,8 @@ const RegistrationPage = () => {
             onChange={handleEventChange}
             className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-300 focus:border-purple-500 shadow-sm transition duration-200"
           >
-            <option value="ShikshaMahakumbh2">Shiksha Mahakumbh Abhiyan 5.0</option>
-            {/* <option value="ShikshaMahakumbh2">Shiksha Mahakumbh Abhiyan 6.0</option> */}
-
-            {/* <option value="ShikshaMahakumbh3">Shiksha Mahakumbh Abhiyan 5.0</option> */}
+            <option value="ShikshaMahakumbh2">Shiksha Mahakumbh 3.0</option>
+            {/* <option value="ShikshaMahakumbh3">Shiksha Mahakumbh 3.0</option> */}
           </select>
         </div>
 
