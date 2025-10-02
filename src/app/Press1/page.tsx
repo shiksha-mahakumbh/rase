@@ -9,20 +9,20 @@ import Image from "next/image";
 
 const shareUrl = encodeURIComponent("https://www.rase.co.in/Press1"); // Replace with your actual page URL
 const shareText = encodeURIComponent(
-  "A Grand Start to Shiksha Mahakumbh 2.0! Witness the Baton Ceremony's success & join us Dec 16-17 for an educational revolution at Kurukshetra University!"
+  "Publish your work in Swadeshi Journals."
 );
-const shareImage ="/2024M/press1.jpg";
+const shareImage ="/2024M/Renewable Energy";
 
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
   Press: "1",
-  image:"/2024M/press1.jpg",
-  title: "A Grand Start to Shiksha Mahakumbh 2.0: Baton Ceremony Successfully Concluded Kurukshetra, November 20, 2024",
+  image:"/2024M/Office inugration",
+  title: "शिक्षा महाकुंभ अभियान के कार्यालय का NIPER SAS Nagar के परिसर में माननीय देशराज शर्मा जी, राष्ट्रीय महामंत्री, विद्या भारती; डॉ वरिन्दर गर्ग जी, OSD, स्वास्थ्य मंत्री, भारत सरकार; श्री विजय नड्डा जी, क्षेत्रीय संगठन मंत्री, विद्या भारती एवं प्रो दुलाल पांडा, निदेशक NIPER SAS Nagar की गरिमामयी उपस्थिति में हुया उद्घाटन संपन्न।",
   sections: [
     {
       title: "Introduction",
       content: [
-        "In preparation for Shiksha Mahakumbh 2.0, the 'Baton Ceremony' was held today at Kurukshetra University, Kurukshetra, with grandeur and enthusiasm. This symbolic event marked the formal commencement of the Mahakumbh and witnessed the participation of several dignitaries from the fields of education, society, and politics.",
+        "In preparation for Shiksha Mahakumbh 4.0, the 'Baton Ceremony' was held today at Kurukshetra University, Kurukshetra, with grandeur and enthusiasm. This symbolic event marked the formal commencement of the Mahakumbh and witnessed the participation of several dignitaries from the fields of education, society, and politics.",
       ]
     },
 
@@ -30,7 +30,7 @@ const data = {
       title: "Highlights of the Event",
       content: [
         <b key="highlight-1">1. Vice-Chancellor, Kurukshetra University</b>,
-        "The Vice-Chancellor emphasized the significance of Shiksha Mahakumbh 2.0 in highlighting the role of the Indian education system in global development. He congratulated all participants for their efforts in making this initiative a reality.",
+        "The Vice-Chancellor emphasized the significance of Shiksha Mahakumbh 4.0 in highlighting the role of the Indian education system in global development. He congratulated all participants for their efforts in making this initiative a reality.",
 
         <b key="highlight-2">2. Dr. Thakur SKR (Sci/Engr-SF, ISRO & Director, Shiksha Mahakumbh)</b>,
         "Dr. Thakur elaborated on the theme 'The Role of the Indian Education System in Global Development' and described the event as a global platform for innovation and dialogue in education. He added, “While sports have the global platform of the Olympics, there is currently no such forum for sustainable development, which is a fundamental aspect of global progress. Shiksha Mahakumbh is a small but significant step to address this gap, drawing inspiration from India’s ancient heritage as a global knowledge leader.”",
@@ -38,10 +38,10 @@ const data = {
         <b key="highlight-3">3. Shri Vijay Nadda (Organizing Secretary, Vidya Bharati North Zone)</b>,
         "Shri Nadda highlighted the objectives of Shiksha Mahakumbh, describing it as a key initiative to uphold the legacy of Indian education and align it with NEP 2020. He emphasized its role in fostering skill-based and entrepreneurial education while promoting meaningful discourse.",
 
-        <b key="highlight-4">4. Shri Virender Garg (Patron, Publicity Department, Shiksha Mahakumbh 2.0)</b>,
+        <b key="highlight-4">4. Shri Virender Garg (Patron, Publicity Department, Shiksha Mahakumbh 4.0)</b>,
         "Shri Garg discussed the interconnection between Indian culture and education and assured his full support for the success of the Mahakumbh.",
 
-        <b key="highlight-5">5. Dr. Amit Kansal (Coordinator, Publicity Department, Shiksha Mahakumbh 2.0)</b>,
+        <b key="highlight-5">5. Dr. Amit Kansal (Coordinator, Publicity Department, Shiksha Mahakumbh 4.0)</b>,
         "Dr. Kansal provided insights into the program’s structure and shared details about the preparations for upcoming events.",
       ]
     },
@@ -49,7 +49,7 @@ const data = {
     {
       title: "Key Attractions:-",
       content: [
-        "The Baton, symbolizing the inauguration of Shiksha Mahakumbh 2.0, was ceremoniously established by the chief guest.",
+        "The Baton, symbolizing the inauguration of Shiksha Mahakumbh 4.0, was ceremoniously established by the chief guest.",
 
         <b key="attractions-1">Special Presentations:-</b>,
         "Thought-provoking discussions on Indian culture enriched the event.",
@@ -62,7 +62,7 @@ const data = {
     {
       title: "Upcoming Events:-",
       content: [
-        "Shri Krishna Pandey, Co-convener, DHE, Haryana, announced that Shiksha Mahakumbh 2.0 will host a series of academic and cultural activities on December 16-17, 2024, at Kurukshetra University. These include:",
+        "Shri Krishna Pandey, Co-convener, DHE, Haryana, announced that Shiksha Mahakumbh 4.0 will host a series of academic and cultural activities on December 16-17, 2024, at Kurukshetra University. These include:",
 
         <b key="upcoming-1">Vice-Chancellors and Directors Conclave</b>,
         "Scientists Conclave",
@@ -81,14 +81,14 @@ const data = {
     {
       title: "Invitations:-",
       content: [
-        "Honorable member of the Finance Committee of Shiksha Mahakumbh, Shri Sanjay Chaudhary, along with Prof. Sunil Dhingra, Director, UIET, Kurukshetra University, extended an open invitation to all educators, students, and organizations to actively participate in the upcoming sessions of Shiksha Mahakumbh 2.0.",
+        "Honorable member of the Finance Committee of Shiksha Mahakumbh, Shri Sanjay Chaudhary, along with Prof. Sunil Dhingra, Director, UIET, Kurukshetra University, extended an open invitation to all educators, students, and organizations to actively participate in the upcoming sessions of Shiksha Mahakumbh 4.0.",
       ]
     },
 
     {
       title: "With Regards,",
       content: [
-        "Coordinator, Publicity Department, Shiksha Mahakumbh 2.0",
+        "Coordinator, Publicity Department, Shiksha Mahakumbh 4.0",
       ]
     },
 
@@ -215,7 +215,7 @@ export default function Home() {
            Twitter
           </a>
           <a
-            href={`mailto:?subject=Shiksha Mahakumbh 2.0&body=${shareText}%20${shareUrl}&picture=${shareImage}`}
+            href={`mailto:?subject=Shiksha Mahakumbh 4.0&body=${shareText}%20${shareUrl}&picture=${shareImage}`}
             className="p-2 bg-gray-500 text-white rounded hover:bg-gray-600"
           >
              Email
