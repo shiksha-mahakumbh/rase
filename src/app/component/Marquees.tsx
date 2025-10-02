@@ -37,7 +37,7 @@ const items: Item[] = [
   {
     imageUrl: "/new.gif",
     text: "शिक्षा महाकुंभ अभियान के कार्यालय का NIPER SAS Nagar के परिसर मे उद्घाटन संपन्न।, Click Here.",
-    link: "<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fshikshamahakumbh%2Fposts%2Fpfbid02ppA5ShzyHvASa2sEfbBihxkV8b9DGoqz7QhWHDqTLbFra9GmLxa7pxv5mEd6UQQYl&show_text=true&width=500" width="500" height="767" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>",
+    link: "https://www.rase.co.in",
   },
 ];
 
