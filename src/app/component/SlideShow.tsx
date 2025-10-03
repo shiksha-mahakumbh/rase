@@ -8,6 +8,8 @@ interface Slide {
   src: string;
   alt: string;
   legend: string;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
 interface SlideShowProps {
@@ -21,41 +23,52 @@ const SlideShow: React.FC<SlideShowProps> = ({ slides }) => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
   };
 
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? slides.length - 1 : prevIndex - 1
-    );
-  };
-
   useEffect(() => {
-    const intervalId = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    const intervalId = setInterval(nextSlide, 5000);
     return () => clearInterval(intervalId);
-  }, [currentIndex]);
+  }, [slides.length]);
 
   return (
-    <div className="m-4">
+    <div className="m-4 rounded-lg overflow-hidden shadow-lg border border-[#F59E0B]">
       <Carousel
         selectedItem={currentIndex}
-        showStatus={false} // Hide status indicator
-        showThumbs={false} // Hide thumbnails
+        showStatus={false}
+        showThumbs={false}
+        showArrows={true}
+        autoPlay={false}
+        infiniteLoop={true}
         onChange={(index) => setCurrentIndex(index)}
-        className="max-w-full"
+        emulateTouch
+        transitionTime={800}
       >
         {slides.map((slide, index) => (
           <div key={index} className="relative">
             <Image
               src={slide.src}
               alt={slide.alt}
-              className="w-full h-auto object-cover"
+              className="w-full h-[450px] sm:h-[500px] md:h-[550px] lg:h-[600px] object-cover"
               width={1200}
               height={800}
-              sizes="(max-width: 768px) 100vw, 768px" // Makes it responsive
+              sizes="(max-width: 768px) 100vw, 768px"
               priority
             />
-
             {slide.legend && (
-              <div className="absolute bottom-0 w-full bg-gray-800 bg-opacity-60 text-gray-200 px-4 py-3 text-sm sm:text-base lg:text-lg">
-                <p className="text-center">{slide.legend}</p>
+              <div className="absolute bottom-0 w-full bg-gradient-to-t from-gray-900 via-transparent to-transparent px-6 py-4">
+                <p className="text-white text-sm sm:text-base lg:text-lg font-semibold text-center drop-shadow-lg">
+                  {slide.legend}
+                </p>
+                {slide.ctaText && slide.ctaLink && (
+                  <div className="flex justify-center mt-2">
+                    <a
+                      href={slide.ctaLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#F59E0B] hover:bg-yellow-400 text-black font-bold py-2 px-4 rounded-md transition duration-300 shadow-md"
+                    >
+                      {slide.ctaText}
+                    </a>
+                  </div>
+                )}
               </div>
             )}
           </div>
