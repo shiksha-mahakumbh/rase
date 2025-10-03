@@ -1,12 +1,26 @@
-"use client";
+
+"use client"
 
 import React, { useState, useEffect } from "react";
-import { Tabs, Alert, Button, Spin, Modal } from "antd";
+import {
+  List,
+  Typography,
+  Tabs,
+  Alert,
+  Modal,
+  Button,
+  Skeleton,
+  Spin,
+} from "antd";
 import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import { useRouter } from "next/navigation";
-import clsx from "clsx";
+
+
+
+
+
 
 type Event = {
   id: string;
@@ -23,9 +37,12 @@ const EventsComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>("");
+
+  // State to track the loading status of all images
   const [imageLoading, setImageLoading] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [allImagesLoaded, setAllImagesLoaded] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -46,17 +63,41 @@ const EventsComponent: React.FC = () => {
     }
   };
 
+  const handleRefresh = () => {
+    fetchEvents();
+  };
+
   useEffect(() => {
     fetchEvents();
   }, []);
 
   useEffect(() => {
+    // Sort events by date in descending order
     const sortedEvents = [...events].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-    setCurrentNotices(sortedEvents.slice(0, 5));
-    setPastNotices(sortedEvents.slice(5));
+
+    // Select the latest 5 events as current notices
+    const latestFive = sortedEvents.slice(0, 5);
+
+    // Select all other events as past notices
+    const olderEvents = sortedEvents.slice(5);
+
+    // Set the state
+    setCurrentNotices(latestFive);
+    setPastNotices(olderEvents);
   }, [events]);
+
+  useEffect(() => {
+    // Check if all images are loaded
+    if (Object.keys(imageLoading).length === 0) {
+      setAllImagesLoaded(true);
+    } else {
+      setAllImagesLoaded(
+        Object.values(imageLoading).every((loading) => !loading)
+      );
+    }
+  }, [imageLoading]);
 
   const handleImageClick = (imageUrl: string) => {
     setModalImage(imageUrl);
@@ -80,54 +121,53 @@ const EventsComponent: React.FC = () => {
     });
   };
 
-  const renderEventCard = (event: Event) => (
-    <div
-      key={event.id}
-      className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 mb-4 opacity-0 animate-fadeIn"
-    >
-      {imageLoading[event.id] && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-          <Spin size="large" />
-        </div>
-      )}
-      <img
-        src={event.imageUrl}
-        alt={event.title}
-        className="w-full h-48 object-cover cursor-pointer"
-        onClick={() => handleImageClick(event.imageUrl)}
-        onLoad={() => handleImageLoadEnd(event.id)}
-        onError={() => handleImageLoadEnd(event.id)}
-        onLoadStart={() => handleImageLoadStart(event.id)}
-      />
-      {/* Hover Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-        <button
-          onClick={() => router.push("/noticeboard")}
-          className="text-white bg-primary px-4 py-2 rounded-lg font-semibold hover:bg-blue-600"
-        >
-          Read More
-        </button>
-      </div>
-      <div className="p-4 bg-white">
-        <h3 className="font-bold text-lg text-primary">{event.title}</h3>
-        <p className="text-gray-500 text-sm">
-          {new Date(event.date).toLocaleDateString()}
-        </p>
-      </div>
-    </div>
-  );
-
   const tabItems = [
     {
       key: "1",
       label: "Current Notices",
       children: loading ? (
-        <Spin size="large" className="my-4" />
+        <div className="max-h-64 overflow-y-auto">
+          <Skeleton active paragraph={{ rows: 4 }} />
+        </div>
       ) : currentNotices.length === 0 ? (
-        <Alert message="No current notices available." type="info" />
+        <Typography.Text>No current notices available.</Typography.Text>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-4">
-          {currentNotices.map(renderEventCard)}
+        <div className="max-h-64 overflow-y-auto">
+          <List
+            dataSource={currentNotices}
+            renderItem={(event) => (
+              <List.Item className="border-b-2 border-gray-500 py-4 flex items-start">
+                <div className="flex-grow flex flex-col justify-center w-2/3 pr-4">
+                  <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
+                    {event.title} 
+                  </Typography.Title>
+                </div>
+                <div className="relative w-1/3">
+                  {imageLoading[event.id] && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white opacity-75 z-10">
+                      <Spin />
+                    </div>
+                  )}
+                  <img
+                    src={event.imageUrl}
+                    alt={event.title}
+                    className="h-auto w-full object-cover rounded-lg cursor-pointer"
+                    onClick={() => handleImageClick(event.imageUrl)}
+                    onLoad={() => handleImageLoadEnd(event.id)}
+                    onError={() => handleImageLoadEnd(event.id)}
+                    onLoadStart={() => handleImageLoadStart(event.id)}
+                  />
+                </div>
+              </List.Item>
+            )}
+          />
+          {currentNotices.length > 0 && (
+            <div className="text-center mt-4">
+              <Button type="link" onClick={() => router.push('/noticeboard')}>
+                Read More
+              </Button>
+            </div>
+          )}
         </div>
       ),
     },
@@ -135,70 +175,123 @@ const EventsComponent: React.FC = () => {
       key: "2",
       label: "Past Notices",
       children: loading ? (
-        <Spin size="large" className="my-4" />
+        <div className="max-h-64 overflow-y-auto">
+          <Skeleton active paragraph={{ rows: 4 }} />
+        </div>
       ) : pastNotices.length === 0 ? (
-        <Alert message="No past notices available." type="info" />
+        <Typography.Text>No past notices available.</Typography.Text>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-4">
-          {pastNotices.map(renderEventCard)}
+        <div className="max-h-64 overflow-y-auto">
+          <List
+            dataSource={pastNotices.slice(0, 5)} // Show only the first 5 notices
+            renderItem={(event) => (
+              <List.Item className="border-b-2 border-gray-500 py-4 flex items-start">
+                <div className="flex-grow flex flex-col justify-center w-2/3 pr-4">
+                  <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
+                    {event.title}
+                  </Typography.Title>
+                </div>
+                <div className="relative w-1/3">
+                  {imageLoading[event.id] && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white opacity-75 z-10">
+                      <Spin />
+                    </div>
+                  )}
+                  <img
+                    src={event.imageUrl}
+                    alt={event.title}
+                    className="h-auto w-full object-cover rounded-lg cursor-pointer"
+                    onClick={() => handleImageClick(event.imageUrl)}
+                    onLoad={() => handleImageLoadEnd(event.id)}
+                    onError={() => handleImageLoadEnd(event.id)}
+                    onLoadStart={() => handleImageLoadStart(event.id)}
+                  />
+                </div>
+              </List.Item>
+            )}
+          />
+          {pastNotices.length > 5 && (
+            <div className="text-center mt-4">
+              <Button type="link" onClick={() => router.push('/noticeboard')}>
+                Read More
+              </Button>
+            </div>
+          )}
         </div>
       ),
     },
   ];
 
   return (
-    <div className="p-6 bg-gray-50">
-      <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <span className="text-xl font-bold text-primary flex items-center gap-2">
-            Notice Board <CalendarOutlined />
+    <div className="p-6 text-primary">
+      <div className="bg-white shadow-lg rounded-lg max-w-lg mx-auto">
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+          <span className="text-lg font-semibold flex items-center">
+            Notice Board
+            <CalendarOutlined className="ml-2 text-primary" />
           </span>
-          <Button icon={<ReloadOutlined />} onClick={fetchEvents} type="primary">
-            Refresh
-          </Button>
+          <Button
+            icon={<ReloadOutlined />}
+            onClick={handleRefresh}
+            className="ml-2"
+            size="small"
+            type="text"
+          />
         </div>
-
-        <div className="text-center p-2 border-b border-gray-200 flex justify-center items-center gap-2">
-          <img src="new.gif" alt="new" />
+        <span className="text-lg p-2 flex text-center font-semibold justify-center border-b border-gray-300 items-center">
+          <img src="new.gif" alt="" />&nbsp;
           <a
             href="/donation"
-            className="text-blue-600 font-semibold hover:text-primary transition-colors duration-300"
+            className="text-base text-blue-600 hover:text-primary"
           >
             Click Here to Sponsor
           </a>
-          <img src="new.gif" alt="new" />
-        </div>
+          &nbsp;<img src="new.gif" alt="" />
+        </span>
+        {/* <span className="text-lg p-2 flex text-center font-semibold justify-center border-b border-gray-300 items-center">
+          <img src="new.gif" alt="" />&nbsp;
+          <a
+            href="/tentative_schdule.xlsx"
+            className="text-base text-blue-600 hover:text-primary"
+          >
 
+            Tentative Schedule शिक्षा महाकुंभ - 2024
+          </a> 
+          &nbsp;<img src="new.gif" alt="" />
+        </span> */}
         {error && (
-          <Alert message="Error" description={error} type="error" className="m-4" />
+          <Alert
+            message="Error"
+            description={error}
+            type="error"
+            showIcon
+            className="m-4"
+          />
         )}
-
-        <Tabs defaultActiveKey="1" className="p-4" items={tabItems} />
+        <Tabs defaultActiveKey="1" className="p-4">
+          {tabItems.map((item) => (
+            <Tabs.TabPane tab={item.label} key={item.key}>
+              {item.children}
+            </Tabs.TabPane>
+          ))}
+        </Tabs>
       </div>
-
-      {/* Modal for image */}
-      <Modal open={isModalVisible} onCancel={handleCancel} footer={null} centered width="80%">
-        <img src={modalImage} alt="Modal" className="w-full h-auto object-contain" />
+      <Modal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        centered
+        width="80%"
+      >
+        <img
+          src={modalImage}
+          alt="Modal"
+          className="w-full h-auto object-contain"
+        />
       </Modal>
-
-      {/* Fade-in animation keyframes */}
-      <style jsx>{`
-        @keyframes fadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.7s ease forwards;
-        }
-      `}</style>
     </div>
   );
 };
 
 export default EventsComponent;
+
