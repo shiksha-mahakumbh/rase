@@ -1,19 +1,16 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-export default function PaperSubmission() {
-  const router = useRouter();
-
+const PaperSubmission = () => {
   useEffect(() => {
-    // Redirect user to the external GitHub file
-    window.location.href =
-      "https://github.com/shiksha-mahakumbh/rase/blob/aad7a242bcc4076ae6c8f2ec574c6a1d7fa4caea/src/app/component/Vibhag/AcademicCouncil24.tsx";
+    window.location.href = "https://www.rase.co.in/VibhagRoute/AcademicCouncil24";
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-white text-black">
-      <p>Redirecting to GitHub repository...</p>
+    <div className="flex items-center justify-center h-screen bg-white text-black text-lg">
+      Redirecting to the Paper Submission Portal...
     </div>
   );
-}
+};
+
+export default PaperSubmission;
