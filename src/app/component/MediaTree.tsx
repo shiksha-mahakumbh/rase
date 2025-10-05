@@ -15,7 +15,7 @@ const Glimpses: React.FC = () => {
       label: "शिक्षा महाकुंभ 4.0",
       engLabel: "Shiksha Mahakumbh 4.0",
       year: "2024",
-      theme: "Education for Global Harmony",
+      theme: "Indian Education System for Global Development",
       color: "from-blue-700 to-indigo-800",
       image: "/images/smk4.jpg",
       children: [
@@ -38,7 +38,7 @@ const Glimpses: React.FC = () => {
       label: "शिक्षा महाकुंभ 3.0",
       engLabel: "Shiksha Mahakumbh 3.0",
       year: "2024",
-      theme: "Role of Indian Education System for Global Development",
+      theme: "Role of Startups in Developing Economy of",
       color: "from-orange-500 to-red-600",
       image: "/images/smk3.jpg",
       children: [
