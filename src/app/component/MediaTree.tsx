@@ -206,5 +206,4 @@ const Glimpses: React.FC = () => {
     </>
   );
 };
-
 export default Glimpses;
