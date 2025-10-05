@@ -1,215 +1,291 @@
+// src/components/PaperTracks.tsx
+"use client";
+
 import React from "react";
+import Link from "next/link";
 
-const AcademicCouncil: React.FC = () => {
-  const data = [
-    {
-      heading: "ACADEMIC COUNCIL",
-      members: [
-        { title: "Patron", names: [ "Dr. Ashok Pal"],address: "President, Vidya Bharti - North Zone"  },
-        { title: "Patron", names: [  "Mr. Vijay Kumar Nadda"] ,address:"Organising Secratery, Vidya Bharti - North Zone"},
-      ],
-    },
-    {
-      heading: "ADVISORY COMMITTEE",
-      members: [
-        { title:"",names: "Prof. Somnath Sachdeva", address: "Vice Chancellor, Kurukshetra University, Haryana" },
-        { title:"",names:  "Prof. Binod Kumar Kanaujia", address: "Director, NIT Jalandhar, Punjab" },
-        { title: "",names: "Prof. B. V. Reddy", address: "Director, NIT Kurukshetra, Haryana" },
-        { title:"",names:  "Prof. Deepti Dharmani", address: "Vice Chancellor, Chaudhary Bansi Lal University, Haryana" },
-        { title:"",names:  "Prof. Amar Pal Singh", address: "Vice Chancellor, Dr. R. M.L. National Law University, UP" },
-        { title: "",names: "Prof. R. P. Tiwari", address: "Vice Chancellor, Central University of Punjab, Punjab" },
-        { title: "",names: "Prof. Tankeshwar Kumar", address: "Vice Chancellor, Central University of Haryana, Haryana" },
-        { title: "",names: "Prof. S. P. Bansal", address: "Vice Chancellor, Central University of Himachal Pradesh, H.P." },
-        { title: "",names: "Prof. M. C. Govil", address: "Director, NIT Sikkim, Sikkim" },
-        { title: "",names: "Prof. Dinesh Kumar", address: "Vice Chancellor, Gurugram University, Haryana" },
-        { title: "",names: "Prof. B. R. Kamboj", address: "Vice Chancellor, Haryana Agriculture University, Haryana" },
-        { title: "",names: "Prof. Kartar Singh Dhiman", address: "SKA University, Haryana" },
-        { title: "",names: "Dr. Thakur Sudesh Kumar Raunija", address: "Sci/Engr-SF, ISRO, and Director, DHE & VBITR" },
-      ],
-    },
-    {
-      heading: "ACADEMIC COMMITTEE",
-      members: [
-        { title: "Chairperson", names: "Dr. Ravi Prakash", address: "Chaudhary Bansi Lal University, Haryana" },
-        { title: "Vice-Chairperson", names: "Prof. Brahmjit Singh", address: "NIT Kurukshetra, Haryana" },
-        { title: "Members", names: "Prof. Bala Lakhendra", address: "BHU Varanasi, U.P." },
-        { title: "Members", names:  "Prof. Sathans", address: " NIT Kurukshetra, Haryana" },
-        { title: "Members", names:  "Prof. Anish Sachdeva",address: "NIT Jalandhar, Punjab" },
-        { title: "Members", names:  "Prof. Anish Sachdeva",address: "NIT Jalandhar, Punjab" },
-        { title: "Members", names:  "Dr. Rajeev Arya, Assistant Professor",address: "NIT Patna, Bihar" },
-      ],
-    },
-    {
-      heading: "SECTIONS",
-      sections: [
-        {
-          title: "Engineering Section",
-          president: "Prof. Brahmjit Singh, NIT Kurukshetra, Haryana",
-          members: [
-            "Dr. Vipin Sharma, Technical Consultant, HCL Technologies, Noida",
-            "Dr. Mukesh Khandelwal,  Delhi University",
-            "Dr. Sonu Bala Garg, IKG Punjab Technical University, Jalandhar",
-            "Dr. Vikash Kumar Garg, SLIET, Longowal",
-            
-            "Dr. Gaurav Sharma, IIT Delhi"
-          ],
-        },
-        {
-          title: "Management & International Relations",
-          president: "Dr. Samriti Mahajan, Lingaya’s Vidyapeeth, Faridabad, Haryana",
-          members: [],
-        },
-        {
-          title: "Social Sciences",
-          president: "Prof. S. P. Kaushik, Kurukshetra University, Haryana",
-          members: [
-            "Dr. Atryee Saha, JNU, Delhi",
-           
-          ],
-        },
-        {
-          title: "Humanities",
-          president: "Dr. Kuldeep Mehandiratta, Kurukshetra University, Haryana",
-          members: [],
-        },
-        {
-          title: "Business, Startup & Entrepreneurship",
-          president: "Dr. Raghvendra Singh Yadav, Mangalmay Institute of Management, UP",
-          members: [],
-        },
-        {
-          title: "Ed Tech and Technology",
-          president: "Dr. Sachin Sharma, Shri Madhav College of Education and Technology, Hapur, UP",
-          members: ["Dr. Manish Kumar, Zakir Hussain College, Delhi University"],
-        },
-        {
-          title: "Gurukul Education",
-          president: "Prof. Shubha Sharma, Vedanta PG Girls College, Ringus, Sikar, Rajasthan",
-          members: [],
-        },
-        {
-          title: "Sports and Physical Education",
-          president: "Dr. Jasbir Singh, DAV University Jalandhar, Punjab",
-          members: [],
-        },
-        {
-          title: "Medicine",
-          president: "Dr. Naresh Bhargava, BPS Women University, Sonepat",
-          members: [],
-        },
-        {
-          title: "Fundamental Sciences",
-          president: "Prof. Anand, Kurukshetra University, Haryana",
-          members: ["Dr. Rajesh Agnihotri, UIET Kurukshetra University, Haryana",
-                    "Dr. Vipin Jain, CLBU, Bhiwani",
-                     "Dr. Pankaj, Centeral University of Himachal Pradesh.",
-                     "Dr. Kapil Sood, GDC Dhaliara, HP",
-          ],
-        },
-        {
-          title: "Environment and Water Conservation",
-          president: "Dr. Vivek Kumar, Prof & Head, Centre for Rural Development and Technology, Indian Institute of Technology Delhi",
-          members: ["Dr. Updesh Verma, Manyavar Kanshiram Government Degree College, Ghaziabad, UP"],
-        },
-        {
-          title: "Culture",
-          president: "Prof. Sanjay Jha, LNMU, Darbhanga, Bihar",
-          members: [],
-        },
-        {
-          title: "Languages",
-          president: "Dr. Virender Pal, IIHS Kurukshetra University",
-          members: ["Dr. Ram Chandra, Kurukshetra University", "Dr. Sunaina Saini, Zakir Hussain College, Delhi University"],
-        },
-        {
-          title: "Agriculture and Veterinary Sciences",
-          president: "Prof. Neelesh Sharma, SKUAST Jammu, J&K",
-          members: [],
-        },
-        {
-          title: "School Education",
-          president: "Dr. Digvijay Singh, ITTR, Kurukshetra University",
-          members: ["Dr. Sandeep, SIATE, Palwal, Haryana", "Dr. Sumant Goyal, SIATE, Palwal, Haryana"],
-        },
-        {
-          title: "Education for Disabled",
-          president: "Dr. Jyoti Tiwari, Army Institute of Education, Greater NOIDA, U.P.",
-          members: [],
-        },
-      ],
-    },
-  ];
+type Track = {
+  id: number;
+  title: string;
+  bullets: string[];
+  chair?: string;
+};
 
-  
+const tracks: Track[] = [
+  {
+    id: 1,
+    title: "Fundamental & Applied Sciences",
+    bullets: [
+      "Physics, Chemistry, Biology, Mathematics",
+      "Earth & Space Sciences",
+      "Interdisciplinary Sciences (Biotech, Material Science, etc.)",
+    ],
+    chair: "Dr. Praveen Kumar",
+  },
+  {
+    id: 2,
+    title: "Engineering & Technology",
+    bullets: [
+      "Core Engineering (Mechanical, Civil, Electrical)",
+      "Emerging Tech (AI, Robotics, Data Science, Quantum)",
+    ],
+    chair: "Dr. Anish Sachdeva",
+  },
+  {
+    id: 3,
+    title: "Management, Business & Entrepreneurship",
+    bullets: ["Business Administration", "Startups & Family Business", "Social Entrepreneurship"],
+    chair: "Dr. Sanjeev Bansal",
+  },
+  {
+    id: 4,
+    title: "International Relations, Law & Governance",
+    bullets: ["Global Affairs", "Public Policy & Administration", "Legal Studies & Human Rights"],
+    chair: "Dr. Poornima Pawar",
+  },
+  {
+    id: 5,
+    title: "Social Sciences & Humanities",
+    bullets: ["Sociology, Psychology, Political Science, History", "Philosophy & Ethics"],
+    chair: "Dr. Bala Lakhendra",
+  },
+  {
+    id: 6,
+    title: "Education Systems & Pedagogy",
+    bullets: [
+      "School Education (Foundational to Secondary)",
+      "Higher Education & Research",
+      "Inclusive & Lifelong Learning",
+    ],
+    chair: "Dr. P K Singh",
+  },
+  {
+    id: 7,
+    title: "EdTech & Digital Education",
+    bullets: ["EdTech Innovations", "Online & Blended Learning", "AI in Education"],
+    chair: "Dr. Rajneesh Talwar",
+  },
+  {
+    id: 8,
+    title: "Health Sciences & Traditional Medicine",
+    bullets: ["Modern Medicine", "AYUSH (Ayurveda, Yoga etc.)", "Public Health & Preventive Care"],
+    chair: "Dr. Nitin Bansal",
+  },
+  {
+    id: 9,
+    title: "Sports, Physical Education & Well-being",
+    bullets: ["Sports Science", "Mental Health & Wellness", "Yoga & Lifestyle Education"],
+    chair: "Dr. Lakha Singh",
+  },
+  {
+    id: 10,
+    title: "Agriculture, Food & Veterinary Sciences",
+    bullets: ["Sustainable Agriculture", "Agri-Tech & Innovation", "Animal Health & Husbandry"],
+    chair: "Dr. Neelesh Sharma",
+  },
+  {
+    id: 11,
+    title: "Environment, Sustainability & Water Resources",
+    bullets: ["Climate Change", "Environmental Education", "Water & Resource Management"],
+    chair: "Dr. Ashwani Sharma",
+  },
+  {
+    id: 12,
+    title: "Culture, Arts & Heritage",
+    bullets: ["Performing & Visual Arts", "Folk & Tribal Traditions", "Cultural Conservation"],
+    chair: "Dr. Ravi Prakash",
+  },
+  {
+    id: 13,
+    title: "Languages & Linguistics",
+    bullets: ["Bharatiya Classical & Modern Languages", "Translation & Language Tech"],
+    chair: "Dr. Anshu",
+  },
+  {
+    id: 14,
+    title: "Vocational & Skill-based Education",
+    bullets: ["Industrial Training", "Crafts & Traditional Skills", "Workforce Readiness"],
+    chair: "Dr. Kamlesh Prasad",
+  },
+  {
+    id: 15,
+    title: "Indian Knowledge System",
+    bullets: [
+      "Philosophy & Science in Indian Traditions",
+      "Vedic Literature, Epistemology & Performing Arts",
+      "Education in Ancient India (Gurukula to Nalanda)",
+    ],
+    chair: "Dr. V K Singh",
+  },
+];
+
+const PaperTracks: React.FC = () => {
+  const submitLink =
+    "https://cmt3.research.microsoft.com/SK2025/Submission/Index";
+
+  // JSON-LD structured data for SEO (conference + tracks)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ConferenceEvent",
+    name: "Shiksha Mahakumbh 2025 - Paper Presentation",
+    startDate: "2025-10-31",
+    endDate: "2025-11-02",
+    location: {
+      "@type": "Place",
+      name: "NIPER Mohali",
+      address: "Sector 67, SAS Nagar (Mohali), Punjab, India",
+    },
+    description:
+      "Multitrack conference at Shiksha Mahakumbh 2025. Paper presentations across 15 tracks including sciences, engineering, education, health, and Bhartiya Knowledge Systems.",
+    organizer: {
+      "@type": "Organization",
+      name: "Department of Holistic Education (DHE) & NIPER Mohali",
+      url: "https://shikshamahakumbh.com",
+    },
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    subEvent: tracks.map((t) => ({
+      "@type": "Event",
+      name: t.title,
+      description: t.bullets.join(" | "),
+      performer: t.chair || "",
+    })),
+  };
+
   return (
-    <div className="container mx-auto px-4 py-6 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-4xl font-bold text-center mb-8">Shiksha Mahakumbh Abhiyan</h1>
-      <h2 className="text-2xl font-semibold text-center mb-6">
-        Department of Holistic Education <br />
-        Vidya Bharti Institute of Training and Research Chandigarh
-      </h2>
+    <section aria-labelledby="paper-presentation" className="max-w-6xl mx-auto px-4 py-8">
+      {/* Structured data (SEO) */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-      {data.map((section, index) => (
-        <div key={index} className="mb-8">
-          <h3 className="text-3xl font-semibold mb-4 text-blue-700">{section.heading}</h3>
+      {/* Header */}
+      <header className="mb-6 text-center">
+        <h2 id="paper-presentation" className="text-2xl sm:text-3xl font-bold text-black">
+          Paper Presentation — Multitrack Conference
+        </h2>
+        <p className="mt-2 text-gray-700 max-w-2xl mx-auto">
+          The Shiksha Mahakumbh 2025 (5th Edition) will host a hybrid multitrack conference—featuring
+          original research, plenary talks, workshops and cross-disciplinary dialogue. Submit a paper
+          aligned with NEP 2020, innovation, and Bhartiya knowledge systems.
+        </p>
 
-          {section.members && (
-            <table className="table-auto border-collapse w-full bg-white shadow-md rounded-md mb-6">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border px-4 py-2 text-left">Title/Role</th>
-                  <th className="border px-4 py-2 text-left">Name</th>
-                  <th className="border px-4 py-2 text-left">Affiliation</th>
-                </tr>
-              </thead>
-              <tbody>
-                {section.members.map((member, idx) => (
-                  <tr key={idx} className="hover:bg-gray-100">
-                    <td className="border px-4 py-2">{member.title || "Member"}</td>
-                    <td className="border px-4 py-2">
-                      {Array.isArray(member.names) ? member.names.join(", ") : member.names}
-                    </td>
-                    <td className="border px-4 py-2">{'address' in member ? member.address : "N/A"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-
-          {section.sections && (
-            <div className="mt-6">
-              {section.sections.map((subSection, idx) => (
-                <div key={idx} className="mb-6">
-                  <h4 className="text-2xl font-semibold mb-2 text-green-700">{subSection.title}</h4>
-                  <table className="table-auto border-collapse w-full bg-white shadow-md rounded-md">
-                    <thead>
-                      <tr className="bg-gray-200">
-                        <th className="border px-4 py-2 text-left">Role</th>
-                        <th className="border px-4 py-2 text-left">Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="border px-4 py-2">President</td>
-                        <td className="border px-4 py-2">{subSection.president}</td>
-                      </tr>
-                      {subSection.members.length > 0 &&
-                        subSection.members.map((member, memberIdx) => (
-                          <tr key={memberIdx}>
-                            <td className="border px-4 py-2">Member</td>
-                            <td className="border px-4 py-2">{member}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))}
-            </div>
-          )}
+        <div className="mt-4 flex flex-col sm:flex-row sm:justify-center gap-3">
+          <a
+            href={submitLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition"
+          >
+            Submit Paper (CMT Portal)
+          </a>
+          <Link href="/paper">
+            <a className="inline-block text-black border border-black px-4 py-2 rounded-md hover:bg-black hover:text-white transition">
+              Call for Papers & Guidelines
+            </a>
+          </Link>
         </div>
-      ))}
-    </div>
+      </header>
+
+      {/* Chairs / Conveners card */}
+      <div className="bg-white border rounded-lg shadow-sm px-5 py-4 mb-6">
+        <h3 className="text-lg font-semibold text-black">General Chair & Conveners</h3>
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="p-3 border rounded-md">
+            <p className="text-sm text-gray-600">General Chair</p>
+            <p className="font-semibold text-black">Prof. Brahmjit Singh (NIT Kurukshetra)</p>
+          </div>
+          <div className="p-3 border rounded-md">
+            <p className="text-sm text-gray-600">Co-Chairs</p>
+            <p className="font-semibold text-black">Dr. Krishan Gopal, Dr. Deepak B. Salunke (NIPER SAS Nagar)</p>
+          </div>
+          <div className="p-3 border rounded-md">
+            <p className="text-sm text-gray-600">Conveners</p>
+            <p className="font-semibold text-black">Dr. Vikash Kumar Garg • 9988610629</p>
+            <p className="mt-1 font-semibold text-black">Dr. Kapil Sood • 8588820738</p>
+            <p className="mt-1 font-semibold text-black">Dr. Pankaj Kumar • 9540344621</p>
+            <p className="mt-1 font-semibold text-black">Dr. Dhirender Kumar • 9015625255</p>
+            <p className="mt-1 font-semibold text-black">Dr. Pankaj Verma • 8295577722</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Tracks grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {tracks.map((t) => (
+          <article
+            key={t.id}
+            className="bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition transform hover:-translate-y-1"
+            aria-labelledby={`track-${t.id}-title`}
+          >
+            <h4 id={`track-${t.id}-title`} className="text-lg font-semibold text-black">
+              {t.id}. {t.title}
+            </h4>
+
+            <ul className="mt-3 text-gray-700 list-disc list-inside space-y-1">
+              {t.bullets.map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+
+            {t.chair && (
+              <div className="mt-4 text-sm text-gray-800">
+                <span className="font-medium">Track Chair:</span> <span>{t.chair}</span>
+              </div>
+            )}
+
+            <div className="mt-4 flex gap-2">
+              <a
+                href={submitLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm inline-block px-3 py-1 rounded bg-black text-white hover:bg-gray-800 transition"
+                aria-label={`Submit paper for ${t.title}`}
+              >
+                Submit Paper
+              </a>
+              <Link href="/contact">
+                <a className="text-sm inline-block px-3 py-1 rounded border border-black text-black hover:bg-black hover:text-white transition">
+                  Contact Convenor
+                </a>
+              </Link>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* Publication & Notes */}
+      <aside className="mt-8 bg-white border rounded-lg p-5 shadow-sm">
+        <h3 className="text-lg font-semibold text-black">Publication & Review</h3>
+        <p className="mt-2 text-gray-700">
+          All accepted papers will be published in a peer-reviewed open access journal with ISSN.
+          Selected high-quality papers will be considered for Web of Science / Scopus indexed journals.
+          Submissions undergo a double-blind peer review; similarity index must be within acceptable limits.
+        </p>
+
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="p-3 border rounded">
+            <p className="text-sm text-gray-600">Best Paper</p>
+            <p className="font-semibold text-black">Track-wise Best Paper Award</p>
+          </div>
+          <div className="p-3 border rounded">
+            <p className="text-sm text-gray-600">Submission</p>
+            <p className="font-semibold text-black">
+              <a href={submitLink} target="_blank" rel="noopener noreferrer" className="underline">
+                CMT Submission Portal
+              </a>
+            </p>
+          </div>
+          <div className="p-3 border rounded">
+            <p className="text-sm text-gray-600">Backup Email</p>
+            <p className="font-semibold text-black">smkchair@gmail.com</p>
+          </div>
+        </div>
+      </aside>
+    </section>
   );
 };
 
-export default AcademicCouncil;
+export default PaperTracks;
