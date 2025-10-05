@@ -1,103 +1,46 @@
+// pages/merchandise.tsx
+
 "use client";
-import React, { useState, useEffect } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
-import Image from "next/image";
-
-interface Slide {
-  src: string;
-  alt: string;
-  legend?: string; // 👈 legend is now optional
-}
-
-interface SlideShowProps {
-  slides: Slide[];
-}
-
-const SlideShow: React.FC<SlideShowProps> = ({ slides }) => {
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(intervalId);
-  }, [slides.length]);
-
-  return (
-    <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200">
-      <Carousel
-        selectedItem={currentIndex}
-        showStatus={false}
-        showThumbs={false}
-        infiniteLoop
-        autoPlay
-        interval={4000}
-        showArrows={true}
-        className="max-w-full"
-      >
-        {slides.map((slide, index) => (
-          <div key={index} className="relative">
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              width={1200}
-              height={800}
-              className="w-full h-auto object-cover transition-transform duration-500 hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 768px"
-              priority
-            />
-            {slide.legend && (
-              <div className="absolute bottom-0 bg-gradient-to-t from-black/70 to-transparent text-white w-full px-4 py-2 text-center text-sm sm:text-base">
-                {slide.legend}
-              </div>
-            )}
-          </div>
-        ))}
-      </Carousel>
-    </div>
-  );
-};
-
-export default SlideShow;
-
 
 import React from "react";
-import SlideShow from "./SlideShow";
+import { motion } from "framer-motion";
+import SlideShow from "./SlideShow"; // Make sure the path is correct
 import Head from "next/head";
 
 const merchandiseItems = [
   {
     id: 1,
-    title: "Official Shiksha Mahakumbh T-Shirt",
+    title: "Shiksha Mahakumbh T-shirt",
     slides: [
-      { src: "/merchandise/tshirt/1.jpg", alt: "Shiksha Mahakumbh T-shirt" },
-      { src: "/merchandise/tshirt/2.jpg", alt: "Conference T-shirt back view" },
-      { src: "/merchandise/tshirt/3.jpg", alt: "T-shirt close-up logo" },
+      { src: "/merchandise/tshirt/1.jpg", alt: "T-shirt Image 1", legend: "" },
+      { src: "/merchandise/tshirt/2.jpg", alt: "T-shirt Image 2", legend: "" },
+      { src: "/merchandise/tshirt/3.jpg", alt: "T-shirt Image 3", legend: "" },
     ],
     price: 500,
   },
   {
     id: 2,
-    title: "Conference Mug",
+    title: "Official Mug",
     slides: [
-      { src: "/merchandise/mug/1.jpg", alt: "Official Mug Shiksha Mahakumbh" },
+      { src: "/merchandise/mug/1.jpg", alt: "Mug Image 1", legend: "" },
     ],
     price: 200,
   },
   {
     id: 3,
-    title: "Event Cap",
+    title: "Cap",
     slides: [
-      { src: "/merchandise/cap/1.jpg", alt: "Shiksha Mahakumbh Cap" },
+      { src: "/merchandise/cap/1.jpg", alt: "Cap Image 1", legend: "" },
+      { src: "/merchandise/cap/2.jpg", alt: "Cap Image 2", legend: "" },
     ],
     price: 200,
   },
   {
     id: 4,
-    title: "Backpack",
+    title: "Conference Bag",
     slides: [
-      { src: "/merchandise/bag/1.jpg", alt: "Event Backpack" },
+      { src: "/merchandise/bag/1.jpg", alt: "Bag Image 1", legend: "" },
+      { src: "/merchandise/bag/2.jpg", alt: "Bag Image 2", legend: "" },
     ],
     price: 400,
   },
@@ -106,69 +49,101 @@ const merchandiseItems = [
 const Merchandise = () => {
   return (
     <>
-      {/* 🌍 SEO Optimized Head Section */}
+      {/* SEO Metadata */}
       <Head>
-        <title>Shiksha Mahakumbh Official Merchandise | Buy Online</title>
+        <title>Official Merchandise | Shiksha Mahakumbh Abhiyan</title>
         <meta
           name="description"
-          content="Explore official merchandise of Shiksha Mahakumbh Abhiyan — T-shirts, Caps, Mugs, and more. Celebrate the spirit of Bharat through education!"
+          content="Explore official merchandise of Shiksha Mahakumbh Abhiyan – T-shirts, mugs, caps, and bags that symbolize the spirit of Bharat’s educational renaissance."
         />
         <meta
           name="keywords"
-          content="Shiksha Mahakumbh merchandise, education conference India, buy event t-shirt, Bharat@2047 campaign, educational initiatives, Vidya Bharti"
+          content="Shiksha Mahakumbh merchandise, official T-shirt, educational event, Shiksha Mahakumbh store, IIT Ropar event, education campaign"
         />
-        <meta name="author" content="Department of Holistic Education" />
+        <meta name="robots" content="index, follow" />
       </Head>
 
-      <div className="bg-gradient-to-b from-gray-50 to-white py-10 px-6 md:px-16">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-primary mb-2">
-            शिक्षा महाकुंभ अभियान - Official Merchandise
-          </h1>
-          <p className="text-gray-700 max-w-3xl mx-auto text-lg">
-            Celebrate the spirit of <strong>Shiksha Mahakumbh Abhiyan</strong> with exclusive 
-            event merchandise. Every item supports the educational transformation movement of Bharat@2047.
-          </p>
-        </div>
+      {/* Header Section */}
+      <section className="bg-white text-black py-12 text-center px-4">
+        <motion.h1
+          className="text-4xl md:text-5xl font-bold mb-4 text-primary"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Shiksha Mahakumbh Official Merchandise
+        </motion.h1>
+        <motion.p
+          className="text-lg md:text-xl max-w-3xl mx-auto text-gray-700"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          Be part of the <strong>Shiksha Mahakumbh Abhiyan</strong> by owning
+          exclusive event merchandise that represents unity, knowledge, and the
+          spirit of <strong>Indian Education for Global Development</strong>.
+        </motion.p>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {/* Merchandise Section */}
+      <section className="bg-gray-50 py-12 px-4 md:px-16">
+        <div className="max-w-6xl mx-auto grid gap-12">
           {merchandiseItems.map((item) => (
-            <section
+            <motion.div
               key={item.id}
-              className="p-5 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-300"
+              className="bg-white shadow-lg rounded-2xl overflow-hidden p-6 md:p-10 hover:shadow-xl transition-shadow duration-300"
+              whileHover={{ scale: 1.02 }}
             >
-              <h2 className="text-xl font-semibold mb-3 text-center text-primary">
+              <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-center text-primary">
                 {item.title}
               </h2>
 
-              <div className="rounded-lg overflow-hidden mb-4">
+              <div className="max-w-3xl mx-auto mb-6">
                 <SlideShow slides={item.slides} />
               </div>
 
-              <p className="text-center text-lg font-semibold text-gray-800 mb-2">
-                <span className="text-primary font-bold">Price:</span> ₹{item.price}{" "}
-                <span className="text-sm text-gray-500">(plus delivery charges)</span>
+              <p className="text-lg md:text-xl font-semibold text-center mb-6">
+                <span className="font-bold text-primary text-2xl">₹{item.price}</span>{" "}
+                <span className="text-gray-600 text-base">
+                  + delivery charges
+                </span>
               </p>
 
-              <div className="flex justify-center">
-                <a
-                  href="/comingsoon"
-                  className="inline-block bg-primary text-white py-2 px-6 rounded-full hover:bg-primary-dark transition-all duration-300"
-                >
-                  Buy Now
+              <div className="text-center">
+                <a href="/commingsoon" className="inline-block">
+                  <motion.button
+                    className="bg-primary text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-primary/90 transition"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Buy Now
+                  </motion.button>
                 </a>
               </div>
-            </section>
+            </motion.div>
           ))}
         </div>
+      </section>
 
-        <div className="text-center mt-16">
-          <p className="text-gray-700 italic max-w-2xl mx-auto">
-            “Each merchandise purchase contributes to our mission — 
-            empowering education, innovation, and the holistic development of Bharat.”
-          </p>
-        </div>
-      </div>
+      {/* Call-to-Action */}
+      <section className="bg-primary text-white py-12 text-center">
+        <h3 className="text-2xl md:text-3xl font-bold mb-4">
+          Join the Movement of Educational Renaissance
+        </h3>
+        <p className="max-w-3xl mx-auto mb-6 text-lg text-gray-100">
+          Support the mission of <strong>Shiksha Mahakumbh Abhiyan</strong> by
+          purchasing official merchandise and spreading the message of holistic
+          education across Bharat and the world.
+        </p>
+        <a href="/about">
+          <motion.button
+            className="bg-white text-primary font-semibold py-3 px-6 rounded-full hover:bg-gray-100"
+            whileHover={{ scale: 1.05 }}
+          >
+            Learn More
+          </motion.button>
+        </a>
+      </section>
     </>
   );
 };
