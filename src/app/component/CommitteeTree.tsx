@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import SlideShow from "../SlideShow"; // adjust path if needed
+// import SlideShow from "../SlideShow"; // adjust path if needed
 
 // ---------- DATA ----------
 const committeeGroups = [
@@ -194,7 +194,7 @@ const CommitteesPage = () => {
       </section>
 
       {/* MERCHANDISE SECTION */}
-      <section className="bg-white py-16 px-4">
+      {/* <section className="bg-white py-16 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <motion.h2
             className="text-4xl font-bold text-primary mb-6"
@@ -235,6 +235,6 @@ const CommitteesPage = () => {
       </section>
     </>
   );
-};
+}; */}
 
 export default CommitteesPage;
