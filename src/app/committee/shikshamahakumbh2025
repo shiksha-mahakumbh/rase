@@ -1,1 +1,143 @@
+"use client";
+import React from "react";
+import Footer from "../../component/Footer";
+import CompanyInfo from "../../component/CompanyInfo";
+import NavBar from "../../component/NavBar";
+
+interface Member {
+  name: string;
+  designation: string;
+}
+
+interface CommitteeSectionProps {
+  title: string;
+  members: Member[];
+}
+
+const CommitteeSection: React.FC<CommitteeSectionProps> = ({ title, members }) => {
+  return (
+    <section className="mb-12 px-4">
+      <h2 className="text-3xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+        {title}
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border-collapse shadow-lg rounded-lg overflow-hidden">
+          <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <tr>
+              <th className="px-6 py-3 text-left text-lg font-semibold">Name</th>
+              <th className="px-6 py-3 text-left text-lg font-semibold">Designation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {members.map((member, idx) => (
+              <tr
+                key={idx}
+                className={`transition duration-300 hover:bg-blue-50 ${
+                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                }`}
+              >
+                <td className="px-6 py-3 text-gray-800">{member.name}</td>
+                <td className="px-6 py-3 text-gray-700">{member.designation}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+};
+
+const ShikshaMahaKumbh2025 = () => {
+  const data = {
+    Patron: [
+      { name: "Prof. Dulal Panda", designation: "Director, NIPER SAS Nagar" },
+    ],
+    Director: [
+      {
+        name: "Dr. Thakur SKR",
+        designation: "Scientist/Engineer-SF, ISRO; Director, Department of Holistic Education (DHE)",
+      },
+    ],
+    Secretaries: [
+      { name: "Prof. Kulbhushan Tikoo", designation: "NIPER SAS Nagar" },
+      { name: "Prof. Tarun Sharma", designation: "NIPER SAS Nagar" },
+      { name: "Dr. Jatinder Garg", designation: "Controller of Examinations, Central University of HP, Dharamshala (HP)" },
+      { name: "Sh. Pankaj Kumar", designation: "CEO, KBD, Kurukshetra" },
+    ],
+    JointSecretaries: [
+      { name: "Prof. Krishan Gopal", designation: "NIPER SAS Nagar" },
+      { name: "Dr. Neeraj Mittal", designation: "Secretary, DHE" },
+      { name: "Dr. Krishna Pandey", designation: "UIET, Kurukshetra" },
+    ],
+    Conveners: [
+      { name: "Sh. Saurab Choudhary", designation: "President, DHE" },
+      { name: "Dr. Vikram Singh", designation: "NIPER SAS Nagar" },
+      { name: "Dr. Shamsher Singh", designation: "AB College, Pathankot" },
+      { name: "Dr. Vipin Kumar Jain", designation: "Dean, CBLU, Bhiwani" },
+    ],
+    AdvisoryCommittee: [
+      { name: "Sh. Vijay Nadda", designation: "Organizing Secretary, Vidya Bharti North Zone" },
+      { name: "Sh. Bal Kishan", designation: "Joint Organizing Secretary, Vidya Bharti North Zone" },
+      { name: "Sh. Sukhraj Sethia", designation: "President, Vidya Bharti North Zone" },
+      { name: "Smt. Deepti Dharmani", designation: "Vice President, Vidya Bharti North Zone" },
+      { name: "Sh. Dilaram Chauhan", designation: "General Secretary, Vidya Bharti North Zone" },
+      { name: "Sh. Chander Has Gupta", designation: "Secretary, Vidya Bharti North Zone" },
+      { name: "Prof. Som Nath", designation: "VC, Kurukshetra University" },
+      { name: "Lt.(Dr.) Virender Pal", designation: "Registrar, Kurukshetra University" },
+    ],
+    OrganizingCommittee: [
+      { name: "Dr. Deepika Singh", designation: "NIPER SAS Nagar" },
+      { name: "Dr. B. B. Mishra", designation: "NIPER SAS Nagar" },
+      { name: "Dr. U. R. Lal", designation: "NIPER SAS Nagar" },
+      { name: "Dr. Amit Kansal", designation: "Ex-Director NHPC" },
+      { name: "Dr. Vijay Kumar Sharma", designation: "NIT Srinagar" },
+      { name: "Sh. Sanyog Dutt", designation: "Director, Swarup Consultancy" },
+      { name: "Dr. Jitesh Kumar Pandey", designation: "HR Manager, Government of Punjab" },
+      { name: "Sh. Sanjay Soni", designation: "Director, CSR, Vidya Bharti Haryana" },
+      { name: "Sh. Sanjay Chaudhary", designation: "Founder, HUM Foundation" },
+      { name: "Adv. Prashant Tripathi", designation: "Lawyer, Supreme Court of India" },
+      { name: "Sh. Bhupendra Dharmani", designation: "Ex-Information Commissioner, Haryana" },
+      { name: "Dr. Shiksha Sharma", designation: "Academic Advisor, DHE" },
+      { name: "Dr. Ashwini Rana", designation: "NIT Hamirpur" },
+      { name: "Dr. Ravi Kant", designation: "IIT Ropar" },
+      { name: "Dr. Praveen Kumar", designation: "IACS, Kolkata" },
+      { name: "Prof. Sathans", designation: "NIT Kurukshetra" },
+      { name: "Dr. Pooja Mahajan", designation: "Member DHE" },
+      { name: "Dr. Rajneesh Talwar", designation: "Chitkara University" },
+      { name: "Dr. Tarun Changotra", designation: "GNDU Campus Pathankot" },
+      { name: "Dr. Lakshmi Dhingra", designation: "AB College Pathankot" },
+      { name: "Sh. Satish Saini", designation: "Treasurer, DHE" },
+      { name: "Prof. (Dr.) Ravishankar", designation: "IIFT Delhi" },
+      { name: "Prof. (Dr.) Sudhir Aggarwal", designation: "Sr. Scientist, USA" },
+      { name: "Prof. Dr. R.K. Mishra", designation: "SLIET, Longowal" },
+      { name: "Prof. Vivek Kumar", designation: "IIT Delhi" },
+      { name: "Dr. Gaurav Sharma", designation: "Principal Scientist, IIT Delhi" },
+      { name: "Dr. Ramotar Meena", designation: "JNU" },
+      { name: "Dr. Sachin Kumar Gupta", designation: "MIT, Meerut" },
+    ],
+  };
+
+  return (
+    <>
+      <CompanyInfo />
+      <NavBar />
+      <div className="container mx-auto p-6">
+        <h1 className="text-4xl font-extrabold text-center mb-12 text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+          Shiksha Maha Kumbh 2025
+        </h1>
+
+        <CommitteeSection title="Patron" members={data.Patron} />
+        <CommitteeSection title="Director" members={data.Director} />
+        <CommitteeSection title="Secretaries" members={data.Secretaries} />
+        <CommitteeSection title="Joint Secretaries" members={data.JointSecretaries} />
+        <CommitteeSection title="Conveners" members={data.Conveners} />
+        <CommitteeSection title="Advisory Committee" members={data.AdvisoryCommittee} />
+        <CommitteeSection title="Organizing Committee" members={data.OrganizingCommittee} />
+      </div>
+      <Footer />
+    </>
+  );
+};
+
+export default ShikshaMahaKumbh2025;
 
