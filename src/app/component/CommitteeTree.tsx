@@ -1,18 +1,17 @@
-// pages/committee/index.tsx
-
 "use client";
 
 import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import SlideShow from "../SlideShow"; // adjust path if needed
 
-// ---------- DATA SECTION ----------
+// ---------- DATA ----------
 const committeeGroups = [
   {
     title: "Shiksha Mahakumbh Committees",
     description:
-      "Meet the visionary leaders, academicians, and contributors shaping Bharat’s educational renaissance under the Shiksha Mahakumbh Abhiyan.",
+      "Meet the visionary leaders and academicians shaping Bharat’s educational renaissance under the Shiksha Mahakumbh Abhiyan.",
     years: [
       {
         year: "2025",
@@ -31,37 +30,45 @@ const committeeGroups = [
       },
     ],
   },
-  {
-    title: "Shiksha Kumbh Committees",
-    description:
-      "The Shiksha Kumbh initiatives form the foundation for academic collaboration and innovation across Bharat and the world.",
-    years: [
-      {
-        year: "2024",
-        committeeLink: "/committee/shikshakumbh2024",
-        website: "https://sk24.rase.co.in",
-      },
-      {
-        year: "2023",
-        committeeLink: "/committee/shikshakumbh2023",
-        website: "https://sk23.rase.co.in",
-      },
-    ],
-  },
 ];
 
-// ---------- MEMBER STRUCTURE ----------
 const advisoryMembers = [
   { name: "Prof. Dulal Panda", designation: "Director, NIPER SAS Nagar" },
-  { name: "Dr. Thakur S.K.R", designation: "Scientist/Engineer-SF, ISRO; Director, Department of Holistic Education (DHE)" },
-  { name: "Prof. Kulbhushan Tikoo", designation: "NIPER SAS Nagar" },
-  { name: "Dr. Jatinder Garg", designation: "Central University of HP" },
+  { name: "Dr. Thakur S.K.R", designation: "Scientist/Engineer-SF, ISRO; Director, DHE" },
   { name: "Dr. Gaurav Sharma", designation: "Principal Scientist, IIT Delhi" },
   { name: "Prof. Som Nath", designation: "Vice-Chancellor, Kurukshetra University" },
-  { name: "Dr. Ravi Kant", designation: "IIT Ropar" },
-  { name: "Dr. Ramotar Meena", designation: "Jawaharlal Nehru University" },
-  { name: "Dr. Rajneesh Talwar", designation: "Chitkara University" },
-  { name: "Dr. Pooja Mahajan", designation: "Member, Department of Holistic Education" },
+];
+
+// Merchandise items
+const merchandiseItems = [
+  {
+    id: 1,
+    title: "T-shirt",
+    slides: [
+      { src: "/merchandise/tshirt/1.jpg", alt: "T-shirt 1", legend: "" },
+      { src: "/merchandise/tshirt/2.jpg", alt: "T-shirt 2", legend: "" },
+      { src: "/merchandise/tshirt/3.jpg", alt: "T-shirt 3", legend: "" },
+    ],
+    price: 500,
+  },
+  {
+    id: 2,
+    title: "Mug",
+    slides: [{ src: "/merchandise/mug/1.jpg", alt: "Mug 1", legend: "" }],
+    price: 200,
+  },
+  {
+    id: 3,
+    title: "Cap",
+    slides: [{ src: "/merchandise/cap/1.jpg", alt: "Cap 1", legend: "" }],
+    price: 200,
+  },
+  {
+    id: 4,
+    title: "Bag",
+    slides: [{ src: "/merchandise/bag/1.jpg", alt: "Bag 1", legend: "" }],
+    price: 400,
+  },
 ];
 
 // ---------- MAIN COMPONENT ----------
@@ -75,46 +82,38 @@ const CommitteesPage = () => {
   return (
     <>
       <Head>
-        <title>Committees | Shiksha Mahakumbh Abhiyan</title>
+        <title>Committees & Merchandise | Shiksha Mahakumbh Abhiyan</title>
         <meta
           name="description"
-          content="Explore the committees and key members behind Shiksha Mahakumbh and Shiksha Kumbh — the national education renaissance initiatives uniting scholars, innovators, and institutions for global development."
+          content="Explore the Shiksha Mahakumbh committees and official merchandise — uniting scholars, innovators, and educators for Bharat’s global educational renaissance."
         />
         <meta
           name="keywords"
-          content="Shiksha Mahakumbh, committees, education event, Vidya Bharti, IIT Ropar, DHE, Shiksha Kumbh, educational collaboration, Bharat"
+          content="Shiksha Mahakumbh, DHE, Vidya Bharti, education, committees, merchandise, Bharat, global education"
         />
-        <meta name="robots" content="index, follow" />
       </Head>
 
-      {/* HEADER SECTION */}
+      {/* HEADER */}
       <section className="bg-white text-black text-center py-16 px-4 border-b border-gray-200">
         <motion.h1
           className="text-4xl md:text-5xl font-bold mb-4 text-primary"
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
         >
-          Committees of Shiksha Mahakumbh Abhiyan
+          Shiksha Mahakumbh Abhiyan – Committees & Official Merchandise
         </motion.h1>
-        <motion.p
-          className="max-w-3xl mx-auto text-lg text-gray-700"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-        >
-          Guiding Bharat’s Educational Renaissance through Collaboration, Vision,
-          and Leadership.
-        </motion.p>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          Celebrating Bharat’s educational excellence through collaboration, innovation, and unity.
+        </p>
       </section>
 
-      {/* COMMITTEE CARDS */}
+      {/* COMMITTEE SECTION */}
       <section className="py-12 bg-gray-50 px-4 md:px-10">
-        <div className="max-w-7xl mx-auto grid gap-8 md:grid-cols-2">
+        <div className="max-w-6xl mx-auto grid gap-8">
           {committeeGroups.map((committee, index) => (
             <motion.div
               key={index}
-              className="bg-white shadow-lg rounded-2xl p-8 hover:shadow-xl transition-all"
+              className="bg-white shadow-lg rounded-2xl p-8 hover:shadow-xl transition"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -124,7 +123,6 @@ const CommitteesPage = () => {
               </h2>
               <p className="text-gray-700 text-center mb-6">{committee.description}</p>
 
-              {/* Latest year first */}
               <div className="space-y-4 text-center">
                 {committee.years.map((yearData, idx) => (
                   <div
@@ -134,7 +132,7 @@ const CommitteesPage = () => {
                     <span className="text-xl font-semibold text-primary">
                       {yearData.year}
                     </span>
-                    <div className="mt-2 flex flex-col sm:flex-row justify-center gap-3">
+                    <div className="mt-3 flex flex-col sm:flex-row justify-center gap-3">
                       <Link href={yearData.website}>
                         <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition">
                           View Event
@@ -150,7 +148,6 @@ const CommitteesPage = () => {
                 ))}
               </div>
 
-              {/* Expand/Collapse Advisory */}
               <div className="text-center mt-6">
                 <button
                   className="text-blue-600 font-semibold underline"
@@ -196,23 +193,45 @@ const CommitteesPage = () => {
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="bg-primary text-white text-center py-12">
-        <h3 className="text-3xl font-bold mb-4">
-          Shiksha Mahakumbh 2025 – Join the Journey of Transformation
-        </h3>
-        <p className="max-w-3xl mx-auto mb-6 text-lg text-gray-100">
-          Participate in our conclaves, research forums, and educational
-          collaborations to strengthen Bharat’s vision for global development.
-        </p>
-        <Link href="/conclave">
-          <motion.button
-            className="bg-white text-primary font-semibold py-3 px-6 rounded-full hover:bg-gray-100"
-            whileHover={{ scale: 1.05 }}
+      {/* MERCHANDISE SECTION */}
+      <section className="bg-white py-16 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <motion.h2
+            className="text-4xl font-bold text-primary mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
           >
-            Explore Conclaves
-          </motion.button>
-        </Link>
+            Official Shiksha Mahakumbh Merchandise
+          </motion.h2>
+          <p className="text-gray-700 mb-10 max-w-3xl mx-auto">
+            Support the movement! Own official Shiksha Mahakumbh merchandise that celebrates Bharat’s educational journey.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {merchandiseItems.map((item) => (
+              <motion.div
+                key={item.id}
+                className="border rounded-2xl shadow-md hover:shadow-lg transition bg-gray-50 p-6"
+                whileHover={{ scale: 1.03 }}
+              >
+                <h3 className="text-2xl font-semibold mb-3 text-gray-800">
+                  {item.title}
+                </h3>
+                <div className="mb-4">
+                  <SlideShow slides={item.slides} />
+                </div>
+                <p className="text-lg font-semibold text-gray-900 mb-4">
+                  Price: ₹{item.price} + Delivery
+                </p>
+                <Link href="/commingsoon">
+                  <button className="bg-primary text-white py-2 px-5 rounded hover:bg-primary/90">
+                    Buy Now
+                  </button>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
     </>
   );
