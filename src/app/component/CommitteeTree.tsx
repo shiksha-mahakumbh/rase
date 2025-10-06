@@ -11,6 +11,13 @@ const CommitteeGrid: React.FC<CommitteeTreeProps> = ({ onSelect }) => {
 
   // Shiksha Mahakumbh series
   const committees = [
+       {
+      title: "Shiksha Mahakumbh 5.0",
+      year: "2025",
+      link: "https://rase.co.in",
+      committeeLink: "/committee/shikshamahakumbh2025",
+      onCommitteeSelect: "Shiksha Mahakumbh 5.0 Committee",
+    },
     {
       title: "Shiksha Mahakumbh 4.0",
       year: "2024",
