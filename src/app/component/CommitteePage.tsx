@@ -1,14 +1,9 @@
-// components/Commites.tsx
-
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import Head from "next/head";
 
 interface AdvisoryMember {
   name: string;
   designation: string;
+  photo?: string; // Optional: profile photo URL
 }
 
 interface AdvisoryCouncilProps {
@@ -16,82 +11,56 @@ interface AdvisoryCouncilProps {
   members: AdvisoryMember[];
 }
 
-const Commites: React.FC<AdvisoryCouncilProps> = ({ title, members }) => {
+const Committees: React.FC<AdvisoryCouncilProps> = ({ title, members }) => {
   return (
-    <>
-      {/* SEO Metadata */}
-      <Head>
-        <title>{`${title} | Shiksha Mahakumbh Abhiyan`}</title>
-        <meta
-          name="description"
-          content={`Meet the esteemed members of ${title}, contributing to the Shiksha Mahakumbh Abhiyan — a global movement for holistic education and Indian knowledge systems.`}
-        />
-        <meta
-          name="keywords"
-          content={`Shiksha Mahakumbh Committee, ${title}, Shiksha Mahakumbh Abhiyan, Indian Education, Global Development`}
-        />
-      </Head>
+    <div className="flex flex-col items-center p-6">
+      {/* Heading */}
+      <h2 className="text-3xl font-bold mb-8 text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+        {title}
+      </h2>
 
-      <section className="bg-white py-12 px-4 md:px-16">
-        {/* Title Section */}
-        <motion.div
-          className="text-center mb-10"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-3">
-            {title}
-          </h2>
-          <p className="text-gray-700 text-lg max-w-3xl mx-auto">
-            The driving force behind <strong>Shiksha Mahakumbh Abhiyan</strong> —
-            uniting visionary educators, leaders, and changemakers to transform
-            education globally.
-          </p>
-          <div className="mt-4 mx-auto w-24 border-b-4 border-primary rounded-full"></div>
-        </motion.div>
-
-        {/* Members Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {members.map((member, index) => (
-            <motion.div
-              key={index}
-              className="bg-gradient-to-br from-white to-gray-50 shadow-md hover:shadow-xl transition-shadow duration-300 rounded-2xl p-6 border border-gray-200 text-center"
-              whileHover={{ scale: 1.03 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, duration: 0.4 }}
-            >
-              <div className="mb-3">
-                <div className="w-20 h-20 mx-auto rounded-full bg-primary text-white flex items-center justify-center text-2xl font-bold shadow-md">
-                  {member.name.charAt(0)}
-                </div>
-              </div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-900">
-                {member.name}
-              </h3>
-              <p className="text-gray-600 mt-2 text-sm md:text-base italic">
-                {member.designation}
-              </p>
-            </motion.div>
-          ))}
+      {/* Card */}
+      <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+              <tr>
+                <th className="px-6 py-3 text-left text-lg font-semibold tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-lg font-semibold tracking-wider">Designation</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {members.map((member, index) => (
+                <tr
+                  key={index}
+                  className={`transition duration-300 hover:bg-blue-50 ${
+                    index % 2 === 0 ? "" : "bg-gray-50"
+                  }`}
+                >
+                  <td className="px-6 py-4 flex items-center gap-4">
+                    {member.photo && (
+                      <img
+                        src={member.photo}
+                        alt={member.name}
+                        className="w-10 h-10 rounded-full object-cover shadow-md"
+                      />
+                    )}
+                    <span className="font-medium text-gray-800">{member.name}</span>
+                  </td>
+                  <td className="px-6 py-4 text-gray-700">{member.designation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        {/* Footer Message */}
-        <motion.div
-          className="text-center mt-12 text-gray-700"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-        >
-          <p className="text-base md:text-lg">
-            Together, we are building a stronger educational foundation for{" "}
-            <strong>Bharat</strong> and the <strong>World</strong>.
-          </p>
-        </motion.div>
-      </section>
-    </>
+      {/* Optional SEO-friendly description */}
+      <p className="mt-6 text-center text-gray-600 max-w-3xl text-sm sm:text-base">
+        These are the dedicated members of the {title} for the Shiksha Mahakumbh Abhiyan, guiding and managing initiatives to promote quality education and holistic development across India.
+      </p>
+    </div>
   );
 };
 
-export default Commites;
+export default Committees;
