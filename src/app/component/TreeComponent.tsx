@@ -1,11 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const ShikshaMahakumbhTimeline: React.FC = () => {
   const [archives, setArchives] = useState<{ [key: string]: boolean }>({});
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const controls = useAnimation();
 
   const toggleArchive = (edition: string) =>
     setArchives((prev) => ({ ...prev, [edition]: !prev[edition] }));
@@ -49,20 +52,33 @@ const ShikshaMahakumbhTimeline: React.FC = () => {
     },
   ];
 
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-
   const scrollLeft = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: -400, behavior: "smooth" });
+    if (scrollRef.current)
+      scrollRef.current.scrollBy({ left: -400, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: 400, behavior: "smooth" });
+    if (scrollRef.current)
+      scrollRef.current.scrollBy({ left: 400, behavior: "smooth" });
   };
+
+  // Animate connecting line on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollRef.current && lineRef.current) {
+        const scrollWidth = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+        const scrollLeft = scrollRef.current.scrollLeft;
+        const progress = (scrollLeft / scrollWidth) * 100;
+        lineRef.current.style.width = `${progress}%`;
+      }
+    };
+    scrollRef.current?.addEventListener("scroll", handleScroll);
+    return () => scrollRef.current?.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <section className="py-12 bg-gradient-to-r from-blue-50 to-purple-50">
-      {/* Header */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-12">
         <motion.h1
           className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-purple-700 tracking-wide"
           initial={{ opacity: 0, y: -30 }}
@@ -73,11 +89,9 @@ const ShikshaMahakumbhTimeline: React.FC = () => {
         </motion.h1>
         <p className="mt-4 text-lg md:text-xl text-gray-700 max-w-3xl mx-auto">
           A nationwide movement redefining Indian education through innovation, inclusion, and inspiration.
-          Explore the legacy of knowledge and transformation — from classrooms to society.
         </p>
       </div>
 
-      {/* Carousel */}
       <div className="relative">
         {/* Scroll Buttons */}
         <button
@@ -93,19 +107,30 @@ const ShikshaMahakumbhTimeline: React.FC = () => {
           <FaArrowRight />
         </button>
 
-        {/* Timeline Cards */}
+        {/* Timeline Line */}
+        <div className="absolute top-32 left-6 right-6 h-1 bg-gray-300 rounded-full z-0 hidden md:block"></div>
+        <motion.div
+          ref={lineRef}
+          className="absolute top-32 left-6 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full z-10 hidden md:block"
+        ></motion.div>
+
         <div
           ref={scrollRef}
-          className="flex space-x-8 overflow-x-auto scrollbar-hide px-6 md:px-12"
+          className="flex space-x-8 overflow-x-auto scrollbar-hide px-6 md:px-12 relative z-10"
         >
           {mahakumbhSeries.map((edition, index) => (
             <motion.div
               key={index}
-              className="min-w-[320px] md:min-w-[400px] bg-white rounded-3xl shadow-xl p-6 flex-shrink-0 hover:scale-105 transition-transform"
+              className="min-w-[320px] md:min-w-[400px] bg-white rounded-3xl shadow-xl p-6 flex-shrink-0 hover:scale-105 transition-transform relative"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
+              {/* Timeline Dot */}
+              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+                <div className="w-6 h-6 bg-purple-600 border-2 border-white rounded-full shadow-lg"></div>
+              </div>
+
               <h2 className="text-2xl font-bold text-center text-blue-800 mb-2">{edition.title}</h2>
               <span className="block text-center text-sm font-semibold text-gray-500 mb-3">
                 Edition Year: {edition.year}
