@@ -120,10 +120,8 @@ const tracks: Track[] = [
 ];
 
 const PaperTracks: React.FC = () => {
-  const submitLink =
-    "https://cmt3.research.microsoft.com/SK2025/Submission/Index";
+  const submitLink = "https://cmt3.research.microsoft.com/SK2025/Submission/Index";
 
-  // JSON-LD structured data for SEO (conference + tracks)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ConferenceEvent",
@@ -142,144 +140,140 @@ const PaperTracks: React.FC = () => {
       name: "Department of Holistic Education (DHE) & NIPER Mohali",
       url: "https://shikshamahakumbh.com",
     },
-    eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    subEvent: tracks.map((t) => ({
-      "@type": "Event",
-      name: t.title,
-      description: t.bullets.join(" | "),
-      performer: t.chair || "",
-    })),
   };
 
   return (
-    <section aria-labelledby="paper-presentation" className="max-w-6xl mx-auto px-4 py-8">
-      {/* Structured data (SEO) */}
+    <section className="max-w-6xl mx-auto px-4 py-10">
+      {/* Structured data for SEO */}
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* Header */}
-      <header className="mb-6 text-center">
-        <h2 id="paper-presentation" className="text-2xl sm:text-3xl font-bold text-black">
+      <header className="text-center mb-10">
+        <h2 className="text-3xl sm:text-4xl font-bold text-black mb-3">
           Paper Presentation — Multitrack Conference
         </h2>
-        <p className="mt-2 text-gray-700 max-w-2xl mx-auto">
-          The Shiksha Mahakumbh 2025 (5th Edition) will host a hybrid multitrack conference—featuring
-          original research, plenary talks, workshops and cross-disciplinary dialogue. Submit a paper
-          aligned with NEP 2020, innovation, and Bhartiya knowledge systems.
+        <p className="text-gray-700 max-w-2xl mx-auto">
+          Shiksha Mahakumbh 2025 (5th Edition) will host a hybrid multitrack conference — featuring
+          original research, plenary talks, workshops, and cross-disciplinary dialogue.
         </p>
 
-        <div className="mt-4 flex flex-col sm:flex-row sm:justify-center gap-3">
+        <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3">
           <a
             href={submitLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition"
+            className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800"
           >
             Submit Paper (CMT Portal)
           </a>
           <Link href="/paper">
-            <a className="inline-block text-black border border-black px-4 py-2 rounded-md hover:bg-black hover:text-white transition">
+            <span className="border border-black text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer">
               Call for Papers & Guidelines
-            </a>
+            </span>
           </Link>
         </div>
       </header>
 
-      {/* Chairs / Conveners card */}
-      <div className="bg-white border rounded-lg shadow-sm px-5 py-4 mb-6">
-        <h3 className="text-lg font-semibold text-black">General Chair & Conveners</h3>
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="p-3 border rounded-md">
-            <p className="text-sm text-gray-600">General Chair</p>
-            <p className="font-semibold text-black">Prof. Brahmjit Singh (NIT Kurukshetra)</p>
+      {/* Important Dates & Fees */}
+      <div className="bg-white border rounded-lg shadow-sm p-6 mb-10">
+        <h3 className="text-2xl font-semibold text-black mb-4">Important Dates & Registration Fees</h3>
+
+        <div className="grid sm:grid-cols-2 gap-6">
+          <div>
+            <h4 className="text-lg font-semibold text-black mb-2">Important Dates</h4>
+            <ul className="text-gray-700 space-y-1">
+              <li>📅 Call for Papers — <strong>01 Aug 2025</strong></li>
+              <li>📅 Abstract Submission — <strong>7 Oct 2025</strong></li>
+              <li>📅 Abstract Acceptance — <strong>10 Oct 2025</strong></li>
+              <li>📅 Full Paper Submission — <strong>20 Oct 2025</strong></li>
+              <li>📅 Regular Registration — <strong>20 Oct 2025</strong></li>
+              <li>📅 Late Registration — <strong>30 Oct 2025</strong></li>
+            </ul>
           </div>
-          <div className="p-3 border rounded-md">
-            <p className="text-sm text-gray-600">Co-Chairs</p>
-            <p className="font-semibold text-black">Dr. Krishan Gopal, Dr. Deepak B. Salunke (NIPER SAS Nagar)</p>
-          </div>
-          <div className="p-3 border rounded-md">
-            <p className="text-sm text-gray-600">Conveners</p>
-            <p className="font-semibold text-black">Dr. Vikash Kumar Garg • 9988610629</p>
-            <p className="mt-1 font-semibold text-black">Dr. Kapil Sood • 8588820738</p>
-            <p className="mt-1 font-semibold text-black">Dr. Pankaj Kumar • 9540344621</p>
-            <p className="mt-1 font-semibold text-black">Dr. Dhirender Kumar • 9015625255</p>
-            <p className="mt-1 font-semibold text-black">Dr. Pankaj Verma • 8295577722</p>
+
+          <div>
+            <h4 className="text-lg font-semibold text-black mb-2">Registration Fees</h4>
+            <ul className="text-gray-700 space-y-1">
+              <li>🎓 Students (UG/PG/PhD): ₹500</li>
+              <li>🔬 Research Scholars: ₹1,000</li>
+              <li>🏫 Academia & R&D: ₹2,100</li>
+              <li>🏢 Industry: ₹5,000</li>
+              <li className="text-sm text-gray-600 mt-2">
+                *Includes Lunch, Kit & Certificate for one author<br />
+                *Additional Author: ₹500/person<br />
+                *No fee for International Delegates. Includes complimentary DHE Membership.
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      {/* Tracks grid */}
+      {/* Author Guidelines */}
+      <div className="bg-white border rounded-lg shadow-sm p-6 mb-10">
+        <h3 className="text-2xl font-semibold text-black mb-4">Author Guidelines for Paper Submission</h3>
+        <p className="text-gray-700 mb-3">
+          Authors are invited to submit original, unpublished research papers relevant to conference tracks.
+          Submissions (5–6 pages) should include title, abstract, keywords, author details, and follow
+          the official IEEE conference format.
+        </p>
+
+        <ul className="list-disc list-inside text-gray-700 space-y-1">
+          <li>Similarity index (plagiarism) must be below <strong>15%</strong>.</li>
+          <li>Submit papers in <strong>PDF</strong> format using the specified IEEE template.</li>
+          <li>Papers should not exceed <strong>5–6 pages</strong>.</li>
+          <li>Final camera-ready paper must be submitted before the deadline.</li>
+          <li>All correspondence and documents must be sent together within deadlines.</li>
+        </ul>
+
+        <p className="mt-3 text-sm text-gray-600">
+          📥 IEEE Paper Template available on the conference website.
+        </p>
+      </div>
+
+      {/* Tracks Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {tracks.map((t) => (
           <article
             key={t.id}
-            className="bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition transform hover:-translate-y-1"
-            aria-labelledby={`track-${t.id}-title`}
+            className="bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition hover:-translate-y-1"
           >
-            <h4 id={`track-${t.id}-title`} className="text-lg font-semibold text-black">
-              {t.id}. {t.title}
-            </h4>
-
+            <h4 className="text-lg font-semibold text-black">{t.id}. {t.title}</h4>
             <ul className="mt-3 text-gray-700 list-disc list-inside space-y-1">
-              {t.bullets.map((b, i) => (
-                <li key={i}>{b}</li>
-              ))}
+              {t.bullets.map((b, i) => <li key={i}>{b}</li>)}
             </ul>
-
             {t.chair && (
               <div className="mt-4 text-sm text-gray-800">
-                <span className="font-medium">Track Chair:</span> <span>{t.chair}</span>
+                <strong>Track Chair:</strong> {t.chair}
               </div>
             )}
-
-            <div className="mt-4 flex gap-2">
-              <a
-                href={submitLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm inline-block px-3 py-1 rounded bg-black text-white hover:bg-gray-800 transition"
-                aria-label={`Submit paper for ${t.title}`}
-              >
-                Submit Paper
-              </a>
-              <Link href="/contact">
-                <a className="text-sm inline-block px-3 py-1 rounded border border-black text-black hover:bg-black hover:text-white transition">
-                  Contact Convenor
-                </a>
-              </Link>
-            </div>
           </article>
         ))}
       </div>
 
-      {/* Publication & Notes */}
-      <aside className="mt-8 bg-white border rounded-lg p-5 shadow-sm">
-        <h3 className="text-lg font-semibold text-black">Publication & Review</h3>
-        <p className="mt-2 text-gray-700">
-          All accepted papers will be published in a peer-reviewed open access journal with ISSN.
-          Selected high-quality papers will be considered for Web of Science / Scopus indexed journals.
-          Submissions undergo a double-blind peer review; similarity index must be within acceptable limits.
+      {/* Publication Info */}
+      <aside className="mt-10 bg-white border rounded-lg p-6 shadow-sm">
+        <h3 className="text-2xl font-semibold text-black mb-3">Publication & Review</h3>
+        <p className="text-gray-700 mb-4">
+          All accepted papers will be published in a peer-reviewed open-access journal (ISSN).
+          Selected high-quality papers may be recommended for Scopus / Web of Science indexed journals.
         </p>
 
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="p-3 border rounded">
-            <p className="text-sm text-gray-600">Best Paper</p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <div className="p-3 border rounded text-center">
+            <p className="text-sm text-gray-600">🏆 Best Paper</p>
             <p className="font-semibold text-black">Track-wise Best Paper Award</p>
           </div>
-          <div className="p-3 border rounded">
-            <p className="text-sm text-gray-600">Submission</p>
-            <p className="font-semibold text-black">
-              <a href={submitLink} target="_blank" rel="noopener noreferrer" className="underline">
-                CMT Submission Portal
-              </a>
-            </p>
+          <div className="p-3 border rounded text-center">
+            <p className="text-sm text-gray-600">📤 Submission</p>
+            <a href={submitLink} target="_blank" className="font-semibold underline text-black">
+              CMT Submission Portal
+            </a>
           </div>
-          <div className="p-3 border rounded">
-            <p className="text-sm text-gray-600">Backup Email</p>
+          <div className="p-3 border rounded text-center">
+            <p className="text-sm text-gray-600">✉️ Backup Email</p>
             <p className="font-semibold text-black">smkchair@gmail.com</p>
           </div>
         </div>
