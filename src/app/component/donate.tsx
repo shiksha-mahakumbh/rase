@@ -60,7 +60,7 @@ const Donate: React.FC = () => {
 
           <div className="flex flex-wrap gap-4">
             <a
-              href="/2024K/Sponsership Brochure Shiksha Mahakumbh 2025 1"
+              href="/2024K/Sponsership-Brochure-Shiksha-Mahakumbh-2025-1.pdf"
               target="_blank"
               className="bg-blue-600 text-white px-5 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md"
             >
@@ -68,7 +68,7 @@ const Donate: React.FC = () => {
             </a>
 
             <a
-              href="/2024K/Sponsership Brochure Shiksha Mahakumbh 2025 2"
+              href="/2024K/Sponsership-Brochure-Shiksha-Mahakumbh-2025-2.pdf"
               target="_blank"
               className="bg-yellow-500 text-white px-5 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition duration-300 shadow-md"
             >
