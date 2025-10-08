@@ -1,154 +1,122 @@
-import React from 'react';
-import Image from 'next/image';
-
-// Define a type for the account details
-type AccountDetails = {
-    accountName: string;
-    accountNumber: string;
-    bank: string;
-    branch: string;
-    ifscCode: string;
-    upiId: string;
-};
-
-// Define a type for sponsorship links
-type SponsorshipLinks = {
-    link1: string;
-    link1Text: string;
-    link2: string;
-    link2Text: string;
-};
+"use client";
+import React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const Donate: React.FC = () => {
-    // Function to render each section with its custom account details, image, and sponsorship links
-    const renderSection = (
-        heading: string,
-        accountDetails: AccountDetails,
-        imageSrc: string,
-        sponsorshipLinks: SponsorshipLinks
-    ) => (
-        <div className="flex flex-col items-center justify-center px-4 lg:px-8 py-6">
-            <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-6 text-center">
-                {heading}
-            </h2>
+  return (
+    <div className="bg-white text-black min-h-screen py-12 px-6 md:px-12">
+      {/* Hero Section */}
+      <div className="text-center mb-12">
+        <motion.h1
+          className="text-3xl md:text-5xl font-bold text-primary tracking-wide mb-4"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          🙏 Support the Vision of <span className="text-blue-700">Shiksha Mahakumbh Abhiyan</span>
+        </motion.h1>
+        <p className="text-gray-700 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+          Together, let us build a future where <strong>Education, Culture, and Technology</strong> come together 
+          for the holistic development of Bharat and the world.  
+          <br />Your contribution fuels knowledge, innovation, and transformation.
+        </p>
+      </div>
 
-            {/* Account Details Section */}
-            <div className="bg-gray-100 p-6 lg:p-8 rounded-lg shadow-md text-black text-left w-full max-w-lg">
-                <h3 className="text-lg lg:text-xl font-semibold mb-4">
-                    Account Details:
-                </h3>
-                <p className="whitespace-pre-line leading-6">
-                    <strong>Account Name:</strong> {accountDetails.accountName}<br />
-                    <strong>Account No.:</strong> {accountDetails.accountNumber}<br />
-                    <strong>Bank:</strong> {accountDetails.bank}<br />
-                    <strong>Branch:</strong> {accountDetails.branch}<br />
-                    <strong>IFSC Code:</strong> {accountDetails.ifscCode}<br />
-                    <strong>UPI ID:</strong> {accountDetails.upiId}
-                </p>
-            </div>
-
-            {/* Sponsorship Links */}
-            <p className="mt-6 text-black text-center text-sm lg:text-base">
-                For more details about sponsorship,{" "}
-                <a
-                    href={sponsorshipLinks.link1}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-primary underline hover:text-blue-600"
-                >
-                    {sponsorshipLinks.link1Text}
-                </a>.
-            </p>
-            <p className="mt-4 text-black text-center text-sm lg:text-base">
-                For more details about sponsorship,{" "}
-                <a
-                    href={sponsorshipLinks.link2}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-primary underline hover:text-blue-600"
-                >
-                    {sponsorshipLinks.link2Text}
-                </a>.
-            </p>
-
-            {/* Sponsor Image */}
-            <div className="mt-6 w-full max-w-sm flex justify-center">
-                <Image
-                    src={imageSrc} // Use the imageSrc parameter
-                    alt={`${heading} Support`}
-                    width={300}
-                    height={300}
-                    className="rounded-lg object-cover"
-                />
-            </div>
+      {/* Main Donation Section */}
+      <motion.div
+        className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-lg p-8 max-w-6xl mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {/* Left Side - Image */}
+        <div className="flex justify-center md:w-1/2 mb-8 md:mb-0">
+          <Image
+            src="/2024K/Sponsor.png"
+            alt="Donate for Shiksha Mahakumbh"
+            width={400}
+            height={400}
+            className="rounded-xl object-cover shadow-md"
+          />
         </div>
-    );
 
-    // Define the account details, images, and links for each section
-    const accountDetailsLeft: AccountDetails = {
-        accountName: "Shiksha Mahakumbh",
-        accountNumber: "42563560855",
-        bank: "State Bank of India",
-        branch: "Chandigarh Main Branch",
-        ifscCode: "SBIN0000628",
-        upiId: "shikshamahakumbh@sbi",
-    };
+        {/* Right Side - Details */}
+        <div className="md:w-1/2 text-left space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-blue-700">
+            Bank Details for Donation
+          </h2>
 
-    const accountDetailsRight: AccountDetails = {
-        accountName: "Shiksha Kumbh",
-        accountNumber: "42563561350",
-        bank: "State Bank of India",
-        branch: "Chandigarh Main Branch",
-        ifscCode: "SBIN0000628",
-        upiId: "shikshakhumbh@sbi",
-    };
+          <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
+            <p className="leading-7">
+              <strong>Account Name:</strong> Shiksha Mahakumbh<br />
+              <strong>Account No.:</strong> 42563560855<br />
+              <strong>Bank:</strong> State Bank of India<br />
+              <strong>Branch:</strong> Chandigarh Main Branch<br />
+              <strong>IFSC Code:</strong> SBIN0000628<br />
+              <strong>UPI ID:</strong> shikshamahakumbh@sbi
+            </p>
+          </div>
 
-    const sponsorshipLinksLeft: SponsorshipLinks = {
-        link1: "/2024K/Shiksha-Mahakumbh-25-sponsorship2.pdf",
-        link1Text: "Sponsorship 1",
-        link2: "/2024K/SM-25-sponsorship-3.pdf (1).pdf",
-        link2Text: "Sponsorship 2",
-    };
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="/2024K/Shiksha-Mahakumbh-25-sponsorship2.pdf"
+              target="_blank"
+              className="bg-blue-600 text-white px-5 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md"
+            >
+              📘 View Sponsorship Plan 1
+            </a>
 
-    const sponsorshipLinksRight: SponsorshipLinks = {
-        link1: "/",
-       
-        link1Text: "Sponsorship 1",
-        link2: "/",
-        link2Text: "Sponsorship 2",
-    };
+            <a
+              href="/2024K/SM-25-sponsorship-3.pdf (1).pdf"
+              target="_blank"
+              className="bg-yellow-500 text-white px-5 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition duration-300 shadow-md"
+            >
+              📗 View Sponsorship Plan 2
+            </a>
+          </div>
 
-    return (
-        <div className="flex flex-col items-center">
-            {/* Combined Heading */}
-            <h1 className="text-3xl lg:text-4xl font-bold text-primary text-center mb-8 mt-6">
-                Join Us in Making a Difference - Support The Cause
-            </h1>
+          <p className="text-gray-600 text-base leading-relaxed">
+            Every rupee you contribute strengthens <strong>the nation’s educational foundation</strong> and
+            inspires millions of young minds.  
+            <br />Be part of the movement. Join, Volunteer, or Sponsor today!
+          </p>
 
-            {/* Side-by-Side Sections */}
-            <div className="flex flex-col lg:flex-row items-stretch w-full">
-                {/* Left Section */}
-                <div className="flex-1 bg-gray-50">
-                    {renderSection(
-                        "Shiksha Mahakumbh",
-                        accountDetailsLeft,
-                        "/2024K/Sponsor.png",
-                        sponsorshipLinksLeft
-                    )}
-                </div>
-
-                {/* Right Section */}
-                <div className="flex-1 bg-gray-50">
-                    {renderSection(
-                        "Shiksha Kumbh",
-                        accountDetailsRight,
-                        "/sk.png",
-                        sponsorshipLinksRight
-                    )}
-                </div>
-            </div>
+          <div className="pt-4">
+            <a
+              href="https://shikshamahakumbh.com"
+              target="_blank"
+              className="inline-block bg-gradient-to-r from-blue-700 to-blue-500 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:scale-105 transition-transform"
+            >
+              🌍 Join the Shiksha Mahakumbh Movement
+            </a>
+          </div>
         </div>
-    );
+      </motion.div>
+
+      {/* Bottom Call to Action */}
+      <motion.div
+        className="text-center mt-16 max-w-3xl mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
+      >
+        <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-3">
+          “Let’s make Education a Sacred Movement — a Mahakumbh of Knowledge.”
+        </h3>
+        <p className="text-gray-600">
+          Stay tuned for updates at{" "}
+          <a
+            href="https://shikshamahakumbh.com"
+            className="text-blue-700 font-semibold underline"
+            target="_blank"
+          >
+            shikshamahakumbh.com
+          </a>
+        </p>
+      </motion.div>
+    </div>
+  );
 };
 
 export default Donate;
