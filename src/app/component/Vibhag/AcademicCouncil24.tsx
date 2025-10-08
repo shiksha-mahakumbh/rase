@@ -229,7 +229,7 @@ const PaperTracks: React.FC = () => {
         </ul>
 
         <p className="mt-3 text-sm text-gray-600">
-          📥 IEEE Paper Template available on the conference website.
+          {/* 📥 IEEE Paper Template available on the conference website. */}
         </p>
       </div>
 
