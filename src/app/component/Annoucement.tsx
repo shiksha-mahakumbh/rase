@@ -39,7 +39,7 @@ const Announcement = () => {
     <div className="flex flex-col items-center justify-center h-auto bg-white w-full py-8">
       <Global styles={shadowAnimation} />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+      <div className="flex flex-col w-full max-w-6xl">
         {/* Paper Presentation Schedule */}
         <div
           className={`transition-all duration-500 min-h-[200px] ${
