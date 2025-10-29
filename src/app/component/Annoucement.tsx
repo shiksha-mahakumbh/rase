@@ -54,7 +54,7 @@ const Announcement = () => {
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => window.open("/2024M/Abstract Booklet.pdf", "_blank")}
+            onClick={() => window.open("/2024M/Tentative Schedule SM25 - V2.0", "_blank")}
           >
             Click Here
           </button>
@@ -76,7 +76,7 @@ const Announcement = () => {
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => (window.location.href = "/paper")}
+           onClick={() => window.open("/2024M/DHE English Olympaid Result", "_blank")}
           >
             Click Here
           </button>
@@ -98,7 +98,7 @@ const Announcement = () => {
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => (window.location.href = "/conclave")}
+             onClick={() => window.open("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025", "_blank")}
           >
             Click Here
           </button>
