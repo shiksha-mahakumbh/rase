@@ -46,7 +46,7 @@ const Announcement = () => {
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 m-4 rounded-lg text-center`}
         >
-          {* Paper Presentation Schedule (Disabled currently)
+          {Paper Presentation Schedule (Disabled currently)
           <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />
           </span>
@@ -56,9 +56,9 @@ const Announcement = () => {
             onClick={() => window.open('/2024M/Abstract Booklet.pdf', '_blank')}
           >
             Click Here
-          </button> */}
+          </button> }
 
-          {* Tentative Schedule (Disabled currently)
+          {Tentative Schedule (Disabled currently)
           <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />
           </span>
@@ -68,7 +68,7 @@ const Announcement = () => {
             onClick={() => window.open('/2024M/Tentative Schedule SM24.xlsx', '_blank')}
           >
             Click Here
-          </button> */}
+          </button> }
 
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
             Register to Participate in Shiksha Mahakumbh 2025
@@ -83,7 +83,7 @@ const Announcement = () => {
           </button>
         </div>
 
-        {* Second Component (Hidden currently)
+        {Second Component (Hidden currently)
         <div
           className={`transition-all duration-500 flex-1 min-h-[200px] ${
             isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
@@ -99,9 +99,9 @@ const Announcement = () => {
           >
             Click Here
           </button>
-        </div> */}
+        </div> }
 
-        {* Third Component (Hidden currently)
+        {Third Component (Hidden currently)
         <div
           className={`transition-all duration-500 flex-1 min-h-[200px] ${
             isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
@@ -117,7 +117,7 @@ const Announcement = () => {
           >
             Click Here
           </button>
-        </div> */}
+        </div>}
       </div>
     </div>
   );
