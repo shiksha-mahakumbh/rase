@@ -50,7 +50,7 @@ const Announcement = () => {
             <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
           <h2 className="mb-4 text-lg font-semibold px-6 py-6 text-gray-800">
-            Paper Presentation Schedule
+            Tentative Schedule
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
@@ -70,11 +70,10 @@ const Announcement = () => {
             <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
           <p className="text-red-700 text-sm mb-2 p-6">
-            Note: The Last Date for Abstract Submission has been extended to
-            December 05, 2024.
+  .
           </p>
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            Call for Papers
+            DHE English Olympaid Resuld
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
