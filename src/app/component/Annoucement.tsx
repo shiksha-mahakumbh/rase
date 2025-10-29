@@ -41,8 +41,8 @@ const Announcement = () => {
         {/* First Component */}
         <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
          
-         {/* Paper Presentation Schedule */}
-         {/* <span className='text-red-700 text-sm'>
+         {* Paper Presentation Schedule *}
+         {* <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />
           </span>
           <h2 className="mb-4 text-l font-semibold">Paper Presentation Schedule</h2>
@@ -50,9 +50,9 @@ const Announcement = () => {
            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
            onClick={() => window.open('/2024M/Abstract Booklet.pdf', '_blank')}>
            Click Here
-         </button> */}
+         </button> *}
 
-         {/* <span className='text-red-700 text-sm'>
+         {* <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />
           </span>
           
@@ -61,7 +61,7 @@ const Announcement = () => {
            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary"
            onClick={() => window.open('/2024M/Tentative Schedule SM24.xlsx', '_blank')}>
            Click Here
-         </button> */}
+         </button> *}
 
          <h2 className="mb-4 text-l font-semibold">Register to Participate in Shiksha Mahakumbh 2025</h2>
           <button 
@@ -75,8 +75,8 @@ const Announcement = () => {
          
 
         </div>
-        {/* Second Component */ }
-        {/* <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
+        {* Second Component *}
+        {* <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
           <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />&nbsp;Note&#58; The Last Date for Abstract Submission has been extended to  December 05, 2024.
           </span>
@@ -86,9 +86,9 @@ const Announcement = () => {
             onClick={() => window.location.href = '/paper'}>
             Click Here
           </button>
-        </div> */}
-        {/* Third Component */}
-        {/* <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
+        </div> *}
+        {* Third Component *}
+        {* <div className={`transition-all duration-500 flex-1 min-h-[200px] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'} animated-shadow bg-white p-6 m-4 rounded-lg text-center`}>
           <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />&nbsp;Note&#58; Visit and view our upcoming conclaves with destinations
           </span>
@@ -98,7 +98,7 @@ const Announcement = () => {
             onClick={() => window.location.href = '/conclave'}>
             Click Here
           </button>
-        </div> */}
+        </div> *}
       </div>
     </div>
   );
