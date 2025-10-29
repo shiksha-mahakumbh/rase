@@ -49,7 +49,7 @@ const Announcement = () => {
           <span className="text-red-700 text-sm flex justify-center mb-2">
             <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
-          <h2 className="mb-4 text-lg font-semibold text-gray-800">
+          <h2 className="mb-4 text-lg font-semibold px-6 py-6 text-gray-800">
             Paper Presentation Schedule
           </h2>
           <button
