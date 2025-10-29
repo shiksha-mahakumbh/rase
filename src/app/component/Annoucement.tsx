@@ -71,9 +71,8 @@ const Announcement = () => {
           </span>
           <p className="text-red-700 text-sm mb-2 p-6">
   .
-          </p>
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            DHE English Olympaid Resuld
+            DHE English Olympaid Result
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
@@ -84,7 +83,7 @@ const Announcement = () => {
         </div>
 
          {/* Call for Conclave */}
-        {/* <div
+         <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
@@ -93,10 +92,9 @@ const Announcement = () => {
             <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
           <p className="text-red-700 text-sm mb-2">
-            Note: Visit and view our upcoming conclaves with destinations.
           </p>
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            Call for Conclave
+            व्यवस्था जानकारी शिक्षा महाकुंभ 2025 
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
@@ -105,7 +103,7 @@ const Announcement = () => {
             Click Here
           </button>
         </div>
-      </div>  */}
+      </div>
 
       {/* Registration Section */}
       <div
