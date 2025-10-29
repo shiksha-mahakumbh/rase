@@ -35,10 +35,11 @@ const Announcement = () => {
     }
   `;
 
-  // Helper to open files from /public/2024M folder
+  // ✅ Updated openFile function
   const openFile = (filePath: string) => {
-    const encodedPath = encodeURI(filePath);
-    window.open(encodedPath, "_blank");
+    // Ensure leading slash is preserved and use the same domain
+    const url = `${window.location.origin}${filePath}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -53,7 +54,7 @@ const Announcement = () => {
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
         >
           <span className="text-red-700 text-sm flex justify-center mb-2">
-            <img src="new.gif" alt="New" className="w-10 h-auto" />
+            <img src="/new.gif" alt="New" className="w-10 h-auto" />
           </span>
           <h2 className="mb-4 text-lg font-semibold px-6 py-6 text-gray-800">
             Tentative Schedule
@@ -61,7 +62,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              openFile("/2024M/Tentative Schedule SM25 - V2.0.xlsx")
+              openFile("/2024M/Tentative%20Schedule%20SM25%20-%20V2.0.xlsx")
             }
           >
             Click Here
@@ -75,7 +76,7 @@ const Announcement = () => {
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
         >
           <span className="text-red-700 text-sm flex justify-center mb-2">
-            <img src="new.gif" alt="New" className="w-10 h-auto" />
+            <img src="/new.gif" alt="New" className="w-10 h-auto" />
           </span>
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
             DHE English Olympiad Result
@@ -83,7 +84,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              openFile("/2024M/DHE English Olympaid Result.jpg")
+              openFile("/2024M/DHE%20English%20Olympiad%20Result.jpg")
             }
           >
             Click Here
@@ -97,7 +98,7 @@ const Announcement = () => {
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
         >
           <span className="text-red-700 text-sm flex justify-center mb-2">
-            <img src="new.gif" alt="New" className="w-10 h-auto" />
+            <img src="/new.gif" alt="New" className="w-10 h-auto" />
           </span>
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
             व्यवस्था जानकारी शिक्षा महाकुंभ 2025
@@ -105,7 +106,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              openFile("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025.jpg")
+              openFile("/2024M/व्यवस्था%20जानकारी%20शिक्षा%20महाकुंभ%202025.jpg")
             }
           >
             Click Here
