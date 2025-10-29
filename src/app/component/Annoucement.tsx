@@ -36,93 +36,95 @@ const Announcement = () => {
   `;
 
   return (
-    <div className="flex flex-col items-center justify-center h-auto bg-white w-full">
+    <div className="flex flex-col items-center justify-center h-auto bg-white w-full py-8">
       <Global styles={shadowAnimation} />
 
-      <div className="flex flex-col items-center justify-center w-full">
-        {/* --------------------- FIRST COMPONENT --------------------- */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+        {/* Paper Presentation Schedule */}
         <div
-          className={`transition-all duration-500 flex-1 min-h-[200px] ${
+          className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-          } animated-shadow bg-white p-6 m-4 rounded-lg text-center`}
+          } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
         >
-          { PAPER PRESENTATION SCHEDULE (currently disabled)
-          <span className='text-red-700 text-sm'>
-            <img src="new.gif" alt="" />
+          <span className="text-red-700 text-sm flex justify-center mb-2">
+            <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
-          <h2 className="mb-4 text-l font-semibold">Paper Presentation Schedule</h2>
-          <button
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => window.open('/2024M/Abstract Booklet.pdf', '_blank')}
-          >
-            Click Here
-          </button>
-          }
-
-          { TENTATIVE SCHEDULE (currently disabled)
-          <span className='text-red-700 text-sm'>
-            <img src="new.gif" alt="" />
-          </span>
-          <h2 className="mb-4 text-l font-semibold">Tentative Schedule Shiksha Mahakumbh 2024</h2>
-          <button
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => window.open('/2024M/Tentative Schedule SM24.xlsx', '_blank')}
-          >
-            Click Here
-          </button>
-          }
-
-          {/* ACTIVE CONTENT */}
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            Register to Participate in Shiksha Mahakumbh 2025
+            Paper Presentation Schedule
           </h2>
           <button
-            className="px-6 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() =>
-              (window.location.href = "/registration/Single_Registration")
-            }
+            className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
+            onClick={() => window.open("/2024M/Abstract Booklet.pdf", "_blank")}
           >
             Click Here
           </button>
         </div>
 
-        { --------------------- SECOND COMPONENT (hidden) ---------------------
+        {/* Call for Papers */}
         <div
-          className={`transition-all duration-500 flex-1 min-h-[200px] ${
-            isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-          } animated-shadow bg-white p-6 m-4 rounded-lg text-center`}
+          className={`transition-all duration-500 min-h-[200px] ${
+            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+          } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
         >
-          <span className='text-red-700 text-sm'>
-            <img src="new.gif" alt="" />&nbsp;Note: The Last Date for Abstract Submission has been extended to December 05, 2024.
+          <span className="text-red-700 text-sm flex justify-center mb-2">
+            <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
-          <h2 className="mb-4 text-xl font-semibold">Call for Papers</h2>
+          <p className="text-red-700 text-sm mb-2">
+            Note: The Last Date for Abstract Submission has been extended to
+            December 05, 2024.
+          </p>
+          <h2 className="mb-4 text-lg font-semibold text-gray-800">
+            Call for Papers
+          </h2>
           <button
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => (window.location.href = '/paper')}
+            className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
+            onClick={() => (window.location.href = "/paper")}
           >
             Click Here
           </button>
         </div>
-        ------------------------------------------------------------- }
 
-        { --------------------- THIRD COMPONENT (hidden) ---------------------
+        {/* Call for Conclave */}
         <div
-          className={`transition-all duration-500 flex-1 min-h-[200px] ${
-            isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-          } animated-shadow bg-white p-6 m-4 rounded-lg text-center`}
+          className={`transition-all duration-500 min-h-[200px] ${
+            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+          } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
         >
-          <span className='text-red-700 text-sm'>
-            <img src="new.gif" alt="" />&nbsp;Note: Visit and view our upcoming conclaves with destinations
+          <span className="text-red-700 text-sm flex justify-center mb-2">
+            <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
-          <h2 className="mb-4 text-xl font-semibold">Call for Conclave</h2>
+          <p className="text-red-700 text-sm mb-2">
+            Note: Visit and view our upcoming conclaves with destinations.
+          </p>
+          <h2 className="mb-4 text-lg font-semibold text-gray-800">
+            Call for Conclave
+          </h2>
           <button
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => (window.location.href = '/conclave')}
+            className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
+            onClick={() => (window.location.href = "/conclave")}
           >
             Click Here
           </button>
         </div>
-        ------------------------------------------------------------- }
+      </div>
+
+      {/* Registration Section */}
+      <div
+        className={`transition-all duration-500 mt-10 w-full max-w-4xl ${
+          isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+        } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
+      >
+        <h2 className="mb-4 text-lg font-semibold text-gray-800">
+          Register to Participate in Shiksha Mahakumbh 2025
+        </h2>
+        <button
+          className="px-6 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
+          onClick={() =>
+            (window.location.href = "/registration/Single_Registration")
+          }
+        >
+          Click Here
+        </button>
       </div>
     </div>
   );
