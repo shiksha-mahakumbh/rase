@@ -40,13 +40,13 @@ const Announcement = () => {
       <Global styles={shadowAnimation} />
 
       <div className="flex flex-col items-center justify-center w-full">
-        {/* First Component */}
+        {/* --------------------- FIRST COMPONENT --------------------- */}
         <div
           className={`transition-all duration-500 flex-1 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 m-4 rounded-lg text-center`}
         >
-          {Paper Presentation Schedule (Disabled currently)
+          { PAPER PRESENTATION SCHEDULE (currently disabled)
           <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />
           </span>
@@ -56,9 +56,10 @@ const Announcement = () => {
             onClick={() => window.open('/2024M/Abstract Booklet.pdf', '_blank')}
           >
             Click Here
-          </button> }
+          </button>
+          }
 
-          {Tentative Schedule (Disabled currently)
+          { TENTATIVE SCHEDULE (currently disabled)
           <span className='text-red-700 text-sm'>
             <img src="new.gif" alt="" />
           </span>
@@ -68,8 +69,10 @@ const Announcement = () => {
             onClick={() => window.open('/2024M/Tentative Schedule SM24.xlsx', '_blank')}
           >
             Click Here
-          </button> }
+          </button>
+          }
 
+          {/* ACTIVE CONTENT */}
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
             Register to Participate in Shiksha Mahakumbh 2025
           </h2>
@@ -83,14 +86,14 @@ const Announcement = () => {
           </button>
         </div>
 
-        {Second Component (Hidden currently)
+        { --------------------- SECOND COMPONENT (hidden) ---------------------
         <div
           className={`transition-all duration-500 flex-1 min-h-[200px] ${
             isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
           } animated-shadow bg-white p-6 m-4 rounded-lg text-center`}
         >
           <span className='text-red-700 text-sm'>
-            <img src="new.gif" alt="" />&nbsp;Note&#58; The Last Date for Abstract Submission has been extended to December 05, 2024.
+            <img src="new.gif" alt="" />&nbsp;Note: The Last Date for Abstract Submission has been extended to December 05, 2024.
           </span>
           <h2 className="mb-4 text-xl font-semibold">Call for Papers</h2>
           <button
@@ -99,16 +102,17 @@ const Announcement = () => {
           >
             Click Here
           </button>
-        </div> }
+        </div>
+        ------------------------------------------------------------- }
 
-        {Third Component (Hidden currently)
+        { --------------------- THIRD COMPONENT (hidden) ---------------------
         <div
           className={`transition-all duration-500 flex-1 min-h-[200px] ${
             isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
           } animated-shadow bg-white p-6 m-4 rounded-lg text-center`}
         >
           <span className='text-red-700 text-sm'>
-            <img src="new.gif" alt="" />&nbsp;Note&#58; Visit and view our upcoming conclaves with destinations
+            <img src="new.gif" alt="" />&nbsp;Note: Visit and view our upcoming conclaves with destinations
           </span>
           <h2 className="mb-4 text-xl font-semibold">Call for Conclave</h2>
           <button
@@ -117,7 +121,8 @@ const Announcement = () => {
           >
             Click Here
           </button>
-        </div>}
+        </div>
+        ------------------------------------------------------------- }
       </div>
     </div>
   );
