@@ -35,12 +35,18 @@ const Announcement = () => {
     }
   `;
 
+  // Helper to open files from /public/2024M folder
+  const openFile = (filePath: string) => {
+    const encodedPath = encodeURI(filePath);
+    window.open(encodedPath, "_blank");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-auto bg-white w-full py-8">
       <Global styles={shadowAnimation} />
 
       <div className="flex flex-col w-full max-w-6xl space-y-6">
-        {/* Paper Presentation Schedule */}
+        {/* Tentative Schedule */}
         <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
@@ -55,7 +61,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              window.open("/2024M/Tentative Schedule SM25 - V2.0", "_blank")
+              openFile("/2024M/Tentative Schedule SM25 - V2.0.xlsx")
             }
           >
             Click Here
@@ -77,7 +83,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              window.open("/2024M/DHE English Olympiad Result", "_blank")
+              openFile("/2024M/DHE English Olympiad Result.pdf")
             }
           >
             Click Here
@@ -99,7 +105,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              window.open("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025", "_blank")
+              openFile("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025.pdf")
             }
           >
             Click Here
