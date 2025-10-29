@@ -39,7 +39,7 @@ const Announcement = () => {
     <div className="flex flex-col items-center justify-center h-auto bg-white w-full py-8">
       <Global styles={shadowAnimation} />
 
-      <div className="flex flex-col w-full max-w-6xl">
+      <div className="flex flex-col w-full max-w-6xl space-y-6">
         {/* Paper Presentation Schedule */}
         <div
           className={`transition-all duration-500 min-h-[200px] ${
@@ -54,13 +54,15 @@ const Announcement = () => {
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() => window.open("/2024M/Tentative Schedule SM25 - V2.0", "_blank")}
+            onClick={() =>
+              window.open("/2024M/Tentative Schedule SM25 - V2.0", "_blank")
+            }
           >
             Click Here
           </button>
         </div>
 
-        {/* Call for Papers */}
+        {/* DHE English Olympiad Result */}
         <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
@@ -69,21 +71,21 @@ const Announcement = () => {
           <span className="text-red-700 text-sm flex justify-center mb-2">
             <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
-          <p className="text-red-700 text-sm mb-2 p-6">
-  .
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            DHE English Olympaid Result
+            DHE English Olympiad Result
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-           onClick={() => window.open("/2024M/DHE English Olympaid Result", "_blank")}
+            onClick={() =>
+              window.open("/2024M/DHE English Olympiad Result", "_blank")
+            }
           >
             Click Here
           </button>
         </div>
 
-         {/* Call for Conclave */}
-         <div
+        {/* व्यवस्था जानकारी शिक्षा महाकुंभ 2025 */}
+        <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
@@ -91,14 +93,14 @@ const Announcement = () => {
           <span className="text-red-700 text-sm flex justify-center mb-2">
             <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
-          <p className="text-red-700 text-sm mb-2">
-          </p>
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            व्यवस्था जानकारी शिक्षा महाकुंभ 2025 
+            व्यवस्था जानकारी शिक्षा महाकुंभ 2025
           </h2>
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-             onClick={() => window.open("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025", "_blank")}
+            onClick={() =>
+              window.open("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025", "_blank")
+            }
           >
             Click Here
           </button>
