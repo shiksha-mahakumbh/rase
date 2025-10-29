@@ -83,7 +83,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              openFile("/2024M/DHE English Olympiad Result.pdf")
+              openFile("/2024M/DHE English Olympaid Result")
             }
           >
             Click Here
@@ -105,7 +105,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              openFile("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025.pdf")
+              openFile("/2024M/व्यवस्था जानकारी शिक्षा महाकुंभ 2025")
             }
           >
             Click Here
