@@ -69,7 +69,7 @@ const Announcement = () => {
           <span className="text-red-700 text-sm flex justify-center mb-2">
             <img src="new.gif" alt="New" className="w-10 h-auto" />
           </span>
-          <p className="text-red-700 text-sm mb-2">
+          <p className="text-red-700 text-sm mb-2 p-6">
             Note: The Last Date for Abstract Submission has been extended to
             December 05, 2024.
           </p>
