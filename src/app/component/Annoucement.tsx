@@ -84,7 +84,7 @@ const Announcement = () => {
           <button
             className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
             onClick={() =>
-              openFile("/2024M/DHE-English-Olympaid-Result .jpg")
+              openFile("public/2024M/DHE-English-Olympaid-Result.jpg")
             }
           >
             Click Here
