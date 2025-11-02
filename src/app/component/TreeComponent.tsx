@@ -50,6 +50,15 @@ const ShikshaMahakumbhTimeline: React.FC = () => {
       mainPhotos: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
       day1Photos: "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
     },
+    {
+      title: "Shiksha Mahakumbh 5.0",
+      year: "2025",
+      description: "Classroom to Society: Building a Healthier World Through Education.",
+      link: "https://rase.co.in",
+      campaign: "/RASE_2023_1ST_EDITION_Campaign.pdf",
+      mainPhotos: "https://drive.google.com/drive/folders/1T5HOcgbHQs6MNouIiWb0i4DGkrRd23vY",
+      day1Photos: "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
+    },
   ];
 
   const scrollLeft = () => {
