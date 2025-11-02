@@ -55,9 +55,9 @@ const ShikshaMahakumbhTimeline: React.FC = () => {
       year: "2025",
       description: "Classroom to Society: Building a Healthier World Through Education.",
       link: "https://rase.co.in",
-      campaign: "/RASE_2023_1ST_EDITION_Campaign.pdf",
-      mainPhotos: "https://drive.google.com/drive/folders/1T5HOcgbHQs6MNouIiWb0i4DGkrRd23vY",
-      day1Photos: "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
+      campaign: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
+      mainPhotos: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
+      
     },
   ];
 
