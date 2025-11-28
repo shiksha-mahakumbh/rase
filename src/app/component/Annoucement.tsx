@@ -15,6 +15,19 @@ const Announcement = () => {
     @keyframes shadow-move {
       0% {
         box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5);
+         }
+      25% {
+        box-shadow: 0 0 10px 2px rgba(0, 255, 0, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 10px 2px rgba(0, 0, 255, 0.5);
+      }
+      75% {
+        box-shadow: 0 0 10px 2px rgba(255, 255, 0, 0.5);
+      }
+      100% {
+        box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5);
+      }
     }
 
     .animated-shadow {
@@ -35,7 +48,7 @@ const Announcement = () => {
 
       <div className="flex flex-col w-full max-w-6xl space-y-6">
         {/* Tentative Schedule */}
-        {/* <div
+        <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
@@ -54,10 +67,10 @@ const Announcement = () => {
           >
             Click Here
           </button>
-        </div> */}
+        </div>
 
         {/* DHE English Olympiad Result */}
-        {/* <div
+        <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
@@ -76,10 +89,10 @@ const Announcement = () => {
           >
             Click Here
           </button>
-        </div> */}
+        </div>
 
         {/* व्यवस्था जानकारी शिक्षा महाकुंभ 2025 */}
-        {/* <div
+        <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
@@ -99,7 +112,7 @@ const Announcement = () => {
             Click Here
           </button>
         </div>
-      </div> */}
+      </div>
 
       {/* Registration Section */}
       <div
