@@ -46,28 +46,28 @@ const Announcement = () => {
     <div className="flex flex-col items-center justify-center h-auto bg-white w-full py-8">
       <Global styles={shadowAnimation} />
 
-      <div className="flex flex-col w-full max-w-6xl space-y-6">
+      {/* <div className="flex flex-col w-full max-w-6xl space-y-6"> */}
         {/* Tentative Schedule */}
-        <div
-          className={`transition-all duration-500 min-h-[200px] ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-          } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
-        >
-          <span className="text-red-700 text-sm flex justify-center mb-2">
-            <img src="/new.gif" alt="New" className="w-10 h-auto" />
-          </span>
-          <h2 className="mb-4 text-lg font-semibold px-6 py-6 text-gray-800">
-            Tentative Schedule
-          </h2>
-          <button
-            className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-            onClick={() =>
-              openFile("/2024M/Tentative%20Schedule%20SM25%20-%20V2.0.xlsx")
-            }
-          >
-            Click Here
-          </button>
-        </div>
+        {/* <div */}
+          {/* className={`transition-all duration-500 min-h-[200px] ${ */}
+            {/* isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90" */}
+          {/* } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`} */}
+        {/* > */}
+          {/* <span className="text-red-700 text-sm flex justify-center mb-2"> */}
+            {/* <img src="/new.gif" alt="New" className="w-10 h-auto" /> */}
+          {/* </span> */}
+          {/* <h2 className="mb-4 text-lg font-semibold px-6 py-6 text-gray-800"> */}
+            {/* Tentative Schedule */}
+          {/* </h2> */}
+          {/* <button */}
+            {/* className="px-5 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition" */}
+            {/* onClick={() => */}
+              {/* openFile("/2024M/Tentative%20Schedule%20SM25%20-%20V2.0.xlsx") */}
+            {/* } */}
+          {/* > */}
+            {/* Click Here */}
+          {/* </button> */}
+        {/* </div> */}
 
         {/* DHE English Olympiad Result */}
         <div
