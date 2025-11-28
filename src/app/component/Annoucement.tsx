@@ -120,7 +120,7 @@ const Announcement = () => {
   } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
 >
   <h2 className="mb-4 text-lg font-semibold text-gray-800">
-    Register to Participate in Shiksha Mahakumbh 2025
+    Register to Participate in Shiksha Mahakumbh 2026
   </h2>
   <button
     className="px-6 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
