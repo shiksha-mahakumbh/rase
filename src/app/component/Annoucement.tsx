@@ -70,7 +70,7 @@ const Announcement = () => {
         </div>
 
         {/* DHE English Olympiad Result */}
-        <div
+        {/* <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
@@ -89,10 +89,10 @@ const Announcement = () => {
           >
             Click Here
           </button>
-        </div>
+        </div> */}
 
         {/* व्यवस्था जानकारी शिक्षा महाकुंभ 2025 */}
-        <div
+        {/* <div
           className={`transition-all duration-500 min-h-[200px] ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
           } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
@@ -112,7 +112,7 @@ const Announcement = () => {
             Click Here
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* Registration Section */}
       <div
