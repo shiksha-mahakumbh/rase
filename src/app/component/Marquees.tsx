@@ -12,24 +12,24 @@ interface Item {
 const items: Item[] = [
   {
     imageUrl: "/new.gif",
-    text: "शिक्षा महाकुंभ अभियान – 5th Edition at NIPER Mohali from 31st Oct to 2nd Nov 2025.",
+    text: "शिक्षा महाकुंभ अभियान – 6th Edition at NIT Hamirpur from 9th Oct to 11th Oct 2026.",
     link: "https://www.rase.co.in",
   },
   {
     imageUrl: "/new.gif",
-    text: "शिक्षा महाकुंभ 4.0 concluded at Kurukshetra University, Dec 16-17, 2024. Download photos here.",
-    link: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
+    text: "शिक्षा महाकुंभ 5.0 concluded at NIPER Mohali, 31 Oct to 2nd Nov 2025. Download photos here.",
+    link: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA",
   },
   {
     imageUrl: "/new.gif",
-    text: "Join the revolution through education at NIPER Mohali, register now.",
+    text: "Join the revolution through education at NIT Hamirpur, register now.",
     link: "https://www.rase.co.in/registration/Single_Registration",
   },
-  {
-    imageUrl: "/new.gif",
-    text: "शिक्षा महाकुंभ अभियान office inaugurated at NIPER SAS Nagar campus.",
-    link: "https://www.rase.co.in",
-  },
+  // {
+  //   imageUrl: "/new.gif",
+  //   text: "शिक्षा महाकुंभ अभियान office inaugurated at NIPER SAS Nagar campus.",
+  //   link: "https://www.rase.co.in",
+  // },
 ];
 
 const Marquees: React.FC = () => {
