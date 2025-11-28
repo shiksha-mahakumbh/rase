@@ -45,44 +45,37 @@ export default function NoticeBoard() {
 
   return (
     <div className="px-4 py-10 md:px-20">
-      <h2 className="text-2xl font-bold text-center mb-8 text-primary">
+      <h2 className="text-3xl font-bold text-center mb-10 text-primary tracking-wide">
         Latest Notices
       </h2>
 
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {events.map((event) => (
           <div
             key={event.id}
-            className="bg-white rounded-xl shadow-md p-4 transition transform hover:scale-105 hover:shadow-lg"
+            className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-gray-100"
           >
-            <img
-              src={event.imageUrl}
-              alt={event.title}
-              className="rounded-md w-full h-40 object-cover"
-            />
+            {/* Image Section */}
+            <div className="w-full h-48 overflow-hidden">
+              <img
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
 
-            <h3 className="mt-4 font-semibold text-gray-800">{event.title}</h3>
-            <p className="text-sm text-gray-500">📅 {event.date}</p>
+            {/* Content */}
+            <div className="p-5">
+              <p className="text-sm text-gray-500 mb-1">
+                📅 {event.date}
+              </p>
+
+              <h3 className="font-semibold text-lg text-gray-800 leading-snug group-hover:text-primary transition-colors">
+                {event.title}
+              </h3>
+            </div>
           </div>
         ))}
-      </div>
-
-      {/* Registration Section */}
-      <div
-        className={`transition-all duration-500 mt-10 w-full max-w-3xl mx-auto 
-        animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
-      >
-        <h2 className="mb-4 text-lg font-semibold text-gray-800">
-          Register to Participate in Shiksha Mahakumbh 2025
-        </h2>
-        <button
-          className="px-6 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
-          onClick={() =>
-            (window.location.href = "/registration/Single_Registration")
-          }
-        >
-          Click Here
-        </button>
       </div>
     </div>
   );
