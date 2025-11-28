@@ -113,25 +113,25 @@ const Announcement = () => {
           {/* </button> */}
         {/* </div> */}
       {/* </div> */}
+{/* Registration Section */}
+<div
+  className={`transition-all duration-500 mt-10 w-full max-w-4xl ${
+    isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+  } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
+>
+  <h2 className="mb-4 text-lg font-semibold text-gray-800">
+    Register to Participate in Shiksha Mahakumbh 2025
+  </h2>
+  <button
+    className="px-6 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
+    onClick={() =>
+      (window.location.href = "/registration/Single_Registration")
+    }
+  >
+    Click Here
+  </button>
+</div>
 
-      {/* Registration Section */}
-      {/* <div */}
-        {/* className={`transition-all duration-500 mt-10 w-full max-w-4xl ${ */}
-          {/* isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90" */}
-        {/* } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`} */}
-      {/* > */}
-        {/* <h2 className="mb-4 text-lg font-semibold text-gray-800"> */}
-          {/* Register to Participate in Shiksha Mahakumbh 2025 */}
-        {/* </h2> */}
-        {/* <button */}
-          {/* className="px-6 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition" */}
-          {/* onClick={() => */}
-            {/* (window.location.href = "/registration/Single_Registration") */}
-          {/* } */}
-        {/* > */}
-          {/* Click Here */}
-        {/* </button> */}
-      {/* </div> */}
     </div>
   );
 };
