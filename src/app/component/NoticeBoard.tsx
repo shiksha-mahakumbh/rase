@@ -12,7 +12,7 @@ export default function NoticeBoard() {
   const [events] = useState<NoticeEvent[]>([
     {
       id: "1",
-      title: "Registration Open for Shiksha Mahakumbh 2025",
+      title: "Registration Open for Shiksha Mahakumbh 2026",
       imageUrl: "/notices/notice1.jpg",
     },
     {
