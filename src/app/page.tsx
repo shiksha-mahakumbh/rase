@@ -16,6 +16,12 @@ import Announcement from "./component/Annoucement";
 import UpcomingEvent from "./component/UpcomingEvent";
 import NoticeBoard from "./component/NoticeBoard";
 const slides1 = [
+    {
+    src: "/2024M/Vyakhanmala.jpg",
+    alt: "Image 1",
+    legend:
+      '“Vyakhanmala: Lecture Series on Panchakosha & Bharatiya Jnana Parampara” First Lecture (Annamaya Kosha)"',
+  },
   {
     src: "/2024M/Press8.jpg",
     alt: "Image 1",
