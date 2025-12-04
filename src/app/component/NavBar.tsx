@@ -32,7 +32,14 @@ const NavBar: React.FC = () => {
         { path: "/VibhagRoute/Prabandhan24", title: "प्रबंधन विभाग" },
       ],
     },
-    { path: "https://pub.dhe.org.in", title: "Publication" },
+     {
+      path: "/",
+      title: "Publication",
+      subMenu: [
+        { path: "https://pub.dhe.org.in", title: "Journal" },
+        { path: /2024M/Shiksha Maha Khumbh Final.pdf", title: "Souvenir" },
+       ],
+    },
     {
       path: "/",
       title: "Events",
