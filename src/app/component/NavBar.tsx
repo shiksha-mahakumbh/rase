@@ -37,7 +37,7 @@ const NavBar: React.FC = () => {
   title: "Publication",
   subMenu: [
     { path: "https://pub.dhe.org.in", title: "Journal" },
-    { path: "/2024M/Shiksha Maha Khumbh Final.pdf", title: "Souvenir" },
+    { path: "/2024M/Souvenir Abstracts_MTC.pdf", title: "Souvenir" },
   ],
 },
 
