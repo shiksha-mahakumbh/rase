@@ -33,6 +33,7 @@ const NavBar: React.FC = () => {
       ],
     },
    {
+     path: "/",
   title: "Publication",
   subMenu: [
     { path: "https://pub.dhe.org.in", title: "Journal" },
