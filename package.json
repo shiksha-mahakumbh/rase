@@ -34,7 +34,7 @@
     "jspdf-autotable": "^3.8.3",
     "latest": "^0.2.0",
     "multer": "^1.4.5-lts.1",
-    "next": "^15.0.3",
+    "next": "15.0.7",
     "next-connect": "^1.0.0",
     "next-qrcode": "^2.5.1",
     "nodemailer": "^6.9.16",
