@@ -46,8 +46,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             </a>
           </p>
 
-                  {/* Modal */}
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
+
           <div className="text-white p-4 rounded-lg flex flex-col items-center justify-center text-center text-base md:text-xl font-semibold bg-primary">
             <p>
               <strong>शिक्षा महाकुंभ अभियान</strong> – 6th Edition is going to be held
@@ -55,7 +54,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             </p>
           </div>
           
-        </Modal>
+
           {/* Custom Child Content (Optional) */}
           {children && <div className="mt-4">{children}</div>}
         </div>
