@@ -1,92 +1,83 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const Info = () => {
-  const text = `
-  <h2 class="text-2xl md:text-3xl font-bold text-[#502a2a] mb-3 text-center">
-    शिक्षा महाकुंभ अभियान: A National Movement for Global Educational Transformation
-  </h2>
-
-  <p class="mb-2 leading-relaxed">
-  शिक्षा महाकुंभ अभियान is a visionary multi-edition national movement conceptualised by visionary ISRO scientist and accomplished author 
-  <strong>Dr. Thakur SKR</strong> under the guidance of <strong>Sh. Vijay Nadda</strong>, Visionary Educationist and Social Reformer. It unites leaders from across education, policy, industry, civil society, and the youth to reimagine and reform the <strong>Bhartiya education system</strong>.
-  </p>
-
-  <p class="mb-2 leading-relaxed">
-  Rooted in Bhartiya knowledge systems and aligned with global educational priorities, this initiative serves as a vibrant platform for collaboration, innovation, and action—bringing together insights from local classrooms and global think tanks alike.
-  </p>
-
-  <p class="mb-2 leading-relaxed font-semibold">
-  Core Focus:
-  </p>
-  <ul class="list-disc pl-5 space-y-1 text-gray-800">
-    <li>Integration of global best practices with Bhartiya values</li>
-    <li>Innovative pedagogies & future-ready curriculum</li>
-    <li>Harnessing technology and digital learning</li>
-  </ul>
-
-  <p class="mt-3 mb-2 font-semibold">Key Priorities:</p>
-  <ul class="list-disc pl-5 space-y-1 text-gray-800">
-    <li>Inclusivity & universal access to quality learning</li>
-    <li>Teacher training & professional growth</li>
-    <li>Policy alignment with UN SDGs</li>
-    <li>Cultural preservation & global exchange</li>
-    <li>Bridging the digital divide through EdTech</li>
-  </ul>
-
-  <h3 class="mt-4 mb-2 font-bold text-lg text-[#502a2a]">Past Editions:</h3>
-  <ul class="list-none space-y-2">
-    <li>🔹 <strong>1st Edition – NIT Jalandhar | June 2023</strong> — Focus on K–12 reforms & best practices compendium.</li>
-    <li>🔹 <strong>2nd Edition – NIT Kurukshetra | Dec 2023</strong> — Startup-academia collaborations & MoUs.</li>
-    <li>🔹 <strong>3rd Edition – NIT Srinagar | June 2024</strong> — Skilling & innovation for peace-building in J&K.</li>
-    <li>🔹 <strong>4th Edition – Kurukshetra University | Dec 2024</strong> — Bhartiya Education Vision for Global Hub.</li>
-    <li>🔹 <strong>5th Edition – NIPER Mohali | Oct–Nov 2025</strong> — Linking pharma education with global health.</li>
-  </ul>
-
-  <p class="mt-3 font-semibold text-center text-[#502a2a]">
-  Shiksha Mahakumbh Abhiyan is not just a conference—it’s a national implementation accelerator shaping policy, partnerships, and real impact.
-  </p>
-  `;
-
-  const [isTextExpanded, setIsTextExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(true);
-
-  const toggleText = () => setIsTextExpanded(!isTextExpanded);
-
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-
-    handleWindowResize();
-    window.addEventListener("resize", handleWindowResize);
-    return () => window.removeEventListener("resize", handleWindowResize);
-  }, []);
-
-  const textClassHeading = isMobile ? "text-xl" : "text-2xl";
+const Info: React.FC = () => {
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   return (
-    <div className="bg-gradient-to-br from-[#fff7f7] to-[#f5f0f0] px-5 py-6 rounded-xl shadow-md border border-[#e7dcdc]">
-      <h1 className={`${textClassHeading} mb-3 text-[#502a2a] font-bold text-center`}>
-        About Shiksha Mahakumbh Abhiyan
+    <section className="bg-gradient-to-br from-[#fff7f7] to-[#f5f0f0] px-6 py-8 rounded-2xl shadow-lg border border-[#e7dcdc] max-w-5xl mx-auto">
+      
+      {/* SEO Heading */}
+      <h1 className="text-2xl md:text-3xl font-bold text-[#502a2a] text-center mb-6 leading-snug">
+        Shiksha Mahakumbh Abhiyan: A People’s Movement for Global Educational Transformation
       </h1>
 
-      <div className="text-black leading-relaxed text-justify">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: isTextExpanded ? text : `${text.substring(0, 700)}...`,
-          }}
-        />
-        <div className="flex justify-center">
-          <button
-            onClick={toggleText}
-            className="mt-4 px-6 py-2 bg-[#502a2a] text-white rounded-full shadow hover:bg-[#7a4343] transition duration-300"
-          >
-            {isTextExpanded ? "Show Less" : "Read More"}
-          </button>
-        </div>
+      <div className={`text-gray-800 leading-relaxed text-justify space-y-4 ${expanded ? "" : "line-clamp-6"}`}>
+        
+        <p>
+        Shiksha Mahakumbh Abhiyan is a visionary, multi-edition, multinational, and multidimensional movement conceptualized by a distinguished ISRO scientist and eminent author, and shaped under the guidance of visionary educationists and social reformers. The initiative brings together education, policy, industry, civil society, and youth on a shared platform to reimagine and strengthen the Bhartiya education system while positioning Bharat as a meaningful contributor to the global education discourse.
+        </p>
+
+        <p>
+        Rooted in Bharatiya knowledge traditions and aligned with global educational contexts, the Abhiyan serves as a powerful platform for collaboration, innovation, and implementation. Its aspiration goes beyond national boundaries—envisioning education on a global stage, much like the Olympic spirit—where local experiences and global perspectives converge to shape the future of learning.
+        </p>
+
+        <p>
+        At its core lies a pragmatic yet forward-looking vision: to build a global education ecosystem that is inclusive, interdisciplinary, ethical, and transformation-driven—deeply connected with the real needs of society.
+        </p>
+
+        <p>
+        Each edition of the Mahakumbh extends beyond dialogue and deliberation. It generates concrete action plans, fosters institutional partnerships, and encourages community participation, ensuring sustainable and measurable impact.
+        </p>
+
+        <p>
+        A distinctive strength of the Shiksha Mahakumbh Abhiyan is its Whole-of-Society approach, transcending academic boundaries to engage teachers, students, institutional leaders, policymakers, industry representatives, social organizations, and media in a unified mission.
+        </p>
+
+        <p>
+        By positioning education as a catalyst for societal transformation, the movement calls for advancing with national consciousness and global responsibility.
+        </p>
+
+        <p>
+        Each edition builds upon the achievements of the previous one, creating a continuous chain of innovation and implementation.
+        </p>
+
+        {/* Divider */}
+        <hr className="my-4 border-gray-300" />
+
+        <h2 className="text-xl font-semibold text-[#502a2a]">
+          Major Editions
+        </h2>
+
+        <ul className="space-y-3">
+          <li>🔹 First Edition – NIT Jalandhar | 9–11 June 2023<br/>Theme: Recent Advances in School Education<br/>Core Focus: A strong beginning in innovation within school education</li>
+
+          <li>🔹 Second Edition – NIT Kurukshetra | 20 December 2023<br/>Theme: Role of Academic-driven Startups in Economy<br/>Core Focus: From Education to Startups, Startups to Economy</li>
+
+          <li>🔹 Third Edition – NIT Srinagar | 29–30 June 2024<br/>Theme: Role of Academic-driven Startups in Developing Economy of J&amp;K<br/>Core Focus: From Education to Enterprise, Enterprise to Regional Development</li>
+
+          <li>🔹 Fourth Edition – Kurukshetra University | 16–17 December 2024<br/>Theme: Indian Education System for Global Development<br/>Core Focus: Indian Education as a Global Solution</li>
+
+          <li>🔹 Fifth Edition – NIPER Mohali | 31 October – 2 November 2025<br/>Theme: Classroom to Society – Building a Healthier World through Education<br/>Core Focus: The Journey of Education from Classroom to Society</li>
+        </ul>
+
+        <hr className="my-4 border-gray-300" />
+
+        <p className="font-semibold text-center text-[#502a2a]">
+        Shiksha Mahakumbh Abhiyan continues to evolve as a dynamic national and global movement—bridging vision with action, and ideas with impact.
+        </p>
       </div>
-    </div>
+
+      {/* Toggle Button */}
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="px-6 py-2 bg-[#502a2a] text-white rounded-full shadow-md hover:bg-[#7a4343] transition duration-300"
+        >
+          {expanded ? "Show Less" : "Read More"}
+        </button>
+      </div>
+    </section>
   );
 };
 
