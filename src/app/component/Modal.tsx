@@ -45,14 +45,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               please click here.
             </a>
           </p>
-
-
-          <div className="text-white p-4 rounded-lg flex flex-col items-center justify-center text-center text-base md:text-xl font-semibold bg-primary">
-            <p>
-              <strong>शिक्षा महाकुंभ अभियान</strong> – 6th Edition is going to be held
-              at <strong>NIT Hamirpur</strong>.
-            </p>
-          </div>
           
 
           {/* Custom Child Content (Optional) */}
