@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+
 
 const tracks = [
   { title: "Fundamental & Applied Sciences", details: "Physics, Chemistry, Biology, Mathematics, Earth & Space Sciences", chair: "Prof. Sunil (NIT Hamirpur)" },
@@ -716,19 +717,30 @@ function CulturalPage() {
 
 // ─── SIDEBAR CONFIG ───────────────────────────────────────────────────────────
 
-const pages = [
-  { id: "ConferencePage",   label: "Conference" },
-  { id: "ConclavePage",     label: "Conclave" },
-  { id: "AwardsPage",       label: "Awards" },
-  { id: "OlympiadPage",     label: "Olympiad" },
-  { id: "ExhibitionPage",   label: "Exhibition" },
-  { id: "ProjectsPage",     label: "Projects" },
-  { id: "BestPracticesPage",label: "Best Practices" },
-  { id: "PatrikaPage",      label: "Bal Shodh Patrika" },
-  { id: "CulturalPage",     label: "Cultural Program" },
+type PageId =
+  | "ConferencePage"
+  | "ConclavePage"
+  | "AwardsPage"
+  | "OlympiadPage"
+  | "ExhibitionPage"
+  | "ProjectsPage"
+  | "BestPracticesPage"
+  | "PatrikaPage"
+  | "CulturalPage";
+
+const pages: { id: PageId; label: string }[] = [
+  { id: "ConferencePage",    label: "Conference" },
+  { id: "ConclavePage",      label: "Conclave" },
+  { id: "AwardsPage",        label: "Awards" },
+  { id: "OlympiadPage",      label: "Olympiad" },
+  { id: "ExhibitionPage",    label: "Exhibition" },
+  { id: "ProjectsPage",      label: "Projects" },
+  { id: "BestPracticesPage", label: "Best Practices" },
+  { id: "PatrikaPage",       label: "Bal Shodh Patrika" },
+  { id: "CulturalPage",      label: "Cultural Program" },
 ];
 
-const pageMap = {
+const pageMap: Record<PageId, React.ReactElement> = {
   ConferencePage:    <ConferencePage />,
   ConclavePage:      <ConclavePage />,
   AwardsPage:        <AwardsPage />,
@@ -743,7 +755,7 @@ const pageMap = {
 // ─── MAIN DASHBOARD ───────────────────────────────────────────────────────────
 
 export default function AcademicCouncilDashboard() {
-  const [active, setActive] = useState("ConferencePage");
+  const [active, setActive] = useState<PageId>("ConferencePage");
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
