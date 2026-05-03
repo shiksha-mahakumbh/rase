@@ -201,21 +201,23 @@ const pageMap = {
 };
 
 // ─── MAIN DASHBOARD ───────────────────────────────────────────────────────────
+// ─── MAIN DASHBOARD ───────────────────────────────────────────────────────────
 export default function AcademicCouncilDashboard() {
   const [active, setActive] = useState("ConferencePage");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const pageMap: Record<string, React.ComponentType> = {
-  ConferencePage: ConferencePage,
-  ConclavePage: ConclavePage,
-  AwardsPage: AwardsPage,
-  OlympiadPage: OlympiadPage,
-  ExhibitionPage: ExhibitionPage,
-  ProjectsPage: ProjectsPage,
-  BestPracticesPage: BestPracticesPage,
-  PatrikaPage: PatrikaPage,
-  CulturalPage: CulturalPage,
-};
+  // MAKE SURE THIS IS HERE 👇
+  const pages = [
+    { id: "ConferencePage", label: "Conference" },
+    { id: "ConclavePage", label: "Conclave" },
+    { id: "AwardsPage", label: "Awards" },
+    { id: "OlympiadPage", label: "Olympiad" },
+    { id: "ExhibitionPage", label: "Exhibition" },
+    { id: "ProjectsPage", label: "Projects" },
+    { id: "BestPracticesPage", label: "Best Practices" },
+    { id: "PatrikaPage", label: "Bal Shodh Patrika" },
+    { id: "CulturalPage", label: "Cultural Program" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -223,6 +225,7 @@ export default function AcademicCouncilDashboard() {
       <aside className="w-64 bg-white border-r p-4 hidden md:flex flex-col">
         <h2 className="text-xl font-bold mb-6">Academic Council</h2>
         <nav className="space-y-1">
+          {/* This should now find 'pages' correctly */}
           {pages.map((p) => (
             <button
               key={p.id}
@@ -237,39 +240,10 @@ export default function AcademicCouncilDashboard() {
         </nav>
       </aside>
 
-      {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b px-4 py-3 flex items-center justify-between">
-        <span className="font-bold">Academic Council</span>
-        <button onClick={() => setMenuOpen(!menuOpen)} className="text-sm border px-3 py-1 rounded">
-          {menuOpen ? "✕ Close" : "☰ Menu"}
-        </button>
-      </div>
-
-      {menuOpen && (
-        <div className="md:hidden fixed top-12 left-0 right-0 z-40 bg-white border-b shadow-lg px-4 py-3">
-          <nav className="space-y-1">
-            {pages.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => { setActive(p.id); setMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                  active === p.id ? "bg-black text-white font-medium" : "text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      )}
-
+      {/* ... Rest of your component (Mobile Menu & Main) ... */}
       <main className="flex-1 p-6 pt-16 md:pt-6 max-w-5xl">
-    {/* 2. Render it as a component tag */}
-    {(() => {
-      const ActivePage = pageMap[active];
-      return <ActivePage />;
-    })()}
-  </main>
+        {pageMap[active as keyof typeof pageMap]}
+      </main>
     </div>
   );
 }
