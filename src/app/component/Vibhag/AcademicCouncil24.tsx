@@ -205,17 +205,17 @@ export default function AcademicCouncilDashboard() {
   const [active, setActive] = useState("ConferencePage");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const pages = [
-    { id: "ConferencePage", label: "Conference" },
-    { id: "ConclavePage", label: "Conclave" },
-    { id: "AwardsPage", label: "Awards" },
-    { id: "OlympiadPage", label: "Olympiad" },
-    { id: "ExhibitionPage", label: "Exhibition" },
-    { id: "ProjectsPage", label: "Projects" },
-    { id: "BestPracticesPage", label: "Best Practices" },
-    { id: "PatrikaPage", label: "Bal Shodh Patrika" },
-    { id: "CulturalPage", label: "Cultural Program" },
-  ];
+  const pageMap: Record<string, React.ComponentType> = {
+  ConferencePage: ConferencePage,
+  ConclavePage: ConclavePage,
+  AwardsPage: AwardsPage,
+  OlympiadPage: OlympiadPage,
+  ExhibitionPage: ExhibitionPage,
+  ProjectsPage: ProjectsPage,
+  BestPracticesPage: BestPracticesPage,
+  PatrikaPage: PatrikaPage,
+  CulturalPage: CulturalPage,
+};
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -264,8 +264,12 @@ export default function AcademicCouncilDashboard() {
       )}
 
       <main className="flex-1 p-6 pt-16 md:pt-6 max-w-5xl">
-        {pageMap[active]}
-      </main>
+    {/* 2. Render it as a component tag */}
+    {(() => {
+      const ActivePage = pageMap[active];
+      return <ActivePage />;
+    })()}
+  </main>
     </div>
   );
 }
