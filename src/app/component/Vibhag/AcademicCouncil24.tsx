@@ -121,17 +121,72 @@ function ConclavePage() {
     </>
   );
 }
+// ─── INDIVIDUAL PAGES ────────────────────────────────────────────────────────
 
-// Baaki pages ko brevity ke liye yahan short kiya hai, lekin sab included hain
-function AwardsPage() { /* pura AwardsPage code daal do jaise pehle tha */ }
-function OlympiadPage() { /* pura code */ }
-function ExhibitionPage() { /* pura code */ }
-function ProjectsPage() { /* pura code */ }
-function BestPracticesPage() { /* pura code */ }
-function PatrikaPage() { /* pura code */ }
-function CulturalPage() { /* pura code */ }
+// ... (Keep your existing ConferencePage and ConclavePage)
 
-// Agar chaaho to main pura code ek baar mein de sakta hoon. Abhi yeh test karo.
+function AwardsPage() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Awards & Recognition</h1>
+      <p className="mt-2 text-gray-600">Details about the awards ceremony will be updated here.</p>
+    </div>
+  );
+}
+
+function OlympiadPage() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Olympiad 2026</h1>
+      <p className="mt-2 text-gray-600">Information about the upcoming Olympiad competitions.</p>
+    </div>
+  );
+}
+
+function ExhibitionPage() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Exhibition</h1>
+      <p className="mt-2 text-gray-600">Showcasing innovation and research projects.</p>
+    </div>
+  );
+}
+
+function ProjectsPage() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Projects</h1>
+      <p className="mt-2 text-gray-600">Student and professional project submissions.</p>
+    </div>
+  );
+}
+
+function BestPracticesPage() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Best Practices</h1>
+      <p className="mt-2 text-gray-600">Shared institutional best practices and case studies.</p>
+    </div>
+  );
+}
+
+function PatrikaPage() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Bal Shodh Patrika</h1>
+      <p className="mt-2 text-gray-600">Our official research publication and journal.</p>
+    </div>
+  );
+}
+
+function CulturalPage() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Cultural Program</h1>
+      <p className="mt-2 text-gray-600">Details on the cultural events and performances.</p>
+    </div>
+  );
+}
 
 const pageMap = {
   ConferencePage: <ConferencePage />,
