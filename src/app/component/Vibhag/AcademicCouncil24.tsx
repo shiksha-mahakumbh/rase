@@ -1248,14 +1248,171 @@ function BestPracticesPage() {
   ); 
 }
 
-function PatrikaPage() { 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">Bal Shodh Patrika</h1>
-      <p>Content for Patrika goes here.</p>
-    </div>
-  ); 
-}
+📘 Bal Shodh Patrika – Shiksha Mahakumbh 6.0
+
+🌟 Overview
+
+Bal Shodh Patrika is a unique academic initiative under Shiksha Mahakumbh 6.0 aimed at nurturing a culture of research, inquiry, and innovation among school students. It provides a national platform for young learners to present their ideas, research work, and project-based learnings in a structured academic format.
+
+This initiative bridges the gap between school education and research orientation, encouraging students to think critically and contribute meaningfully to society.
+
+
+---
+
+🎯 Objectives
+
+Develop research aptitude among school students
+
+Promote critical thinking and analytical skills
+
+Encourage documentation of student projects and ideas
+
+Provide a platform for academic expression and publication
+
+Inspire students towards innovation and knowledge creation
+
+
+
+---
+
+👥 Participation Categories
+
+The Patrika will be published in two sections:
+
+📗 Section 1
+
+Classes: 9th – 10th
+
+Focus: Basic research, observations, project documentation
+
+
+📘 Section 2
+
+Classes: 11th – 12th
+
+Focus: Advanced research, analytical studies, innovative ideas
+
+
+
+---
+
+🧠 Themes & Topics
+
+Submissions may be based on themes aligned with national and global priorities, such as:
+
+🇮🇳 Viksit Bharat 2047
+
+🌱 Environment & Sustainability
+
+🤖 AI, Technology & Future Innovations
+
+🚜 Agriculture & Rural Development
+
+🏛️ Indian Knowledge Systems (IKS)
+
+🧬 Science & Scientific Discoveries
+
+💡 Social Issues & Solutions
+
+🌍 Global Challenges & Local Solutions
+
+
+
+---
+
+📝 Submission Format
+
+Students are required to submit:
+
+📄 Research Paper / Article (800–1500 words)
+
+🧾 Abstract (150–200 words)
+
+📊 Data / Case Study (if applicable)
+
+🖼️ Diagrams / Images / Project Documentation
+
+
+
+---
+
+⚙️ Review & Selection Process
+
+1. Submission of entries
+
+
+2. Screening for eligibility and originality
+
+
+3. Review by subject experts
+
+
+4. Selection of best entries
+
+
+5. Final publication in Bal Shodh Patrika
+
+
+
+
+---
+
+🏆 Recognition & Benefits
+
+📜 Publication in national-level Student Research Journal
+
+🎓 Certificates for participants
+
+🏅 Special recognition for outstanding research
+
+🎤 Opportunity to present at Shiksha Mahakumbh 6.0
+
+🤝 Academic exposure and mentorship opportunities
+
+
+
+---
+
+📅 Timeline
+
+📌 Call for Submissions: To be announced
+
+📌 Last Date for Submission: To be announced
+
+📌 Review & Selection: To be announced
+
+📌 Publication & Release: During Shiksha Mahakumbh 2026
+
+
+
+---
+
+🏫 Institutional Collaboration
+
+Schools and institutions are encouraged to:
+
+Motivate students for participation
+
+Guide students in research writing
+
+Support documentation and submission
+
+
+
+---
+
+📞 Contact & Support
+
+📧 Email: academics@shikshamahakumbh.com
+📞 Phone/WhatsApp: +91-7903431900
+🌐 Website: www.shikshamahakumbh.com
+
+
+---
+
+✨ Igniting Young Researchers
+
+Bal Shodh Patrika is a step towards building a generation of young thinkers, researchers, and innovators who will shape the future of the nation.
 
 function CulturalPage() { 
   return (
