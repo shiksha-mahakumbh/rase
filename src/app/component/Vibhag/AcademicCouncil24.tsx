@@ -126,16 +126,6 @@ const tracks = [
   },
 ];
 
-const conclaves = [
-  { title: "VC / Directors Conclave", theme: "Practical Innovation in Education System", focus: "Policy transformation, autonomy, global benchmarks", output: "Vision Charter for Higher Education @2047" },
-  { title: "Principals & Teachers Conclave", theme: "Transformative Ethical Learning", focus: "School leadership, pedagogy, equity", output: "Teaching Excellence Toolkit" },
-  { title: "Scientists & Researchers Conclave", theme: "Lab to the Last Mile", focus: "R&D, patents, interdisciplinary research", output: "Research-to-Policy Guide" },
-  { title: "Startup & Entrepreneurs Conclave", theme: "Entrepreneurship for Employment", focus: "Innovation, startups, incubation", output: "Entrepreneurship Framework" },
-  { title: "CSR & NGO Conclave", theme: "Inclusive Education Responsibility", focus: "Access, equity, social impact", output: "Education Investment Charter" },
-  { title: "Media Conclave", theme: "Power of Truth", focus: "Responsible journalism, narratives", output: "Media Ethics Code" },
-  { title: "Talent Conclave", theme: "Nurturing Excellence", focus: "Top students, mentorship", output: "Talent Recognition Pathway" },
-];
-
 // ─── INDIVIDUAL PAGES ────────────────────────────────────────────────────────
 
 
@@ -352,34 +342,274 @@ function ConferencePage() {
   );
 };
 
+const conclaves = [
+  {
+    title: "VC / Directors Conclave",
+    icon: "🎓",
+    participants:
+      "Vice-Chancellors, Directors, Academic Thinkers, NEP Implementers",
+    focus:
+      "Systemic policy transformation, institutional autonomy, global benchmarks",
+    output:
+      "Vision Charter for Higher Education @2047",
+    theme:
+      "Practical Innovation in Education System",
+    coordinators:
+      "Dr. Chander Prakash, NIT Hamirpur",
+  },
+  {
+    title: "Principals & Outstanding Teachers Conclave",
+    icon: "🏫",
+    participants:
+      "School Principals, Outstanding Teachers, DEOs, Education Officers",
+    focus:
+      "Foundational literacy, school leadership, rural-urban equity, pedagogy reforms",
+    output:
+      "Model School Leadership & Teaching Excellence Toolkit",
+    theme:
+      "Transformative Ethical Learning with Innovations",
+    coordinators:
+      "Dr. Siddarath Chauhan, NIT Hamirpur | Dr. Kuldeep Kumar, NIT Hamirpur",
+  },
+  {
+    title: "Scientists & Research Scholars Conclave",
+    icon: "🔬",
+    participants:
+      "Scientists, Research Scholars, PhD Candidates, Innovators, R&D Professionals",
+    focus:
+      "Interdisciplinary R&D, patent ecosystem, Bharatiya knowledge",
+    output:
+      "Research-to-Policy Action Guide",
+    theme:
+      "Lab to the Last Mile",
+    coordinators:
+      "Prof. Ravi Kumar, NIT Hamirpur | Dr. Pooja, CSIR–CSIO Chandigarh",
+  },
+  {
+    title: "Startup Leaders / Entrepreneurs Conclave",
+    icon: "🚀",
+    participants:
+      "Startup Founders, Entrepreneurs, Business Leaders, Innovation Mentors",
+    focus:
+      "Entrepreneurship promotion through education",
+    output:
+      "Student Entrepreneurship Development Framework",
+    theme:
+      "Mitigation of Unemployment through Entrepreneurship",
+    coordinators:
+      "Er. Pankaj Kumar, NIT Hamirpur",
+  },
+  {
+    title: "CSR & NGO Conclave",
+    icon: "🤝",
+    participants:
+      "CSR Leaders, NGOs, Philanthropic Foundations, Social Activists",
+    focus:
+      "Equitable access, girls’ education, underserved communities",
+    output:
+      "Inclusive Education Investment Charter",
+    theme:
+      "Society of Knowledge, Obedience with Practical Responsibility",
+    coordinators:
+      "Dr. Somesh Kumar, NIT Hamirpur",
+  },
+  {
+    title: "Media Conclave",
+    icon: "📢",
+    participants:
+      "Journalists, Edufluencers, Digital Content Creators, Fact-checkers",
+    focus:
+      "Responsible storytelling, fact-based discourse, positive narratives",
+    output:
+      "Shiksha Media Ethics & Impact Code",
+    theme:
+      "Visualize the World with the Power of Truth",
+    coordinators:
+      "Dr. Rakesh Kumar, NIT Hamirpur | Adv. Aarti Sharma, Member, DHE",
+  },
+  {
+    title: "Talent Conclave (90%+ Achievers)",
+    icon: "🌟",
+    participants:
+      "Meritorious Students (90%+), Toppers, Academic Achievers",
+    focus:
+      "Talent recognition, motivation, academic excellence",
+    output:
+      "National Talent Recognition & Mentorship Pathway",
+    theme:
+      "Nurturing Excellence for Viksit Bharat",
+    coordinators:
+      "Dr. Arvind Kumar, NIT Hamirpur",
+  },
+];
+
 function ConclavePage() {
   return (
-    <>
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold">Conclaves – Shiksha Mahakumbh 6.0</h1>
-        <p className="text-gray-600 mt-2 max-w-3xl">High-impact dialogue platforms bringing together academia, governance, industry and society to drive actionable outcomes aligned with Viksit Bharat 2047.</p>
-      </header>
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-purple-900 to-indigo-700 text-white py-16 px-6 rounded-b-3xl">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            🎓 Conclaves – Shiksha Mahakumbh 6.0
+          </h1>
 
-      <div className="grid md:grid-cols-2 gap-5 mb-10">
-        {conclaves.map((c, i) => (
-          <div key={i} className="bg-white border p-4 rounded-xl hover:shadow-md transition">
-            <h3 className="text-lg font-semibold">{c.title}</h3>
-            <p className="text-sm text-gray-600 mt-1">Theme: {c.theme}</p>
-            <p className="text-sm mt-2"><strong>Focus:</strong> {c.focus}</p>
-            <p className="text-sm mt-1"><strong>Outcome:</strong> {c.output}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="bg-white p-6 rounded-xl shadow-sm">
-        <h3 className="text-xl font-semibold mb-3">Leadership & Coordination</h3>
-        <div className="grid md:grid-cols-3 gap-4 text-sm">
-          <div className="border p-3 rounded"><p className="text-gray-500">Chair</p><p className="font-medium">Dr. Praveen Kumar Sharma</p></div>
-          <div className="border p-3 rounded"><p className="text-gray-500">Co-Chairs</p><p>Dr. Sujeet Thakur, Prof. Y. D. Sharma, Dr. Rajeshwar Banshtu</p></div>
-          <div className="border p-3 rounded"><p className="text-gray-500">Conveners</p><p>Dr. Vipin Jain & Institutional Registrars</p></div>
+          <p className="text-lg md:text-xl max-w-5xl mx-auto leading-8">
+            High-impact dialogue platforms bringing together
+            leaders from academia, research, governance,
+            industry, and society to shape the future of
+            education aligned with
+            <span className="font-semibold">
+              {" "}Viksit Bharat 2047
+            </span>.
+          </p>
         </div>
-      </div>
-    </>
+      </section>
+
+      {/* Overview */}
+      <section className="max-w-7xl mx-auto py-14 px-6">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-6">
+            🌟 Overview
+          </h2>
+
+          <p className="text-lg text-gray-700 leading-8">
+            The Conclaves at Shiksha Mahakumbh 6.0 serve as
+            high-impact dialogue platforms fostering policy
+            discussions, innovation exchange, and actionable
+            outcomes across diverse sectors of education,
+            governance, entrepreneurship, and research.
+          </p>
+        </div>
+      </section>
+
+      {/* Conclave Cards */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <h2 className="text-3xl font-bold text-purple-700 mb-8">
+          🧩 Conclave Categories
+        </h2>
+
+        <div className="space-y-8">
+          {conclaves.map((conclave, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-8"
+            >
+              <h3 className="text-2xl font-bold text-purple-700 mb-5">
+                {index + 1}. {conclave.icon} {conclave.title}
+              </h3>
+
+              <div className="space-y-4 text-gray-700 leading-7">
+                <p>
+                  <span className="font-semibold">
+                    Participants:
+                  </span>{" "}
+                  {conclave.participants}
+                </p>
+
+                <p>
+                  <span className="font-semibold">
+                    Focus:
+                  </span>{" "}
+                  {conclave.focus}
+                </p>
+
+                <p>
+                  <span className="font-semibold">
+                    Output:
+                  </span>{" "}
+                  {conclave.output}
+                </p>
+
+                <p>
+                  <span className="font-semibold">
+                    Theme:
+                  </span>{" "}
+                  {conclave.theme}
+                </p>
+
+                <p>
+                  <span className="font-semibold">
+                    Coordinators:
+                  </span>{" "}
+                  {conclave.coordinators}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Leadership */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-8">
+            🧭 Leadership & Coordination
+          </h2>
+
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-2xl font-semibold mb-3">
+                🔹 Chair
+              </h3>
+
+              <p className="text-gray-700 text-lg">
+                Dr. Praveen Kumar Sharma
+                <br />
+                Plaksha University, Mohali
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-semibold mb-3">
+                🔹 Co-Chairs
+              </h3>
+
+              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                <li>Dr. Sujeet Thakur, IIT Delhi</li>
+                <li>Prof. Y. D. Sharma, NIT Hamirpur</li>
+                <li>Dr. Rajeshwar Banshtu, NIT Hamirpur</li>
+                <li>
+                  Dr. Jatinder Garg,
+                  Central University of Himachal Pradesh
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-semibold mb-3">
+                🔹 Conveners
+              </h3>
+
+              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                <li>Dr. Vipin Jain, CBLU Bhiwani</li>
+                <li>Registrar, NIT Hamirpur</li>
+                <li>Registrar, IIT Mandi</li>
+                <li>
+                  Registrar,
+                  Central University of Himachal Pradesh
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <section className="max-w-7xl mx-auto px-6 pb-16">
+        <div className="bg-gradient-to-r from-purple-700 to-indigo-700 text-white rounded-2xl shadow-xl p-10 text-center">
+          <h2 className="text-4xl font-bold mb-5">
+            ✨ Driving Dialogue to Action
+          </h2>
+
+          <p className="max-w-4xl mx-auto text-lg leading-8">
+            Each conclave is designed to move beyond discussions
+            and generate practical frameworks, policy inputs,
+            and collaborative pathways contributing to the
+            future of education in India.
+          </p>
+        </div>
+      </section>
+    </div>
   );
 }
 // ─── INDIVIDUAL PAGES ────────────────────────────────────────────────────────
