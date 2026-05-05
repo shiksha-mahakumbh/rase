@@ -927,22 +927,555 @@ function AwardsPage() {
 }
 
 
-function OlympiadPage() { 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">Olympiad</h1>
-      <p>Content for Olympiad goes here.</p>
-    </div>
-  ); 
-}
+const olympiadCategories = [
+  {
+    title: "DHE English Olympiad",
+    icon: "🇬🇧",
+    description:
+      "Enhancing language proficiency, comprehension, grammar, and communication skills.",
+  },
+  {
+    title: "DHE Maths Olympiad",
+    icon: "🔢",
+    description:
+      "Strengthening analytical thinking, problem-solving, and conceptual understanding in mathematics.",
+  },
+  {
+    title: "DHE Tech Olympiad",
+    icon: "💻",
+    description:
+      "Promoting digital literacy, logical reasoning, and technology awareness among students.",
+  },
+];
 
-function ExhibitionPage() { 
+const olympiadObjectives = [
+  "Identify and encourage academic excellence among students",
+  "Promote analytical thinking and conceptual clarity",
+  "Strengthen subject-wise competencies",
+  "Provide a national recognition platform",
+  "Build a strong academic foundation for future learning",
+];
+
+const examFeatures = [
+  "Conducted within schools (Offline/Online mode)",
+  "Objective-based assessment",
+  "Focus on conceptual understanding and application",
+  "Class-wise question papers",
+];
+
+const participationSteps = [
+  "School Registration",
+  "Student Enrollment",
+  "Conduct of Olympiad in School",
+  "Evaluation & Result Compilation",
+  "Declaration of Results",
+];
+
+const olympiadBenefits = [
+  "Certificates for all participants",
+  "Merit Certificates for top performers",
+  "Top achievers felicitated at Shiksha Mahakumbh 6.0",
+  "National-level recognition",
+];
+
+function OlympiadPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Exhibition</h1>
-      <p>Content for Exhibition goes here.</p>
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-purple-700 to-indigo-700 text-white py-16 px-6 rounded-b-3xl">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-5">
+            🏆 DHE Olympiad – Shiksha Mahakumbh 6.0
+          </h1>
+
+          <p className="text-lg md:text-xl leading-8 max-w-5xl mx-auto">
+            A nationwide academic initiative designed to
+            identify, nurture, and celebrate young talent
+            by promoting academic excellence, analytical
+            thinking, and healthy competition among students.
+          </p>
+        </div>
+      </section>
+
+      {/* Overview */}
+      <section className="max-w-7xl mx-auto py-14 px-6">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-6">
+            🌟 Overview
+          </h2>
+
+          <p className="text-lg leading-8 text-gray-700">
+            The DHE Olympiad under Shiksha Mahakumbh 6.0
+            provides students across India with an opportunity
+            to test their knowledge, strengthen conceptual
+            understanding, and compete at a national level.
+            Conducted directly within schools, the Olympiad
+            ensures maximum participation and encourages a
+            culture of academic excellence.
+          </p>
+        </div>
+      </section>
+
+      {/* Objectives */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-8">
+            🎯 Objectives
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {olympiadObjectives.map((objective, index) => (
+              <div
+                key={index}
+                className="bg-purple-50 rounded-xl p-5 shadow-sm"
+              >
+                ✅ {objective}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <h2 className="text-3xl font-bold text-purple-700 mb-8">
+          📚 Olympiad Categories
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {olympiadCategories.map((category, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-8"
+            >
+              <h3 className="text-2xl font-bold text-purple-700 mb-4">
+                {category.icon} {category.title}
+              </h3>
+
+              <p className="text-gray-700 leading-7">
+                {category.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Eligibility */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white rounded-2xl shadow-xl p-10 text-center">
+          <h2 className="text-3xl font-bold mb-6">
+            👥 Eligibility
+          </h2>
+
+          <div className="space-y-4 text-lg">
+            <p>🎓 Students from Classes 3 to 10</p>
+
+            <p>🏫 Participation through respective schools</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Format */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-8">
+            📝 Format of Examination
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {examFeatures.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-gray-100 rounded-xl p-5"
+              >
+                📌 {feature}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-8">
+            ⚙️ Participation Process
+          </h2>
+
+          <div className="grid md:grid-cols-5 gap-5">
+            {participationSteps.map((step, index) => (
+              <div
+                key={index}
+                className="bg-purple-50 rounded-2xl p-6 text-center shadow-sm"
+              >
+                <div className="text-3xl font-bold text-purple-700 mb-3">
+                  {index + 1}
+                </div>
+
+                <p className="text-sm text-gray-700 leading-6">
+                  {step}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recognition */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-8 text-center">
+            🏆 Recognition & Awards
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {olympiadBenefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="bg-white/10 rounded-xl p-5"
+              >
+                🌟 {benefit}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-8">
+            📅 Timeline
+          </h2>
+
+          <div className="space-y-4 text-lg text-gray-700">
+            <p>📌 Registration Start: To be announced</p>
+
+            <p>📌 Exam Dates: To be announced</p>
+
+            <p>📌 Result Declaration: To be announced</p>
+
+            <p>
+              📌 Felicitation:
+              During Shiksha Mahakumbh 2026 (NIT Hamirpur)
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* School Participation */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-purple-700 mb-8">
+            🏫 School Participation
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              "Coordinating student registrations",
+              "Conducting the Olympiad smoothly",
+              "Encouraging maximum participation",
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-indigo-50 rounded-xl p-5 shadow-sm"
+              >
+                ✅ {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-purple-700 to-indigo-700 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            📞 Contact & Support
+          </h2>
+
+          <div className="space-y-4 text-lg text-center">
+            <p>📧 academics@shikshamahakumbh.com</p>
+
+            <p>📞 +91-7903431900</p>
+
+            <p>🌐 www.shikshamahakumbh.com</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <section className="text-center py-12 px-6">
+        <h3 className="text-3xl font-bold text-purple-700 mb-4">
+          ✨ Empowering Young Minds
+        </h3>
+
+        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
+          The DHE Olympiad is not just an examination,
+          but a journey towards building confident,
+          capable, and future-ready students for
+          a stronger Bharat.
+        </p>
+      </section>
     </div>
-  ); 
+  );
+}
+const exhibitionSegments = [
+  {
+    title: "Student Projects Zone",
+    icon: "🚀",
+    description:
+      "Innovative models and ideas by school & college students",
+  },
+  {
+    title: "University & Institutional Stalls",
+    icon: "🎓",
+    description:
+      "Showcasing academic excellence, research, and initiatives",
+  },
+  {
+    title: "Laboratory & Research Displays",
+    icon: "🔬",
+    description:
+      "Live demonstrations of technologies and experiments",
+  },
+  {
+    title: "Best Practices Pavilion",
+    icon: "💡",
+    description:
+      "Successful educational and social models",
+  },
+  {
+    title: "Cultural Theme Stalls",
+    icon: "🎭",
+    description:
+      "Exhibits reflecting Indian traditions and theme-based concepts",
+  },
+  {
+    title: "State Representation Zone",
+    icon: "🌍",
+    description:
+      "Showcasing diverse culture, education models, and innovations from different states",
+  },
+  {
+    title: "Organizations & Institutions Stalls",
+    icon: "🤝",
+    description:
+      "Participation from educational bodies, NGOs, and social organizations",
+  },
+  {
+    title: "Host Institution Showcase",
+    icon: "🏫",
+    description:
+      "NIT Hamirpur & Local Institutions",
+  },
+];
+
+const exhibitionParticipants = [
+  "School & College Students",
+  "Universities & Institutions",
+  "Research Labs & Innovators",
+  "NGOs & Organizations",
+  "State Representatives",
+  "Cultural Groups",
+];
+
+const exhibitionObjectives = [
+  "Provide a platform to showcase innovation and creativity",
+  "Highlight best practices in education and society",
+  "Promote collaboration among institutions and stakeholders",
+  "Integrate culture, science, and sustainability",
+];
+
+const exhibitionBenefits = [
+  "Participation Certificates",
+  "Recognition for outstanding exhibits",
+  "Networking with academicians, policymakers, and industry experts",
+  "National-level exposure",
+];
+
+function ExhibitionPage() {
+  return (
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-cyan-700 to-blue-700 text-white py-16 px-6 rounded-b-3xl">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-5">
+            🏛️ Exhibition – Shiksha Mahakumbh 6.0
+          </h1>
+
+          <p className="text-lg md:text-xl leading-8 max-w-5xl mx-auto">
+            A dynamic showcase of innovation, culture,
+            institutional excellence, and transformative ideas
+            bringing together students, universities,
+            organizations, and innovators on one platform.
+          </p>
+        </div>
+      </section>
+
+      {/* Overview */}
+      <section className="max-w-7xl mx-auto py-14 px-6">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-cyan-700 mb-6">
+            🌟 Overview
+          </h2>
+
+          <p className="text-lg leading-8 text-gray-700">
+            The Exhibition at Shiksha Mahakumbh 6.0 serves as a
+            vibrant ecosystem where innovation, sustainability,
+            culture, and education come together. Participants
+            will present impactful ideas, research, working
+            models, and transformative initiatives aligned with
+            the vision of Viksit Bharat 2047.
+          </p>
+        </div>
+      </section>
+
+      {/* Theme */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-2xl shadow-xl p-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-5">
+            🌿 Theme
+          </h2>
+
+          <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+            “Shiksha, Prakriti aur Pragati”
+          </h3>
+
+          <p className="text-lg md:text-xl">
+            Educating for Development and Harmony with Nature
+          </p>
+        </div>
+      </section>
+
+      {/* Segments */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <h2 className="text-3xl font-bold text-cyan-700 mb-8">
+          🧩 Key Exhibition Segments
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {exhibitionSegments.map((segment, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-6"
+            >
+              <h3 className="text-2xl font-bold text-cyan-700 mb-4">
+                {segment.icon} {segment.title}
+              </h3>
+
+              <p className="text-gray-700 leading-7">
+                {segment.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Participants */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
+            👥 Participants
+          </h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {exhibitionParticipants.map((participant, index) => (
+              <div
+                key={index}
+                className="bg-cyan-50 rounded-xl p-5 shadow-sm"
+              >
+                🎓 {participant}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Objectives */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
+            🎯 Objectives
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {exhibitionObjectives.map((objective, index) => (
+              <div
+                key={index}
+                className="bg-green-50 rounded-xl p-5 shadow-sm"
+              >
+                ✅ {objective}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recognition */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
+            🏆 Opportunities & Recognition
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {exhibitionBenefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="bg-orange-50 rounded-xl p-5 shadow-sm"
+              >
+                🌟 {benefit}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Dates */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8 text-center">
+          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
+            📅 Exhibition Dates
+          </h2>
+
+          <p className="text-2xl font-bold text-cyan-700">
+            9–11 October 2026 | NIT Hamirpur
+          </p>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-cyan-700 to-blue-700 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            📞 Participation & Enquiries
+          </h2>
+
+          <div className="space-y-4 text-lg text-center">
+            <p>📧 academics@shikshamahakumbh.com</p>
+
+            <p>📞 +91-7903431900</p>
+
+            <p>🌐 www.shikshamahakumbh.com</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <section className="text-center py-12 px-6">
+        <h3 className="text-3xl font-bold text-cyan-700 mb-4">
+          ✨ A Confluence of Ideas & Innovation
+        </h3>
+
+        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
+          Explore a vibrant ecosystem where education,
+          innovation, culture, and sustainability come
+          together at the Shiksha Mahakumbh 6.0 Exhibition.
+        </p>
+      </section>
+    </div>
+  );
 }
 
 const projectThemes = [
@@ -1239,51 +1772,105 @@ function ProjectsPage() {
   );
 }
 
-function BestPracticesPage() { 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">Best Practices</h1>
-      <p>Content for Best Practices goes here.</p>
-    </div>
-  ); 
-}
-
-const projectThemes = [
-  "Science & Innovation",
-  "AI, Robotics & Emerging Technologies",
-  "Environment & Sustainability",
-  "Health & Well-being",
-  "Agriculture & Rural Development",
-  "Indian Knowledge Systems (IKS)",
-  "Social Innovation & Public Solutions",
-  "Engineering & Applied Technology",
+const bestPracticeCategories = [
+  {
+    title: "Academic Innovations",
+    icon: "🎓",
+    items: [
+      "Experiential Learning Models",
+      "Multidisciplinary Teaching Approaches",
+      "Outcome-Based Education",
+    ],
+  },
+  {
+    title: "EdTech Integration",
+    icon: "💻",
+    items: [
+      "AI & Digital Tools in Teaching",
+      "Smart Classrooms & LMS",
+      "Blended & Online Learning Models",
+    ],
+  },
+  {
+    title: "Community & Social Impact",
+    icon: "🌱",
+    items: [
+      "Rural & Tribal Education Initiatives",
+      "Inclusive Education Practices",
+      "Women Empowerment through Education",
+    ],
+  },
+  {
+    title: "Institutional Excellence",
+    icon: "🏫",
+    items: [
+      "Governance & Leadership Models",
+      "School/University Transformation Initiatives",
+      "Quality Assurance & Accreditation Practices",
+    ],
+  },
+  {
+    title: "Sustainability & Environment",
+    icon: "🌍",
+    items: [
+      "Green Campus Initiatives",
+      "Water Conservation & Waste Management",
+      "Climate Awareness Programs",
+    ],
+  },
+  {
+    title: "Indian Knowledge System (IKS)",
+    icon: "🕉",
+    items: [
+      "Gurukul-based Learning Models",
+      "Value-based Education Practices",
+      "Integration of Bharatiya Knowledge Traditions",
+    ],
+  },
 ];
 
-const projectBenefits = [
-  "Certificates for all participants",
-  "Awards for top projects",
-  "Opportunity to present before national-level experts",
-  "Mentorship & institutional support for selected projects",
-  "Featured on official website & exhibitions",
+const submissionRequirements = [
+  "Title of Best Practice",
+  "Institution / Organization Name",
+  "Objective & Problem Addressed",
+  "Detailed Description of Practice",
+  "Implementation Methodology",
+  "Impact & Outcomes (with data if available)",
+  "Scalability & Replicability",
+  "Supporting Documents (photos/videos/reports)",
 ];
 
-function ProjectsPage() {
+const evaluationCriteria = [
+  "Innovation & Originality",
+  "Measurable Impact",
+  "Sustainability",
+  "Replicability",
+  "Alignment with National Education Vision",
+];
+
+const recognitionBenefits = [
+  "Best Practices Awards (Category-wise)",
+  "Certificate of Excellence",
+  "Opportunity to present at national platform",
+  "Inclusion in “Shiksha Mahakumbh Best Practices Compendium”",
+];
+
+function BestPracticesPage() {
   return (
     <div className="bg-gray-50 min-h-screen text-gray-800">
       {/* Hero */}
       <section className="bg-gradient-to-r from-emerald-700 to-teal-600 text-white py-16 px-6 rounded-b-3xl">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-5">
-            🚀 Student Projects – Shiksha Mahakumbh 6.0
+            🌟 Best Practices – Shiksha Mahakumbh 6.0
           </h1>
 
           <p className="text-lg md:text-xl leading-8 max-w-5xl mx-auto">
-            A national-level innovation platform designed to nurture
-            creativity, research, and problem-solving skills among
-            students while contributing towards
-            <span className="font-semibold">
-              {" "}Viksit Bharat 2047
-            </span>.
+            A national initiative to identify, showcase, and
+            scale innovative, impactful, and replicable
+            practices in education, governance, and
+            community engagement aligned with
+            Viksit Bharat 2047.
           </p>
         </div>
       </section>
@@ -1296,12 +1883,11 @@ function ProjectsPage() {
           </h2>
 
           <p className="text-lg leading-8 text-gray-700">
-            The Student Projects Initiative under Shiksha Mahakumbh 6.0
-            provides students from schools and higher education
-            institutions with a platform to present innovative ideas,
-            prototypes, and impactful working models that address
-            real-world challenges. This initiative bridges the gap
-            between academic learning and practical implementation.
+            The Best Practices Initiative at Shiksha Mahakumbh 6.0
+            provides a national platform for institutions and
+            individuals to present successful and innovative
+            models contributing towards quality education,
+            inclusivity, sustainability, and social impact.
           </p>
         </div>
       </section>
@@ -1315,96 +1901,57 @@ function ProjectsPage() {
 
           <div className="grid md:grid-cols-2 gap-5">
             {[
-              "Promote innovation-driven learning",
-              "Encourage research and practical application",
-              "Identify and nurture young talent",
-              "Provide a national platform for showcasing ideas",
-              "Connect students with experts, mentors, and institutions",
-            ].map((item, index) => (
+              "Promote innovation and excellence in education practices",
+              "Share replicable models across institutions and regions",
+              "Encourage community-driven and socially impactful initiatives",
+              "Build a repository of best practices aligned with Viksit Bharat 2047",
+            ].map((objective, index) => (
               <div
                 key={index}
                 className="bg-emerald-50 rounded-xl p-5 shadow-sm"
               >
-                ✅ {item}
+                ✅ {objective}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Participation */}
+      {/* Categories */}
       <section className="max-w-7xl mx-auto px-6 mb-14">
         <h2 className="text-3xl font-bold text-emerald-700 mb-8">
-          👥 Participation Categories
+          🧩 Categories of Best Practices
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-md p-8 border-t-4 border-emerald-600">
-            <h3 className="text-2xl font-bold mb-4">
-              🏫 School Level
-            </h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          {bestPracticeCategories.map((category, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-8"
+            >
+              <h3 className="text-2xl font-bold text-emerald-700 mb-5">
+                {category.icon} {category.title}
+              </h3>
 
-            <p className="mb-3 text-gray-700">
-              <span className="font-semibold">Classes:</span> 6–10
-            </p>
-
-            <p className="text-gray-700 leading-7">
-              Focus on basic innovation, creative models,
-              practical ideas, and problem-solving concepts.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-md p-8 border-t-4 border-teal-600">
-            <h3 className="text-2xl font-bold mb-4">
-              🎓 College Level
-            </h3>
-
-            <p className="mb-3 text-gray-700">
-              <span className="font-semibold">Eligibility:</span> UG / PG Students
-            </p>
-
-            <p className="text-gray-700 leading-7">
-              Focus on advanced projects, research-based
-              solutions, prototypes, and emerging technologies.
-            </p>
-          </div>
+              <ul className="space-y-3 text-gray-700">
+                {category.items.map((item, itemIndex) => (
+                  <li key={itemIndex}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Themes */}
+      {/* Submission */}
       <section className="max-w-7xl mx-auto px-6 mb-14">
         <div className="bg-white rounded-2xl shadow-md p-8">
           <h2 className="text-3xl font-bold text-emerald-700 mb-8">
-            🧠 Themes & Domains
+            📂 Submission Requirements
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {projectThemes.map((theme, index) => (
-              <div
-                key={index}
-                className="bg-gradient-to-r from-emerald-100 to-teal-100 rounded-xl p-5 shadow-sm text-center font-medium"
-              >
-                {theme}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Submission Guidelines */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-emerald-700 mb-8">
-            📌 Project Submission Guidelines
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              "Project Abstract (200–300 words)",
-              "Detailed Report / Documentation",
-              "Short Video Demonstration (2–5 minutes)",
-              "Images / Prototype (if available)",
-            ].map((item, index) => (
+          <div className="grid md:grid-cols-2 gap-5">
+            {submissionRequirements.map((item, index) => (
               <div
                 key={index}
                 className="bg-gray-100 rounded-xl p-5"
@@ -1416,50 +1963,357 @@ function ProjectsPage() {
         </div>
       </section>
 
-      {/* Selection Process */}
+      {/* Evaluation */}
       <section className="max-w-7xl mx-auto px-6 mb-14">
-        <h2 className="text-3xl font-bold text-emerald-700 mb-8">
-          ⚙️ Selection Process
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-emerald-700 mb-8">
+            ⚙️ Evaluation Criteria
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {evaluationCriteria.map((criteria, index) => (
+              <div
+                key={index}
+                className="bg-teal-50 rounded-xl p-5 text-center shadow-sm"
+              >
+                ⭐ {criteria}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recognition */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-8 text-center">
+            🏆 Recognition
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {recognitionBenefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="bg-white/10 rounded-xl p-5"
+              >
+                🌟 {benefit}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-emerald-700 mb-8">
+            📅 Process Flow
+          </h2>
+
+          <div className="grid md:grid-cols-5 gap-5">
+            {[
+              "Call for Submissions",
+              "Screening & Shortlisting",
+              "Expert Evaluation",
+              "Presentation (Selected Entries)",
+              "Final Recognition at Shiksha Mahakumbh 6.0",
+            ].map((step, index) => (
+              <div
+                key={index}
+                className="bg-emerald-50 rounded-2xl p-6 text-center shadow-sm"
+              >
+                <div className="text-3xl font-bold text-emerald-700 mb-3">
+                  {index + 1}
+                </div>
+
+                <p className="text-sm text-gray-700 leading-6">
+                  {step}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Exhibition */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-emerald-700 mb-8">
+            🏢 Exhibition Opportunity
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              "🏫 Exhibition Stalls",
+              "📊 Posters & Demonstrations",
+              "🎥 Live Presentations",
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-green-50 rounded-xl p-6 text-center shadow-sm"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-emerald-700 to-teal-600 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            📞 Contact
+          </h2>
+
+          <div className="space-y-4 text-lg text-center">
+            <p>📧 academics@shikshamahakumbh.com</p>
+
+            <p>📞 WhatsApp: +91-7903431900</p>
+
+            <p>🌐 www.shikshamahakumbh.com</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <section className="text-center py-12 px-6">
+        <h3 className="text-3xl font-bold text-emerald-700 mb-4">
+          ✨ From Practice to Policy
+        </h3>
+
+        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
+          This initiative aims to transform grassroots
+          innovations into national models, creating a
+          strong ecosystem of knowledge sharing and
+          continuous improvement in education.
+        </p>
+      </section>
+    </div>
+  );
+}
+
+const patrikaSections = [
+  {
+    title: "Section 1",
+    icon: "📗",
+    classes: "Classes: 9th – 10th",
+    focus:
+      "Basic research, observations, project documentation",
+  },
+  {
+    title: "Section 2",
+    icon: "📘",
+    classes: "Classes: 11th – 12th",
+    focus:
+      "Advanced research, analytical studies, innovative ideas",
+  },
+];
+
+const patrikaThemes = [
+  "🇮🇳 Viksit Bharat 2047",
+  "🌱 Environment & Sustainability",
+  "🤖 AI, Technology & Future Innovations",
+  "🚜 Agriculture & Rural Development",
+  "🏛️ Indian Knowledge Systems (IKS)",
+  "🧬 Science & Scientific Discoveries",
+  "💡 Social Issues & Solutions",
+  "🌍 Global Challenges & Local Solutions",
+];
+
+const submissionFormats = [
+  "📄 Research Paper / Article (800–1500 words)",
+  "🧾 Abstract (150–200 words)",
+  "📊 Data / Case Study (if applicable)",
+  "🖼️ Diagrams / Images / Project Documentation",
+];
+
+const patrikaBenefits = [
+  "Publication in national-level Student Research Journal",
+  "Certificates for participants",
+  "Special recognition for outstanding research",
+  "Opportunity to present at Shiksha Mahakumbh 6.0",
+  "Academic exposure and mentorship opportunities",
+];
+
+function PatrikaPage() {
+  return (
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-indigo-700 to-blue-700 text-white py-16 px-6 rounded-b-3xl">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-5">
+            📘 Bal Shodh Patrika – Shiksha Mahakumbh 6.0
+          </h1>
+
+          <p className="text-lg md:text-xl leading-8 max-w-5xl mx-auto">
+            A unique academic initiative designed to nurture
+            research, inquiry, innovation, and critical thinking
+            among school students through structured academic
+            publication and project-based learning.
+          </p>
+        </div>
+      </section>
+
+      {/* Overview */}
+      <section className="max-w-7xl mx-auto py-14 px-6">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
+            🌟 Overview
+          </h2>
+
+          <p className="text-lg leading-8 text-gray-700">
+            Bal Shodh Patrika serves as a national platform for
+            young learners to present their ideas, research work,
+            and project-based learnings in a structured academic
+            format. This initiative bridges the gap between school
+            education and research orientation, encouraging
+            students to contribute meaningfully to society through
+            innovation and knowledge creation.
+          </p>
+        </div>
+      </section>
+
+      {/* Objectives */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+            🎯 Objectives
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {[
+              "Develop research aptitude among school students",
+              "Promote critical thinking and analytical skills",
+              "Encourage documentation of student projects and ideas",
+              "Provide a platform for academic expression and publication",
+              "Inspire students towards innovation and knowledge creation",
+            ].map((objective, index) => (
+              <div
+                key={index}
+                className="bg-indigo-50 rounded-xl p-5 shadow-sm"
+              >
+                ✅ {objective}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Participation */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+          👥 Participation Categories
         </h2>
 
-        <div className="grid md:grid-cols-5 gap-5">
-          {[
-            "Registration & Submission",
-            "Initial Screening",
-            "Expert Review & Evaluation",
-            "Shortlisting of Top Projects",
-            "Final Showcase at Shiksha Mahakumbh 6.0",
-          ].map((step, index) => (
+        <div className="grid md:grid-cols-2 gap-6">
+          {patrikaSections.map((section, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl shadow-md p-6 text-center"
+              className="bg-white rounded-2xl shadow-md p-8"
             >
-              <div className="text-4xl font-bold text-emerald-700 mb-4">
-                {index + 1}
-              </div>
+              <h3 className="text-2xl font-bold text-indigo-700 mb-4">
+                {section.icon} {section.title}
+              </h3>
+
+              <p className="text-lg font-semibold mb-3">
+                {section.classes}
+              </p>
 
               <p className="text-gray-700 leading-7">
-                {step}
+                {section.focus}
               </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Benefits */}
+      {/* Themes */}
       <section className="max-w-7xl mx-auto px-6 mb-14">
         <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-emerald-700 mb-8">
-            🏆 Recognition & Benefits
+          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+            🧠 Themes & Topics
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {projectBenefits.map((benefit, index) => (
+            {patrikaThemes.map((theme, index) => (
               <div
                 key={index}
-                className="bg-emerald-50 rounded-xl p-5 shadow-sm"
+                className="bg-blue-50 rounded-xl p-5 shadow-sm"
               >
-                🎖️ {benefit}
+                {theme}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Submission */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+            📝 Submission Format
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {submissionFormats.map((format, index) => (
+              <div
+                key={index}
+                className="bg-gray-100 rounded-xl p-5"
+              >
+                {format}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+            ⚙️ Review & Selection Process
+          </h2>
+
+          <div className="grid md:grid-cols-5 gap-5">
+            {[
+              "Submission of entries",
+              "Screening for eligibility and originality",
+              "Review by subject experts",
+              "Selection of best entries",
+              "Final publication in Bal Shodh Patrika",
+            ].map((step, index) => (
+              <div
+                key={index}
+                className="bg-indigo-50 rounded-2xl p-6 text-center shadow-sm"
+              >
+                <div className="text-3xl font-bold text-indigo-700 mb-3">
+                  {index + 1}
+                </div>
+
+                <p className="text-gray-700 text-sm leading-6">
+                  {step}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+            🏆 Recognition & Benefits
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {patrikaBenefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="bg-yellow-50 rounded-xl p-5 shadow-sm"
+              >
+                🌟 {benefit}
               </div>
             ))}
           </div>
@@ -1469,59 +2323,60 @@ function ProjectsPage() {
       {/* Timeline */}
       <section className="max-w-7xl mx-auto px-6 mb-14">
         <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-emerald-700 mb-8">
-            📅 Important Timeline
+          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+            📅 Timeline
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-5 text-lg">
-            <div>📌 Topic Finalization: To be announced</div>
-            <div>📌 Registration Start: To be announced</div>
-            <div>📌 Submission Deadline: To be announced</div>
-            <div>
-              📌 Final Showcase: 9–11 October 2026 (NIT Hamirpur)
-            </div>
+          <div className="space-y-4 text-lg text-gray-700">
+            <p>📌 Call for Submissions: To be announced</p>
+
+            <p>📌 Last Date for Submission: To be announced</p>
+
+            <p>📌 Review & Selection: To be announced</p>
+
+            <p>
+              📌 Publication & Release:
+              During Shiksha Mahakumbh 2026
+            </p>
           </div>
         </div>
       </section>
 
       {/* Collaboration */}
       <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-emerald-700 mb-8">
-            🏛️ Institutional Collaboration
+        <div className="bg-gradient-to-r from-indigo-700 to-blue-700 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            🏫 Institutional Collaboration
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-5 mb-6">
-            <div className="bg-gray-100 rounded-xl p-5 text-center">
-              IITs / NITs / Central Universities
+          <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-5">
+            <div className="bg-white/10 rounded-xl p-5">
+              ✅ Motivate students for participation
             </div>
 
-            <div className="bg-gray-100 rounded-xl p-5 text-center">
-              Research Institutions
+            <div className="bg-white/10 rounded-xl p-5">
+              ✅ Guide students in research writing
             </div>
 
-            <div className="bg-gray-100 rounded-xl p-5 text-center">
-              Industry Experts & Mentors
+            <div className="bg-white/10 rounded-xl p-5">
+              ✅ Support documentation and submission
             </div>
           </div>
-
-          <p className="text-gray-700 leading-8 text-lg">
-            Institutions are encouraged to adopt and refine promising
-            student projects for further development and innovation.
-          </p>
         </div>
       </section>
 
       {/* Contact */}
       <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-gradient-to-r from-emerald-700 to-teal-600 text-white rounded-2xl shadow-xl p-10">
-          <h2 className="text-3xl font-bold mb-6 text-center">
+        <div className="bg-white rounded-2xl shadow-md p-10 text-center">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
             📞 Contact & Support
           </h2>
 
-          <div className="space-y-4 text-lg text-center">
+          <div className="space-y-4 text-lg">
             <p>📧 academics@shikshamahakumbh.com</p>
+
             <p>📞 +91-7903431900</p>
+
             <p>🌐 www.shikshamahakumbh.com</p>
           </div>
         </div>
@@ -1529,26 +2384,240 @@ function ProjectsPage() {
 
       {/* Footer */}
       <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-emerald-700 mb-4">
-          ✨ Be the Innovator of Tomorrow
+        <h3 className="text-3xl font-bold text-indigo-700 mb-4">
+          ✨ Igniting Young Researchers
         </h3>
 
         <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          Transform your ideas into impactful solutions and become
-          a part of India’s largest academic innovation movement.
+          Bal Shodh Patrika is a step towards building
+          a generation of young thinkers, researchers,
+          and innovators who will shape the future
+          of the nation.
         </p>
       </section>
     </div>
   );
 }
 
-function CulturalPage() { 
+const culturalHighlights = [
+  "Folk Performances showcasing the rich cultural heritage of Himachal Pradesh",
+  "Classical & Contemporary Dance Performances",
+  "Theme-based Skits & Dramatic Presentations",
+  "Eco-conscious Performances aligned with sustainability",
+  "Music & Creative Expressions by students and artists",
+];
+
+const participationGroups = [
+  "School & College Students",
+  "Cultural Teams & Institutions",
+  "Independent Performers",
+  "Folk Artists (Local Representation)",
+];
+
+const culturalObjectives = [
+  "Promote Indian culture and heritage",
+  "Encourage creative expression among youth",
+  "Integrate education with cultural values",
+  "Highlight sustainability and harmony with nature through art",
+];
+
+const recognitionBenefits = [
+  "Certificates of Participation",
+  "Special Recognition for outstanding performances",
+  "Opportunity to perform on a national stage",
+  "Exposure to academicians, policymakers, and cultural leaders",
+];
+
+function CulturalPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Cultural Program</h1>
-      <p>Content for Cultural Program goes here.</p>
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-pink-700 via-rose-600 to-orange-500 text-white py-16 px-6 rounded-b-3xl">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-5">
+            🎭 Cultural Program – Shiksha Mahakumbh 6.0
+          </h1>
+
+          <p className="text-lg md:text-xl leading-8 max-w-5xl mx-auto">
+            Celebrating the vibrant spirit of Indian culture,
+            traditions, and creative expression through inspiring
+            performances that connect education, sustainability,
+            and heritage.
+          </p>
+        </div>
+      </section>
+
+      {/* Overview */}
+      <section className="max-w-7xl mx-auto py-14 px-6">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-rose-700 mb-6">
+            🌟 Overview
+          </h2>
+
+          <p className="text-lg leading-8 text-gray-700">
+            The Cultural Program at Shiksha Mahakumbh 6.0
+            celebrates the rich diversity of Indian traditions
+            and artistic expression. The event will showcase
+            local Himachali culture along with theme-based
+            performances that reflect the harmony between
+            education, nature, and sustainable development.
+          </p>
+        </div>
+      </section>
+
+      {/* Theme */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-2xl shadow-xl p-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-5">
+            🌿 Theme
+          </h2>
+
+          <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+            “Shiksha, Prakriti aur Pragati”
+          </h3>
+
+          <p className="text-lg md:text-xl">
+            Educating for Development and Harmony with Nature
+          </p>
+        </div>
+      </section>
+
+      {/* Highlights */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-rose-700 mb-8">
+            🎨 Key Highlights
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {culturalHighlights.map((item, index) => (
+              <div
+                key={index}
+                className="bg-rose-50 rounded-xl p-6 shadow-sm"
+              >
+                🎭 {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Participation */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <h2 className="text-3xl font-bold text-rose-700 mb-8">
+          👥 Participation
+        </h2>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {participationGroups.map((group, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-6 text-center"
+            >
+              <div className="text-4xl mb-4">🎤</div>
+
+              <p className="font-medium text-gray-700 leading-7">
+                {group}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Recognition */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-rose-700 mb-8">
+            🏆 Opportunities & Recognition
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {recognitionBenefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="bg-orange-50 rounded-xl p-5 shadow-sm"
+              >
+                🌟 {benefit}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Objectives */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-rose-700 mb-8">
+            🎯 Objectives
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {culturalObjectives.map((objective, index) => (
+              <div
+                key={index}
+                className="bg-green-50 rounded-xl p-5 shadow-sm"
+              >
+                ✅ {objective}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Schedule */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-white rounded-2xl shadow-md p-8 text-center">
+          <h2 className="text-3xl font-bold text-rose-700 mb-8">
+            📅 Event Schedule
+          </h2>
+
+          <div className="space-y-4 text-lg text-gray-700">
+            <p>
+              Cultural programs will be organised during
+            </p>
+
+            <p className="text-2xl font-bold text-rose-700">
+              9–11 October 2026 | NIT Hamirpur
+            </p>
+
+            <p className="text-gray-500">
+              (Detailed schedule to be announced)
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="max-w-7xl mx-auto px-6 mb-14">
+        <div className="bg-gradient-to-r from-rose-700 to-orange-500 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            📞 Contact & Participation
+          </h2>
+
+          <div className="space-y-4 text-lg text-center">
+            <p>📧 academics@shikshamahakumbh.com</p>
+
+            <p>📞 +91-7903431900</p>
+
+            <p>🌐 www.shikshamahakumbh.com</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <section className="text-center py-12 px-6">
+        <h3 className="text-3xl font-bold text-rose-700 mb-4">
+          ✨ Where Culture Meets Consciousness
+        </h3>
+
+        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
+          Experience the harmony of tradition, creativity,
+          and sustainability through inspiring cultural
+          expressions at Shiksha Mahakumbh 6.0.
+        </p>
+      </section>
     </div>
-  ); 
+  );
 }
 const pageMap = {
   ConferencePage: <ConferencePage />,
