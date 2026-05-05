@@ -391,13 +391,309 @@ function ConclavePage() {
 // Keep your ConferencePage and ConclavePage as they are...
 
 
-function AwardsPage() { 
-  return ( 
-    <div> 
-      <h1 className="text-2xl font-bold">Awards & Recognition</h1> 
-      <p>Content for Awards goes here.</p> 
+const awardCategories = [
+  {
+    title: "Research Publications",
+    details: [
+      "Journal Name",
+      "Paper Title",
+      "Impact Factor",
+      "Indexing (Scopus / SCI / UGC Care / etc.)",
+      "Year of Publication",
+    ],
+  },
+  {
+    title: "Books & Book Chapters",
+    details: [
+      "Book Title / Chapter Title",
+      "Publisher Name",
+      "ISBN Number",
+      "Year of Publication",
+    ],
+  },
+  {
+    title: "Patents",
+    details: [
+      "Patent Title",
+      "Patent Number",
+      "Patent Office",
+      "Status (Filed / Published / Granted)",
+      "Date of Grant (if applicable)",
+    ],
+  },
+  {
+    title: "Startups / Innovations",
+    details: [
+      "Name of Startup / Innovation",
+      "Brief Description",
+      "Registration Details (if any)",
+      "Impact / Outcome",
+    ],
+  },
+  {
+    title: "Research Projects / Grants",
+    details: [
+      "Project Title",
+      "Funding Agency",
+      "Grant Amount",
+      "Duration",
+      "Status (Ongoing / Completed)",
+    ],
+  },
+];
+
+function AwardsPage() {
+  return (
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-16 px-6 rounded-b-3xl">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            🏆 Excellence Awards – Shiksha Mahakumbh 6.0
+          </h1>
+
+          <p className="text-lg md:text-xl max-w-5xl mx-auto leading-8">
+            Celebrating outstanding contributions in research,
+            innovation, publications, entrepreneurship, and
+            academic excellence.
+          </p>
+        </div>
+      </section>
+
+      {/* Overview */}
+      <section className="max-w-7xl mx-auto py-14 px-6">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-orange-600 mb-6">
+            🌟 Overview
+          </h2>
+
+          <p className="text-lg text-gray-700 leading-8">
+            The Excellence Awards at Shiksha Mahakumbh 6.0 aim
+            to recognize and celebrate outstanding contributions
+            in the fields of research, innovation, publications,
+            and entrepreneurship. These awards honour both
+            faculty members and students who have demonstrated
+            excellence and impact in their respective domains.
+          </p>
+        </div>
+      </section>
+
+      {/* Award Categories */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <h2 className="text-3xl font-bold text-orange-600 mb-8">
+          🎯 Award Categories
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-orange-500">
+            <h3 className="text-2xl font-bold mb-4">
+              👨‍🏫 Faculty Excellence Award
+            </h3>
+
+            <p className="text-gray-700 leading-7">
+              Recognizing outstanding academic and research
+              contributions by faculty members.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-yellow-500">
+            <h3 className="text-2xl font-bold mb-4">
+              🎓 Student Excellence Award
+            </h3>
+
+            <p className="text-gray-700 leading-7">
+              Honouring talented students for innovation,
+              research, and creative achievements.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Levels */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <h2 className="text-3xl font-bold text-orange-600 mb-8">
+          🏫 Levels of Awards
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-2xl shadow-md p-8 text-center">
+            <h3 className="text-2xl font-bold">
+              🏫 School Level
+            </h3>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-md p-8 text-center">
+            <h3 className="text-2xl font-bold">
+              🎓 College / University Level
+            </h3>
+          </div>
+        </div>
+      </section>
+
+      {/* Evaluation Categories */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <h2 className="text-3xl font-bold text-orange-600 mb-8">
+          📂 Evaluation Categories
+        </h2>
+
+        <div className="space-y-6">
+          {awardCategories.map((category, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-8"
+            >
+              <h3 className="text-2xl font-bold text-orange-600 mb-5">
+                {index + 1}. {category.title}
+              </h3>
+
+              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                {category.details.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Documents */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-orange-600 mb-6">
+            📋 Document Checklist
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-4 text-gray-700">
+            <div className="bg-gray-100 p-4 rounded-xl">
+              Proof of publication (first page / DOI link)
+            </div>
+
+            <div className="bg-gray-100 p-4 rounded-xl">
+              ISBN / Patent certificate copies
+            </div>
+
+            <div className="bg-gray-100 p-4 rounded-xl">
+              Grant approval letters
+            </div>
+
+            <div className="bg-gray-100 p-4 rounded-xl">
+              Startup registration proof (if applicable)
+            </div>
+
+            <div className="bg-gray-100 p-4 rounded-xl md:col-span-2">
+              Any other supporting documents
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Selection Process */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <h2 className="text-3xl font-bold text-orange-600 mb-8">
+          ⚙️ Selection Process
+        </h2>
+
+        <div className="grid md:grid-cols-5 gap-4">
+          {[
+            "Application Submission",
+            "Document Verification",
+            "Expert Review Committee Evaluation",
+            "Final Selection",
+            "Award Declaration",
+          ].map((step, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-6 text-center"
+            >
+              <div className="text-4xl font-bold text-orange-500 mb-3">
+                {index + 1}
+              </div>
+
+              <p className="text-gray-700 text-sm">
+                {step}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl shadow-xl p-10">
+          <h2 className="text-3xl font-bold mb-8 text-center">
+            🏅 Recognition & Benefits
+          </h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              "🏆 Trophy & Certificate of Excellence",
+              "🌟 National Recognition",
+              "📢 Opportunity to present work",
+              "🤝 Networking with academicians & industry leaders",
+            ].map((benefit, index) => (
+              <div
+                key={index}
+                className="bg-white/20 rounded-xl p-5 text-center"
+              >
+                <p className="font-medium">{benefit}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-orange-600 mb-6">
+            📅 Important Timeline
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-gray-100 p-5 rounded-xl">
+              📌 Call for Applications: To be announced
+            </div>
+
+            <div className="bg-gray-100 p-5 rounded-xl">
+              📌 Last Date: To be announced
+            </div>
+
+            <div className="bg-gray-100 p-5 rounded-xl">
+              📌 Result Declaration: During Shiksha Mahakumbh 2026
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-orange-600 mb-6">
+            📞 Contact
+          </h2>
+
+          <div className="space-y-3 text-lg text-gray-700">
+            <p>📧 academics@shikshamahakumbh.com</p>
+            <p>📞 +91-7903431900</p>
+            <p>🌐 www.shikshamahakumbh.com</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <section className="text-center py-12 px-6">
+        <h3 className="text-3xl font-bold text-orange-600 mb-4">
+          ✨ Celebrating Excellence, Inspiring Innovation
+        </h3>
+
+        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
+          These awards aim to encourage a culture of research,
+          creativity, and impactful contribution in education
+          and society.
+        </p>
+      </section>
     </div>
-  ); 
+  );
 }
 
 
