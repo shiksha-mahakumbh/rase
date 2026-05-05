@@ -139,7 +139,7 @@ const tracks = [
   },
 ];
 
-const ConferencePage = () => {
+function ConferencePage = () => {
   return (
     <div className="bg-gray-50 min-h-screen text-gray-800">
       {/* Hero */}
