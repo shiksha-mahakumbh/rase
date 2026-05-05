@@ -130,6 +130,7 @@ function ConclavePage() {
 // Keep your ConferencePage and ConclavePage as they are...
 
 function AwardsPage() {
+ const AwardsPage = () => {
   return (
     <div className="bg-white text-gray-800">
       {/* Hero Section */}
@@ -138,6 +139,7 @@ function AwardsPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             🏆 Excellence Awards – Shiksha Mahakumbh 6.0
           </h1>
+
           <p className="text-lg md:text-xl max-w-4xl mx-auto">
             Celebrating outstanding contributions in research, innovation,
             publications, entrepreneurship, and academic excellence.
@@ -174,6 +176,7 @@ function AwardsPage() {
               <h3 className="text-2xl font-semibold mb-3">
                 👨‍🏫 Faculty Excellence Award
               </h3>
+
               <p className="text-gray-700 leading-7">
                 Recognizing outstanding academic and research contributions by
                 faculty members.
@@ -184,6 +187,7 @@ function AwardsPage() {
               <h3 className="text-2xl font-semibold mb-3">
                 🎓 Student Excellence Award
               </h3>
+
               <p className="text-gray-700 leading-7">
                 Honouring talented students for innovation, research, and
                 creative achievements.
@@ -251,7 +255,9 @@ function AwardsPage() {
 
             {/* Patents */}
             <div className="bg-white p-8 rounded-2xl shadow-md">
-              <h3 className="text-2xl font-bold mb-4">🧾 3. Patents</h3>
+              <h3 className="text-2xl font-bold mb-4">
+                🧾 3. Patents
+              </h3>
 
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li>Patent Title</li>
@@ -374,9 +380,7 @@ function AwardsPage() {
           <div className="bg-white rounded-2xl shadow-md p-8 space-y-4 text-lg">
             <p>📌 Call for Applications: To be announced</p>
             <p>📌 Last Date: To be announced</p>
-            <p>
-              📌 Result Declaration: During Shiksha Mahakumbh 2026
-            </p>
+            <p>📌 Result Declaration: During Shiksha Mahakumbh 2026</p>
           </div>
         </div>
       </section>
@@ -396,7 +400,7 @@ function AwardsPage() {
         </div>
       </section>
 
-      {/* Footer Quote */}
+      {/* Footer */}
       <section className="text-center py-10 px-6">
         <h3 className="text-2xl md:text-3xl font-bold text-orange-600">
           ✨ Celebrating Excellence, Inspiring Innovation
@@ -409,7 +413,7 @@ function AwardsPage() {
       </section>
     </div>
   );
-}
+};
 
 export default AwardsPage;
 
