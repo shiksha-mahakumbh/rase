@@ -142,7 +142,6 @@ const conclaves = [
 
 function ConferencePage() {
   return (
-    <>
     <div className="bg-gray-50 min-h-screen text-gray-800">
       {/* Hero */}
       <section className="bg-gradient-to-r from-blue-900 to-indigo-700 text-white py-16 px-6 rounded-b-3xl">
