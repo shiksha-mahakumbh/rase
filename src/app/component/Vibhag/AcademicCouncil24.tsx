@@ -129,7 +129,7 @@ function ConclavePage() {
 
 // Keep your ConferencePage and ConclavePage as they are...
 
-function AwardsPage() {
+
  const AwardsPage = () => {
   return (
     <div className="bg-white text-gray-800">
