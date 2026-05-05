@@ -2421,7 +2421,7 @@ const culturalObjectives = [
   "Highlight sustainability and harmony with nature through art",
 ];
 
-const recognitionBenefits = [
+const culturalRecognitionBenefits = [
   "Certificates of Participation",
   "Special Recognition for outstanding performances",
   "Opportunity to perform on a national stage",
@@ -2532,7 +2532,7 @@ function CulturalPage() {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {recognitionBenefits.map((benefit, index) => (
+            {culturalRecognitionBenefits.map((benefit, index) => (
               <div
                 key={index}
                 className="bg-orange-50 rounded-xl p-5 shadow-sm"
