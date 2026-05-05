@@ -3,23 +3,6 @@
 import { useState } from "react";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
-const tracks = [
-  { title: "Fundamental & Applied Sciences", details: "Physics, Chemistry, Biology, Mathematics, Earth & Space Sciences", chair: "Prof. Sunil (NIT Hamirpur)" },
-  { title: "Engineering & Technology", details: "AI, Robotics, Data Science, Quantum Technology", chair: "Dr. K. S. Pandey (IIT Mandi)" },
-  { title: "Management & Entrepreneurship", details: "Business, Startups, Social Innovation", chair: "Dr. Suman Kumar (CUHP)" },
-  { title: "Law & Governance", details: "Public Policy, Global Affairs, Legal Studies", chair: "Prof. Sudershan Kumar (IIT Bombay)" },
-  { title: "Social Sciences & Humanities", details: "Psychology, Sociology, Philosophy", chair: "Dr. Yogesh Gupta" },
-  { title: "Education & Pedagogy", details: "School, Higher, Inclusive Education", chair: "Dr. Naveen Mokta (NCERT)" },
-  { title: "EdTech & Digital Education", details: "AI Learning, Digital Platforms", chair: "Prof. Dhirendra Kumar" },
-  { title: "Health & AYUSH", details: "Medicine, Public Health, AYUSH", chair: "Dr. Shweta Chaurasia (PGIMER)" },
-  { title: "Sports & Wellness", details: "Sports Science, Yoga, Mental Health", chair: "Dr. Pawan Kumar" },
-  { title: "Agriculture & Veterinary", details: "Agri-Tech, Sustainability", chair: "Dr. Som Dev" },
-  { title: "Environment & Sustainability", details: "Climate Change, Water Management", chair: "Dr. R. S. Banshtu" },
-  { title: "Culture & Heritage", details: "Arts, Folk, Traditions", chair: "Dr. Nand Lal" },
-  { title: "Languages & Linguistics", details: "Indian Languages, Translation", chair: "Prof. Mohini" },
-  { title: "Vocational Education", details: "Skills, Industry Training", chair: "Prof. Ashok Sarial" },
-  { title: "Indian Knowledge System", details: "Vedic, Philosophy, Nyaya", chair: "Prof. Bhag Chand Chauhan" },
-];
 
 const conclaves = [
   { title: "VC / Directors Conclave", theme: "Practical Innovation in Education System", focus: "Policy transformation, autonomy, global benchmarks", output: "Vision Charter for Higher Education @2047" },
@@ -33,63 +16,340 @@ const conclaves = [
 
 // ─── INDIVIDUAL PAGES ────────────────────────────────────────────────────────
 
-function ConferencePage() {
+const tracks = [
+  {
+    title: "Fundamental & Applied Sciences",
+    details:
+      "Physics, Chemistry, Biology, Mathematics, Earth & Space Sciences, Interdisciplinary Sciences",
+    chair: "Prof. Sunil (NIT Hamirpur)",
+    coChair: "Dr. Kuldeep Kumar, Dr. Kalyan S. Ghosh",
+    convenor: "Dr. Om Prakash, Dr. Vikram, Dr. Praveen Sharma",
+  },
+  {
+    title: "Engineering & Technology",
+    details:
+      "Core Engineering, AI, Robotics, Data Science, Quantum Technology",
+    chair: "Dr. K. S. Pandey (IIT Mandi)",
+    coChair: "Dr. Nitin Gupta, Dr. Varun Kumar",
+    convenor: "Dr. Taleri Ganesh, Dr. Kirti Mahajan",
+  },
+  {
+    title: "Management, Business & Entrepreneurship",
+    details:
+      "Business Administration, Startups, Social Entrepreneurship",
+    chair: "Dr. Suman Kumar (CUHP)",
+    coChair: "Dr. Ashutosh Vashishth",
+    convenor: "Dr. Shampy Kamboj, Dr. Neeraj Dhiman",
+  },
+  {
+    title: "International Relations, Law & Governance",
+    details:
+      "Public Policy, Global Affairs, Legal Studies, Human Rights",
+    chair: "Prof. Sudershan Kumar (IIT Bombay)",
+    coChair: "Dr. Somesh K. Sharma",
+    convenor: "Dr. Sachin Kumar",
+  },
+  {
+    title: "Social Sciences & Humanities",
+    details:
+      "Sociology, Psychology, History, Philosophy, Ethics",
+    chair: "Dr. Yogesh Gupta",
+    coChair: "Dr. Manoj Sharma",
+    convenor: "Dr. Rinshu Dwivedi, Dr. Priya Jaiswal",
+  },
+  {
+    title: "Education Systems & Pedagogy",
+    details:
+      "School Education, Higher Education, Inclusive Education, IKS",
+    chair: "Dr. Naveen Mokta (NCERT)",
+    coChair: "Dr. Ramesh Vats",
+    convenor: "Dr. Om Prakash",
+  },
+  {
+    title: "EdTech & Digital Education",
+    details:
+      "AI in Education, Online Learning, Digital Literacy",
+    chair: "Prof. Dhirendra Kumar",
+    coChair: "Dr. Siddarath Chauhan",
+    convenor: "Dr. Aman Kumar",
+  },
+  {
+    title: "Health Sciences & Traditional Medicine",
+    details:
+      "Modern Medicine, AYUSH, Public Health",
+    chair: "Dr. Shweta Chaurasia (PGIMER)",
+    coChair: "Dr. Hem Raj",
+    convenor: "Dr. Amit Kaul, Dr. S. Kala Negi",
+  },
+  {
+    title: "Sports, Physical Education & Well-being",
+    details:
+      "Sports Science, Mental Health, Yoga",
+    chair: "Dr. Pawan Kumar",
+    coChair: "Dr. R. K. Jamalta",
+    convenor: "Dr. Subit Jain, Dr. Rakesh Rakta",
+  },
+  {
+    title: "Agriculture, Food & Veterinary Sciences",
+    details:
+      "Sustainable Agriculture, Agri-Tech, Animal Husbandry",
+    chair: "Dr. Som Dev",
+    coChair: "-",
+    convenor: "Dr. Puneet Banta",
+  },
+  {
+    title: "Environment, Sustainability & Water Resources",
+    details:
+      "Climate Change, Environmental Education, Water Management",
+    chair: "Dr. R. S. Banshtu",
+    coChair: "Dr. Vijay S. Dogra",
+    convenor: "Dr. Vivek Kumar, Dr. Ray Singh Meena",
+  },
+  {
+    title: "Culture, Arts & Heritage",
+    details:
+      "Performing Arts, Folk Traditions, Cultural Conservation",
+    chair: "Dr. Nand Lal",
+    coChair: "Dr. Ashwani",
+    convenor: "Dr. Venu, Ar. Suresh Kumar",
+  },
+  {
+    title: "Languages & Linguistics",
+    details:
+      "Indian & Foreign Languages, Translation Technology",
+    chair: "Prof. Mohini",
+    coChair: "Dr. Garima Bhati",
+    convenor: "Dr. Zarina, Dr. Manoj Yadav",
+  },
+  {
+    title: "Vocational & Skill-Based Education",
+    details:
+      "Industrial Training, Crafts, Workforce Development",
+    chair: "Prof. Ashok Sarial",
+    coChair: "Dr. Ashwani Rana",
+    convenor: "Dr. Vivek Kumar, Dr. Jitendra Man",
+  },
+  {
+    title: "Indian Knowledge System (IKS)",
+    details:
+      "Philosophy, Nyaya, Mimamsa, Vedic Literature",
+    chair: "Prof. Bhag Chand Chauhan",
+    coChair: "Dr. Sant Ram",
+    convenor: "Dr. Rakesh Kumar, Dr. Himesh Handa",
+  },
+];
+
+const ConferencePage = () => {
   return (
-    <>
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold">Conference Page 2026</h1>
-        <p className="text-gray-600 mt-2 max-w-3xl">Shiksha Mahakumbh 2026 hosts a hybrid global conference bringing together researchers, academicians, industry experts and innovators aligned with Viksit Bharat 2047.</p>
-      </header>
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-blue-900 to-indigo-700 text-white py-16 px-6 rounded-b-3xl">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            📚 Multi-Track Conference – Shiksha Mahakumbh 6.0
+          </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-xl shadow-sm"><p className="text-sm text-gray-500">Paper Length</p><p className="font-semibold">5–6 Pages (IEEE)</p></div>
-        <div className="bg-white p-4 rounded-xl shadow-sm"><p className="text-sm text-gray-500">Similarity</p><p className="font-semibold">Below 15%</p></div>
-        <div className="bg-white p-4 rounded-xl shadow-sm"><p className="text-sm text-gray-500">Submission</p><p className="font-semibold">CMT Portal (PDF)</p></div>
-      </div>
-
-      <div className="bg-white p-5 rounded-xl shadow-sm mb-8">
-        <h2 className="text-xl font-semibold mb-3">Important Dates</h2>
-        <ul className="space-y-2 text-gray-700">
-          <li>Abstract Submission: 30 June 2026</li>
-          <li>Acceptance: 31 July 2026</li>
-          <li>Full Paper: 31 August 2026</li>
-          <li>Registration: 31 August 2026</li>
-        </ul>
-      </div>
-
-      <div className="bg-white p-5 rounded-xl shadow-sm mb-8">
-        <h2 className="text-xl font-semibold mb-4">Conference Tracks</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border">
-            <thead><tr className="bg-gray-100 text-left"><th className="p-2 border">Track</th><th className="p-2 border">Domains</th><th className="p-2 border">Chair</th></tr></thead>
-            <tbody>
-              {tracks.map((t, i) => (
-                <tr key={i} className="border-t">
-                  <td className="p-2 border font-medium">{t.title}</td>
-                  <td className="p-2 border">{t.details}</td>
-                  <td className="p-2 border">{t.chair}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <p className="text-lg md:text-xl max-w-5xl mx-auto leading-8">
+            Shiksha Mahakumbh 2026 hosts a Hybrid International Conference
+            bringing together researchers, academicians, industry experts,
+            innovators, and scholars aligned with the vision of
+            <span className="font-semibold"> Viksit Bharat 2047</span>.
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div className="bg-white p-5 rounded-xl shadow-sm mb-8">
-        <h2 className="text-xl font-semibold mb-3">Registration Fees</h2>
-        <ul className="grid md:grid-cols-2 gap-2 text-gray-700">
-          <li>Students: ₹500</li><li>Research Scholars: ₹1,000</li><li>Academia: ₹2,100</li><li>Industry: ₹5,000</li><li>International: Free</li>
-        </ul>
-      </div>
+      {/* Leadership */}
+      <section className="max-w-7xl mx-auto py-14 px-6">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+            🧭 Conference Leadership
+          </h2>
 
-      <div className="bg-white p-5 rounded-xl shadow-sm">
-        <h2 className="text-xl font-semibold mb-3">Publication & Awards</h2>
-        <p className="text-gray-700">Peer-reviewed open access journal (ISSN). Selected papers for Scopus / Web of Science.</p>
-        <p className="mt-2 font-medium">Track-wise Best Paper Award</p>
-      </div>
-    </>
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-bold text-xl mb-2">🎯 Chair</h3>
+              <p>Prof. Brahmjit Singh, NIT Kurukshetra</p>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-xl mb-2">🔹 Co-Chairs</h3>
+              <p>
+                Dr. Vikash Kumar Garg, Prof. R. K. Sehgal,
+                Prof. Raman Parti, Prof. Sushil Chauhan,
+                Prof. Ravi Ranade, Dr. Chander Prakash
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-xl mb-2">🔹 Conveners</h3>
+              <p>
+                Dr. Pankaj Verma, Dr. Gaurav, Dr. Tarun,
+                Dr. T. P. Sharma, Dr. Ramesh Vats
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Submission Details */}
+      <section className="max-w-7xl mx-auto px-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-2xl shadow-md">
+            <p className="text-sm text-gray-500 mb-2">📄 Paper Length</p>
+            <h3 className="text-xl font-bold">5–6 Pages (IEEE Format)</h3>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow-md">
+            <p className="text-sm text-gray-500 mb-2">📊 Similarity Index</p>
+            <h3 className="text-xl font-bold">Below 15%</h3>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow-md">
+            <p className="text-sm text-gray-500 mb-2">📤 Submission</p>
+            <h3 className="text-xl font-bold">CMT Portal (PDF)</h3>
+          </div>
+        </div>
+      </section>
+
+      {/* Dates */}
+      <section className="max-w-7xl mx-auto px-6 mb-10">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
+            📅 Important Dates
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-4 text-lg">
+            <div>📌 Abstract Submission: 30 June 2026</div>
+            <div>📌 Acceptance Notification: 31 July 2026</div>
+            <div>📌 Full Paper Submission: 31 August 2026</div>
+            <div>📌 Registration Deadline: 31 August 2026</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tracks */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <h2 className="text-3xl font-bold text-indigo-700 mb-8">
+          🧩 Conference Tracks
+        </h2>
+
+        <div className="space-y-6">
+          {tracks.map((track, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md p-8"
+            >
+              <h3 className="text-2xl font-bold text-indigo-700 mb-3">
+                {index + 1}. {track.title}
+              </h3>
+
+              <p className="text-gray-700 leading-7 mb-4">
+                {track.details}
+              </p>
+
+              <div className="space-y-2 text-gray-700">
+                <p>
+                  <span className="font-semibold">Chair:</span>{" "}
+                  {track.chair}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Co-Chair:</span>{" "}
+                  {track.coChair}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Convenor:</span>{" "}
+                  {track.convenor}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Registration */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
+            💰 Registration Fees
+          </h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="bg-gray-100 p-5 rounded-xl">
+              🎓 Students (UG/PG/PhD): ₹500
+            </div>
+
+            <div className="bg-gray-100 p-5 rounded-xl">
+              🔬 Research Scholars: ₹1,000
+            </div>
+
+            <div className="bg-gray-100 p-5 rounded-xl">
+              🏫 Academia & R&D: ₹2,100
+            </div>
+
+            <div className="bg-gray-100 p-5 rounded-xl">
+              🏢 Industry: ₹5,000
+            </div>
+
+            <div className="bg-gray-100 p-5 rounded-xl">
+              🌍 International Delegates: Free
+            </div>
+          </div>
+
+          <div className="mt-6 text-gray-700 space-y-2">
+            <p>✔ Includes Lunch, Kit & Certificate (one author)</p>
+            <p>✔ Additional Author: ₹500</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Publication */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="bg-white rounded-2xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
+            📚 Publication & Review
+          </h2>
+
+          <div className="space-y-3 text-gray-700 text-lg">
+            <p>Peer-reviewed Open Access Journal (ISSN)</p>
+            <p>
+              Selected papers recommended for Scopus / Web of Science
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Awards */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl shadow-xl p-10 text-center">
+          <h2 className="text-4xl font-bold mb-4">
+            🏆 Track-wise Best Paper Award
+          </h2>
+
+          <p className="text-lg max-w-3xl mx-auto">
+            Outstanding research contributions across all conference
+            tracks will be recognised and awarded during
+            Shiksha Mahakumbh 2026.
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <section className="text-center py-12 px-6">
+        <h3 className="text-3xl font-bold text-indigo-700 mb-4">
+          ✨ Advancing Research to Impact
+        </h3>
+
+        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
+          This conference aims to transform ideas into innovation and
+          research into real-world impact, fostering collaboration across
+          disciplines for a future-ready Bharat.
+        </p>
+      </section>
+    </div>
   );
-}
+};
 
 function ConclavePage() {
   return (
@@ -130,291 +390,14 @@ function ConclavePage() {
 // Keep your ConferencePage and ConclavePage as they are...
 
 
-function AwardsPage() {
-  return (
-    <>
-    <div className="bg-white text-gray-800">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-16 px-6 rounded-2xl">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            🏆 Excellence Awards – Shiksha Mahakumbh 6.0
-          </h1>
-
-          <p className="text-lg md:text-xl max-w-4xl mx-auto">
-            Celebrating outstanding contributions in research, innovation,
-            publications, entrepreneurship, and academic excellence.
-          </p>
-        </div>
-      </section>
-
-      {/* Overview */}
-      <section className="max-w-6xl mx-auto py-14 px-6">
-        <div className="bg-gray-50 rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold mb-4 text-orange-600">
-            🌟 Overview
-          </h2>
-
-          <p className="text-lg leading-8 text-gray-700">
-            The Excellence Awards at Shiksha Mahakumbh 6.0 aim to recognize and
-            celebrate outstanding contributions in the fields of research,
-            innovation, publications, and entrepreneurship. These awards honour
-            both faculty members and students who have demonstrated excellence
-            and impact in their respective domains.
-          </p>
-        </div>
-      </section>
-
-      {/* Award Categories */}
-      <section className="bg-orange-50 py-14 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-orange-600 mb-10">
-            🎯 Award Categories
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-orange-500">
-              <h3 className="text-2xl font-semibold mb-3">
-                👨‍🏫 Faculty Excellence Award
-              </h3>
-
-              <p className="text-gray-700 leading-7">
-                Recognizing outstanding academic and research contributions by
-                faculty members.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-yellow-500">
-              <h3 className="text-2xl font-semibold mb-3">
-                🎓 Student Excellence Award
-              </h3>
-
-              <p className="text-gray-700 leading-7">
-                Honouring talented students for innovation, research, and
-                creative achievements.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Levels */}
-      <section className="max-w-6xl mx-auto py-14 px-6">
-        <h2 className="text-3xl font-bold text-center text-orange-600 mb-10">
-          🏫 Levels of Awards
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-gradient-to-br from-orange-100 to-yellow-100 rounded-2xl p-8 shadow-md text-center">
-            <h3 className="text-2xl font-bold mb-2">🏫 School Level</h3>
-          </div>
-
-          <div className="bg-gradient-to-br from-yellow-100 to-orange-100 rounded-2xl p-8 shadow-md text-center">
-            <h3 className="text-2xl font-bold mb-2">
-              🎓 College / University Level
-            </h3>
-          </div>
-        </div>
-      </section>
-
-      {/* Evaluation Categories */}
-      <section className="bg-gray-50 py-14 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-orange-600 mb-12">
-            📂 Evaluation Categories
-          </h2>
-
-          <div className="space-y-8">
-            {/* Publications */}
-            <div className="bg-white p-8 rounded-2xl shadow-md">
-              <h3 className="text-2xl font-bold mb-4">
-                📑 1. Research Publications
-              </h3>
-
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Journal Name</li>
-                <li>Paper Title</li>
-                <li>Impact Factor</li>
-                <li>Indexing (Scopus / SCI / UGC Care / etc.)</li>
-                <li>Year of Publication</li>
-              </ul>
-            </div>
-
-            {/* Books */}
-            <div className="bg-white p-8 rounded-2xl shadow-md">
-              <h3 className="text-2xl font-bold mb-4">
-                📚 2. Books & Book Chapters
-              </h3>
-
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Book Title / Chapter Title</li>
-                <li>Publisher Name</li>
-                <li>ISBN Number</li>
-                <li>Year of Publication</li>
-              </ul>
-            </div>
-
-            {/* Patents */}
-            <div className="bg-white p-8 rounded-2xl shadow-md">
-              <h3 className="text-2xl font-bold mb-4">
-                🧾 3. Patents
-              </h3>
-
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Patent Title</li>
-                <li>Patent Number</li>
-                <li>Patent Office</li>
-                <li>Status (Filed / Published / Granted)</li>
-                <li>Date of Grant (if applicable)</li>
-              </ul>
-            </div>
-
-            {/* Startups */}
-            <div className="bg-white p-8 rounded-2xl shadow-md">
-              <h3 className="text-2xl font-bold mb-4">
-                🚀 4. Startups / Innovations
-              </h3>
-
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Name of Startup / Innovation</li>
-                <li>Brief Description</li>
-                <li>Registration Details (if any)</li>
-                <li>Impact / Outcome</li>
-              </ul>
-            </div>
-
-            {/* Grants */}
-            <div className="bg-white p-8 rounded-2xl shadow-md">
-              <h3 className="text-2xl font-bold mb-4">
-                💰 5. Research Projects / Grants
-              </h3>
-
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Project Title</li>
-                <li>Funding Agency</li>
-                <li>Grant Amount</li>
-                <li>Duration</li>
-                <li>Status (Ongoing / Completed)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Documents */}
-      <section className="max-w-6xl mx-auto py-14 px-6">
-        <div className="bg-orange-50 rounded-2xl p-8 shadow-md">
-          <h2 className="text-3xl font-bold text-orange-600 mb-6">
-            📋 Document Checklist (Mandatory)
-          </h2>
-
-          <ul className="grid md:grid-cols-2 gap-4 list-disc pl-6 text-gray-700">
-            <li>Proof of publication (first page / DOI link)</li>
-            <li>ISBN / Patent certificate copies</li>
-            <li>Grant approval letters</li>
-            <li>Startup registration proof (if applicable)</li>
-            <li>Any other supporting documents</li>
-          </ul>
-        </div>
-      </section>
-
-      {/* Selection Process */}
-      <section className="bg-gray-50 py-14 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-orange-600 mb-10">
-            ⚙️ Selection Process
-          </h2>
-
-          <div className="grid md:grid-cols-5 gap-6 text-center">
-            {[
-              "Application Submission",
-              "Document Verification",
-              "Expert Review Committee Evaluation",
-              "Final Selection",
-              "Award Declaration",
-            ].map((step, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl shadow-md p-6"
-              >
-                <div className="text-3xl font-bold text-orange-500 mb-3">
-                  {index + 1}
-                </div>
-
-                <p className="text-gray-700">{step}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section className="max-w-6xl mx-auto py-14 px-6">
-        <h2 className="text-3xl font-bold text-center text-orange-600 mb-10">
-          🏅 Recognition & Benefits
-        </h2>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            "🏆 Trophy & Certificate of Excellence",
-            "🌟 National Recognition",
-            "📢 Opportunity to present work",
-            "🤝 Networking with academicians & industry leaders",
-          ].map((benefit, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-lg rounded-2xl p-6 text-center border-t-4 border-orange-500"
-            >
-              <p className="font-semibold text-gray-700">{benefit}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="bg-orange-50 py-14 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-orange-600 mb-8">
-            📅 Important Timeline
-          </h2>
-
-          <div className="bg-white rounded-2xl shadow-md p-8 space-y-4 text-lg">
-            <p>📌 Call for Applications: To be announced</p>
-            <p>📌 Last Date: To be announced</p>
-            <p>📌 Result Declaration: During Shiksha Mahakumbh 2026</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section className="max-w-5xl mx-auto py-14 px-6">
-        <div className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-2xl p-10 shadow-xl">
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            📞 Contact
-          </h2>
-
-          <div className="space-y-4 text-lg text-center">
-            <p>📧 academics@shikshamahakumbh.com</p>
-            <p>📞 +91-7903431900</p>
-            <p>🌐 www.shikshamahakumbh.com</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <section className="text-center py-10 px-6">
-        <h3 className="text-2xl md:text-3xl font-bold text-orange-600">
-          ✨ Celebrating Excellence, Inspiring Innovation
-        </h3>
-
-        <p className="mt-4 text-gray-600 max-w-3xl mx-auto leading-7">
-          These awards aim to encourage a culture of research, creativity,
-          and impactful contribution in education and society.
-        </p>
-      </section>
+function AwardsPage() { 
+  return ( 
+    <div> 
+      <h1 className="text-2xl font-bold">Awards & Recognition</h1> 
+      <p>Content for Awards goes here.</p> 
     </div>
-  );
-};
+  ); 
+}
 
 
 function OlympiadPage() { 
