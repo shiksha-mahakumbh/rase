@@ -130,8 +130,9 @@ function ConclavePage() {
 // Keep your ConferencePage and ConclavePage as they are...
 
 
- const AwardsPage = () => {
+function AwardsPage() {
   return (
+    <>
     <div className="bg-white text-gray-800">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-16 px-6 rounded-2xl">
@@ -415,7 +416,6 @@ function ConclavePage() {
   );
 };
 
-export default AwardsPage;
 
 function OlympiadPage() { 
   return (
