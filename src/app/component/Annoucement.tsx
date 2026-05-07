@@ -92,22 +92,24 @@ const Announcement = () => {
         {/* </div> */}
 
         {/* व्यवस्था जानकारी शिक्षा महाकुंभ 2025 */}
-         <div 
-          {className={`transition-all duration-500 min-h-[200px] ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-          } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
-         > 
-      <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            PROGRAMMES @ SHIKSHA MAHAKUMBH 6.0 
-     </h2> 
-          <button
+        <div
+  className={`transition-all duration-500 min-h-[200px] ${
+    isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+  } animated-shadow bg-white p-6 rounded-lg text-center shadow-md`}
+>
+  <h2 className="mb-4 text-lg font-semibold text-gray-800">
+    PROGRAMMES @ SHIKSHA MAHAKUMBH 6.0
+  </h2>
+
+  <button
     className="px-6 py-2 bg-primary text-white rounded hover:bg-white hover:text-primary border border-primary transition"
     onClick={() =>
       (window.location.href = "/VibhagRoute/AcademicCouncil24")
-        > 
-           Click Here
-        </button>
-        </div> 
+    }
+  >
+    Click Here
+  </button>
+</div>
    
 {/* Registration Section */}
 <div
