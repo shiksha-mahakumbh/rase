@@ -1,125 +1,226 @@
 import React from "react";
 
+// ================= SHIKSHA MAHAKUMBH =================
 
-// Function for rendering heading
 export function Shiksha() {
   return (
     <div>
-      <h1>About Shiksha Mahakumbh</h1>
+      <h1>Shiksha Mahakumbh Abhiyan</h1>
+
       <br />
       <br />
+
       <p>
-        Shiksha Mahakumbh is the brainchild of Dr. Thakur SKR, a prominent ISRO
-        scientist and staunch RSS worker, which took shape under the able
-        guidance of Mr. Vijay Kumar Nadda, a visionary and forward-looking RSS
-        Pracharak and Organising Secretary of Vidya Bharti (North Zone).
+        Shiksha Mahakumbh Abhiyan is a visionary, multi-edition,
+        multinational, and multidimensional movement conceptualized by a
+        distinguished ISRO scientist and eminent author, and shaped under the
+        guidance of visionary educationists and social reformers.
       </p>
+
       <br />
-      <p>The inaugural edition of Shiksha Mahakumbh i.e., National Conference on Recent Advances in School Education (RASE 2023) was organised by Sarvhitkari Educational Society, a prominent unit of Vidya Bharti –Akhil Bhartiya Shiksha Sansthan in the state of Punjab, in collaboration with Dr. B. R. Ambedkar National Institute of Technology Jalandhar. The conference was held from June 9 to 11, 2023, at the esteemed premises of Dr. B. R. Ambedkar National Institute of Technology, Jalandhar.</p>
+
+      <p>
+        The initiative brings together education, policy, industry, civil
+        society, and youth on a shared platform to reimagine and strengthen the
+        Bhartiya education system while positioning Bharat as a meaningful
+        contributor to the global education discourse.
+      </p>
+
+      <br />
+
+      <p>
+        Rooted in Bharatiya knowledge traditions and aligned with global
+        educational contexts, the Abhiyan serves as a powerful platform for
+        collaboration, innovation, and implementation.
+      </p>
+
+      <br />
+
+      <p>
+        Its aspiration goes beyond national boundaries—envisioning education on
+        a global stage, much like the Olympic spirit—where local experiences and
+        global perspectives converge to shape the future of learning.
+      </p>
+
+      <br />
+
+      <p>
+        At its core lies a pragmatic yet forward-looking vision: to build a
+        global education ecosystem that is inclusive, interdisciplinary,
+        ethical, and transformation-driven—deeply connected with the real needs
+        of society.
+      </p>
+
+      <br />
+
+      <p>
+        Each edition of the Mahakumbh extends beyond dialogue and deliberation.
+        It generates concrete action plans, fosters institutional partnerships,
+        and encourages community participation, ensuring sustainable and
+        measurable impact.
+      </p>
+
+      <br />
+
+      <p>
+        A distinctive strength of the Shiksha Mahakumbh Abhiyan is its
+        Whole-of-Society approach, transcending academic boundaries to engage
+        teachers, students, institutional leaders, policymakers, industry
+        representatives, social organizations, and media in a unified mission.
+      </p>
+
+      <br />
+
+      <p>
+        By positioning education as a catalyst for societal transformation, the
+        movement calls for advancing with national consciousness and global
+        responsibility.
+      </p>
+
+      <br />
+
+      <p>
+        Each edition builds upon the achievements of the previous one, creating
+        a continuous chain of innovation and implementation.
+      </p>
     </div>
   );
 }
 
-// Function for rendering subheading
+// ================= SECOND SECTION =================
+
 export function Shikshatwo() {
   return (
     <div>
-      <h1>Shiksha Mahakumbh</h1>
-      <br></br>
+      <h1>Major Editions of Shiksha Mahakumbh Abhiyan</h1>
+
+      <br />
+
       <p>
-        Shiksha Mahakumbh is the brainchild of Dr. Thakur SKR, a prominent ISRO
-        scientist and staunch RSS worker, which took shape under the able
-        guidance of Mr. Vijay Kumar Nadda, a visionary and forward-looking RSS
-        Pracharak and Organising Secretary of Vidya Bharti &#40;North Zone&#41;. The
-        inaugural edition of Shiksha Mahakumbh i.e., National Conference on
-        Recent Advances in School Education &#40;RASE 2023&#41; was organised by
-        Sarvhitkari Educational Society, a prominent unit of Vidya Bharti &#45;Akhil
-        Bhartiya Shiksha Sansthan in the state of Punjab, in collaboration with
-        Dr. B. R. Ambedkar National Institute of Technology Jalandhar. The
-        conference was held from June 9 to 11, 2023, at the esteemed premises of
-        Dr. B. R. Ambedkar National Institute of Technology, Jalandhar. During
-        the campaign of Shiksha Mahakumbh, the voice of conducting this very
-        massive and innovative event annually in collaboration with Institutions
-        of National Importance arose. Several Directors of these Institutions
-        and Vice-Chancellors of Central Universities demanded its next edition
-        in their Institutions. Accordingly, the matter was discussed within the
-        committee of this mass movement and it&#39;s decided to book its first 5
-        editions in collaboration with these Institutions of National
-        Importance. When the agreement of its 2nd edition was signed between
-        Department of Holistic Education, the originating place of this mass
-        movement and Indian Institute of Technology Ropar, the news spread
-        across the country. Thereafter several other Universities demanded for
-        its editions in their institutions. Then the managing committee decided
-        to launch its another franchise i.e., Shiksha Kumbh. Accordingly, the
-        mass movement translated into Shiksha Mahakumbh &#45; an annual event for
-        the entire globe and Shiksha Kumbh &#45; an annual event for field-specific
-        participants of the globe. The foremost objective of Shiksha Mahakumbh
-        is to cultivate an environment conducive to the effective implementation
-        of the National Education Policy 2020 &#40;NEP&#41;. Moreover, this conference
-        franchise aspires to congregate and facilitate the exchange of insights
-        and research findings among distinguished academic scientists,
-        researchers, research scholars, and industry experts, encompassing all
-        facets of school and higher education. This endeavor, spearheaded by the
-        Department of Holistic Education of Vidya Bharti, is unparalleled on a
-        global scale, aiming to annually unite the 26.5 Crore school students
-        and 4.25 Crore college&#58;university students from across Bharat on a
-        single platform to decide the direction of Bhartiya Education in a
-        similar fashion as was the practice in ancient Bharat. It achieves this
-        laudable goal through its collaboration with Institutions of National
-        Importance. Shiksha Mahakumbh is managed by the Event Management Cell of
-        the Department of Holistic Education, which is a new generation Think
-        Tank of Vidya Bharti.
+        <strong>🔹 First Edition – NIT Jalandhar</strong>
+        <br />
+        9–11 June 2023
+        <br />
+        Theme: Recent Advances in School Education
+        <br />
+        Core Focus: A strong beginning in innovation within school education
+      </p>
+
+      <br />
+
+      <p>
+        <strong>🔹 Second Edition – NIT Kurukshetra</strong>
+        <br />
+        20 December 2023
+        <br />
+        Theme: Role of Academic-driven Startups in Economy
+        <br />
+        Core Focus: From Education to Startups, Startups to Economy
+      </p>
+
+      <br />
+
+      <p>
+        <strong>🔹 Third Edition – NIT Srinagar</strong>
+        <br />
+        29–30 June 2024
+        <br />
+        Theme: Role of Academic-driven Startups in Developing Economy of J&K
+        <br />
+        Core Focus: From Education to Enterprise, Enterprise to Regional
+        Development
+      </p>
+
+      <br />
+
+      <p>
+        <strong>🔹 Fourth Edition – Kurukshetra University</strong>
+        <br />
+        16–17 December 2024
+        <br />
+        Theme: Indian Education System for Global Development
+        <br />
+        Core Focus: Indian Education as a Global Solution
+      </p>
+
+      <br />
+
+      <p>
+        <strong>🔹 Fifth Edition – NIPER Mohali</strong>
+        <br />
+        31 October – 2 November 2025
+        <br />
+        Theme: Classroom to Society – Building a Healthier World through
+        Education
+        <br />
+        Core Focus: The Journey of Education from Classroom to Society
+      </p>
+
+      <br />
+
+      <p>
+        Shiksha Mahakumbh Abhiyan continues to evolve as a dynamic national and
+        global movement—bridging vision with action, and ideas with impact.
       </p>
     </div>
   );
 }
 
-// Function for rendering paragraph
+// ================= DHE =================
+
 export function Dhe() {
   return (
     <div>
-      <h1>Department of Holistic education</h1>
-      <br></br>
+      <h1>Department of Holistic Education</h1>
+
+      <br />
+
       <p>
-        The Department of Holistic Education is the brainchild of Dr. Thakur SKR
-        who is a distinguished scientist of ISRO, a dedicated social worker and
-        an accomplished author. The foundation of DHE is based on the ideology
-        that the level of education should not be gauged by academic scores
-        alone. Rather, in true essence, education should aim at holistic
-        development of children and should be multi-disciplinary focusing on
-        skill development, physical fitness, emotional well being and
-        development of strong ethics in students. Holistic education will
-        transform young minds into not only professionally skilled adults but
-        also responsible individuals who are an asset for the nation. Keeping
-        pace with the technology driven world, there is an imperative need of
-        integration of technology with value-based education. Considering the
-        present lacunae and the dynamically evolving landscape of education, the
-        structure of DHE has been designed to effectively bridge the gaps in
-        present education system to make it more effective. At present, DHE has
-        25 dedicated cells- IT Cell, Industry Coordination Cell, Learning
-        Management System Cell, CSR Cell, R&D Cell, Entrepreneurship Cell,
-        Foreign Language Cell, Atal Tinkering Labs, Environment Cell, Sports
-        Cell etc catering to various aspects of education system with dedicated
-        co-ordinators to lead these cells. Exhaustive research and development
-        is carried out prior to running pilot projects and implementing them in
-        schools and society. Since inception, the Department has multiple
-        revolutionary projects- E-cycle, Punjab Super 100, Tredul App, Sarvatr
-        App, Swadeshi bazaar App, TUDU App. Jobs360o App, Surbhi Diye, Surbhi
-        Piggy Bag, Surbhi Flower Pot, etc. to its credit. The department has
-        successfully organised mass outreach events viz Shiksha Mahakumbh at NIT
-        Jalandhar and Shiksha Kumbh at NIT Kurukshetra which were attended by
-        dignitaries and stakeholders from all fields – viz politics,
-        bureaucracy, educational stalwarts, corporate houses, media and speakers
-        from all domains. DHE has also launched its quarterly journal “Viksit
-        India” which offers comprehensive coverage of a multitude of educational
-        aspects, from school education to higher education, language pedagogy to
-        technological advancements, child pedagogy to scientific research and
-        explores the realms of ever-evolving domain of education. With the same
-        vigour and enthusiasm, the Department is gearing up for organisation of
-        Shiksha Kumbh at NIT Srinagar and Shiksha Mahakumbh at IIT Ropar along
-        with launch of various innovative projects- One child one hour work per
-        day, Recycling of cloths, paper & plastic, One school one product,
-        International collaborations, etc in the upcoming months.
+        The Department of Holistic Education (DHE) is a visionary initiative
+        dedicated to transforming education through holistic, interdisciplinary,
+        and socially impactful approaches.
+      </p>
+
+      <br />
+
+      <p>
+        DHE works toward integrating innovation, ethics, skill development,
+        research, entrepreneurship, sustainability, and Indian Knowledge Systems
+        into mainstream education.
+      </p>
+
+      <br />
+
+      <p>
+        Through multiple academic, social, and technological initiatives, the
+        department strives to bridge the gap between classroom learning and
+        real-world application.
+      </p>
+
+      <br />
+
+      <p>
+        DHE actively collaborates with Institutions of National Importance,
+        universities, schools, industries, startups, policymakers, and social
+        organizations to create an education ecosystem aligned with the vision
+        of Viksit Bharat 2047.
+      </p>
+
+      <br />
+
+      <p>
+        The department has successfully led initiatives including Shiksha
+        Mahakumbh, Shiksha Kumbh, innovation projects, entrepreneurship
+        platforms, educational outreach programs, and national-level academic
+        collaborations.
+      </p>
+
+      <br />
+
+      <p>
+        With a strong emphasis on implementation, impact, and inclusivity, DHE
+        continues to work as a catalyst for educational transformation at both
+        national and global levels.
       </p>
     </div>
   );
