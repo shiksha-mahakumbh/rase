@@ -16,7 +16,7 @@ const CompanyInfo: React.FC = () => {
         <p className="text-sm md:text-base text-gray-700 leading-relaxed">
           An initiative by the <strong>Department of Holistic Education (DHE)</strong> in collaboration 
           with <strong>INIs</strong>, committed to fostering education, research, innovation, and 
-          <em> Indian Knowledge Systems</em> for <strong>Bharat@2047</strong>.
+          <em> Bharatiye Knowledge Systems</em> for <strong>Bharat@2047</strong>.
         </p>
       </div>
 
