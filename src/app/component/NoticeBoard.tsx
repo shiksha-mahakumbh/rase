@@ -13,7 +13,7 @@ export default function NoticeBoard() {
     {
       id: "1",
       title: "Registration Open for Shiksha Mahakumbh 2026",
-      imageUrl: "/notices/notice1.jpg",
+      // imageUrl: "/notices/notice1.jpg",
     },
     {
       id: "2",
