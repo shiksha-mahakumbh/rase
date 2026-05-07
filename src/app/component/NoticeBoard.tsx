@@ -50,13 +50,13 @@ export default function NoticeBoard() {
             className="flex items-center bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 p-3 gap-4 hover:-translate-y-1 cursor-pointer"
           >
             {/* Left Image */}
-            <div className="w-32 h-24 flex-shrink-0 overflow-hidden rounded-lg">
+            {/* <div className="w-32 h-24 flex-shrink-0 overflow-hidden rounded-lg">
               <img
                 src={event.imageUrl}
                 alt={event.title}
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />
-            </div>
+            </div> */}
 
             {/* Title */}
             <div className="flex-grow">
