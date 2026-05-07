@@ -13,27 +13,27 @@ export default function NoticeBoard() {
     {
       id: "1",
       title: "Registration Open for Shiksha Mahakumbh 2026",
-      imageUrl: "/notices/notice1.jpg",
+      // imageUrl: "/notices/notice1.jpg",
     },
     {
       id: "2",
       title: "Workshops & Volunteer Orientation – Starting Soon",
-      imageUrl: "/notices/notice2.jpg",
+      // imageUrl: "/notices/notice2.jpg",
     },
     {
       id: "3",
       title: "Sponsorship Window Now Open",
-      imageUrl: "/notices/notice3.jpg",
+      // imageUrl: "/notices/notice3.jpg",
     },
     {
       id: "4",
       title: "Project Display Registration Begins",
-      imageUrl: "/notices/notice4.jpg",
+      // imageUrl: "/notices/notice4.jpg",
     },
     {
       id: "5",
       title: "Accommodation Details Will Be Released Soon",
-      imageUrl: "/notices/notice5.jpg",
+      // imageUrl: "/notices/notice5.jpg",
     },
   ]);
 
