@@ -184,23 +184,24 @@ export default function RootLayout({
               </span>
             </p>
 
-            <div className="mt-5 text-sm md:text-lg leading-relaxed max-w-4xl bg-white/10 p-4 rounded-lg border border-white/20">
-              To know more about{" "}
-              <span className="font-semibold text-yellow-200">
-                multi-track conferences, conclaves, olympiads, innovation
-                projects, talent conclaves, exhibitions, workshops, and academic
-                activities
-              </span>
-              , visit:
-              <a
-                href="https://www.rase.co.in/VibhagRoute/AcademicCouncil24"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block mt-3 text-cyan-300 underline break-all hover:text-cyan-200 transition"
-              >
-                https://www.rase.co.in/VibhagRoute/AcademicCouncil24
-              </a>
-            </div>
+           <div className="mt-5 text-sm md:text-lg leading-relaxed max-w-4xl bg-white/10 p-4 rounded-lg border border-white/20">
+  To know more about{" "}
+  <span className="font-semibold text-yellow-200">
+    multi-track conferences, conclaves, olympiads, innovation
+    projects, talent conclaves, exhibitions, workshops, and academic
+    activities
+  </span>
+  ,{" "}
+  <a
+    href="https://www.rase.co.in/VibhagRoute/AcademicCouncil24"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-cyan-300 underline hover:text-cyan-200 transition font-semibold"
+  >
+    click here
+  </a>
+  .
+</div>
           </div>
         </Modal>
 
