@@ -33,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             Join India&apos;s largest <strong>Annual Educational Conclave</strong> – Shiksha Mahakumbh Abhiyan, organized by the Department of Holistic Education (DHE) in collaboration with premier INIs.
           </p>
 
-          <p className="text-md md:text-lg text-gray-700 font-medium">
+          {/* <p className="text-md md:text-lg text-gray-700 font-medium">
             The 5th edition of <strong>Shiksha Mahakumbh</strong> was successfully concluded at <strong>NIPER Mohali</strong>.{" "}
             To view photographs,{" "}
             <a
@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             >
               please click here.
             </a>
-          </p>
+          </p> */}
           
 
           {/* Custom Child Content (Optional) */}
