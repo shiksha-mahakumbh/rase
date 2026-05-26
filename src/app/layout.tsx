@@ -62,27 +62,26 @@ export default function RootLayout({
           content="text/html; charset=utf-8"
         />
 
+        {/* ✅ Responsive */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+
         {/* ✅ Title */}
         <title>
-          शिक्षा महाकुंभ अभियान | Shiksha Mahakumbh Abhiyan – Annual International
-          Educational Conference
+          शिक्षा महाकुंभ अभियान | Shiksha Mahakumbh Abhiyan
         </title>
 
         {/* ✅ SEO Meta */}
         <meta
           name="description"
-          content="Welcome to शिक्षा महाकुंभ अभियान – An initiative of Department of Holistic Education (DHE) in collaboration with INIs. Annual International Conference on Education, Research, Innovation & Indian Knowledge Systems aligned with NEP 2020 and Bharat@2047 vision."
+          content="Annual International Conference on Education, Research, Innovation & Indian Knowledge Systems aligned with NEP 2020 and Bharat@2047 vision."
         />
 
         <meta
           name="keywords"
-          content="Shiksha Mahakumbh, शिक्षा महाकुंभ, Education Conference India, Vidya Bharti, DHE, NEP 2020, Innovation in Education, Olympiad, Research, Talent Conclave, Bharat 2047"
-        />
-
-        {/* ✅ Responsive */}
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1"
+          content="Shiksha Mahakumbh, शिक्षा महाकुंभ, Education Conference India, Vidya Bharti, DHE, Olympiad, Research, Talent Conclave"
         />
 
         {/* ✅ Favicon */}
@@ -145,7 +144,7 @@ export default function RootLayout({
           content="ca-pub-4330032354977759"
         />
 
-        {/* ✅ Botpress Chatbot */}
+        {/* ✅ Botpress */}
         <script
           async
           src="https://cdn.botpress.cloud/webchat/v1/inject.js"
@@ -158,22 +157,30 @@ export default function RootLayout({
         ></script>
       </head>
 
-      <body className={inter.className}>
+      <body
+        className={`${inter.className} overflow-x-hidden bg-black`}
+      >
         {/* ✅ Main Content */}
-        {children}
+        <main className="w-full overflow-x-hidden">
+          {children}
+        </main>
 
         {/* ✅ Announcement Modal */}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <div className="text-white p-4 md:p-6 rounded-xl flex flex-col items-center justify-center text-center bg-primary">
-            <h1 className="text-2xl md:text-4xl font-extrabold leading-tight">
+          <div className="w-full max-w-[95vw] sm:max-w-2xl md:max-w-4xl mx-auto text-white px-4 py-5 sm:p-6 md:p-8 rounded-2xl flex flex-col items-center justify-center text-center bg-primary overflow-hidden">
+            
+            {/* Heading */}
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold leading-tight break-words">
               शिक्षा महाकुंभ अभियान
             </h1>
 
-            <h2 className="text-xl md:text-3xl font-bold mt-2 text-yellow-300">
+            {/* Edition */}
+            <h2 className="text-lg sm:text-2xl md:text-4xl font-bold mt-2 text-yellow-300">
               6th Edition
             </h2>
 
-            <p className="mt-4 text-base md:text-xl font-medium leading-relaxed max-w-3xl">
+            {/* Description */}
+            <p className="mt-4 text-sm sm:text-base md:text-xl font-medium leading-relaxed max-w-3xl px-1">
               Join the national educational movement at{" "}
               <span className="font-bold text-yellow-200">
                 NIT Hamirpur
@@ -184,24 +191,31 @@ export default function RootLayout({
               </span>
             </p>
 
-           <div className="mt-5 text-sm md:text-lg leading-relaxed max-w-4xl bg-white/10 p-4 rounded-lg border border-white/20">
-  To know more about{" "}
-  <span className="font-semibold text-yellow-200">
-    multi-track conferences, conclaves, olympiads, innovation
-    projects, talent conclaves, exhibitions, workshops, and academic
-    activities
-  </span>
-  ,{" "}
-  <a
-    href="https://www.rase.co.in/VibhagRoute/AcademicCouncil24"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-cyan-300 underline hover:text-cyan-200 transition font-semibold"
-  >
-    click here
-  </a>
-  .
-</div>
+            {/* Info Box */}
+            <div className="mt-5 w-full text-xs sm:text-sm md:text-lg leading-relaxed bg-white/10 p-3 sm:p-4 md:p-5 rounded-xl border border-white/20">
+              <span className="font-semibold text-yellow-200">
+                Multi-track conferences, conclaves, olympiads,
+                innovation projects, talent conclaves, exhibitions,
+                workshops, and academic activities
+              </span>{" "}
+              —{" "}
+              <a
+                href="https://www.rase.co.in/VibhagRoute/AcademicCouncil24"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cyan-300 underline hover:text-cyan-200 transition font-semibold break-words"
+              >
+                click here
+              </a>
+            </div>
+
+            {/* Button */}
+            <button
+              onClick={closeModal}
+              className="mt-6 px-5 py-2.5 text-sm sm:text-base md:text-lg bg-white text-black font-bold rounded-full hover:scale-105 transition-transform duration-300"
+            >
+              Explore Now
+            </button>
           </div>
         </Modal>
 
