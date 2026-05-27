@@ -229,6 +229,11 @@ const Footer: React.FC = () => {
         <p>
           © 2025 <Link href="https://www.dhe.org.in/" className="text-yellow-400 hover:text-white">Shiksha Mahakumbh Abhiyan</Link>. All Rights Reserved.
         </p>
+        <p className="mt-3 text-sm text-gray-300 leading-relaxed max-w-4xl mx-auto">
+          The Microsoft CMT service was used for managing the peer-reviewing process for this conference. This service was
+          provided for free by Microsoft, and they bore all related expenses, including costs for Azure cloud services as
+          well as software development and support.
+        </p>
       </div>
     </footer>
   );
