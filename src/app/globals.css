@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .home-gradient-text {
+    @apply bg-gradient-to-r from-[#502a2a] via-[#7a4343] to-[#b22222] bg-clip-text text-transparent;
+  }
+
+  .home-glass {
+    @apply rounded-2xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(80,42,42,0.08)];
+  }
+
+  .home-section-title {
+    @apply text-3xl font-extrabold tracking-tight text-primary md:text-4xl;
+  }
+
+  .home-card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+}
+
+@layer components {
+  .home-timeline-connector {
+    @apply absolute left-5 top-12 h-[calc(100%-1rem)] w-0.5 bg-gradient-to-b from-primary/40 to-amber-400/40 md:left-1/2 md:-translate-x-1/2;
+  }
+
+  .registration-form-fields form {
+    @apply rounded-2xl border border-gray-100 bg-white p-4 md:p-6;
+  }
+
+  .registration-form-fields input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  .registration-form-fields select,
+  .registration-form-fields textarea {
+    @apply rounded-xl border-gray-200 shadow-sm transition focus:border-primary focus:ring-2 focus:ring-primary/15;
+  }
+
+  .registration-form-fields button[type="submit"],
+  .registration-form-fields button.bg-primary {
+    @apply rounded-xl shadow-md transition hover:-translate-y-0.5 hover:shadow-lg;
+  }
+}

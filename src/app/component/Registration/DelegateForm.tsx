@@ -5,6 +5,7 @@ import { storage } from '@/app/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import  toast , { Toaster } from "react-hot-toast";
+import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
 interface FormData {
   name: string;
@@ -212,8 +213,7 @@ else  if (value === 'ResearchScholar' ) {
     }
   }, []);
   return (
-    <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
-      <h1 className='text-primary text-center text-xl'>Participant Registration</h1>
+    <RegistrationFormWrapper heading="Participant Registration">
       <form onSubmit={handleSubmit} className='bg-white p-4'>
      
         {/* Name Field */}
@@ -511,7 +511,8 @@ else  if (value === 'ResearchScholar' ) {
           Submit
         </button>
       </form>
-    </div>)
+    </RegistrationFormWrapper>
+  );
 };
 
 export default RegistrationForm;

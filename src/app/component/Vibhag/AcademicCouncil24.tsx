@@ -1,6 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import OverviewPage from "./academic/AcademicCouncilOverview";
+import { OpenBestPracticesSection } from "./academic/OpenBestPracticesSection";
+import {
+  ACPage,
+  ACHero,
+  ACSection,
+  ACCard,
+  ACGlassPanel,
+  ACObjectiveCard,
+  ACTimelineStep,
+  ACContactBlock,
+  SectionCTA,
+  ACFooterStatement,
+  REG_LINKS,
+} from "./academic/AcademicCouncilUI";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const tracks = [
@@ -132,213 +147,174 @@ const tracks = [
 
 function ConferencePage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
-      {/* Hero */}
-      <section className="bg-gradient-to-r from-blue-900 to-indigo-700 text-white py-16 px-6 rounded-b-3xl">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            📚 Multi-Track Conference – Shiksha Mahakumbh 6.0
-          </h1>
+    <ACPage>
+      <ACHero
+        accent="indigo"
+        title="📚 Multi-Track Conference – Shiksha Mahakumbh 6.0"
+      />
 
-          <p className="text-lg md:text-xl max-w-5xl mx-auto leading-8">
-            Shiksha Mahakumbh 2026 hosts a Hybrid International Conference
-            bringing together researchers, academicians, industry experts,
-            innovators, and scholars aligned with the vision of
-            <span className="font-semibold"> Viksit Bharat 2047</span>.
+      <ACSection title="🌟 Overview">
+        <ACGlassPanel>
+          <p className="text-base leading-relaxed text-gray-700 md:text-lg md:leading-8">
+            Shiksha Mahakumbh 2026 (6th Edition) will host a Hybrid Multi-Track
+            International Conference, bringing together researchers, academicians,
+            industry experts, and scholars to present original research,
+            participate in plenary talks, workshops, and engage in
+            cross-disciplinary dialogue aligned with Viksit Bharat 2047.
           </p>
-        </div>
-      </section>
+        </ACGlassPanel>
+      </ACSection>
 
       {/* Leadership */}
-      <section className="max-w-7xl mx-auto py-14 px-6">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-indigo-700 mb-8">
-            🧭 Conference Leadership
-          </h2>
-
+      <ACSection title="🧭 Conference Leadership">
+        <ACGlassPanel>
           <div className="space-y-6">
             <div>
-              <h3 className="font-bold text-xl mb-2">🎯 Chair</h3>
+              <h3 className="mb-2 text-lg font-bold text-indigo-700 md:text-xl">
+                🎯 Chair
+              </h3>
               <p>Prof. Brahmjit Singh, NIT Kurukshetra</p>
             </div>
-
             <div>
-              <h3 className="font-bold text-xl mb-2">🔹 Co-Chairs</h3>
-              <p>
-                Dr. Vikash Kumar Garg, Prof. R. K. Sehgal,
-                Prof. Raman Parti, Prof. Sushil Chauhan,
-                Prof. Ravi Ranade, Dr. Chander Prakash
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-xl mb-2">🔹 Conveners</h3>
-              <p>
-                Dr. Pankaj Verma, Dr. Gaurav, Dr. Tarun,
-                Dr. T. P. Sharma, Dr. Ramesh Vats
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Submission Details */}
-      <section className="max-w-7xl mx-auto px-6 mb-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <p className="text-sm text-gray-500 mb-2">📄 Paper Length</p>
-            <h3 className="text-xl font-bold">5–6 Pages (IEEE Format)</h3>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <p className="text-sm text-gray-500 mb-2">📊 Similarity Index</p>
-            <h3 className="text-xl font-bold">Below 15%</h3>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <p className="text-sm text-gray-500 mb-2">📤 Submission</p>
-            <h3 className="text-xl font-bold">CMT Portal (PDF)</h3>
-          </div>
-        </div>
-      </section>
-
-      {/* Dates */}
-      <section className="max-w-7xl mx-auto px-6 mb-10">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
-            📅 Important Dates
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-4 text-lg">
-            <div>📌 Abstract Submission: 30 June 2026</div>
-            <div>📌 Acceptance Notification: 31 July 2026</div>
-            <div>📌 Full Paper Submission: 31 August 2026</div>
-            <div>📌 Registration Deadline: 31 August 2026</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tracks */}
-      <section className="max-w-7xl mx-auto px-6 mb-12">
-        <h2 className="text-3xl font-bold text-indigo-700 mb-8">
-          🧩 Conference Tracks
-        </h2>
-
-        <div className="space-y-6">
-          {tracks.map((track, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl shadow-md p-8"
-            >
-              <h3 className="text-2xl font-bold text-indigo-700 mb-3">
-                {index + 1}. {track.title}
+              <h3 className="mb-2 text-lg font-bold text-indigo-700 md:text-xl">
+                🔹 Co-Chairs
               </h3>
-
-              <p className="text-gray-700 leading-7 mb-4">
-                {track.details}
+              <p>
+                Dr. Vikash Kumar Garg, Prof. R. K. Sehgal, Prof. Raman Parti,
+                Prof. Sushil Chauhan, Prof. Ravi Ranade, Dr. Chander Prakash
               </p>
-
-              <div className="space-y-2 text-gray-700">
-                <p>
-                  <span className="font-semibold">Chair:</span>{" "}
-                  {track.chair}
-                </p>
-
-                <p>
-                  <span className="font-semibold">Co-Chair:</span>{" "}
-                  {track.coChair}
-                </p>
-
-                <p>
-                  <span className="font-semibold">Convenor:</span>{" "}
-                  {track.convenor}
-                </p>
-              </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Registration */}
-      <section className="max-w-7xl mx-auto px-6 mb-12">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
-            💰 Registration Fees
-          </h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-gray-100 p-5 rounded-xl">
-              🎓 Students (UG/PG/PhD): ₹500
-            </div>
-
-            <div className="bg-gray-100 p-5 rounded-xl">
-              🔬 Research Scholars: ₹1,000
-            </div>
-
-            <div className="bg-gray-100 p-5 rounded-xl">
-              🏫 Academia & R&D: ₹2,100
-            </div>
-
-            <div className="bg-gray-100 p-5 rounded-xl">
-              🏢 Industry: ₹5,000
-            </div>
-
-            <div className="bg-gray-100 p-5 rounded-xl">
-              🌍 International Delegates: Free
+            <div>
+              <h3 className="mb-2 text-lg font-bold text-indigo-700 md:text-xl">
+                🔹 Conveners
+              </h3>
+              <p>
+                Dr. Pankaj Verma, Dr. Gaurav, Dr. Tarun, Dr. T. P. Sharma, Dr.
+                Ramesh Vats
+              </p>
             </div>
           </div>
+        </ACGlassPanel>
+      </ACSection>
 
-          <div className="mt-6 text-gray-700 space-y-2">
-            <p>✔ Includes Lunch, Kit & Certificate (one author)</p>
-            <p>✔ Additional Author: ₹500</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Publication */}
-      <section className="max-w-7xl mx-auto px-6 mb-12">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-indigo-700 mb-6">
-            📚 Publication & Review
-          </h2>
-
-          <div className="space-y-3 text-gray-700 text-lg">
-            <p>Peer-reviewed Open Access Journal (ISSN)</p>
-            <p>
-              Selected papers recommended for Scopus / Web of Science
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Awards */}
-      <section className="max-w-7xl mx-auto px-6 mb-12">
-        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl shadow-xl p-10 text-center">
-          <h2 className="text-4xl font-bold mb-4">
-            🏆 Track-wise Best Paper Award
-          </h2>
-
-          <p className="text-lg max-w-3xl mx-auto">
-            Outstanding research contributions across all conference
-            tracks will be recognised and awarded during
-            Shiksha Mahakumbh 2026.
-          </p>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-indigo-700 mb-4">
-          ✨ Advancing Research to Impact
+      <ACSection title="📢 Call for Papers">
+        <h3 className="mb-4 text-lg font-semibold text-indigo-700">
+          📝 Submission Details
         </h3>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <ACCard>
+            <p className="text-sm text-gray-500 mb-2">📄 Paper Length</p>
+            <h3 className="text-lg font-bold md:text-xl">
+              5–6 pages (IEEE Format)
+            </h3>
+          </ACCard>
+          <ACCard>
+            <p className="text-sm text-gray-500 mb-2">📊 Similarity Index</p>
+            <h3 className="text-lg font-bold md:text-xl">Below 15%</h3>
+          </ACCard>
+          <ACCard>
+            <p className="text-sm text-gray-500 mb-2">📤 Format</p>
+            <h3 className="text-lg font-bold md:text-xl">
+              PDF submission via CMT Portal
+            </h3>
+          </ACCard>
+        </div>
+      </ACSection>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          This conference aims to transform ideas into innovation and
-          research into real-world impact, fostering collaboration across
-          disciplines for a future-ready Bharat.
-        </p>
-      </section>
-    </div>
+      <ACSection title="📅 Important Dates">
+        <div className="grid gap-3 md:grid-cols-2">
+          <ACCard>📌 Abstract Submission: 30 June 2026</ACCard>
+          <ACCard>📌 Acceptance Notification: 31 July 2026</ACCard>
+          <ACCard>📌 Full Paper Submission: 31 August 2026</ACCard>
+          <ACCard>📌 Registration Deadline: 31 August 2026</ACCard>
+        </div>
+      </ACSection>
+
+      <ACSection title="🧩 Conference Tracks">
+        <div className="space-y-4">
+          {tracks.map((track, index) => {
+            const trackEmojis = [
+              "🔬", "⚙️", "💼", "🌍", "📖", "🎓", "💻", "🏥", "🧘", "🌾",
+              "🌱", "🎭", "🌐", "🛠", "🕉",
+            ];
+            return (
+              <ACCard key={index}>
+                <h3 className="mb-3 text-lg font-bold text-indigo-700 md:text-xl">
+                  {trackEmojis[index] ?? "📚"} {index + 1}. {track.title}
+                </h3>
+                <p className="mb-4 leading-relaxed text-gray-700">{track.details}</p>
+                <div className="space-y-1 text-sm text-gray-700 md:text-base">
+                  <p>
+                    <span className="font-semibold">Chair:</span> {track.chair}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Co-Chair:</span>{" "}
+                    {track.coChair}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Convenor:</span>{" "}
+                    {track.convenor}
+                  </p>
+                </div>
+              </ACCard>
+            );
+          })}
+        </div>
+      </ACSection>
+
+      <ACSection title="💰 Registration Fees">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ACCard>🎓 Students (UG/PG/PhD): ₹500</ACCard>
+          <ACCard>🔬 Research Scholars: ₹1,000</ACCard>
+          <ACCard>🏫 Academia & R&D: ₹2,100</ACCard>
+          <ACCard>🏢 Industry: ₹5,000</ACCard>
+          <ACCard>
+            🌍 International Delegates: Free (with DHE Membership)
+          </ACCard>
+        </div>
+        <div className="mt-4 space-y-2 text-gray-700">
+          <p>✔ Includes Lunch, Kit & Certificate (one author)</p>
+          <p>✔ Additional Author: ₹500</p>
+        </div>
+      </ACSection>
+
+      <ACSection title="📚 Publication & Review">
+        <div className="space-y-3 text-base text-gray-700 md:text-lg">
+          <p>Peer-reviewed Open Access Journal (ISSN)</p>
+          <p>Selected papers recommended for Scopus / Web of Science</p>
+        </div>
+      </ACSection>
+
+      <ACSection title="🏆 Awards">
+        <ACCard
+          hover={false}
+          className="border-amber-200/50 bg-gradient-to-r from-amber-400 to-orange-500 text-center text-white"
+        >
+          <h2 className="mb-3 text-2xl font-bold md:text-3xl">
+            🥇 Track-wise Best Paper Award
+          </h2>
+        </ACCard>
+      </ACSection>
+
+      <ACSection title="📤 Submission">
+        <div className="space-y-2 text-base text-gray-700 md:text-lg">
+          <p>CMT Portal (Primary Submission)</p>
+          <p>Backup Email (if required)</p>
+          <p>🌐 Website: www.shikshamahakumbh.com</p>
+        </div>
+      </ACSection>
+
+      <ACFooterStatement title="✨ Advancing Research to Impact">
+        This conference aims to transform ideas into innovation and research
+        into real-world impact, fostering collaboration across disciplines for a
+        future-ready Bharat.
+      </ACFooterStatement>
+
+      <SectionCTA
+        buttonText="शोध-पत्र प्रस्तुत करें"
+        href={REG_LINKS.general}
+      />
+    </ACPage>
   );
 };
 
@@ -445,107 +421,57 @@ const conclaves = [
 
 function ConclavePage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
-      {/* Hero */}
-      <section className="bg-gradient-to-r from-purple-900 to-indigo-700 text-white py-16 px-6 rounded-b-3xl">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            🎓 Conclaves – Shiksha Mahakumbh 6.0
-          </h1>
+    <ACPage>
+      <ACHero
+        accent="purple"
+        title="🎓 Conclaves – Shiksha Mahakumbh 6.0"
+      />
 
-          <p className="text-lg md:text-xl max-w-5xl mx-auto leading-8">
-            High-impact dialogue platforms bringing together
-            leaders from academia, research, governance,
-            industry, and society to shape the future of
-            education aligned with
-            <span className="font-semibold">
-              {" "}Viksit Bharat 2047
-            </span>.
+      <ACSection title="🌟 Overview">
+        <ACGlassPanel>
+          <p className="text-base leading-relaxed text-gray-700 md:text-lg md:leading-8">
+            The Conclaves at Shiksha Mahakumbh 6.0 serve as high-impact dialogue
+            platforms bringing together leaders from academia, research,
+            governance, industry, and society. These thematic conclaves aim to
+            foster policy discussions, innovation exchange, and actionable
+            outcomes aligned with the vision of Viksit Bharat 2047.
           </p>
-        </div>
-      </section>
+        </ACGlassPanel>
+      </ACSection>
 
-      {/* Overview */}
-      <section className="max-w-7xl mx-auto py-14 px-6">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-purple-700 mb-6">
-            🌟 Overview
-          </h2>
-
-          <p className="text-lg text-gray-700 leading-8">
-            The Conclaves at Shiksha Mahakumbh 6.0 serve as
-            high-impact dialogue platforms fostering policy
-            discussions, innovation exchange, and actionable
-            outcomes across diverse sectors of education,
-            governance, entrepreneurship, and research.
-          </p>
-        </div>
-      </section>
-
-      {/* Conclave Cards */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <h2 className="text-3xl font-bold text-purple-700 mb-8">
-          🧩 Conclave Categories
-        </h2>
-
-        <div className="space-y-8">
+      <ACSection title="🧩 Conclave Categories">
+        <div className="space-y-4">
           {conclaves.map((conclave, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl shadow-md p-8"
-            >
-              <h3 className="text-2xl font-bold text-purple-700 mb-5">
-                {index + 1}. {conclave.icon} {conclave.title}
+            <ACCard key={index}>
+              <h3 className="mb-4 text-lg font-bold text-purple-700 md:text-xl">
+                🧩 {index + 1}. {conclave.icon} {conclave.title}
               </h3>
-
-              <div className="space-y-4 text-gray-700 leading-7">
+              <div className="space-y-3 text-sm leading-relaxed text-gray-700 md:text-base">
                 <p>
-                  <span className="font-semibold">
-                    Participants:
-                  </span>{" "}
+                  <span className="font-semibold">Participants:</span>{" "}
                   {conclave.participants}
                 </p>
-
                 <p>
-                  <span className="font-semibold">
-                    Focus:
-                  </span>{" "}
-                  {conclave.focus}
+                  <span className="font-semibold">Focus:</span> {conclave.focus}
                 </p>
-
                 <p>
-                  <span className="font-semibold">
-                    Output:
-                  </span>{" "}
-                  {conclave.output}
+                  <span className="font-semibold">Output:</span> {conclave.output}
                 </p>
-
                 <p>
-                  <span className="font-semibold">
-                    Theme:
-                  </span>{" "}
-                  {conclave.theme}
+                  <span className="font-semibold">Theme:</span> {conclave.theme}
                 </p>
-
                 <p>
-                  <span className="font-semibold">
-                    Coordinators:
-                  </span>{" "}
+                  <span className="font-semibold">Coordinators:</span>{" "}
                   {conclave.coordinators}
                 </p>
               </div>
-            </div>
+            </ACCard>
           ))}
         </div>
-      </section>
+      </ACSection>
 
-      {/* Leadership */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-purple-700 mb-8">
-            🧭 Leadership & Coordination
-          </h2>
-
+      <ACSection title="🧭 Leadership & Coordination">
+        <ACGlassPanel>
           <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-semibold mb-3">
@@ -591,25 +517,17 @@ function ConclavePage() {
               </ul>
             </div>
           </div>
-        </div>
-      </section>
+        </ACGlassPanel>
+      </ACSection>
 
-      {/* Footer */}
-      <section className="max-w-7xl mx-auto px-6 pb-16">
-        <div className="bg-gradient-to-r from-purple-700 to-indigo-700 text-white rounded-2xl shadow-xl p-10 text-center">
-          <h2 className="text-4xl font-bold mb-5">
-            ✨ Driving Dialogue to Action
-          </h2>
+      <ACFooterStatement title="✨ Driving Dialogue to Action">
+        Each conclave is designed to move beyond discussions and generate
+        practical frameworks, policy inputs, and collaborative pathways that
+        contribute to shaping the future of education in India.
+      </ACFooterStatement>
 
-          <p className="max-w-4xl mx-auto text-lg leading-8">
-            Each conclave is designed to move beyond discussions
-            and generate practical frameworks, policy inputs,
-            and collaborative pathways contributing to the
-            future of education in India.
-          </p>
-        </div>
-      </section>
-    </div>
+      <SectionCTA buttonText="आवेदन करें" href={REG_LINKS.conclave} />
+    </ACPage>
   );
 }
 // ─── INDIVIDUAL PAGES ────────────────────────────────────────────────────────
@@ -674,7 +592,7 @@ const awardCategories = [
 
 function AwardsPage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
+    <ACPage>
       {/* Hero */}
       <section className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-16 px-6 rounded-b-3xl">
         <div className="max-w-7xl mx-auto text-center">
@@ -910,19 +828,13 @@ function AwardsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-orange-600 mb-4">
-          ✨ Celebrating Excellence, Inspiring Innovation
-        </h3>
+      <ACFooterStatement title="✨ Celebrating Excellence, Inspiring Innovation">
+        These awards aim to encourage a culture of research, creativity, and
+        impactful contribution in education and society.
+      </ACFooterStatement>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          These awards aim to encourage a culture of research,
-          creativity, and impactful contribution in education
-          and society.
-        </p>
-      </section>
-    </div>
+      <SectionCTA buttonText="नामांकन करें" href={REG_LINKS.general} />
+    </ACPage>
   );
 }
 
@@ -980,7 +892,7 @@ const olympiadBenefits = [
 
 function OlympiadPage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
+    <ACPage>
       {/* Hero */}
       <section className="bg-gradient-to-r from-purple-700 to-indigo-700 text-white py-16 px-6 rounded-b-3xl">
         <div className="max-w-7xl mx-auto text-center">
@@ -1204,20 +1116,14 @@ function OlympiadPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-purple-700 mb-4">
-          ✨ Empowering Young Minds
-        </h3>
+      <ACFooterStatement title="✨ Empowering Young Minds">
+        The DHE Olympiad is not just an examination, but a journey towards
+        building confident, capable, and future-ready students for a stronger
+        Bharat.
+      </ACFooterStatement>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          The DHE Olympiad is not just an examination,
-          but a journey towards building confident,
-          capable, and future-ready students for
-          a stronger Bharat.
-        </p>
-      </section>
-    </div>
+      <SectionCTA buttonText="प्रतिभागिता हेतु पंजीकरण करें" href={REG_LINKS.talent} />
+    </ACPage>
   );
 }
 const exhibitionSegments = [
@@ -1296,7 +1202,7 @@ const exhibitionBenefits = [
 
 function ExhibitionPage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
+    <ACPage>
       {/* Hero */}
       <section className="bg-gradient-to-r from-cyan-700 to-blue-700 text-white py-16 px-6 rounded-b-3xl">
         <div className="max-w-7xl mx-auto text-center">
@@ -1462,19 +1368,13 @@ function ExhibitionPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-cyan-700 mb-4">
-          ✨ A Confluence of Ideas & Innovation
-        </h3>
+      <ACFooterStatement title="✨ A Confluence of Ideas & Innovation">
+        Explore a vibrant ecosystem where education, innovation, culture, and
+        sustainability come together at the Shiksha Mahakumbh 6.0 Exhibition.
+      </ACFooterStatement>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          Explore a vibrant ecosystem where education,
-          innovation, culture, and sustainability come
-          together at the Shiksha Mahakumbh 6.0 Exhibition.
-        </p>
-      </section>
-    </div>
+      <SectionCTA buttonText="अभी जुड़ें" href={REG_LINKS.general} />
+    </ACPage>
   );
 }
 
@@ -1499,7 +1399,7 @@ const projectBenefits = [
 
 function ProjectsPage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
+    <ACPage>
       {/* Hero */}
       <section className="bg-gradient-to-r from-emerald-700 to-teal-600 text-white py-16 px-6 rounded-b-3xl">
         <div className="max-w-7xl mx-auto text-center">
@@ -1757,18 +1657,13 @@ function ProjectsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-emerald-700 mb-4">
-          ✨ Be the Innovator of Tomorrow
-        </h3>
+      <ACFooterStatement title="✨ Be the Innovator of Tomorrow">
+        Transform your ideas into impactful solutions and become a part of
+        India&apos;s largest academic innovation movement.
+      </ACFooterStatement>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          Transform your ideas into impactful solutions and become
-          a part of India’s largest academic innovation movement.
-        </p>
-      </section>
-    </div>
+      <SectionCTA buttonText="अपना विवरण प्रस्तुत करें" href={REG_LINKS.general} />
+    </ACPage>
   );
 }
 
@@ -1857,23 +1752,13 @@ const recognitionBenefits = [
 
 function BestPracticesPage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
-      {/* Hero */}
-      <section className="bg-gradient-to-r from-emerald-700 to-teal-600 text-white py-16 px-6 rounded-b-3xl">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-5">
-            🌟 Best Practices – Shiksha Mahakumbh 6.0
-          </h1>
+    <ACPage>
+      <OpenBestPracticesSection />
 
-          <p className="text-lg md:text-xl leading-8 max-w-5xl mx-auto">
-            A national initiative to identify, showcase, and
-            scale innovative, impactful, and replicable
-            practices in education, governance, and
-            community engagement aligned with
-            Viksit Bharat 2047.
-          </p>
-        </div>
-      </section>
+      <ACHero
+        accent="emerald"
+        title="🌟 Best Practices – Shiksha Mahakumbh 6.0"
+      />
 
       {/* Overview */}
       <section className="max-w-7xl mx-auto py-14 px-6">
@@ -1883,11 +1768,12 @@ function BestPracticesPage() {
           </h2>
 
           <p className="text-lg leading-8 text-gray-700">
-            The Best Practices Initiative at Shiksha Mahakumbh 6.0
-            provides a national platform for institutions and
-            individuals to present successful and innovative
-            models contributing towards quality education,
-            inclusivity, sustainability, and social impact.
+            The Best Practices Initiative at Shiksha Mahakumbh 6.0 aims to
+            identify, showcase, and scale innovative, impactful, and replicable
+            practices in education, governance, and community engagement. It
+            provides a national platform for institutions and individuals to
+            present their successful models that contribute towards quality
+            education, inclusivity, and sustainable development.
           </p>
         </div>
       </section>
@@ -2076,20 +1962,17 @@ function BestPracticesPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-emerald-700 mb-4">
-          ✨ From Practice to Policy
-        </h3>
+      <ACFooterStatement title="✨ From Practice to Policy">
+        This initiative aims to transform grassroots innovations into national
+        models, creating a strong ecosystem of knowledge sharing and continuous
+        improvement in education.
+      </ACFooterStatement>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          This initiative aims to transform grassroots
-          innovations into national models, creating a
-          strong ecosystem of knowledge sharing and
-          continuous improvement in education.
-        </p>
-      </section>
-    </div>
+      <SectionCTA
+        buttonText="अपना विवरण प्रस्तुत करें"
+        href={REG_LINKS.general}
+      />
+    </ACPage>
   );
 }
 
@@ -2138,7 +2021,7 @@ const patrikaBenefits = [
 
 function PatrikaPage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
+    <ACPage>
       {/* Hero */}
       <section className="bg-gradient-to-r from-indigo-700 to-blue-700 text-white py-16 px-6 rounded-b-3xl">
         <div className="max-w-7xl mx-auto text-center">
@@ -2382,20 +2265,14 @@ function PatrikaPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-indigo-700 mb-4">
-          ✨ Igniting Young Researchers
-        </h3>
+      <ACFooterStatement title="✨ Igniting Young Researchers">
+        Bal Shodh Patrika is a step towards building a generation of young
+        thinkers, researchers, and innovators who will shape the future of the
+        nation.
+      </ACFooterStatement>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          Bal Shodh Patrika is a step towards building
-          a generation of young thinkers, researchers,
-          and innovators who will shape the future
-          of the nation.
-        </p>
-      </section>
-    </div>
+      <SectionCTA buttonText="आवेदन करें" href={REG_LINKS.general} />
+    </ACPage>
   );
 }
 
@@ -2430,7 +2307,7 @@ const culturalRecognitionBenefits = [
 
 function CulturalPage() {
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800">
+    <ACPage>
       {/* Hero */}
       <section className="bg-gradient-to-r from-pink-700 via-rose-600 to-orange-500 text-white py-16 px-6 rounded-b-3xl">
         <div className="max-w-7xl mx-auto text-center">
@@ -2604,22 +2481,17 @@ function CulturalPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <section className="text-center py-12 px-6">
-        <h3 className="text-3xl font-bold text-rose-700 mb-4">
-          ✨ Where Culture Meets Consciousness
-        </h3>
+      <ACFooterStatement title="✨ Where Culture Meets Consciousness">
+        Experience the harmony of tradition, creativity, and sustainability
+        through inspiring cultural expressions at Shiksha Mahakumbh 6.0.
+      </ACFooterStatement>
 
-        <p className="max-w-4xl mx-auto text-gray-600 leading-8 text-lg">
-          Experience the harmony of tradition, creativity,
-          and sustainability through inspiring cultural
-          expressions at Shiksha Mahakumbh 6.0.
-        </p>
-      </section>
-    </div>
+      <SectionCTA buttonText="प्रतिभागिता हेतु पंजीकरण करें" href={REG_LINKS.talent} />
+    </ACPage>
   );
 }
 const pageMap = {
+  OverviewPage: <OverviewPage />,
   ConferencePage: <ConferencePage />,
   ConclavePage: <ConclavePage />,
   AwardsPage: <AwardsPage />,
@@ -2634,11 +2506,11 @@ const pageMap = {
 // ─── MAIN DASHBOARD ───────────────────────────────────────────────────────────
 // ─── MAIN DASHBOARD ───────────────────────────────────────────────────────────
 export default function AcademicCouncilDashboard() {
-  const [active, setActive] = useState("ConferencePage");
+  const [active, setActive] = useState("OverviewPage");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // MAKE SURE THIS IS HERE 👇
   const pages = [
+    { id: "OverviewPage", label: "Overview" },
     { id: "ConferencePage", label: "Conference" },
     { id: "ConclavePage", label: "Conclave" },
     { id: "AwardsPage", label: "Awards" },
@@ -2651,18 +2523,25 @@ export default function AcademicCouncilDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#faf8f6]">
       {/* Desktop Sidebar */}
-      <aside className="w-64 bg-white border-r p-4 hidden md:flex flex-col">
-        <h2 className="text-xl font-bold mb-6">Academic Council</h2>
-        <nav className="space-y-1">
-          {/* This should now find 'pages' correctly */}
+      <aside className="hidden w-72 flex-col border-r border-primary/10 bg-white/80 p-5 shadow-lg backdrop-blur-xl md:flex">
+        <div className="mb-6 rounded-2xl bg-gradient-to-br from-primary to-[#7a4343] p-4 text-white">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/70">
+            शैक्षिक विभाग
+          </p>
+          <h2 className="text-xl font-bold">Academic Council</h2>
+          <p className="mt-1 text-xs text-white/80">Shiksha Mahakumbh 6.0 · शैक्षिक विभाग</p>
+        </div>
+        <nav className="flex-1 space-y-1 overflow-y-auto">
           {pages.map((p) => (
             <button
               key={p.id}
               onClick={() => setActive(p.id)}
-              className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                active === p.id ? "bg-black text-white font-medium" : "text-gray-700 hover:bg-gray-100"
+              className={`w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium transition-all ${
+                active === p.id
+                  ? "bg-primary text-white shadow-md shadow-primary/20"
+                  : "text-gray-700 hover:bg-primary/5 hover:text-primary"
               }`}
             >
               {p.label}
@@ -2671,9 +2550,42 @@ export default function AcademicCouncilDashboard() {
         </nav>
       </aside>
 
-      {/* ... Rest of your component (Mobile Menu & Main) ... */}
-      <main className="flex-1 p-6 pt-16 md:pt-6 max-w-5xl">
-        {pageMap[active as keyof typeof pageMap]}
+      {/* Mobile nav */}
+      <div className="fixed left-0 right-0 top-[60px] z-30 border-b border-gray-200 bg-white/95 px-4 py-3 backdrop-blur-md md:hidden">
+        <button
+          type="button"
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="mb-2 flex w-full items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary"
+        >
+          {pages.find((p) => p.id === active)?.label ?? "Menu"}
+          <span>{menuOpen ? "▲" : "▼"}</span>
+        </button>
+        {menuOpen && (
+          <nav className="grid max-h-48 grid-cols-2 gap-1 overflow-y-auto">
+            {pages.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => {
+                  setActive(p.id);
+                  setMenuOpen(false);
+                }}
+                className={`rounded-lg px-2 py-2 text-xs font-medium ${
+                  active === p.id
+                    ? "bg-primary text-white"
+                    : "bg-gray-50 text-gray-700"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </nav>
+        )}
+      </div>
+
+      <main className="flex-1 p-4 pt-28 md:p-6 md:pt-8 lg:max-w-none">
+        <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white/60 shadow-xl backdrop-blur-sm">
+          {pageMap[active as keyof typeof pageMap]}
+        </div>
       </main>
     </div>
   );

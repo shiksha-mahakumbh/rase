@@ -1,62 +1,100 @@
 "use client";
+
 import React from "react";
 import Marquee from "react-fast-marquee";
 import Link from "next/link";
+import Image from "next/image";
+import { REGISTRATION_PATH } from "./UpcomingEvent";
 
-interface Item {
-  imageUrl: string;
-  text: string;
-  link: string;
-}
-
-const items: Item[] = [
+const tickerItems = [
   {
-    imageUrl: "/new.gif",
-    text: "शिक्षा महाकुंभ अभियान – 6th Edition at NIT Hamirpur from 9th Oct to 11th Oct 2026.",
-    link: "https://www.rase.co.in",
+    text: "Shiksha Mahakumbh 6.0 — 9–11 Oct 2026 at NIT Hamirpur. Registration open.",
+    link: REGISTRATION_PATH,
+    external: false,
   },
   {
-    imageUrl: "/new.gif",
-    text: "शिक्षा महाकुंभ 5.0 concluded at NIPER Mohali, 31 Oct to 2nd Nov 2025. Download photos here.",
+    text: "Shiksha Mahakumbh 5.0 concluded at NIPER Mohali (31 Oct – 2 Nov 2025). View photos.",
     link: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA",
+    external: true,
   },
   {
-    imageUrl: "/new.gif",
-    text: "Join the revolution through education at NIT Hamirpur, register now.",
-    link: "https://www.rase.co.in/registration/Single_Registration",
+    text: "Programmes @ Shiksha Mahakumbh 6.0 — explore the academic council schedule.",
+    link: "/VibhagRoute/AcademicCouncil24",
+    external: false,
   },
-  // {
-  //   imageUrl: "/new.gif",
-  //   text: "शिक्षा महाकुंभ अभियान office inaugurated at NIPER SAS Nagar campus.",
-  //   link: "https://www.rase.co.in",
-  // },
 ];
 
 const Marquees: React.FC = () => {
   return (
-    <div className="bg-white border-t-4 border-b-4 border-[#F59E0B]">
-      <div className="bg-[#F59E0B] text-white font-bold py-2 px-4 text-lg uppercase tracking-wide">
-        Announcements
-      </div>
-      <Marquee pauseOnHover={true} pauseOnClick={true} gradient={false} speed={60}>
-        <div className="flex space-x-6 py-4 px-4">
-          {items.map((item, index) => (
-            <Link key={index} href={item.link} target="_blank">
-              <div className="flex items-center space-x-3 bg-[#F5F5F5] hover:bg-[#E0E0E0] transition-transform transform hover:scale-105 rounded-full px-4 py-2 cursor-pointer border border-[#F59E0B] shadow-sm">
-                <img
-                  src={item.imageUrl}
-                  alt="New Icon"
-                  className="h-6 w-6 animate-bounce"
-                />
-                <p className="text-black font-medium text-sm lg:text-base hover:text-[#F59E0B] max-w-xs lg:max-w-md">
-                  {item.text}
-                </p>
-              </div>
-            </Link>
-          ))}
+    <section
+      className="border-y border-primary/10 bg-gradient-to-r from-[#faf8f6] via-white to-amber-50/40"
+      aria-label="Announcements"
+    >
+      <div className="mx-auto max-w-7xl px-4 py-4 md:py-5">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F59E0B] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#F59E0B]" />
+            </span>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-primary md:text-base">
+              Announcements
+            </h2>
+          </div>
+          <Link
+            href={REGISTRATION_PATH}
+            className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-primary/90"
+          >
+            Register Now
+          </Link>
         </div>
-      </Marquee>
-    </div>
+
+        <div className="overflow-hidden rounded-xl border border-[#F59E0B]/20 bg-white/90 shadow-sm">
+          <Marquee
+            pauseOnHover
+            pauseOnClick
+            gradient
+            gradientColor="#ffffff"
+            gradientWidth={40}
+            speed={40}
+          >
+            <div className="flex gap-3 px-3 py-2">
+              {tickerItems.map((item, index) => {
+                const content = (
+                  <span className="flex items-center gap-2 rounded-full border border-primary/15 bg-white px-4 py-1.5 text-sm font-medium text-gray-800 shadow-sm">
+                    <Image
+                      src="/new.gif"
+                      alt=""
+                      width={16}
+                      height={16}
+                      className="shrink-0"
+                      unoptimized
+                    />
+                    {item.text}
+                  </span>
+                );
+
+                return item.external ? (
+                  <a
+                    key={index}
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mx-1"
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <Link key={index} href={item.link} className="mx-1">
+                    {content}
+                  </Link>
+                );
+              })}
+            </div>
+          </Marquee>
+        </div>
+      </div>
+    </section>
   );
 };
 

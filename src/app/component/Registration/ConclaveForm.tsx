@@ -3,6 +3,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import toast, { Toaster } from 'react-hot-toast';
+import RegistrationFormWrapper from '../ui/RegistrationFormWrapper';
 
 interface ConclaveData {
   typeofConclave: string;
@@ -65,10 +66,7 @@ const ConclaveForm = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-6 shadow-md rounded-md bg-white">
-      <h1 className="text-center text-xl font-semibold text-primary">
-        Conclave Registration Form
-      </h1>
+    <RegistrationFormWrapper heading="Conclave Registration Form">
       <form onSubmit={handleSubmit} className="mt-4">
         <Toaster />
 
@@ -257,10 +255,7 @@ const ConclaveForm = () => {
           </div>
         )}
       </form>
-    </div>
-      
-     
-  
+    </RegistrationFormWrapper>
   );
 };
 

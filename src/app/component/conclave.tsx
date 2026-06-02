@@ -62,7 +62,7 @@ const Conclaves: React.FC = () => {
 
       {/* Redirect Link */}
       <a
-        href="/registration/Single_Registration" // Replace with your actual URL
+        href="/registration"
         className="mt-8 text-lg font-semibold text-primary hover:text-primary-dark underline"
       >
         Click here to register for the conclave

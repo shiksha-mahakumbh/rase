@@ -1,205 +1,478 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 
-type Menu = {
-  path: string;
-  title: string;
-  subMenu?: Menu[];
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import type { Menu } from "./navbar/types";
+import { getMenuIcon, NavChevronIcon } from "./navbar/NavMenuIcons";
+
+const menus: Menu[] = [
+  { path: "/", title: "Home" },
+  {
+    path: "/registration",
+    title: "Registration",
+  },
+  {
+    path: "/",
+    title: "About Us",
+    subMenu: [
+      { path: "/introduction", title: "Introduction" },
+      // { path: "/shikshakumbh", title: "Shiksha Kumbh" },
+      // { path: "/shikshamahakumbh", title: "Shiksha MahaKumbh" },
+      { path: "/abhiyanphotoframe.pdf", title: "Abhiyan in Photo Frames" },
+      // { path: "/2024M/Shiksha Maha Khumbh Final.pdf", title: "Shiksha Mahakumbh 5.0 in Photo Frame" },
+      { path: "/VibhagRoute/AcademicCouncil24", title: "शैक्षिक विभाग" },
+      { path: "/VibhagRoute/Vitt24", title: "वित्त विभाग" },
+      { path: "/VibhagRoute/Prachar24", title: "प्रचार विभाग" },
+      { path: "/VibhagRoute/Sampark24", title: "संपर्क विभाग" },
+      { path: "/VibhagRoute/Prabandhan24", title: "प्रबंधन विभाग" },
+    ],
+  },
+  {
+    path: "/",
+    title: "Publication",
+    subMenu: [
+      { path: "https://pub.dhe.org.in", title: "Journal" },
+      { path: "/2024M/Souvenir Abstracts_MTC.pdf", title: "Souvenir" },
+    ],
+  },
+  {
+    path: "/",
+    title: "Events",
+    subMenu: [
+      { path: "/pastevent", title: "Past Events" },
+      { path: "/upcomingevent", title: "Upcoming Events" },
+    ],
+  },
+  {
+    path: "/",
+    title: "Gallery",
+    subMenu: [
+      { path: "/gallery", title: "Photos" },
+      { path: "/videos", title: "Videos" },
+    ],
+  },
+  { path: "/media", title: "Media" },
+  { path: "/committeepage", title: "Committee" },
+  {
+    path: "/",
+    title: "Brochure",
+    subMenu: [
+      { path: "/2024K/Shiksha-Mahakumbh-Brochure-2025", title: "Conference" },
+      { path: "https://www.rase.co.in/donation", title: "Sponsor" },
+    ],
+  },
+  { path: "/merchandise", title: "Merchandise" },
+  { path: "/Press_Release", title: "Press Release" },
+  { path: "/paper", title: "Paper Submission" },
+  { path: "/ContactUs", title: "Contact Us" },
+  { path: "/Best_Wishes", title: "Wishes Received" },
+];
+
+const MEGA_MENU_INDEX = 2; // About Us
+const CTA_PATH = "/registration";
+
+function isExternalPath(path: string): boolean {
+  return path.startsWith("http://") || path.startsWith("https://");
+}
+
+interface NavLinkProps {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+const NavLink: React.FC<NavLinkProps> = ({
+  href,
+  className,
+  children,
+  onClick,
+}) => {
+  if (isExternalPath(href)) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        onClick={onClick}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className} onClick={onClick}>
+      {children}
+    </Link>
+  );
 };
 
 const NavBar: React.FC = () => {
-  const menus: Menu[] = [
-    { path: "/", title: "Home" },
-    {
-      path: "/registration/Single_Registration",
-      title: "Registration",
-    },
-    {
-      path: "/",
-      title: "About Us",
-      subMenu: [
-        { path: "/introduction", title: "Introduction" },
-        // { path: "/shikshakumbh", title: "Shiksha Kumbh" },
-        // { path: "/shikshamahakumbh", title: "Shiksha MahaKumbh" },
-        { path: "/abhiyanphotoframe.pdf", title: "Abhiyan in Photo Frames" },
-        // { path: "/2024M/Shiksha Maha Khumbh Final.pdf", title: "Shiksha Mahakumbh 5.0 in Photo Frame" },
-        { path: "/VibhagRoute/AcademicCouncil24", title: "शैक्षिक विभाग" },
-        { path: "/VibhagRoute/Vitt24", title: "वित्त विभाग" },
-        { path: "/VibhagRoute/Prachar24", title: "प्रचार विभाग" },
-        { path: "/VibhagRoute/Sampark24", title: "संपर्क विभाग" },
-        { path: "/VibhagRoute/Prabandhan24", title: "प्रबंधन विभाग" },
-      ],
-    },
-   {
-     path: "/",
-  title: "Publication",
-  subMenu: [
-    { path: "https://pub.dhe.org.in", title: "Journal" },
-    { path: "/2024M/Souvenir Abstracts_MTC.pdf", title: "Souvenir" },
-  ],
-},
-
-    {
-      path: "/",
-      title: "Events",
-      subMenu: [
-        { path: "/pastevent", title: "Past Events" },
-        { path: "/upcomingevent", title: "Upcoming Events" },
-      ],
-    },
-    {
-      path: "/",
-      title: "Gallery",
-      subMenu: [
-        { path: "/gallery", title: "Photos" },
-        { path: "/videos", title: "Videos" },
-      ],
-    },
-    { path: "/media", title: "Media" },
-    { path: "/committeepage", title: "Committee" },
-    {
-      path: "/",
-      title: "Brochure",
-      subMenu: [
-        { path: "/2024K/Shiksha-Mahakumbh-Brochure-2025", title: "Conference" },
-        { path: "https://www.rase.co.in/donation", title: "Sponsor" },
-      ],
-    },
-    { path: "/merchandise", title: "Merchandise" },
-    { path: "/Press_Release", title: "Press Release" },
-    { path: "/paper", title: "Paper Submission" },
-    { path: "/ContactUs", title: "Contact Us" },
-    { path: "/Best_Wishes", title: "Wishes Received" },
-  ];
-
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openSubMenuIndex, setOpenSubMenuIndex] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const handleSubMenuToggle = (index: number) => {
     setOpenSubMenuIndex(openSubMenuIndex === index ? null : index);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setOpenSubMenuIndex(null);
     }
-  };
+  }, []);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [handleClickOutside]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
+  const isActive = (path: string, subMenu?: Menu[]): boolean => {
+    if (path !== "/" && pathname === path) return true;
+    if (pathname === "/" && path === "/") return true;
+    if (subMenu) {
+      return subMenu.some(
+        (sub) =>
+          pathname === sub.path ||
+          (sub.path !== "/" && !isExternalPath(sub.path) && pathname.startsWith(sub.path))
+      );
+    }
+    return false;
+  };
+
+  const closeMobile = () => setIsMenuOpen(false);
+
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/70 shadow-md" ref={menuRef}>
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+    <header
+      ref={menuRef}
+      className={`sticky top-0 z-50 w-full transition-all duration-500 ${
+        scrolled
+          ? "border-b border-white/20 bg-white/85 py-0 shadow-[0_8px_32px_rgba(80,42,42,0.12)] backdrop-blur-xl"
+          : "border-b border-primary/10 bg-white/70 py-1 shadow-md backdrop-blur-lg"
+      }`}
+    >
+      <div
+        className={`mx-auto flex max-w-7xl min-w-0 items-center justify-between gap-2 px-3 transition-all duration-500 sm:px-4 lg:px-6 ${
+          scrolled ? "py-2" : "py-3"
+        }`}
+      >
         {/* Logo / Brand */}
-        <Link href="/" className="text-xl font-extrabold text-primary hover:text-red-600 transition">
-          Shiksha Mahakumbh
+        <Link
+          href="/"
+          className="group flex min-w-0 shrink items-center gap-2 sm:gap-3"
+          aria-label="Shiksha Mahakumbh Abhiyan Home"
+        >
+          <div
+            className={`relative overflow-hidden rounded-xl border border-primary/10 bg-gradient-to-br from-white to-[#faf7f5] shadow-sm transition-all duration-300 group-hover:shadow-md ${
+              scrolled ? "h-10 w-10" : "h-11 w-11"
+            }`}
+          >
+            <Image
+              src="/shiksha.png"
+              alt="Shiksha Mahakumbh"
+              width={44}
+              height={44}
+              className="h-full w-full object-contain p-1"
+              priority
+            />
+          </div>
+          <div className="hidden sm:block">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/60">
+              National Movement
+            </p>
+            <p
+              className={`font-extrabold leading-tight text-primary transition-all group-hover:text-[#b22222] ${
+                scrolled ? "text-base" : "text-lg"
+              }`}
+            >
+              Shiksha Mahakumbh
+            </p>
+          </div>
         </Link>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-black focus:outline-none"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? (
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          ) : (
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7"/>
-            </svg>
-          )}
-        </button>
-
         {/* Desktop Menu */}
-        <nav className={`hidden md:flex space-x-6 font-semibold`}>
-          {menus.map((item, idx) => (
-            <div key={idx} className="relative group">
-              {item.subMenu ? (
-                <>
-                  <span
-                    className="cursor-pointer hover:text-primary transition duration-200"
+        <nav
+          className="hidden min-w-0 flex-1 flex-wrap items-center justify-end gap-x-0.5 gap-y-1 lg:flex xl:gap-x-1.5"
+          aria-label="Main navigation"
+        >
+          {menus.map((item, idx) => {
+            const active = isActive(item.path, item.subMenu);
+            const icon = getMenuIcon(item.title);
+            const isCta = item.path === CTA_PATH && !item.subMenu;
+            const isMega = idx === MEGA_MENU_INDEX && item.subMenu;
+
+            if (isCta) {
+              return (
+                <NavLink
+                  key={idx}
+                  href={item.path}
+                  className="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary to-[#7a4343] px-3 py-2 text-xs font-bold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30 xl:px-4 xl:text-sm"
+                >
+                  {icon}
+                  {item.title}
+                </NavLink>
+              );
+            }
+
+            if (item.subMenu) {
+              return (
+                <div key={idx} className="relative">
+                  <button
+                    type="button"
                     onClick={() => handleSubMenuToggle(idx)}
+                    aria-expanded={openSubMenuIndex === idx}
+                    aria-haspopup="true"
+                    className={`flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold transition-all duration-200 xl:px-3 xl:py-2 xl:text-sm ${
+                      active
+                        ? "bg-primary/10 text-primary"
+                        : "text-gray-700 hover:bg-primary/5 hover:text-primary"
+                    }`}
                   >
-                    {item.title}
-                  </span>
-                  {/* Dropdown */}
+                    {icon}
+                    <span>{item.title}</span>
+                    <NavChevronIcon
+                      className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                        openSubMenuIndex === idx ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
                   <AnimatePresence>
                     {openSubMenuIndex === idx && (
-                      <motion.ul
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute left-0 mt-2 bg-white border rounded-lg shadow-lg w-56 py-2 z-20"
+                        className={`absolute left-0 z-30 mt-2 overflow-hidden rounded-2xl border border-gray-100 bg-white/95 shadow-2xl backdrop-blur-xl ${
+                          isMega ? "w-[min(90vw,520px)] p-4" : "w-56 py-2"
+                        }`}
                       >
-                        {item.subMenu.map((subItem, subIdx) => (
-                          <li key={subIdx}>
-                            <Link
-                              href={subItem.path}
-                              className="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white transition"
-                            >
-                              {subItem.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </motion.ul>
+                        {isMega ? (
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div>
+                              <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                Overview
+                              </p>
+                              <ul className="space-y-0.5">
+                                {item.subMenu.slice(0, 2).map((subItem, subIdx) => (
+                                  <li key={subIdx}>
+                                    <NavLink
+                                      href={subItem.path}
+                                      onClick={() => setOpenSubMenuIndex(null)}
+                                      className="block rounded-lg px-3 py-2.5 text-sm text-gray-700 transition hover:bg-primary hover:text-white"
+                                    >
+                                      {subItem.title}
+                                    </NavLink>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                विभाग
+                              </p>
+                              <ul className="grid gap-0.5">
+                                {item.subMenu.slice(2).map((subItem, subIdx) => (
+                                  <li key={subIdx}>
+                                    <NavLink
+                                      href={subItem.path}
+                                      onClick={() => setOpenSubMenuIndex(null)}
+                                      className="block rounded-lg px-3 py-2 text-sm text-gray-700 transition hover:bg-primary hover:text-white"
+                                    >
+                                      {subItem.title}
+                                    </NavLink>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        ) : (
+                          <ul>
+                            {item.subMenu.map((subItem, subIdx) => (
+                              <li key={subIdx}>
+                                <NavLink
+                                  href={subItem.path}
+                                  onClick={() => setOpenSubMenuIndex(null)}
+                                  className="block px-4 py-2.5 text-sm text-gray-700 transition hover:bg-primary hover:text-white"
+                                >
+                                  {subItem.title}
+                                </NavLink>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </motion.div>
                     )}
                   </AnimatePresence>
-                </>
-              ) : (
-                <Link href={item.path} className="hover:text-primary transition duration-200">
-                  {item.title}
-                </Link>
-              )}
-            </div>
-          ))}
+                </div>
+              );
+            }
+
+            return (
+              <NavLink
+                key={idx}
+                href={item.path}
+                className={`flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold transition-all duration-200 xl:px-3 xl:py-2 xl:text-sm ${
+                  active
+                    ? "bg-primary/10 text-primary"
+                    : "text-gray-700 hover:bg-primary/5 hover:text-primary"
+                }`}
+              >
+                {icon}
+                {item.title}
+              </NavLink>
+            );
+          })}
         </nav>
+
+        {/* Mobile: CTA + Hamburger */}
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
+          <NavLink
+            href={CTA_PATH}
+            className="inline-flex rounded-lg bg-primary px-2.5 py-1.5 text-[10px] font-bold text-white shadow-md sm:px-3 sm:py-2 sm:text-xs"
+          >
+            Register
+          </NavLink>
+          <button
+            type="button"
+            className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-primary/15 bg-white/80 text-primary shadow-sm backdrop-blur-sm"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+          >
+            <div className="flex w-5 flex-col items-center justify-center gap-1.5">
+              <motion.span
+                animate={
+                  isMenuOpen
+                    ? { rotate: 45, y: 6, width: 20 }
+                    : { rotate: 0, y: 0, width: 20 }
+                }
+                className="block h-0.5 rounded-full bg-primary"
+              />
+              <motion.span
+                animate={
+                  isMenuOpen
+                    ? { opacity: 0, width: 0 }
+                    : { opacity: 1, width: 14 }
+                }
+                className="block h-0.5 rounded-full bg-primary"
+              />
+              <motion.span
+                animate={
+                  isMenuOpen
+                    ? { rotate: -45, y: -6, width: 20 }
+                    : { rotate: 0, y: 0, width: 20 }
+                }
+                className="block h-0.5 rounded-full bg-primary"
+              />
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: "-100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "-100%" }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white shadow-lg"
-          >
-            <ul className="flex flex-col p-4 space-y-3 font-medium">
-              {menus.map((item, idx) => (
-                <li key={idx}>
-                  {item.subMenu ? (
-                    <details>
-                      <summary className="cursor-pointer text-primary">{item.title}</summary>
-                      <ul className="pl-4 mt-2 space-y-2">
-                        {item.subMenu.map((subItem, subIdx) => (
-                          <li key={subIdx}>
-                            <Link href={subItem.path} className="block hover:underline">
-                              {subItem.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  ) : (
-                    <Link href={item.path} className="hover:text-primary transition">
-                      {item.title}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 top-[60px] z-40 bg-black/40 backdrop-blur-sm lg:hidden"
+              onClick={closeMobile}
+              aria-hidden="true"
+            />
+            <motion.div
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 280 }}
+              className="fixed right-0 top-[60px] z-50 flex h-[calc(100vh-60px)] w-[min(100%,320px)] flex-col overflow-y-auto border-l border-gray-200 bg-white/95 shadow-2xl backdrop-blur-xl lg:hidden"
+            >
+              <div className="border-b border-gray-100 p-4">
+                <NavLink
+                  href={CTA_PATH}
+                  onClick={closeMobile}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-[#7a4343] py-3 text-sm font-bold text-white shadow-lg"
+                >
+                  Participate — Registration
+                </NavLink>
+              </div>
+              <ul className="flex flex-col p-4 font-medium">
+                {menus.map((item, idx) => (
+                  <li key={idx} className="border-b border-gray-50 last:border-0">
+                    {item.subMenu ? (
+                      <details className="group py-2">
+                        <summary className="flex cursor-pointer list-none items-center justify-between py-2 text-primary [&::-webkit-details-marker]:hidden">
+                          <span className="flex items-center gap-2 font-semibold">
+                            {getMenuIcon(item.title)}
+                            {item.title}
+                          </span>
+                          <NavChevronIcon className="h-4 w-4 transition group-open:rotate-180" />
+                        </summary>
+                        <ul className="mb-2 space-y-1 border-l-2 border-primary/20 pl-4">
+                          {item.subMenu.map((subItem, subIdx) => (
+                            <li key={subIdx}>
+                              <NavLink
+                                href={subItem.path}
+                                onClick={closeMobile}
+                                className="block rounded-lg py-2 text-sm text-gray-600 hover:text-primary"
+                              >
+                                {subItem.title}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    ) : item.path === CTA_PATH ? (
+                      <NavLink
+                        href={item.path}
+                        onClick={closeMobile}
+                        className="flex items-center gap-2 py-3 font-semibold text-primary"
+                      >
+                        {getMenuIcon(item.title)}
+                        {item.title}
+                      </NavLink>
+                    ) : (
+                      <NavLink
+                        href={item.path}
+                        onClick={closeMobile}
+                        className={`flex items-center gap-2 py-3 transition ${
+                          isActive(item.path)
+                            ? "font-semibold text-primary"
+                            : "text-gray-700 hover:text-primary"
+                        }`}
+                      >
+                        {getMenuIcon(item.title)}
+                        {item.title}
+                      </NavLink>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

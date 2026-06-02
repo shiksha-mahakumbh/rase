@@ -5,6 +5,7 @@ import { storage } from '@/app/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import toast, { Toaster } from "react-hot-toast";
+import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
 interface NgoData {
   name: string;
@@ -90,8 +91,7 @@ const VolReg = () => {
   };
 
   return (
-    <div className='shadow-md rounded-md max-w-md mx-auto mt-8'>
-      <h1 className='text-primary text-center text-xl'>Volunteer Registration Form</h1>
+    <RegistrationFormWrapper heading="Volunteer Registration Form">
       <form onSubmit={handleSubmit} className='bg-white p-4'>
         
         <div className="mb-4">
@@ -217,7 +217,7 @@ const VolReg = () => {
         </div>
       )}
       </form>
-    </div>
+    </RegistrationFormWrapper>
   );
 };
 

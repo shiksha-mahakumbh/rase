@@ -4,6 +4,7 @@ import { db, storage } from "@/app/firebase";  // Make sure Firebase is set up
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import toast, { Toaster } from "react-hot-toast";
+import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
 // Type for the form data
 interface TalentFormData {
@@ -94,8 +95,7 @@ const TalentForm = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-6 shadow-md rounded-md bg-white">
-      <h1 className="text-center text-xl font-semibold text-primary">Talent Registration Form</h1>
+    <RegistrationFormWrapper heading="Talent Registration Form">
       <Toaster />
       <form onSubmit={handleSubmit}>
         {/* Name Field */}
@@ -220,7 +220,7 @@ const TalentForm = () => {
           {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
-    </div>
+    </RegistrationFormWrapper>
   );
 };
 

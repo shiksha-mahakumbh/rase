@@ -5,7 +5,6 @@ import {
   Typography,
   Tabs,
   Alert,
-  Modal,
   Button,
   Skeleton,
   Spin,
@@ -13,6 +12,7 @@ import {
 import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase";
+import ImageLightbox from "../component/ui/ImageLightbox";
 import CompanyInfo from "../component/CompanyInfo";
 import NavBar from "../component/NavBar";
 
@@ -250,14 +250,12 @@ const EventsComponent: React.FC = () => {
         </Tabs>
         <div className="border-t border-gray-200 mt-4" />
         {/* Single HR line after all content */}
-        <Modal
-          visible={isModalVisible}
-          footer={null}
-          onCancel={handleCancel}
-          className="modal-image"
-        >
-          <img src={modalImage} alt="Larger view" className="w-full h-auto" />
-        </Modal>
+        <ImageLightbox
+          isOpen={isModalVisible}
+          imageSrc={modalImage}
+          onClose={handleCancel}
+          alt="Larger view"
+        />
         <div className="text-center p-3">
           <span className="text-xs text-red-600">
             Note: Click on an image for a larger view

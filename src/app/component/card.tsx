@@ -1,7 +1,19 @@
-import React from "react";
-import { Card, Tag } from "antd";
+"use client";
 
-const cardData = [
+import React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import GlassCard from "./home/GlassCard";
+
+interface CardItem {
+  src: string;
+  alt: string;
+  title: string;
+  description: string;
+  tags: string[];
+}
+
+const cardData: CardItem[] = [
   {
     src: "/2023K/k2.JPG",
     alt: "Shiksha Kumbh 2023",
@@ -19,7 +31,7 @@ const cardData = [
   {
     src: "/2024K/k2.jpeg",
     alt: "Shiksha Kumbh 2024",
-    title: "RASE 2024 3rd Edition",
+    title: "RASE 2024\u00a03rd\u00a0Edition",
     description: `The conference will highlight the economic impact of academic-driven startups, fostering collaboration, skill development, and rural innovation. It aims to cultivate entrepreneurship culture and utilize educational infrastructure for startup growth.`,
     tags: ["#kumbh", "#shiksha", "#dhe"],
   },
@@ -27,55 +39,46 @@ const cardData = [
 
 export const CustomCard: React.FC = () => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "1rem",
-        justifyContent: "center",
-        padding: "1rem",
-      }}
-    >
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {cardData.map((item, index) => (
-        <Card
+        <motion.div
           key={index}
-          hoverable
-          cover={
-            <img
-              alt={item.alt}
-              src={item.src}
-              style={{ height: "200px", objectFit: "cover" }}
-            />
-          }
-          style={{ maxWidth: "271px", width: "100%", marginBottom: "1rem" }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: index * 0.1, duration: 0.5 }}
         >
-          <div>
-            <h2
-              style={{
-                fontSize: "1.25rem",
-                color: "#502a2a",
-                marginBottom: "0.5rem",
-              }}
-            >
-              {item.title}
-            </h2>
-            <p style={{ color: "#555" }}>{item.description}</p>
-          </div>
-          <div style={{ paddingTop: "1rem" }}>
-            {item.tags.map((tag, tagIndex) => (
-              <Tag
-                key={tagIndex}
-                style={{
-                  marginBottom: "0.5rem",
-                  color: "white",
-                  backgroundColor: "#502a2a",
-                }}
-              >
-                {tag}
-              </Tag>
-            ))}
-          </div>
-        </Card>
+          <GlassCard className="home-card-hover flex h-full flex-col overflow-hidden">
+            <div className="relative h-48 w-full overflow-hidden">
+              <Image
+                alt={item.alt}
+                src={item.src}
+                fill
+                className="object-cover transition-transform duration-500 hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            </div>
+            <div className="flex flex-1 flex-col p-5">
+              <h2 className="mb-2 text-xl font-bold text-[#502a2a]">
+                {item.title}
+              </h2>
+              <p className="flex-1 text-sm leading-relaxed text-[#555]">
+                {item.description}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {item.tags.map((tag, tagIndex) => (
+                  <span
+                    key={tagIndex}
+                    className="rounded-full bg-[#502a2a] px-3 py-1 text-xs font-medium text-white"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </GlassCard>
+        </motion.div>
       ))}
     </div>
   );
