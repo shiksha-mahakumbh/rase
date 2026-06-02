@@ -12,6 +12,8 @@ import OrganizerRegForm from "./OrganizerReg";
 import AccomodationForm from "./AccomodationReg";
 import BestPracticesForm from "./Best_Practices";
 import { Toaster } from "react-hot-toast";
+import RegistrationShell from "../ui/RegistrationShell";
+import { formClasses } from "../ui/formClasses";
 
 const RegistrationPage = () => {
   const [event, setEvent] = useState<string>("ShikshaMahakumbh2");
@@ -30,7 +32,7 @@ const RegistrationPage = () => {
     if (event === "ShikshaMahakumbh3") {
       return (
         <div className="text-center text-lg text-gray-700 mt-4">
-          <p className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 px-6 rounded-lg shadow-lg">
+          <p className={formClasses.comingSoon}>
             🚧 Coming Soon! Stay tuned for exciting updates on Shiksha Mahakumbh 2026! 🚀
           </p>
         </div>
@@ -83,59 +85,59 @@ const RegistrationPage = () => {
     ],
   };
 
-  return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100">
-      <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-3xl transform transition-all duration-300 hover:scale-105">
-        <h1 className="text-4xl font-extrabold text-center text-gradient mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
-          Event Registration
-        </h1>
+  const step = subcategory ? 2 : event ? 1 : 0;
 
-        {/* Event Selection */}
+  return (
+    <RegistrationShell
+      title="Event Registration"
+      step={step || 1}
+      totalSteps={2}
+    >
+      {/* Event Selection */}
+      <div className="mb-6">
+        <label className={`${formClasses.label} text-lg`}>
+          Select Event
+        </label>
+        <select
+          value={event}
+          onChange={handleEventChange}
+          className={formClasses.select}
+        >
+          <option value="ShikshaMahakumbh2">Shiksha Mahakumbh 2025</option>
+          { <option value="ShikshaMahakumbh3">Shiksha Mahakumbh 2026</option> }
+        </select>
+      </div>
+
+      {/* Subcategory Dropdown for Shiksha Mahakumbh 2.0 */}
+      {event === "ShikshaMahakumbh2" && (
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2 font-semibold text-lg">
-            Select Event
+          <label className={`${formClasses.label} text-lg`}>
+            Select Registration Type
           </label>
           <select
-            value={event}
-            onChange={handleEventChange}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-300 focus:border-purple-500 shadow-sm transition duration-200"
+            value={subcategory}
+            onChange={handleSubcategoryChange}
+            className={formClasses.select}
           >
-            <option value="ShikshaMahakumbh2">Shiksha Mahakumbh 2025</option>
-            { <option value="ShikshaMahakumbh3">Shiksha Mahakumbh 2026</option> }
+            <option value="" disabled>
+              -- Select an option --
+            </option>
+            {subcategories[event]?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
+      )}
 
-        {/* Subcategory Dropdown for Shiksha Mahakumbh 2.0 */}
-        {event === "ShikshaMahakumbh2" && (
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2 font-semibold text-lg">
-              Select Registration Type
-            </label>
-            <select
-              value={subcategory}
-              onChange={handleSubcategoryChange}
-              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-300 focus:border-purple-500 shadow-sm transition duration-200"
-            >
-              <option value="" disabled>
-                -- Select an option --
-              </option>
-              {subcategories[event]?.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {/* Render the selected form or message */}
-        <div className="mt-6">
-          {renderForm()}
-        </div>
-
-        <Toaster />
+      {/* Render the selected form or message */}
+      <div className="mt-6 border-t border-gray-100 pt-6">
+        {renderForm()}
       </div>
-    </div>
+
+      <Toaster />
+    </RegistrationShell>
   );
 };
 

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
+import ImageLightbox from "./ui/ImageLightbox";
 
 interface ImageData {
   src: string;
@@ -155,49 +156,13 @@ export default function PrintMediaShikshaMahaKumbh2023() {
         ))}
       </div>
 
-      {selectedImage && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50"
-          onClick={handleCloseModal}
-        >
-          <div
-            className="relative p-4 bg-white rounded-lg max-w-full max-h-full overflow-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={selectedImage}
-              alt="Selected Image"
-              className="rounded-lg"
-              layout="intrinsic"
-              width={800}
-              height={600}
-              objectFit="contain"
-            />
-            <div className="absolute top-0 right-0 p-4">
-              <button
-                onClick={() => {
-                  window.open(selectedImage, "_blank");
-                }}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md"
-              >
-                Download
-              </button>
-            </div>
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-0 right-0 p-4 text-white"
-            >
-              <svg
-                className="w-8 h-8 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 10.293l4.707-4.707 1.414 1.414L13.414 12l4.707 4.707-1.414 1.414L12 13.414l-4.707 4.707-1.414-1.414L10.586 12 5.879 7.293 7.293 5.879 12 10.293z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
+      <ImageLightbox
+        isOpen={!!selectedImage}
+        imageSrc={selectedImage ?? ""}
+        onClose={handleCloseModal}
+        alt="Selected Image"
+        downloadUrl={selectedImage ?? undefined}
+      />
     </div>
   );
 }

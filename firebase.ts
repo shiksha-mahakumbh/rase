@@ -1,25 +1,19 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAB6FJEBNv-4QtqQ4FR3-Jj6Y0r1sVu030",
-  authDomain: "dhe-sm.firebaseapp.com",
-  projectId: "dhe-sm",
-  storageBucket: "dhe-sm.appspot.com",
-  messagingSenderId: "59719303159",
-  appId: "1:59719303159:web:b2917b02e61eb1f76c38f2",
-  measurementId: "G-Q7GLHKCFZB"
+  apiKey: "AIzaSyDL6UJwLh8KaNHARuedHNTjWIcFixkfv5s",
+  authDomain: "shiksha-mahakumbh-abhiyan.firebaseapp.com",
+  projectId: "shiksha-mahakumbh-abhiyan",
+  storageBucket: "shiksha-mahakumbh-abhiyan.firebasestorage.app",
+  messagingSenderId: "316847987997",
+  appId: "1:316847987997:web:90e1d6b1971bbe1091d5f4",
+  measurementId: "G-WVH4YJCJHV",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore and Storage
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Export initialized instances and configuration
 export { firebaseConfig, app, db, storage };

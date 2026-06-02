@@ -15,12 +15,16 @@ import { CustomCard } from "./component/card";
 import Announcement from "./component/Annoucement";
 import UpcomingEvent from "./component/UpcomingEvent";
 import NoticeBoard from "./component/NoticeBoard";
+import SectionShell from "./component/home/SectionShell";
+import ImpactStatsBar from "./component/home/ImpactStatsBar";
+import GlassCard from "./component/home/GlassCard";
+
 const slides1 = [
-    {
+  {
     src: "/2024M/Vyakhanmala.jpg",
     alt: "Image 1",
     legend:
-      '“Vyakhanmala: Lecture Series on Panchakosha & Bharatiya Jnana Parampara” First Lecture (Annamaya Kosha)"',
+      '"Vyakhanmala: Lecture Series on Panchakosha & Bharatiya Jnana Parampara" First Lecture (Annamaya Kosha)"',
   },
   {
     src: "/2024M/Press8.jpg",
@@ -50,13 +54,13 @@ const slides1 = [
     src: "/2024K/k6.jpg",
     alt: "Image 1",
     legend:
-      "Prof. Rajeev Ahuja and Dr. Thakur SKR invited Smt. Droupadi Murmu, the Hon’ble President of Bharat, for the Shiksha Mahakumbh Abhiyan 4.0",
+      "Prof. Rajeev Ahuja and Dr. Thakur SKR invited Smt. Droupadi Murmu, the Hon'ble President of Bharat, for the Shiksha Mahakumbh Abhiyan 4.0",
   },
   {
     src: "/2023M/up_cm.jpg",
     alt: "Image 1",
     legend:
-      "Shiksha Mahakumbh team inviting Hon’ble Chief Minister, UP to 4th Edition",
+      "Shiksha Mahakumbh team inviting Hon'ble Chief Minister, UP to 4th Edition",
   },
   {
     src: "/2023M/banwari_lal_purohit.JPG",
@@ -115,12 +119,12 @@ const slides1 = [
   {
     src: "/2024K/k12.png",
     alt: "Image 1",
-    legend: "Shri Manoj Sinha, Hon’ble Lieutenant Governor, J&K",
+    legend: "Shri Manoj Sinha, Hon'ble Lieutenant Governor, J&K",
   },
   {
     src: "/2024K/k7.png",
     alt: "Image 1",
-    legend: "Dr. Jitendra Singh, Hon’ble MoS (IC), Science and Technology",
+    legend: "Dr. Jitendra Singh, Hon'ble MoS (IC), Science and Technology",
   },
 ];
 
@@ -130,8 +134,8 @@ const pageVariants = {
 };
 
 const pageTransition = {
-  type: "tween",
-  ease: "anticipate",
+  type: "tween" as const,
+  ease: "anticipate" as const,
   duration: 0.8,
 };
 
@@ -156,96 +160,107 @@ const TransitionWrapper: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-const MobileView = () => (
-  <div className="flex flex-col space-y-4 items-center">
-    <div className="flex flex-col w-full">
-      <div className="flex items-center justify-center">
-        <TransitionWrapper>
-          <SlideShow slides={slides1} />
-        </TransitionWrapper>
-      </div>
-      <div className="flex items-center justify-center">
-        <Announcement />
-      </div>
-      <TransitionWrapper>
-        
-        <NoticeBoard />
-      </TransitionWrapper>
-    </div>
-    <div className="w-full">
-      <TransitionWrapper>
-        <Info />
-      </TransitionWrapper>
-    </div>
-    <div className="w-full">
-      <TransitionWrapper>
-        <Conference_Support />
-      </TransitionWrapper>
-    </div>
-    <div className="w-full">
-      <TransitionWrapper>
-        <Media_Partners />
-      </TransitionWrapper>
-    </div>
-    <div className="w-full">
-      <TransitionWrapper>
-        <Organiger />
-      </TransitionWrapper>
-    </div>
-    
-  </div>
-);
-
-const DesktopView = () => (
-  <div className="flex flex-col items-center space-x-4">
-    <div className="w-1/5"></div>
-    <div className="flex ">
-      <div className="w-1/5 flex items-center justify-center">
-        <Announcement />
-      </div>
-      <div className="w-3/5 flex items-center justify-center">
-        <TransitionWrapper>
-          <SlideShow slides={slides1} />
-        </TransitionWrapper>
-      </div>
-      <div className="w-1/4 flex items-center justify-center">
-        <TransitionWrapper>
-          <NoticeBoard />
-        </TransitionWrapper>
-      </div>
-    </div>
-    <div className="w-3/5">
-      <TransitionWrapper>
-        <Info />
-      </TransitionWrapper>
-      <TransitionWrapper>
-        <Conference_Support />
-      </TransitionWrapper>
-      <TransitionWrapper>
-        <Media_Partners />
-      </TransitionWrapper>
-      <TransitionWrapper>
-        <Organiger />
-      </TransitionWrapper>
-    </div>
-  </div>
-);
-
 export default function Home() {
   return (
-    <div className="bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-[#faf8f6]">
       <CompanyInfo />
       <NavBar />
       <Marquees />
 
-      <div>
-        <div className="sm:hidden">
-          <MobileView />
+      {/* Hero Bento Zone */}
+      <SectionShell
+        background="gradient"
+        className="px-3 py-6 md:px-6 md:py-10"
+        ariaLabel="Hero section"
+      >
+        <div className="mx-auto max-w-7xl">
+          {/* Bento Grid: Announcement | SlideShow | NoticeBoard */}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
+            {/* Left Column - Announcements */}
+            <div className="order-2 lg:order-1 lg:col-span-3">
+              <TransitionWrapper>
+                <Announcement />
+              </TransitionWrapper>
+            </div>
+
+            {/* Center - Immersive Hero Slideshow */}
+            <div className="order-1 lg:order-2 lg:col-span-6">
+              <TransitionWrapper>
+                <SlideShow slides={slides1} />
+              </TransitionWrapper>
+            </div>
+
+            {/* Right Column - Notices */}
+            <div className="order-3 lg:col-span-3">
+              <TransitionWrapper>
+                <NoticeBoard />
+              </TransitionWrapper>
+            </div>
+          </div>
+
+          {/* Impact Metrics Dashboard */}
+          <div className="mt-8 md:mt-10">
+            <TransitionWrapper>
+              <ImpactStatsBar />
+            </TransitionWrapper>
+          </div>
         </div>
-        <div className="hidden sm:block">
-          <DesktopView />
+      </SectionShell>
+
+      {/* About / Info Section */}
+      <TransitionWrapper>
+        <Info />
+      </TransitionWrapper>
+
+      {/* Upcoming Events */}
+      <SectionShell
+        background="cool"
+        className="px-4 py-10 md:px-8 md:py-14"
+        ariaLabel="Upcoming events"
+      >
+        <div className="mx-auto max-w-7xl">
+          <GlassCard className="overflow-hidden p-6 md:p-8">
+            <TransitionWrapper>
+              <UpcomingEvent />
+            </TransitionWrapper>
+          </GlassCard>
         </div>
-      </div>
+      </SectionShell>
+
+      {/* Edition Highlights Cards */}
+      <SectionShell
+        background="default"
+        className="px-4 py-10 md:px-8 md:py-14"
+        ariaLabel="Edition highlights"
+      >
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 text-center">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary/70">
+              Research &amp; Publications
+            </p>
+            <h2 className="home-section-title">Edition Highlights</h2>
+          </div>
+          <TransitionWrapper>
+            <CustomCard />
+          </TransitionWrapper>
+        </div>
+      </SectionShell>
+
+      {/* Academic Partners */}
+      <TransitionWrapper>
+        <Conference_Support />
+      </TransitionWrapper>
+
+      {/* Media Partners */}
+      <TransitionWrapper>
+        <Media_Partners />
+      </TransitionWrapper>
+
+      {/* Sponsors */}
+      <TransitionWrapper>
+        <Organiger />
+      </TransitionWrapper>
+
       <Footer />
     </div>
   );

@@ -5,6 +5,7 @@ import { storage } from "@/app/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import toast from "react-hot-toast";
+import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
 interface AbstractFormData {
   PaperTitle: string;
@@ -121,11 +122,8 @@ const AbstractSubmission = () => {
 
   return (
     <div className="bg-white mb-5 px-4">
-    <div className="shadow-md rounded-md max-w-screen-md mx-auto pt-8 bg-white text-black">
-      <h1 className="text-primary text-center text-2xl mb-4">
-          Abstract Submission Form
-        </h1>
-        <form onSubmit={handleSubmit} className="bg-white p-4">
+    <RegistrationFormWrapper heading="Abstract Submission Form">
+        <form onSubmit={handleSubmit} className="bg-white p-4 text-black">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
               Corresponding Author Name <span className="text-red-700 text-base"><sup>&#42;</sup></span>
@@ -341,7 +339,7 @@ const AbstractSubmission = () => {
 </div>
 
         </form>
-      </div>
+    </RegistrationFormWrapper>
     </div>
   );
 };

@@ -2,6 +2,9 @@
 import Image from "next/image";
 import React from "react";
 import Marquee from "react-fast-marquee";
+import { motion } from "framer-motion";
+import SectionShell from "./home/SectionShell";
+import GlassCard from "./home/GlassCard";
 
 const Organiger: React.FC = () => {
   interface Item {
@@ -11,51 +14,116 @@ const Organiger: React.FC = () => {
   }
 
   const marquees: Item[] = [
-    { imageUrl: "/l1.jpeg", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/drdo.jpg", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l2.png", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l3.jpg", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l4.png", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l5.png", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l6.png", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l7.png", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l8.png", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
-    { imageUrl: "/l9.jpg", text: "Shiksha Mahakumbh - IIT Ropar", link: "https://www.youtube.com/watch?v=FFfdSd8_XOw" },
+    {
+      imageUrl: "/l1.jpeg",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/drdo.jpg",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l2.png",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l3.jpg",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l4.png",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l5.png",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l6.png",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l7.png",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l8.png",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
+    {
+      imageUrl: "/l9.jpg",
+      text: "Shiksha Mahakumbh - IIT Ropar",
+      link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+    },
   ];
 
   return (
-    <div className="flex flex-col w-full bg-gradient-to-r from-blue-50 to-indigo-100 py-10">
-      {/* Heading */}
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold text-indigo-700 drop-shadow-md">🌟 Our Sponsors 🌟</h1>
-        <p className="text-gray-600 mt-2 text-sm md:text-base">
-          Empowering <span className="font-semibold text-indigo-600">Shiksha Mahakumbh</span> with their invaluable support
-        </p>
-      </div>
+    <SectionShell
+      background="cool"
+      className="px-4 py-10 md:px-8 md:py-14"
+      ariaLabel="Sponsors"
+    >
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 text-center">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600/70">
+            Sponsorship
+          </p>
+          <h1 className="text-3xl font-extrabold text-indigo-700 drop-shadow-md md:text-4xl">
+            🌟 Our Sponsors 🌟
+          </h1>
+          <p className="mt-3 text-sm text-gray-600 md:text-base">
+            Empowering{" "}
+            <span className="font-semibold text-indigo-600">
+              Shiksha Mahakumbh
+            </span>{" "}
+            with their invaluable support
+          </p>
+        </div>
 
-      {/* Sponsors Carousel */}
-      <Marquee pauseOnHover={true} pauseOnClick={true} speed={40} gradient={false}>
-        {marquees.map((sponsor, index) => (
-          <a
-            key={index}
-            href={sponsor.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mx-8 group"
+        <GlassCard className="overflow-hidden p-4 md:p-6">
+          <Marquee
+            pauseOnHover={true}
+            pauseOnClick={true}
+            speed={40}
+            gradient={true}
+            gradientColor="#eef2ff"
+            gradientWidth={60}
           >
-            <div className="p-4 bg-white rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-110 duration-300 flex items-center justify-center">
-              <Image
-                className="w-24 h-24 object-contain"
-                src={sponsor.imageUrl}
-                alt={`Sponsor ${index + 1}`}
-                height={100}
-                width={100}
-              />
-            </div>
-          </a>
-        ))}
-      </Marquee>
-    </div>
+            {marquees.map((sponsor, index) => (
+              <a
+                key={index}
+                href={sponsor.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group mx-6"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1, y: -4 }}
+                  className="flex items-center justify-center rounded-2xl border border-indigo-100 bg-white p-4 shadow-md transition-shadow hover:shadow-xl"
+                >
+                  <Image
+                    className="h-24 w-24 object-contain"
+                    src={sponsor.imageUrl}
+                    alt={`Sponsor ${index + 1}`}
+                    height={100}
+                    width={100}
+                  />
+                </motion.div>
+              </a>
+            ))}
+          </Marquee>
+        </GlassCard>
+      </div>
+    </SectionShell>
   );
 };
 
