@@ -2,12 +2,15 @@
 import React from "react";
 import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
+import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import NavBar from "../component/NavBar";
 import Press5 from "../component/Press6";
 import proceeding5 from '/public/2024M/press5.jpg';
 import Image from "next/image";
+import { getPressShareUrl } from "@/lib/seo/pressShare";
 
-const shareUrl = encodeURIComponent("https://www.rase.co.in/Press6"); // Replace with your actual page URL
+const shareUrl = getPressShareUrl(6);
 const shareText = encodeURIComponent("Shiksha Mahakumbh 2024 begins at Kurukshetra University");
 const shareImage = "/2024M/Press7.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
@@ -54,15 +57,7 @@ Kurukshetra, 16 December. Kurukshetra University, Kurukshetra organized the inau
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-              />
+              <WhatsAppIcon />
             </a>
           </li>
           <li key="contact-2">
@@ -78,15 +73,7 @@ Kurukshetra, 16 December. Kurukshetra University, Kurukshetra organized the inau
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-              />
+              <WhatsAppIcon />
             </a>
           </li>
           <li key="contact-3">
@@ -101,16 +88,7 @@ Kurukshetra, 16 December. Kurukshetra University, Kurukshetra organized the inau
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-                
-              />
+              <WhatsAppIcon />
             </a>
           </li>
         </ul>,
@@ -182,7 +160,8 @@ export default function Home() {
           {/* Right sidebar or additional content */}
         </div>
       </div>
-      <Footer />
+      <RelatedContentSectionClient path="/Press6" title="Related programmes & resources" />
+    <Footer />
     </div>
   );
 }

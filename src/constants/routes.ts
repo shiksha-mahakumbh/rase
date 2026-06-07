@@ -1,0 +1,36 @@
+export const ROUTES = {
+  home: "/",
+  registration: "/registration",
+  registrationSuccess: "/registration/success",
+  admin: "/admin",
+  adminRegistration: (id: string) => `/admin/registrations/${id}`,
+  contact: "/ContactUs",
+  introduction: "/introduction",
+  academicCouncil: "/VibhagRoute/AcademicCouncil24",
+  upcomingEvents: "/upcomingevent",
+  privacy: "/privacy-policy",
+  terms: "/terms-and-conditions",
+  disclaimer: "/disclaimer",
+  refund: "/refund-policy",
+} as const;
+
+/** Routes that expose PII exports — require admin session cookie */
+export const PROTECTED_DATA_ROUTE_PREFIXES = [
+  "/admin",
+  "/AllData",
+  "/participantregistrationdatadekh",
+  "/volunteerdatadekh",
+  "/volunteerregistrationdatadekh",
+  "/ngoregistrationdatadekh",
+  "/abstractdatadekh",
+  "/fulllengthdatadekh",
+  "/fulllengthpaperdatadekh",
+  "/organiserdatadekh",
+  "/schooldata",
+  "/Talentdata",
+  "/Conclavedata",
+  "/Bestpracticedata",
+  "/accomodationdata",
+  "/DelegateForm",
+  "/heiprojectregistrationdata",
+] as const;

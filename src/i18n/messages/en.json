@@ -1,0 +1,29 @@
+{
+  "common": {
+    "siteName": "Shiksha Mahakumbh Abhiyan",
+    "register": "Register Now",
+    "contact": "Contact Us",
+    "language": "Language"
+  },
+  "nav": {
+    "home": "Home",
+    "registration": "Registration",
+    "about": "About",
+    "research": "Research",
+    "events": "Events"
+  },
+  "registration": {
+    "title": "Official Registration",
+    "stepCategory": "Category",
+    "stepDetails": "Your details",
+    "stepPayment": "Payment & confirm"
+  },
+  "meta": {
+    "homeTitle": "National Education Summit",
+    "homeDescription": "Shiksha Mahakumbh 6.0 at NIT Hamirpur — India's premier multidisciplinary education summit.",
+    "aboutTitle": "About the Movement",
+    "aboutDescription": "Shiksha Mahakumbh national education movement — vision, impact, and editions.",
+    "contactTitle": "Contact Us",
+    "contactDescription": "Reach the Shiksha Mahakumbh organising team."
+  }
+}

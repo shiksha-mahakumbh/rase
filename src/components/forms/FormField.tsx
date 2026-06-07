@@ -68,10 +68,18 @@ export function FormField({
           rows={rows}
           placeholder={placeholder}
           className={className}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${name}-error` : undefined}
           {...register(name)}
         />
       ) : as === "select" ? (
-        <select id={name} className={className} {...register(name)}>
+        <select
+          id={name}
+          className={className}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${name}-error` : undefined}
+          {...register(name)}
+        >
           <option value="">Select...</option>
           {options?.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -85,10 +93,16 @@ export function FormField({
           type={type}
           placeholder={placeholder}
           className={className}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${name}-error` : undefined}
           {...register(name)}
         />
       )}
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && (
+        <p id={`${name}-error`} className="mt-1 text-xs text-red-600" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -96,12 +110,14 @@ export function FormField({
 export function FormSection({
   title,
   children,
+  className = "",
 }: {
   title: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <section className={formClasses.section}>
+    <section className={`${formClasses.section} ${className}`.trim()}>
       <h2 className={formClasses.sectionTitle}>{title}</h2>
       <div className="grid gap-4 md:grid-cols-2">{children}</div>
     </section>
@@ -193,7 +209,7 @@ export function PaymentBlock({
   showPayButton?: boolean;
 }) {
   return (
-    <div className={`${formClasses.notice} md:col-span-2`}>
+    <div className={`registration-payment ${formClasses.notice} md:col-span-2`}>
       {typeof fee === "number" && (
         <p className="mb-2 font-semibold">
           Registration Fee: ₹{fee.toLocaleString("en-IN")}

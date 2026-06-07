@@ -23,6 +23,7 @@ import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { RegistrationType } from "@/types/registration";
 import { useState } from "react";
+import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 
 interface GenericRegistrationFormProps {
   registrationType: RegistrationType;
@@ -40,11 +41,14 @@ export default function GenericRegistrationForm({
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<GenericFormValues>({
     resolver: zodResolver(genericSchema),
     defaultValues: { accommodationRequired: "No" },
   });
+
+  useRegistrationDraft(registrationType, watch, reset);
 
   const reg = sharedRegister(register);
   const errs = sharedErrors(errors);
@@ -66,7 +70,7 @@ export default function GenericRegistrationForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <CommonParticipantFields register={reg} errors={errs} />
 
-      <FormSection title={sectionTitle}>
+      <FormSection title={sectionTitle} className="registration-details">
         <FormField
           label="Title / Subject"
           name="title"
@@ -87,7 +91,7 @@ export default function GenericRegistrationForm({
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
 
-      <FormSection title="Payment Details (if applicable)">
+      <FormSection title="Payment Details (if applicable)" className="registration-payment">
         <div className="md:col-span-2">
           <PaymentBlock />
         </div>

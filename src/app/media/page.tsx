@@ -1,28 +1,5 @@
-"use client"
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
-import Footer from "../component/Footer";
+﻿import { createPillarMetadata, createPillarPage } from "@/lib/knowledge-graph/create-pillar-page";
 
-const MediaPage = React.lazy(() => import("../component/MediaPage"));
+export const metadata = createPillarMetadata("media");
 
-const gallery = () => (
-  <div className="bg-white">
-  <div>
-  <CompanyInfo/>
-  <NavBar />
-  </div>
-    <div>
-    <React.Suspense fallback={<div>Loading...</div>}>
-    
-      <MediaPage />
-    </React.Suspense>
-    </div>
-    <div>
-      < Footer />
-    </div>
-
-  </div>
-);
-
-export default gallery;
+export default createPillarPage("media");

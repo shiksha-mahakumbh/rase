@@ -20,6 +20,7 @@ export default function RegistrationTable({
 }: RegistrationTableProps) {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
+  const [emailFilter, setEmailFilter] = useState("");
   const [sortKey, setSortKey] = useState<keyof RegistrationRow>("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(1);
@@ -51,6 +52,13 @@ export default function RegistrationTable({
       result = result.filter((r) => r.registrationType === typeFilter);
     }
 
+    if (emailFilter) {
+      result = result.filter((r) => {
+        const status = (r.emailDeliveryStatus as string) ?? "none";
+        return status === emailFilter;
+      });
+    }
+
     result.sort((a, b) => {
       const av = a[sortKey];
       const bv = b[sortKey];
@@ -62,7 +70,7 @@ export default function RegistrationTable({
     });
 
     return result;
-  }, [rows, search, typeFilter, sortKey, sortDir]);
+  }, [rows, search, typeFilter, emailFilter, sortKey, sortDir]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -104,9 +112,67 @@ export default function RegistrationTable({
             </option>
           ))}
         </select>
+        <select
+          className="rounded-lg border border-gray-200 px-3 py-2 text-sm"
+          value={emailFilter}
+          onChange={(e) => {
+            setEmailFilter(e.target.value);
+            setPage(1);
+          }}
+          aria-label="Filter by email delivery status"
+        >
+          <option value="">All email logs</option>
+          <option value="sent">Email sent</option>
+          <option value="failed">Email failed</option>
+          <option value="pending">Email pending</option>
+          <option value="skipped">Email skipped</option>
+          <option value="none">No email log</option>
+        </select>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="space-y-3 p-4 md:hidden">
+        {paginated.map((row) => (
+          <article
+            key={row.id}
+            className="rounded-xl border border-gray-200 bg-gray-50/50 p-4"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selected.has(row.id)}
+                  onChange={(e) => onSelectChange(row.id, e.target.checked)}
+                />
+                <span className="font-mono text-xs font-semibold text-primary">
+                  {row.registrationId}
+                </span>
+              </label>
+              <Link
+                href={`/admin/registrations/${row.id}`}
+                className="text-sm font-semibold text-primary"
+              >
+                View
+              </Link>
+            </div>
+            <p className="mt-2 font-medium">{row.fullName}</p>
+            <p className="text-xs text-gray-500">{row.registrationType}</p>
+            <div className="mt-2 flex flex-wrap gap-2 text-xs">
+              <StatusBadge value={row.paymentStatus} />
+              <StatusBadge value={row.accommodationStatus} />
+              {row.emailDeliveryStatus && (
+                <span className="rounded-full bg-slate-200 px-2 py-0.5 font-semibold text-slate-700">
+                  Email: {String(row.emailDeliveryStatus)}
+                </span>
+              )}
+            </div>
+          </article>
+        ))}
+        {!paginated.length && (
+          <p className="py-8 text-center text-gray-500">No registrations found</p>
+        )}
+      </div>
+
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full min-w-[900px] text-left text-sm">
           <thead className="bg-gray-50 text-xs uppercase text-gray-500">
             <tr>

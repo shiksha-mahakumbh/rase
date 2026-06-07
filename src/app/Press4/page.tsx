@@ -2,12 +2,16 @@
 import React from "react";
 import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
+import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import NavBar from "../component/NavBar";
 import Press4 from "../component/Press4";
 import proceeding4 from '/public/2024M/press4.jpg';
 import Image from "next/image";
 
-const shareUrl = encodeURIComponent("https://www.rase.co.in/Press3"); // Replace with your actual page URL
+import { getPressShareUrl } from "@/lib/seo/pressShare";
+
+const shareUrl = getPressShareUrl(4);
 const shareText = encodeURIComponent("आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम");
 const shareImage = "/2024M/press3.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
@@ -72,15 +76,7 @@ const data = {
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-              />
+              <WhatsAppIcon />
             </a>
           </li>
           <li key="contact-2">
@@ -96,15 +92,7 @@ const data = {
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-              />
+              <WhatsAppIcon />
             </a>
           </li>
           <li key="contact-3">
@@ -119,16 +107,7 @@ const data = {
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-                
-              />
+              <WhatsAppIcon />
             </a>
           </li>
         </ul>,
@@ -200,7 +179,8 @@ export default function Home() {
           {/* Right sidebar or additional content */}
         </div>
       </div>
-      <Footer />
+      <RelatedContentSectionClient path="/Press4" title="Related programmes & resources" />
+    <Footer />
     </div>
   );
 }

@@ -199,7 +199,7 @@ export default function OlympiadForm() {
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
 
       {registrationFee > 0 && (
-        <FormSection title="Payment Details">
+        <FormSection title="Payment Details" className="registration-payment">
           <div className="md:col-span-2">
             <PaymentBlock fee={registrationFee} />
           </div>

@@ -102,6 +102,18 @@ export async function saveRegistration(
     });
   }
 
+  try {
+    await addDoc(collection(db, "audit_logs"), {
+      action: "registration_created",
+      registrationId,
+      registrationType: input.registrationType,
+      masterDocId: masterRef.id,
+      createdAt: serverTimestamp(),
+    });
+  } catch {
+    // Non-blocking audit trail
+  }
+
   return {
     registrationId,
     masterDocId: masterRef.id,

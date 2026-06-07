@@ -9,12 +9,13 @@ import {
   ACGlassPanel,
   ACObjectiveCard,
   SectionCTA,
-  ACFooterStatement,
   REG_LINKS,
 } from "./AcademicCouncilUI";
+import { AuthoritySections } from "@/components/authority";
 
 function OverviewPage() {
   return (
+    <>
     <ACPage>
       <ACHero
         accent="primary"
@@ -126,7 +127,7 @@ function OverviewPage() {
       </ACSection>
 
       <ACSection title="✨ Vision">
-        <ACGlassPanel className="border-primary/15 bg-gradient-to-br from-primary/5 to-amber-50/40">
+        <ACGlassPanel className="border-brand-navy/15 bg-gradient-to-br from-brand-navy/5 to-brand-surface-warm">
           <p className="text-base leading-relaxed text-gray-800 md:text-lg md:leading-8">
             To build a dynamic, inclusive, and impact-driven academic ecosystem
             that bridges education, research, innovation, and society, and
@@ -138,7 +139,7 @@ function OverviewPage() {
 
       <ACSection title="🚀 Positioning Line (for brochure highlight)">
         <ACCard hover={false} className="border-amber-200/50 bg-gradient-to-r from-amber-50 to-white text-center">
-          <p className="text-lg font-semibold italic text-primary md:text-xl">
+          <p className="text-lg font-semibold italic text-brand-navy md:text-xl">
             &ldquo;The Academic Backbone of Shiksha Mahakumbh – Integrating
             Knowledge, Innovation, and Impact.&rdquo;
           </p>
@@ -151,6 +152,12 @@ function OverviewPage() {
         href={REG_LINKS.general}
       />
     </ACPage>
+
+    <AuthoritySections
+      sections={["impact", "research", "institutions", "government"]}
+      impactVariant="compact"
+    />
+    </>
   );
 }
 

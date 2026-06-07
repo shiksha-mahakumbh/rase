@@ -1,5 +1,6 @@
 import React from "react";
-import Slider from "react-slick";
+import LazySlickSlider from "@/components/carousel/LazySlickSlider";
+import WorkshopSlideImage from "@/components/media/WorkshopSlideImage";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -58,17 +59,16 @@ const EventPage: React.FC = () => {
 
       {/* Slider with Images */}
       <div className="mb-6 w-full max-w-4xl">
-        <Slider {...sliderSettings} className="w-full">
+        <LazySlickSlider settings={sliderSettings} className="w-full">
           {eventDetails.images.map((image, index) => (
             <div key={index} className="flex justify-center">
-              <img
+              <WorkshopSlideImage
                 src={image}
                 alt={`Event Slide ${index + 1}`}
-                className="w-full h-80 object-contain rounded-lg"
               />
             </div>
           ))}
-        </Slider>
+        </LazySlickSlider>
       </div>
 
       {/* Event Venue */}

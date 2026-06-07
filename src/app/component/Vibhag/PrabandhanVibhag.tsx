@@ -117,10 +117,10 @@ const PrabandhanVibhag: React.FC = () => {
             className="relative"
           >
             <div className="mb-4 flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy text-sm font-bold text-white">
                 {index + 1}
               </span>
-              <h4 className="text-xl font-bold text-primary md:text-2xl">
+              <h4 className="text-xl font-bold text-brand-navy md:text-2xl">
                 {category.category}
               </h4>
             </div>

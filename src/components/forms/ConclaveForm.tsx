@@ -103,7 +103,7 @@ export default function ConclaveForm() {
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
 
-      <FormSection title="Payment Details">
+      <FormSection title="Payment Details" className="registration-payment">
         <FormField
           label="UTR Number"
           name="utrNumber"

@@ -146,7 +146,7 @@ export default function BestPracticeForm() {
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
 
-      <FormSection title="Payment Details">
+      <FormSection title="Payment Details" className="registration-payment">
         <div className="md:col-span-2">
           <PaymentBlock />
         </div>

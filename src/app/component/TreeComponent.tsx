@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { PAST_EDITIONS } from "@/data/past-editions";
 
 const ShikshaMahakumbhTimeline: React.FC = () => {
   const [archives, setArchives] = useState<{ [key: string]: boolean }>({});
@@ -13,53 +14,15 @@ const ShikshaMahakumbhTimeline: React.FC = () => {
   const toggleArchive = (edition: string) =>
     setArchives((prev) => ({ ...prev, [edition]: !prev[edition] }));
 
-  const mahakumbhSeries = [
-    {
-      title: "Shiksha Mahakumbh 1.0",
-      year: "2023",
-      description: "The inaugural edition laying the foundation for nationwide education renaissance.",
-      link: "https://sm23.rase.co.in",
-      campaign: "/RASE_2023_1ST_EDITION_Campaign.pdf",
-      mainPhotos: "https://drive.google.com/drive/folders/1T5HOcgbHQs6MNouIiWb0i4DGkrRd23vY",
-      day1Photos: "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
-    },
-    {
-      title: "Shiksha Mahakumbh 2.0",
-      year: "2023",
-      description: "Expanded edition connecting educators and students to holistic learning and outreach.",
-      link: "https://sm23.rase.co.in",
-      campaign: "/RASE_2023_2ND_EDITION_Campaign.pdf",
-      mainPhotos: "https://drive.google.com/drive/folders/1u_rgXNeYBuwnLae7irG4NiHgEil69j16",
-      day1Photos: "https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq",
-    },
-    {
-      title: "Shiksha Mahakumbh 3.0",
-      year: "2024",
-      description: "Focused on innovation, research, and student empowerment across India.",
-      link: "https://sk24.rase.co.in",
-      campaign: "/RASE_2024_3RD_EDITION_Campaign.pdf",
-      mainPhotos: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
-      day1Photos: "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
-    },
-    {
-      title: "Shiksha Mahakumbh 4.0",
-      year: "2024",
-      description: "Bringing together national leaders, educators, and innovators for holistic growth.",
-      link: "https://rase.co.in",
-      campaign: "/RASE_2024_4TH_EDITION_Campaign.pdf",
-      mainPhotos: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
-      day1Photos: "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
-    },
-    {
-      title: "Shiksha Mahakumbh 5.0",
-      year: "2025",
-      description: "Classroom to Society: Building a Healthier World Through Education.",
-      link: "https://rase.co.in",
-      campaign: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
-      mainPhotos: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
-      day1Photos: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
-    },
-  ];
+  const mahakumbhSeries = PAST_EDITIONS.map((e) => ({
+    title: e.title,
+    year: e.year,
+    description: e.theme,
+    link: e.href,
+    campaign: e.campaignPdf ?? e.galleryUrl ?? "#",
+    mainPhotos: e.galleryUrl ?? "#",
+    day1Photos: e.galleryUrl ?? "#",
+  }));
 
   const scrollLeft = () => {
     if (scrollRef.current)

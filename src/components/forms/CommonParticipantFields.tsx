@@ -52,7 +52,7 @@ export function CommonParticipantFields({
   errors,
 }: SharedFormProps) {
   return (
-    <FormSection title="Participant Details">
+    <FormSection title="Participant Details" className="registration-details">
       <FormField
         label="Full Name"
         name="fullName"

@@ -7,72 +7,17 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Menu } from "./navbar/types";
 import { getMenuIcon, NavChevronIcon } from "./navbar/NavMenuIcons";
+import {
+  NAV_MENUS,
+  POPULAR_LINKS,
+  CTA_PATH,
+  MEGA_MENU_INDEX,
+} from "@/constants/navigation";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import NavIntlProvider from "@/components/i18n/NavIntlProvider";
+import GlobalSearch from "@/components/search/GlobalSearch";
 
-const menus: Menu[] = [
-  { path: "/", title: "Home" },
-  {
-    path: "/registration",
-    title: "Registration",
-  },
-  {
-    path: "/",
-    title: "About Us",
-    subMenu: [
-      { path: "/introduction", title: "Introduction" },
-      // { path: "/shikshakumbh", title: "Shiksha Kumbh" },
-      // { path: "/shikshamahakumbh", title: "Shiksha MahaKumbh" },
-      { path: "/abhiyanphotoframe.pdf", title: "Abhiyan in Photo Frames" },
-      // { path: "/2024M/Shiksha Maha Khumbh Final.pdf", title: "Shiksha Mahakumbh 5.0 in Photo Frame" },
-      { path: "/VibhagRoute/AcademicCouncil24", title: "शैक्षिक विभाग" },
-      { path: "/VibhagRoute/Vitt24", title: "वित्त विभाग" },
-      { path: "/VibhagRoute/Prachar24", title: "प्रचार विभाग" },
-      { path: "/VibhagRoute/Sampark24", title: "संपर्क विभाग" },
-      { path: "/VibhagRoute/Prabandhan24", title: "प्रबंधन विभाग" },
-    ],
-  },
-  {
-    path: "/",
-    title: "Publication",
-    subMenu: [
-      { path: "https://pub.dhe.org.in", title: "Journal" },
-      { path: "/2024M/Souvenir Abstracts_MTC.pdf", title: "Souvenir" },
-    ],
-  },
-  {
-    path: "/",
-    title: "Events",
-    subMenu: [
-      { path: "/pastevent", title: "Past Events" },
-      { path: "/upcomingevent", title: "Upcoming Events" },
-    ],
-  },
-  {
-    path: "/",
-    title: "Gallery",
-    subMenu: [
-      { path: "/gallery", title: "Photos" },
-      { path: "/videos", title: "Videos" },
-    ],
-  },
-  { path: "/media", title: "Media" },
-  { path: "/committeepage", title: "Committee" },
-  {
-    path: "/",
-    title: "Brochure",
-    subMenu: [
-      { path: "/2024K/Shiksha-Mahakumbh-Brochure-2025", title: "Conference" },
-      { path: "https://www.rase.co.in/donation", title: "Sponsor" },
-    ],
-  },
-  { path: "/merchandise", title: "Merchandise" },
-  { path: "/Press_Release", title: "Press Release" },
-  { path: "/paper", title: "Paper Submission" },
-  { path: "/ContactUs", title: "Contact Us" },
-  { path: "/Best_Wishes", title: "Wishes Received" },
-];
-
-const MEGA_MENU_INDEX = 2; // About Us
-const CTA_PATH = "/registration";
+const menus = NAV_MENUS;
 
 function isExternalPath(path: string): boolean {
   return path.startsWith("http://") || path.startsWith("https://");
@@ -226,7 +171,7 @@ const NavBar: React.FC = () => {
                 <NavLink
                   key={idx}
                   href={item.path}
-                  className="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary to-[#7a4343] px-3 py-2 text-xs font-bold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30 xl:px-4 xl:text-sm"
+                  className="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-brand-saffron px-3 py-2 text-xs font-bold text-brand-navy shadow-lg shadow-brand-saffron/25 transition-all hover:-translate-y-0.5 hover:bg-brand-saffron-dark hover:text-white xl:px-4 xl:text-sm"
                 >
                   {icon}
                   {item.title}
@@ -271,6 +216,22 @@ const NavBar: React.FC = () => {
                         {isMega ? (
                           <div className="grid gap-4 sm:grid-cols-2">
                             <div>
+                              <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                Popular
+                              </p>
+                              <ul className="mb-3 space-y-0.5">
+                                {POPULAR_LINKS.map((link) => (
+                                  <li key={link.path}>
+                                    <NavLink
+                                      href={link.path}
+                                      onClick={() => setOpenSubMenuIndex(null)}
+                                      className="block rounded-lg px-3 py-2 text-sm font-semibold text-brand-navy transition hover:bg-brand-saffron/20"
+                                    >
+                                      {link.title}
+                                    </NavLink>
+                                  </li>
+                                ))}
+                              </ul>
                               <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
                                 Overview
                               </p>
@@ -345,6 +306,13 @@ const NavBar: React.FC = () => {
             );
           })}
         </nav>
+
+        <div className="hidden items-center gap-2 lg:flex">
+          <GlobalSearch />
+          <NavIntlProvider>
+            <LanguageSwitcher />
+          </NavIntlProvider>
+        </div>
 
         {/* Mobile: CTA + Hamburger */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">

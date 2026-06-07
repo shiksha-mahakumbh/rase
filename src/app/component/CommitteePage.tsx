@@ -1,4 +1,5 @@
 import React from "react";
+import OptimizedImage from "@/components/media/OptimizedImage";
 
 interface AdvisoryMember {
   name: string;
@@ -39,10 +40,13 @@ const Committees: React.FC<AdvisoryCouncilProps> = ({ title, members }) => {
                 >
                   <td className="px-6 py-4 flex items-center gap-4">
                     {member.photo && (
-                      <img
+                      <OptimizedImage
                         src={member.photo}
                         alt={member.name}
-                        className="w-10 h-10 rounded-full object-cover shadow-md"
+                        width={40}
+                        height={40}
+                        className="h-10 w-10 rounded-full object-cover shadow-md"
+                        enableBlur={false}
                       />
                     )}
                     <span className="font-medium text-gray-800">{member.name}</span>

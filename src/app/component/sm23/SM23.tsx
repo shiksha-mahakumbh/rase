@@ -1,7 +1,5 @@
 import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import EventImageSlider from "@/components/media/LazyEventImageSlider";
 
 // Sample event data
 const eventDetails = {
@@ -27,18 +25,6 @@ const eventDetails = {
 };
 
 const EventPage: React.FC = () => {
-  // Slider settings
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    arrows: false,
-  };
-
   return (
     <div className="bg-gray-50 min-h-screen p-8 flex flex-col items-center">
       {/* Event Title Above the Slider */}
@@ -48,17 +34,10 @@ const EventPage: React.FC = () => {
 
       {/* Slider with Images */}
       <div className="mb-6 w-full max-w-4xl">
-        <Slider {...sliderSettings} className="w-full">
-          {eventDetails.images.map((image, index) => (
-            <div key={index} className="flex justify-center">
-              <img
-                src={image}
-                alt={`Event Slide ${index + 1}`}
-                className="w-full h-80 object-contain rounded-lg"
-              />
-            </div>
-          ))}
-        </Slider>
+        <EventImageSlider
+          images={eventDetails.images}
+          eventTitle={eventDetails.title}
+        />
       </div>
 
       {/* Event Venue */}

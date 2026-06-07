@@ -1,25 +1,21 @@
-import React from "react";
-import CompanyInfo from "../../component/CompanyInfo";
-import NavBar from "../../component/NavBar";
-import Footer from "../../component/Footer";
-import PracharVibhag from "../../component/Vibhag/PrabandhanVibhag";
+import NavBar from "@/app/component/NavBar";
+import Footer from "@/app/component/Footer";
+import PrabandhanVibhag from "@/app/component/Vibhag/PrabandhanVibhag";
+import VibhagPageShell from "@/components/vibhag/VibhagPageShell";
+import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
 
-
-const Home: React.FC = () => {
+export default function PrabandhanPage() {
   return (
-    <>
-      <CompanyInfo />
+    <div className="min-h-screen bg-brand-surface">
       <NavBar />
-      <div className="flex flex-col sm:flex-row space-y-4">
-        <div className="w-full sm:w-1/5 sm:flex-col"></div>
-        <div className="w-full sm:w-3/5 sm:flex-col">
-          <PracharVibhag />
-        </div>
-        <div className="w-full sm:w-1/5 sm:flex-col"></div>
-      </div>
+      <VibhagPageShell currentSlug="Prabandhan24">
+        <PrabandhanVibhag />
+      </VibhagPageShell>
+      <RelatedContentSection
+        path="/VibhagRoute/Prabandhan24"
+        title="Related programmes & resources"
+      />
       <Footer />
-    </>
+    </div>
   );
-};
-
-export default Home;
+}

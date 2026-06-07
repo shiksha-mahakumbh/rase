@@ -11,6 +11,10 @@ export interface RegistrationRow {
   contactNumber?: string;
   paymentStatus?: string;
   accommodationStatus?: string;
+  accommodationRequired?: string;
+  emailDeliveryStatus?: string;
+  paymentAmount?: number;
+  amount?: number;
   createdAt?: unknown;
   [key: string]: unknown;
 }

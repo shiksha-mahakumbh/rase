@@ -3,6 +3,7 @@ import CompanyInfo from "../component/CompanyInfo";
 import NavBar from "../component/NavBar";
 import Footer from "../component/Footer";
 import Press from "../component/Press";
+import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
 
 const page = () => {
   return (
@@ -10,6 +11,7 @@ const page = () => {
       <CompanyInfo />
       <NavBar />
       <Press/>
+      <RelatedContentSection path="/Press_Release" title="Related programmes & resources" />
       <Footer />
     </div>
     

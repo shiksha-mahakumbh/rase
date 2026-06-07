@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import BrochureDownloadLink from "@/components/analytics/BrochureDownloadLink";
 
 const Donate: React.FC = () => {
   return (
@@ -59,21 +60,21 @@ const Donate: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <a
+            <BrochureDownloadLink
               href="/2024K/Sponsership-Brochure-Shiksha-Mahakumbh-2025-1.pdf"
-              target="_blank"
-              className="bg-blue-600 text-white px-5 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md"
+              plan="sponsorship-1"
+              className="rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white shadow-md transition duration-300 hover:bg-blue-700"
             >
               📘 View Sponsorship Plan 1
-            </a>
+            </BrochureDownloadLink>
 
-            <a
+            <BrochureDownloadLink
               href="/2024K/Sponsership-Brochure-Shiksha-Mahakumbh-2025-2.pdf"
-              target="_blank"
-              className="bg-yellow-500 text-white px-5 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition duration-300 shadow-md"
+              plan="sponsorship-2"
+              className="rounded-lg bg-yellow-500 px-5 py-3 font-semibold text-white shadow-md transition duration-300 hover:bg-yellow-600"
             >
               📗 View Sponsorship Plan 2
-            </a>
+            </BrochureDownloadLink>
           </div>
 
           <p className="text-gray-600 text-base leading-relaxed">
