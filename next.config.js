@@ -1,4 +1,5 @@
 const createNextIntlPlugin = require("next-intl/plugin");
+const { LEGACY_REDIRECTS } = require("./src/config/legacy-redirects.js");
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
@@ -61,28 +62,7 @@ const nextConfig = {
     ];
   },
   async redirects() {
-    return [
-      {
-        source: "/participantregistrationdatadekh%20copy",
-        destination: "/participantregistrationdatadekh",
-        permanent: true,
-      },
-      {
-        source: "/participantregistrationdatadekh copy",
-        destination: "/participantregistrationdatadekh",
-        permanent: true,
-      },
-      {
-        source: "/ngoregistrationdatadekh%20copy",
-        destination: "/ngoregistrationdatadekh",
-        permanent: true,
-      },
-      {
-        source: "/ngoregistrationdatadekh copy",
-        destination: "/ngoregistrationdatadekh",
-        permanent: true,
-      },
-    ];
+    return LEGACY_REDIRECTS;
   },
 };
 

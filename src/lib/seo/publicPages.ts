@@ -1,4 +1,5 @@
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { PRESS_CANONICAL_PATHS } from "@/constants/canonical-routes";
 import {
   createArticleMetadata,
   createCommitteeMetadata,
@@ -49,13 +50,13 @@ export const PUBLIC_PAGE_META = {
   upcomingevent: createEventMetadata({
     title: "Upcoming Events",
     description: "Upcoming Shiksha Mahakumbh events and national education programmes.",
-    path: "/upcomingevent",
+    path: "/upcoming-events",
   }),
   pastevent: createEventMetadata({
     title: "Past Editions — Shiksha Mahakumbh 1.0 to 5.0",
     description:
       "Official archive of five completed Shiksha Mahakumbh Abhiyan editions: NIT Jalandhar, NIT Kurukshetra, NIT Srinagar, Kurukshetra University, and NIPER Mohali. Themes, venues, impact, and galleries.",
-    path: "/pastevent",
+    path: "/past-events",
     keywords: [
       "Shiksha Mahakumbh past editions",
       "Indian Education Conference",
@@ -67,7 +68,7 @@ export const PUBLIC_PAGE_META = {
   committeepage: createCommitteeMetadata({
     title: "Organising Committee",
     description: "Committee members for Shiksha Mahakumbh Abhiyan.",
-    path: "/committeepage",
+    path: "/committees",
   }),
   gallery: createPageMetadata({
     title: "Photo Gallery",
@@ -75,14 +76,20 @@ export const PUBLIC_PAGE_META = {
     path: "/gallery",
   }),
   media: createPageMetadata({
-    title: "Media & Press",
-    description: "Media coverage and press releases for Shiksha Mahakumbh.",
-    path: "/media",
+    title: "Media Centre — Press, Archives & Coverage",
+    description:
+      "Shiksha Mahakumbh media centre: press releases, digital and print archives, photo and video galleries, and national coverage.",
+    path: "/media-center",
+    keywords: [
+      "Shiksha Mahakumbh media",
+      "education press India",
+      "Mahakumbh digital media archive",
+    ],
   }),
   pressRelease: createArticleMetadata({
     title: "Press Releases",
     description: "Official press releases from Shiksha Mahakumbh Abhiyan.",
-    path: "/Press_Release",
+    path: "/press",
   }),
   donation: createPageMetadata({
     title: "Donation & Sponsorship",
@@ -203,27 +210,29 @@ export const PUBLIC_PAGE_META = {
   vibhagPrachar: createPageMetadata({
     title: "Prachar Vibhag — SMK 6.0",
     description: "Communications and outreach for Shiksha Mahakumbh 6.0.",
-    path: "/VibhagRoute/Prachar24",
+    path: "/departments/prachar",
   }),
   vibhagPrabandhan: createPageMetadata({
     title: "Prabandhan Vibhag — SMK 6.0",
     description: "Programme management division — Shiksha Mahakumbh 6.0.",
-    path: "/VibhagRoute/Prabandhan24",
+    path: "/departments/prabandhan",
   }),
   vibhagSampark: createPageMetadata({
     title: "Sampark Vibhag — SMK 6.0",
     description: "Institutional liaison and stakeholder engagement — Shiksha Mahakumbh 6.0.",
-    path: "/VibhagRoute/Sampark24",
+    path: "/departments/sampark",
   }),
   vibhagVitt: createPageMetadata({
     title: "Vitt Vibhag — SMK 6.0",
     description: "Finance and resource management — Shiksha Mahakumbh 6.0.",
-    path: "/VibhagRoute/Vitt24",
+    path: "/departments/vitt",
   }),
   merchandise: createPageMetadata({
-    title: "Merchandise",
-    description: "Official Shiksha Mahakumbh merchandise and materials.",
+    title: "Official Merchandise",
+    description:
+      "Official Shiksha Mahakumbh merchandise — T-shirts, mugs, caps, and conference bags symbolizing Bharat's educational renaissance.",
     path: "/merchandise",
+    keywords: ["Shiksha Mahakumbh merchandise", "education summit store"],
   }),
   talkShow: createPageMetadata({
     title: "Talk Show",
@@ -280,7 +289,7 @@ export function getPressArticleContent(pressNumber: number) {
   };
   return {
     ...copy,
-    path: `/Press${pressNumber}` as const,
+    path: PRESS_CANONICAL_PATHS[pressNumber] ?? `/press/article-${pressNumber}`,
     image: PRESS_OG_IMAGES[pressNumber] ?? "/sLogo.png",
   };
 }
@@ -290,7 +299,7 @@ export function pressArticleMeta(pressNumber: number) {
   return createArticleMetadata({
     title: copy.title,
     description: copy.description,
-    path: `/Press${pressNumber}`,
+    path: PRESS_CANONICAL_PATHS[pressNumber] ?? `/press/article-${pressNumber}`,
     keywords: ["Shiksha Mahakumbh press", "education news India", "SMK media"],
     image: getPressOgImageUrl(pressNumber),
   });

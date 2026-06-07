@@ -34,7 +34,7 @@ Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Sa
       image: proceeding6,
       // previewLink: '/Press1.pdf',
       // downloadLink: '/Press1.pdf',
-      readLink: '/Press6' // Link to the TSX file or page
+      readLink: '/press/education-summit-coverage' // Link to the TSX file or page
     },
     {
       title: `राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा`,
@@ -44,7 +44,7 @@ Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Sa
       image: proceeding5,
       // previewLink: '/Press1.pdf',
       // downloadLink: '/Press1.pdf',
-      readLink: '/Press5' // Link to the TSX file or page
+      readLink: '/press/national-coverage' // Link to the TSX file or page
     },
     {
       title: `"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन"`,
@@ -52,7 +52,7 @@ Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Sa
       image: proceeding4,
       // previewLink: '/Press1.pdf',
       // downloadLink: '/Press1.pdf',
-      readLink: '/Press4' // Link to the TSX file or page
+      readLink: '/press/residential-camp-hindi' // Link to the TSX file or page
     },
     {
       title: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण)",
@@ -60,7 +60,7 @@ Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Sa
       image: proceeding3,
       // previewLink: '/Press1.pdf',
       // downloadLink: '/Press1.pdf',
-      readLink: '/Press3' // Link to the TSX file or page
+      readLink: '/press/residential-camp-success' // Link to the TSX file or page
     },
     {
       title: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।",
@@ -68,7 +68,7 @@ Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Sa
       image: proceeding1,
       // previewLink: '/Press1.pdf',
       // downloadLink: '/Press1.pdf',
-      readLink: '/Press2' // Link to the TSX file or page
+      readLink: '/press/shiksha-mahakumbh-4-0' // Link to the TSX file or page
     },
     {
       title: "Baton Ceremony",
@@ -76,7 +76,7 @@ Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Sa
       image: proceeding2,
       // previewLink: '/Press1.pdf',
       // downloadLink: '/Press1.pdf',
-      readLink: '/Press1' // Link to the TSX file or page
+      readLink: '/press/baton-ceremony-smk-4' // Link to the TSX file or page
     },
     // {
     //   title: "RASE 2023 2nd Edition",

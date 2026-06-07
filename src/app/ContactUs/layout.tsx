@@ -6,7 +6,7 @@ export const metadata = createPageMetadata({
   title: "Contact Us",
   description:
     "Contact the Shiksha Mahakumbh Abhiyan organising team — Department of Holistic Education, E7 Orchid Towers, Sector-125, SAS Nagar, Punjab 140301.",
-  path: "/ContactUs",
+  path: "/contact-us",
   keywords: [
     "Contact Shiksha Mahakumbh",
     "Department of Holistic Education address",

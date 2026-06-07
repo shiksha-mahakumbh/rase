@@ -1,47 +1,57 @@
 import React from "react";
-import Image from "next/image"; // Next.js Image for better handling
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import Image from "next/image";
 
 interface GuestProps {
   name: string;
   place: string;
   designation: string;
   imageSrc: string;
-  href?: string; // Optional href property
+  href?: string;
 }
 
-const Guest: React.FC<GuestProps> = ({ name, place, designation, imageSrc, href }) => (
-  <Card className="py-4 border border-primary rounded-xl max-w-sm mx-auto">
-    <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+const Guest: React.FC<GuestProps> = ({
+  name,
+  place,
+  designation,
+  imageSrc,
+  href,
+}) => (
+  <article className="mx-auto flex h-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_8px_32px_rgba(11,31,59,0.08)] transition hover:-translate-y-1 hover:border-brand-saffron/30 hover:shadow-lg">
+    <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-surface">
+      <Image
+        alt={`Portrait of ${name}`}
+        src={imageSrc}
+        fill
+        className="object-cover"
+        sizes="(max-width: 640px) 100vw, 320px"
+        loading="lazy"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-navy/40 via-transparent to-transparent"
+      />
+    </div>
+    <div className="flex flex-1 flex-col p-5">
       {href ? (
         <a
           href={href}
-          className="text-tiny hover:text-red-800 hover:bg-gray-100 uppercase font-bold text-black"
+          className="text-lg font-bold text-brand-navy hover:text-brand-saffron-dark hover:underline"
           target="_blank"
           rel="noopener noreferrer"
         >
           {name}
         </a>
       ) : (
-        <p className="text-tiny uppercase font-bold text-black">{name}</p>
+        <h3 className="text-lg font-bold text-brand-navy">{name}</h3>
       )}
-    </CardHeader>
-    <CardBody className="flex flex-col py-2 items-center">
-      <Image
-        alt={`Image of ${name}`}
-        src={imageSrc}
-        width={260}
-        height={290}
-        className="object-cover rounded-xl mb-2"
-        style={{ objectFit: "cover" }}
-        priority
-      />
-      <div className="w-full px-4">
-        <small className="text-black">{designation}</small>
-        <h4 className="font-bold text-large text-black">{place}</h4>
-      </div>
-    </CardBody>
-  </Card>
+      <p className="mt-1 text-sm font-medium text-brand-saffron-dark">
+        {designation}
+      </p>
+      <blockquote className="mt-3 flex-1 border-l-2 border-brand-saffron/50 pl-3 text-sm italic leading-relaxed text-gray-700">
+        {place}
+      </blockquote>
+    </div>
+  </article>
 );
 
 export default Guest;

@@ -57,7 +57,7 @@ const ShikshaMahaKumbhTree: React.FC = () => {
         <TreeNode
           label={
             <div className="text-center p-2">
-              <a href="/commingsoon">
+              <a href="/coming-soon">
                 <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-white hover:text-primary">
                   2025
                 </button>

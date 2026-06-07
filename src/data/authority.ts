@@ -97,7 +97,7 @@ export const researchOutput: ResearchOutputItem[] = [
     title: "Bal Shodh Patrika",
     type: "Patrika",
     description: "Student research journal integrated with Academic Council.",
-    href: "/VibhagRoute/AcademicCouncil24",
+    href: "/departments/academic-council",
   },
   {
     title: "Abstract & Full-Length Submission",

@@ -1,0 +1,1448 @@
+{
+  "total": 145,
+  "api": [
+    "/api/client-error",
+    "/api/health",
+    "/api/payments/razorpay-webhook",
+    "/api/registration/send-email",
+    "/api/registration/verify-captcha",
+    "/api/visitors"
+  ],
+  "unlinked": [
+    "/abhiyaninphotoframe",
+    "/BatonCeremony",
+    "/printmediashikshakumbh2023",
+    "/printmediashikshakumbh2024",
+    "/printmediashikshamahakumbh2023",
+    "/printmediashikshamahakumbh2024",
+    "/ResidentialCamp",
+    "/shikshakumbh2023digitalmedia",
+    "/shikshakumbh2024digitalmedia"
+  ],
+  "notSitemap": [
+    "/abhiyaninphotoframe",
+    "/abstract",
+    "/academiccouncil",
+    "/Accomodation",
+    "/awards",
+    "/BatonCeremony",
+    "/Best_Wishes",
+    "/books",
+    "/commingsoon",
+    "/committee/shikshakumbh2023",
+    "/committee/shikshakumbh2024",
+    "/committee/shikshamahakumbh2023",
+    "/committee/shikshamahakumbh2024",
+    "/committeepage",
+    "/conclave",
+    "/conferences",
+    "/ContactUs",
+    "/cookie-policy",
+    "/disclaimer",
+    "/donation",
+    "/education",
+    "/educational-leaders",
+    "/educational-technology",
+    "/events",
+    "/feedback",
+    "/fulllengthpaper",
+    "/gallery",
+    "/heiprojectdisplaysubmission",
+    "/higher-education",
+    "/innovation",
+    "/institutions",
+    "/introduction",
+    "/journals",
+    "/keynotespeakers",
+    "/knowledge",
+    "/leadership",
+    "/media",
+    "/merchandise",
+    "/noticeboard",
+    "/olympiad",
+    "/",
+    "/paper",
+    "/pastevent",
+    "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
+    "/past_event/sk23",
+    "/past_event/sk24",
+    "/past_event/sm23",
+    "/past_event/sm24",
+    "/past_event/sm25",
+    "/past_event/Spoken_English_Workshop",
+    "/past_event/Teacher_Development_Program",
+    "/people",
+    "/policy",
+    "/policy-papers",
+    "/Press1",
+    "/Press2",
+    "/Press3",
+    "/Press4",
+    "/Press5",
+    "/Press6",
+    "/Press7",
+    "/Press8",
+    "/Press9",
+    "/Press_Release",
+    "/printmediashikshakumbh2023",
+    "/printmediashikshakumbh2024",
+    "/printmediashikshamahakumbh2023",
+    "/printmediashikshamahakumbh2024",
+    "/privacy-policy",
+    "/proceeding1",
+    "/proceeding2",
+    "/proceeding3",
+    "/proceedings",
+    "/publications",
+    "/refund-policy",
+    "/registration/Accomodation",
+    "/registration/conclaveReg",
+    "/registration/ngo",
+    "/registration",
+    "/registration/participant",
+    "/registration/Single_Registration",
+    "/registration/success",
+    "/registration/talent",
+    "/registration/volunteer",
+    "/reports",
+    "/research",
+    "/research-papers",
+    "/research-projects",
+    "/ResidentialCamp",
+    "/school-education",
+    "/schoolprojectdisplaysubmission",
+    "/schools",
+    "/shikshakumbh",
+    "/shikshakumbh2023digitalmedia",
+    "/shikshakumbh2024digitalmedia",
+    "/shikshamahakumbh",
+    "/shikshamahakumbh2023digitalmedia",
+    "/shikshamahakumbh2024digitalmedia",
+    "/skill-development",
+    "/student-development",
+    "/summits",
+    "/TalkShow",
+    "/teacher-development",
+    "/terms-and-conditions",
+    "/Topics",
+    "/universities",
+    "/upcomingevent",
+    "/VibhagRoute/AcademicCouncil24",
+    "/VibhagRoute/Prabandhan24",
+    "/VibhagRoute/Prachar24",
+    "/VibhagRoute/Sampark24",
+    "/VibhagRoute/Vitt24",
+    "/videos",
+    "/vocational-education",
+    "/whitepapers",
+    "/Wishes_Received",
+    "/workshops"
+  ],
+  "routes": [
+    {
+      "route": "/abhiyaninphotoframe",
+      "file": "src/app/abhiyaninphotoframe/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/abstract",
+      "file": "src/app/abstract/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/abstractdatadekh",
+      "file": "src/app/abstractdatadekh/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/abstractdatadekhsm24",
+      "file": "src/app/abstractdatadekhsm24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/academiccouncil",
+      "file": "src/app/academiccouncil/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Accomodation",
+      "file": "src/app/Accomodation/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/accomodationdata",
+      "file": "src/app/accomodationdata/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/addkeynotespeaker",
+      "file": "src/app/addkeynotespeaker/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/addvcdirector",
+      "file": "src/app/addvcdirector/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/addwishesreceived",
+      "file": "src/app/addwishesreceived/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/admin",
+      "file": "src/app/admin/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/admin/registrations/[id]",
+      "file": "src/app/admin/registrations/[id]/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": true
+    },
+    {
+      "route": "/AllData",
+      "file": "src/app/AllData/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/awards",
+      "file": "src/app/awards/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/BatonCeremony",
+      "file": "src/app/BatonCeremony/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Bestpracticedata",
+      "file": "src/app/Bestpracticedata/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/Best_Wishes",
+      "file": "src/app/Best_Wishes/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/books",
+      "file": "src/app/books/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/commingsoon",
+      "file": "src/app/commingsoon/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/committee/shikshakumbh2023",
+      "file": "src/app/committee/shikshakumbh2023/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/committee/shikshakumbh2024",
+      "file": "src/app/committee/shikshakumbh2024/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/committee/shikshamahakumbh2023",
+      "file": "src/app/committee/shikshamahakumbh2023/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/committee/shikshamahakumbh2024",
+      "file": "src/app/committee/shikshamahakumbh2024/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/committeepage",
+      "file": "src/app/committeepage/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/conclave",
+      "file": "src/app/conclave/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Conclavedata",
+      "file": "src/app/Conclavedata/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/conferences",
+      "file": "src/app/conferences/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/ContactUs",
+      "file": "src/app/ContactUs/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/cookie-policy",
+      "file": "src/app/cookie-policy/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/DelegateForm",
+      "file": "src/app/DelegateForm/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/disclaimer",
+      "file": "src/app/disclaimer/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/donation",
+      "file": "src/app/donation/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/education",
+      "file": "src/app/education/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/educational-leaders",
+      "file": "src/app/educational-leaders/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/educational-technology",
+      "file": "src/app/educational-technology/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/events",
+      "file": "src/app/events/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/feedback",
+      "file": "src/app/feedback/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/fulllengthdatadekh",
+      "file": "src/app/fulllengthdatadekh/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/fulllengthdatadekhsm24",
+      "file": "src/app/fulllengthdatadekhsm24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/fulllengthpaper",
+      "file": "src/app/fulllengthpaper/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/fulllengthpaperdatadekh",
+      "file": "src/app/fulllengthpaperdatadekh/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/gallery",
+      "file": "src/app/gallery/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/heiprojectdisplaysubmission",
+      "file": "src/app/heiprojectdisplaysubmission/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/heiprojectregistrationdata",
+      "file": "src/app/heiprojectregistrationdata/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/higher-education",
+      "file": "src/app/higher-education/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/innovation",
+      "file": "src/app/innovation/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/institutions",
+      "file": "src/app/institutions/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/introduction",
+      "file": "src/app/introduction/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/journals",
+      "file": "src/app/journals/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/keynotespeakers",
+      "file": "src/app/keynotespeakers/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/knowledge",
+      "file": "src/app/knowledge/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/leadership",
+      "file": "src/app/leadership/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/media",
+      "file": "src/app/media/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/merchandise",
+      "file": "src/app/merchandise/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/ngoregistrationdatadekh",
+      "file": "src/app/ngoregistrationdatadekh/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/noticeboard",
+      "file": "src/app/noticeboard/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/noticeboarddata",
+      "file": "src/app/noticeboarddata/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/olympiad",
+      "file": "src/app/olympiad/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/organiserdatadekh",
+      "file": "src/app/organiserdatadekh/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/",
+      "file": "src/app/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/paper",
+      "file": "src/app/paper/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/participantregistrationdatadekh",
+      "file": "src/app/participantregistrationdatadekh/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/pastevent",
+      "file": "src/app/pastevent/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
+      "file": "src/app/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/sk23",
+      "file": "src/app/past_event/sk23/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/sk24",
+      "file": "src/app/past_event/sk24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/sm23",
+      "file": "src/app/past_event/sm23/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/sm24",
+      "file": "src/app/past_event/sm24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/sm25",
+      "file": "src/app/past_event/sm25/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/Spoken_English_Workshop",
+      "file": "src/app/past_event/Spoken_English_Workshop/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/past_event/Teacher_Development_Program",
+      "file": "src/app/past_event/Teacher_Development_Program/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/people",
+      "file": "src/app/people/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/policy",
+      "file": "src/app/policy/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/policy-papers",
+      "file": "src/app/policy-papers/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press1",
+      "file": "src/app/Press1/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press2",
+      "file": "src/app/Press2/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press3",
+      "file": "src/app/Press3/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press4",
+      "file": "src/app/Press4/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press5",
+      "file": "src/app/Press5/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press6",
+      "file": "src/app/Press6/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press7",
+      "file": "src/app/Press7/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press8",
+      "file": "src/app/Press8/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press9",
+      "file": "src/app/Press9/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Press_Release",
+      "file": "src/app/Press_Release/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/printmediashikshakumbh2023",
+      "file": "src/app/printmediashikshakumbh2023/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/printmediashikshakumbh2024",
+      "file": "src/app/printmediashikshakumbh2024/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/printmediashikshamahakumbh2023",
+      "file": "src/app/printmediashikshamahakumbh2023/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/printmediashikshamahakumbh2024",
+      "file": "src/app/printmediashikshamahakumbh2024/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/privacy-policy",
+      "file": "src/app/privacy-policy/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/proceeding1",
+      "file": "src/app/proceeding1/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/proceeding2",
+      "file": "src/app/proceeding2/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/proceeding3",
+      "file": "src/app/proceeding3/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/proceedings",
+      "file": "src/app/proceedings/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/publications",
+      "file": "src/app/publications/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/refund-policy",
+      "file": "src/app/refund-policy/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/Accomodation",
+      "file": "src/app/registration/Accomodation/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/conclaveReg",
+      "file": "src/app/registration/conclaveReg/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/ngo",
+      "file": "src/app/registration/ngo/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration",
+      "file": "src/app/registration/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/participant",
+      "file": "src/app/registration/participant/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/Single_Registration",
+      "file": "src/app/registration/Single_Registration/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/success",
+      "file": "src/app/registration/success/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/talent",
+      "file": "src/app/registration/talent/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/registration/volunteer",
+      "file": "src/app/registration/volunteer/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/reports",
+      "file": "src/app/reports/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/research",
+      "file": "src/app/research/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/research-papers",
+      "file": "src/app/research-papers/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/research-projects",
+      "file": "src/app/research-projects/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/ResidentialCamp",
+      "file": "src/app/ResidentialCamp/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/school-education",
+      "file": "src/app/school-education/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/schooldata",
+      "file": "src/app/schooldata/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/schoolprojectdisplaysubmission",
+      "file": "src/app/schoolprojectdisplaysubmission/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/schools",
+      "file": "src/app/schools/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/shikshakumbh",
+      "file": "src/app/shikshakumbh/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/shikshakumbh2023digitalmedia",
+      "file": "src/app/shikshakumbh2023digitalmedia/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/shikshakumbh2024digitalmedia",
+      "file": "src/app/shikshakumbh2024digitalmedia/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/shikshamahakumbh",
+      "file": "src/app/shikshamahakumbh/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/shikshamahakumbh2023digitalmedia",
+      "file": "src/app/shikshamahakumbh2023digitalmedia/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/shikshamahakumbh2024digitalmedia",
+      "file": "src/app/shikshamahakumbh2024digitalmedia/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/skill-development",
+      "file": "src/app/skill-development/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/student-development",
+      "file": "src/app/student-development/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/summits",
+      "file": "src/app/summits/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Talentdata",
+      "file": "src/app/Talentdata/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/TalkShow",
+      "file": "src/app/TalkShow/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/teacher-development",
+      "file": "src/app/teacher-development/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/terms-and-conditions",
+      "file": "src/app/terms-and-conditions/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Topics",
+      "file": "src/app/Topics/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/universities",
+      "file": "src/app/universities/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/upcomingevent",
+      "file": "src/app/upcomingevent/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/VibhagRoute/AcademicCouncil24",
+      "file": "src/app/VibhagRoute/AcademicCouncil24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/VibhagRoute/Prabandhan24",
+      "file": "src/app/VibhagRoute/Prabandhan24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/VibhagRoute/Prachar24",
+      "file": "src/app/VibhagRoute/Prachar24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/VibhagRoute/Sampark24",
+      "file": "src/app/VibhagRoute/Sampark24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/VibhagRoute/Vitt24",
+      "file": "src/app/VibhagRoute/Vitt24/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/videos",
+      "file": "src/app/videos/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/vocational-education",
+      "file": "src/app/vocational-education/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/volunteerdatadekh",
+      "file": "src/app/volunteerdatadekh/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/volunteerregistrationdatadekh",
+      "file": "src/app/volunteerregistrationdatadekh/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": true,
+      "dynamic": false
+    },
+    {
+      "route": "/whitepapers",
+      "file": "src/app/whitepapers/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/Wishes_Received",
+      "file": "src/app/Wishes_Received/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/workshops",
+      "file": "src/app/workshops/page.tsx",
+      "linked": true,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": false
+    },
+    {
+      "route": "/[locale]/ContactUs",
+      "file": "src/app/[locale]/ContactUs/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": true
+    },
+    {
+      "route": "/[locale]/introduction",
+      "file": "src/app/[locale]/introduction/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": true
+    },
+    {
+      "route": "/[locale]",
+      "file": "src/app/[locale]/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": true
+    },
+    {
+      "route": "/[locale]/registration",
+      "file": "src/app/[locale]/registration/page.tsx",
+      "linked": false,
+      "sitemap": false,
+      "metadata": true,
+      "protected": false,
+      "dynamic": true
+    }
+  ]
+}

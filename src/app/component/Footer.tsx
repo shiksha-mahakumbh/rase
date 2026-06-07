@@ -3,25 +3,23 @@
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebook,
-  faYoutube,
-  faXTwitter,
-  faLinkedin,
-  faInstagram,
-} from "@fortawesome/free-brands-svg-icons";
-import { motion } from "framer-motion";
 import { DHE_ORGANIZATION } from "@/config/organization";
+import { impactStatistics } from "@/data/authority";
 import { normalizeStaticImageSrc } from "./home/normalizeImageSrc";
 import {
   footerLogos,
   quickLinks,
+  departmentLinks,
+  educationLinks,
   programLinks,
   legalLinks,
   socialLinks,
 } from "./footer-content";
-import FooterContactForm from "@/components/footer/FooterContactForm";
+
+const FooterContactForm = dynamic(
+  () => import("@/components/footer/FooterContactForm"),
+  { ssr: false, loading: () => <p className="text-sm text-gray-400">Loading form…</p> }
+);
 import FooterNewsletterSlot from "@/components/footer/FooterNewsletterSlot";
 import ScrollToTopButton from "@/components/footer/ScrollToTopButton";
 
@@ -30,17 +28,47 @@ const FooterVisitorCounter = dynamic(
   { ssr: false, loading: () => null }
 );
 
-const socialIconMap = {
-  youtube: faYoutube,
-  facebook: faFacebook,
-  linkedin: faLinkedin,
-  instagram: faInstagram,
-  x: faXTwitter,
-} as const;
+const socialLabels: Record<string, string> = {
+  youtube: "YT",
+  facebook: "f",
+  linkedin: "in",
+  instagram: "IG",
+  x: "X",
+};
+
+function FooterLinkList({
+  title,
+  links,
+}: {
+  title: string;
+  links: { name: string; href: string }[];
+}) {
+  return (
+    <div>
+      <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron">
+        {title}
+      </h3>
+      <ul className="space-y-2.5">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className="text-sm text-gray-300 transition-colors hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
+            >
+              {link.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 const Footer: React.FC = () => {
   const { address, emails, phones, websites, intro, mission, name, abhiyan } =
     DHE_ORGANIZATION;
+
+  const footerStats = impactStatistics.slice(0, 4);
 
   return (
     <>
@@ -54,6 +82,27 @@ const Footer: React.FC = () => {
           className="pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-white/5 blur-3xl"
         />
 
+        {/* Impact statistics strip */}
+        <div className="relative z-10 border-b border-white/10 px-4 py-8 md:px-8">
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 sm:grid-cols-4">
+            {footerStats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center backdrop-blur-sm"
+              >
+                <p className="text-2xl font-extrabold text-brand-saffron md:text-3xl">
+                  {stat.prefix}
+                  {stat.value}
+                  {stat.suffix}
+                </p>
+                <p className="mt-1 text-xs font-medium uppercase tracking-wide text-white/70">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Partner logos */}
         <div className="relative z-10 border-b border-white/10 px-4 py-8 md:px-8">
           <p className="mb-5 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">
@@ -61,13 +110,12 @@ const Footer: React.FC = () => {
           </p>
           <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-3 md:gap-4">
             {footerLogos.map((logo, i) => (
-              <motion.a
+              <a
                 key={i}
                 href={logo.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.08, y: -2 }}
-                className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm transition-colors hover:border-brand-saffron/40 hover:bg-white/10"
+                className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:scale-105 hover:border-brand-saffron/40 hover:bg-white/10"
               >
                 <Image
                   src={normalizeStaticImageSrc(logo.src)}
@@ -76,16 +124,16 @@ const Footer: React.FC = () => {
                   height={48}
                   className="h-9 w-auto md:h-11"
                 />
-              </motion.a>
+              </a>
             ))}
           </div>
         </div>
 
-        {/* Five-column main footer */}
+        {/* Main footer grid */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-14">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-8">
-            {/* Column 1 — About */}
-            <div className="sm:col-span-2 lg:col-span-1">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-8">
+            {/* About — spans 2 cols on xl */}
+            <div className="sm:col-span-2 xl:col-span-2">
               <div className="mb-4 flex items-center gap-3">
                 <Image
                   src="/logo.png"
@@ -106,50 +154,33 @@ const Footer: React.FC = () => {
                 <span className="font-semibold text-brand-saffron/90">Mission: </span>
                 {mission}
               </p>
-            </div>
-
-            {/* Column 2 — Quick Links */}
-            <div>
-              <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron">
-                Quick Links
-              </h3>
-              <ul className="space-y-2">
-                {quickLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-gray-300 transition-colors hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
+              <div className="mt-5 flex flex-wrap gap-3">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.id}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-base transition-all hover:border-brand-saffron/50 hover:bg-brand-saffron/15 hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
+                  >
+                    <span className="text-xs font-bold" aria-hidden>
+                      {socialLabels[social.id]}
+                    </span>
+                  </a>
                 ))}
-              </ul>
+              </div>
             </div>
 
-            {/* Column 3 — Programs */}
-            <div>
-              <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron">
-                Programs &amp; Activities
-              </h3>
-              <ul className="space-y-2">
-                {programLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-gray-300 transition-colors hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <FooterLinkList title="Quick Links" links={quickLinks} />
+            <FooterLinkList title="Departments" links={departmentLinks} />
+            <FooterLinkList title="Education & Research" links={educationLinks} />
+            <FooterLinkList title="Programs" links={programLinks} />
 
-            {/* Column 4 — Contact */}
-            <div>
+            {/* Contact */}
+            <div className="sm:col-span-2 xl:col-span-1">
               <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron">
-                Contact Information
+                Contact
               </h3>
               <address className="space-y-3 not-italic text-sm leading-relaxed text-gray-300">
                 <p>
@@ -169,7 +200,7 @@ const Footer: React.FC = () => {
                       <li key={email}>
                         <a
                           href={`mailto:${email}`}
-                          className="text-brand-saffron/90 hover:text-brand-saffron hover:underline"
+                          className="break-all text-brand-saffron/90 hover:text-brand-saffron hover:underline"
                         >
                           {email}
                         </a>
@@ -193,7 +224,7 @@ const Footer: React.FC = () => {
                   </ul>
                 </div>
                 <div>
-                  <span className="font-semibold text-white/80">Website</span>
+                  <span className="font-semibold text-white/80">Websites</span>
                   <ul className="mt-1 space-y-0.5">
                     {websites.map((site) => (
                       <li key={site.href}>
@@ -211,37 +242,14 @@ const Footer: React.FC = () => {
                 </div>
               </address>
             </div>
-
-            {/* Column 5 — Social + quick message */}
-            <div className="space-y-5">
-              <div>
-                <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron">
-                  Follow Us
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {socialLinks.map((social) => (
-                    <a
-                      key={social.id}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={social.label}
-                      className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-lg transition-all hover:border-brand-saffron/50 hover:bg-brand-saffron/15 hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
-                    >
-                      <FontAwesomeIcon icon={socialIconMap[social.id]} />
-                    </a>
-                  ))}
-                </div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                <h3 className="mb-3 text-sm font-bold text-white">Quick Message</h3>
-                <FooterContactForm />
-              </div>
-            </div>
           </div>
 
-          {/* Newsletter strip */}
-          <div className="mt-10">
+          {/* Contact form + newsletter */}
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+              <h3 className="mb-3 text-sm font-bold text-white">Quick Message</h3>
+              <FooterContactForm />
+            </div>
             <FooterNewsletterSlot />
           </div>
         </div>

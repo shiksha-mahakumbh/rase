@@ -1,13 +1,3 @@
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
-import ContactUs from "@/app/component/ContactUs";
+import { createLegacyRedirect } from "@/lib/routing/legacy-redirect-page";
 
-export default function ContactPage() {
-  return (
-    <div className="min-h-screen bg-brand-surface">
-      <NavBar />
-      <ContactUs />
-      <Footer />
-    </div>
-  );
-}
+export default createLegacyRedirect("/contact-us");

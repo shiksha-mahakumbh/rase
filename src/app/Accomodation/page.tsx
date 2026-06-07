@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
+import { createLegacyRedirect } from "@/lib/routing/legacy-redirect-page";
 
-export default function LegacyAccommodationPage() {
-  redirect("/registration");
-}
+export default createLegacyRedirect("/accommodation");

@@ -11,7 +11,7 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     category: "news",
     tags: ["press", "media"],
     publishedAt: "2024-11-01",
-    href: "/Press_Release",
+    href: "/press",
     featured: true,
   },
   {
@@ -58,7 +58,7 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     category: "event-report",
     tags: ["SMK6", "event"],
     publishedAt: "2026-01-01",
-    href: "/upcomingevent",
+    href: "/upcoming-events",
     featured: true,
   },
   {
@@ -68,7 +68,7 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     category: "event-report",
     tags: ["archive", "history"],
     publishedAt: "2023-01-01",
-    href: "/pastevent",
+    href: "/past-events",
   },
 ];
 

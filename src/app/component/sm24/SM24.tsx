@@ -80,7 +80,7 @@ const EventPage: React.FC = () => {
 
         <div className="text-center mb-6">
         <Link
-             href="/Wishes_Received"
+             href="/wishes-received"
              className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
         >
           Wishes Received

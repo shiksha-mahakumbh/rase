@@ -1,28 +1,13 @@
-"use client"
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
-import Footer from "../component/Footer";
+import NavBar from "@/app/component/NavBar";
+import Footer from "@/app/component/Footer";
+import Merchandise from "@/app/component/Merchandise";
 
-const Merchandise = React.lazy(() => import("../component/Merchandise"));
-
-const gallery = () => (
-  <div className="bg-white">
-  <div>
-  <CompanyInfo/>
-  <NavBar />
-  </div>
-    <div>
-    <React.Suspense fallback={<div>Loading...</div>}>
-    
+export default function MerchandisePage() {
+  return (
+    <div className="min-h-screen bg-brand-surface">
+      <NavBar />
       <Merchandise />
-    </React.Suspense>
+      <Footer />
     </div>
-    <div>
-      < Footer />
-    </div>
-
-  </div>
-);
-
-export default gallery;
+  );
+}

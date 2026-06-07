@@ -1,94 +1,131 @@
 "use client";
-import React from "react";
+
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { COMMITTEE_EDITIONS } from "@/data/committee-editions";
 
 interface CommitteeTreeProps {
-  onSelect: (committee: string) => void;
+  onSelect?: (committee: string) => void;
 }
 
 const CommitteeTimeline: React.FC<CommitteeTreeProps> = ({ onSelect }) => {
-  const committees = [
-    {
-      title: "Shiksha Mahakumbh 1.0",
-      year: "2023",
-      description: "The inaugural edition setting the foundation for future Mahakumbh series.",
-      link: "https://rase.co.in",
-      committeeLink: "/committee/shikshamahakumbh2023",
-      onCommitteeSelect: "Shiksha Mahakumbh 1.0 Committee",
-    },
-    {
-      title: "Shiksha Mahakumbh 2.0",
-      year: "2023",
-      description: "Early edition emphasizing teacher workshops and rural school outreach.",
-      link: "https://rase.co.in",
-      committeeLink: "/committee/shikshakumbh2023",
-      onCommitteeSelect: "Shiksha Mahakumbh 2.0 Committee",
-    },
-    {
-      title: "Shiksha Mahakumbh 3.0",
-      year: "2024",
-      description: "Focused on innovations in school education and student empowerment.",
-      link: "https://rase.co.in",
-      committeeLink: "/committee/shikshakumbh2024",
-      onCommitteeSelect: "Shiksha Mahakumbh 3.0 Committee",
-    },
-    {
-      title: "Shiksha Mahakumbh 4.0",
-      year: "2024",
-      description: "Celebrating excellence in Indian education system with interactive workshops.",
-      link: "https://rase.co.in",
-      committeeLink: "/committee/shikshamahakumbh2024",
-      onCommitteeSelect: "Shiksha Mahakumbh 4.0 Committee",
-    },
-    {
-      title: "Shiksha Mahakumbh 5.0",
-      year: "2025",
-      description: "The latest edition, focusing on global education trends and innovations.",
-      link: "https://rase.co.in",
-      committeeLink: "/committee/shikshamahakumbh2025",
-      onCommitteeSelect: "Shiksha Mahakumbh 5.0 Committee",
-    },
-  ];
+  const [query, setQuery] = useState("");
+  const [yearFilter, setYearFilter] = useState<string>("all");
+
+  const years = useMemo(
+    () => Array.from(new Set(COMMITTEE_EDITIONS.map((c) => c.year))).sort(),
+    []
+  );
+
+  const filtered = useMemo(() => {
+    return COMMITTEE_EDITIONS.filter((c) => {
+      const matchesYear = yearFilter === "all" || c.year === yearFilter;
+      const q = query.toLowerCase().trim();
+      const matchesQuery =
+        !q ||
+        c.title.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        c.year.includes(q);
+      return matchesYear && matchesQuery;
+    });
+  }, [query, yearFilter]);
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-extrabold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-        Shiksha Mahakumbh Timeline
-      </h1>
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <label className="sr-only" htmlFor="committee-search">
+          Search committees
+        </label>
+        <input
+          id="committee-search"
+          type="search"
+          placeholder="Search edition or description…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="min-h-[44px] flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron"
+        />
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by year">
+          <button
+            type="button"
+            onClick={() => setYearFilter("all")}
+            className={`min-h-[40px] rounded-lg px-3 py-1.5 text-sm font-medium ${
+              yearFilter === "all"
+                ? "bg-brand-navy text-white"
+                : "bg-slate-100 text-gray-700"
+            }`}
+          >
+            All
+          </button>
+          {years.map((year) => (
+            <button
+              key={year}
+              type="button"
+              onClick={() => setYearFilter(year)}
+              className={`min-h-[40px] rounded-lg px-3 py-1.5 text-sm font-medium ${
+                yearFilter === year
+                  ? "bg-brand-navy text-white"
+                  : "bg-slate-100 text-gray-700"
+              }`}
+            >
+              {year}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      <div className="relative border-l-4 border-blue-600 ml-4">
-        {committees.map((committee, index) => (
-          <div key={index} className="mb-10 ml-6 relative">
-            {/* Circle marker */}
-            <div className="absolute -left-7 top-0 w-6 h-6 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"></div>
-
-            {/* Card */}
-            <div className="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-xl font-bold text-gray-800">{committee.title}</h2>
-                <span className="bg-yellow-400 text-black font-semibold px-3 py-1 rounded-full text-sm">
+      <div className="relative ml-2 border-l-2 border-brand-saffron/40 pl-8">
+        {filtered.map((committee, index) => (
+          <motion.article
+            key={committee.title}
+            initial={{ opacity: 0, x: -12 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.06 }}
+            className="relative mb-10"
+          >
+            <div
+              aria-hidden
+              className="absolute -left-[2.55rem] top-2 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-brand-saffron shadow-md"
+            />
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_8px_32px_rgba(11,31,59,0.08)] transition hover:-translate-y-0.5 hover:border-brand-saffron/30 hover:shadow-lg">
+              <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-brand-saffron-dark">
+                    Edition {committee.edition}
+                  </span>
+                  <h2 className="text-xl font-bold text-brand-navy md:text-2xl">
+                    {committee.title}
+                  </h2>
+                </div>
+                <span className="rounded-full bg-brand-saffron/15 px-3 py-1 text-sm font-semibold text-brand-navy">
                   {committee.year}
                 </span>
               </div>
-              <p className="text-gray-700 mb-4">{committee.description}</p>
-              <div className="flex flex-col md:flex-row gap-3">
-                <Link href={committee.link} passHref>
-                  <button className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 w-full md:w-auto">
-                    View Event
-                  </button>
+              <p className="mb-5 leading-relaxed text-gray-600">
+                {committee.description}
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href={committee.link}
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-navy-light"
+                >
+                  View Event
                 </Link>
-                <Link href={committee.committeeLink} passHref>
-                  <button
-                    className="bg-purple-600 text-white p-2 rounded-lg hover:bg-purple-700 transition duration-300 w-full md:w-auto"
-                    onClick={() => onSelect(committee.onCommitteeSelect)}
-                  >
-                    Committee Details
-                  </button>
+                <Link
+                  href={committee.committeeLink}
+                  onClick={() => onSelect?.(committee.onCommitteeSelect)}
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-brand-saffron bg-brand-saffron/10 px-5 py-2.5 text-sm font-semibold text-brand-navy transition hover:bg-brand-saffron/20"
+                >
+                  Committee Details
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.article>
         ))}
+        {filtered.length === 0 && (
+          <p className="py-8 text-center text-gray-500">No editions match your search.</p>
+        )}
       </div>
     </div>
   );

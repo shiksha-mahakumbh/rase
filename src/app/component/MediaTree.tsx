@@ -19,8 +19,8 @@ const Glimpses: React.FC = () => {
       color: "from-blue-700 to-indigo-800",
       image: "/images/smk4.jpg",
       children: [
-        { label: "Digital Media", link: "/shikshamahakumbh2024digitalmedia" },
-        { label: "Print Media", link: "/printmediashikshamahakumbh2024" },
+        { label: "Digital Media", link: "/media/shiksha-mahakumbh/2024/digital" },
+        { label: "Print Media", link: "/media/shiksha-mahakumbh/2024/print" },
       ],
       archive: [
         {
@@ -28,8 +28,8 @@ const Glimpses: React.FC = () => {
           label: "शिक्षा महाकुंभ 1.0",
           engLabel: "Shiksha Mahakumbh 1.0",
           children: [
-            { label: "Digital Media", link: "/shikshamahakumbh2023digitalmedia" },
-            { label: "Print Media", link: "/printmediashikshamahakumbh2023" },
+            { label: "Digital Media", link: "/media/shiksha-mahakumbh/2023/digital" },
+            { label: "Print Media", link: "/media/shiksha-mahakumbh/2023/print" },
           ],
         },
       ],
@@ -42,8 +42,8 @@ const Glimpses: React.FC = () => {
       color: "from-orange-500 to-red-600",
       image: "/images/smk3.jpg",
       children: [
-        { label: "Digital Media", link: "/shikshakumbh2024digitalmedia" },
-        { label: "Print Media", link: "/printmediashikshakumbh2024" },
+        { label: "Digital Media", link: "/media/shiksha-kumbh/2024/digital" },
+        { label: "Print Media", link: "/media/shiksha-kumbh/2024/print" },
       ],
       archive: [
         {
@@ -51,8 +51,8 @@ const Glimpses: React.FC = () => {
           label: "शिक्षा महाकुंभ 2.0",
           engLabel: "Shiksha Mahakumbh 2.0",
           children: [
-            { label: "Digital Media", link: "/shikshakumbh2023digitalmedia" },
-            { label: "Print Media", link: "/printmediashikshakumbh2023" },
+            { label: "Digital Media", link: "/media/shiksha-kumbh/2023/digital" },
+            { label: "Print Media", link: "/media/shiksha-kumbh/2023/print" },
           ],
         },
       ],

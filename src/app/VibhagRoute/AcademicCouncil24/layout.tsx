@@ -5,7 +5,7 @@ export const metadata = createPageMetadata({
   title: "Academic Council — Programmes & Research Tracks",
   description:
     "Shiksha Mahakumbh 6.0 Academic Council: multi-track conference, conclaves, olympiads, exhibitions, best practices, and publications at NIT Hamirpur.",
-  path: "/VibhagRoute/AcademicCouncil24",
+  path: "/departments/academic-council",
   keywords: [
     "Academic Council Shiksha Mahakumbh",
     "research conference India 2026",

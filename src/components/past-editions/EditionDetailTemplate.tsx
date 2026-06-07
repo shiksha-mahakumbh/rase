@@ -11,7 +11,7 @@ export default function EditionDetailTemplate({ edition, children }: Props) {
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
       <nav className="text-sm text-slate-600">
-        <Link href="/pastevent" className="hover:text-brand-saffron">
+        <Link href="/past-events" className="hover:text-brand-saffron">
           Past Editions
         </Link>
         <span className="mx-2">/</span>
@@ -58,7 +58,7 @@ export default function EditionDetailTemplate({ edition, children }: Props) {
       ) : null}
 
       <p className="mt-10">
-        <Link href="/pastevent" className="font-semibold text-brand-navy hover:underline">
+        <Link href="/past-events" className="font-semibold text-brand-navy hover:underline">
           ← All past editions
         </Link>
       </p>

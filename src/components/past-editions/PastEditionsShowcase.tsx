@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import { PAST_EDITIONS } from "@/data/past-editions";
 import PastEditionsJsonLd from "./PastEditionsJsonLd";
@@ -65,12 +64,8 @@ export default function PastEditionsShowcase() {
             className="absolute bottom-0 left-4 top-0 hidden w-0.5 bg-brand-saffron/30 md:left-1/2 md:block md:-translate-x-1/2"
           />
           {PAST_EDITIONS.map((edition, index) => (
-            <motion.article
+            <article
               key={edition.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: index * 0.05 }}
               className={`relative md:flex md:w-[calc(50%-2rem)] ${
                 index % 2 === 0
                   ? "md:mr-auto md:pr-8"
@@ -169,7 +164,7 @@ export default function PastEditionsShowcase() {
                   </div>
                 </div>
               </div>
-            </motion.article>
+            </article>
           ))}
         </div>
       </section>

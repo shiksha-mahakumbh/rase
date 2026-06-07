@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "Committee", path: "/committeepage" },
+          { name: "Committee", path: "/committees" },
           { name: "Shiksha Mahakumbh 2024", path: "/committee/shikshamahakumbh2024" },
         ]}
       />

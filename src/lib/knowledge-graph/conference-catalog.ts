@@ -10,8 +10,8 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     label: "Shiksha Mahakumbh 6.0",
     routes: [
       { path: "/registration", label: "Register SMK 6.0" },
-      { path: "/upcomingevent", label: "Upcoming Programmes" },
-      { path: "/VibhagRoute/AcademicCouncil24", label: "Academic Council 6.0" },
+      { path: "/upcoming-events", label: "Upcoming Programmes" },
+      { path: "/departments/academic-council", label: "Academic Council 6.0" },
     ],
   },
   {
@@ -19,7 +19,7 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     label: "Shiksha Mahakumbh 5.0",
     routes: [
       { path: "/past_event/sm25", label: "SMK 5.0 — NIPER Mohali" },
-      { path: "/pastevent", label: "Past Editions Archive" },
+      { path: "/past-events", label: "Past Editions Archive" },
     ],
   },
   {
@@ -28,7 +28,7 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     routes: [
       { path: "/past_event/sm24", label: "SMK 4.0 — Kurukshetra University" },
       { path: "/past_event/sk24", label: "SMK 3.0 — NIT Srinagar" },
-      { path: "/shikshamahakumbh2024digitalmedia", label: "Digital Media 2024" },
+      { path: "/media/shiksha-mahakumbh/2024/digital", label: "Digital Media 2024" },
       { path: "/proceeding1", label: "Proceedings 2024" },
     ],
   },
@@ -38,7 +38,7 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     routes: [
       { path: "/past_event/sm23", label: "SMK 1.0 — NIT Jalandhar" },
       { path: "/past_event/sk23", label: "SMK 2.0 — NIT Kurukshetra" },
-      { path: "/shikshamahakumbh2023digitalmedia", label: "Digital Media 2023" },
+      { path: "/media/shiksha-mahakumbh/2023/digital", label: "Digital Media 2023" },
     ],
   },
 ];
@@ -65,8 +65,8 @@ export const SUMMIT_ROUTES = [
 ] as const;
 
 export const EVENT_HUB_ROUTES = [
-  { path: "/upcomingevent", label: "Upcoming Events" },
-  { path: "/pastevent", label: "Past Events" },
+  { path: "/upcoming-events", label: "Upcoming Events" },
+  { path: "/past-events", label: "Past Events" },
   { path: "/past_event/sk24", label: "Shiksha Kumbh 2024" },
   { path: "/past_event/sk23", label: "Shiksha Kumbh 2023" },
 ] as const;

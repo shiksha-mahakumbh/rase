@@ -1,7 +1,8 @@
-import React from 'react';
-import Footer from '../../component/Footer';
-import CompanyInfo from '../../component/CompanyInfo';
-import NavBar from '../../component/NavBar';
+import React from "react";
+import Footer from "../../component/Footer";
+import NavBar from "../../component/NavBar";
+import CommitteeDetailShell from "@/components/committee/CommitteeDetailShell";
+import CommitteeMemberSection from "@/components/committee/CommitteeMemberSection";
 const ShikshaKumbh2024 = () => {
   const data = {
       LocalAdvisoryCommittee: [
@@ -91,64 +92,14 @@ const ShikshaKumbh2024 = () => {
     }
   
 
-  const renderCommittee = (committee: Array<{ id: number, name: string, designation: string }>, title: string) => (
-    <div className="my-8">
-      <h2 className="text-xl font-semibold mb-4">{title}</h2>
-      <ul>
-        {committee.map((member) => (
-          <li key={member.id} className="mb-2">
-            <strong>{member.name}</strong> - {member.designation}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-
   return (
     <>
-    <CompanyInfo />
       <NavBar />
-      
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl text-center font-bold mb-8">Shiksha Maha Kumbh 2024</h1>
-
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold">National Advisory Committee</h2>
-          <ul>
-            {data.NationalAdvisoryCommittee.map((member) => (
-              <li key={member.id} className="flex justify-between p-2">
-                <span>{member.name}</span>
-                <span>{member.designation}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold">Local Advisory Committee</h2>
-          <ul>
-            {data.LocalAdvisoryCommittee.map((member) => (
-              <li key={member.id} className="flex justify-between p-2">
-                <span>{member.name}</span>
-                <span>{member.designation}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold">Organizing Committee</h2>
-          <ul>
-            {data.OrganizingCommittee.map((member) => (
-              <li key={member.id} className="flex justify-between p-2">
-                <span>{member.name}</span>
-                <span>{member.designation}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
-      
+      <CommitteeDetailShell editionTitle="Shiksha Maha Kumbh 2024">
+        <CommitteeMemberSection title="National Advisory Committee" members={data.NationalAdvisoryCommittee} badge="Advisory" />
+        <CommitteeMemberSection title="Local Advisory Committee" members={data.LocalAdvisoryCommittee} />
+        <CommitteeMemberSection title="Organizing Committee" members={data.OrganizingCommittee} badge="Organising" />
+      </CommitteeDetailShell>
       <Footer />
     </>
   );

@@ -1,0 +1,74 @@
+[
+  {
+    "page": "home",
+    "url": "http://localhost:3000/",
+    "performance": 43,
+    "accessibility": 96,
+    "bestPractices": 89,
+    "seo": 100,
+    "lcp": "5.1 s",
+    "fcp": "2.2 s",
+    "cls": "0",
+    "tbt": "1,520 ms"
+  },
+  {
+    "page": "past-events",
+    "url": "http://localhost:3000/past-events",
+    "performance": 72,
+    "accessibility": 96,
+    "bestPractices": 93,
+    "seo": 100,
+    "lcp": "2.3 s",
+    "fcp": "1.8 s",
+    "cls": "0",
+    "tbt": "880 ms"
+  },
+  {
+    "page": "media-center",
+    "url": "http://localhost:3000/media-center",
+    "performance": 70,
+    "accessibility": 97,
+    "bestPractices": 93,
+    "seo": 100,
+    "lcp": "1.7 s",
+    "fcp": "1.0 s",
+    "cls": "0",
+    "tbt": "1,810 ms"
+  },
+  {
+    "page": "contact-us",
+    "url": "http://localhost:3000/contact-us",
+    "performance": 48,
+    "accessibility": 96,
+    "bestPractices": 93,
+    "seo": 100,
+    "lcp": "4.5 s",
+    "fcp": "1.8 s",
+    "cls": "0",
+    "tbt": "1,900 ms"
+  },
+  {
+    "page": "academic-council",
+    "url": "http://localhost:3000/departments/academic-council",
+    "performance": 45,
+    "accessibility": 96,
+    "bestPractices": 96,
+    "seo": 100,
+    "lcp": "5.1 s",
+    "fcp": "2.2 s",
+    "cls": "0",
+    "tbt": "1,200 ms"
+  },
+  {
+    "page": "committees",
+    "url": "http://localhost:3000/committees",
+    "performance": 48,
+    "accessibility": 96,
+    "bestPractices": 93,
+    "seo": 100,
+    "lcp": "4.5 s",
+    "fcp": "1.5 s",
+    "cls": "0",
+    "tbt": "1,610 ms"
+  }
+]
