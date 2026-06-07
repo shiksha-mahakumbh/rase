@@ -17,6 +17,10 @@ import {
 import { auth } from "@/lib/firebase";
 import { AdminRole } from "@/types/registration";
 import { resolveAdminRole } from "@/lib/resolveAdminRole";
+import {
+  setAdminSessionCookie,
+  clearAdminSessionCookie,
+} from "@/constants/auth";
 
 interface AdminContextValue {
   user: User | null;
@@ -58,8 +62,11 @@ export function AdminProvider({ children }: { children: ReactNode }) {
           if (firebaseUser) {
             const resolvedRole = await resolveAdminRole(firebaseUser);
             setRole(resolvedRole);
+            if (resolvedRole) setAdminSessionCookie();
+            else clearAdminSessionCookie();
           } else {
             setRole(null);
+            clearAdminSessionCookie();
           }
         } catch (error) {
           console.error("Admin auth error:", error);
@@ -84,6 +91,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    clearAdminSessionCookie();
     await signOut(auth);
   };
 

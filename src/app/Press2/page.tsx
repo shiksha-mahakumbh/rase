@@ -2,12 +2,16 @@
 import React from "react";
 import CompanyInfo from "../component/CompanyInfo";
 import Footer from "../component/Footer";
+import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import NavBar from "../component/NavBar";
 import Press2 from "../component/Press2";
 import proceeding1 from '/public/2024M/press2.jpg';
 import Image from "next/image"; 
 
-const shareUrl = encodeURIComponent("https://www.rase.co.in/Press2"); // Replace with your actual page URL
+import { getPressShareUrl } from "@/lib/seo/pressShare";
+
+const shareUrl = getPressShareUrl(2);
 const shareText = encodeURIComponent(
   "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।"
 );
@@ -64,15 +68,7 @@ const data = {
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-              />
+              <WhatsAppIcon />
             </a>
           </li>
           <li key="contact-2">
@@ -88,15 +84,7 @@ const data = {
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-              />
+              <WhatsAppIcon />
             </a>
           </li>
           <li key="contact-3">
@@ -112,15 +100,7 @@ const data = {
               target="_blank"
               style={{ textDecoration: "none" }}
             >
-              <img
-                src="https://img.icons8.com/ios-filled/20/25D366/whatsapp.png"
-                alt="WhatsApp"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  verticalAlign: "middle",
-                }}
-              />
+              <WhatsAppIcon />
             </a>
           </li>
         </ul>,
@@ -181,6 +161,7 @@ export default function Home() {
         {/* Right sidebar or additional content */}
       </div>
     </div>
+    <RelatedContentSectionClient path="/Press2" title="Related programmes & resources" />
     <Footer />
   </div>
 );

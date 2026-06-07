@@ -1,0 +1,48 @@
+/**
+ * Normalizes legacy Academic Council section markup (content unchanged).
+ * Applied inside .ac-page wrapper only.
+ */
+
+.ac-page {
+  overflow-x: clip;
+}
+
+.ac-page [class*="max-w-7xl"] {
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .ac-page [class*="max-w-7xl"] {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.ac-page [class*="max-w-7xl"] h2,
+.ac-page [class*="max-w-7xl"] h3 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.ac-page [class*="rounded-2xl"][class*="shadow"] {
+  border: 1px solid rgb(226 232 240 / 0.8);
+}
+
+.ac-page .grid {
+  min-width: 0;
+}
+
+.ac-page ul,
+.ac-page ol {
+  overflow-wrap: anywhere;
+}
+
+.ac-page table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

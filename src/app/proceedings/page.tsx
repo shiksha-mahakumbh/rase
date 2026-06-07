@@ -4,7 +4,8 @@ import Info from '../component/Info';
 import NavBar from '../component/NavBar';
 import Introduction from '../component/Introduction';
 import Books from '../component/Books';
-import Proceedings from '../component/Proceedings';
+import ProceedingsShell from './ProceedingsShell';
+import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
 
 
 
@@ -24,13 +25,14 @@ export default function Home() {
       
       <div className="w-full sm:w-3/5 sm:flex-col">
      
-  <Proceedings />
+  <ProceedingsShell />
       </div>
   
     
       <div className="w-full sm:w-1/5 sm:flex-col">
         </div>
     </div>
+    <RelatedContentSection path="/proceedings" title="Related programmes & resources" />
     <Footer/>
   </div>
   

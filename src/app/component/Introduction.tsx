@@ -45,11 +45,11 @@ const Info = () => {
 
     <li>🔹 <strong>2nd Edition – NIT Kurukshetra | 20th December 2023</strong><br/>Theme: Role of Academic-Driven Startups in the Economy (RASE)<br/>Impact: Sparked nationwide collaboration between academia and entrepreneurship, resulting in MoUs, startup incubation, and industry-institution integration plans.</li>
 
-    <li>🔹 <strong>3rd Edition – NIT Srinagar | 29th–30th June 2024</strong><br/>Theme: Academic Innovation for the Economic Development of J&K<br/>Impact: Focused on peace-building and economic empowerment through education in conflict-prone zones; initiated local skilling programs and startup mentorship cells.</li>
+    <li>🔹 <strong>3rd Edition – NIT Srinagar | 29th–30th June 2024</strong><br/>Theme: Role of Academic-driven Startups in Developing Economy of J & K<br/>Impact: Focused on peace-building and economic empowerment through education in conflict-prone zones; initiated local skilling programs and startup mentorship cells.</li>
 
     <li>🔹 <strong>4th Edition – Kurukshetra University | 16th–17th December 2024</strong><br/>Theme: Bhartiya Education System for Global Development<br/>Impact: Developed a national vision document for Bhartiya as a global education hub, rooted in NEP 2020 and Bhartiya knowledge systems.</li>
 
-    <li>🔹 <strong>5th Edition – NIPER Mohali | 31st Oct – 2nd Nov 2025</strong><br/>Theme: Empowering Global Health through Pharma Innovation and Education<br/>Expected Impact: Strategic roadmap for linking pharmaceutical education, R&D, and global health; building Bhartiya's role in global medical innovation and knowledge exchange.</li>
+    <li>🔹 <strong>5th Edition – NIPER Mohali | 31st Oct – 2nd Nov 2025</strong><br/>Theme: Classroom to Society: Building a Healthier World through Education<br/>Impact: Advanced the national dialogue on linking classroom learning with societal wellbeing and health-oriented education outcomes.</li>
   </ul>
 
   <p class="mt-4">

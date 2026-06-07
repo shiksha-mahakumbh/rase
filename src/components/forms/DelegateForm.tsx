@@ -23,6 +23,7 @@ import { formClasses } from "@/app/component/ui/formClasses";
 import { DELEGATE_FEES } from "@/types/registration";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { useMemo, useState } from "react";
+import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 
 const defaultValues: Partial<DelegateFormValues> = {
   accommodationRequired: "No",
@@ -39,11 +40,14 @@ export default function DelegateForm() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<DelegateFormValues>({
     resolver: zodResolver(delegateSchema),
     defaultValues,
   });
+
+  useRegistrationDraft("Delegate Registration", watch, reset);
 
   const category = watch("delegateCategory");
   const fee = useMemo(
@@ -75,7 +79,7 @@ export default function DelegateForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <CommonParticipantFields register={sharedRegister(register)} errors={sharedErrors(errors)} />
 
-      <FormSection title="Delegate Registration">
+      <FormSection title="Delegate Registration" className="registration-details">
         <FormField
           label="Delegate Category"
           name="delegateCategory"
@@ -96,7 +100,7 @@ export default function DelegateForm() {
       <AccommodationSection register={sharedRegister(register)} watch={sharedWatch(watch)} errors={sharedErrors(errors)} />
 
       {fee > 0 && (
-        <FormSection title="Payment Details">
+        <FormSection title="Payment Details" className="registration-payment">
           <FormField
             label="UTR Number"
             name="utrNumber"

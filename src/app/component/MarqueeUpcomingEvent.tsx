@@ -1,6 +1,7 @@
 import React from "react";
 import Marquee from "react-fast-marquee";
-import Link from 'next/link';
+import Link from "next/link";
+import OptimizedImage from "@/components/media/OptimizedImage";
 
 interface Item {
     imageUrl: string;
@@ -22,7 +23,14 @@ const MarqueeUpcomingEvent: React.FC = () => {
                 <div className="flex flex-col">
                     {items.map((item, index) => (
                         <div key={index} className="object-cover p-2 w-full">
-                            <img src={item.imageUrl} alt="Item Image" className="mt-1 me-1 object-cover" />
+                            <OptimizedImage
+                              src={item.imageUrl}
+                              alt=""
+                              width={48}
+                              height={48}
+                              className="me-1 mt-1 object-cover"
+                              enableBlur={false}
+                            />
                             <Link href={item.link}>
                                 <p className="text-orange-600">{item.text}</p>
                             </Link>

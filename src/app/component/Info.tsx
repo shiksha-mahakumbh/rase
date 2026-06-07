@@ -13,6 +13,7 @@ import {
   SocietyIcon,
 } from "./home/icons";
 import type { EditionItem } from "./home/types";
+import { PAST_EDITIONS } from "@/data/past-editions";
 
 const contentParagraphs: { text: React.ReactNode; icon: React.ReactNode }[] = [
   {
@@ -108,38 +109,12 @@ const contentParagraphs: { text: React.ReactNode; icon: React.ReactNode }[] = [
   },
 ];
 
-const editions: EditionItem[] = [
-  {
-    title: "First Edition – NIT Jalandhar",
-    date: "9–11 June 2023",
-    theme: "Recent Advances in School Education",
-    focus: "A strong beginning in innovation within school education",
-  },
-  {
-    title: "Second Edition – NIT Kurukshetra",
-    date: "20 December 2023",
-    theme: "Role of Academic-driven Startups in Economy",
-    focus: "From Education to Startups, Startups to Economy",
-  },
-  {
-    title: "Third Edition – NIT Srinagar",
-    date: "29–30 June 2024",
-    theme: "Role of Academic-driven Startups in Developing Economy of J&K",
-    focus: "From Education to Enterprise, Enterprise to Regional Development",
-  },
-  {
-    title: "Fourth Edition – Kurukshetra University",
-    date: "16–17 December 2024",
-    theme: "Indian Education System for Global Development",
-    focus: "Indian Education as a Global Solution",
-  },
-  {
-    title: "Fifth Edition – NIPER Mohali",
-    date: "31 October – 2 November 2025",
-    theme: "Classroom to Society – Building a Healthier World through Education",
-    focus: "The Journey of Education from Classroom to Society",
-  },
-];
+const editions: EditionItem[] = PAST_EDITIONS.map((e) => ({
+  title: `${e.edition === "1.0" ? "First" : e.edition === "2.0" ? "Second" : e.edition === "3.0" ? "Third" : e.edition === "4.0" ? "Fourth" : "Fifth"} Edition – ${e.venue}`,
+  date: e.dates,
+  theme: e.theme,
+  focus: e.coreEssence,
+}));
 
 const Info: React.FC = () => {
   const jsonLd = {
@@ -148,38 +123,14 @@ const Info: React.FC = () => {
     name: "Shiksha Mahakumbh Abhiyan",
     description:
       "A global educational movement connecting policy, academia, industry, and society to transform education.",
-    event: [
-      {
-        "@type": "Event",
-        name: "First Edition – NIT Jalandhar",
-        startDate: "2023-06-09",
-        endDate: "2023-06-11",
-        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-      },
-      {
-        "@type": "Event",
-        name: "Second Edition – NIT Kurukshetra",
-        startDate: "2023-12-20",
-      },
-      {
-        "@type": "Event",
-        name: "Third Edition – NIT Srinagar",
-        startDate: "2024-06-29",
-        endDate: "2024-06-30",
-      },
-      {
-        "@type": "Event",
-        name: "Fourth Edition – Kurukshetra University",
-        startDate: "2024-12-16",
-        endDate: "2024-12-17",
-      },
-      {
-        "@type": "Event",
-        name: "Fifth Edition – NIPER Mohali",
-        startDate: "2025-10-31",
-        endDate: "2025-11-02",
-      },
-    ],
+    event: PAST_EDITIONS.map((e) => ({
+      "@type": "Event",
+      name: e.title,
+      startDate: e.dateStart,
+      endDate: e.dateEnd ?? e.dateStart,
+      location: { "@type": "Place", name: e.venueFull },
+      description: e.theme,
+    })),
   };
 
   return (

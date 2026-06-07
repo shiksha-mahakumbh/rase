@@ -4,6 +4,49 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { saveRegistration } from "@/lib/saveRegistration";
+import { clearAllRegistrationDrafts } from "@/lib/registration/draftStorage";
+import {
+  ANALYTICS_EVENTS,
+  getTrafficSource,
+  trackEvent,
+} from "@/lib/analytics/events";
+import { attributionForFirestore } from "@/lib/analytics/attribution";
+
+async function verifyCaptchaBeforeSubmit(): Promise<boolean> {
+  if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
+    return process.env.NODE_ENV !== "production";
+  }
+
+  const grecaptcha = (
+    window as unknown as {
+      grecaptcha?: {
+        ready: (cb: () => void) => void;
+        execute: (key: string, opts: { action: string }) => Promise<string>;
+      };
+    }
+  ).grecaptcha;
+
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  if (!grecaptcha || !siteKey) return false;
+
+  const token = await new Promise<string | null>((resolve) => {
+    grecaptcha.ready(() => {
+      grecaptcha.execute(siteKey, { action: "registration" }).then(resolve).catch(() => resolve(null));
+    });
+  });
+
+  if (!token) return false;
+
+  const res = await fetch("/api/registration/verify-captcha", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, action: "registration" }),
+  });
+
+  if (!res.ok) return false;
+  const data = await res.json();
+  return Boolean(data.ok);
+}
 import { uploadFile } from "@/lib/uploadFile";
 import {
   PaymentStatus,
@@ -30,6 +73,12 @@ export function useRegistrationSubmit() {
   }: SubmitOptions) => {
     setLoading(true);
     try {
+      const captchaOk = await verifyCaptchaBeforeSubmit();
+      if (!captchaOk) {
+        toast.error("Security verification failed. Please refresh and try again.");
+        return;
+      }
+
       const uploaded: Record<string, unknown> = {};
 
       for (const [key, value] of Object.entries(files)) {
@@ -63,7 +112,15 @@ export function useRegistrationSubmit() {
         ...data,
         ...mapUploadedFiles(uploaded),
         payment,
+        trafficSource: getTrafficSource(),
+        ...attributionForFirestore(),
       };
+
+      if (data.accommodationRequired === "Yes") {
+        trackEvent(ANALYTICS_EVENTS.accommodationRequested, {
+          registrationType,
+        });
+      }
 
       const result = await saveRegistration({
         registrationType,
@@ -87,6 +144,12 @@ export function useRegistrationSubmit() {
         // Email failure should not block registration
       }
 
+      trackEvent(ANALYTICS_EVENTS.registrationCompleted, {
+        registrationType,
+        source: getTrafficSource(),
+      });
+
+      clearAllRegistrationDrafts();
       toast.success("Registration submitted successfully!");
       router.push(
         `/registration/success?id=${encodeURIComponent(result.registrationId)}`

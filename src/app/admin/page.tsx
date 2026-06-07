@@ -1,8 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { collection, getDocs, doc, writeBatch } from "firebase/firestore";
+import { doc, writeBatch, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import {
+  fetchRegistrationsPage,
+  fetchAllRegistrations,
+  REGISTRATIONS_PAGE_SIZE,
+} from "@/lib/services/firestore/registrations";
 import {
   AdminProvider,
   useAdmin,
@@ -10,7 +15,18 @@ import {
   canManageStatus,
 } from "@/lib/adminAuth";
 import RegistrationTable from "@/components/admin/RegistrationTable";
-import AnalyticsCharts from "@/components/admin/AnalyticsCharts";
+import AdminReportsPanel from "@/components/admin/AdminReportsPanel";
+import dynamic from "next/dynamic";
+import AdminGrowthAnalytics from "@/components/admin/AdminGrowthAnalytics";
+import AdminAnalyticsIntelligence from "@/components/admin/AdminAnalyticsIntelligence";
+import AdminGrowthDashboard from "@/components/admin/AdminGrowthDashboard";
+import AdminSystemHealth from "@/components/admin/AdminSystemHealth";
+import AdminDashboardOverview from "@/components/admin/AdminDashboardOverview";
+
+const AnalyticsCharts = dynamic(
+  () => import("@/components/admin/AnalyticsCharts"),
+  { ssr: false, loading: () => <ChartsSkeleton /> }
+);
 import {
   RegistrationRow,
   downloadCsv,
@@ -23,27 +39,39 @@ function DashboardContent() {
   const { user, role, loading, login, logout, isAdmin } = useAdmin();
   const [registrations, setRegistrations] = useState<RegistrationRow[]>([]);
   const [fetching, setFetching] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [cursor, setCursor] = useState<QueryDocumentSnapshot<DocumentData> | null>(
+    null
+  );
+  const [hasMore, setHasMore] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  const loadRegistrations = async () => {
-    setFetching(true);
+  const loadRegistrations = async (append = false) => {
+    if (append) setLoadingMore(true);
+    else setFetching(true);
     try {
-      const snap = await getDocs(collection(db, "registrations"));
-      const rows: RegistrationRow[] = snap.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      }));
-      rows.sort((a, b) => {
-        const ta = a.createdAt as { seconds?: number } | undefined;
-        const tb = b.createdAt as { seconds?: number } | undefined;
-        return (tb?.seconds ?? 0) - (ta?.seconds ?? 0);
-      });
-      setRegistrations(rows);
+      const page = await fetchRegistrationsPage(append ? cursor : null);
+      setRegistrations((prev) =>
+        append ? [...prev, ...page.rows] : page.rows
+      );
+      setCursor(page.lastDoc);
+      setHasMore(page.hasMore);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load registrations");
     } finally {
       setFetching(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const loadAllForExport = async (): Promise<RegistrationRow[]> => {
+    try {
+      return await fetchAllRegistrations();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load full export data");
+      return registrations;
     }
   };
 
@@ -75,9 +103,21 @@ function DashboardContent() {
       pendingVerifications: registrations.filter(
         (r) => r.registrationStatus === "Pending"
       ).length,
+      approved: registrations.filter(
+        (r) => r.registrationStatus === "Approved"
+      ).length,
+      verified: registrations.filter(
+        (r) => r.registrationStatus === "Verified"
+      ).length,
       pendingAccommodation: registrations.filter(
         (r) => r.accommodationStatus === "Requested"
       ).length,
+      revenue: registrations.reduce((sum, r) => {
+        const amt = Number(r.paymentAmount ?? r.amount ?? 0);
+        return r.paymentStatus === "Paid" && !Number.isNaN(amt)
+          ? sum + amt
+          : sum;
+      }, 0),
     };
   }, [registrations]);
 
@@ -152,7 +192,7 @@ function DashboardContent() {
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={loadRegistrations}
+              onClick={() => loadRegistrations(false)}
               disabled={fetching}
               className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
             >
@@ -170,38 +210,17 @@ function DashboardContent() {
       </header>
 
       <main className="mx-auto max-w-7xl space-y-8 px-6 py-8">
-        {/* Notifications */}
-        <div className="grid gap-4 md:grid-cols-3">
-          <NotificationCard
-            title="New Registrations"
-            value={stats.today}
-            hint="Submitted today"
-          />
-          <NotificationCard
-            title="Pending Verifications"
-            value={stats.pendingVerifications}
-            hint="Registration status pending"
-          />
-          <NotificationCard
-            title="Pending Accommodation"
-            value={stats.pendingAccommodation}
-            hint="Awaiting confirmation"
-          />
-        </div>
+        <AdminSystemHealth />
 
-        {/* Overview cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          <StatCard label="Total" value={stats.total} />
-          <StatCard label="Delegate" value={stats.delegate} />
-          <StatCard label="Conclave" value={stats.conclave} />
-          <StatCard label="Olympiad" value={stats.olympiad} />
-          <StatCard label="Awards" value={stats.awards} />
-          <StatCard label="Best Practices" value={stats.bestPractices} />
-          <StatCard label="Accommodation" value={stats.accommodation} />
-          <StatCard label="Today" value={stats.today} />
-          <StatCard label="Pending Payments" value={stats.pendingPayments} />
-          <StatCard label="Completed Payments" value={stats.completedPayments} />
-        </div>
+        <AdminGrowthDashboard rows={registrations} />
+
+        <AdminDashboardOverview stats={stats} />
+
+        <AdminReportsPanel rows={registrations} />
+
+        <AdminGrowthAnalytics rows={registrations} />
+
+        <AdminAnalyticsIntelligence rows={registrations} />
 
         <AnalyticsCharts registrations={registrations} />
 
@@ -210,24 +229,24 @@ function DashboardContent() {
           <div className="flex flex-wrap gap-2 rounded-xl border bg-white p-4">
             <button
               type="button"
-              onClick={() =>
-                downloadCsv(
-                  selected.size ? selectedRows : registrations,
-                  "registrations.csv"
-                )
-              }
+              onClick={async () => {
+                const rows = selected.size
+                  ? selectedRows
+                  : await loadAllForExport();
+                downloadCsv(rows, "registrations.csv");
+              }}
               className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
             >
               Export CSV {selected.size ? `(${selected.size})` : "(All)"}
             </button>
             <button
               type="button"
-              onClick={() =>
-                downloadExcel(
-                  selected.size ? selectedRows : registrations,
-                  "registrations.xlsx"
-                )
-              }
+              onClick={async () => {
+                const rows = selected.size
+                  ? selectedRows
+                  : await loadAllForExport();
+                downloadExcel(rows, "registrations.xlsx");
+              }}
               className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
             >
               Export Excel
@@ -267,6 +286,23 @@ function DashboardContent() {
           </div>
         )}
 
+        <p className="text-sm text-gray-500">
+          Showing {registrations.length} registration
+          {registrations.length !== 1 ? "s" : ""}
+          {hasMore ? ` (${REGISTRATIONS_PAGE_SIZE} per page)` : ""}
+        </p>
+
+        {hasMore && (
+          <button
+            type="button"
+            onClick={() => loadRegistrations(true)}
+            disabled={loadingMore}
+            className="rounded-lg border border-primary bg-white px-6 py-2 text-sm font-semibold text-primary hover:bg-primary/5"
+          >
+            {loadingMore ? "Loading..." : "Load more"}
+          </button>
+        )}
+
         <RegistrationTable
           rows={registrations}
           selected={selected}
@@ -291,32 +327,9 @@ function DashboardContent() {
   );
 }
 
-function StatCard({ label, value }: { label: string; value: number }) {
+function ChartsSkeleton() {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-        {label}
-      </p>
-      <p className="mt-1 text-2xl font-bold text-primary">{value}</p>
-    </div>
-  );
-}
-
-function NotificationCard({
-  title,
-  value,
-  hint,
-}: {
-  title: string;
-  value: number;
-  hint: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
-      <p className="text-sm font-semibold text-amber-900">{title}</p>
-      <p className="text-3xl font-bold text-primary">{value}</p>
-      <p className="text-xs text-amber-800">{hint}</p>
-    </div>
+    <div className="h-64 animate-pulse rounded-2xl border bg-gray-100" aria-hidden />
   );
 }
 

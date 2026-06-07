@@ -2,9 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  :root {
+    --color-brand-navy: #0b1f3b;
+    --color-brand-saffron: #ff9933;
+    --color-brand-emerald: #059669;
+    --color-brand-surface: #f8fafc;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
 @layer utilities {
   .home-gradient-text {
-    @apply bg-gradient-to-r from-[#502a2a] via-[#7a4343] to-[#b22222] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-navy via-brand-navy-light to-brand-saffron bg-clip-text text-transparent;
   }
 
   .home-glass {
@@ -12,7 +36,7 @@
   }
 
   .home-section-title {
-    @apply text-3xl font-extrabold tracking-tight text-primary md:text-4xl;
+    @apply text-3xl font-extrabold tracking-tight text-brand-navy md:text-4xl;
   }
 
   .home-card-hover {

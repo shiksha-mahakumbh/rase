@@ -1,0 +1,29 @@
+{
+  "common": {
+    "siteName": "Shiksha Mahakumbh Abhiyan",
+    "register": "S'inscrire",
+    "contact": "Contact",
+    "language": "Langue"
+  },
+  "nav": {
+    "home": "Accueil",
+    "registration": "Inscription",
+    "about": "À propos",
+    "research": "Recherche",
+    "events": "Événements"
+  },
+  "registration": {
+    "title": "Inscription officielle",
+    "stepCategory": "Catégorie",
+    "stepDetails": "Vos informations",
+    "stepPayment": "Paiement et confirmation"
+  },
+  "meta": {
+    "homeTitle": "Sommet national de l'éducation",
+    "homeDescription": "Shiksha Mahakumbh 6.0 à NIT Hamirpur.",
+    "aboutTitle": "À propos du mouvement",
+    "aboutDescription": "Mouvement national d'éducation Shiksha Mahakumbh.",
+    "contactTitle": "Contact",
+    "contactDescription": "Contacter l'équipe organisatrice."
+  }
+}

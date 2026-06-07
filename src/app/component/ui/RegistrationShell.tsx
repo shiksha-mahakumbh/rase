@@ -57,7 +57,7 @@ const RegistrationShell: React.FC<RegistrationShellProps> = ({
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
-                  className="h-full rounded-full bg-gradient-to-r from-primary to-[#F59E0B]"
+                  className="h-full rounded-full bg-gradient-to-r from-brand-navy to-brand-saffron"
                 />
               </div>
             </div>

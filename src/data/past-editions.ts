@@ -1,0 +1,146 @@
+/**
+ * Canonical Shiksha Mahakumbh past editions (1.0–5.0).
+ * Single source of truth — do not duplicate edition facts elsewhere.
+ */
+
+export type PastEditionRecord = {
+  id: string;
+  edition: string;
+  title: string;
+  venue: string;
+  venueFull: string;
+  dates: string;
+  dateStart: string;
+  dateEnd?: string;
+  theme: string;
+  /** Core essence / Mool Tatva */
+  coreEssence: string;
+  impact: string;
+  href: string;
+  galleryUrl?: string;
+  campaignPdf?: string;
+  imageSrc?: string;
+  year: string;
+};
+
+export const PAST_EDITIONS: PastEditionRecord[] = [
+  {
+    id: "smk-1",
+    edition: "1.0",
+    title: "Shiksha Mahakumbh 1.0",
+    venue: "NIT Jalandhar",
+    venueFull: "Dr. B. R. Ambedkar National Institute of Technology, Jalandhar",
+    dates: "9–11 June 2023",
+    dateStart: "2023-06-09",
+    dateEnd: "2023-06-11",
+    theme: "Recent Advances in School Education",
+    coreEssence: "A strong beginning in innovation within school education",
+    impact:
+      "Initiated national dialogue on foundational reforms, introduced community-driven school models, and generated a best practices compendium on K–12 innovations.",
+    href: "/past_event/sm23",
+    galleryUrl:
+      "https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq",
+    campaignPdf: "/RASE_2023_1ST_EDITION_Campaign.pdf",
+    imageSrc: "/2023M/k1.png",
+    year: "2023",
+  },
+  {
+    id: "smk-2",
+    edition: "2.0",
+    title: "Shiksha Mahakumbh 2.0",
+    venue: "NIT Kurukshetra",
+    venueFull: "National Institute of Technology, Kurukshetra",
+    dates: "20 December 2023",
+    dateStart: "2023-12-20",
+    theme: "Role of Academic-driven Startups in Economy",
+    coreEssence: "From Education to Startups, Startups to Economy",
+    impact:
+      "Sparked nationwide collaboration between academia and entrepreneurship, resulting in MoUs, startup incubation, and industry-institution integration plans.",
+    href: "/past_event/sk23",
+    galleryUrl:
+      "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
+    campaignPdf: "/RASE_2023_2ND_EDITION_Campaign.pdf",
+    imageSrc: "/2023K/k2.JPG",
+    year: "2023",
+  },
+  {
+    id: "smk-3",
+    edition: "3.0",
+    title: "Shiksha Mahakumbh 3.0",
+    venue: "NIT Srinagar",
+    venueFull: "National Institute of Technology, Srinagar",
+    dates: "29–30 June 2024",
+    dateStart: "2024-06-29",
+    dateEnd: "2024-06-30",
+    theme: "Role of Academic-driven Startups in Developing Economy of J & K",
+    coreEssence: "From Education to Enterprise, Enterprise to Regional Development",
+    impact:
+      "Focused on peace-building and economic empowerment through education in conflict-prone zones; initiated local skilling programs and startup mentorship cells.",
+    href: "/past_event/sk24",
+    galleryUrl:
+      "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
+    campaignPdf: "/RASE_2024_3RD_EDITION_Campaign.pdf",
+    imageSrc: "/2024K/k2.jpeg",
+    year: "2024",
+  },
+  {
+    id: "smk-4",
+    edition: "4.0",
+    title: "Shiksha Mahakumbh 4.0",
+    venue: "Kurukshetra University",
+    venueFull: "Kurukshetra University, Kurukshetra",
+    dates: "16–17 December 2024",
+    dateStart: "2024-12-16",
+    dateEnd: "2024-12-17",
+    theme: "Indian Education System for Global Development",
+    coreEssence: "Indian Education as a Global Solution",
+    impact:
+      "Developed a national vision document for Bhartiya as a global education hub, rooted in NEP 2020 and Bhartiya knowledge systems.",
+    href: "/past_event/sm24",
+    galleryUrl:
+      "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
+    campaignPdf: "/RASE_2024_4TH_EDITION_Campaign.pdf",
+    imageSrc: "/2024M/press1.jpg",
+    year: "2024",
+  },
+  {
+    id: "smk-5",
+    edition: "5.0",
+    title: "Shiksha Mahakumbh 5.0",
+    venue: "NIPER Mohali",
+    venueFull: "National Institute of Pharmaceutical Education and Research, Mohali",
+    dates: "31 October – 2 November 2025",
+    dateStart: "2025-10-31",
+    dateEnd: "2025-11-02",
+    theme: "Classroom to Society: Building a Healthier World through Education",
+    coreEssence: "The Journey of Education from Classroom to Society",
+    impact:
+      "Advanced the national dialogue on linking classroom learning with societal wellbeing and health-oriented education outcomes.",
+    href: "/past_event/sm25",
+    galleryUrl:
+      "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
+    imageSrc: "/2024M/press1.jpg",
+    year: "2025",
+  },
+];
+
+export const PAST_EDITION_BY_ID = Object.fromEntries(
+  PAST_EDITIONS.map((e) => [e.id, e])
+) as Record<string, PastEditionRecord>;
+
+export function getEditionByHref(href: string): PastEditionRecord | undefined {
+  return PAST_EDITIONS.find((e) => e.href === href);
+}
+
+export const PAST_EDITIONS_SEO_KEYWORDS = [
+  "Shiksha Mahakumbh",
+  "Shiksha Mahakumbh Abhiyan",
+  "Department of Holistic Education",
+  "Indian Education Conference",
+  "Education Conclave India",
+  "Research Conference India",
+  "Academic Innovation Summit",
+  "National Education Event",
+  "School Education Conference",
+  "Higher Education Summit",
+];

@@ -1,0 +1,29 @@
+{
+  "common": {
+    "siteName": "شيكشا مهاكومب أبهيان",
+    "register": "التسجيل الآن",
+    "contact": "اتصل بنا",
+    "language": "اللغة"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "registration": "التسجيل",
+    "about": "حول",
+    "research": "البحث",
+    "events": "الفعاليات"
+  },
+  "registration": {
+    "title": "التسجيل الرسمي",
+    "stepCategory": "الفئة",
+    "stepDetails": "بياناتك",
+    "stepPayment": "الدفع والتأكيد"
+  },
+  "meta": {
+    "homeTitle": "القمة الوطنية للتعليم",
+    "homeDescription": "شيكشا مهاكومب 6.0 في NIT Hamirpur.",
+    "aboutTitle": "عن الحركة",
+    "aboutDescription": "حركة شيكشا مهاكومب الوطنية للتعليم.",
+    "contactTitle": "اتصل بنا",
+    "contactDescription": "تواصل مع فريق التنظيم."
+  }
+}
