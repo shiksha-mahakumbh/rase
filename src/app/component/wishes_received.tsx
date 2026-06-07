@@ -1,11 +1,13 @@
-"use client"
-import React, { useEffect, useState } from "react";
-import Guest from "../component/Guest";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-import {firebaseConfig} from "@/app/firebase";
-const speakers = [
+"use client";
 
+import React, { useEffect, useMemo, useState } from "react";
+import Guest from "../component/Guest";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/app/firebase";
+import ShowcaseHero from "@/components/showcase/ShowcaseHero";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
+
+const speakers = [
   {
     id: 1,
     name: "Prof. Abhay Kumar Singh",
@@ -99,48 +101,112 @@ const speakers = [
   },
 ];
 
-
 const WishesReceived: React.FC = () => {
-  const [firebaseSpeakers, setFirebaseSpeakers] = useState<any[]>([]);
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  const [firebaseSpeakers, setFirebaseSpeakers] = useState<
+    {
+      id: string;
+      name: string;
+      designation: string;
+      place: string;
+      imageSrc: string;
+      href?: string;
+    }[]
+  >([]);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    // Fetch data from Firebase Firestore
     const fetchSpeakers = async () => {
-      const querySnapshot = await getDocs(collection(db, "wishesReceived")); // Use your collection name
-      const fetchedSpeakers: any[] = [];
+      const querySnapshot = await getDocs(collection(db, "wishesReceived"));
+      const fetchedSpeakers: typeof firebaseSpeakers = [];
       querySnapshot.forEach((doc) => {
-        fetchedSpeakers.push({ id: doc.id, ...doc.data() });
+        fetchedSpeakers.push({ id: doc.id, ...doc.data() } as (typeof firebaseSpeakers)[0]);
       });
       setFirebaseSpeakers(fetchedSpeakers);
     };
-  
+
     fetchSpeakers();
   }, []);
 
-  return (
-    <div className="p-4">
-      <div className="p-4">
-      <p className="text-xl md:text-2xl text-primary text-center uppercase font-bold mb-4">Wishes Received for the success of Shiksha Mahakumbh 2024</p>
-      <div className="flex flex-wrap">
-          {/* Hardcoded speakers */}
-          {speakers.map((guest) => (
-            <div key={guest.id} className="w-full sm:w-1/2 lg:w-1/3 p-2">
-              <Guest {...guest} />
-            </div>
-          ))}
+  const allGuests = useMemo(
+    () => [...speakers, ...firebaseSpeakers],
+    [firebaseSpeakers]
+  );
 
-          {/* Firebase speakers */}
-          {firebaseSpeakers.map((guest) => (
-            <div key={guest.id} className="w-full sm:w-1/2 lg:w-1/3 p-2">
-              <Guest {...guest} />
+  const filtered = useMemo(() => {
+    const q = query.toLowerCase().trim();
+    if (!q) return allGuests;
+    return allGuests.filter(
+      (g) =>
+        g.name.toLowerCase().includes(q) ||
+        g.designation.toLowerCase().includes(q) ||
+        g.place.toLowerCase().includes(q)
+    );
+  }, [allGuests, query]);
+
+  const featured = filtered.slice(0, 2);
+  const rest = filtered.slice(2);
+
+  return (
+    <div className="min-h-screen bg-brand-surface">
+      <ShowcaseHero
+        eyebrow="Distinguished Greetings"
+        title="Wishes Received for the success of Shiksha Mahakumbh 2024"
+        subtitle="Messages and best wishes from dignitaries, leaders, and institutions supporting the national education movement."
+      />
+
+      <main id="main-content" className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
+        <BreadcrumbNav
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Best Wishes", href: "/best-wishes" },
+            { label: "Wishes Received" },
+          ]}
+          className="mb-8"
+        />
+
+        <label htmlFor="wishes-search" className="sr-only">
+          Search dignitaries
+        </label>
+        <input
+          id="wishes-search"
+          type="search"
+          placeholder="Search by name, designation, or message…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="mb-8 w-full max-w-md min-h-[44px] rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron"
+        />
+
+        {featured.length > 0 && (
+          <section className="mb-10" aria-labelledby="featured-dignitaries">
+            <h2 id="featured-dignitaries" className="mb-6 text-xl font-bold text-brand-navy">
+              Featured Dignitaries
+            </h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              {featured.map((guest, i) => (
+                <div key={`featured-${guest.name}-${i}`} className="md:scale-[1.02]">
+                  <Guest {...guest} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </section>
+        )}
+
+        <section aria-labelledby="all-wishes">
+          <h2 id="all-wishes" className="mb-6 text-xl font-bold text-brand-navy">
+            All Messages ({filtered.length})
+          </h2>
+          <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
+            {rest.map((guest, index) => (
+              <div key={`${guest.name}-${index}`} className="mb-4 break-inside-avoid">
+                <Guest {...guest} />
+              </div>
+            ))}
+          </div>
+          {filtered.length === 0 && (
+            <p className="py-12 text-center text-gray-500">No messages match your search.</p>
+          )}
+        </section>
+      </main>
     </div>
   );
 };

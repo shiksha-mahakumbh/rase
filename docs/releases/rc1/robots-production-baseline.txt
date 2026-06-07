@@ -1,0 +1,16 @@
+User-Agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /AllData
+Disallow: /participantregistrationdatadekh
+Disallow: /volunteerdatadekh
+Disallow: /ngoregistrationdatadekh
+Disallow: /abstractdatadekh
+Disallow: /organiserdatadekh
+Disallow: /schooldata
+Disallow: /noticeboarddata
+Disallow: /addkeynotespeaker
+Disallow: /addvcdirector
+Disallow: /addwishesreceived
+
+Sitemap: https://www.rase.co.in/sitemap.xml

@@ -19,9 +19,9 @@ export const footerLogos: FooterLogo[] = [
   { href: "https://poojawala.in/", src: "/pooja.png", alt: "Pooja" },
   { href: "https://www.swadeshibazaar.co.in/", src: "/sb.png", alt: "Swadeshi Bazar" },
   { href: "https://tredul.in/", src: "/tre-dul.png", alt: "Tredul" },
-  { href: "https://www.itrchandigarh.org/", src: "/logo 2.png", alt: "ITR" },
+  { href: "https://www.itrchandigarh.org/", src: "/logo%202.png", alt: "ITR" },
   { href: "https://vi.rase.co.in/", src: "/vi.png", alt: "Vikas India" },
-  { href: "https://tudu.co.in//", src: "/tudu.png", alt: "Tudu" },
+  { href: "https://tudu.co.in/", src: "/tudu.png", alt: "Tudu" },
   { href: "https://punjabsuper100.com/", src: "/pb100.png", alt: "Punjab Super 100" },
 ];
 
@@ -29,26 +29,42 @@ export const quickLinks: FooterLink[] = [
   { name: "Home", href: "/" },
   { name: "Introduction", href: "/introduction" },
   { name: "Registration", href: "/registration" },
+  { name: "Upcoming Events", href: "/upcoming-events" },
+  { name: "Past Events", href: "/past-events" },
+  { name: "Committees", href: "/committees" },
+  { name: "Media Centre", href: "/media-center" },
+  { name: "Press Releases", href: "/press" },
+  { name: "Merchandise", href: "/merchandise" },
+  { name: "Contact Us", href: "/contact-us" },
+];
+
+export const departmentLinks: FooterLink[] = [
+  { name: "Academic Council", href: "/departments/academic-council" },
+  { name: "प्रबंधन (Prabandhan)", href: "/departments/prabandhan" },
+  { name: "प्रचार (Prachar)", href: "/departments/prachar" },
+  { name: "संपर्क (Sampark)", href: "/departments/sampark" },
+  { name: "वित्त (Vitt)", href: "/departments/vitt" },
+];
+
+export const educationLinks: FooterLink[] = [
+  { name: "Education Hub", href: "/education" },
+  { name: "Research", href: "/research" },
+  { name: "Publications", href: "/publications" },
+  { name: "Initiatives", href: "/initiatives" },
+  { name: "Knowledge Hub", href: "/knowledge" },
   { name: "Journals", href: "/journals" },
   { name: "Proceedings", href: "/proceedings" },
-  { name: "Upcoming Events", href: "/upcomingevent" },
-  { name: "Past Events", href: "/pastevent" },
-  { name: "Media & Press", href: "/media" },
-  { name: "Committee", href: "/committeepage" },
-  { name: "Contact Us", href: "/ContactUs" },
 ];
 
 export const programLinks: FooterLink[] = [
-  { name: "Academic Council", href: "/VibhagRoute/AcademicCouncil24" },
-  { name: "प्रबंधन विभाग (Prabandhan)", href: "/VibhagRoute/Prabandhan24" },
-  { name: "प्रचार विभाग (Prachar)", href: "/VibhagRoute/Prachar24" },
-  { name: "संपर्क विभाग (Sampark)", href: "/VibhagRoute/Sampark24" },
-  { name: "वित्त विभाग (Vitt)", href: "/VibhagRoute/Vitt24" },
+  { name: "Shiksha Mahakumbh 6.0", href: "/registration" },
   { name: "Conclave", href: "/conclave" },
   { name: "Workshops", href: "/workshops" },
   { name: "Summits", href: "/summits" },
-  { name: "Knowledge Hub", href: "/knowledge" },
+  { name: "Olympiads", href: "/olympiad" },
+  { name: "Innovation", href: "/innovation" },
   { name: "Gallery", href: "/gallery" },
+  { name: "Best Wishes", href: "/best-wishes" },
 ];
 
 export const legalLinks: FooterLink[] = [
@@ -58,7 +74,7 @@ export const legalLinks: FooterLink[] = [
   { name: "Refund Policy", href: "/refund-policy" },
   { name: "Cookie Policy", href: "/cookie-policy" },
   { name: "Sitemap", href: "/sitemap.xml" },
-  { name: "Contact Us", href: "/ContactUs" },
+  { name: "Contact Us", href: "/contact-us" },
 ];
 
 export const socialLinks = [

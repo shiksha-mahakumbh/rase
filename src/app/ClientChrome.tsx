@@ -27,8 +27,16 @@ export default function ClientChrome() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const seen = sessionStorage.getItem(MODAL_SEEN_KEY);
-    if (!seen) setIsModalOpen(true);
+    const showModal = () => {
+      const seen = sessionStorage.getItem(MODAL_SEEN_KEY);
+      if (!seen) setIsModalOpen(true);
+    };
+    if (typeof requestIdleCallback !== "undefined") {
+      const id = requestIdleCallback(showModal, { timeout: 3000 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(showModal, 2000);
+    return () => window.clearTimeout(t);
   }, []);
 
   const closeModal = () => {
@@ -55,7 +63,7 @@ export default function ClientChrome() {
             To know more about multi-track conferences, conclaves, olympiads, and
             academic activities,{" "}
             <a
-              href="https://www.rase.co.in/VibhagRoute/AcademicCouncil24"
+              href="/departments/academic-council"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-cyan-300 underline transition hover:text-cyan-200"

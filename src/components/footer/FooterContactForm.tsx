@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import toast from "react-hot-toast";
-import { db } from "@/app/firebase";
+import { db } from "@/lib/firebase/client";
 
 interface FooterContactFormProps {
   variant?: "light" | "dark";

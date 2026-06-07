@@ -52,12 +52,12 @@ export default function SummitsHubPage() {
             </li>
           ))}
           <li>
-            <Link href="/academiccouncil" className="font-medium text-brand-navy hover:underline">
+            <Link href="/departments/academic-council" className="font-medium text-brand-navy hover:underline">
               Academic Council
             </Link>
           </li>
           <li>
-            <Link href="/academicconclave" className="font-medium text-brand-navy hover:underline">
+            <Link href="/conclave" className="font-medium text-brand-navy hover:underline">
               Academic Conclave
             </Link>
           </li>

@@ -40,7 +40,7 @@ export default function MovementTimelineSection() {
         </div>
         <p className="mt-8 text-center">
           <Link
-            href="/pastevent"
+            href="/past-events"
             className="text-sm font-semibold text-brand-saffron hover:underline"
           >
             View full past editions archive →

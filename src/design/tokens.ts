@@ -25,9 +25,10 @@ export const event = {
   tagline: "Education · Research · Innovation · Indian Knowledge Systems",
 } as const;
 
+/** Homepage hero stats — aligned with authority.ts impactStatistics */
 export const impactStats = [
   { value: 5, label: "Major Editions", suffix: "" },
   { value: 6, label: "Current Edition", suffix: ".0" },
-  { value: 100, label: "Institutions Engaged", suffix: "+" },
+  { value: 500, label: "Institutions Engaged", suffix: "+" },
   { value: 2047, label: "Bharat@2047 Vision", suffix: "" },
 ] as const;

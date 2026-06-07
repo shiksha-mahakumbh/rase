@@ -1,6 +1,7 @@
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import VibhagRelatedNav from "@/components/vibhag/VibhagRelatedNav";
 import { getVibhagBySlug } from "@/data/vibhag-pages";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 
 interface VibhagPageShellProps {
   currentSlug: string;
@@ -22,7 +23,7 @@ export default function VibhagPageShell({
           <BreadcrumbNav
             items={[
               { label: "Home", href: "/" },
-              { label: "Departments", href: "/VibhagRoute/AcademicCouncil24" },
+              { label: "Departments", href: CANONICAL_ROUTES.departments.academicCouncil },
               { label: page?.title ?? "Department" },
             ]}
           />

@@ -1,35 +1,38 @@
-"use client";
-
+import dynamic from "next/dynamic";
 import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
-import Marquees from "@/app/component/Marquees";
-import Conference_Support from "@/app/component/Conference_Support";
-import Media_Partners from "@/app/component/Media_Partners";
-import Organiger from "@/app/component/organiger";
-import UpcomingEvent from "@/app/component/UpcomingEvent";
-import { CustomCard } from "@/app/component/card";
-import Announcement from "@/app/component/Annoucement";
-import NoticeBoard from "@/app/component/NoticeBoard";
-import SectionShell from "@/app/component/home/SectionShell";
-import GlassCard from "@/app/component/home/GlassCard";
 import HeroSection from "./HeroSection";
 import TrustStrip from "./TrustStrip";
+import SectionShell from "@/app/component/home/SectionShell";
+import { CtaButton, SectionHeader } from "@/components/ui";
+import { ROUTES } from "@/constants/routes";
+import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
+import DiscoverStrip from "./DiscoverStrip";
 import WhyAttendSection from "./WhyAttendSection";
 import MovementTimelineSection from "./MovementTimelineSection";
 import WhoShouldAttendSection from "./WhoShouldAttendSection";
 import EventTracksSection from "./EventTracksSection";
 import SpeakerHighlightsSection from "./SpeakerHighlightsSection";
-import TestimonialsSection from "./TestimonialsSection";
-import GallerySection from "./GallerySection";
 import VenueTravelSection from "./VenueTravelSection";
-import HomeFaqSection from "./HomeFaqSection";
-import DiscoverStrip from "./DiscoverStrip";
-import StickyRegisterBar from "./StickyRegisterBar";
-import FloatingActionButton from "./FloatingActionButton";
-import { CtaButton, SectionHeader } from "@/components/ui";
-import { ROUTES } from "@/constants/routes";
-import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
+import LazySection from "@/components/performance/LazySection";
+import SectionSkeleton from "@/components/performance/SectionSkeleton";
+
+const Marquees = dynamic(() => import("@/app/component/Marquees"));
+const Footer = dynamic(() => import("@/app/component/Footer"));
+const Announcement = dynamic(() => import("@/app/component/Annoucement"));
+const NoticeBoard = dynamic(() => import("@/app/component/NoticeBoard"));
+const GlassCard = dynamic(() => import("@/app/component/home/GlassCard"));
+const UpcomingEvent = dynamic(() => import("@/app/component/UpcomingEvent"));
+const TestimonialsSection = dynamic(() => import("./TestimonialsSection"));
+const GallerySection = dynamic(() => import("./GallerySection"));
+const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
+const CustomCard = dynamic(() =>
+  import("@/app/component/card").then((m) => ({ default: m.CustomCard }))
+);
+const ConferenceSupport = dynamic(() => import("@/app/component/Conference_Support"));
+const MediaPartners = dynamic(() => import("@/app/component/Media_Partners"));
+const Organiger = dynamic(() => import("@/app/component/organiger"));
+import HomePageChrome from "./HomePageChrome";
 
 export default function HomePage() {
   return (
@@ -59,30 +62,41 @@ export default function HomePage() {
                 All registration types
               </CtaButton>
             </div>
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
-              <div className="lg:col-span-4">
-                <Announcement />
+            <LazySection
+              minHeight="20rem"
+              fallback={
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+                  <SectionSkeleton />
+                  <SectionSkeleton />
+                  <SectionSkeleton />
+                </div>
+              }
+            >
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
+                <div className="lg:col-span-4">
+                  <Announcement />
+                </div>
+                <div className="lg:col-span-4">
+                  <NoticeBoard />
+                </div>
+                <div className="lg:col-span-4">
+                  <GlassCard className="flex h-full flex-col justify-center p-6">
+                    <p className="text-sm font-semibold text-brand-saffron">6th Edition</p>
+                    <p className="mt-2 text-lg font-bold text-brand-navy">
+                      NIT Hamirpur · 9–11 Oct 2026
+                    </p>
+                    <p className="mt-2 text-sm text-slate-600">
+                      Multi-track conclaves, olympiads, research, exhibitions, and awards.
+                    </p>
+                    <div className="mt-4">
+                      <CtaButton href={ROUTES.academicCouncil} variant="ghost">
+                        View full programme
+                      </CtaButton>
+                    </div>
+                  </GlassCard>
+                </div>
               </div>
-              <div className="lg:col-span-4">
-                <NoticeBoard />
-              </div>
-              <div className="lg:col-span-4">
-                <GlassCard className="flex h-full flex-col justify-center p-6">
-                  <p className="text-sm font-semibold text-brand-saffron">6th Edition</p>
-                  <p className="mt-2 text-lg font-bold text-brand-navy">
-                    NIT Hamirpur · 9–11 Oct 2026
-                  </p>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Multi-track conclaves, olympiads, research, exhibitions, and awards.
-                  </p>
-                  <div className="mt-4">
-                    <CtaButton href={ROUTES.academicCouncil} variant="ghost">
-                      View full programme
-                    </CtaButton>
-                  </div>
-                </GlassCard>
-              </div>
-            </div>
+            </LazySection>
           </div>
         </SectionShell>
 
@@ -90,57 +104,86 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-mid" />
         </div>
-        <WhyAttendSection />
-        <MovementTimelineSection />
-        <WhoShouldAttendSection />
-        <EventTracksSection />
 
-        <SectionShell
-          background="default"
-          className="px-4 py-10 md:px-8 md:py-14"
-          ariaLabel="Upcoming events"
+        <LazySection fallback={<SectionSkeleton lines={4} />}>
+          <WhyAttendSection />
+        </LazySection>
+        <LazySection fallback={<SectionSkeleton lines={5} />}>
+          <MovementTimelineSection />
+        </LazySection>
+        <LazySection fallback={<SectionSkeleton />}>
+          <WhoShouldAttendSection />
+        </LazySection>
+        <LazySection fallback={<SectionSkeleton />}>
+          <EventTracksSection />
+        </LazySection>
+
+        <LazySection
+          minHeight="16rem"
+          fallback={<div className="mx-auto max-w-7xl"><SectionSkeleton lines={4} /></div>}
         >
-          <div className="mx-auto max-w-7xl">
-            <GlassCard className="overflow-hidden p-6 md:p-8">
-              <UpcomingEvent />
-            </GlassCard>
-          </div>
-        </SectionShell>
+          <SectionShell
+            background="default"
+            className="px-4 py-10 md:px-8 md:py-14"
+            ariaLabel="Upcoming events"
+          >
+            <div className="mx-auto max-w-7xl">
+              <GlassCard className="overflow-hidden p-6 md:p-8">
+                <UpcomingEvent />
+              </GlassCard>
+            </div>
+          </SectionShell>
+        </LazySection>
 
-        <SpeakerHighlightsSection />
-        <TestimonialsSection />
-        <GallerySection />
+        <LazySection fallback={<SectionSkeleton />}>
+          <SpeakerHighlightsSection />
+        </LazySection>
+        <LazySection fallback={<SectionSkeleton />}>
+          <TestimonialsSection />
+        </LazySection>
+        <LazySection fallback={<SectionSkeleton lines={4} />}>
+          <GallerySection />
+        </LazySection>
 
-        <SectionShell
-          background="default"
-          className="px-4 py-10 md:px-8 md:py-14"
-          ariaLabel="Edition highlights"
-        >
-          <div className="mx-auto max-w-7xl">
-            <SectionHeader
-              eyebrow="Research & Publications"
-              title="Edition Highlights"
-              description="Proceedings and outcomes from past Mahakumbh editions."
-            />
-            <CustomCard />
-          </div>
-        </SectionShell>
+        <LazySection fallback={<SectionSkeleton lines={4} />}>
+          <SectionShell
+            background="default"
+            className="px-4 py-10 md:px-8 md:py-14"
+            ariaLabel="Edition highlights"
+          >
+            <div className="mx-auto max-w-7xl">
+              <SectionHeader
+                eyebrow="Research & Publications"
+                title="Edition Highlights"
+                description="Proceedings and outcomes from past Mahakumbh editions."
+              />
+              <CustomCard />
+            </div>
+          </SectionShell>
+        </LazySection>
 
-        <VenueTravelSection />
+        <LazySection fallback={<SectionSkeleton />}>
+          <VenueTravelSection />
+        </LazySection>
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-footer" />
         </div>
-        <HomeFaqSection />
-        <HomeEducationEcosystemNav />
+        <LazySection fallback={<SectionSkeleton lines={4} />}>
+          <HomeFaqSection />
+        </LazySection>
+        <LazySection fallback={<SectionSkeleton />}>
+          <HomeEducationEcosystemNav />
+        </LazySection>
 
-        <Conference_Support />
-        <Media_Partners />
-        <Organiger />
+        <LazySection minHeight="8rem">
+          <ConferenceSupport />
+          <MediaPartners />
+          <Organiger />
+        </LazySection>
       </main>
 
       <Footer />
-      <StickyRegisterBar />
-      <FloatingActionButton />
+      <HomePageChrome />
     </div>
   );
 }

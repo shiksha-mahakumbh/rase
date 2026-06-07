@@ -1,9 +1,11 @@
 import { SITE_URL } from "@/config/site";
+import { PRESS_CANONICAL_PATHS } from "@/constants/canonical-routes";
 
 /** Canonical share URL for Press1–Press9 client pages */
 export function getPressShareUrl(pressNumber: number): string {
   const base = SITE_URL.replace(/\/$/, "");
-  return encodeURIComponent(`${base}/Press${pressNumber}`);
+  const path = PRESS_CANONICAL_PATHS[pressNumber] ?? `/press/article-${pressNumber}`;
+  return encodeURIComponent(`${base}${path}`);
 }
 
 /** OG image path per press article (under /public) */

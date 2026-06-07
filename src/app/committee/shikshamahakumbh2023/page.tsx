@@ -1,7 +1,8 @@
-import React from 'react';
-import Footer from '../../component/Footer';
-import CompanyInfo from '../../component/CompanyInfo';
-import NavBar from '../../component/NavBar';
+import React from "react";
+import Footer from "../../component/Footer";
+import NavBar from "../../component/NavBar";
+import CommitteeDetailShell from "@/components/committee/CommitteeDetailShell";
+import CommitteeMemberSection from "@/components/committee/CommitteeMemberSection";
 const ShikshaMahaKumbh2023 = () => {
   const data = {
     
@@ -98,45 +99,18 @@ const ShikshaMahaKumbh2023 = () => {
       };
     
   
-      const renderTable = (title: string, members: { id: number; name: string; designation: string }[]) => (
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold text-center mb-4">{title}</h2>
-          <table className="table-auto w-full max-w-4xl mx-auto border border-gray-300">
-            <thead>
-              <tr className="bg-primary text-white">
-                <th className="p-2 border border-gray-300 text-center">Name</th>
-                <th className="p-2 border border-gray-300 text-center">Designation</th>
-              </tr>
-            </thead>
-            <tbody>
-              {members.map((member, index) => (
-                <tr
-                  key={member.id}
-                  className={`${index % 2 === 0 ? "bg-white" : "bg-gray-100"} hover:bg-gray-200`}
-                >
-                  <td className="p-2 border border-gray-300 text-center">{member.name}</td>
-                  <td className="p-2 border border-gray-300 text-center">{member.designation}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-      );
-    
       return (
         <>
-          <CompanyInfo />
           <NavBar />
-          <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-bold text-center mb-8">Shiksha Maha Kumbh 2023</h1>
-            {renderTable("National Advisory Committee", data.NationalAdvisoryCommittee)}
-            {renderTable("Local Advisory Committee", data.LocalAdvisoryCommittee)}
-            {renderTable("Organizing Committee", data.OrganizingCommittee)}
-            {renderTable("Organizing Secretaries", data.OrganizingSecretaries)}
-            {renderTable("Conference Joint Secretaries", data.ConferenceJointSecretaries)}
-            {renderTable("Conference Conveners", data.ConferenceConveners)}
-            {renderTable("Conference Coordinators", data.ConferenceCoordinators)}
-          </div>
+          <CommitteeDetailShell editionTitle="Shiksha Maha Kumbh 2023">
+            <CommitteeMemberSection title="National Advisory Committee" members={data.NationalAdvisoryCommittee} badge="Advisory" />
+            <CommitteeMemberSection title="Local Advisory Committee" members={data.LocalAdvisoryCommittee} />
+            <CommitteeMemberSection title="Organizing Committee" members={data.OrganizingCommittee} badge="Organising" />
+            <CommitteeMemberSection title="Organizing Secretaries" members={data.OrganizingSecretaries} />
+            <CommitteeMemberSection title="Conference Joint Secretaries" members={data.ConferenceJointSecretaries} />
+            <CommitteeMemberSection title="Conference Conveners" members={data.ConferenceConveners} />
+            <CommitteeMemberSection title="Conference Coordinators" members={data.ConferenceCoordinators} />
+          </CommitteeDetailShell>
           <Footer />
         </>
       );

@@ -11,7 +11,7 @@ const accordionItems = [
     id: "programmes",
     title: "Programmes @ Shiksha Mahakumbh 6.0",
     summary: "Conclaves, olympiads, exhibitions, awards & more",
-    href: "/VibhagRoute/AcademicCouncil24",
+    href: "/departments/academic-council",
     cta: "View Programmes",
     icon: ConferenceIcon,
   },

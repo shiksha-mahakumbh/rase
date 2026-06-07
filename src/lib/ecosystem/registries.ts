@@ -27,7 +27,7 @@ const experts: EcosystemItem[] = [
     tags: ["IKS", "expert"],
     category: "insight",
     publishedAt: "2025-05-01",
-    href: "/VibhagRoute/AcademicCouncil24",
+    href: "/departments/academic-council",
     organization: "SMK 6.0",
   },
 ];
@@ -92,7 +92,7 @@ const caseStudies: EcosystemItem[] = [
     tags: ["olympiad", "case-study", "schools"],
     category: "insight",
     publishedAt: "2024-09-01",
-    href: "/VibhagRoute/AcademicCouncil24",
+    href: "/departments/academic-council",
   },
   {
     id: "case-conclave",

@@ -19,10 +19,10 @@ export const NAV_MENUS: Menu[] = [
       { path: ROUTES.introduction, title: "Introduction" },
       { path: "/abhiyanphotoframe.pdf", title: "Photo Frames" },
       { path: ROUTES.academicCouncil, title: "शैक्षिक विभाग" },
-      { path: "/VibhagRoute/Vitt24", title: "वित्त विभाग" },
-      { path: "/VibhagRoute/Prachar24", title: "प्रचार विभाग" },
-      { path: "/VibhagRoute/Sampark24", title: "संपर्क विभाग" },
-      { path: "/VibhagRoute/Prabandhan24", title: "प्रबंधन विभाग" },
+      { path: "/departments/vitt", title: "वित्त विभाग" },
+      { path: "/departments/prachar", title: "प्रचार विभाग" },
+      { path: "/departments/sampark", title: "संपर्क विभाग" },
+      { path: "/departments/prabandhan", title: "प्रबंधन विभाग" },
     ],
   },
   {
@@ -32,6 +32,9 @@ export const NAV_MENUS: Menu[] = [
       { path: "https://pub.dhe.org.in", title: "Journal" },
       { path: "/abstract", title: "Abstract Submission" },
       { path: "/proceedings", title: "Proceedings" },
+      { path: "/research", title: "Research Hub" },
+      { path: "/publications", title: "Publications" },
+      { path: "/initiatives", title: "Initiatives" },
       { path: "/2024M/Souvenir Abstracts_MTC.pdf", title: "Souvenir" },
     ],
   },
@@ -39,7 +42,7 @@ export const NAV_MENUS: Menu[] = [
     path: ROUTES.home,
     title: "Events",
     subMenu: [
-      { path: "/pastevent", title: "Past Events" },
+      { path: "/past-events", title: "Past Events" },
       { path: ROUTES.upcomingEvents, title: "Upcoming Events" },
     ],
   },
@@ -49,11 +52,12 @@ export const NAV_MENUS: Menu[] = [
     subMenu: [
       { path: "/gallery", title: "Photos" },
       { path: "/videos", title: "Videos" },
-      { path: "/media", title: "Press & Media" },
+      { path: "/media-center", title: "Media Centre" },
+      { path: "/press", title: "Press Releases" },
     ],
   },
-  { path: "/committeepage", title: "Committee" },
-  { path: "/ContactUs", title: "Contact" },
+  { path: "/committees", title: "Committee" },
+  { path: "/contact-us", title: "Contact" },
 ];
 
 export const CTA_PATH = ROUTES.registration;

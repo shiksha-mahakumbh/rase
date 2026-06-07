@@ -22,7 +22,7 @@ export type PillarSlug =
 export type PillarRegistryEntry = {
   id: EducationPillarId;
   slug: PillarSlug;
-  path: `/${PillarSlug}`;
+  path: `/${PillarSlug}` | "/media-center";
   label: string;
   tagline: string;
   intro: string;
@@ -183,7 +183,7 @@ export const PILLAR_REGISTRY: PillarRegistryEntry[] = [
   {
     id: "media",
     slug: "media",
-    path: "/media",
+    path: "/media-center",
     label: "Media",
     tagline: "Press, digital media, and national coverage",
     intro:

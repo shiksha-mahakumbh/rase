@@ -1,5 +1,3 @@
-﻿import { createPillarMetadata, createPillarPage } from "@/lib/knowledge-graph/create-pillar-page";
+import { createLegacyRedirect } from "@/lib/routing/legacy-redirect-page";
 
-export const metadata = createPillarMetadata("media");
-
-export default createPillarPage("media");
+export default createLegacyRedirect("/media-center");

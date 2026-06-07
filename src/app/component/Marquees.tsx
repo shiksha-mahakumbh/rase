@@ -19,7 +19,7 @@ const tickerItems = [
   },
   {
     text: "Programmes @ Shiksha Mahakumbh 6.0 — explore the academic council schedule.",
-    link: "/VibhagRoute/AcademicCouncil24",
+    link: "/departments/academic-council",
     external: false,
   },
 ];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { event } from "@/design/tokens";
 
 function getTimeLeft(target: Date) {
@@ -16,8 +16,11 @@ function getTimeLeft(target: Date) {
 }
 
 export default function CountdownBanner() {
-  const target = new Date(`${event.startDate}T09:00:00`);
-  const [left, setLeft] = useState(getTimeLeft(target));
+  const target = useMemo(
+    () => new Date(`${event.startDate}T09:00:00`),
+    []
+  );
+  const [left, setLeft] = useState(() => getTimeLeft(target));
 
   useEffect(() => {
     const id = setInterval(() => setLeft(getTimeLeft(target)), 1000);

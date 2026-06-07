@@ -6,7 +6,7 @@ const insights = [
     title: "NEP 2020 Implementation Frameworks",
     date: "2026",
     author: "Academic Council",
-    href: "/VibhagRoute/AcademicCouncil24",
+    href: "/departments/academic-council",
     tag: "Policy",
   },
   {
@@ -27,7 +27,7 @@ const insights = [
     title: "Upcoming Edition — NIT Hamirpur",
     date: "Oct 2026",
     author: "Events",
-    href: "/upcomingevent",
+    href: "/upcoming-events",
     tag: "Event",
   },
 ];

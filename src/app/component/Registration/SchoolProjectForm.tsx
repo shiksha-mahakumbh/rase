@@ -401,7 +401,7 @@ const SchoolProjectForm: React.FC = () => {
   <button
     type="button"
     onClick={() => {
-      window.location.href = "/Accomodation"; // Adjust path as needed
+      window.location.href = "/accommodation"; // Adjust path as needed
     }}
     className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary-dark transition duration-300"
   >

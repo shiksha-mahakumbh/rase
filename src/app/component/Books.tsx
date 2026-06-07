@@ -52,7 +52,7 @@ const Books: React.FC = () => {
           Read More
         </button>
       </div>
-      <p> <Link className="text-blue-400 cursor-pointer" href="/ContactUs">{`To acquire a copy of this book, please don't hesitate to get in touch with us.`}</Link></p>
+      <p> <Link className="text-blue-400 cursor-pointer" href="/contact-us">{`To acquire a copy of this book, please don't hesitate to get in touch with us.`}</Link></p>
       <div className="relative w-full max-w-md mx-auto my-8 perspective">
         <div className="book-card relative bg-white w-64 h-80 mx-auto shadow-xl rounded-lg transform transition-transform duration-700 hover:rotate-y-6">
           <a href="/" target="_blank">
