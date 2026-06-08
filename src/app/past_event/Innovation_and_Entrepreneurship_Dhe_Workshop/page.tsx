@@ -1,22 +1,18 @@
 "use client";
-import CompanyInfo from "../../component/CompanyInfo";
-import Footer from "../../component/Footer";
-import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
-import NavBar from "../../component/NavBar";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import EventPage from "../../component/Innovation_and_Entrepreneurship_Dhe_Workshop/Innovation_and_Entrepreneurship_Dhe_Workshop";
 
+const PAGE_HERO = {
+  eyebrow: "Workshops",
+  title: "Innovation & Entrepreneurship Workshop",
+  subtitle: "DHE workshop on innovation and entrepreneurial skills.",
+  accent: "emerald",
+} as const;
 
-export default function Structure() {
+export default function InnovationWorkshopPage() {
   return (
-    <div className="bg-white">
-    <CompanyInfo />
-    <NavBar />
+    <PublicPageShell hero={PAGE_HERO} relatedPath="/workshops">
       <EventPage />
-      <RelatedContentSectionClient
-        path="/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop"
-        title="Related programmes & resources"
-      />
-      <Footer />
-    </div>
+    </PublicPageShell>
   );
 }

@@ -241,7 +241,7 @@ const NavBar: React.FC = () => {
               National Movement
             </p>
             <p
-              className={`font-extrabold leading-tight text-primary transition-all group-hover:text-[#b22222] ${
+              className={`font-extrabold leading-tight text-primary transition-all group-hover:text-brand-saffron ${
                 scrolled ? "text-base" : "text-lg"
               }`}
             >

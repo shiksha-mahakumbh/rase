@@ -17,7 +17,13 @@ import {
   RegistrationStatus,
   PaymentStatus,
   AccommodationStatus,
+  RegistrationType,
 } from "@/types/registration";
+import {
+  isPaidRegistrationType,
+  paidCategoryPaymentOptions,
+  freeCategoryPaymentOptions,
+} from "@/lib/registration/config";
 
 function DetailContent() {
   const params = useParams();
@@ -139,8 +145,18 @@ function DetailContent() {
               />
               <StatusSelect
                 label="Payment Status"
-                value={String(record.paymentStatus ?? "Pending")}
-                options={["Pending", "Paid", "Failed"]}
+                value={String(
+                  record.paymentStatus === "Pending"
+                    ? "Pending Payment"
+                    : record.paymentStatus ?? "Submitted"
+                )}
+                options={
+                  isPaidRegistrationType(
+                    String(record.registrationType) as RegistrationType
+                  )
+                    ? paidCategoryPaymentOptions()
+                    : freeCategoryPaymentOptions()
+                }
                 onChange={(v) =>
                   updateStatus("paymentStatus", v as PaymentStatus)
                 }

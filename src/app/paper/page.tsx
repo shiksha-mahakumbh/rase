@@ -1,18 +1,17 @@
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import PaperSubmission from "../component/Papersubmit";
-import Footer from "../component/Footer";
 
-const page = () => {
-  return (
-    <div className="bg-white">
-      <CompanyInfo />
-      <NavBar />
-      <PaperSubmission />
-      <Footer />
-    </div>
-  );
+const PAGE_HERO = {
+  eyebrow: "Research",
+  title: "Paper Submission Portal",
+  subtitle: "Redirecting to the academic council paper submission portal.",
+  accent: "emerald" as const,
 };
 
-export default page;
+export default function PaperPage() {
+  return (
+    <PublicPageShell hero={PAGE_HERO} showCta={false}>
+      <PaperSubmission />
+    </PublicPageShell>
+  );
+}

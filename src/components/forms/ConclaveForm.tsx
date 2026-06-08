@@ -13,15 +13,13 @@ import {
 import {
   FormField,
   FormSection,
-  FileUploadField,
-  PaymentBlock,
   sharedRegister,
   sharedErrors,
   sharedWatch,
 } from "@/components/forms/FormField";
 import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
-import { useState } from "react";
+import { resolvePaymentStatus } from "@/lib/registration/config";
 
 const CONCLAVE_OPTIONS = [
   "Vice Chancellor & Director Conclave",
@@ -35,8 +33,6 @@ const CONCLAVE_OPTIONS = [
 
 export default function ConclaveForm() {
   const { submitRegistration, loading } = useRegistrationSubmit();
-  const [receipt, setReceipt] = useState<File | null>(null);
-  const [receiptError, setReceiptError] = useState<string>();
 
   const {
     register,
@@ -53,20 +49,13 @@ export default function ConclaveForm() {
   const watchShared = sharedWatch(watch);
 
   const onSubmit = async (data: ConclaveFormValues) => {
-    if (!receipt) {
-      setReceiptError("Payment receipt is required");
-      return;
-    }
-    setReceiptError(undefined);
-
     await submitRegistration({
       registrationType: "Conclave",
       data: {
         ...data,
         category: data.conclaveSelection,
       },
-      files: { receipt },
-      paymentStatus: "Paid",
+      paymentStatus: resolvePaymentStatus("Conclave"),
     });
   };
 
@@ -74,7 +63,7 @@ export default function ConclaveForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <CommonParticipantFields register={reg} errors={errs} />
 
-      <FormSection title="Conclave Registration">
+      <FormSection title="Conclave Registration" className="registration-details">
         <FormField
           label="Conclave Selection"
           name="conclaveSelection"
@@ -96,38 +85,9 @@ export default function ConclaveForm() {
             label: o,
           }))}
         />
-        <div className="md:col-span-2">
-          <PaymentBlock />
-        </div>
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
-
-      <FormSection title="Payment Details" className="registration-payment">
-        <FormField
-          label="UTR Number"
-          name="utrNumber"
-          required
-          register={reg}
-          errors={errs}
-        />
-        <FormField
-          label="Transaction ID"
-          name="transactionId"
-          required
-          register={reg}
-          errors={errs}
-        />
-        <FileUploadField
-          label="Upload Payment Receipt"
-          name="receipt"
-          accept=".jpg,.jpeg,.png,.pdf"
-          required
-          onChange={setReceipt}
-          error={receiptError}
-          hint="Accepted: jpg, jpeg, png, pdf"
-        />
-      </FormSection>
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

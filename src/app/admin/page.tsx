@@ -22,6 +22,7 @@ import AdminAnalyticsIntelligence from "@/components/admin/AdminAnalyticsIntelli
 import AdminGrowthDashboard from "@/components/admin/AdminGrowthDashboard";
 import AdminSystemHealth from "@/components/admin/AdminSystemHealth";
 import AdminDashboardOverview from "@/components/admin/AdminDashboardOverview";
+import AdminRegistrationCategories from "@/components/admin/AdminRegistrationCategories";
 
 const AnalyticsCharts = dynamic(
   () => import("@/components/admin/AnalyticsCharts"),
@@ -95,7 +96,11 @@ function DashboardContent() {
       ).length,
       today: registrations.filter((r) => isToday(r.createdAt)).length,
       pendingPayments: registrations.filter(
-        (r) => r.paymentStatus === "Pending"
+        (r) =>
+          r.paymentStatus === "Pending Payment" || r.paymentStatus === "Pending"
+      ).length,
+      submittedFree: registrations.filter(
+        (r) => r.paymentStatus === "Submitted"
       ).length,
       completedPayments: registrations.filter(
         (r) => r.paymentStatus === "Paid"
@@ -215,6 +220,8 @@ function DashboardContent() {
         <AdminGrowthDashboard rows={registrations} />
 
         <AdminDashboardOverview stats={stats} />
+
+        <AdminRegistrationCategories />
 
         <AdminReportsPanel rows={registrations} />
 

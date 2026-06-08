@@ -264,7 +264,7 @@ const OrganiserRegistration = () => {
         <div className="text-center">
         <h2 className="text-lg font-semibold">Thank you for registering!</h2>
         <p>Your registration has been successfully submitted.</p>
-        <a href="/rase.co.in" className="p-4"><button className="bg-primary text-white rounded-md P-4 mt-2 mb-2">Home</button></a>
+        <a href="/" className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-navy px-5 py-2.5 text-sm font-bold text-white transition hover:bg-brand-navy-light">Home</a>
       </div>
       )}
     </div>

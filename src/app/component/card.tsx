@@ -35,7 +35,7 @@ export const CustomCard: React.FC = () => {
               </div>
             ) : null}
             <div className="flex flex-1 flex-col p-5">
-              <h2 className="mb-2 text-xl font-bold text-[#502a2a]">{edition.title}</h2>
+              <h2 className="mb-2 text-xl font-bold text-brand-navy">{edition.title}</h2>
               <p className="text-sm font-medium text-primary">{edition.venue} · {edition.dates}</p>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-[#555]">
                 {edition.theme}

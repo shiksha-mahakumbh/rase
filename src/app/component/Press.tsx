@@ -1,192 +1,93 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Card, Button } from 'antd';
-import Image from 'next/image';
-import proceeding1 from '/public/2024M/press2.jpg';
-import proceeding2 from '/public/2024M/press1.jpg';
-import proceeding3 from '/public/2024M/res/res9.jpg';
-import proceeding4 from '/public/2024M/press4.jpg';
-import proceeding5 from '/public/2024M/press5.jpg';
-import proceeding6 from '/public/2024M/Press7.jpg';
 
-const { Meta } = Card;
+import Image from "next/image";
+import { CtaButton } from "@/components/ui";
+import proceeding1 from "/public/2024M/press2.jpg";
+import proceeding2 from "/public/2024M/press1.jpg";
+import proceeding3 from "/public/2024M/res/res9.jpg";
+import proceeding4 from "/public/2024M/press4.jpg";
+import proceeding5 from "/public/2024M/press5.jpg";
+import proceeding6 from "/public/2024M/Press7.jpg";
 
-const Proceedings: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(true);
+const cardData = [
+  {
+    title: "Shiksha Mahakumbh 2024 begins at Kurukshetra University",
+    description:
+      "Human behaviour has indispensable role in Indian education. Entrepreneurship cells must be established in Higher Education.",
+    image: proceeding6,
+    readLink: "/press/education-summit-coverage",
+  },
+  {
+    title: "राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा",
+    description:
+      "कुवि में डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन तथा केयू के संयुक्त तत्वावधान में दो दिवसीय शिक्षा महाकुंभ का सफल समारोप।",
+    image: proceeding5,
+    readLink: "/press/national-coverage",
+  },
+  {
+    title: '"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुआ काउंटडाउन',
+    description:
+      'शिक्षा महाकुंभ 2.0 की तैयारियों के अंतर्गत UIET, कुरुक्षेत्र विश्वविद्यालय में "हवन रश्म" का आयोजन।',
+    image: proceeding4,
+    readLink: "/press/residential-camp-hindi",
+  },
+  {
+    title: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण)",
+    description: "आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम",
+    image: proceeding3,
+    readLink: "/press/residential-camp-success",
+  },
+  {
+    title: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।",
+    description:
+      "आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन।",
+    image: proceeding1,
+    readLink: "/press/shiksha-mahakumbh-4-0",
+  },
+  {
+    title: "Baton Ceremony",
+    description:
+      "A Grand Start to Shiksha Mahakumbh 2.0: Baton Ceremony Successfully Concluded Kurukshetra, November 20, 2024",
+    image: proceeding2,
+    readLink: "/press/baton-ceremony-smk-4",
+  },
+];
 
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-
-    handleWindowResize();
-    window.addEventListener('resize', handleWindowResize);
-    return () => {
-      window.removeEventListener('resize', handleWindowResize);
-    };
-  }, []);
-
-  const cardData = [
-    {
-      title: `Shiksha Mahakumbh 2024 begins at Kurukshetra University`,
-      description: `Human behaviour has indispensable role in Indian education: Swami Gyananand
-Entrepreneurship cells must be established in Higher Education: Sah Sanghatak Satish Kumar `,
-      image: proceeding6,
-      // previewLink: '/Press1.pdf',
-      // downloadLink: '/Press1.pdf',
-      readLink: '/press/education-summit-coverage' // Link to the TSX file or page
-    },
-    {
-      title: `राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा`,
-      description: `राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा
-कुवि में डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन, चंडीगढ़ तथा केयू के संयुक्त तत्वावधान में ‘वैश्विक विकास के लिए भारतीय शिक्षा प्रणाली’ विषय पर दो दिवसीय शिक्षा महाकुंभ का हुआ सफल समारोप
-कुरुक्षेत्र, 17 दिसम्बर। `,
-      image: proceeding5,
-      // previewLink: '/Press1.pdf',
-      // downloadLink: '/Press1.pdf',
-      readLink: '/press/national-coverage' // Link to the TSX file or page
-    },
-    {
-      title: `"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुया काउंटडाउन"`,
-      description: `शिक्षा महाकुंभ 2.0 की तैयारियों के अंतर्गत सुबह 7:30 बजे UIET, कुरुक्षेत्र विश्वविद्यालय में "हवन रश्म" का आयोजन किया गया।`,
-      image: proceeding4,
-      // previewLink: '/Press1.pdf',
-      // downloadLink: '/Press1.pdf',
-      readLink: '/press/residential-camp-hindi' // Link to the TSX file or page
-    },
-    {
-      title: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण)",
-      description: "आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम",
-      image: proceeding3,
-      // previewLink: '/Press1.pdf',
-      // downloadLink: '/Press1.pdf',
-      readLink: '/press/residential-camp-success' // Link to the TSX file or page
-    },
-    {
-      title: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।",
-      description: "आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन किया जाएगा ",
-      image: proceeding1,
-      // previewLink: '/Press1.pdf',
-      // downloadLink: '/Press1.pdf',
-      readLink: '/press/shiksha-mahakumbh-4-0' // Link to the TSX file or page
-    },
-    {
-      title: "Baton Ceremony",
-      description: "A Grand Start to Shiksha Mahakumbh 2.0: Baton CeremonySuccessfully Concluded  Kurukshetra, November 20, 2024",
-      image: proceeding2,
-      // previewLink: '/Press1.pdf',
-      // downloadLink: '/Press1.pdf',
-      readLink: '/press/baton-ceremony-smk-4' // Link to the TSX file or page
-    },
-    // {
-    //   title: "RASE 2023 2nd Edition",
-    //   description: "Click on the buttons below to preview, download, or read the proceedings.",
-    //   image: proceeding1,
-    //   previewLink: '/Proceeding1.pdf',
-    //   downloadLink: '/Proceeding1.pdf',
-    //   readLink: '/proceeding1' // Link to the TSX file or page
-    // },
-    // {
-    //   title: "RASE 2024 3rd Edition",
-    //   description: "Click on the buttons below to preview, download, or read the proceedings.",
-    //   image: proceeding3,
-    //   previewLink: '/Proceeding3.pdf',
-    //   downloadLink: '/Proceeding3.pdf',
-    //   readLink: '/proceeding3' // Link to the TSX file or page
-    // },
-    // Add more cards as needed
-  ];
-
-  const openPreview = (previewLink: string) => {
-    window.open(previewLink, '_blank');
-  };
-
-  const downloadProceedings = (downloadLink: string) => {
-    const link = document.createElement('a');
-    link.href = downloadLink;
-    link.download = downloadLink.substring(downloadLink.lastIndexOf('/') + 1);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const openReadProceeding = (readLink: string) => {
-    window.open(readLink, '_blank');
-  };
-
+export default function PressHub() {
   return (
-    <>
-      <h1 className='text-3xl font-bold text-primary text-center mb-6'>Press Note
-</h1>
-      <div className="flex flex-wrap justify-center gap-4 p-4">
-        {cardData.map((data, index) => (
-          <Card
-            key={index}
-            style={{ width: isMobile ? '100%' : 300, marginBottom: 20 }}
-            bodyStyle={{ padding: 10 }}
-            cover={
-              <div
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  paddingTop: '56.25%', // Aspect ratio 16:9
-                  overflow: 'hidden',
-                  borderRadius: '8px',
-                }}
-              >
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-                  <Image
-                    alt="Proceeding Image"
-                    src={data.image}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-lg"
-                  />
-                </div>
-              </div>
-            }
-            actions={[
-              // <Button
-              //   key="preview"
-              //   type="primary"
-              //   onClick={() => openPreview(data.previewLink)}
-              //   style={{ width: '100%', marginBottom: '4px', backgroundColor: '#1890ff', borderColor: '#1890ff', color: '#fff' }} // Uniform color
-              // >
-              //   Preview
-              // </Button>,
-              // <Button
-              //   key="download"
-              //   type="primary"
-              //   onClick={() => downloadProceedings(data.downloadLink)}
-              //   style={{ width: '100%', marginBottom: '4px', backgroundColor: '#1890ff', borderColor: '#1890ff', color: '#fff' }} // Uniform color
-              // >
-              //   Download
-              // </Button>,
-              <Button
-                key="read"
-                type="primary"
-                onClick={() => openReadProceeding(data.readLink)}
-                style={{ width: '100%', backgroundColor: '#1890ff', borderColor: '#1890ff', color: '#fff' }} // Uniform color
-              >
-                Read 
-              </Button>,
-            ]}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'rotateY(5deg)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'rotateY(0deg)';
-            }}
+    <div>
+      <h2 className="home-section-title mb-8 text-center">Latest Press Notes</h2>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {cardData.map((data) => (
+          <article
+            key={data.readLink}
+            className="home-card-hover flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
           >
-            <Meta
-              title={data.title}
-              description={data.description}
-            />
-          </Card>
+            <div className="relative aspect-video w-full overflow-hidden">
+              <Image
+                alt={data.title}
+                src={data.image}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+            </div>
+            <div className="flex flex-1 flex-col p-5">
+              <h3 className="text-base font-bold text-brand-navy line-clamp-3">
+                {data.title}
+              </h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600 line-clamp-4">
+                {data.description}
+              </p>
+              <div className="mt-4">
+                <CtaButton href={data.readLink} variant="secondary" className="w-full">
+                  Read Release
+                </CtaButton>
+              </div>
+            </div>
+          </article>
         ))}
       </div>
-    </>
+    </div>
   );
-};
-
-export default Proceedings;
+}

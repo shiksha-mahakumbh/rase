@@ -26,7 +26,7 @@ const CompanyInfo: React.FC = () => {
             <GlobeEducationIcon className="h-4 w-4" />
             Global Educational Movement
           </div>
-          <h2 className="text-3xl font-extrabold leading-tight text-[#4d1414] md:text-4xl lg:text-5xl">
+          <h2 className="text-3xl font-extrabold leading-tight text-brand-navy md:text-4xl lg:text-5xl">
             Welcome to{" "}
             <span className="home-gradient-text">Shiksha Mahakumbh Abhiyan</span>
           </h2>
@@ -77,10 +77,10 @@ const CompanyInfo: React.FC = () => {
               />
             </a>
           </GlassCard>
-          <h3 className="mt-4 text-xl font-semibold tracking-wide text-[#4d1414] md:text-2xl">
+          <h3 className="mt-4 text-xl font-semibold tracking-wide text-brand-navy md:text-2xl">
             शिक्षा महाकुंभ अभियान
           </h3>
-          <h3 className="text-lg font-bold text-[#b22222] md:text-xl">
+          <h3 className="text-lg font-bold text-brand-saffron md:text-xl">
             Shiksha Mahakumbh Abhiyan
           </h3>
         </motion.div>

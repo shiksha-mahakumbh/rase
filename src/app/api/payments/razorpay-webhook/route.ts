@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { processRazorpayWebhookEvent } from "@/lib/firestore/payments.server";
 
 /**
  * Razorpay webhook — verify signature and process payment events.
@@ -38,16 +39,25 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const event = JSON.parse(body) as {
-      event?: string;
-      payload?: { payment?: { entity?: { id?: string; status?: string } } };
-    };
+    const event = JSON.parse(body) as Parameters<typeof processRazorpayWebhookEvent>[0];
+    const result = await processRazorpayWebhookEvent(event);
 
-    // TODO Phase 4: Firebase Admin SDK — update registrations paymentStatus by order id
-    console.info("Razorpay webhook:", event.event);
+    if (!result.ok) {
+      console.warn("[razorpay-webhook]", result.event, result.error);
+      return NextResponse.json(
+        { received: true, processed: false, error: result.error },
+        { status: 202 }
+      );
+    }
 
-    return NextResponse.json({ received: true });
-  } catch {
+    return NextResponse.json({
+      received: true,
+      processed: true,
+      registrationId: result.registrationId,
+      paymentStatus: result.paymentStatus,
+    });
+  } catch (error) {
+    console.error("[razorpay-webhook]", error);
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 }

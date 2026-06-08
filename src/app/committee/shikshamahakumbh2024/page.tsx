@@ -1,7 +1,5 @@
 import React from "react";
-import Footer from "../../component/Footer";
-import NavBar from "../../component/NavBar";
-import CommitteeDetailShell from "@/components/committee/CommitteeDetailShell";
+import CommitteeEditionPage from "@/components/committee/CommitteeEditionPage";
 import CommitteeMemberSection from "@/components/committee/CommitteeMemberSection";
 
 const ShikshaMahaKumbh2024 = () => {
@@ -98,9 +96,7 @@ const ShikshaMahaKumbh2024 = () => {
   
     
   return (
-    <>
-      <NavBar />
-      <CommitteeDetailShell editionTitle="Shiksha Maha Kumbh 2024">
+    <CommitteeEditionPage editionTitle="Shiksha Maha Kumbh 2024">
         <CommitteeMemberSection title="Conference Patron" members={data.ConferencePatron} badge="Leadership" />
         <CommitteeMemberSection title="Conference Director" members={data.ConferenceDirector} />
         <CommitteeMemberSection title="Conference Secretaries" members={data.ConferenceSecretaries} />
@@ -108,9 +104,7 @@ const ShikshaMahaKumbh2024 = () => {
         <CommitteeMemberSection title="Conference Conveners" members={data.ConferenceConveners} />
         <CommitteeMemberSection title="Advisory Committee" members={data.LocalAdvisoryCommittee} badge="Advisory" />
         <CommitteeMemberSection title="Organizing Committee" members={data.OrganizingCommittee} badge="Organising" />
-      </CommitteeDetailShell>
-      <Footer />
-    </>
+    </CommitteeEditionPage>
   );
 };
 

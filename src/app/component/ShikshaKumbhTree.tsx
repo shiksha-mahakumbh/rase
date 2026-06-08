@@ -21,12 +21,12 @@ const TreeComponent: React.FC = () => {
         lineBorderRadius={"10px"}
         label={
           <div className="text-center p-2 ">
-            <Link href="" passHref>
-              <button className="bg-primary p-2 rounded-lg tracking-widest hover:bg-white hover:text-primary">
+            <Link href="/shikshakumbh">
+              <span className="inline-block rounded-lg bg-brand-navy p-2 tracking-widest text-white transition hover:bg-white hover:text-brand-navy">
                 Shiksha
                 <br />
                 Kumbh
-              </button>
+              </span>
             </Link>
           </div>
         }

@@ -1,27 +1,17 @@
-"use client"
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
-import Footer from "../component/Footer";
+"use client";
+
+import React, { Suspense } from "react";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
 const GalleryPage = React.lazy(() => import("../component/GalleryPage"));
 
-const gallery = () => (
-  <div className="bg-white">
-  <div>
-  <CompanyInfo/>
-  <NavBar />
-  </div>
-    <div>
-    <React.Suspense fallback={<div>Loading...</div>}>
-      <GalleryPage />
-    </React.Suspense>
-    </div>
-    <div>
-      < Footer />
-    </div>
-
-  </div>
-);
-
-export default gallery;
+export default function GalleryRoutePage() {
+  return (
+    <PublicPageShell hero={PAGE_HEROES.gallery} skipContainer>
+      <Suspense fallback={<div className="py-12 text-center text-slate-600">Loading gallery…</div>}>
+        <GalleryPage />
+      </Suspense>
+    </PublicPageShell>
+  );
+}

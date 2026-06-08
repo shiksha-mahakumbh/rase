@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
 interface ShowcaseHeroProps {
@@ -33,32 +32,24 @@ export default function ShowcaseHero({
       />
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         {eyebrow && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron/90"
-          >
+          <p className="mb-3 animate-fade-in text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron/90">
             {eyebrow}
-          </motion.p>
+          </p>
         )}
-        <motion.h1
+        <h1
           id="showcase-hero-title"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="text-3xl font-extrabold leading-tight md:text-5xl"
+          className="animate-fade-in text-3xl font-extrabold leading-tight md:text-5xl"
+          style={{ animationDelay: "50ms" }}
         >
           {title}
-        </motion.h1>
+        </h1>
         {subtitle && (
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-white/90 md:text-lg"
+          <div
+            className="animate-fade-in mx-auto mt-5 max-w-3xl text-base leading-relaxed text-white/90 md:text-lg"
+            style={{ animationDelay: "100ms" }}
           >
             {subtitle}
-          </motion.div>
+          </div>
         )}
       </div>
     </section>

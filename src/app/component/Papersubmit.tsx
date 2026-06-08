@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 const PaperSubmission = () => {
   useEffect(() => {
-    window.location.href = "https://www.rase.co.in/VibhagRoute/AcademicCouncil24";
+    window.location.href = "/departments/academic-council";
   }, []);
 
   return (

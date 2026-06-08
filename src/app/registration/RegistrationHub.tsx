@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import RegistrationShell from "@/app/component/ui/RegistrationShell";
 import {
@@ -19,6 +19,10 @@ import { loadMeta, saveMeta } from "@/lib/registration/draftStorage";
 import RecaptchaScript from "@/components/security/RecaptchaProvider";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
 import RegistrationTrustBar from "@/components/registration/RegistrationTrustBar";
+import {
+  isExternalRedirectType,
+  requiresPaymentStep,
+} from "@/lib/registration/config";
 
 function RegistrationFormRouter({
   type,
@@ -26,13 +30,15 @@ function RegistrationFormRouter({
   onContinueToPayment,
 }: {
   type: RegistrationType;
-  step: 2 | 3;
+  step: number;
   onContinueToPayment: () => void;
 }) {
-  const visibilityClass =
-    step === 2
+  const paid = requiresPaymentStep(type);
+  const visibilityClass = paid
+    ? step === 2
       ? "[&_.registration-payment]:hidden [&_button[type=submit]]:hidden"
-      : "[&_.registration-details]:hidden";
+      : "[&_.registration-details]:hidden"
+    : "";
 
   const form = (() => {
     switch (type) {
@@ -58,6 +64,7 @@ function RegistrationFormRouter({
           <GenericRegistrationForm
             registrationType="Projects"
             sectionTitle="Projects Registration"
+            requiresPayment
           />
         );
       case "Bal Shodh Patrika":
@@ -79,6 +86,7 @@ function RegistrationFormRouter({
           <GenericRegistrationForm
             registrationType="Accommodation"
             sectionTitle="Accommodation Registration"
+            requiresPayment
           />
         );
       default:
@@ -89,7 +97,7 @@ function RegistrationFormRouter({
   return (
     <div className={visibilityClass}>
       {form}
-      {step === 2 && (
+      {paid && step === 2 && (
         <button
           type="button"
           onClick={onContinueToPayment}
@@ -103,22 +111,29 @@ function RegistrationFormRouter({
 }
 
 export default function RegistrationHub() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState(1);
   const [registrationType, setRegistrationType] =
     useState<RegistrationType>("Delegate Registration");
 
+  const paidFlow = useMemo(
+    () => requiresPaymentStep(registrationType),
+    [registrationType]
+  );
+  const totalSteps = paidFlow ? 3 : 2;
+
   useEffect(() => {
     const meta = loadMeta();
-    if (meta?.registrationType) {
+    if (meta?.registrationType && !isExternalRedirectType(meta.registrationType)) {
       setRegistrationType(meta.registrationType);
-      if (meta.step >= 2 && meta.step <= 3) {
-        setStep(meta.step as 2 | 3);
+      if (meta.step >= 2) {
+        const maxStep = requiresPaymentStep(meta.registrationType) ? 3 : 2;
+        setStep(Math.min(meta.step, maxStep));
       }
     }
   }, []);
 
   useEffect(() => {
-    if (step > 1) {
+    if (step > 1 && !isExternalRedirectType(registrationType)) {
       saveMeta({
         step,
         registrationType,
@@ -140,19 +155,25 @@ export default function RegistrationHub() {
         title={EVENT_NAME}
         subtitle="Official registration — national education movement & global summit"
         step={step}
-        totalSteps={3}
+        totalSteps={totalSteps}
       >
-        <RegistrationProgress currentStep={step} />
+        <RegistrationProgress
+          currentStep={step}
+          requiresPayment={paidFlow}
+        />
         <RegistrationTrustBar />
 
         {step === 1 && (
           <CategoryStep
             value={registrationType}
             onChange={(t) => {
-              setRegistrationType(t);
-              setStep(1);
+              if (!isExternalRedirectType(t)) {
+                setRegistrationType(t);
+                setStep(1);
+              }
             }}
             onContinue={() => {
+              if (isExternalRedirectType(registrationType)) return;
               trackEvent(ANALYTICS_EVENTS.registrationStarted, {
                 registrationType,
                 step: 2,
@@ -162,11 +183,16 @@ export default function RegistrationHub() {
           />
         )}
 
-        {step >= 2 && (
+        {step >= 2 && !isExternalRedirectType(registrationType) && (
           <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
               <span>
                 <strong className="text-brand-navy">{registrationType}</strong>
+                {paidFlow ? (
+                  <span className="ml-2 text-xs text-amber-700">(Paid registration)</span>
+                ) : (
+                  <span className="ml-2 text-xs text-emerald-700">(Free registration)</span>
+                )}
               </span>
               <button
                 type="button"
@@ -179,17 +205,18 @@ export default function RegistrationHub() {
 
             {step === 2 && (
               <p className="text-sm text-slate-600">
-                Fill your details below. Progress is saved automatically if you leave
-                this page.
+                {paidFlow
+                  ? "Fill your details below. Progress is saved automatically if you leave this page."
+                  : "Complete your details and submit — no payment required for this category."}
               </p>
             )}
-            {step === 3 && (
+            {paidFlow && step === 3 && (
               <p className="text-sm text-slate-600">
-                Complete payment (if required) and submit your registration.
+                Complete payment and submit your registration.
               </p>
             )}
 
-            {(step === 2 || step === 3) && (
+            {(step === 2 || (paidFlow && step === 3)) && (
               <RegistrationFormRouter
                 type={registrationType}
                 step={step}
@@ -197,7 +224,7 @@ export default function RegistrationHub() {
               />
             )}
 
-            {step === 3 && (
+            {paidFlow && step === 3 && (
               <button
                 type="button"
                 className="text-sm font-semibold text-brand-navy underline"

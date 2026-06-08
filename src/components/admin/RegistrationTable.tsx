@@ -289,9 +289,13 @@ export default function RegistrationTable({
 }
 
 function StatusBadge({ value }: { value?: string }) {
+  const display =
+    value === "Pending" ? "Pending Payment" : value;
   const colors: Record<string, string> = {
     Paid: "bg-green-100 text-green-800",
+    "Pending Payment": "bg-amber-100 text-amber-800",
     Pending: "bg-amber-100 text-amber-800",
+    Submitted: "bg-sky-100 text-sky-800",
     Failed: "bg-red-100 text-red-800",
     Verified: "bg-blue-100 text-blue-800",
     Approved: "bg-green-100 text-green-800",
@@ -305,10 +309,10 @@ function StatusBadge({ value }: { value?: string }) {
   return (
     <span
       className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${
-        colors[value ?? ""] ?? "bg-gray-100 text-gray-700"
+        colors[display ?? ""] ?? colors[value ?? ""] ?? "bg-gray-100 text-gray-700"
       }`}
     >
-      {value ?? "—"}
+      {display ?? "—"}
     </span>
   );
 }

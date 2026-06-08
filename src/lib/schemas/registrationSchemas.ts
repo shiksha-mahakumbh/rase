@@ -162,15 +162,6 @@ export const olympiadSchema = commonParticipantSchema
     studentCount: z.number().min(1, "Upload a valid student list"),
     registrationFee: z.number().min(0),
     utrNumber: z.string().optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.registrationFee > 0 && !data.utrNumber?.trim()) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "UTR number is required after payment",
-        path: ["utrNumber"],
-      });
-    }
   });
 
 export const awardsSchema = commonParticipantSchema

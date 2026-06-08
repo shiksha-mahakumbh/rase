@@ -1,6 +1,5 @@
 import Link from "next/link";
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   buildBreadcrumbSchema,
@@ -9,7 +8,6 @@ import {
   buildScholarlyArticleSchema,
 } from "@/lib/seo/schema";
 import type { PublicationTypeEntry } from "@/lib/knowledge-graph/publication-catalog";
-import RelatedContentSection from "./RelatedContentSection";
 
 type Props = { entry: PublicationTypeEntry };
 
@@ -42,36 +40,40 @@ export default function PublicationTypePage({ entry }: Props) {
       : null;
 
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <PublicPageShell
+      hero={{
+        eyebrow: "Publications",
+        title: entry.label,
+        subtitle: entry.description,
+        accent: "navy",
+      }}
+      relatedPath={entry.path}
+      containerClassName="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16"
+    >
       <JsonLd data={collection} />
       <JsonLd data={breadcrumbs} />
       <JsonLd data={datasetPlaceholder} />
       {scholarlyCatalogue ? <JsonLd data={scholarlyCatalogue} /> : null}
-      <NavBar />
-      <main id="main-content" className="mx-auto max-w-4xl px-4 py-10 md:py-14">
-        <nav className="text-sm text-slate-600">
-          <Link href="/publications" className="hover:text-brand-saffron">
-            Publications
-          </Link>
-          <span className="mx-2">/</span>
-          <span className="font-medium text-brand-navy">{entry.label}</span>
-        </nav>
-        <h1 className="mt-6 text-3xl font-bold text-brand-navy">{entry.label}</h1>
-        <p className="mt-4 text-slate-700">{entry.description}</p>
-        <p className="mt-4 text-sm text-slate-500">
-          Indexed publications will appear here. Browse existing{" "}
-          <Link href="/proceedings" className="font-semibold text-brand-saffron hover:underline">
-            proceedings
-          </Link>{" "}
-          and{" "}
-          <Link href="/journals" className="font-semibold text-brand-saffron hover:underline">
-            journals
-          </Link>{" "}
-          in the meantime.
-        </p>
-      </main>
-      <RelatedContentSection path={entry.path} />
-      <Footer />
-    </div>
+
+      <nav className="text-sm text-slate-600" aria-label="Breadcrumb">
+        <Link href="/publications" className="hover:text-brand-saffron">
+          Publications
+        </Link>
+        <span className="mx-2">/</span>
+        <span className="font-medium text-brand-navy">{entry.label}</span>
+      </nav>
+
+      <p className="mt-6 text-sm text-slate-500">
+        Indexed publications will appear here. Browse existing{" "}
+        <Link href="/proceedings" className="font-semibold text-brand-saffron hover:underline">
+          proceedings
+        </Link>{" "}
+        and{" "}
+        <Link href="/journals" className="font-semibold text-brand-saffron hover:underline">
+          journals
+        </Link>{" "}
+        in the meantime.
+      </p>
+    </PublicPageShell>
   );
 }

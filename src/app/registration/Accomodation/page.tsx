@@ -1,20 +1,17 @@
 "use client";
 
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
-import CompanyInfo from "@/app/component/CompanyInfo";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import AccomodationForm from "@/app/component/Registration/AccomodationReg";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
 /** Legacy registration path — preserved for bookmarks */
 export default function RegistrationAccommodationPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <CompanyInfo />
-      <NavBar />
-      <main className="mx-auto max-w-4xl px-4 py-8">
-        <AccomodationForm />
-      </main>
-      <Footer />
-    </div>
+    <PublicPageShell
+      hero={PAGE_HEROES.accommodation}
+      containerClassName="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16"
+    >
+      <AccomodationForm />
+    </PublicPageShell>
   );
 }

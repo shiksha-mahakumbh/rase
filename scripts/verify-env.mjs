@@ -41,6 +41,9 @@ const groups = {
   registration: [
     { key: "NEXT_PUBLIC_RECAPTCHA_SITE_KEY", required: true, production: true },
     { key: "RECAPTCHA_SECRET_KEY", required: true, production: true },
+    { key: "NEXT_PUBLIC_RAZORPAY_KEY_ID", required: true, production: true },
+    { key: "RAZORPAY_KEY_ID", required: true, production: true },
+    { key: "RAZORPAY_KEY_SECRET", required: true, production: true },
     { key: "RAZORPAY_WEBHOOK_SECRET", required: true, production: true },
   ],
   analytics: [

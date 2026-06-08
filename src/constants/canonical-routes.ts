@@ -12,6 +12,7 @@ export const CANONICAL_ROUTES = {
   wishesReceived: "/wishes-received",
   committees: "/committees",
   mediaCenter: "/media-center",
+  glimpses: "/glimpses",
   merchandise: "/merchandise",
   press: "/press",
   comingSoon: "/coming-soon",

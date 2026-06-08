@@ -6,6 +6,9 @@ export const REGISTRATION_ID_PREFIX = "SMK2026";
 
 export type RegistrationType =
   | "Delegate Registration"
+  | "Multi Track Conference"
+  | "Paper Submission"
+  | "Abstract Submission"
   | "Conclave"
   | "Awards"
   | "Olympiad"
@@ -20,8 +23,17 @@ export type Gender = "Male" | "Female" | "Other";
 export type VidyaBhartiStatus = "Vidya Bharti" | "Non Vidya Bharti";
 export type YesNo = "Yes" | "No";
 
-export type RegistrationStatus = "Pending" | "Verified" | "Approved" | "Rejected";
-export type PaymentStatus = "Pending" | "Paid" | "Failed";
+export type RegistrationStatus =
+  | "Pending"
+  | "Submitted"
+  | "Verified"
+  | "Approved"
+  | "Rejected";
+export type PaymentStatus =
+  | "Pending Payment"
+  | "Paid"
+  | "Failed"
+  | "Submitted";
 export type AccommodationStatus =
   | "Not Required"
   | "Requested"
@@ -199,7 +211,10 @@ export interface GenericRegistrationData extends BaseRegistration {
     | "Projects"
     | "Bal Shodh Patrika"
     | "Cultural Program"
-    | "Accommodation";
+    | "Accommodation"
+    | "Multi Track Conference"
+    | "Paper Submission"
+    | "Abstract Submission";
   title?: string;
   description?: string;
 }
@@ -222,6 +237,9 @@ export interface AdminUser {
 
 export const REGISTRATION_TYPE_OPTIONS: RegistrationType[] = [
   "Delegate Registration",
+  "Multi Track Conference",
+  "Paper Submission",
+  "Abstract Submission",
   "Conclave",
   "Awards",
   "Olympiad",
@@ -235,6 +253,9 @@ export const REGISTRATION_TYPE_OPTIONS: RegistrationType[] = [
 
 export const TYPE_COLLECTION_MAP: Record<RegistrationType, string> = {
   "Delegate Registration": "delegate_registrations",
+  "Multi Track Conference": "registrations",
+  "Paper Submission": "registrations",
+  "Abstract Submission": "registrations",
   Conclave: "conclave_registrations",
   "Best Practices": "best_practices",
   Olympiad: "olympiad_registrations",
@@ -256,3 +277,5 @@ export const DELEGATE_FEES: Record<string, number> = {
 };
 
 export const OLYMPIAD_FEE_PER_STUDENT = 200;
+
+export const PROJECT_REGISTRATION_FEE = 200;

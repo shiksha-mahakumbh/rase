@@ -1,19 +1,17 @@
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
-import Footer from "../component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import Donation from "../component/donate";
 
-const page = () => {
-  return (
-    <div className="bg-white h-screen">
-      <CompanyInfo />
-      <NavBar />
-      <Donation />
-      <Footer />
-    </div>
-    
-  );
+const PAGE_HERO = {
+  eyebrow: "Support",
+  title: "Donation",
+  subtitle: "Support the Shiksha Mahakumbh national education movement.",
+  accent: "emerald" as const,
 };
 
-export default page;
+export default function DonationPage() {
+  return (
+    <PublicPageShell hero={PAGE_HERO}>
+      <Donation />
+    </PublicPageShell>
+  );
+}

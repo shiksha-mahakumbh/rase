@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 export interface CommitteeMember {
   id?: number;
   name: string;
@@ -20,13 +18,12 @@ export default function CommitteeMemberSection({
   members,
   badge,
 }: CommitteeMemberSectionProps) {
+  const sectionId = `section-${title.replace(/\s/g, "-")}`;
+
   return (
-    <section className="mb-10" aria-labelledby={`section-${title.replace(/\s/g, "-")}`}>
+    <section className="mb-10" aria-labelledby={sectionId}>
       <div className="mb-5 flex flex-wrap items-center gap-3">
-        <h2
-          id={`section-${title.replace(/\s/g, "-")}`}
-          className="text-xl font-bold text-brand-navy md:text-2xl"
-        >
+        <h2 id={sectionId} className="text-xl font-bold text-brand-navy md:text-2xl">
           {title}
         </h2>
         {badge && (
@@ -67,19 +64,16 @@ export default function CommitteeMemberSection({
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 md:hidden">
         {members.map((member, index) => (
-          <motion.article
+          <article
             key={`${member.name}-card-${index}`}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.03 }}
-            className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+            className="animate-fade-in rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+            style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }}
           >
             <h3 className="font-bold text-brand-navy">{member.name}</h3>
             <p className="mt-1 text-sm leading-relaxed text-gray-600">
               {member.designation}
             </p>
-          </motion.article>
+          </article>
         ))}
       </div>
     </section>

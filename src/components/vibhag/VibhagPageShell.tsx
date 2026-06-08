@@ -17,7 +17,7 @@ export default function VibhagPageShell({
   const page = getVibhagBySlug(currentSlug);
 
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <>
       <div className="border-b border-brand-navy/10 bg-white/90 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 md:px-6">
           <BreadcrumbNav
@@ -31,6 +31,6 @@ export default function VibhagPageShell({
       </div>
       {children}
       {showRelatedNav && <VibhagRelatedNav currentSlug={currentSlug} />}
-    </div>
+    </>
   );
 }

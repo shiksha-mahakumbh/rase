@@ -4,8 +4,9 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
-import Modal from "./component/Modal";
 import ErrorBoundary from "@/components/errors/ErrorBoundary";
+
+const Modal = dynamic(() => import("./component/Modal"), { ssr: false });
 
 const CookieConsent = dynamic(
   () => import("@/components/common/CookieConsent"),
@@ -25,6 +26,20 @@ const MODAL_SEEN_KEY = "smk_announcement_seen";
 /** Global client chrome — does not wrap page children (server-first layout). */
 export default function ClientChrome() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const onChunkError = (event: PromiseRejectionEvent) => {
+      const reason = event.reason;
+      const message =
+        reason instanceof Error ? reason.message : String(reason ?? "");
+      const name = reason instanceof Error ? reason.name : "";
+      if (name === "ChunkLoadError" || message.includes("ChunkLoadError")) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener("unhandledrejection", onChunkError);
+    return () => window.removeEventListener("unhandledrejection", onChunkError);
+  }, []);
 
   useEffect(() => {
     const showModal = () => {

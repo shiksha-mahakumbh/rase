@@ -1,7 +1,6 @@
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import VibhagPageShell from "@/components/vibhag/VibhagPageShell";
-import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
+import { getVibhagBySlug } from "@/data/vibhag-pages";
 import type { ReactNode } from "react";
 
 interface DepartmentPageProps {
@@ -17,17 +16,24 @@ export default function DepartmentPage({
   children,
   showRelatedNav = true,
 }: DepartmentPageProps) {
+  const page = getVibhagBySlug(slug);
+
   return (
-    <div className="min-h-screen bg-brand-surface">
-      <NavBar />
+    <PublicPageShell
+      hero={{
+        eyebrow: "Departments",
+        title: page?.title ?? "Department",
+        subtitle: page?.description,
+        accent: "navy",
+      }}
+      showHero={false}
+      relatedPath={canonicalPath}
+      skipContainer
+      showCta={slug !== "AcademicCouncil24"}
+    >
       <VibhagPageShell currentSlug={slug} showRelatedNav={showRelatedNav}>
         {children}
       </VibhagPageShell>
-      <RelatedContentSection
-        path={canonicalPath}
-        title="Related programmes & resources"
-      />
-      <Footer />
-    </div>
+    </PublicPageShell>
   );
 }

@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import Footer from "../component/Footer";
-import NavBar from "../component/NavBar";
-import Image from "next/image"; // Import the Image component from Next.js
+import Image from "next/image";
 
 const speakers = [
   {

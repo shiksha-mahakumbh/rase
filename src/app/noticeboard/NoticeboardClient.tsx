@@ -2,26 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import {
-  List,
-  Typography,
-  Tabs,
-  Alert,
-  Button,
-  Skeleton,
-  Spin,
-} from "antd";
-import { CalendarOutlined, ReloadOutlined } from "@ant-design/icons";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import type { NoticeboardEvent } from "@/lib/noticeboard/getEvents";
 import ImageLightbox from "../component/ui/ImageLightbox";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
 
 type Props = {
   initialEvents: NoticeboardEvent[];
 };
+
+type TabKey = "current" | "past";
 
 export default function NoticeboardClient({ initialEvents }: Props) {
   const [events, setEvents] = useState<NoticeboardEvent[]>(initialEvents);
@@ -29,6 +19,7 @@ export default function NoticeboardClient({ initialEvents }: Props) {
   const [pastNotices, setPastNotices] = useState<NoticeboardEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabKey>("current");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalImage, setModalImage] = useState("");
   const [imageLoading, setImageLoading] = useState<Record<string, boolean>>({});
@@ -63,11 +54,6 @@ export default function NoticeboardClient({ initialEvents }: Props) {
     setIsModalVisible(true);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setModalImage("");
-  };
-
   const handleImageLoadStart = (id: string) => {
     setImageLoading((prev) => ({ ...prev, [id]: true }));
   };
@@ -81,117 +67,152 @@ export default function NoticeboardClient({ initialEvents }: Props) {
   };
 
   const renderNoticeList = (items: NoticeboardEvent[]) => (
-    <div className="max-h-screen overflow-y-auto">
-      <List
-        dataSource={items}
-        renderItem={(event) => (
-          <List.Item className="flex items-start border-b-2 border-gray-500 py-4">
-            <div className="flex w-2/3 flex-grow flex-col justify-center pr-4">
-              <Typography.Title level={4} style={{ fontSize: "0.88rem" }}>
-                {event.title}
-              </Typography.Title>
-            </div>
-            <div className="relative w-1/3">
-              {imageLoading[event.id] && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-white opacity-75">
-                  <Spin />
-                </div>
-              )}
+    <ul className="max-h-[70vh] space-y-4 overflow-y-auto" role="list">
+      {items.map((event) => (
+        <li
+          key={event.id}
+          className="flex flex-col gap-4 border-b border-slate-200 pb-4 sm:flex-row sm:items-start"
+        >
+          <div className="min-w-0 flex-1 sm:w-2/3">
+            <h3 className="text-sm font-semibold text-brand-navy md:text-base">
+              {event.title}
+            </h3>
+          </div>
+          <div className="relative w-full shrink-0 sm:w-1/3">
+            {imageLoading[event.id] && (
+              <div
+                className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-white/80"
+                aria-hidden="true"
+              >
+                <span className="h-6 w-6 animate-spin rounded-full border-2 border-brand-navy border-t-transparent" />
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => handleImageClick(event.imageUrl)}
+              className="block w-full rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
+              aria-label={`View larger image for ${event.title}`}
+            >
               <Image
                 src={event.imageUrl}
                 alt={event.title}
                 width={400}
                 height={320}
                 unoptimized
-                sizes="(max-width: 768px) 33vw, 400px"
-                className="w-full cursor-pointer rounded-lg object-cover md:h-80"
-                onClick={() => handleImageClick(event.imageUrl)}
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="h-auto w-full cursor-pointer rounded-lg object-cover md:max-h-80"
                 onLoad={() => handleImageLoadEnd(event.id)}
                 onError={() => handleImageLoadEnd(event.id)}
                 onLoadStart={() => handleImageLoadStart(event.id)}
               />
-            </div>
-          </List.Item>
-        )}
-      />
-    </div>
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 
-  const tabItems = [
-    {
-      key: "1",
-      label: "Current Notices",
-      children: loading ? (
-        <Skeleton active paragraph={{ rows: 4 }} />
-      ) : currentNotices.length === 0 ? (
-        <Typography.Text>No current notices available.</Typography.Text>
-      ) : (
-        renderNoticeList(currentNotices)
-      ),
-    },
-    {
-      key: "2",
-      label: "Past Notices",
-      children: loading ? (
-        <Skeleton active paragraph={{ rows: 4 }} />
-      ) : pastNotices.length === 0 ? (
-        <Typography.Text>No past notices available.</Typography.Text>
-      ) : (
-        renderNoticeList(pastNotices)
-      ),
-    },
-  ];
+  const activeItems = activeTab === "current" ? currentNotices : pastNotices;
+  const emptyMessage =
+    activeTab === "current"
+      ? "No current notices available."
+      : "No past notices available.";
 
   return (
-    <>
-      <CompanyInfo />
-      <NavBar />
-      <div className="p-6 text-primary">
-        <div className="mx-auto rounded-lg bg-white shadow-lg">
-          <div className="flex items-center justify-between border-b border-gray-200 p-4">
-            <span className="flex items-center text-lg font-semibold">
-              Notice Board
-              <CalendarOutlined className="ml-2 text-primary" />
+    <div className="text-brand-navy">
+      <div className="mx-auto rounded-lg bg-white shadow-lg">
+        <div className="flex items-center justify-between border-b border-gray-200 p-4">
+          <h2 className="flex items-center text-lg font-semibold">
+            Notice Board
+            <span className="ml-2 text-brand-saffron" aria-hidden="true">
+              📅
             </span>
-            <Button
-              icon={<ReloadOutlined />}
-              onClick={fetchEvents}
-              className="ml-2"
-              size="small"
-              type="text"
-            />
+          </h2>
+          <button
+            type="button"
+            onClick={fetchEvents}
+            disabled={loading}
+            aria-label="Refresh notices"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-brand-navy hover:bg-brand-surface-warm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron disabled:opacity-50"
+          >
+            <span aria-hidden="true">↻</span>
+          </button>
+        </div>
+
+        {error && (
+          <div
+            role="alert"
+            className="m-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+          >
+            <p className="font-semibold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
+
+        <div className="p-4">
+          <div
+            className="mb-4 flex gap-2"
+            role="tablist"
+            aria-label="Notice categories"
+          >
+            {(
+              [
+                { key: "current" as const, label: "Current Notices" },
+                { key: "past" as const, label: "Past Notices" },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab.key}
+                aria-controls={`notice-panel-${tab.key}`}
+                id={`notice-tab-${tab.key}`}
+                onClick={() => setActiveTab(tab.key)}
+                className={`min-h-[44px] rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron ${
+                  activeTab === tab.key
+                    ? "bg-brand-navy text-white"
+                    : "bg-white text-brand-navy ring-1 ring-slate-200 hover:ring-brand-saffron/50"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
-          {error && (
-            <Alert
-              message="Error"
-              description={error}
-              type="error"
-              showIcon
-              className="m-4"
-            />
-          )}
-          <Tabs defaultActiveKey="1" className="p-4">
-            {tabItems.map((item) => (
-              <Tabs.TabPane tab={item.label} key={item.key}>
-                {item.children}
-              </Tabs.TabPane>
-            ))}
-          </Tabs>
-          <div className="mt-4 border-t border-gray-200" />
-          <ImageLightbox
-            isOpen={isModalVisible}
-            imageSrc={modalImage}
-            onClose={handleCancel}
-            alt="Larger view"
-          />
-          <div className="p-3 text-center">
-            <span className="text-xs text-red-600">
-              Note: Click on an image for a larger view
-            </span>
+          <div
+            id={`notice-panel-${activeTab}`}
+            role="tabpanel"
+            aria-labelledby={`notice-tab-${activeTab}`}
+          >
+            {loading ? (
+              <div className="space-y-3" aria-busy="true" aria-label="Loading notices">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-16 animate-pulse rounded-lg bg-slate-100" />
+                ))}
+              </div>
+            ) : activeItems.length === 0 ? (
+              <p className="text-sm text-slate-600">{emptyMessage}</p>
+            ) : (
+              renderNoticeList(activeItems)
+            )}
           </div>
         </div>
+
+        <div className="mt-4 border-t border-gray-200" />
+        <ImageLightbox
+          isOpen={isModalVisible}
+          imageSrc={modalImage}
+          onClose={() => {
+            setIsModalVisible(false);
+            setModalImage("");
+          }}
+          alt="Larger view of notice"
+        />
+        <p className="p-3 text-center text-xs text-red-600">
+          Note: Click on an image for a larger view
+        </p>
       </div>
-    </>
+    </div>
   );
 }

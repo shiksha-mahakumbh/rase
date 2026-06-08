@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import Guest from "../component/Guest";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase";
-import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 
 const speakers = [
@@ -147,14 +146,7 @@ const WishesReceived: React.FC = () => {
   const rest = filtered.slice(2);
 
   return (
-    <div className="min-h-screen bg-brand-surface">
-      <ShowcaseHero
-        eyebrow="Distinguished Greetings"
-        title="Wishes Received for the success of Shiksha Mahakumbh 2024"
-        subtitle="Messages and best wishes from dignitaries, leaders, and institutions supporting the national education movement."
-      />
-
-      <main id="main-content" className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
+    <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
         <BreadcrumbNav
           items={[
             { label: "Home", href: "/" },
@@ -206,7 +198,6 @@ const WishesReceived: React.FC = () => {
             <p className="py-12 text-center text-gray-500">No messages match your search.</p>
           )}
         </section>
-      </main>
     </div>
   );
 };

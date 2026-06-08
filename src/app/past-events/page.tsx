@@ -1,26 +1,33 @@
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import PastEditionsShowcase from "@/components/past-editions/PastEditionsShowcase";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 
 export default function PastEventsPage() {
   return (
-    <div className="min-h-screen bg-brand-surface">
-      <NavBar />
-      <main id="main-content">
-        <div className="mx-auto max-w-6xl px-4 pt-6 md:px-6">
-          <BreadcrumbNav
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Shiksha Mahakumbh", href: "/shikshamahakumbh" },
-              { label: "Past Events" },
-            ]}
-            className="mb-2"
-          />
-        </div>
-        <PastEditionsShowcase />
-      </main>
-      <Footer />
-    </div>
+    <PublicPageShell
+      hero={{
+        eyebrow: "Programmes",
+        title: "Past Events",
+        subtitle:
+          "Explore Shiksha Mahakumbh and Shiksha Kumbh editions, workshops, and national programmes.",
+        accent: "saffron",
+      }}
+      relatedPath={CANONICAL_ROUTES.pastEvents}
+      skipContainer
+      showCta
+    >
+      <div className="mx-auto max-w-6xl px-4 pt-2 md:px-6">
+        <BreadcrumbNav
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Shiksha Mahakumbh", href: "/shikshamahakumbh" },
+            { label: "Past Events" },
+          ]}
+          className="mb-2"
+        />
+      </div>
+      <PastEditionsShowcase />
+    </PublicPageShell>
   );
 }

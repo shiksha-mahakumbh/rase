@@ -1,21 +1,18 @@
 "use client";
-import CompanyInfo from "../../component/CompanyInfo";
-import Footer from "../../component/Footer";
-import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
-import NavBar from "../../component/NavBar";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import EventPage from "../../component/Spoken_English_Workshop/Spoken_English_Workshop";
 
-export default function Structure() {
+const PAGE_HERO = {
+  eyebrow: "Workshops",
+  title: "Spoken English Workshop",
+  subtitle: "Professional development workshop archive.",
+  accent: "emerald",
+} as const;
+
+export default function SpokenEnglishWorkshopPage() {
   return (
-    <div className="bg-white">
-    <CompanyInfo />
-    <NavBar />
+    <PublicPageShell hero={PAGE_HERO} relatedPath="/workshops">
       <EventPage />
-      <RelatedContentSectionClient
-        path="/past_event/Spoken_English_Workshop"
-        title="Related programmes & resources"
-      />
-      <Footer />
-    </div>
+    </PublicPageShell>
   );
 }

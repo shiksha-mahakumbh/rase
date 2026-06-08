@@ -1,16 +1,13 @@
 "use client";
-import CompanyInfo from "../component/CompanyInfo";
-import Footer from "../component/Footer";
-import NavBar from "../component/NavBar";
+
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import UpcomingEvent from "../component/UpcomingEvent";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
 export default function UpcomingEventsPage() {
   return (
-    <div className="bg-white">
-      <CompanyInfo />
-      <NavBar />
+    <PublicPageShell hero={PAGE_HEROES.upcomingEvents} skipContainer>
       <UpcomingEvent />
-      <Footer />
-    </div>
+    </PublicPageShell>
   );
 }

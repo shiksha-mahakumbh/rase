@@ -2,7 +2,6 @@
 
 import React, { ReactNode } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import "./academic-council.css";
 
 export interface SectionCTAProps {
@@ -58,11 +57,7 @@ export const ACHero: React.FC<ACHeroProps> = ({
       aria-hidden="true"
       className="pointer-events-none absolute -left-24 bottom-0 h-64 w-64 rounded-full bg-white/5 blur-3xl"
     />
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="relative z-10 mx-auto max-w-5xl text-center"
-    >
+    <div className="animate-fade-in relative z-10 mx-auto max-w-5xl text-center">
       <h1
         id="ac-hero-title"
         className="text-2xl font-extrabold leading-tight tracking-tight md:text-4xl lg:text-5xl"
@@ -74,7 +69,7 @@ export const ACHero: React.FC<ACHeroProps> = ({
           {subtitle}
         </div>
       )}
-    </motion.div>
+    </div>
   </section>
 );
 
@@ -84,13 +79,9 @@ export const ACSection: React.FC<ACSectionProps> = ({
   className = "",
   id,
 }) => (
-  <motion.section
+  <section
     id={id}
-    initial={{ opacity: 0, y: 16 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-40px" }}
-    transition={{ duration: 0.45 }}
-    className={`px-4 py-8 md:px-8 md:py-10 ${className}`}
+    className={`animate-fade-in px-4 py-8 md:px-8 md:py-10 ${className}`}
     aria-labelledby={id ? `${id}-heading` : undefined}
   >
     <div className="mx-auto max-w-5xl">
@@ -102,7 +93,7 @@ export const ACSection: React.FC<ACSectionProps> = ({
       </h2>
       {children}
     </div>
-  </motion.section>
+  </section>
 );
 
 export const ACCard: React.FC<{
@@ -209,12 +200,7 @@ export const SectionCTA: React.FC<SectionCTAProps> = ({
   title = "Ready to participate?",
 }) => (
   <section className="px-4 pb-12 pt-4 md:px-8">
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-brand-navy/20 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-6 text-center text-white shadow-xl md:p-10"
-    >
+    <div className="animate-fade-in mx-auto max-w-5xl overflow-hidden rounded-3xl border border-brand-navy/20 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-6 text-center text-white shadow-xl md:p-10">
       <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-saffron/90">
         {title}
       </p>
@@ -224,7 +210,7 @@ export const SectionCTA: React.FC<SectionCTAProps> = ({
       >
         {buttonText}
       </Link>
-    </motion.div>
+    </div>
   </section>
 );
 

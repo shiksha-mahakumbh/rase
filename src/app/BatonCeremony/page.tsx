@@ -1,22 +1,17 @@
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import Footer from "../component/Footer";
-import NavBar from "../component/NavBar";
-
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import BatonCeremony from "../component/Baton";
 
-const page = () => {
-  return (
-    <div className="bg-white min-h-screen">
-      <CompanyInfo />
-      <NavBar />
-      <div className="p-4">
-      <BatonCeremony />
-      </div>
-      <Footer />
-    </div>
-    
-  );
-};
+const PAGE_HERO = {
+  eyebrow: "Events",
+  title: "Baton Ceremony",
+  subtitle: "Ceremonial launch of Shiksha Mahakumbh editions.",
+  accent: "saffron",
+} as const;
 
-export default page;
+export default function BatonCeremonyPage() {
+  return (
+    <PublicPageShell hero={PAGE_HERO}>
+      <BatonCeremony />
+    </PublicPageShell>
+  );
+}

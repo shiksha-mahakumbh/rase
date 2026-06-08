@@ -29,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
         <h2 className="text-2xl font-bold text-primary md:text-3xl">
           Welcome to{" "}
-          <span className="text-[#b22222]">शिक्षा महाकुंभ अभियान</span>
+          <span className="text-brand-saffron">शिक्षा महाकुंभ अभियान</span>
         </h2>
 
         <p className="text-lg font-medium leading-relaxed text-gray-700 md:text-xl">
