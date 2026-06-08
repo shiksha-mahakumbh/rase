@@ -8,3 +8,4 @@ docs/lighthouse/
 docs/launch-audit-results.json
 docs/production-go-live-results.json
 scripts/link-verify-result.json
+.vercel
