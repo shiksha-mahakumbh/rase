@@ -14,13 +14,17 @@ export async function GET() {
     });
   } catch (error) {
     console.error("[api/visitors] GET", error);
-    return NextResponse.json(
-      { daily: 0, total: 0, displayTotal: 94567 },
-      {
-        status: 200,
-        headers: { "X-Visitor-Fallback": "true" },
-      }
-    );
+    const fallback = { daily: 0, total: 0, displayTotal: 94567, degraded: true };
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        { ...fallback, error: "Visitor counter unavailable" },
+        { status: 503, headers: { "X-Visitor-Fallback": "true" } }
+      );
+    }
+    return NextResponse.json(fallback, {
+      status: 200,
+      headers: { "X-Visitor-Fallback": "true" },
+    });
   }
 }
 
@@ -31,9 +35,15 @@ export async function POST() {
     return NextResponse.json(counts);
   } catch (error) {
     console.error("[api/visitors] POST", error);
-    return NextResponse.json(
-      { daily: 0, total: 0, displayTotal: 94567 },
-      { headers: { "X-Visitor-Fallback": "true" } }
-    );
+    const fallback = { daily: 0, total: 0, displayTotal: 94567, degraded: true };
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        { ...fallback, error: "Visitor counter unavailable" },
+        { status: 503, headers: { "X-Visitor-Fallback": "true" } }
+      );
+    }
+    return NextResponse.json(fallback, {
+      headers: { "X-Visitor-Fallback": "true" },
+    });
   }
 }

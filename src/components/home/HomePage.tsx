@@ -1,6 +1,11 @@
 import dynamic from "next/dynamic";
-import NavBar from "@/app/component/NavBar";
 import HeroSection from "./HeroSection";
+
+const NavBar = dynamic(() => import("@/app/component/NavBar"), {
+  loading: () => (
+    <div className="h-16 w-full border-b border-slate-200 bg-white/90" aria-hidden />
+  ),
+});
 import TrustStrip from "./TrustStrip";
 import SectionShell from "@/app/component/home/SectionShell";
 import { CtaButton, SectionHeader } from "@/components/ui";

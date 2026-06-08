@@ -3,7 +3,6 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import AdSlotRegion from "@/components/showcase/AdSlotRegion";
@@ -53,7 +52,7 @@ export default function MediaCenter() {
   }, [filter]);
 
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <>
       <ShowcaseHero
         eyebrow="Media Centre"
         title={
@@ -73,7 +72,7 @@ export default function MediaCenter() {
         }
       />
 
-      <main id="main-content" className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
+      <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
         <BreadcrumbNav
           items={[
             { label: "Home", href: "/" },
@@ -162,10 +161,9 @@ export default function MediaCenter() {
             </h2>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {editionItems.map((item, index) => (
-                <motion.article
+                <article
                   key={index}
-                  whileHover={{ y: -4 }}
-                  className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-lg"
+                  className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-lg transition-transform duration-200 hover:-translate-y-1"
                 >
                   <div className="relative h-48">
                     <Image
@@ -211,14 +209,8 @@ export default function MediaCenter() {
                             ? "Hide Archived Media ▲"
                             : "View Archived Media ▼"}
                         </button>
-                        <AnimatePresence>
-                          {open === item.label && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              className="mt-4 border-t border-slate-100 pt-4"
-                            >
+                        {open === item.label && (
+                            <div className="animate-fade-in mt-4 border-t border-slate-100 pt-4">
                               {item.archive.map((arch, j) => (
                                 <div key={j} className="mb-4">
                                   <h4 className="mb-2 text-center text-sm font-semibold text-brand-navy">
@@ -237,13 +229,12 @@ export default function MediaCenter() {
                                   </div>
                                 </div>
                               ))}
-                            </motion.div>
+                            </div>
                           )}
-                        </AnimatePresence>
                       </>
                     )}
                   </div>
-                </motion.article>
+                </article>
               ))}
             </div>
           </section>
@@ -318,7 +309,7 @@ export default function MediaCenter() {
           where education meets innovation and culture. Join us in building Bharat&apos;s
           educational vision for the world.
         </p>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }

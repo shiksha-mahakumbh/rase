@@ -1,17 +1,12 @@
 "use client";
 import React from "react";
-import CompanyInfo from "@/app/component/CompanyInfo";
-import Footer from "@/app/component/Footer";
-import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
-import WhatsAppIcon from "@/components/common/WhatsAppIcon";
-import NavBar from "@/app/component/NavBar";
 import Press5 from "@/app/component/Press5";
-import proceeding5 from '/public/2024M/press5.jpg';
-import Image from "next/image";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
+import PressArticleShell from "@/components/press/PressArticleShell";
 import { getPressShareUrl } from "@/lib/seo/pressShare";
 
 const shareUrl = getPressShareUrl(5);
-const shareText = encodeURIComponent("राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा");
+const shareTextPlain = "राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा";
 const shareImage = "/2024M/press5.jpg";
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
@@ -115,59 +110,16 @@ const data = {
   ],
 };
 
-export default function Home() {
+export default function PressArticlePage() {
   return (
-    <div className="bg-white">
-      <CompanyInfo />
-      <NavBar />
-      
-      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 pb-6">
-        
-        <div className="w-full sm:w-1/5">
-          {/* Left sidebar or additional content */}
-        </div>
-        <div className="w-full sm:w-3/5">
-          <Press5 data={data} />
-          {/* Social Media Sharing Section */}
-          <div className="mt-6 flex justify-center space-x-4">
-            <a
-              href={`https://wa.me/?text=${shareText}%20${shareUrl}&picture=${shareImage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              WhatsApp
-            </a>
-            <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}&picture=${shareImage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Facebook
-            </a>
-            <a
-              href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}&picture=${shareImage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 bg-blue-400 text-white rounded hover:bg-blue-500"
-            >
-              Twitter
-            </a>
-            <a
-              href={`mailto:?subject=Shiksha Mahakumbh 2.0&body=${shareText}%20${shareUrl}&picture=${shareImage}`}
-              className="p-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-            >
-              Email
-            </a>
-          </div>
-        </div>
-        <div className="w-full sm:w-1/5">
-          {/* Right sidebar or additional content */}
-        </div>
-      </div>
-      <RelatedContentSectionClient path="/press/national-coverage" title="Related programmes & resources" />
-    <Footer />
-    </div>
+    <PressArticleShell
+      title={data.title}
+      canonicalPath="/press/national-coverage"
+      shareUrl={shareUrl}
+      shareText={shareTextPlain}
+      shareImage={shareImage}
+    >
+      <Press5 data={data} />
+    </PressArticleShell>
   );
 }

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   buildBreadcrumbSchema,
@@ -12,7 +11,6 @@ import {
 import type { EntityDirectoryConfig } from "@/lib/knowledge-graph/entity-directories";
 import { ENTITY_DIRECTORIES } from "@/lib/knowledge-graph/entity-directories";
 import { ENTITY_LANDING_REGISTRY } from "@/lib/knowledge-graph/entities/landing-framework";
-import RelatedContentSection from "./RelatedContentSection";
 import InternalLinksBlock from "./InternalLinksBlock";
 import { getInternalLinksForPath } from "@/lib/knowledge-graph/internal-link-engine";
 import { SITE_URL } from "@/config/site";
@@ -69,71 +67,71 @@ export default function EntityDirectoryTemplate({ directory }: Props) {
   ]);
 
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <PublicPageShell
+      hero={{
+        eyebrow: "National Directory",
+        title: directory.label,
+        subtitle: directory.description,
+        accent: "navy",
+      }}
+      relatedPath={directory.path}
+      containerClassName="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16"
+    >
       <JsonLd data={collection} />
       <JsonLd data={profilePage} />
       {researchProject ? <JsonLd data={researchProject} /> : null}
       <JsonLd data={itemList} />
       <JsonLd data={breadcrumbs} />
-      <NavBar />
-      <main id="main-content" className="mx-auto max-w-4xl px-4 py-10 md:py-14">
-        <nav aria-label="Breadcrumb" className="text-sm text-slate-600">
-          <Link href="/education" className="hover:text-brand-saffron">
-            Education
-          </Link>
-          <span className="mx-2">/</span>
-          <span className="font-medium text-brand-navy">{directory.label}</span>
-        </nav>
 
-        <header className="mt-6">
-          <h1 className="text-3xl font-bold text-brand-navy">{directory.label}</h1>
-          <p className="mt-4 leading-relaxed text-slate-700">{directory.description}</p>
-          <p className="mt-4 text-sm text-slate-500">
-            Entity profiles will be published here as the national directory expands.
-            No content has been migrated in this phase.
-          </p>
-        </header>
+      <nav aria-label="Breadcrumb" className="text-sm text-slate-600">
+        <Link href="/education" className="hover:text-brand-saffron">
+          Education
+        </Link>
+        <span className="mx-2">/</span>
+        <span className="font-medium text-brand-navy">{directory.label}</span>
+      </nav>
 
-        {entries.length > 0 ? (
-          <ul className="mt-8 space-y-3">
-            {entries.map((e) => (
-              <li key={e.slug}>
+      <p className="mt-6 text-sm text-slate-500">
+        Entity profiles will be published here as the national directory expands.
+      </p>
+
+      {entries.length > 0 ? (
+        <ul className="mt-8 space-y-3">
+          {entries.map((e) => (
+            <li key={e.slug}>
+              <Link
+                href={e.path}
+                className="font-medium text-brand-navy hover:text-brand-saffron hover:underline"
+              >
+                {e.label}
+              </Link>
+              <span className="ml-2 text-xs text-slate-500">({e.status})</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <section className="mt-8" aria-labelledby="other-directories">
+          <h2 id="other-directories" className="text-lg font-bold text-brand-navy">
+            Explore directories
+          </h2>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {ENTITY_DIRECTORIES.filter((d) => d.id !== directory.id).map((d) => (
+              <li key={d.id}>
                 <Link
-                  href={e.path}
-                  className="font-medium text-brand-navy hover:text-brand-saffron hover:underline"
+                  href={d.path}
+                  className="text-sm font-medium text-brand-navy hover:text-brand-saffron hover:underline"
                 >
-                  {e.label}
+                  {d.label}
                 </Link>
-                <span className="ml-2 text-xs text-slate-500">({e.status})</span>
               </li>
             ))}
           </ul>
-        ) : (
-          <section className="mt-8" aria-labelledby="other-directories">
-            <h2 id="other-directories" className="text-lg font-bold text-brand-navy">
-              Explore directories
-            </h2>
-            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-              {ENTITY_DIRECTORIES.filter((d) => d.id !== directory.id).map((d) => (
-                <li key={d.id}>
-                  <Link
-                    href={d.path}
-                    className="text-sm font-medium text-brand-navy hover:underline"
-                  >
-                    {d.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        </section>
+      )}
 
-        <div className="mt-10">
-          <InternalLinksBlock title="Related programmes" links={related} />
-        </div>
-      </main>
-      <RelatedContentSection path={directory.path} excludePaths={[directory.path]} />
-      <Footer />
-    </div>
+      <div className="mt-10">
+        <InternalLinksBlock title="Related programmes" links={related} />
+      </div>
+    </PublicPageShell>
   );
 }

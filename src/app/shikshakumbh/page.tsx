@@ -1,48 +1,20 @@
-import CompanyInfo from "@/app/component/CompanyInfo";
-import Footer from "@/app/component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import Kumbh from "@/app/component/Kumbh";
-import NavBar from "@/app/component/NavBar";
 import SlideShow from "@/app/component/SlideShow";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
-export default function Home() {
-  const slides2 = [
-    {
-      src: "/2024K/k1.jpeg",
-      alt: "Image 1",
-      legend: "",
-    },
-    {
-      src: "/2024K/k2.jpeg",
-      alt: "Image 1",
-      legend: "",
-    },
-    {
-      src: "/2024K/k3.jpg",
-      alt: "Image 1",
-      legend: "",
-    },
-    {
-      src: "/2024K/k4.jpg",
-      alt: "Image 1",
-      legend: "",
-    },
+export default function ShikshaKumbhPage() {
+  const slides = [
+    { src: "/2024K/k1.jpeg", alt: "Shiksha Kumbh highlight 1", legend: "" },
+    { src: "/2024K/k2.jpeg", alt: "Shiksha Kumbh highlight 2", legend: "" },
+    { src: "/2024K/k3.jpg", alt: "Shiksha Kumbh highlight 3", legend: "" },
+    { src: "/2024K/k4.jpg", alt: "Shiksha Kumbh highlight 4", legend: "" },
   ];
 
   return (
-    <div className="bg-white">
-      <CompanyInfo />
-      <NavBar />
-
-      <div className="flex flex-col items-center justify-center sm:flex-row space-y-4">
-        
-        <div className="w-full sm:w-3/5 sm:flex-col">
-          <SlideShow slides={slides2} />
-
-          <Kumbh />
-        </div>
-        
-      </div>
-      <Footer />
-    </div>
+    <PublicPageShell hero={PAGE_HEROES.shikshaKumbh}>
+      <SlideShow slides={slides} />
+      <Kumbh />
+    </PublicPageShell>
   );
 }

@@ -22,6 +22,7 @@ import {
 import { formClasses } from "@/app/component/ui/formClasses";
 import { DELEGATE_FEES } from "@/types/registration";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
+import { resolvePaymentStatus } from "@/lib/registration/config";
 import { useMemo, useState } from "react";
 import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 
@@ -41,6 +42,7 @@ export default function DelegateForm() {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<DelegateFormValues>({
     resolver: zodResolver(delegateSchema),
@@ -71,7 +73,10 @@ export default function DelegateForm() {
         category: data.delegateCategory,
       },
       files: { receipt },
-      paymentStatus: fee > 0 && data.utrNumber ? "Paid" : "Pending",
+      paymentStatus: resolvePaymentStatus("Delegate Registration", {
+        registrationFee: fee,
+        hasPaymentProof: Boolean(data.utrNumber?.trim()),
+      }),
     });
   };
 
@@ -93,7 +98,14 @@ export default function DelegateForm() {
           }))}
         />
         <div className="flex items-end md:col-span-2">
-          <PaymentBlock fee={fee} showPayButton={fee > 0} />
+          <PaymentBlock
+            fee={fee}
+            showPayButton={fee > 0}
+            onPaymentVerified={(p) => {
+              setValue("transactionId", p.razorpay_payment_id);
+              setValue("utrNumber", p.razorpay_payment_id);
+            }}
+          />
         </div>
       </FormSection>
 

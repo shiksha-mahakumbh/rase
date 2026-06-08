@@ -1,19 +1,11 @@
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
-import Footer from "../component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import AbstractSubmission from "../component/AbstractSubmission";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
-const page = () => {
+export default function AbstractPage() {
   return (
-    <div className="bg-white h-screen">
-      <CompanyInfo />
-      <NavBar />
-      <AbstractSubmission/>
-      <Footer />
-    </div>
-    
+    <PublicPageShell hero={PAGE_HEROES.abstract} skipContainer>
+      <AbstractSubmission />
+    </PublicPageShell>
   );
-};
-
-export default page;
+}

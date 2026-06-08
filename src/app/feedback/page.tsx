@@ -1,16 +1,17 @@
-import CompanyInfo from "../component/CompanyInfo";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import Feedback from "../component/Feedback";
-import Footer from "../component/Footer";
-import NavBar from "../component/NavBar";
 
+const PAGE_HERO = {
+  eyebrow: "Community",
+  title: "Feedback",
+  subtitle: "Share your experience and help improve Shiksha Mahakumbh programmes.",
+  accent: "saffron" as const,
+};
 
-export default function Committee() {
+export default function FeedbackPage() {
   return (
-    <>
-    <CompanyInfo />
-    <NavBar />
-    <Feedback />
-    <Footer />
-  </>
-  )
+    <PublicPageShell hero={PAGE_HERO}>
+      <Feedback />
+    </PublicPageShell>
+  );
 }

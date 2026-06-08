@@ -1,7 +1,6 @@
 "use client";
 
 import React, { ReactNode } from "react";
-import { motion } from "framer-motion";
 import { formClasses } from "./formClasses";
 import { GlobeEducationIcon, KnowledgeIcon } from "../home/icons";
 
@@ -27,11 +26,7 @@ const RegistrationShell: React.FC<RegistrationShellProps> = ({
     <div className={formClasses.page}>
       <div className="mx-auto max-w-5xl px-4 py-10 md:py-14">
         {/* Trust header */}
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 text-center"
-        >
+        <div className="mb-8 animate-fade-in text-center">
           <div className="mb-4 flex flex-wrap justify-center gap-2">
             <span className={formClasses.trustBadge}>
               <GlobeEducationIcon className="h-3.5 w-3.5" />
@@ -54,33 +49,22 @@ const RegistrationShell: React.FC<RegistrationShellProps> = ({
                 <span>{progress}%</span>
               </div>
               <div className="h-2 overflow-hidden rounded-full bg-gray-200">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  className="h-full rounded-full bg-gradient-to-r from-brand-navy to-brand-saffron"
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-brand-navy to-brand-saffron transition-all duration-500"
+                  style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
           )}
-        </motion.div>
+        </div>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className={formClasses.shell}
-          >
+          <div className={`${formClasses.shell} animate-fade-in`}>
             {children}
-          </motion.div>
+          </div>
 
           {/* Benefits sidebar */}
-          <motion.aside
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="hidden lg:block"
-          >
+          <aside className="hidden animate-fade-in lg:block">
             <div className="sticky top-24 space-y-4">
               <div className="rounded-2xl border border-primary/10 bg-white/80 p-5 shadow-lg backdrop-blur-sm">
                 <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-primary">
@@ -123,7 +107,7 @@ const RegistrationShell: React.FC<RegistrationShellProps> = ({
                 </ol>
               </div>
             </div>
-          </motion.aside>
+          </aside>
         </div>
       </div>
     </div>

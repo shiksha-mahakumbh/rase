@@ -49,7 +49,7 @@ const PaperSubmission = () => {
         // <span className="mt-4 text-justify text-primary whitespace-pre-line cursor-pointer">
           <Link
           className="mt-4 text-justify text-primary whitespace-pre-line underline"
-          href="//Guideline.docx"
+          href="/Guideline.docx"
         >
           Click here to view the full length paper guideline
         </Link>

@@ -1,37 +1,17 @@
-import CompanyInfo from '../component/CompanyInfo';
-import Footer from '../component/Footer';
-import Info from '../component/Info';
-import NavBar from '../component/NavBar';
-import Introduction from '../component/Introduction';
-import Journals from '../component/Journals';
+import PublicPageShell from "@/components/layouts/PublicPageShell";
+import Journals from "../component/Journals";
 
+const PAGE_HERO = {
+  eyebrow: "Publications",
+  title: "Journals",
+  subtitle: "Academic journals affiliated with the national education movement.",
+  accent: "navy" as const,
+};
 
-
-
-export default function Home() {
- 
+export default function JournalsPage() {
   return (
-    <div className='bg-white'>
-    <CompanyInfo/>
-    <NavBar />
-    
-    <div className="flex flex-col sm:flex-row space-y-4">
-    
-      <div className="w-full sm:w-1/5 sm:flex-col">
-       </div>
-  
-      
-      <div className="w-full sm:w-3/5 sm:flex-col">
-     
-   <Journals />
-      </div>
-  
-    
-      <div className="w-full sm:w-1/5 sm:flex-col">
-        </div>
-    </div>
-    <Footer/>
-  </div>
-  
-  )
+    <PublicPageShell hero={PAGE_HERO}>
+      <Journals />
+    </PublicPageShell>
+  );
 }

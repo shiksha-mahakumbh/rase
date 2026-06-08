@@ -46,14 +46,14 @@ export const ENTITY_MAP: Record<string, GraphEntity> = {
     id: "vibhag:academic-council",
     type: "EducationalOrganization",
     name: "Academic Council SMK 6.0",
-    url: `${SITE_URL}/VibhagRoute/AcademicCouncil24`,
+    url: `${SITE_URL}/departments/academic-council`,
     pillarIds: ["higher-education", "school-education", "olympiads"],
   },
   "press:hub": {
     id: "press:hub",
     type: "NewsArticle",
     name: "Shiksha Mahakumbh Press",
-    url: `${SITE_URL}/Press_Release`,
+    url: `${SITE_URL}/press`,
     pillarIds: ["media"],
   },
   "pub:proceedings": {

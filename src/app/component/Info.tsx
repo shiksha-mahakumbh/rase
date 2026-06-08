@@ -191,7 +191,7 @@ const Info: React.FC = () => {
             <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary/70">
               Knowledge Journey
             </p>
-            <h2 className="text-2xl font-bold text-[#502a2a] md:text-3xl">
+            <h2 className="text-2xl font-bold text-brand-navy md:text-3xl">
               Major Editions
             </h2>
           </div>
@@ -216,7 +216,7 @@ const Info: React.FC = () => {
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
                       {index + 1}
                     </span>
-                    <h3 className="text-lg font-bold text-[#502a2a]">
+                    <h3 className="text-lg font-bold text-brand-navy">
                       🔹 {item.title}
                     </h3>
                   </div>
@@ -237,7 +237,7 @@ const Info: React.FC = () => {
             hover={false}
             className="mt-10 border-primary/10 bg-primary/5 p-6 text-center"
           >
-            <p className="text-lg font-semibold text-[#502a2a] md:text-xl">
+            <p className="text-lg font-semibold text-brand-navy md:text-xl">
               Shiksha Mahakumbh Abhiyan continues to evolve as a dynamic
               national and global movement—bridging vision with action, and
               ideas with impact.

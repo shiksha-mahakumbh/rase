@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 const Info = () => {
   const text = `
-  <h2 class="text-2xl font-bold text-[#502a2a] mb-4">शिक्षा महाकुंभ अभियान: A National Movement for Global Educational Transformation</h2>
+  <h2 class="text-2xl font-bold text-brand-navy mb-4">शिक्षा महाकुंभ अभियान: A National Movement for Global Educational Transformation</h2>
 
   <p>
   शिक्षा महाकुंभ अभियान is a visionary multi-edition national movement conceptualised by visionary ISRO scientist and accomplished author 
@@ -103,7 +103,7 @@ const Info = () => {
 
   return (
     <div className="bg-white px-4 py-2 flex flex-col justify-between items-start">
-      <h1 className={`${textClassHeading} py-2 text-[#502a2a] font-bold`}>
+      <h1 className={`${textClassHeading} py-2 text-brand-navy font-bold`}>
         About Shiksha Mahakumbh Abhiyan
       </h1>
       <div className="mb-4 whitespace-pre-line text-justify text-black">
@@ -114,7 +114,7 @@ const Info = () => {
         />
         <button
           onClick={toggleText}
-          className="text-[#502a2a] font-bold mt-2 hover:underline"
+          className="text-brand-navy font-bold mt-2 hover:underline"
         >
           {isTextExpanded ? "Show Less" : "Read More"}
         </button>

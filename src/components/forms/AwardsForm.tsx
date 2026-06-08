@@ -14,13 +14,13 @@ import {
   FormField,
   FormSection,
   FileUploadField,
-  PaymentBlock,
   sharedRegister,
   sharedErrors,
   sharedWatch,
 } from "@/components/forms/FormField";
 import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
+import { resolvePaymentStatus } from "@/lib/registration/config";
 import { useState } from "react";
 
 const AWARD_CATEGORIES = [
@@ -38,7 +38,6 @@ export default function AwardsForm() {
   const [pdf, setPdf] = useState<File | null>(null);
   const [photos, setPhotos] = useState<File[]>([]);
   const [letter, setLetter] = useState<File | null>(null);
-  const [receipt, setReceipt] = useState<File | null>(null);
 
   const {
     register,
@@ -65,9 +64,8 @@ export default function AwardsForm() {
         supportingPdf: pdf,
         supportingPhotos: photos.length ? photos : undefined,
         recommendationLetter: letter,
-        receipt,
       },
-      paymentStatus: data.utrNumber ? "Paid" : "Pending",
+      paymentStatus: resolvePaymentStatus("Awards"),
     });
   };
 
@@ -138,24 +136,6 @@ export default function AwardsForm() {
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
-
-      <FormSection title="Payment Details" className="registration-payment">
-        <div className="md:col-span-2">
-          <PaymentBlock />
-        </div>
-        <FormField
-          label="UTR Number"
-          name="utrNumber"
-          register={reg}
-          errors={errs}
-        />
-        <FileUploadField
-          label="Upload Receipt"
-          name="receipt"
-          accept=".jpg,.jpeg,.png,.pdf"
-          onChange={setReceipt}
-        />
-      </FormSection>
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

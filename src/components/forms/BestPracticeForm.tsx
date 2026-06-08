@@ -14,13 +14,13 @@ import {
   FormField,
   FormSection,
   FileUploadField,
-  PaymentBlock,
   sharedRegister,
   sharedErrors,
   sharedWatch,
 } from "@/components/forms/FormField";
 import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
+import { resolvePaymentStatus } from "@/lib/registration/config";
 import { useState } from "react";
 
 const AREAS = [
@@ -38,7 +38,6 @@ export default function BestPracticeForm() {
   const { submitRegistration, loading } = useRegistrationSubmit();
   const [pdf, setPdf] = useState<File | null>(null);
   const [photos, setPhotos] = useState<File[]>([]);
-  const [receipt, setReceipt] = useState<File | null>(null);
 
   const {
     register,
@@ -68,9 +67,8 @@ export default function BestPracticeForm() {
       files: {
         supportingPdf: pdf,
         supportingPhotos: photos.length ? photos : undefined,
-        receipt,
       },
-      paymentStatus: data.utrNumber ? "Paid" : "Pending",
+      paymentStatus: resolvePaymentStatus("Best Practices"),
     });
   };
 
@@ -145,24 +143,6 @@ export default function BestPracticeForm() {
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
-
-      <FormSection title="Payment Details" className="registration-payment">
-        <div className="md:col-span-2">
-          <PaymentBlock />
-        </div>
-        <FormField
-          label="UTR Number"
-          name="utrNumber"
-          register={reg}
-          errors={errs}
-        />
-        <FileUploadField
-          label="Upload Receipt"
-          name="receipt"
-          accept=".jpg,.jpeg,.png,.pdf"
-          onChange={setReceipt}
-        />
-      </FormSection>
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

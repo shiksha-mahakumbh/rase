@@ -21,27 +21,38 @@ import {
 } from "@/components/forms/FormField";
 import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
-import { RegistrationType } from "@/types/registration";
+import {
+  PROJECT_REGISTRATION_FEE,
+  RegistrationType,
+} from "@/types/registration";
+import { resolvePaymentStatus } from "@/lib/registration/config";
 import { useState } from "react";
 import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 
 interface GenericRegistrationFormProps {
   registrationType: RegistrationType;
   sectionTitle: string;
+  requiresPayment?: boolean;
 }
 
 export default function GenericRegistrationForm({
   registrationType,
   sectionTitle,
+  requiresPayment = false,
 }: GenericRegistrationFormProps) {
   const { submitRegistration, loading } = useRegistrationSubmit();
   const [receipt, setReceipt] = useState<File | null>(null);
+  const [receiptError, setReceiptError] = useState<string>();
+
+  const fee =
+    registrationType === "Projects" ? PROJECT_REGISTRATION_FEE : undefined;
 
   const {
     register,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<GenericFormValues>({
     resolver: zodResolver(genericSchema),
@@ -55,14 +66,24 @@ export default function GenericRegistrationForm({
   const watchShared = sharedWatch(watch);
 
   const onSubmit = async (data: GenericFormValues) => {
+    if (requiresPayment && fee && !data.utrNumber?.trim()) {
+      setReceiptError("Payment confirmation (UTR / payment ID) is required");
+      return;
+    }
+    setReceiptError(undefined);
+
     await submitRegistration({
       registrationType,
       data: {
         ...data,
         category: data.title,
+        registrationFee: fee ?? 0,
       },
-      files: { receipt },
-      paymentStatus: data.utrNumber ? "Paid" : "Pending",
+      files: requiresPayment ? { receipt } : undefined,
+      paymentStatus: resolvePaymentStatus(registrationType, {
+        registrationFee: fee,
+        hasPaymentProof: Boolean(data.utrNumber?.trim()),
+      }),
     });
   };
 
@@ -87,27 +108,39 @@ export default function GenericRegistrationForm({
           register={reg}
           errors={errs}
         />
+        {requiresPayment && fee && (
+          <div className="md:col-span-2">
+            <PaymentBlock
+              fee={fee}
+              showPayButton
+              onPaymentVerified={(p) => {
+                setValue("utrNumber", p.razorpay_payment_id);
+              }}
+            />
+          </div>
+        )}
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
 
-      <FormSection title="Payment Details (if applicable)" className="registration-payment">
-        <div className="md:col-span-2">
-          <PaymentBlock />
-        </div>
-        <FormField
-          label="UTR Number"
-          name="utrNumber"
-          register={reg}
-          errors={errs}
-        />
-        <FileUploadField
-          label="Upload Receipt"
-          name="receipt"
-          accept=".jpg,.jpeg,.png,.pdf"
-          onChange={setReceipt}
-        />
-      </FormSection>
+      {requiresPayment && (
+        <FormSection title="Payment Details" className="registration-payment">
+          <FormField
+            label="UTR / Payment ID"
+            name="utrNumber"
+            required
+            register={reg}
+            errors={errs}
+          />
+          <FileUploadField
+            label="Upload Receipt"
+            name="receipt"
+            accept=".jpg,.jpeg,.png,.pdf"
+            onChange={setReceipt}
+            error={receiptError}
+          />
+        </FormSection>
+      )}
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

@@ -10,6 +10,7 @@ export type AdminDashboardStats = {
   accommodation: number;
   today: number;
   pendingPayments: number;
+  submittedFree: number;
   completedPayments: number;
   approved: number;
   verified: number;
@@ -82,6 +83,7 @@ export default function AdminDashboardOverview({
         <StatCard label="Accommodation" value={stats.accommodation} />
         <StatCard label="Today" value={stats.today} />
         <StatCard label="Pending Payments" value={stats.pendingPayments} />
+        <StatCard label="Free Submitted" value={stats.submittedFree} />
         <StatCard label="Completed Payments" value={stats.completedPayments} />
         <StatCard label="Approved" value={stats.approved} />
         <StatCard label="Verified" value={stats.verified} />

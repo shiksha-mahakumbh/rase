@@ -1,17 +1,18 @@
 "use client";
-import CompanyInfo from "../../component/CompanyInfo";
-import Footer from "../../component/Footer";
-import NavBar from "../../component/NavBar";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import SM24 from "../../component/sm24/SM24";
 
+const PAGE_HERO = {
+  eyebrow: "Past Events",
+  title: "Shiksha Mahakumbh 2024",
+  subtitle: "Highlights and archives from the 2024 edition.",
+  accent: "navy",
+} as const;
 
-export default function Structure() {
+export default function Sm24PastEventPage() {
   return (
-    <div className="bg-white">
-    <CompanyInfo />
-    <NavBar />
+    <PublicPageShell hero={PAGE_HERO} relatedPath="/past-events">
       <SM24 />
-      <Footer />
-    </div>
+    </PublicPageShell>
   );
 }

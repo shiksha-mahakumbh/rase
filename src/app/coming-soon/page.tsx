@@ -1,21 +1,11 @@
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
-import Footer from "../component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import ComingSoon from "../component/CommingSoon";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
 export default function ComingSoonPage() {
   return (
-    <>
-      <CompanyInfo />
-      <NavBar />
-      <div className="flex flex-col space-y-4 sm:flex-row">
-        <div className="w-full sm:w-1/5 sm:flex-col" />
-        <div className="w-full sm:w-3/5 sm:flex-col">
-          <ComingSoon />
-        </div>
-        <div className="w-full sm:w-1/5 sm:flex-col" />
-      </div>
-      <Footer />
-    </>
+    <PublicPageShell hero={PAGE_HEROES.comingSoon}>
+      <ComingSoon />
+    </PublicPageShell>
   );
 }

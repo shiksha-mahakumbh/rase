@@ -1,40 +1,11 @@
-import CompanyInfo from '../component/CompanyInfo';
-import Footer from '../component/Footer';
-import Info from '../component/Info';
-import NavBar from '../component/NavBar';
-import Introduction from '../component/Introduction';
-import Books from '../component/Books';
-import ProceedingsShell from './ProceedingsShell';
-import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
+import ProceedingsShell from "./ProceedingsShell";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
-
-
-
-export default function Home() {
- 
+export default function ProceedingsPage() {
   return (
-    <div className='bg-white'>
-    <CompanyInfo/>
-    <NavBar />
-    
-    <div className="flex flex-col sm:flex-row space-y-4">
-    
-      <div className="w-full sm:w-1/5 sm:flex-col">
-       </div>
-  
-      
-      <div className="w-full sm:w-3/5 sm:flex-col">
-     
-  <ProceedingsShell />
-      </div>
-  
-    
-      <div className="w-full sm:w-1/5 sm:flex-col">
-        </div>
-    </div>
-    <RelatedContentSection path="/proceedings" title="Related programmes & resources" />
-    <Footer/>
-  </div>
-  
-  )
+    <PublicPageShell hero={PAGE_HEROES.proceedings} relatedPath="/proceedings">
+      <ProceedingsShell />
+    </PublicPageShell>
+  );
 }

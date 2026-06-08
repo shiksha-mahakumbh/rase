@@ -1,7 +1,5 @@
 import React from "react";
-import Footer from "../../component/Footer";
-import NavBar from "../../component/NavBar";
-import CommitteeDetailShell from "@/components/committee/CommitteeDetailShell";
+import CommitteeEditionPage from "@/components/committee/CommitteeEditionPage";
 import CommitteeMemberSection from "@/components/committee/CommitteeMemberSection";
 const ShikshaMahaKumbh2023 = () => {
   const data = {
@@ -99,21 +97,17 @@ const ShikshaMahaKumbh2023 = () => {
       };
     
   
-      return (
-        <>
-          <NavBar />
-          <CommitteeDetailShell editionTitle="Shiksha Maha Kumbh 2023">
-            <CommitteeMemberSection title="National Advisory Committee" members={data.NationalAdvisoryCommittee} badge="Advisory" />
-            <CommitteeMemberSection title="Local Advisory Committee" members={data.LocalAdvisoryCommittee} />
-            <CommitteeMemberSection title="Organizing Committee" members={data.OrganizingCommittee} badge="Organising" />
-            <CommitteeMemberSection title="Organizing Secretaries" members={data.OrganizingSecretaries} />
-            <CommitteeMemberSection title="Conference Joint Secretaries" members={data.ConferenceJointSecretaries} />
-            <CommitteeMemberSection title="Conference Conveners" members={data.ConferenceConveners} />
-            <CommitteeMemberSection title="Conference Coordinators" members={data.ConferenceCoordinators} />
-          </CommitteeDetailShell>
-          <Footer />
-        </>
-      );
+  return (
+    <CommitteeEditionPage editionTitle="Shiksha Maha Kumbh 2023">
+      <CommitteeMemberSection title="National Advisory Committee" members={data.NationalAdvisoryCommittee} badge="Advisory" />
+      <CommitteeMemberSection title="Local Advisory Committee" members={data.LocalAdvisoryCommittee} />
+      <CommitteeMemberSection title="Organizing Committee" members={data.OrganizingCommittee} badge="Organising" />
+      <CommitteeMemberSection title="Organizing Secretaries" members={data.OrganizingSecretaries} />
+      <CommitteeMemberSection title="Conference Joint Secretaries" members={data.ConferenceJointSecretaries} />
+      <CommitteeMemberSection title="Conference Conveners" members={data.ConferenceConveners} />
+      <CommitteeMemberSection title="Conference Coordinators" members={data.ConferenceCoordinators} />
+    </CommitteeEditionPage>
+  );
     };
     
     export default ShikshaMahaKumbh2023;

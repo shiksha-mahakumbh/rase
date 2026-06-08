@@ -1,11 +1,17 @@
 import { Suspense } from "react";
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import ContentHubClient from "./ContentHubClient";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
-import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
 import { buildArticleJsonLd } from "@/lib/content/jsonLd";
 import { CONTENT_REGISTRY } from "@/lib/content/registry";
+
+const PAGE_HERO = {
+  eyebrow: "Knowledge Hub",
+  title: "Research & Resources",
+  subtitle:
+    "Proceedings, publications, policy papers, and programme archives from the national education movement.",
+  accent: "navy" as const,
+};
 
 export default function KnowledgeHubPage() {
   const collectionJsonLd = {
@@ -16,7 +22,11 @@ export default function KnowledgeHubPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <PublicPageShell
+      hero={PAGE_HERO}
+      relatedPath="/knowledge"
+      containerClassName="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16"
+    >
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
@@ -27,15 +37,9 @@ export default function KnowledgeHubPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
-      <NavBar />
-      <main id="main-content" className="mx-auto max-w-7xl px-4 py-10 md:py-14">
-        <Suspense fallback={<p className="text-gray-500">Loading...</p>}>
-          <ContentHubClient />
-        </Suspense>
-
-      </main>
-      <RelatedContentSection path="/knowledge" title="Related programmes & resources" />
-      <Footer />
-    </div>
+      <Suspense fallback={<p className="text-slate-500">Loading…</p>}>
+        <ContentHubClient />
+      </Suspense>
+    </PublicPageShell>
   );
 }

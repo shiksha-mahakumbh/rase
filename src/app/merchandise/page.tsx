@@ -1,13 +1,17 @@
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import Merchandise from "@/app/component/Merchandise";
+
+const PAGE_HERO = {
+  eyebrow: "Official Store",
+  title: "Merchandise",
+  subtitle: "Official Shiksha Mahakumbh merchandise and programme materials.",
+  accent: "saffron" as const,
+};
 
 export default function MerchandisePage() {
   return (
-    <div className="min-h-screen bg-brand-surface">
-      <NavBar />
+    <PublicPageShell hero={PAGE_HERO} showHero={false} skipContainer>
       <Merchandise />
-      <Footer />
-    </div>
+    </PublicPageShell>
   );
 }

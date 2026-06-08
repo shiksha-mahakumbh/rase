@@ -53,6 +53,10 @@ import {
   RegistrationType,
   UploadedFileMeta,
 } from "@/types/registration";
+import {
+  isPaidRegistrationType,
+  resolvePaymentStatus,
+} from "@/lib/registration/config";
 
 interface SubmitOptions {
   registrationType: RegistrationType;
@@ -69,7 +73,7 @@ export function useRegistrationSubmit() {
     registrationType,
     data,
     files = {},
-    paymentStatus = "Pending",
+    paymentStatus,
   }: SubmitOptions) => {
     setLoading(true);
     try {
@@ -103,15 +107,24 @@ export function useRegistrationSubmit() {
         }
       }
 
-      const payment = buildPaymentPayload(data, uploaded);
+      const payment = isPaidRegistrationType(registrationType)
+        ? buildPaymentPayload(data, uploaded)
+        : undefined;
+
       const fee = data.registrationFee as number | undefined;
       const resolvedPaymentStatus: PaymentStatus =
-        fee === 0 ? "Paid" : paymentStatus;
+        paymentStatus ??
+        resolvePaymentStatus(registrationType, {
+          registrationFee: fee,
+          hasPaymentProof: Boolean(
+            data.utrNumber || data.transactionId || data.razorpayPaymentId
+          ),
+        });
 
       const payload = {
         ...data,
         ...mapUploadedFiles(uploaded),
-        payment,
+        ...(payment ? { payment } : {}),
         trafficSource: getTrafficSource(),
         ...attributionForFirestore(),
       };
@@ -176,6 +189,8 @@ function buildPaymentPayload(
     chequeNumber: data.chequeNumber,
     panNumber: data.panNumber,
     registrationFee: data.registrationFee,
+    razorpayPaymentId: data.razorpayPaymentId,
+    razorpayOrderId: data.razorpayOrderId,
     receipt,
   };
 }

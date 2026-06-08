@@ -78,7 +78,7 @@ const Glimpses: React.FC = () => {
         />
         <meta property="og:image" content="/images/smk4.jpg" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://www.rase.co.in/glimpses" />
+        <link rel="canonical" href="/glimpses" />
       </Head>
 
       {/* Hero Section */}

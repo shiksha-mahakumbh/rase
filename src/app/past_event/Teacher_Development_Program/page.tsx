@@ -1,22 +1,18 @@
 "use client";
-import CompanyInfo from "../../component/CompanyInfo";
-import Footer from "../../component/Footer";
-import NavBar from "../../component/NavBar";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import EventPage from "../../component/Teacher_Development_Program/Teacher_Development_Program";
-import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
 
+const PAGE_HERO = {
+  eyebrow: "Workshops",
+  title: "Teacher Development Program",
+  subtitle: "Faculty development programme archive.",
+  accent: "emerald",
+} as const;
 
-export default function Structure() {
+export default function TeacherDevelopmentProgramPage() {
   return (
-    <div className="bg-white">
-    <CompanyInfo />
-    <NavBar />
+    <PublicPageShell hero={PAGE_HERO} relatedPath="/workshops">
       <EventPage />
-      <RelatedContentSectionClient
-        path="/past_event/Teacher_Development_Program"
-        title="Related programmes & resources"
-      />
-      <Footer />
-    </div>
+    </PublicPageShell>
   );
 }

@@ -1,74 +1,18 @@
 "use client";
+
 import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import Footer from "../component/Footer";
-import NavBar from "../component/NavBar";
-import Image from "next/image"; // Import the Image component from Next.js
+import Image from "next/image";
 
 const speakers = [
-  {
-    id: 1,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res1.jpg",
-  },
-  {
-    id: 2,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res2.jpg",
-  },
-  {
-    id: 3,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res3.jpg",
-  },
-  {
-    id: 4,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res4.jpg",
-  },
-  {
-    id: 5,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res5.jpg",
-  },
-  {
-    id: 6,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res6.jpg",
-  },
-  {
-    id: 7,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res7.jpg",
-  },
-  {
-    id: 8,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res8.jpg",
-  },
-  {
-    id: 9,
-    name: "",
-    designation: "",
-    place: "",
-    imageSrc: "/2024M/res/res9.jpg",
-  },
+  { id: 1, name: "", designation: "", place: "", imageSrc: "/2024M/res/res1.jpg" },
+  { id: 2, name: "", designation: "", place: "", imageSrc: "/2024M/res/res2.jpg" },
+  { id: 3, name: "", designation: "", place: "", imageSrc: "/2024M/res/res3.jpg" },
+  { id: 4, name: "", designation: "", place: "", imageSrc: "/2024M/res/res4.jpg" },
+  { id: 5, name: "", designation: "", place: "", imageSrc: "/2024M/res/res5.jpg" },
+  { id: 6, name: "", designation: "", place: "", imageSrc: "/2024M/res/res6.jpg" },
+  { id: 7, name: "", designation: "", place: "", imageSrc: "/2024M/res/res7.jpg" },
+  { id: 8, name: "", designation: "", place: "", imageSrc: "/2024M/res/res8.jpg" },
+  { id: 9, name: "", designation: "", place: "", imageSrc: "/2024M/res/res9.jpg" },
 ];
 
 const Guest: React.FC<{
@@ -77,42 +21,32 @@ const Guest: React.FC<{
   place: string;
   imageSrc: string;
 }> = ({ name, designation, place, imageSrc }) => (
-  <div className="border rounded-lg p-4 shadow-md flex flex-col items-center">
-    <div className="w-full h-60 overflow-hidden rounded-lg relative">
+  <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="relative h-60 w-full overflow-hidden rounded-xl">
       <Image
         src={imageSrc}
-        alt={name}
-        layout="fill" // Makes image fill the container
-        objectFit="cover" // Ensures proper cropping
-        className="rounded-lg"
-        priority // Prioritize image loading for above-the-fold images
-        placeholder="blur" // Add a blurred placeholder while the image loads
-        blurDataURL="/path-to-placeholder-image.jpg" // Optional LQIP (Low-Quality Image Placeholder)
+        alt={name || "Residential camp highlight"}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, 25vw"
       />
     </div>
-    <h3 className="text-lg font-bold mt-4 text-center">{name}</h3>
-    <p className="text-sm text-gray-600 text-center">{designation}</p>
-    <p className="mt-2 text-gray-800 text-center">{place}</p>
+    {name && <h3 className="mt-4 text-center text-lg font-bold text-brand-navy">{name}</h3>}
+    {designation && <p className="text-center text-sm text-slate-600">{designation}</p>}
+    {place && <p className="mt-2 text-center text-slate-700">{place}</p>}
   </div>
 );
 
 const Residential_Camp: React.FC = () => {
   return (
-    <div className="bg-white min-h-screen">
-      <CompanyInfo />
-      <NavBar />
-      <div className="p-4">
-        <p className="text-xl md:text-2xl text-primary text-center uppercase font-bold mb-8">
-          Residential Camp Shiksha Mahakumbh 2024
-        </p>
-        <div className="flex flex-wrap justify-center">
-          {speakers.map((guest) => (
-            <div key={guest.id} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4">
-              <Guest {...guest} />
-            </div>
-          ))}
-        </div>
-        <Footer />
+    <div>
+      <p className="home-section-title mb-8 text-center text-xl uppercase md:text-2xl">
+        Residential Camp Shiksha Mahakumbh 2024
+      </p>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {speakers.map((guest) => (
+          <Guest key={guest.id} {...guest} />
+        ))}
       </div>
     </div>
   );

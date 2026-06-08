@@ -4,7 +4,7 @@ const PREFIX = "smk_registration_draft_";
 const META_KEY = "smk_registration_meta";
 
 export interface RegistrationMeta {
-  step: 1 | 2 | 3;
+  step: number;
   registrationType: RegistrationType;
   updatedAt: string;
 }

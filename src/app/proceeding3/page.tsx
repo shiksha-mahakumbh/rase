@@ -1,9 +1,14 @@
-'use client';
-import React from 'react';
-import CompanyInfo from '../component/CompanyInfo';
-import Footer from '../component/Footer';
-import NavBar from '../component/NavBar';
-import Proceeding3 from '../component/Proceeding3';
+"use client";
+import React from "react";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
+import Proceeding3 from "../component/Proceeding3";
+
+const PAGE_HERO = {
+  eyebrow: "Publications",
+  title: "Proceedings Volume III",
+  subtitle: "Research outcomes from Shiksha Mahakumbh editions.",
+  accent: "navy",
+} as const;
 
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {
@@ -150,23 +155,10 @@ const data = {
     ]
   };
   
-export default function Home() {
+export default function Proceeding3Page() {
   return (
-    <div className='bg-white'>
-      <CompanyInfo />
-      <NavBar />
-      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0">
-        <div className="w-full sm:w-1/5">
-          {/* Left sidebar or additional content */}
-        </div>
-        <div className="w-full sm:w-3/5">
-          <Proceeding3 data={data} />
-        </div>
-        <div className="w-full sm:w-1/5">
-          {/* Right sidebar or additional content */}
-        </div>
-      </div>
-      <Footer />
-    </div>
+    <PublicPageShell hero={PAGE_HERO} relatedPath="/proceedings">
+      <Proceeding3 data={data} />
+    </PublicPageShell>
   );
 }

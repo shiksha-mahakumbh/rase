@@ -15,6 +15,10 @@ import {
   RegistrationStatus,
   AccommodationStatus,
 } from "@/types/registration";
+import {
+  isPaidRegistrationType,
+  resolvePaymentStatus,
+} from "@/lib/registration/config";
 
 const MASTER_COLLECTION = "registrations";
 const COUNTER_COLLECTION = "registrationCounters";
@@ -64,8 +68,14 @@ export async function saveRegistration(
     ...input.data,
     registrationId,
     registrationType: input.registrationType,
-    paymentStatus: input.paymentStatus ?? "Pending",
-    registrationStatus: input.registrationStatus ?? "Pending",
+    paymentStatus:
+      input.paymentStatus ??
+      resolvePaymentStatus(input.registrationType, {
+        registrationFee: input.data.registrationFee as number | undefined,
+      }),
+    registrationStatus:
+      input.registrationStatus ??
+      (isPaidRegistrationType(input.registrationType) ? "Pending" : "Submitted"),
     accommodationStatus:
       input.accommodationStatus ??
       (input.data.accommodationRequired === "Yes"

@@ -1,20 +1,29 @@
-const STEPS = [
+const PAID_STEPS = [
   { id: 1, label: "Category" },
   { id: 2, label: "Your details" },
   { id: 3, label: "Payment & confirm" },
 ] as const;
 
+const FREE_STEPS = [
+  { id: 1, label: "Category" },
+  { id: 2, label: "Your details & submit" },
+] as const;
+
 export default function RegistrationProgress({
   currentStep,
+  requiresPayment = true,
 }: {
-  currentStep: 1 | 2 | 3;
+  currentStep: number;
+  requiresPayment?: boolean;
 }) {
-  const progress = Math.round((currentStep / 3) * 100);
+  const steps = requiresPayment ? PAID_STEPS : FREE_STEPS;
+  const total = steps.length;
+  const progress = Math.round((currentStep / total) * 100);
 
   return (
     <nav aria-label="Registration progress" className="mb-8">
       <ol className="flex items-center justify-between gap-2">
-        {STEPS.map((step, index) => {
+        {steps.map((step, index) => {
           const done = currentStep > step.id;
           const active = currentStep === step.id;
           return (
@@ -40,7 +49,7 @@ export default function RegistrationProgress({
                   {step.label}
                 </span>
               </div>
-              {index < STEPS.length - 1 && (
+              {index < steps.length - 1 && (
                 <div
                   className={`mx-1 hidden h-0.5 flex-1 sm:block ${
                     done ? "bg-brand-emerald" : "bg-slate-200"

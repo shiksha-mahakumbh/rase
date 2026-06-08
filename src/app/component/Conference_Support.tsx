@@ -87,7 +87,7 @@ const Conference_Support: React.FC = () => {
 
           <p className="mt-8 text-center text-sm text-gray-600 md:text-base">
             🤝 Collaborating with leading institutions worldwide to foster{" "}
-            <span className="font-semibold text-[#b22222]">
+            <span className="font-semibold text-brand-saffron">
               education, research, and innovation
             </span>
             .

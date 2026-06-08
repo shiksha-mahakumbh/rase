@@ -1,19 +1,11 @@
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import NavBar from "../component/NavBar";
-import Footer from "../component/Footer";
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import Fulllengthpaper from "../component/Fulllengthpaper";
+import { PAGE_HEROES } from "@/lib/page-heroes";
 
-const page = () => {
+export default function FullLengthPaperPage() {
   return (
-    <div className="bg-white h-screen">
-      <CompanyInfo />
-      <NavBar />
-      <Fulllengthpaper/>
-      <Footer />
-    </div>
-    
+    <PublicPageShell hero={PAGE_HEROES.fullLengthPaper} relatedPath="/fulllengthpaper">
+      <Fulllengthpaper />
+    </PublicPageShell>
   );
-};
-
-export default page;
+}

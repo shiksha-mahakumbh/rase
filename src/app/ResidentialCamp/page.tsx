@@ -1,22 +1,17 @@
-import React from "react";
-import CompanyInfo from "../component/CompanyInfo";
-import Footer from "../component/Footer";
-import NavBar from "../component/NavBar";
-
+import PublicPageShell from "@/components/layouts/PublicPageShell";
 import ResidentialCamp from "../component/Residential_Camp";
 
-const page = () => {
-  return (
-    <div className="bg-white min-h-screen">
-      <CompanyInfo />
-      <NavBar />
-      <div className="p-4">
-      <ResidentialCamp />
-      </div>
-      <Footer />
-    </div>
-    
-  );
-};
+const PAGE_HERO = {
+  eyebrow: "Programmes",
+  title: "Residential Camp",
+  subtitle: "Residential training programmes at Shiksha Mahakumbh.",
+  accent: "emerald",
+} as const;
 
-export default ResidentialCamp;
+export default function ResidentialCampPage() {
+  return (
+    <PublicPageShell hero={PAGE_HERO}>
+      <ResidentialCamp />
+    </PublicPageShell>
+  );
+}

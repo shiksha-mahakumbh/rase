@@ -2,6 +2,7 @@
 
 import { FieldErrors, FieldValues, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { formClasses } from "@/app/component/ui/formClasses";
+import RazorpayCheckout from "@/components/payments/RazorpayCheckout";
 
 export type SharedFormValues = Record<string, unknown>;
 
@@ -204,10 +205,17 @@ export function FileUploadField({
 export function PaymentBlock({
   fee,
   showPayButton = true,
+  onPaymentVerified,
 }: {
   fee?: number;
   showPayButton?: boolean;
+  onPaymentVerified?: (payment: {
+    razorpay_payment_id: string;
+    razorpay_order_id: string;
+  }) => void;
 }) {
+  const amount = typeof fee === "number" && fee > 0 ? fee : undefined;
+
   return (
     <div className={`registration-payment ${formClasses.notice} md:col-span-2`}>
       {typeof fee === "number" && (
@@ -215,21 +223,28 @@ export function PaymentBlock({
           Registration Fee: ₹{fee.toLocaleString("en-IN")}
         </p>
       )}
-      {showPayButton && (
+      {showPayButton && amount && (
         <>
           <p className="mb-2 text-sm">
-            1. Complete the form → 2. Pay registration fee → 3. Return and enter
-            payment details
+            Pay securely via Razorpay, then enter your payment ID below (auto-filled
+            after successful payment).
           </p>
-          <a
-            href="https://rzp.io/rzp/MMLfl4L2"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90"
-          >
-            Pay Registration Fee
-          </a>
+          <RazorpayCheckout
+            amountInRupees={amount}
+            description="Shiksha Mahakumbh Registration Fee"
+            onSuccess={(result) => {
+              onPaymentVerified?.({
+                razorpay_payment_id: result.razorpay_payment_id,
+                razorpay_order_id: result.razorpay_order_id,
+              });
+            }}
+          />
         </>
+      )}
+      {showPayButton && !amount && (
+        <p className="text-sm text-slate-600">
+          No registration fee for this category. Proceed to submit.
+        </p>
       )}
     </div>
   );

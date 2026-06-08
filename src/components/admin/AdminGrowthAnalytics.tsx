@@ -18,7 +18,10 @@ export default function AdminGrowthAnalytics({ rows }: AdminGrowthAnalyticsProps
   const metrics = useMemo(() => {
     const total = rows.length;
     const paid = rows.filter((r) => r.paymentStatus === "Paid").length;
-    const pending = rows.filter((r) => r.paymentStatus === "Pending").length;
+    const pending = rows.filter(
+      (r) =>
+        r.paymentStatus === "Pending Payment" || r.paymentStatus === "Pending"
+    ).length;
     const accommodation = rows.filter(
       (r) =>
         r.accommodationRequired === "Yes" ||

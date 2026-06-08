@@ -14,13 +14,13 @@ import {
   FormField,
   FormSection,
   FileUploadField,
-  PaymentBlock,
   sharedRegister,
   sharedErrors,
   sharedWatch,
 } from "@/components/forms/FormField";
 import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
+import { resolvePaymentStatus } from "@/lib/registration/config";
 import { OLYMPIAD_FEE_PER_STUDENT } from "@/types/registration";
 import {
   parseStudentListFile,
@@ -34,7 +34,6 @@ export default function OlympiadForm() {
   const { submitRegistration, loading } = useRegistrationSubmit();
   const [studentFile, setStudentFile] = useState<File | null>(null);
   const [parsedStudents, setParsedStudents] = useState<ParsedStudent[]>([]);
-  const [receipt, setReceipt] = useState<File | null>(null);
 
   const {
     register,
@@ -98,9 +97,8 @@ export default function OlympiadForm() {
         category: data.olympiadType,
         parsedStudents,
       },
-      files: { studentList: studentFile, receipt },
-      paymentStatus:
-        data.registrationFee > 0 && data.utrNumber ? "Paid" : "Pending",
+      files: { studentList: studentFile },
+      paymentStatus: resolvePaymentStatus("Olympiad"),
     });
   };
 
@@ -191,32 +189,12 @@ export default function OlympiadForm() {
             Number of Students: {studentCount}
           </p>
           <p className="text-sm text-gray-700">
-            Registration Fee: ₹{registrationFee.toLocaleString("en-IN")}
+            Students registered: {studentCount} (no payment required)
           </p>
         </div>
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
-
-      {registrationFee > 0 && (
-        <FormSection title="Payment Details" className="registration-payment">
-          <div className="md:col-span-2">
-            <PaymentBlock fee={registrationFee} />
-          </div>
-          <FormField
-            label="UTR Number"
-            name="utrNumber"
-            register={reg}
-            errors={errs}
-          />
-          <FileUploadField
-            label="Upload Receipt"
-            name="receipt"
-            accept=".jpg,.jpeg,.png,.pdf"
-            onChange={setReceipt}
-          />
-        </FormSection>
-      )}
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}
