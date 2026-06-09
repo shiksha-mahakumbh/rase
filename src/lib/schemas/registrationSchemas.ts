@@ -77,6 +77,8 @@ export const delegateSchema = commonParticipantSchema
     transactionId: z.string().optional(),
     chequeNumber: z.string().optional(),
     panNumber: z.string().optional(),
+    razorpayPaymentId: z.string().optional(),
+    razorpayOrderId: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const feeMap: Record<string, number> = {
@@ -112,8 +114,6 @@ export const conclaveSchema = commonParticipantSchema
       "Research Conclave",
     ]),
     participationType: z.enum(["Speaker", "Delegate", "Invitee", "Observer"]),
-    utrNumber: z.string().min(1, "UTR number is required"),
-    transactionId: z.string().min(1, "Transaction ID is required"),
   });
 
 export const bestPracticeSchema = commonParticipantSchema
@@ -189,6 +189,8 @@ export const genericSchema = commonParticipantSchema
     title: z.string().min(3, "Title is required"),
     description: z.string().min(10, "Description is required"),
     utrNumber: z.string().optional(),
+    razorpayPaymentId: z.string().optional(),
+    razorpayOrderId: z.string().optional(),
   });
 
 export type DelegateFormValues = z.infer<typeof delegateSchema>;

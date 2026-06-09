@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { FieldValue } from "firebase-admin/firestore";
+import { getAdminFirestore } from "@/lib/firebase-admin";
 import { EVENT_NAME } from "@/types/registration";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 
@@ -52,10 +52,16 @@ export async function POST(request: NextRequest) {
     }
 
     if (!REG_ID_RE.test(registrationId)) {
-      return NextResponse.json({ error: "Invalid registration ID" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid registration ID" },
+        { status: 400 }
+      );
     }
     if (!EMAIL_RE.test(email) || String(fullName).length < 2) {
-      return NextResponse.json({ error: "Invalid email or name" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid email or name" },
+        { status: 400 }
+      );
     }
 
     const smtpHost = process.env.SMTP_HOST;
@@ -100,10 +106,13 @@ export async function POST(request: NextRequest) {
     }
 
     if (masterDocId) {
-      await updateDoc(doc(db, "registrations", masterDocId), {
-        emailDeliveryStatus: emailStatus,
-        updatedAt: new Date(),
-      });
+      await getAdminFirestore()
+        .collection("registrations")
+        .doc(masterDocId)
+        .update({
+          emailDeliveryStatus: emailStatus,
+          updatedAt: FieldValue.serverTimestamp(),
+        });
     }
 
     return NextResponse.json({ success: true, emailStatus });
@@ -112,18 +121,22 @@ export async function POST(request: NextRequest) {
 
     if (masterDocId) {
       try {
-        await updateDoc(doc(db, "registrations", masterDocId), {
-          emailDeliveryStatus: "failed",
-          updatedAt: new Date(),
-        });
-      } catch {
-        // ignore secondary update errors
+        await getAdminFirestore()
+          .collection("registrations")
+          .doc(masterDocId)
+          .update({
+            emailDeliveryStatus: "failed",
+            updatedAt: FieldValue.serverTimestamp(),
+          });
+      } catch (updateError) {
+        console.error("email status update failed:", updateError);
       }
     }
 
-    return NextResponse.json(
-      { error: "Failed to send email" },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      success: false,
+      emailStatus: "failed",
+      error: "Failed to send email",
+    });
   }
 }

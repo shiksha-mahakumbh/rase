@@ -9,16 +9,10 @@ service cloud.firestore {
     function isAdminUser() {
       return isSignedIn()
         && exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid))
-        && get(/databases/$(database)/documents/adminUsers/$(request.auth.uid)).data.role in ['admin', 'superadmin', 'coordinator', 'reviewer', 'Super Admin', 'Admin', 'Data Entry'];
-    }
-
-    function validRegistrationCreate() {
-      return request.resource.data.keys().hasAll(['registrationId', 'registrationType', 'email', 'fullName'])
-        && request.resource.data.registrationId is string
-        && request.resource.data.registrationId.matches('SMK2026-[0-9]{6}')
-        && request.resource.data.email is string
-        && request.resource.data.fullName is string
-        && request.resource.data.fullName.size() >= 2;
+        && get(/databases/$(database)/documents/adminUsers/$(request.auth.uid)).data.role in [
+          'admin', 'superadmin', 'coordinator', 'reviewer',
+          'Super Admin', 'Admin', 'Data Entry'
+        ];
     }
 
     match /adminUsers/{userId} {
@@ -27,23 +21,32 @@ service cloud.firestore {
     }
 
     match /registrations/{docId} {
-      allow create: if validRegistrationCreate();
+      allow create: if false;
       allow read, update, delete: if isAdminUser();
     }
 
     match /registrationCounters/{docId} {
+      allow read, write: if false;
+    }
+
+    match /paymentRecords/{docId} {
       allow read: if isAdminUser();
-      allow write: if false;
+      allow create, update, delete: if false;
     }
 
     match /audit_logs/{logId} {
-      allow create: if request.resource.data.keys().hasAll(['action'])
-        && request.resource.data.action is string;
-      allow read, update, delete: if isAdminUser();
+      allow read: if isAdminUser();
+      allow create, update, delete: if false;
+    }
+
+    match /accommodationRequests/{docId} {
+      allow read: if isAdminUser();
+      allow create, update, delete: if false;
     }
 
     match /{collection}/{docId} {
-      allow read, write: if isAdminUser();
+      allow read: if isAdminUser();
+      allow create, update, delete: if false;
     }
   }
 }

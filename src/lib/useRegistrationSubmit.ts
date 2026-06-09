@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { saveRegistration } from "@/lib/saveRegistration";
 import { clearAllRegistrationDrafts } from "@/lib/registration/draftStorage";
 import {
   ANALYTICS_EVENTS,
@@ -11,43 +10,6 @@ import {
   trackEvent,
 } from "@/lib/analytics/events";
 import { attributionForFirestore } from "@/lib/analytics/attribution";
-
-async function verifyCaptchaBeforeSubmit(): Promise<boolean> {
-  if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
-    return process.env.NODE_ENV !== "production";
-  }
-
-  const grecaptcha = (
-    window as unknown as {
-      grecaptcha?: {
-        ready: (cb: () => void) => void;
-        execute: (key: string, opts: { action: string }) => Promise<string>;
-      };
-    }
-  ).grecaptcha;
-
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!grecaptcha || !siteKey) return false;
-
-  const token = await new Promise<string | null>((resolve) => {
-    grecaptcha.ready(() => {
-      grecaptcha.execute(siteKey, { action: "registration" }).then(resolve).catch(() => resolve(null));
-    });
-  });
-
-  if (!token) return false;
-
-  const res = await fetch("/api/registration/verify-captcha", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token, action: "registration" }),
-  });
-
-  if (!res.ok) return false;
-  const data = await res.json();
-  return Boolean(data.ok);
-}
-import { uploadFile } from "@/lib/uploadFile";
 import {
   PaymentStatus,
   RegistrationType,
@@ -65,6 +27,59 @@ interface SubmitOptions {
   paymentStatus?: PaymentStatus;
 }
 
+async function getCaptchaToken(): Promise<string | null> {
+  if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
+    return process.env.NODE_ENV !== "production" ? "dev-bypass" : null;
+  }
+
+  const grecaptcha = (
+    window as unknown as {
+      grecaptcha?: {
+        ready: (cb: () => void) => void;
+        execute: (key: string, opts: { action: string }) => Promise<string>;
+      };
+    }
+  ).grecaptcha;
+
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  if (!grecaptcha || !siteKey) return null;
+
+  return new Promise<string | null>((resolve) => {
+    grecaptcha.ready(() => {
+      grecaptcha
+        .execute(siteKey, { action: "registration" })
+        .then(resolve)
+        .catch(() => resolve(null));
+    });
+  });
+}
+
+async function uploadRegistrationFile(
+  file: File,
+  registrationType: RegistrationType,
+  field: string
+): Promise<UploadedFileMeta> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("registrationType", registrationType);
+  formData.append("field", field);
+
+  const res = await fetch("/api/registration/upload", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(
+      typeof err.error === "string" ? err.error : "File upload failed"
+    );
+  }
+
+  const body = await res.json();
+  return body.file as UploadedFileMeta;
+}
+
 export function useRegistrationSubmit() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -77,8 +92,8 @@ export function useRegistrationSubmit() {
   }: SubmitOptions) => {
     setLoading(true);
     try {
-      const captchaOk = await verifyCaptchaBeforeSubmit();
-      if (!captchaOk) {
+      const captchaToken = await getCaptchaToken();
+      if (!captchaToken) {
         toast.error("Security verification failed. Please refresh and try again.");
         return;
       }
@@ -91,25 +106,19 @@ export function useRegistrationSubmit() {
         if (Array.isArray(value)) {
           const results: UploadedFileMeta[] = [];
           for (const file of value) {
-            const result = await uploadFile(
-              file,
-              `registrations/${registrationType}/${key}`
+            results.push(
+              await uploadRegistrationFile(file, registrationType, key)
             );
-            results.push(result);
           }
           uploaded[key] = results;
         } else {
-          const result = await uploadFile(
+          uploaded[key] = await uploadRegistrationFile(
             value,
-            `registrations/${registrationType}/${key}`
+            registrationType,
+            key
           );
-          uploaded[key] = result;
         }
       }
-
-      const payment = isPaidRegistrationType(registrationType)
-        ? buildPaymentPayload(data, uploaded)
-        : undefined;
 
       const fee = data.registrationFee as number | undefined;
       const resolvedPaymentStatus: PaymentStatus =
@@ -120,6 +129,10 @@ export function useRegistrationSubmit() {
             data.utrNumber || data.transactionId || data.razorpayPaymentId
           ),
         });
+
+      const payment = isPaidRegistrationType(registrationType)
+        ? buildPaymentPayload(data, uploaded, resolvedPaymentStatus)
+        : undefined;
 
       const payload = {
         ...data,
@@ -135,11 +148,27 @@ export function useRegistrationSubmit() {
         });
       }
 
-      const result = await saveRegistration({
-        registrationType,
-        data: payload,
-        paymentStatus: resolvedPaymentStatus,
+      const res = await fetch("/api/registration/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          captchaToken,
+          registrationType,
+          data: payload,
+          paymentStatus: resolvedPaymentStatus,
+        }),
       });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(
+          typeof err.error === "string"
+            ? err.error
+            : "Registration failed. Please try again."
+        );
+      }
+
+      const result = await res.json();
 
       try {
         await fetch("/api/registration/send-email", {
@@ -169,7 +198,11 @@ export function useRegistrationSubmit() {
       );
     } catch (error) {
       console.error(error);
-      toast.error("Registration failed. Please try again.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Registration failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -180,7 +213,8 @@ export function useRegistrationSubmit() {
 
 function buildPaymentPayload(
   data: Record<string, unknown>,
-  uploaded: Record<string, unknown>
+  uploaded: Record<string, unknown>,
+  paymentStatus: PaymentStatus
 ) {
   const receipt = uploaded.receipt as UploadedFileMeta | undefined;
   return {
@@ -191,6 +225,8 @@ function buildPaymentPayload(
     registrationFee: data.registrationFee,
     razorpayPaymentId: data.razorpayPaymentId,
     razorpayOrderId: data.razorpayOrderId,
+    status: paymentStatus,
+    amount: data.registrationFee,
     receipt,
   };
 }

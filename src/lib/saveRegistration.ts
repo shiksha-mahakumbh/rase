@@ -58,6 +58,7 @@ export interface SaveRegistrationResult {
   typeDocId: string;
 }
 
+/** @deprecated Client writes are disabled — use POST /api/registration/submit */
 export async function saveRegistration(
   input: SaveRegistrationInput
 ): Promise<SaveRegistrationResult> {
@@ -138,6 +139,12 @@ export function formatFirestoreDate(value: unknown): string {
   }
   if (value instanceof Date) {
     return value.toLocaleString("en-IN");
+  }
+  if (typeof value === "string") {
+    const parsed = Date.parse(value);
+    if (!Number.isNaN(parsed)) {
+      return new Date(parsed).toLocaleString("en-IN");
+    }
   }
   return String(value);
 }
