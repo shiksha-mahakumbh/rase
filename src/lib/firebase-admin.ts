@@ -4,6 +4,8 @@ import { getStorage, type Storage } from "firebase-admin/storage";
 
 const STORAGE_BUCKET = "shiksha-mahakumbh-abhiyan.firebasestorage.app";
 const EXPECTED_PROJECT_ID = "shiksha-mahakumbh-abhiyan";
+/** Named Firestore database (project uses `default`, not legacy `(default)`). */
+const FIRESTORE_DATABASE_ID = "default";
 
 let adminApp: App | undefined;
 let adminDb: Firestore | undefined;
@@ -76,7 +78,7 @@ export function getAdminApp(): App {
 
 export function getAdminFirestore(): Firestore {
   if (!adminDb) {
-    adminDb = getFirestore(getAdminApp());
+    adminDb = getFirestore(getAdminApp(), FIRESTORE_DATABASE_ID);
   }
   return adminDb;
 }

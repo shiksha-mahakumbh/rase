@@ -10,9 +10,13 @@ export type NoticeboardEvent = {
 
 /** Server-safe Firestore read for noticeboard (ISR / RSC). */
 export async function getNoticeboardEvents(): Promise<NoticeboardEvent[]> {
-  const querySnapshot = await getDocs(collection(db, "events"));
-  return querySnapshot.docs.map((docSnap) => ({
-    id: docSnap.id,
-    ...(docSnap.data() as Omit<NoticeboardEvent, "id">),
-  }));
+  try {
+    const querySnapshot = await getDocs(collection(db, "events"));
+    return querySnapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...(docSnap.data() as Omit<NoticeboardEvent, "id">),
+    }));
+  } catch {
+    return [];
+  }
 }
