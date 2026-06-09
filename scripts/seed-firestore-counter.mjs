@@ -47,7 +47,8 @@ const app =
         projectId: serviceAccount.project_id,
       });
 
-const db = getFirestore(app);
+const FIRESTORE_DATABASE_ID = "default";
+const db = getFirestore(app, FIRESTORE_DATABASE_ID);
 const counterRef = db.collection("registrationCounters").doc("smk2026");
 
 const existing = await counterRef.get();

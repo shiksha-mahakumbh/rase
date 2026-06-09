@@ -10,6 +10,7 @@ import {
   type Firestore,
 } from "firebase/firestore";
 import { firebaseConfig } from "@/app/firebase";
+import { FIRESTORE_DATABASE_ID } from "@/lib/firebase/client";
 
 const SERVER_APP_NAME = "visitors-server";
 const LEGACY_TOTAL_OFFSET = 94567;
@@ -66,9 +67,13 @@ function getVisitorsDb(): Firestore {
     : initializeApp(firebaseConfig, SERVER_APP_NAME);
 
   try {
-    db = initializeFirestore(app, { experimentalForceLongPolling: true });
+    db = initializeFirestore(
+      app,
+      { experimentalForceLongPolling: true },
+      FIRESTORE_DATABASE_ID
+    );
   } catch {
-    db = getFirestore(app);
+    db = getFirestore(app, FIRESTORE_DATABASE_ID);
   }
   return db;
 }

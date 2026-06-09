@@ -1,6 +1,9 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getFirestore, type Firestore } from "firebase/firestore";
 
+/** Named Firestore database (not the legacy "(default)" ID). */
+export const FIRESTORE_DATABASE_ID = "default";
+
 export const firebaseConfig = {
   apiKey: "AIzaSyDL6UJwLh8KaNHARuedHNTjWIcFixkfv5s",
   authDomain: "shiksha-mahakumbh-abhiyan.firebaseapp.com",
@@ -15,4 +18,4 @@ export const app: FirebaseApp =
   getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
 /** Firestore only — avoids bundling Auth/Storage/Analytics on contact/footer routes */
-export const db: Firestore = getFirestore(app);
+export const db: Firestore = getFirestore(app, FIRESTORE_DATABASE_ID);
