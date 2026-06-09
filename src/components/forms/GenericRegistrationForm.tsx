@@ -115,6 +115,8 @@ export default function GenericRegistrationForm({
               showPayButton
               onPaymentVerified={(p) => {
                 setValue("utrNumber", p.razorpay_payment_id);
+                setValue("razorpayPaymentId", p.razorpay_payment_id);
+                setValue("razorpayOrderId", p.razorpay_order_id);
               }}
             />
           </div>

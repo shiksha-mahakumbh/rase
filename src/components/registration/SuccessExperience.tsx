@@ -5,8 +5,6 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import QRCode from "qrcode";
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { downloadAcknowledgementPdf } from "@/lib/generateAcknowledgementPdf";
 import { formatFirestoreDate } from "@/lib/saveRegistration";
 import { EVENT_NAME } from "@/types/registration";
@@ -46,14 +44,16 @@ function SuccessInner() {
     }
 
     const fetchRecord = async () => {
-      const q = query(
-        collection(db, "registrations"),
-        where("registrationId", "==", registrationId),
-        limit(1)
-      );
-      const snap = await getDocs(q);
-      if (!snap.empty) {
-        setRecord(snap.docs[0].data() as Record<string, unknown>);
+      try {
+        const res = await fetch(
+          `/api/registration/${encodeURIComponent(registrationId)}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setRecord(data as Record<string, unknown>);
+        }
+      } catch {
+        // Leave record null — page still shows registration ID from URL
       }
       setLoading(false);
     };

@@ -104,6 +104,8 @@ export default function DelegateForm() {
             onPaymentVerified={(p) => {
               setValue("transactionId", p.razorpay_payment_id);
               setValue("utrNumber", p.razorpay_payment_id);
+              setValue("razorpayPaymentId", p.razorpay_payment_id);
+              setValue("razorpayOrderId", p.razorpay_order_id);
             }}
           />
         </div>
