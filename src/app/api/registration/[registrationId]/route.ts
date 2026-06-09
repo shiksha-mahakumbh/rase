@@ -67,9 +67,13 @@ export async function GET(request: NextRequest, context: RouteContext) {
       createdAt: toIsoString(data.createdAt),
     });
   } catch (error) {
-    console.error("registration lookup error:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("registration lookup error:", message);
     return NextResponse.json(
-      { error: "Unable to load registration" },
+      {
+        error: "Unable to load registration",
+        ...(process.env.NODE_ENV !== "production" ? { detail: message } : {}),
+      },
       { status: 500 }
     );
   }
