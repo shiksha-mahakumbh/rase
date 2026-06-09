@@ -1,0 +1,50 @@
+{
+  "baseUrl": "https://www.rase.co.in",
+  "checkedAt": "2026-06-09T03:55:00.000Z",
+  "method": "Live production probes (HTTP, Firestore REST, Firebase client read, bundle analysis). No write mutations performed.",
+  "evidence": {
+    "firestoreRestRegistrations": {
+      "status": 404,
+      "message": "The database (default) does not exist for project shiksha-mahakumbh-abhiyan"
+    },
+    "firestoreRestCounter": {
+      "status": 404,
+      "message": "The database (default) does not exist for project shiksha-mahakumbh-abhiyan"
+    },
+    "visitorsApi": {
+      "daily": 0,
+      "total": 0,
+      "displayTotal": 94567,
+      "interpretation": "Fallback counts — production server cannot reach Firestore"
+    },
+    "apiProbes": {
+      "captcha": { "http": 400, "body": "Missing captcha token", "configured": true },
+      "createOrder": { "http": 200, "order_id": "order_SzOGm7ZPqOjGeT", "liveKey": true },
+      "sendEmail": { "http": 200, "emailStatus": "skipped" },
+      "webhook": { "http": 401, "body": "Invalid signature", "configured": true }
+    },
+    "routes": {
+      "/registration": { "http": 200, "bytes": 67764, "allHubCategoriesInHtml": true },
+      "/registration/Accomodation": { "http": 200, "bytes": 55139, "legacyFormActive": true },
+      "/registration/volunteer": { "final": "/registration", "redirected": true },
+      "/registration/ngo": { "final": "/registration", "redirected": true },
+      "/registration/talent": { "final": "/registration", "redirected": true },
+      "/admin": { "http": 200 },
+      "/Talentdata": { "final": "/admin?redirect=%2FTalentdata" },
+      "/ngoregistrationdatadekh": { "final": "/admin?redirect=%2Fngoregistrationdatadekh" }
+    },
+    "bundles": {
+      "recaptchaInBundles": true,
+      "razorpayInBundles": true
+    }
+  },
+  "phases": {
+    "firestore": { "overall": "FAIL" },
+    "storage": { "overall": "NOT_PROVEN" },
+    "payment": { "overall": "FAIL" },
+    "webhook": { "overall": "FAIL" },
+    "admin": { "overall": "PARTIAL" },
+    "email": { "overall": "FAIL" }
+  },
+  "score": 24
+}
