@@ -27,6 +27,8 @@
     "db:studio": "prisma studio",
     "db:validate": "prisma validate",
     "db:seed": "node scripts/supabase/seed-rbac.mjs",
+    "db:deploy-supabase": "node scripts/deploy-supabase-production.mjs",
+    "test:security": "node scripts/staging-security-check.mjs && node scripts/test-registration-lookup-security.mjs",
     "seed:cms": "node scripts/seed-cms-content.mjs"
   },
   "prisma": {
