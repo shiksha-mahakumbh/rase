@@ -1,10 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ADMIN_SESSION_COOKIE } from "@/constants/auth";
+import { verifyAdminSessionToken } from "@/lib/security/admin-session";
 import { verifyAdminRequest } from "@/server/lib/admin-request-auth";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
 
 type RouteContext = { params: Promise<{ path: string[] }> };
 
+function hasAdminCredentials(request: NextRequest): boolean {
+  const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  if (cookie && cookie !== "1" && verifyAdminSessionToken(cookie)) {
+    return true;
+  }
+  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "").trim();
+  return Boolean(token);
+}
+
+function unauthorizedResponse() {
+  return NextResponse.json(
+    { error: "Unauthorized", code: "UNAUTHORIZED" },
+    { status: 401 }
+  );
+}
+
 async function proxyToV2Admin(request: NextRequest, segments: string[]) {
+  if (!hasAdminCredentials(request)) {
+    throw new ServiceError("Unauthorized", 401, "UNAUTHORIZED");
+  }
+
   await verifyAdminRequest(request);
 
   const secret =
@@ -45,7 +67,10 @@ async function proxyToV2Admin(request: NextRequest, segments: string[]) {
   });
 }
 
-export async function GET(request: NextRequest, context: RouteContext) {
+async function handleGateway(request: NextRequest, context: RouteContext) {
+  if (!hasAdminCredentials(request)) {
+    return unauthorizedResponse();
+  }
   try {
     const { path } = await context.params;
     return proxyToV2Admin(request, path);
@@ -56,56 +81,24 @@ export async function GET(request: NextRequest, context: RouteContext) {
       { status: mapped.status }
     );
   }
+}
+
+export async function GET(request: NextRequest, context: RouteContext) {
+  return handleGateway(request, context);
 }
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  try {
-    const { path } = await context.params;
-    return proxyToV2Admin(request, path);
-  } catch (error) {
-    const mapped = toErrorResponse(error);
-    return NextResponse.json(
-      { error: mapped.error, code: mapped.code },
-      { status: mapped.status }
-    );
-  }
+  return handleGateway(request, context);
 }
 
 export async function PUT(request: NextRequest, context: RouteContext) {
-  try {
-    const { path } = await context.params;
-    return proxyToV2Admin(request, path);
-  } catch (error) {
-    const mapped = toErrorResponse(error);
-    return NextResponse.json(
-      { error: mapped.error, code: mapped.code },
-      { status: mapped.status }
-    );
-  }
+  return handleGateway(request, context);
 }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
-  try {
-    const { path } = await context.params;
-    return proxyToV2Admin(request, path);
-  } catch (error) {
-    const mapped = toErrorResponse(error);
-    return NextResponse.json(
-      { error: mapped.error, code: mapped.code },
-      { status: mapped.status }
-    );
-  }
+  return handleGateway(request, context);
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  try {
-    const { path } = await context.params;
-    return proxyToV2Admin(request, path);
-  } catch (error) {
-    const mapped = toErrorResponse(error);
-    return NextResponse.json(
-      { error: mapped.error, code: mapped.code },
-      { status: mapped.status }
-    );
-  }
+  return handleGateway(request, context);
 }

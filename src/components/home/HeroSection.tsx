@@ -87,9 +87,6 @@ export default function HeroSection() {
               <CtaButton href="/abstract" variant="secondary">
                 Submit Paper
               </CtaButton>
-              <CtaButton href={ROUTES.registration} variant="outline">
-                Become Volunteer
-              </CtaButton>
             </div>
 
             <div className="mt-8">

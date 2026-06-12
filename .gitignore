@@ -9,3 +9,6 @@ docs/launch-audit-results.json
 docs/production-go-live-results.json
 scripts/link-verify-result.json
 .vercel
+exports/firebase/
+exports/**/*.json
+!exports/**/manifest.example.json

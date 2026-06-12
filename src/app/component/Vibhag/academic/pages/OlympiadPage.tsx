@@ -238,7 +238,7 @@ export default function OlympiadPage() {
         Bharat.
       </ACFooterStatement>
 
-      <SectionCTA buttonText="प्रतिभागिता हेतु पंजीकरण करें" href={REG_LINKS.talent} />
+      <SectionCTA buttonText="प्रतिभागिता हेतु पंजीकरण करें" href={REG_LINKS.general} />
     </ACPage>
   );
 }

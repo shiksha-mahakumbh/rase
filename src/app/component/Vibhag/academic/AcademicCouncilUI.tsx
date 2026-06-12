@@ -229,8 +229,5 @@ export const ACFooterStatement: React.FC<{
 export const REG_LINKS = {
   general: "/registration",
   conclave: "/registration",
-  talent: "/registration",
-  ngo: "/registration",
-  volunteer: "/registration",
   participant: "/registration",
 } as const;

@@ -39,9 +39,6 @@ export default function AdminRegistrationCategories() {
         <p className="mt-3 text-xs text-blue-800">
           External (CMT): {EXTERNAL_REDIRECT_TYPES.join(", ")}
         </p>
-        <p className="text-xs text-blue-700">
-          Legacy routes: Volunteer, NGO, Talent (separate pages)
-        </p>
       </div>
     </div>
   );
