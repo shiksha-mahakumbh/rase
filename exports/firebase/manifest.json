@@ -1,0 +1,77 @@
+{
+  "exportedAt": "2026-06-12T16:59:43.371Z",
+  "collections": {
+    "registrations": {
+      "count": 1,
+      "file": "registrations.json"
+    },
+    "registrationCounters": {
+      "count": 1,
+      "file": "registrationCounters.json"
+    },
+    "conclave_registrations": {
+      "count": 1,
+      "file": "conclave_registrations.json"
+    },
+    "delegate_registrations": {
+      "count": 0,
+      "file": "delegate_registrations.json"
+    },
+    "RegestrationNGOsm24": {
+      "count": 0,
+      "file": "RegestrationNGOsm24.json"
+    },
+    "RegestrationVolsm24": {
+      "count": 0,
+      "file": "RegestrationVolsm24.json"
+    },
+    "ParticipantRegsm24": {
+      "count": 0,
+      "file": "ParticipantRegsm24.json"
+    },
+    "AbstractSubmissionDataSM24": {
+      "count": 0,
+      "file": "AbstractSubmissionDataSM24.json"
+    },
+    "FullLengthSubmissionDataSM24": {
+      "count": 0,
+      "file": "FullLengthSubmissionDataSM24.json"
+    },
+    "BestPractices": {
+      "count": 0,
+      "file": "BestPractices.json"
+    },
+    "talent": {
+      "count": 0,
+      "file": "talent.json"
+    },
+    "Accommodation2025": {
+      "count": 0,
+      "file": "Accommodation2025.json"
+    },
+    "organiserregistration": {
+      "count": 0,
+      "file": "organiserregistration.json"
+    },
+    "SchoolProjectFormdata": {
+      "count": 0,
+      "file": "SchoolProjectFormdata.json"
+    },
+    "heiprojectformdata": {
+      "count": 0,
+      "file": "heiprojectformdata.json"
+    },
+    "events": {
+      "count": 0,
+      "file": "events.json"
+    },
+    "wishesReceived": {
+      "count": 0,
+      "file": "wishesReceived.json"
+    },
+    "keynoteSpeakers": {
+      "count": 0,
+      "file": "keynoteSpeakers.json"
+    }
+  }
+}

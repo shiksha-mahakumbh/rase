@@ -1,4 +1,5 @@
 import { useState, ChangeEvent } from "react";
+import Image from "next/image";
 import axios from "axios";
 import { InstitutionFormProps } from "../Types";
 
@@ -158,7 +159,16 @@ const InstitutionForm = ({
         </div>
       )}
 
-      {imageUrl && <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />}
+      {imageUrl && (
+        <Image
+          src={imageUrl}
+          alt="Uploaded"
+          width={800}
+          height={600}
+          unoptimized
+          className="max-w-full h-auto"
+        />
+      )}
 
       <div className="mb-4">
         {loading ? (

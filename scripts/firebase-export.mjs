@@ -10,6 +10,28 @@ import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
 
+function loadEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return {};
+  const out = {};
+  for (const line of fs.readFileSync(filePath, "utf8").split("\n")) {
+    const t = line.trim();
+    if (!t || t.startsWith("#")) continue;
+    const i = t.indexOf("=");
+    if (i === -1) continue;
+    out[t.slice(0, i).trim()] = t
+      .slice(i + 1)
+      .trim()
+      .replace(/^["']|["']$/g, "");
+  }
+  return out;
+}
+
+Object.assign(
+  process.env,
+  loadEnvFile(path.resolve(".env")),
+  loadEnvFile(path.resolve(".env.local"))
+);
+
 const outArg = process.argv.find((a) => a.startsWith("--out="));
 const outDir = path.resolve(outArg?.split("=")[1] ?? "./exports/firebase");
 
@@ -22,9 +44,11 @@ function loadServiceAccount() {
 }
 
 async function main() {
-  let admin;
+  let appMod;
+  let firestoreMod;
   try {
-    admin = await import("firebase-admin");
+    appMod = await import("firebase-admin/app");
+    firestoreMod = await import("firebase-admin/firestore");
   } catch {
     console.error(
       "firebase-admin is not installed. Add it temporarily: npm i -D firebase-admin"
@@ -32,18 +56,18 @@ async function main() {
     process.exit(1);
   }
 
-  const { initializeApp, cert, getApps } = admin.default.app
-    ? admin.default
-    : admin;
-  const { getFirestore } = admin.default.firestore
-    ? admin.default
-    : await import("firebase-admin/firestore");
+  const { initializeApp, cert, getApps } = appMod;
+  const { getFirestore } = firestoreMod;
 
+  const serviceAccount = loadServiceAccount();
   if (!getApps().length) {
-    initializeApp({ credential: cert(loadServiceAccount()) });
+    initializeApp({
+      credential: cert(serviceAccount),
+      projectId: serviceAccount.project_id,
+    });
   }
 
-  const db = getFirestore();
+  const db = getFirestore(getApps()[0], "default");
   fs.mkdirSync(outDir, { recursive: true });
 
   const collections = [

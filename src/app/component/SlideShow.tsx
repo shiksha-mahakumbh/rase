@@ -21,12 +21,10 @@ interface SlideShowProps {
 const SlideShow: React.FC<SlideShowProps> = ({ slides }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-  };
-
   useEffect(() => {
-    const intervalId = setInterval(nextSlide, 5000);
+    const intervalId = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    }, 5000);
     return () => clearInterval(intervalId);
   }, [slides.length]);
 

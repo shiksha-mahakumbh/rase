@@ -1,0 +1,14 @@
+import "dotenv/config";
+import { PrismaClient } from "@prisma/client";
+if (process.env.DIRECT_URL) process.env.DATABASE_URL = process.env.DIRECT_URL;
+const p = new PrismaClient();
+const storageRls = await p.$queryRaw`SELECT policyname FROM pg_policies WHERE schemaname = 'storage' ORDER BY policyname`;
+const storageCount = await p.$queryRaw`SELECT count(*)::int as n FROM pg_policies WHERE schemaname = 'storage'`;
+const publicCount = await p.$queryRaw`SELECT count(*)::int as n FROM pg_policies WHERE schemaname = 'public'`;
+const buckets = await p.$queryRaw`SELECT count(*)::int as n FROM storage.buckets`;
+const registrations = await p.registration.count();
+const payments = await p.paymentRecord.count();
+const files = await p.uploadedFile.count();
+const counters = await p.registrationCounter.findMany();
+console.log(JSON.stringify({ storageCount, storageRls, publicCount, buckets, registrations, payments, files, counters }, (_, v) => typeof v === "bigint" ? Number(v) : v, 2));
+await p.$disconnect();

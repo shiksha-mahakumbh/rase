@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -34,7 +34,7 @@ function DetailContent() {
   const [password, setPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setFetching(true);
     try {
       const row = await fetchRegistrationByPublicId(id);
@@ -54,11 +54,11 @@ function DetailContent() {
     } finally {
       setFetching(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
-    if (isAdmin && id) load();
-  }, [isAdmin, id]);
+    if (isAdmin && id) void load();
+  }, [isAdmin, id, load]);
 
   const updateStatus = async (
     field: "registrationStatus" | "paymentStatus" | "accommodationStatus",

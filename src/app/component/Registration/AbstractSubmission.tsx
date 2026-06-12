@@ -1,5 +1,6 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
+import Image from "next/image";
 import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import toast from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
@@ -296,7 +297,7 @@ const AbstractSubmission = () => {
             ? 3100
             : "not known"}
         </b>
-                  <img className="p-2" src="/fee.png" alt="Fee" />
+                  <Image className="p-2" src="/fee.png" alt="Fee" width={200} height={200} />
                   <span className="text-sm text-red-600 mb-4">
                 UPI ID&#58; shikshamahakhumb@sbi
               </span>

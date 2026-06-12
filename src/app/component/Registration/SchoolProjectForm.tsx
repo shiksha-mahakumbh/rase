@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import { toast } from "react-hot-toast";
 
@@ -345,7 +346,7 @@ const SchoolProjectForm: React.FC = () => {
           <span className="text-lg font-bold text-gray-700">
             Fee: &#8360; 200
           </span>
-          <img src="/fee.png" alt="QR Code" className="w-24 h-24" />
+          <Image src="/fee.png" alt="QR Code" width={96} height={96} className="w-24 h-24" />
         </div>
 
         {/* Fee Receipt Upload */}

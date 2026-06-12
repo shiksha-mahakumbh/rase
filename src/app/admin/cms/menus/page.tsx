@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
 import {
@@ -34,23 +34,23 @@ export default function MenusAdminPage() {
   const [activeMenuId, setActiveMenuId] = useState("");
   const [newItem, setNewItem] = useState({ label: "", url: "" });
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const data = await adminCmsFetch<{ items: Menu[] }>("menus");
       const list = data.items ?? [];
       setMenus(list);
-      if (!activeMenuId && list[0]) setActiveMenuId(list[0].id);
+      setActiveMenuId((prev) => prev || list[0]?.id || "");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load menus");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void load();
-  }, []);
+  }, [load]);
 
   const seed = async () => {
     try {
