@@ -77,7 +77,7 @@ async function processQueue() {
   processing = true;
 
   const transporter = getTransporter();
-  const from = process.env.SMTP_FROM ?? "noreply@shikshamahakumbh.org";
+  const from = process.env.SMTP_FROM ?? "noreply@shikshamahakumbh.com";
 
   while (queue.length > 0) {
     const item = queue.shift()!;

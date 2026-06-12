@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     const smtpUser = process.env.SMTP_USER;
     const smtpPass = process.env.SMTP_PASS;
     const smtpFrom =
-      process.env.SMTP_FROM ?? "noreply@shikshamahakumbh.org";
+      process.env.SMTP_FROM ?? "noreply@shikshamahakumbh.com";
 
     let emailStatus: "sent" | "failed" | "skipped" = "skipped";
 

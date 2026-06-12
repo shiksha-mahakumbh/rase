@@ -29,7 +29,7 @@ export const DHE_ORGANIZATION = {
   websites: [
     { label: "www.shikshamahakumbh.com", href: "https://www.shikshamahakumbh.com" },
     { label: "www.dhe.org.in", href: "https://www.dhe.org.in/" },
-    { label: "www.rase.co.in", href: SITE_URL },
+    { label: "www.rase.co.in", href: "https://www.rase.co.in" },
   ],
   intro:
     "The Department of Holistic Education (DHE) is a visionary initiative dedicated to transforming education through holistic, interdisciplinary, and socially impactful approaches.",

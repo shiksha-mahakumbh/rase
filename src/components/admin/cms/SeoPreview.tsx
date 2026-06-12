@@ -11,7 +11,7 @@ export default function SeoPreview({
   url: string;
   imageUrl?: string;
 }) {
-  const displayUrl = url || "https://www.rase.co.in/example";
+  const displayUrl = url || "https://www.shikshamahakumbh.com/example";
   const displayTitle = title || "Page title — Shiksha Mahakumbh";
   const displayDesc =
     description ||
@@ -30,7 +30,7 @@ export default function SeoPreview({
         {imageUrl && (
           <div className="mb-2 h-28 rounded bg-slate-100 bg-cover bg-center" style={{ backgroundImage: `url(${imageUrl})` }} />
         )}
-        <p className="text-xs uppercase text-slate-400">rase.co.in</p>
+        <p className="text-xs uppercase text-slate-400">shikshamahakumbh.com</p>
         <p className="font-semibold text-slate-900">{displayTitle}</p>
         <p className="text-sm text-slate-600 line-clamp-2">{displayDesc}</p>
       </div>
