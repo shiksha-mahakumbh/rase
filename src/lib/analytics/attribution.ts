@@ -80,7 +80,7 @@ export function getAttribution(): AttributionBundle {
   return captureAttribution();
 }
 
-export function attributionForFirestore(): Record<string, string> {
+export function attributionForSubmission(): Record<string, string> {
   const a = getAttribution();
   return {
     trafficSource: a.trafficSource,
@@ -94,3 +94,6 @@ export function attributionForFirestore(): Record<string, string> {
     screenClass: a.screenClass,
   };
 }
+
+/** @deprecated Use attributionForSubmission */
+export const attributionForFirestore = attributionForSubmission;

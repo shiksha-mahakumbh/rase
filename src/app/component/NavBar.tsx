@@ -13,8 +13,8 @@ import {
   MEGA_MENU_INDEX,
 } from "@/constants/navigation";
 import NavBarTools from "@/components/nav/NavBarTools";
-
-const menus = NAV_MENUS;
+import { useCms } from "@/lib/cms/context";
+import { cmsMenuToNav } from "@/lib/cms/nav-adapter";
 
 function isExternalPath(path: string): boolean {
   return path.startsWith("http://") || path.startsWith("https://");
@@ -151,10 +151,26 @@ function DesktopDropdown({
 
 const NavBar: React.FC = () => {
   const pathname = usePathname();
+  const cms = useCms();
+  const [fetchedMenu, setFetchedMenu] = useState<Menu[] | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openSubMenuIndex, setOpenSubMenuIndex] = useState<number | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+
+  const menus = cms?.headerMenu
+    ? cmsMenuToNav(cms.headerMenu)
+    : fetchedMenu ?? NAV_MENUS;
+
+  useEffect(() => {
+    if (cms?.headerMenu) return;
+    fetch("/api/v2/menus?type=header")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.menu) setFetchedMenu(cmsMenuToNav(d.menu));
+      })
+      .catch(() => undefined);
+  }, [cms?.headerMenu]);
 
   const handleSubMenuToggle = (index: number) => {
     setOpenSubMenuIndex(openSubMenuIndex === index ? null : index);
@@ -326,9 +342,12 @@ const NavBar: React.FC = () => {
         <NavBarTools />
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
+          <div className="hidden min-[380px]:block sm:block">
+            <NavBarTools />
+          </div>
           <NavLink
             href={CTA_PATH}
-            className="inline-flex rounded-lg bg-primary px-2.5 py-1.5 text-[10px] font-bold text-white shadow-md sm:px-3 sm:py-2 sm:text-xs"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-xs font-bold text-white shadow-md sm:px-4 sm:text-sm"
           >
             Register
           </NavLink>
@@ -373,11 +392,14 @@ const NavBar: React.FC = () => {
             aria-label="Close menu overlay"
           />
           <div className="fixed right-0 top-[60px] z-50 flex h-[calc(100vh-60px)] w-[min(100%,320px)] flex-col overflow-y-auto border-l border-gray-200 bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden">
-            <div className="border-b border-gray-100 p-4">
+            <div className="space-y-3 border-b border-gray-100 p-4">
+              <div className="flex justify-center">
+                <NavBarTools />
+              </div>
               <NavLink
                 href={CTA_PATH}
                 onClick={closeMobile}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-[#7a4343] py-3 text-sm font-bold text-white shadow-lg"
+                className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-[#7a4343] py-3 text-sm font-bold text-white shadow-lg"
               >
                 Participate — Registration
               </NavLink>

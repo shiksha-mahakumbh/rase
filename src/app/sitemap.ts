@@ -3,8 +3,8 @@ import { SITE_URL } from "@/config/site";
 import { ALL_PILLAR_SLUGS } from "@/lib/knowledge-graph/pillar-registry";
 import { MEDIA_ARCHIVE_KEYS } from "@/data/media-archive-keys";
 import { PRESS_CANONICAL_PATHS } from "@/constants/canonical-routes";
+import { generateSitemapIndex } from "@/server/services/seo.service";
 
-/** Pillar slugs whose filesystem path differs from URL slug */
 const PILLAR_PATH_OVERRIDES: Record<string, string> = {
   media: "media-center",
 };
@@ -78,6 +78,7 @@ const STATIC_PATHS = [
   "fulllengthpaper",
   "keynotespeakers",
   "noticeboard",
+  "downloads",
   "conclave",
   "shikshamahakumbh",
   "shikshakumbh",
@@ -116,6 +117,7 @@ const STATIC_PATHS = [
 function sitemapPriority(path: string): number {
   if (path === "") return 1;
   if (path === "registration") return 0.9;
+  if (path === "downloads" || path === "noticeboard") return 0.8;
   if (path.startsWith("departments/")) return 0.7;
   if (path.startsWith("committee/")) return 0.5;
   if (path.startsWith("press/")) return 0.4;
@@ -123,17 +125,36 @@ function sitemapPriority(path: string): number {
   return 0.6;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const unique = Array.from(new Set(STATIC_PATHS));
 
-  return unique.map((path) => ({
+  const staticEntries: MetadataRoute.Sitemap = unique.map((path) => ({
     url: path ? `${SITE_URL}/${path}` : SITE_URL,
     lastModified: now,
     changeFrequency:
-      path === "" || path === "registration" || path === "noticeboard"
+      path === "" || path === "registration" || path === "noticeboard" || path === "downloads"
         ? "weekly"
         : "monthly",
     priority: sitemapPriority(path),
   }));
+
+  try {
+    const cmsEntries = await generateSitemapIndex();
+    const cmsMapped: MetadataRoute.Sitemap = cmsEntries.map((e) => ({
+      url: e.url,
+      lastModified: e.lastModified,
+      changeFrequency: e.changeFrequency,
+      priority: e.priority,
+    }));
+
+    const seen = new Set(staticEntries.map((e) => e.url));
+    const merged = [
+      ...staticEntries,
+      ...cmsMapped.filter((e) => !seen.has(e.url)),
+    ];
+    return merged;
+  } catch {
+    return staticEntries;
+  }
 }

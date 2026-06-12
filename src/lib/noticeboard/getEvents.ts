@@ -1,5 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/app/firebase";
+import { prisma } from "@/server/db/prisma";
 
 export type NoticeboardEvent = {
   id: string;
@@ -8,13 +7,31 @@ export type NoticeboardEvent = {
   imageUrl: string;
 };
 
-/** Server-safe Firestore read for noticeboard (ISR / RSC). */
+/** Server-safe CMS read for noticeboard (ISR / RSC). */
 export async function getNoticeboardEvents(): Promise<NoticeboardEvent[]> {
   try {
-    const querySnapshot = await getDocs(collection(db, "events"));
-    return querySnapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...(docSnap.data() as Omit<NoticeboardEvent, "id">),
+    const notices = await prisma.notice.findMany({
+      where: {
+        status: "published",
+        deletedAt: null,
+        OR: [{ expireAt: null }, { expireAt: { gt: new Date() } }],
+      },
+      orderBy: [{ isPinned: "desc" }, { publishAt: "desc" }],
+      take: 20,
+      select: {
+        id: true,
+        title: true,
+        publishAt: true,
+        publishedAt: true,
+        createdAt: true,
+      },
+    });
+
+    return notices.map((n) => ({
+      id: n.id,
+      title: n.title,
+      date: (n.publishAt ?? n.publishedAt ?? n.createdAt).toISOString(),
+      imageUrl: "",
     }));
   } catch {
     return [];

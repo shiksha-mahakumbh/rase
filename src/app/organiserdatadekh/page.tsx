@@ -1,17 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { message, Table, Spin, Button } from "antd";
-import { collection, getDocs } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-import { getFirestore as getFirestoreFromApp } from "firebase/firestore";
-import { firebaseConfig } from "../firebase";
-import * as XLSX from "xlsx"; // For Excel export
-import jsPDF from "jspdf"; // For PDF export
-import autoTable from "jspdf-autotable"; // For table support in jsPDF
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import TopInfo from "../component/CompanyInfo";
+import {
+  useAdminRegistrationData,
+  rowToLegacyRecord,
+} from "@/lib/legacy/useAdminRegistrationData";
 
-// Define the structure of each registration
 interface Registration {
   id: string;
   name: string;
@@ -23,68 +22,61 @@ interface Registration {
   stateCode: string;
 }
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const firestore = getFirestoreFromApp(app);
-
 const DataPage = () => {
-  const [loading, setLoading] = useState(true);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
-
-  const fetchData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(firestore, "organiserregistration"));
-      const data = querySnapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id
-      })) as Registration[];
-
-      setRegistrations(data);
-      setLoading(false);
-    } catch (error) {
-      message.error("Error fetching data. Please try again.");
-      console.error("Error fetching data: ", error);
-      setLoading(false);
-    }
-  };
+  const { rows, loading } = useAdminRegistrationData("Organiser");
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (loading) return;
+    const data = rows.map((row) => {
+      const legacy = rowToLegacyRecord(row) as Record<string, unknown>;
+      return {
+        id: String(legacy.id ?? row.id),
+        name: String(legacy.name ?? legacy.fullName ?? ""),
+        phone: String(legacy.phone ?? legacy.contactNumber ?? ""),
+        designation: String(legacy.designation ?? ""),
+        institution: String(legacy.institution ?? ""),
+        duty: String(legacy.duty ?? ""),
+        accommodation: String(legacy.accommodation ?? legacy.accommodationRequired ?? ""),
+        stateCode: String(legacy.stateCode ?? ""),
+      };
+    });
+    setRegistrations(data);
+  }, [rows, loading]);
 
-  // Function to export data as Excel
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(registrations);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Registrations");
-
-    // Export file
     XLSX.writeFile(workbook, "RegistrationsData.xlsx");
   };
 
-  // Function to export data as PDF
   const exportToPDF = () => {
     const doc = new jsPDF();
-    const tableColumn = ["S.No", "Name", "Phone", "Designation", "Institution", "Duty", "Accommodation", "State Code"];
-    const tableRows: any[] = [];
-
-    registrations.forEach((reg, index) => {
-      const rowData = [
-        index + 1, // Serial number
-        reg.name,
-        reg.phone,
-        reg.designation,
-        reg.institution,
-        reg.duty,
-        reg.accommodation,
-        reg.stateCode,
-      ];
-      tableRows.push(rowData);
-    });
+    const tableColumn = [
+      "S.No",
+      "Name",
+      "Phone",
+      "Designation",
+      "Institution",
+      "Duty",
+      "Accommodation",
+      "State Code",
+    ];
+    const tableRows = registrations.map((reg, index) => [
+      index + 1,
+      reg.name,
+      reg.phone,
+      reg.designation,
+      reg.institution,
+      reg.duty,
+      reg.accommodation,
+      reg.stateCode,
+    ]);
 
     autoTable(doc, {
       head: [tableColumn],
-      body: tableRows, // Use tableRows directly
+      body: tableRows,
       theme: "grid",
     });
 
@@ -92,13 +84,13 @@ const DataPage = () => {
   };
 
   const columns = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Phone', dataIndex: 'phone', key: 'phone' },
-    { title: 'Designation', dataIndex: 'designation', key: 'designation' },
-    { title: 'Institution', dataIndex: 'institution', key: 'institution' },
-    { title: 'Duty', dataIndex: 'duty', key: 'duty' },
-    { title: 'Accommodation', dataIndex: 'accommodation', key: 'accommodation' },
-    { title: 'State Code', dataIndex: 'stateCode', key: 'stateCode' },
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Phone", dataIndex: "phone", key: "phone" },
+    { title: "Designation", dataIndex: "designation", key: "designation" },
+    { title: "Institution", dataIndex: "institution", key: "institution" },
+    { title: "Duty", dataIndex: "duty", key: "duty" },
+    { title: "Accommodation", dataIndex: "accommodation", key: "accommodation" },
+    { title: "State Code", dataIndex: "stateCode", key: "stateCode" },
   ];
 
   return (
@@ -125,7 +117,7 @@ const DataPage = () => {
             </div>
             <Table
               columns={[
-                { title: 'S.No', render: (_, __, index) => index + 1, key: 'serial' }, // Add Serial Column
+                { title: "S.No", render: (_, __, index) => index + 1, key: "serial" },
                 ...columns,
               ]}
               dataSource={registrations}

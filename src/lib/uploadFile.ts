@@ -1,6 +1,3 @@
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/lib/firebase";
-
 export interface UploadResult {
   name: string;
   url: string;
@@ -11,28 +8,39 @@ export interface UploadResult {
 
 export async function uploadFile(
   file: File,
-  folder: string
+  folder: string,
+  registrationType = "NGO",
+  field = "attachment"
 ): Promise<UploadResult> {
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `${folder}/${Date.now()}_${safeName}`;
-  const storageRef = ref(storage, path);
-  const snapshot = await uploadBytes(storageRef, file, {
-    contentType: file.type,
-  });
-  const url = await getDownloadURL(snapshot.ref);
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("registrationType", registrationType);
+  formData.append("field", field);
 
-  return {
-    name: file.name,
-    url,
-    path,
-    contentType: file.type,
-    size: file.size,
-  };
+  const res = await fetch("/api/registration/upload", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(
+      typeof err.error === "string" ? err.error : "File upload failed"
+    );
+  }
+
+  const body = await res.json();
+  const uploaded = body.file as UploadResult;
+  return uploaded;
 }
 
 export async function uploadFiles(
   files: File[],
-  folder: string
+  folder: string,
+  registrationType = "NGO",
+  field = "attachment"
 ): Promise<UploadResult[]> {
-  return Promise.all(files.map((file) => uploadFile(file, folder)));
+  return Promise.all(
+    files.map((file) => uploadFile(file, folder, registrationType, field))
+  );
 }

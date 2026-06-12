@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-06-11T10:03:12.424Z",
+  "connected": true,
+  "migrations": [
+    {
+      "migration_name": "20250609_init",
+      "finished_at": "2026-06-10T17:10:20.933Z",
+      "applied_steps_count": 1
+    },
+    {
+      "migration_name": "20250610_phase3",
+      "finished_at": "2026-06-10T17:10:22.037Z",
+      "applied_steps_count": 1
+    },
+    {
+      "migration_name": "20250620_phase35_cms_foundation",
+      "finished_at": "2026-06-10T17:10:23.064Z",
+      "applied_steps_count": 1
+    },
+    {
+      "migration_name": "20250621_phase_b_cms",
+      "finished_at": "2026-06-10T17:10:24.151Z",
+      "applied_steps_count": 1
+    },
+    {
+      "migration_name": "20250622_phase_b5_analytics",
+      "finished_at": "2026-06-10T17:10:25.317Z",
+      "applied_steps_count": 1
+    },
+    {
+      "migration_name": "20250629_phase_s2_foundation",
+      "finished_at": "2026-06-10T17:10:26.444Z",
+      "applied_steps_count": 1
+    },
+    {
+      "migration_name": "20250701_phase_c_organizational_cms",
+      "finished_at": "2026-06-10T17:10:27.673Z",
+      "applied_steps_count": 1
+    }
+  ],
+  "tables": {
+    "pages": true,
+    "page_sections": true,
+    "notices": true,
+    "downloads": true,
+    "media_assets": true,
+    "media_albums": true,
+    "seo_metadata": true,
+    "visitor_analytics": true,
+    "entity_revisions": true,
+    "committees": true,
+    "committee_members": true,
+    "speaker_profiles": true,
+    "partners": true,
+    "events": true,
+    "event_media": true
+  },
+  "seedCounts": {
+    "homepage": 2,
+    "notices": 0,
+    "downloads": 0,
+    "committees": 2,
+    "speakers": 2,
+    "partners": 3,
+    "events": 2,
+    "eventMedia": 3
+  },
+  "error": null
+}

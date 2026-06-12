@@ -1,11 +1,12 @@
+/** @deprecated Use POST /api/admin/session — client must not set session cookies. */
 export const ADMIN_SESSION_COOKIE = "smk_admin_session";
 
+/** @deprecated Server sets HttpOnly signed cookie via /api/admin/session */
 export function setAdminSessionCookie() {
-  if (typeof document === "undefined") return;
-  document.cookie = `${ADMIN_SESSION_COOKIE}=1; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+  // No-op: session cookie is set server-side after Firebase verification.
 }
 
+/** @deprecated Cleared via DELETE /api/admin/session */
 export function clearAdminSessionCookie() {
-  if (typeof document === "undefined") return;
-  document.cookie = `${ADMIN_SESSION_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+  // No-op: logout calls DELETE /api/admin/session
 }

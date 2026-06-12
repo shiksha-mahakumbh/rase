@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { PROTECTED_DATA_ROUTE_PREFIXES } from "@/constants/routes";
 import { ADMIN_SESSION_COOKIE } from "@/constants/auth";
+import { verifyAdminSessionTokenEdge } from "@/lib/security/admin-session-edge";
 import { routing } from "@/i18n/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
@@ -37,7 +38,18 @@ function shouldNoIndex(pathname: string): boolean {
   );
 }
 
-export function middleware(request: NextRequest) {
+async function hasValidAdminSession(request: NextRequest): Promise<boolean> {
+  const raw = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  if (!raw || raw === "1") return false;
+
+  const secret = process.env.ADMIN_SESSION_SECRET ?? process.env.ADMIN_OPS_SECRET;
+  if (!secret) return false;
+
+  const session = await verifyAdminSessionTokenEdge(raw, secret);
+  return session !== null;
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isProtectedDataPath(pathname)) {
@@ -49,9 +61,9 @@ export function middleware(request: NextRequest) {
       return response;
     }
 
-    const hasSession = request.cookies.get(ADMIN_SESSION_COOKIE)?.value === "1";
+    const authenticated = await hasValidAdminSession(request);
 
-    if (!hasSession) {
+    if (!authenticated) {
       const loginUrl = new URL("/admin", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
@@ -83,6 +95,7 @@ export const config = {
   matcher: [
     "/((?!api|_next|_vercel|.*\\..*).*)",
     "/AllData",
+    "/noticeboarddata",
     "/participantregistrationdatadekh/:path*",
     "/volunteerdatadekh/:path*",
     "/volunteerregistrationdatadekh/:path*",

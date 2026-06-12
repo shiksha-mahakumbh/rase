@@ -1,9 +1,6 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/app/firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "@/app/firebase";
+import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import toast from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
@@ -36,7 +33,7 @@ const AbstractSubmission = () => {
 
   const [formData, setFormData] = useState<AbstractFormData>(initialFormData);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [pendingFiles, setPendingFiles] = useState<Record<string, File>>({});
 
   const MAX_FILE_SIZE_WORD = 200 * 1024; // 200 KB
   const MAX_FILE_SIZE_PDF = 1 * 1024 * 1024; // 1 MB
@@ -50,8 +47,8 @@ const AbstractSubmission = () => {
       formData.CorrespondingAuthorName &&
       formData.Keywords &&
       formData.ContactNumber &&
-      formData.AttachmentsWord &&
-      formData.AttachmentsPdf &&
+      pendingFiles.AttachmentsWord &&
+      pendingFiles.AttachmentsPdf &&
       formData.type
     );
   };
@@ -66,7 +63,7 @@ const AbstractSubmission = () => {
     }));
   };
 
-  const handleFileChange = async (
+  const handleFileChange = (
     e: ChangeEvent<HTMLInputElement>,
     field: string,
     maxSize: number
@@ -77,18 +74,11 @@ const AbstractSubmission = () => {
         toast.error(`File size exceeds the limit of ${maxSize / (1024 * 1024)} MB.`);
         return;
       }
-      try {
-        const fileRef = ref(storage, `files/${file.name}`);
-        await uploadBytes(fileRef, file);
-        const downloadURL = await getDownloadURL(fileRef);
-        setFormData((prevData) => ({
-          ...prevData,
-          [field]: downloadURL,
-        }));
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        setError(error);
-      }
+      setPendingFiles((prev) => ({ ...prev, [field]: file }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: file.name,
+      }));
     }
   };
 
@@ -103,20 +93,32 @@ const AbstractSubmission = () => {
     }
 
     try {
-      // Add document to Firestore with submission timestamp
-      const docRef = await addDoc(collection(db, "AbstractSubmissionDataSM24"), {
-        ...formData,
-        submissionDate: Timestamp.now(), // Automatically add date and time
+      await submitLegacyForm({
+        registrationType: "Abstract Submission",
+        data: {
+          fullName: formData.CorrespondingAuthorName,
+          email: formData.CorrespondingAuthorEmail,
+          contactNumber: formData.ContactNumber,
+          institution: formData.CorrespondingAuthorName,
+          ...formData,
+          submissionDate: new Date().toISOString(),
+        },
+        files: ["AttachmentsWord", "AttachmentsPdf", "FeeReceipt"]
+          .filter((field) => pendingFiles[field])
+          .map((field) => ({
+            file: pendingFiles[field],
+            field,
+            folder: "abstracts",
+          })),
       });
-      console.log("Document added with ID:", docRef.id);
-      setLoading(false);
       setFormData(initialFormData);
+      setPendingFiles({});
       toast.success("Congratulations you have successfully submitted the Abstract!");
     } catch (error) {
-      console.error("Error adding document:", error);
-      setError(error);
-      setLoading(false);
+      console.error("Error submitting abstract:", error);
       toast.error("Something broke while submitting the Abstract!");
+    } finally {
+      setLoading(false);
     }
   };
 

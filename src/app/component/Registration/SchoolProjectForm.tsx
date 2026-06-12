@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { db, storage } from "../../firebase"; // Adjust the path based on your setup
-import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import { toast } from "react-hot-toast";
 
 const SchoolProjectForm: React.FC = () => {
@@ -66,33 +64,11 @@ const SchoolProjectForm: React.FC = () => {
     }
   };
 
-  // File upload to Firebase Storage
-  const uploadFile = (file: File, path: string) => {
-    return new Promise<string>((resolve, reject) => {
-      const storageRef = ref(storage, path);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        null,
-        (error) => {
-          reject(error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadURL);
-        }
-      );
-    });
-  };
-
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Validate all fields are filled
       if (
         !formData.projectName ||
         !formData.projectDescription ||
@@ -107,28 +83,29 @@ const SchoolProjectForm: React.FC = () => {
         return;
       }
 
-      // Upload files
-      const pptPath = `heiProjects/${formData.projectName}/ppt`;
-      const videoPath = `heiProjects/${formData.projectName}/video`;
-      const feePath = `heiProjects/${formData.projectName}/feeReceipt`;
+      const primaryEmail =
+        participants.find((p) => p.email)?.email ||
+        `${formData.schoolName.replace(/\s+/g, "").toLowerCase()}@school.local`;
 
-      const [pptUrl, videoUrl, feeUrl] = await Promise.all([
-        uploadFile(formData.projectPpt!, pptPath),
-        uploadFile(formData.projectVideo!, videoPath),
-        uploadFile(formData.feeUpload!, feePath),
-      ]);
-
-      // Store form data in Firestore
-      const docRef = await addDoc(collection(db, "SchoolProjectFormdata"), {
-        projectName: formData.projectName,
-        projectDescription: formData.projectDescription,
-        schoolName: formData.schoolName,
-        schoolAddress: formData.schoolAddress,
-        teamSize: teamSize,
-        participants: participants,
-        projectPptUrl: pptUrl,
-        projectVideoUrl: videoUrl,
-        feeReceiptUrl: feeUrl,
+      await submitLegacyForm({
+        registrationType: "School Program",
+        data: {
+          fullName: participants[0]?.name || formData.schoolName,
+          email: primaryEmail,
+          contactNumber: participants[0]?.phone || "0000000000",
+          institution: formData.schoolName,
+          projectName: formData.projectName,
+          projectDescription: formData.projectDescription,
+          schoolName: formData.schoolName,
+          schoolAddress: formData.schoolAddress,
+          teamSize,
+          participants,
+        },
+        files: [
+          { file: formData.projectPpt, field: "projectPptUrl", folder: "school-projects" },
+          { file: formData.projectVideo, field: "projectVideoUrl", folder: "school-projects" },
+          { file: formData.feeUpload, field: "feeReceiptUrl", folder: "school-projects" },
+        ],
       });
 
       toast.success("Project submitted successfully!");

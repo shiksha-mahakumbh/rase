@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Guest from "../component/Guest";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/app/firebase";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 
 const speakers = [
@@ -101,35 +99,9 @@ const speakers = [
 ];
 
 const WishesReceived: React.FC = () => {
-  const [firebaseSpeakers, setFirebaseSpeakers] = useState<
-    {
-      id: string;
-      name: string;
-      designation: string;
-      place: string;
-      imageSrc: string;
-      href?: string;
-    }[]
-  >([]);
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    const fetchSpeakers = async () => {
-      const querySnapshot = await getDocs(collection(db, "wishesReceived"));
-      const fetchedSpeakers: typeof firebaseSpeakers = [];
-      querySnapshot.forEach((doc) => {
-        fetchedSpeakers.push({ id: doc.id, ...doc.data() } as (typeof firebaseSpeakers)[0]);
-      });
-      setFirebaseSpeakers(fetchedSpeakers);
-    };
-
-    fetchSpeakers();
-  }, []);
-
-  const allGuests = useMemo(
-    () => [...speakers, ...firebaseSpeakers],
-    [firebaseSpeakers]
-  );
+  const allGuests = useMemo(() => speakers, []);
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();

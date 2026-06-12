@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { db, storage } from "@/app/firebase"; // Ensure your firebase config includes storage
-import { collection, getDocs } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
+import { useAdminRegistrationData, rowToLegacyRecord } from "@/lib/legacy/useAdminRegistrationData";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -32,53 +30,16 @@ interface NgoData {
 const Page: React.FC = () => {
   const [formDataList, setFormDataList] = useState<NgoData[]>([]);
 
+  const { rows, loading: dataLoading } = useAdminRegistrationData("School Program");
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const colRef = collection(db, "SchoolProjectFormdata");
-        const querySnapshot = await getDocs(colRef);
-
-        const dataList: NgoData[] = [];
-        const downloadURLPromises: Promise<void>[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as NgoData;
-
-          // Update file URLs
-          downloadURLPromises.push(
-            (async () => {
-              if (data.projectPptUrl) {
-                const pptRef = ref(storage, data.projectPptUrl);
-                data.projectPptUrl = await getDownloadURL(pptRef);
-              }
-              if (data.projectVideoUrl) {
-                const videoRef = ref(storage, data.projectVideoUrl);
-                data.projectVideoUrl = await getDownloadURL(videoRef);
-              }
-              if (data.feeReceiptUrl) {
-                const feeRef = ref(storage, data.feeReceiptUrl);
-                data.feeReceiptUrl = await getDownloadURL(feeRef);
-              }
-              dataList.push(data);
-            })()
-          );
-        });
-
-        await Promise.all(downloadURLPromises);
-
-        const dataListWithSerial = dataList.map((data, index) => ({
-          ...data,
-          serial: index + 1,
-        }));
-
-        setFormDataList(dataListWithSerial);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (dataLoading) return;
+    const dataList = rows.map((row, index) => ({
+      ...(rowToLegacyRecord(row) as Record<string, unknown>),
+      serial: index + 1,
+    }));
+    setFormDataList(dataList as NgoData[]);
+  }, [rows, dataLoading]);
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(

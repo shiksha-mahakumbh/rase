@@ -1,44 +1,33 @@
 import { EVENT_SCHEMA, ORGANIZATION_SCHEMA, SITE_URL } from "@/config/site";
+import type { FaqItem } from "@/lib/cms/faq";
+import { buildFaqPageSchema } from "@/lib/cms/faq";
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is Shiksha Mahakumbh Abhiyan?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "A national–international multidisciplinary education movement aligned with NEP 2020 and Bharat@2047.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "When is Shiksha Mahakumbh 6.0?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "9–11 October 2026 at NIT Hamirpur, Himachal Pradesh, India.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I register?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: `Register online at ${SITE_URL}/registration`,
-      },
-    },
-  ],
-};
+const DEFAULT_FAQS: FaqItem[] = [
+  {
+    question: "What is Shiksha Mahakumbh Abhiyan?",
+    answer:
+      "A national–international multidisciplinary education movement aligned with NEP 2020 and Bharat@2047.",
+  },
+  {
+    question: "When is Shiksha Mahakumbh 6.0?",
+    answer: "9–11 October 2026 at NIT Hamirpur, Himachal Pradesh, India.",
+  },
+  {
+    question: "How do I register?",
+    answer: `Register online at ${SITE_URL}/registration`,
+  },
+];
 
-export default function HomeJsonLd() {
-  const scripts = [ORGANIZATION_SCHEMA, EVENT_SCHEMA, faqSchema];
+export default function HomeJsonLd({ faqs }: { faqs?: FaqItem[] }) {
+  const faqSchema = buildFaqPageSchema(faqs?.length ? faqs : DEFAULT_FAQS);
+  const scripts: object[] = [ORGANIZATION_SCHEMA, EVENT_SCHEMA];
+  if (faqSchema) scripts.push(faqSchema);
 
   return (
     <>
-      {scripts.map((schema) => (
+      {scripts.map((schema, i) => (
         <script
-          key={schema["@type"] as string}
+          key={i}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />

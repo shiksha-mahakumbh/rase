@@ -5,15 +5,11 @@ import Marquee from "react-fast-marquee";
 import { motion } from "framer-motion";
 import SectionShell from "./home/SectionShell";
 import GlassCard from "./home/GlassCard";
+import { useCms } from "@/lib/cms/context";
+import { getHomepagePartners } from "@/lib/cms/partners";
+import type { CmsPartnerCard } from "@/lib/cms/types";
 
-const MediaPartners: React.FC = () => {
-  interface Item {
-    imageUrl: string;
-    link: string;
-    name: string;
-  }
-
-  const mediaPartners: Item[] = [
+const DEFAULT_MEDIA = [
     {
       imageUrl: "/2024K/BW.jpg",
       link: "https://businessworld.in/",
@@ -29,7 +25,32 @@ const MediaPartners: React.FC = () => {
       link: "https://www.uttamhindu.com/",
       name: "Uttam Hindu",
     },
-  ];
+];
+
+const MediaPartners: React.FC<{ cmsPartners?: CmsPartnerCard[] }> = ({
+  cmsPartners = [],
+}) => {
+  const cms = useCms();
+  const cmsMedia = getHomepagePartners(cms?.homepage, "media");
+  const cmsMediaPartners =
+    cmsMedia.length > 0
+      ? cmsMedia
+      : cmsPartners
+          .filter((p) => p.partnerCategory === "media")
+          .map((p) => ({
+            name: p.name,
+            logoUrl: p.logoUrl ?? "",
+            website: p.website ?? undefined,
+          }));
+
+  const mediaPartners =
+    cmsMediaPartners.length > 0
+      ? cmsMediaPartners.map((p) => ({
+          imageUrl: p.logoUrl ?? (p as { imageUrl?: string }).imageUrl ?? "",
+          link: p.website ?? (p as { link?: string }).link ?? "",
+          name: p.name,
+        }))
+      : DEFAULT_MEDIA;
 
   return (
     <SectionShell
@@ -70,9 +91,10 @@ const MediaPartners: React.FC = () => {
                   <Image
                     className="h-24 w-28 object-contain transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-lg md:h-28 md:w-28"
                     src={partner.imageUrl}
-                    alt={`${partner.name} Logo`}
+                    alt={`${partner.name} logo`}
                     height={120}
                     width={120}
+                    loading="lazy"
                   />
                 </GlassCard>
                 <p className="mt-3 text-center text-sm font-medium text-gray-700 group-hover:text-primary">

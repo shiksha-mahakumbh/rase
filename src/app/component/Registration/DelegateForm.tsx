@@ -1,9 +1,6 @@
 'use client'
-import { useState,useEffect, ChangeEvent, FormEvent } from 'react';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/app/firebase';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/app/firebase';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { submitLegacyForm } from '@/lib/legacyFormSubmit';
 import  toast , { Toaster } from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
@@ -153,65 +150,37 @@ else  if (value === 'ResearchScholar' ) {
     }
   };
 
-  const handleAddDocument = async (downloadURL: string | null) => {
-    try {
-      const docRef = await addDoc(collection(db, 'ParticipantRegsm24'), { ...formData, feeReceipt: downloadURL });
-      console.log('Document added with ID:', docRef.id);
-      setLoading(false);
-      toast.success("Suceessfully Registered!");
-      setFormData(initialFormData)
-    } catch (error) {
-      setLoading(false);
-      toast.error("Something broke while registration!")
-      console.error('Error adding document:', error);
-    }
-  };
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
-   
-    if (image) {
-      try {
-        const imageRef = ref(storage, `images/${image.name}`);
-        await uploadBytes(imageRef, image);
 
-        const downloadURL = await getDownloadURL(imageRef);
-
-       
-        setFormData((prevData) => ({
-          ...prevData,
-          feeReceipt: downloadURL || '', 
-        }));
-
-     
-        handleAddDocument(downloadURL);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        setLoading(false); 
-      }
-    } else {
-     
-      handleAddDocument(null);
+    try {
+      await submitLegacyForm({
+        registrationType: 'Delegate Registration',
+        data: {
+          ...formData,
+          fullName: formData.name,
+          email: formData.email,
+          contactNumber: formData.contactNumber,
+          institution: formData.name,
+          accommodationRequired: formData.accommodation === 'Yes' ? 'Yes' : 'No',
+          registrationFee: formData.feeAmount,
+        },
+        file: image,
+        uploadFolder: 'delegate',
+        fileField: 'feeReceipt',
+      });
+      toast.success("Suceessfully Registered!");
+      setFormData(initialFormData);
+      setImage(null);
+    } catch (error) {
+      toast.error("Something broke while registration!");
+      console.error('Error submitting registration:', error);
+    } finally {
+      setLoading(false);
     }
-
-    
-    console.log(formData);
   };
-  useEffect(() => {
-    // Check if we are on the client side before running analytics-related code
-    if (typeof window !== 'undefined') {
-      import('firebase/analytics')
-        .then(({ getAnalytics }) => {
-          const analytics = getAnalytics();
-          // Add your Firebase Analytics code here
-          // For example: analytics.logEvent('page_view');
-        })
-        .catch((error) => {
-          console.error('Error importing Firebase Analytics:', error);
-        });
-    }
-  }, []);
+
   return (
     <RegistrationFormWrapper heading="Participant Registration">
       <form onSubmit={handleSubmit} className='bg-white p-4'>

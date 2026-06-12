@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useCallback, ReactNode } from "react";
+import React, { useEffect, useCallback, useRef, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 
@@ -44,6 +44,8 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
   maxWidth = "2xl",
   ariaLabel = "Dialog",
 }) => {
+  const panelRef = useRef<HTMLDivElement>(null);
+
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -55,8 +57,31 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
     if (!isOpen) return;
     document.addEventListener("keydown", handleEscape);
     document.body.style.overflow = "hidden";
+
+    const panel = panelRef.current;
+    const focusable = panel?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable?.[0];
+    const last = focusable?.[focusable.length - 1];
+    first?.focus();
+
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== "Tab" || !focusable?.length) return;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleTab);
+
     return () => {
       document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleTab);
       document.body.style.overflow = "";
     };
   }, [isOpen, handleEscape]);
@@ -83,6 +108,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
           />
 
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 20 }}

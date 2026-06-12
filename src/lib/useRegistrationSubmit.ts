@@ -9,7 +9,7 @@ import {
   getTrafficSource,
   trackEvent,
 } from "@/lib/analytics/events";
-import { attributionForFirestore } from "@/lib/analytics/attribution";
+import { attributionForSubmission } from "@/lib/analytics/attribution";
 import {
   PaymentStatus,
   RegistrationType,
@@ -139,7 +139,7 @@ export function useRegistrationSubmit() {
         ...mapUploadedFiles(uploaded),
         ...(payment ? { payment } : {}),
         trafficSource: getTrafficSource(),
-        ...attributionForFirestore(),
+        ...attributionForSubmission(),
       };
 
       if (data.accommodationRequired === "Yes") {
@@ -193,9 +193,13 @@ export function useRegistrationSubmit() {
 
       clearAllRegistrationDrafts();
       toast.success("Registration submitted successfully!");
-      router.push(
-        `/registration/success?id=${encodeURIComponent(result.registrationId)}`
-      );
+      const successParams = new URLSearchParams({
+        id: result.registrationId,
+      });
+      if (result.lookupToken) {
+        successParams.set("token", result.lookupToken);
+      }
+      router.push(`/registration/success?${successParams.toString()}`);
     } catch (error) {
       console.error(error);
       toast.error(

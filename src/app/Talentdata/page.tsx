@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { db } from '@/app/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { useAdminRegistrationData, rowToLegacyRecord } from "@/lib/legacy/useAdminRegistrationData";
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -25,24 +24,16 @@ interface TalentData {
 const TalentDataPage: React.FC = () => {
   const [dataList, setDataList] = useState<TalentData[]>([]);
 
+  const { rows, loading: dataLoading } = useAdminRegistrationData("Talent");
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const colRef = collection(db, 'talent');
-        const querySnapshot = await getDocs(colRef);
-        const fetchedData: TalentData[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as TalentData;
-          fetchedData.push({ ...data, serial: fetchedData.length + 1 });
-        });
-        setDataList(fetchedData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error('Error fetching data!');
-      }
-    };
-    fetchData();
-  }, []);
+    if (dataLoading) return;
+    const dataList = rows.map((row, index) => ({
+      ...(rowToLegacyRecord(row) as Record<string, unknown>),
+      serial: index + 1,
+    }));
+    setDataList(dataList as TalentData[]);
+  }, [rows, dataLoading]);
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(dataList);

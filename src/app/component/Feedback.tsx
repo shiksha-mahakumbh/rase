@@ -2,9 +2,7 @@
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
 
-import { addDoc, collection } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
-import { db } from "@/app/firebase"; // Adjust the import based on your Firebase setup
 
 const FeedbackForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -16,22 +14,41 @@ const FeedbackForm: React.FC = () => {
   const [suggestions, setSuggestions] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleAddDocument = async (downloadURL: string | null) => {
-    try {
-      const docRef = await addDoc(collection(db, "Feedback"), {
-        name,
-        email,
-        mobile,
-        affiliation,
-        event,
-        experience,
-        suggestions,
-        Attachments: downloadURL || "", 
-      });
-      console.log("Document added with ID:", docRef.id);
-      setLoading(false);
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
 
-      // Reset the form fields
+    if (!name || !email || !mobile || !affiliation || !event) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const message = [
+        `Event: ${event}`,
+        `Affiliation: ${affiliation}`,
+        `Mobile: ${mobile}`,
+        experience ? `Experience: ${experience}` : "",
+        suggestions ? `Suggestions: ${suggestions}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+      const res = await fetch("/api/v2/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: name,
+          email,
+          category: event,
+          message,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Feedback submission failed");
+      }
+
       setName('');
       setEmail('');
       setMobile('');
@@ -42,26 +59,11 @@ const FeedbackForm: React.FC = () => {
 
       toast.success("Thank you for your Feedback! Your Feedback means a lot to us.");
     } catch (error) {
-      setLoading(false);
       toast.error("Something broke while submitting the feedback");
-      console.error("Error adding document:", error);
+      console.error("Error submitting feedback:", error);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!name || !email || !mobile || !affiliation || !event) {
-      toast.error("Please fill in all required fields.");
-      return;
-    }
-
-    setLoading(true);
-
-    // Simulate downloadURL; replace with your actual logic
-    const downloadURL = null; // Replace with actual download URL if needed
-
-    await handleAddDocument(downloadURL);
   };
 
   return (

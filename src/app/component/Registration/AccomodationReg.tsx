@@ -1,9 +1,7 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { message, Spin } from "antd";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage, db } from "@/app/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
@@ -36,7 +34,7 @@ const Forms = () => {
 
   const [formData, setFormData] = useState<AccommodationData>(initialFormData);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [feeReceiptFile, setFeeReceiptFile] = useState<File | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<string>("");
   const [selectedAccommodation, setSelectedAccommodation] = useState<string>("");
 
@@ -51,7 +49,7 @@ const Forms = () => {
       formData.event &&
       formData.accommodationtype &&
       formData.accommodationdate &&
-      formData.FeeReceipt
+      feeReceiptFile
     );
   };
 
@@ -71,29 +69,14 @@ const Forms = () => {
     return `${originalName.split(".")[0]}-${uniqueSuffix}.${fileExtension}`;
   };
 
-  const handleFileChange = async (
-    e: ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, field: string) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLoading(true);
-      try {
-        const uniqueFileName = generateUniqueFileName(file.name);
-        const fileRef = ref(storage, `files/${uniqueFileName}`);
-        await uploadBytes(fileRef, file);
-        const downloadURL = await getDownloadURL(fileRef);
-        setFormData((prevData) => ({
-          ...prevData,
-          [field]: downloadURL,
-        }));
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        setError(error);
-        message.error("Error uploading file.");
-      } finally {
-        setLoading(false);
-      }
+      setFeeReceiptFile(file);
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: file.name,
+      }));
     }
   };
 
@@ -128,20 +111,30 @@ const Forms = () => {
     }
 
     try {
-      await addDoc(collection(db, "Accommodation2025"), {
-        ...formData,
+      await submitLegacyForm({
+        registrationType: "Accommodation",
+        data: {
+          ...formData,
+          fullName: formData.name,
+          email: formData.email,
+          contactNumber: formData.ContactNumber,
+          institution: formData.Designation,
+          accommodationRequired: "Yes",
+        },
+        file: feeReceiptFile,
+        uploadFolder: "accommodation",
+        fileField: "FeeReceipt",
       });
-      console.log("Document added successfully");
-      setLoading(false);
       setFormData(initialFormData);
+      setFeeReceiptFile(null);
       message.success(
         "Congratulations, you have successfully booked the accommodation!"
       );
     } catch (error) {
-      console.error("Error adding document", error);
-      setError(error);
-      setLoading(false);
+      console.error("Error submitting accommodation", error);
       message.error("Something went wrong while booking the accommodation!");
+    } finally {
+      setLoading(false);
     }
   };
 

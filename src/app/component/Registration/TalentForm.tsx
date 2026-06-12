@@ -1,8 +1,6 @@
 "use client";
 import { ChangeEvent, useState } from "react";
-import { db, storage } from "@/app/firebase";  // Make sure Firebase is set up
-import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import toast, { Toaster } from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
@@ -59,21 +57,19 @@ const TalentForm = () => {
     setLoading(true);
 
     try {
-      // If there's an image file, upload it to Firebase Storage
-      let imageUrlFirebase = "";
-
-      if (imageUrl) {
-        const imageRef = ref(storage, `talent_images/${imageUrl.name}`);
-        await uploadBytes(imageRef, imageUrl); // Upload the image file
-        imageUrlFirebase = await getDownloadURL(imageRef); // Get the URL of the uploaded file
-      }
-
-      // Prepare the form data to be submitted to Firestore
-      const newFormData = { ...formData, attachment: imageUrlFirebase };
-
-      // Add data to Firestore
-      await addDoc(collection(db, "talent"), newFormData);
-
+      await submitLegacyForm({
+        registrationType: "Talent",
+        data: {
+          ...formData,
+          fullName: formData.name,
+          email: formData.email,
+          contactNumber: formData.contactNumber,
+          institution: formData.institutionName,
+        },
+        file: imageUrl,
+        uploadFolder: "talent",
+        fileField: "attachment",
+      });
       toast.success("Form submitted successfully!");
       setFormData({
         name: "",

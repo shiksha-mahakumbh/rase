@@ -1,9 +1,6 @@
 "use client";
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/app/firebase";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/app/firebase";
+import { useState, ChangeEvent, FormEvent } from "react";
+import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import toast from "react-hot-toast";
 
 interface FullLengthPaperFormDataSM {
@@ -35,7 +32,7 @@ const Fulllengthpaper = () => {
 
   const [formData, setFormData] = useState<FullLengthPaperFormDataSM>(initialFormData);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [pendingFiles, setPendingFiles] = useState<Record<string, File>>({});
 
   const MAX_WORD_SIZE = 50 * 1024; // 50 KB
   const MAX_PDF_SIZE = 1 * 1024 * 1024; // 1 MB
@@ -50,7 +47,10 @@ const Fulllengthpaper = () => {
       formData.ContactNumber &&
       formData.AttachmentsWord &&
       formData.AttachmentsPdf &&
-      formData.AttachmentsPpt
+      formData.AttachmentsPpt &&
+      pendingFiles.AttachmentsWord &&
+      pendingFiles.AttachmentsPdf &&
+      pendingFiles.AttachmentsPpt
     );
   };
 
@@ -62,7 +62,7 @@ const Fulllengthpaper = () => {
     }));
   };
 
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>, field: string) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, field: string) => {
     const file = e.target.files?.[0];
     if (file) {
       if (
@@ -74,18 +74,11 @@ const Fulllengthpaper = () => {
         );
         return;
       }
-      try {
-        const fileRef = ref(storage, `files/${file.name}`);
-        await uploadBytes(fileRef, file);
-        const downloadURL = await getDownloadURL(fileRef);
-        setFormData((prevData) => ({
-          ...prevData,
-          [field]: downloadURL,
-        }));
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        setError(error);
-      }
+      setPendingFiles((prev) => ({ ...prev, [field]: file }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: file.name,
+      }));
     }
   };
 
@@ -100,21 +93,33 @@ const Fulllengthpaper = () => {
     }
 
     try {
-      // Add document to Firestore
-      const docRef = await addDoc(collection(db, "FullLengthSubmissionDataSM24"), {
-        ...formData,
+      await submitLegacyForm({
+        registrationType: "Paper Submission",
+        data: {
+          fullName: formData.CorrespondingAuthorName,
+          email: formData.CorrespondingAuthorEmail,
+          contactNumber: formData.ContactNumber,
+          institution: formData.CorrespondingAuthorName,
+          ...formData,
+        },
+        files: ["AttachmentsWord", "AttachmentsPdf", "AttachmentsPpt", "FeeReceipt"]
+          .filter((field) => pendingFiles[field])
+          .map((field) => ({
+            file: pendingFiles[field],
+            field,
+            folder: "papers",
+          })),
       });
-      console.log("Document added with ID:", docRef.id);
-      setLoading(false);
       setFormData(initialFormData);
+      setPendingFiles({});
       toast.success(
         "Congratulations you have successfully submitted the Full length paper!"
       );
     } catch (error) {
-      console.error("Error adding document:", error);
-      setError(error);
-      setLoading(false);
+      console.error("Error submitting paper:", error);
       toast.error("Something broke while submitting the Full Length Paper!");
+    } finally {
+      setLoading(false);
     }
   };
 

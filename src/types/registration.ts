@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export const EVENT_NAME = "Shiksha Mahakumbh 6.0";
 export const PAYMENT_URL = "https://rzp.io/rzp/MMLfl4L2";
 export const REGISTRATION_ID_PREFIX = "SMK2026";
@@ -114,8 +112,8 @@ export interface BaseRegistration extends CommonParticipantDetails, Accommodatio
   accommodationStatus: AccommodationStatus;
   payment?: PaymentDetails;
   emailDeliveryStatus?: "sent" | "failed" | "pending" | "skipped";
-  createdAt: Timestamp | Date;
-  updatedAt: Timestamp | Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 export interface DelegateRegistrationData extends BaseRegistration {
@@ -232,7 +230,7 @@ export interface AdminUser {
   email: string;
   displayName?: string;
   role: AdminRole;
-  createdAt: Timestamp | Date;
+  createdAt: Date | string;
 }
 
 export const REGISTRATION_TYPE_OPTIONS: RegistrationType[] = [

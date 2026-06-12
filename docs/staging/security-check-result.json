@@ -1,0 +1,51 @@
+{
+  "passed": 9,
+  "failed": 0,
+  "results": [
+    {
+      "test": "lookup_token_valid",
+      "status": "PASS",
+      "detail": "HMAC token verifies for correct ID"
+    },
+    {
+      "test": "lookup_token_wrong_id",
+      "status": "PASS",
+      "detail": "Wrong registration ID rejected"
+    },
+    {
+      "test": "lookup_token_tampered",
+      "status": "PASS",
+      "detail": "Tampered token rejected"
+    },
+    {
+      "test": "admin_session_valid",
+      "status": "PASS",
+      "detail": "Signed admin session verifies"
+    },
+    {
+      "test": "admin_session_legacy_rejected",
+      "status": "PASS",
+      "detail": "Legacy cookie value '1' rejected"
+    },
+    {
+      "test": "registration_get_requires_auth",
+      "status": "PASS",
+      "detail": "GET registration requires token or email"
+    },
+    {
+      "test": "middleware_rejects_legacy_cookie",
+      "status": "PASS",
+      "detail": "Middleware rejects legacy =1 cookie"
+    },
+    {
+      "test": "registration_backend_supabase",
+      "status": "PASS",
+      "detail": "Registration backend defaults to supabase"
+    },
+    {
+      "test": "src_no_firebase_runtime",
+      "status": "PASS",
+      "detail": "No Firebase runtime imports under src/"
+    }
+  ]
+}

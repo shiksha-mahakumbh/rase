@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
 import toast from "react-hot-toast";
-import { db } from "@/lib/firebase/client";
 
 export default function ContactUsForm() {
   const [name, setName] = useState("");
@@ -16,14 +14,20 @@ export default function ContactUsForm() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await addDoc(collection(db, "contactMessages"), {
-        name,
-        email,
-        subject,
-        message,
-        timestamp: new Date(),
-        source: "contact-page",
+      const res = await fetch("/api/v2/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: name,
+          email,
+          subject,
+          message,
+        }),
       });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(typeof err.error === "string" ? err.error : "Send failed");
+      }
       setName("");
       setEmail("");
       setSubject("");

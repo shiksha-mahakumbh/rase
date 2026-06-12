@@ -1,7 +1,11 @@
+"use client";
+
 import { SectionHeader } from "@/components/ui";
 import { event } from "@/design/tokens";
+import { useCms } from "@/lib/cms/context";
+import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 
-const travel = [
+const DEFAULT_TRAVEL = [
   { title: "Venue", items: [event.venue, event.location] },
   {
     title: "Nearest Airport",
@@ -18,13 +22,27 @@ const travel = [
 ];
 
 export default function VenueTravelSection() {
+  const cms = useCms();
+  const cta = getSection(cms?.homepage, "cta");
+  const travelBlocks = sectionItems<{ title: string; items: string[] }>(cta, "travel");
+  const travel = travelBlocks.length ? travelBlocks : DEFAULT_TRAVEL;
+  const mapUrl = sectionField(
+    cta,
+    "mapEmbedUrl",
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3402.0!2d76.5264!3d31.7089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDQyJzMyLjAiTiA3NsKwMzEnMzUuMCJF!5e0!3m2!1sen!2sin!4v1"
+  );
+
   return (
-    <section className="bg-white py-12 md:py-16 lg:py-20">
+    <section className="bg-white py-12 md:py-16 lg:py-20" aria-label="Venue and travel information">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Plan Your Visit"
-          title="Venue & Travel"
-          description={`${event.name} · 9–11 October 2026 at ${event.venue}.`}
+          title={sectionField(cta, "venueTitle", "Venue & Travel")}
+          description={sectionField(
+            cta,
+            "venueDescription",
+            `${event.name} · 9–11 October 2026 at ${event.venue}.`
+          )}
         />
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="grid gap-4 sm:grid-cols-2">
@@ -48,9 +66,10 @@ export default function VenueTravelSection() {
           </div>
           <iframe
             title="NIT Hamirpur location map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26913.5!2d76.5274!3d31.7089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zTklUIEhhbWlycHVy!5e0!3m2!1sen!2sin!4v1"
-            className="min-h-[280px] w-full rounded-2xl border border-slate-200"
+            src={mapUrl}
             loading="lazy"
+            className="min-h-[280px] w-full rounded-2xl border border-slate-200"
+            allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>

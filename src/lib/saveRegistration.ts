@@ -1,51 +1,14 @@
 import {
-  doc,
-  runTransaction,
-  collection,
-  addDoc,
-  serverTimestamp,
-  Timestamp,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import {
   REGISTRATION_ID_PREFIX,
-  TYPE_COLLECTION_MAP,
   RegistrationType,
   PaymentStatus,
   RegistrationStatus,
   AccommodationStatus,
 } from "@/types/registration";
-import {
-  isPaidRegistrationType,
-  resolvePaymentStatus,
-} from "@/lib/registration/config";
-
-const MASTER_COLLECTION = "registrations";
-const COUNTER_COLLECTION = "registrationCounters";
-const COUNTER_DOC = "smk2026";
-
-export async function generateRegistrationId(): Promise<string> {
-  const counterRef = doc(db, COUNTER_COLLECTION, COUNTER_DOC);
-
-  const nextNumber = await runTransaction(db, async (transaction) => {
-    const counterSnap = await transaction.get(counterRef);
-    const current = counterSnap.exists()
-      ? (counterSnap.data().lastNumber as number)
-      : 0;
-    const updated = current + 1;
-    transaction.set(
-      counterRef,
-      { lastNumber: updated, updatedAt: serverTimestamp() },
-      { merge: true }
-    );
-    return updated;
-  });
-
-  return `${REGISTRATION_ID_PREFIX}-${String(nextNumber).padStart(6, "0")}`;
-}
+import { formatRegistrationDate } from "@/lib/format-date";
 
 export interface SaveRegistrationInput {
-  registrationType: RegistrationType;
+  registrationType: RegistrationType | string;
   data: Record<string, unknown>;
   paymentStatus?: PaymentStatus;
   registrationStatus?: RegistrationStatus;
@@ -58,93 +21,34 @@ export interface SaveRegistrationResult {
   typeDocId: string;
 }
 
-/** @deprecated Client writes are disabled — use POST /api/registration/submit */
+/** Submit registration via server API (Supabase/Prisma). */
 export async function saveRegistration(
   input: SaveRegistrationInput
 ): Promise<SaveRegistrationResult> {
-  const registrationId = await generateRegistrationId();
-  const now = serverTimestamp();
+  const res = await fetch("/api/registration/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
 
-  const payload = {
-    ...input.data,
-    registrationId,
-    registrationType: input.registrationType,
-    paymentStatus:
-      input.paymentStatus ??
-      resolvePaymentStatus(input.registrationType, {
-        registrationFee: input.data.registrationFee as number | undefined,
-      }),
-    registrationStatus:
-      input.registrationStatus ??
-      (isPaidRegistrationType(input.registrationType) ? "Pending" : "Submitted"),
-    accommodationStatus:
-      input.accommodationStatus ??
-      (input.data.accommodationRequired === "Yes"
-        ? "Requested"
-        : "Not Required"),
-    createdAt: now,
-    updatedAt: now,
-  };
-
-  const typeCollection = TYPE_COLLECTION_MAP[input.registrationType];
-
-  const [masterRef, typeRef] = await Promise.all([
-    addDoc(collection(db, MASTER_COLLECTION), payload),
-    addDoc(collection(db, typeCollection), payload),
-  ]);
-
-  if (input.data.accommodationRequired === "Yes") {
-    await addDoc(collection(db, "accommodationRequests"), {
-      ...payload,
-      masterDocId: masterRef.id,
-      registrationDocId: typeRef.id,
-    });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(
+      typeof err.error === "string" ? err.error : "Registration submission failed"
+    );
   }
 
-  if (input.data.payment && typeof input.data.payment === "object") {
-    await addDoc(collection(db, "paymentRecords"), {
-      registrationId,
-      registrationType: input.registrationType,
-      masterDocId: masterRef.id,
-      payment: input.data.payment,
-      paymentStatus: payload.paymentStatus,
-      createdAt: now,
-      updatedAt: now,
-    });
-  }
-
-  try {
-    await addDoc(collection(db, "audit_logs"), {
-      action: "registration_created",
-      registrationId,
-      registrationType: input.registrationType,
-      masterDocId: masterRef.id,
-      createdAt: serverTimestamp(),
-    });
-  } catch {
-    // Non-blocking audit trail
-  }
-
+  const body = await res.json();
   return {
-    registrationId,
-    masterDocId: masterRef.id,
-    typeDocId: typeRef.id,
+    registrationId: body.registrationId,
+    masterDocId: body.id ?? body.masterDocId ?? body.registrationId,
+    typeDocId: body.typeDocId ?? body.id ?? body.registrationId,
   };
 }
 
-export function formatFirestoreDate(value: unknown): string {
-  if (!value) return "—";
-  if (value instanceof Timestamp) {
-    return value.toDate().toLocaleString("en-IN");
-  }
-  if (value instanceof Date) {
-    return value.toLocaleString("en-IN");
-  }
-  if (typeof value === "string") {
-    const parsed = Date.parse(value);
-    if (!Number.isNaN(parsed)) {
-      return new Date(parsed).toLocaleString("en-IN");
-    }
-  }
-  return String(value);
+/** @deprecated IDs are allocated server-side on submit. */
+export async function generateRegistrationId(): Promise<string> {
+  return `${REGISTRATION_ID_PREFIX}-000000`;
 }
+
+export const formatFirestoreDate = formatRegistrationDate;

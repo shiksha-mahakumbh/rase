@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
 import toast from "react-hot-toast";
-import { db } from "@/lib/firebase/client";
 
 interface FooterContactFormProps {
   variant?: "light" | "dark";
@@ -26,12 +24,18 @@ export default function FooterContactForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, "contactMessages"), {
-        email,
-        message,
-        timestamp: new Date(),
-        source: "footer",
+      const res = await fetch("/api/v2/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          message,
+          subject: "Footer contact",
+        }),
       });
+      if (!res.ok) {
+        throw new Error("Send failed");
+      }
       setEmail("");
       setMessage("");
       toast.success("Message sent successfully!");

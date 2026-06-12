@@ -6,6 +6,7 @@ import Footer from "@/app/component/Footer";
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import PageCtaSection from "./PageCtaSection";
 import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
+import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 
 export interface PublicPageHero {
   eyebrow?: string;
@@ -20,6 +21,7 @@ export interface PublicPageShellProps {
   showCta?: boolean;
   relatedPath?: string;
   relatedTitle?: string;
+  breadcrumbs?: { name: string; path: string }[];
   children: ReactNode;
   mainClassName?: string;
   containerClassName?: string;
@@ -32,6 +34,7 @@ export default function PublicPageShell({
   showCta = true,
   relatedPath,
   relatedTitle = "Related programmes & resources",
+  breadcrumbs,
   children,
   mainClassName = "",
   containerClassName = "mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-20",
@@ -39,6 +42,9 @@ export default function PublicPageShell({
 }: PublicPageShellProps) {
   return (
     <div className="min-h-screen bg-brand-surface">
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <BreadcrumbJsonLd items={breadcrumbs} />
+      )}
       <NavBar />
       {showHero && hero && (
         <ShowcaseHero

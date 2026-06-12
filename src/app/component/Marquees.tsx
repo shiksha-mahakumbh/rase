@@ -1,21 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import Link from "next/link";
 import Image from "next/image";
 import { REGISTRATION_PATH } from "./UpcomingEvent";
+import { useCms } from "@/lib/cms/context";
+import type { CmsAnnouncementBar } from "@/lib/cms/types";
 
-const tickerItems = [
+const FALLBACK_TICKER = [
   {
     text: "Shiksha Mahakumbh 6.0 — 9–11 Oct 2026 at NIT Hamirpur. Registration open.",
     link: REGISTRATION_PATH,
     external: false,
-  },
-  {
-    text: "Shiksha Mahakumbh 5.0 concluded at NIPER Mohali (31 Oct – 2 Nov 2025). View photos.",
-    link: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA",
-    external: true,
   },
   {
     text: "Programmes @ Shiksha Mahakumbh 6.0 — explore the academic council schedule.",
@@ -24,7 +21,48 @@ const tickerItems = [
   },
 ];
 
+function barsToTicker(bars: CmsAnnouncementBar[]) {
+  return bars.map((b) => ({
+    text: b.message,
+    link: b.ctaUrl ?? REGISTRATION_PATH,
+    external: b.ctaUrl?.startsWith("http") ?? false,
+  }));
+}
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const handler = () => setReduced(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  return reduced;
+}
+
 const Marquees: React.FC = () => {
+  const cms = useCms();
+  const reducedMotion = usePrefersReducedMotion();
+  const [bars, setBars] = useState<CmsAnnouncementBar[]>(cms?.announcementBars ?? []);
+
+  useEffect(() => {
+    if (cms?.announcementBars?.length) {
+      setBars(cms.announcementBars);
+      return;
+    }
+    fetch("/api/v2/announcement-bars")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.items?.length) setBars(d.items);
+      })
+      .catch(() => undefined);
+  }, [cms?.announcementBars]);
+
+  const tickerItems = bars.length ? barsToTicker(bars) : FALLBACK_TICKER;
+
   return (
     <section
       className="border-y border-primary/10 bg-gradient-to-r from-[#faf8f6] via-white to-amber-50/40"
@@ -43,7 +81,7 @@ const Marquees: React.FC = () => {
           </div>
           <Link
             href={REGISTRATION_PATH}
-            className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-primary/90"
+            className="min-h-[44px] rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             Register Now
           </Link>
@@ -53,10 +91,11 @@ const Marquees: React.FC = () => {
           <Marquee
             pauseOnHover
             pauseOnClick
+            play={!reducedMotion}
             gradient
             gradientColor="#ffffff"
             gradientWidth={40}
-            speed={40}
+            speed={reducedMotion ? 0 : 40}
           >
             <div className="flex gap-3 px-3 py-2">
               {tickerItems.map((item, index) => {

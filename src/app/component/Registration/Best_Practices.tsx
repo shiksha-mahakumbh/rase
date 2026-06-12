@@ -1,9 +1,6 @@
 'use client';
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/app/firebase';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/app/firebase';
+import { submitLegacyForm } from '@/lib/legacyFormSubmit';
 import toast, { Toaster } from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
@@ -50,44 +47,40 @@ const BestPracticesForm = () => {
     }
   };
 
-  const handleAddDocument = async (downloadURL: string | null) => {
-    try {
-      const docRef = await addDoc(collection(db, 'BestPractices'), {
-        ...formData,
-        attachmentURL: downloadURL,
-      });
-      console.log('Document added with ID:', docRef.id);
-      setLoading(false);
-      setFormData(initialFormData);
-      setAttachment(null);
-      toast.success("Best Practice Submitted Successfully!");
-
-      if (formData.accommodation === 'yes') {
-        setShowAccommodationButton(true); // Show the button if 'Yes' is selected
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.error("Error while submitting the form!");
-      console.error('Error adding document:', error);
-    }
-  };
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
-    if (attachment) {
-      try {
-        const fileRef = ref(storage, `attachments/${attachment.name}`);
-        await uploadBytes(fileRef, attachment);
-        const downloadURL = await getDownloadURL(fileRef);
-        handleAddDocument(downloadURL);
-      } catch (error) {
-        console.error('Error uploading attachment:', error);
-        setLoading(false);
+    try {
+      await submitLegacyForm({
+        registrationType: 'Best Practices',
+        data: {
+          ...formData,
+          fullName: formData.keyPerson,
+          email: formData.email,
+          contactNumber: formData.contactNumber,
+          institution: formData.institutionName,
+          organizationName: formData.institutionName,
+          title: formData.aboutPractices.slice(0, 80),
+          briefDescription: formData.aboutPractices,
+          address: formData.address,
+          accommodationRequired: formData.accommodation === 'yes' ? 'Yes' : 'No',
+        },
+        file: attachment,
+        uploadFolder: 'best-practices',
+        fileField: 'attachmentURL',
+      });
+      setFormData(initialFormData);
+      setAttachment(null);
+      toast.success("Best Practice Submitted Successfully!");
+      if (formData.accommodation === 'yes') {
+        setShowAccommodationButton(true);
       }
-    } else {
-      handleAddDocument(null);
+    } catch (error) {
+      toast.error("Error while submitting the form!");
+      console.error('Error submitting registration:', error);
+    } finally {
+      setLoading(false);
     }
   };
 

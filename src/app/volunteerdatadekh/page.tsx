@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useAdminRegistrationData, rowToLegacyRecord } from "@/lib/legacy/useAdminRegistrationData";
 import axios from "axios";
-import { db } from "@/app/firebase";
-import { collection, getDocs } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -25,33 +24,17 @@ const Page: React.FC = () => {
   const [formDataList, setFormDataList] = useState<NgoData[]>([]);
   const [emailsSent, setEmailsSent] = useState<boolean[]>([]);
 
+  const { rows, loading: dataLoading } = useAdminRegistrationData("Volunteer");
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const colRef = collection(db, "RegestrationVolsm24");
-        const querySnapshot = await getDocs(colRef);
-
-        const dataList: NgoData[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as NgoData;
-          dataList.push(data);
-        });
-
-        const dataListWithSerial = dataList.map((data, index) => ({
-          ...data,
-          serial: index + 1,
-        }));
-
-        setFormDataList(dataListWithSerial);
-        setEmailsSent(Array(dataListWithSerial.length).fill(false));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (dataLoading) return;
+    const dataList = rows.map((row, index) => ({
+      ...(rowToLegacyRecord(row) as Record<string, unknown>),
+      serial: index + 1,
+    }));
+    setFormDataList(dataList as typeof formDataList);
+    setEmailsSent(Array(dataList.length).fill(false));
+  }, [rows, dataLoading]);
 
   const sendEmail = async (email: string, formData: NgoData) => {
     try {

@@ -1,43 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminStorage } from "@/lib/firebase-admin";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
-import {
-  REGISTRATION_TYPE_OPTIONS,
-  type RegistrationType,
-  type UploadedFileMeta,
-} from "@/types/registration";
+import type { UploadedFileMeta } from "@/types/registration";
+import { isSupportedType } from "@/server/lib/registration-types";
+import { uploadFile, type UploadBucket } from "@/server/services/storage.service";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const TYPE_BUCKET_MAP: Record<string, UploadBucket> = {
+  Volunteer: "resumes",
+  Talent: "resumes",
+  NGO: "registrations",
+  "Paper Submission": "papers",
+  "Abstract Submission": "papers",
+  "Best Practices": "registrations",
+  Projects: "registrations",
+  "School Program": "registrations",
+};
 
-const ALLOWED_MIME_TYPES = new Set([
-  "application/pdf",
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  "application/vnd.ms-excel",
-]);
-
-const ALLOWED_EXTENSIONS = new Set([
-  ".pdf",
-  ".jpg",
-  ".jpeg",
-  ".png",
-  ".webp",
-  ".xlsx",
-  ".xls",
-]);
-
-function isRegistrationType(value: unknown): value is RegistrationType {
-  return (
-    typeof value === "string" &&
-    (REGISTRATION_TYPE_OPTIONS as readonly string[]).includes(value)
-  );
-}
-
-function getExtension(filename: string): string {
-  const dot = filename.lastIndexOf(".");
-  return dot >= 0 ? filename.slice(dot).toLowerCase() : "";
+function resolveBucket(registrationType: string): UploadBucket {
+  return TYPE_BUCKET_MAP[registrationType] ?? "registrations";
 }
 
 export async function POST(request: NextRequest) {
@@ -60,69 +39,42 @@ export async function POST(request: NextRequest) {
     const file = formData.get("file");
     const registrationType = formData.get("registrationType");
     const field = formData.get("field");
+    const registrationId = formData.get("registrationId")?.toString();
 
     if (!(file instanceof File)) {
       return NextResponse.json({ error: "File is required" }, { status: 400 });
     }
 
-    if (!isRegistrationType(registrationType)) {
-      return NextResponse.json(
-        { error: "Invalid registration type" },
-        { status: 400 }
-      );
+    if (typeof registrationType !== "string" || !isSupportedType(registrationType)) {
+      return NextResponse.json({ error: "Invalid registration type" }, { status: 400 });
     }
 
     if (typeof field !== "string" || !field.trim()) {
       return NextResponse.json({ error: "Field name is required" }, { status: 400 });
     }
 
-    if (file.size <= 0 || file.size > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        { error: "File must be between 1 byte and 10 MB" },
-        { status: 400 }
-      );
-    }
-
-    const extension = getExtension(file.name);
-    if (!ALLOWED_EXTENSIONS.has(extension)) {
-      return NextResponse.json({ error: "Unsupported file type" }, { status: 400 });
-    }
-
-    if (file.type && !ALLOWED_MIME_TYPES.has(file.type)) {
-      return NextResponse.json({ error: "Unsupported MIME type" }, { status: 400 });
-    }
-
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const storagePath = `registrations/${registrationType}/${field}/${Date.now()}_${safeName}`;
     const buffer = Buffer.from(await file.arrayBuffer());
+    const bucket = resolveBucket(registrationType);
 
-    const bucket = getAdminStorage().bucket();
-    const storageFile = bucket.file(storagePath);
-
-    await storageFile.save(buffer, {
-      metadata: {
-        contentType: file.type || "application/octet-stream",
-        metadata: {
-          registrationType,
-          field,
-        },
-      },
+    const result = await uploadFile({
+      bucket,
+      file: buffer,
+      fileName: file.name,
+      contentType: file.type || "application/octet-stream",
+      fieldName: field,
+      registrationId,
+      ipAddress: ip,
     });
 
-    const [signedUrl] = await storageFile.getSignedUrl({
-      action: "read",
-      expires: Date.now() + 10 * 365 * 24 * 60 * 60 * 1000,
-    });
-
-    const result: UploadedFileMeta = {
+    const uploaded: UploadedFileMeta = {
       name: file.name,
-      url: signedUrl,
-      path: storagePath,
+      url: result.signedUrl,
+      path: result.storagePath,
       contentType: file.type || undefined,
       size: file.size,
     };
 
-    return NextResponse.json({ success: true, file: result });
+    return NextResponse.json({ success: true, file: uploaded });
   } catch (error) {
     console.error("registration upload error:", error);
     return NextResponse.json(

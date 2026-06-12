@@ -6,14 +6,10 @@ import { motion } from "framer-motion";
 import SectionShell from "./home/SectionShell";
 import GlassCard from "./home/GlassCard";
 import { normalizeStaticImageSrc } from "./home/normalizeImageSrc";
+import { useCms } from "@/lib/cms/context";
+import { getHomepagePartners } from "@/lib/cms/partners";
 
-const Conference_Support: React.FC = () => {
-  interface Item {
-    imageUrl: string;
-    link: string;
-  }
-
-  const partners: Item[] = [
+const DEFAULT_PARTNERS = [
     { imageUrl: "/2024M/our partners/1.png", link: "" },
     { imageUrl: "/2024M/our partners/3.png", link: "" },
     { imageUrl: "/2024M/our partners/4.png", link: "" },
@@ -36,7 +32,19 @@ const Conference_Support: React.FC = () => {
     { imageUrl: "/2024M/our partners/21.png", link: "" },
     { imageUrl: "/2024M/our partners/22.png", link: "" },
     { imageUrl: "/2024M/our partners/23.png", link: "" },
-  ];
+];
+
+const Conference_Support: React.FC = () => {
+  const cms = useCms();
+  const cmsPartners = getHomepagePartners(cms?.homepage, "academic");
+  const partners =
+    cmsPartners.length > 0
+      ? cmsPartners.map((p) => ({
+          imageUrl: p.logoUrl ?? p.imageUrl ?? "",
+          link: p.website ?? p.link ?? "",
+          name: p.name,
+        }))
+      : DEFAULT_PARTNERS.map((p) => ({ ...p, name: `Academic Partner` }));
 
   return (
     <SectionShell
@@ -65,17 +73,19 @@ const Conference_Support: React.FC = () => {
           >
             {partners.map((partner, index) => (
               <motion.a
-                key={index}
+                key={`${partner.imageUrl}-${index}`}
                 href={partner.link || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={partner.name ?? `Academic partner ${index + 1}`}
                 whileHover={{ scale: 1.08 }}
                 className="group relative mx-4 flex items-center justify-center md:mx-6"
               >
                 <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-md transition-shadow group-hover:shadow-2xl">
                   <Image
                     src={normalizeStaticImageSrc(partner.imageUrl)}
-                    alt={`Academic Partner ${index + 1}`}
+                    alt={partner.name ?? `Academic partner ${index + 1}`}
+                    loading="lazy"
                     height={120}
                     width={120}
                     className="h-24 w-24 object-contain md:h-28 md:w-28"

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/config/site";
+import { hreflangForPath } from "@/lib/seo/hreflang";
 
 export function createPageMetadata(options: {
   title: string;
@@ -7,14 +8,22 @@ export function createPageMetadata(options: {
   path?: string;
   keywords?: string[];
   noIndex?: boolean;
+  ogImageUrl?: string;
+  locale?: "en_IN" | "hi_IN";
 }): Metadata {
-  const url = options.path ? `${SITE_URL}${options.path}` : SITE_URL;
+  const path = options.path ?? "/";
+  const url = `${SITE_URL}${path}`;
+  const image = options.ogImageUrl ?? DEFAULT_OG_IMAGE;
+  const hreflang = hreflangForPath(path);
 
   return {
     title: `${options.title} | ${SITE_NAME}`,
     description: options.description,
     keywords: options.keywords,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      ...(hreflang ? { languages: hreflang } : {}),
+    },
     robots: options.noIndex
       ? { index: false, follow: false }
       : { index: true, follow: true },
@@ -23,14 +32,15 @@ export function createPageMetadata(options: {
       description: options.description,
       url,
       siteName: SITE_NAME,
+      locale: options.locale ?? "en_IN",
       type: "website",
-      images: [{ url: DEFAULT_OG_IMAGE, width: 512, height: 512, alt: SITE_NAME }],
+      images: [{ url: image, width: 1200, height: 630, alt: options.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: options.title,
       description: options.description,
-      images: [DEFAULT_OG_IMAGE],
+      images: [image],
     },
   };
 }

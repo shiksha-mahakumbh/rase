@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { db } from "@/app/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { useAdminRegistrationData, rowToLegacyRecord } from "@/lib/legacy/useAdminRegistrationData";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -22,32 +21,16 @@ interface NgoData {
 const Page: React.FC = () => {
   const [formDataList, setFormDataList] = useState<NgoData[]>([]);
 
+  const { rows, loading: dataLoading } = useAdminRegistrationData("Projects");
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const colRef = collection(db, "heiprojectformdata");
-        const querySnapshot = await getDocs(colRef);
-
-        const dataList: NgoData[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as NgoData;
-          dataList.push(data);
-        });
-
-        const dataListWithSerial = dataList.map((data, index) => ({
-          ...data,
-          serial: index + 1,
-        }));
-
-        setFormDataList(dataListWithSerial);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (dataLoading) return;
+    const dataList = rows.map((row, index) => ({
+      ...(rowToLegacyRecord(row) as Record<string, unknown>),
+      serial: index + 1,
+    }));
+    setFormDataList(dataList as NgoData[]);
+  }, [rows, dataLoading]);
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(

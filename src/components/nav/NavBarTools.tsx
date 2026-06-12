@@ -27,10 +27,10 @@ const NavIntlProvider = dynamic(
   { ssr: false }
 );
 
-export default function NavBarTools() {
+export default function NavBarTools({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="hidden items-center gap-2 lg:flex">
-      <GlobalSearch />
+    <div className={`flex items-center gap-2 ${compact ? "" : "hidden lg:flex"}`}>
+      {!compact && <GlobalSearch />}
       <NavIntlProvider>
         <LanguageSwitcher />
       </NavIntlProvider>

@@ -1,9 +1,6 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/app/firebase";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/app/firebase";
+import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import toast, { Toaster } from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
@@ -52,46 +49,34 @@ const NGOReg = () => {
     }
   };
 
-  const handleAddDocument = async (downloadURL: string | null) => {
-    try {
-      const docRef = await addDoc(collection(db, "RegestrationNGOsm24"), {
-        ...formData,
-        feeReceipt: downloadURL,
-      });
-      console.log("Document added with ID:", docRef.id);
-      setLoading(false);
-      setFormData(initialFormData);
-      setShowBookingButton(formData.accommodation === "yes"); // Show booking button if user selected "yes"
-      toast.success("Successfully Registered!");
-    } catch (error) {
-      setLoading(false);
-      toast.error("Something broke while registration!");
-      console.error("Error adding document:", error);
-    }
-  };
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
-    if (image) {
-      try {
-        const imageRef = ref(storage, `images/${image.name}`);
-        await uploadBytes(imageRef, image);
-
-        const downloadURL = await getDownloadURL(imageRef);
-        setFormData((prevData) => ({
-          ...prevData,
-          feeReceipt: downloadURL || "",
-        }));
-
-        handleAddDocument(downloadURL);
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        setLoading(false);
-      }
-    } else {
-      handleAddDocument(null);
+    try {
+      await submitLegacyForm({
+        registrationType: "NGO",
+        data: {
+          ...formData,
+          fullName: formData.name,
+          email: formData.email,
+          contactNumber: formData.PhoneNumber,
+          institution: formData.name,
+          accommodationRequired: formData.accommodation === "yes" ? "Yes" : "No",
+        },
+        file: image,
+        uploadFolder: "ngo",
+        fileField: "feeReceipt",
+      });
+      setFormData(initialFormData);
+      setImage(null);
+      setShowBookingButton(formData.accommodation === "yes");
+      toast.success("Successfully Registered!");
+    } catch (error) {
+      toast.error("Something broke while registration!");
+      console.error("Error submitting registration:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

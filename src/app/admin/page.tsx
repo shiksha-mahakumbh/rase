@@ -1,19 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { doc, writeBatch, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import {
   fetchRegistrationsPage,
   fetchAllRegistrations,
   REGISTRATIONS_PAGE_SIZE,
-} from "@/lib/services/firestore/registrations";
-import {
-  AdminProvider,
-  useAdmin,
-  canExport,
-  canManageStatus,
-} from "@/lib/adminAuth";
+} from "@/lib/admin/registrations-client";
+import { useAdmin, canExport, canManageStatus } from "@/lib/adminAuth";
 import RegistrationTable from "@/components/admin/RegistrationTable";
 import AdminReportsPanel from "@/components/admin/AdminReportsPanel";
 import dynamic from "next/dynamic";
@@ -41,22 +35,24 @@ function DashboardContent() {
   const [registrations, setRegistrations] = useState<RegistrationRow[]>([]);
   const [fetching, setFetching] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [cursor, setCursor] = useState<QueryDocumentSnapshot<DocumentData> | null>(
-    null
-  );
+  const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
 
-  const loadRegistrations = async (append = false) => {
+  const loadRegistrations = async (pageIndex = 0, append = false) => {
     if (append) setLoadingMore(true);
     else setFetching(true);
     try {
-      const page = await fetchRegistrationsPage(append ? cursor : null);
+      const offset = pageIndex * REGISTRATIONS_PAGE_SIZE;
+      const result = await fetchRegistrationsPage(offset);
       setRegistrations((prev) =>
-        append ? [...prev, ...page.rows] : page.rows
+        append ? [...prev, ...result.rows] : result.rows
       );
-      setCursor(page.lastDoc);
-      setHasMore(page.hasMore);
+      setPage(pageIndex);
+      setHasMore(result.hasMore);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load registrations");
@@ -77,7 +73,7 @@ function DashboardContent() {
   };
 
   useEffect(() => {
-    if (isAdmin) loadRegistrations();
+    if (isAdmin) loadRegistrations(0, false);
   }, [isAdmin]);
 
   const stats = useMemo(() => {
@@ -134,16 +130,41 @@ function DashboardContent() {
   ) => {
     if (!canManageStatus(role) || !selected.size) return;
 
-    const batch = writeBatch(db);
-    selectedRows.forEach((row) => {
-      batch.update(doc(db, "registrations", row.id), {
-        [field]: value,
-        updatedAt: new Date(),
+    try {
+      const res = await fetch("/api/admin/gateway/registrations/bulk-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          ids: selectedRows.map((r) => r.id),
+          field,
+          value,
+        }),
       });
-    });
-    await batch.commit();
-    toast.success(`Updated ${selected.size} registrations`);
-    loadRegistrations();
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(typeof err.error === "string" ? err.error : "Bulk update failed");
+      }
+      toast.success(`Updated ${selected.size} registrations`);
+      loadRegistrations(0, false);
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update registrations"
+      );
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    try {
+      await login(email, password);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Login failed");
+    } finally {
+      setLoginLoading(false);
+    }
   };
 
   if (loading) {
@@ -157,25 +178,53 @@ function DashboardContent() {
   if (!user || !isAdmin) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-amber-50/30 px-4">
-        <div className="w-full max-w-md rounded-3xl border bg-white p-8 shadow-xl text-center">
-          <h1 className="text-2xl font-bold text-primary">
+        <div className="w-full max-w-md rounded-3xl border bg-white p-8 shadow-xl">
+          <h1 className="text-center text-2xl font-bold text-primary">
             Shiksha Mahakumbh 6.0 Admin
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Sign in with an authorized Google account to access the dashboard.
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Sign in with your admin email and password.
           </p>
           {user && !isAdmin && (
-            <p className="mt-4 text-sm text-red-600">
+            <p className="mt-4 text-center text-sm text-red-600">
               Your account ({user.email}) is not registered as an admin.
             </p>
           )}
-          <button
-            type="button"
-            onClick={login}
-            className="mt-6 w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white hover:bg-primary/90"
-          >
-            Sign in with Google
-          </button>
+          <form onSubmit={handleLogin} className="mt-6 space-y-4">
+            <div>
+              <label htmlFor="admin-email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 w-full rounded-xl border px-4 py-3"
+              />
+            </div>
+            <div>
+              <label htmlFor="admin-password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="admin-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="mt-1 w-full rounded-xl border px-4 py-3"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loginLoading}
+              className="w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white hover:bg-primary/90 disabled:opacity-60"
+            >
+              {loginLoading ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
         </div>
       </div>
     );
@@ -194,10 +243,16 @@ function DashboardContent() {
               {user.email} · {role}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/admin/cms"
+              className="rounded-lg border border-brand-navy/20 bg-brand-navy/5 px-4 py-2 text-sm font-semibold text-brand-navy hover:bg-brand-navy/10"
+            >
+              CMS Admin
+            </Link>
             <button
               type="button"
-              onClick={() => loadRegistrations(false)}
+              onClick={() => loadRegistrations(0, false)}
               disabled={fetching}
               className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
             >
@@ -231,7 +286,6 @@ function DashboardContent() {
 
         <AnalyticsCharts registrations={registrations} />
 
-        {/* Bulk actions */}
         {canExport(role) && (
           <div className="flex flex-wrap gap-2 rounded-xl border bg-white p-4">
             <button
@@ -302,7 +356,7 @@ function DashboardContent() {
         {hasMore && (
           <button
             type="button"
-            onClick={() => loadRegistrations(true)}
+            onClick={() => loadRegistrations(page + 1, true)}
             disabled={loadingMore}
             className="rounded-lg border border-primary bg-white px-6 py-2 text-sm font-semibold text-primary hover:bg-primary/5"
           >
@@ -341,9 +395,5 @@ function ChartsSkeleton() {
 }
 
 export default function AdminPage() {
-  return (
-    <AdminProvider>
-      <DashboardContent />
-    </AdminProvider>
-  );
+  return <DashboardContent />;
 }

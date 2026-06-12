@@ -17,6 +17,7 @@ import MovementTimelineSection from "./MovementTimelineSection";
 import WhoShouldAttendSection from "./WhoShouldAttendSection";
 import EventTracksSection from "./EventTracksSection";
 import SpeakerHighlightsSection from "./SpeakerHighlightsSection";
+import type { CmsPartnerCard, CmsSpeakerCard } from "@/lib/cms/types";
 import VenueTravelSection from "./VenueTravelSection";
 import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
@@ -37,9 +38,16 @@ const CustomCard = dynamic(() =>
 const ConferenceSupport = dynamic(() => import("@/app/component/Conference_Support"));
 const MediaPartners = dynamic(() => import("@/app/component/Media_Partners"));
 const Organiger = dynamic(() => import("@/app/component/organiger"));
+const HomeEditionCta = dynamic(() => import("./HomeEditionCta"));
 import HomePageChrome from "./HomePageChrome";
 
-export default function HomePage() {
+export default function HomePage({
+  featuredSpeakers = [],
+  cmsPartners = [],
+}: {
+  featuredSpeakers?: CmsSpeakerCard[];
+  cmsPartners?: CmsPartnerCard[];
+}) {
   return (
     <div className="min-h-screen bg-brand-surface">
       <NavBar />
@@ -85,20 +93,7 @@ export default function HomePage() {
                   <NoticeBoard />
                 </div>
                 <div className="lg:col-span-4">
-                  <GlassCard className="flex h-full flex-col justify-center p-6">
-                    <p className="text-sm font-semibold text-brand-saffron">6th Edition</p>
-                    <p className="mt-2 text-lg font-bold text-brand-navy">
-                      NIT Hamirpur · 9–11 Oct 2026
-                    </p>
-                    <p className="mt-2 text-sm text-slate-600">
-                      Multi-track conclaves, olympiads, research, exhibitions, and awards.
-                    </p>
-                    <div className="mt-4">
-                      <CtaButton href={ROUTES.academicCouncil} variant="ghost">
-                        View full programme
-                      </CtaButton>
-                    </div>
-                  </GlassCard>
+                  <HomeEditionCta />
                 </div>
               </div>
             </LazySection>
@@ -141,7 +136,7 @@ export default function HomePage() {
         </LazySection>
 
         <LazySection fallback={<SectionSkeleton />}>
-          <SpeakerHighlightsSection />
+          <SpeakerHighlightsSection speakers={featuredSpeakers} />
         </LazySection>
         <LazySection fallback={<SectionSkeleton />}>
           <TestimonialsSection />
@@ -182,7 +177,7 @@ export default function HomePage() {
 
         <LazySection minHeight="8rem">
           <ConferenceSupport />
-          <MediaPartners />
+          <MediaPartners cmsPartners={cmsPartners} />
           <Organiger />
         </LazySection>
       </main>

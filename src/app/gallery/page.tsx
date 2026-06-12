@@ -1,17 +1,36 @@
-"use client";
-
-import React, { Suspense } from "react";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
+import CmsGalleryView from "@/components/gallery/CmsGalleryView";
 import { PAGE_HEROES } from "@/lib/page-heroes";
+import {
+  albumItemImageUrl,
+  listPublicMediaAlbums,
+} from "@/server/services/media-album.service";
 
-const GalleryPage = React.lazy(() => import("../component/GalleryPage"));
+export default async function GalleryRoutePage() {
+  const albums = await listPublicMediaAlbums({ albumType: "gallery", limit: 12 });
 
-export default function GalleryRoutePage() {
+  const viewAlbums = albums.map((album) => ({
+    id: album.id,
+    title: album.title,
+    slug: album.slug,
+    description: album.description,
+    items: album.items
+      .map((item) => {
+        const src = albumItemImageUrl(item);
+        if (!src) return null;
+        return {
+          id: item.id,
+          src,
+          alt: item.altText ?? item.mediaAsset?.altText ?? album.title,
+          caption: item.caption ?? item.mediaAsset?.originalName ?? null,
+        };
+      })
+      .filter((item): item is NonNullable<typeof item> => item !== null),
+  }));
+
   return (
     <PublicPageShell hero={PAGE_HEROES.gallery} skipContainer>
-      <Suspense fallback={<div className="py-12 text-center text-slate-600">Loading gallery…</div>}>
-        <GalleryPage />
-      </Suspense>
+      <CmsGalleryView albums={viewAlbums} />
     </PublicPageShell>
   );
 }
