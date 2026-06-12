@@ -97,7 +97,7 @@ export async function trackVisit(input: TrackVisitInput) {
     return { tracked: false, reason: "bot_filtered" };
   }
 
-  let session = await prisma.visitorSession.findUnique({
+  let sessionBefore = await prisma.visitorSession.findUnique({
     where: { sessionId: input.sessionId },
   });
 
@@ -106,126 +106,99 @@ export async function trackVisit(input: TrackVisitInput) {
     orderBy: { startedAt: "asc" },
     select: { id: true },
   });
-  const isReturning = Boolean(priorVisitor && priorVisitor.id !== session?.id);
+  const isReturning = Boolean(priorVisitor && priorVisitor.id !== sessionBefore?.id);
 
   const isNewVisitorToday = !(await prisma.visitorSession.findFirst({
     where: {
       visitorId: input.visitorId,
       isBot: false,
       startedAt: { gte: startOfDay() },
-      ...(session ? { NOT: { id: session.id } } : {}),
+      ...(sessionBefore ? { NOT: { id: sessionBefore.id } } : {}),
     },
     select: { id: true },
   }));
 
-  if (!session) {
-    const traffic = resolveTrafficSource({
-      utmSource: input.utmSource,
-      utmMedium: input.utmMedium,
-      referrer: input.referrer,
-    });
-    const ua = parseUserAgent(input.userAgent ?? "");
+  const traffic = resolveTrafficSource({
+    utmSource: input.utmSource,
+    utmMedium: input.utmMedium,
+    referrer: input.referrer,
+  });
+  const ua = parseUserAgent(input.userAgent ?? "");
 
-    session = await prisma.visitorSession.create({
-      data: {
-        sessionId: input.sessionId,
-        visitorId: input.visitorId,
-        isReturning,
-        isBot: false,
-        ipHash,
-        userAgent: input.userAgent ?? null,
-        referrer: input.referrer ?? null,
-        landingPath: input.path,
-        lastPath: input.path,
-        pageViewCount: 1,
-        startedAt: now,
-        lastActiveAt: now,
-        device: {
-          create: {
-            deviceType: ua.deviceType,
-            browser: ua.browser,
-            browserVersion: ua.browserVersion ?? null,
-            os: ua.os,
-            osVersion: ua.osVersion ?? null,
-            screenWidth: input.screenWidth ?? null,
-            screenHeight: input.screenHeight ?? null,
-          },
-        },
-        location: {
-          create: {
-            country: input.country ?? null,
-            countryCode: input.countryCode ?? null,
-            state: input.state ?? null,
-            city: input.city ?? null,
-          },
-        },
-        trafficSource: {
-          create: {
-            source: traffic.source,
-            medium: traffic.medium,
-            campaign: input.utmCampaign ?? null,
-            term: input.utmTerm ?? null,
-            content: input.utmContent ?? null,
-            referrerDomain: extractReferrerDomain(input.referrer),
-          },
-        },
-        pageViews: {
-          create: {
-            path: input.path,
-            pageCategory,
-            title: input.title ?? null,
-            referrer: input.referrer ?? null,
-            utmSource: input.utmSource ?? null,
-            utmMedium: input.utmMedium ?? null,
-            utmCampaign: input.utmCampaign ?? null,
-            utmTerm: input.utmTerm ?? null,
-            utmContent: input.utmContent ?? null,
-            durationMs: input.durationMs ?? null,
-            viewedAt: now,
-          },
+  const session = await prisma.visitorSession.upsert({
+    where: { sessionId: input.sessionId },
+    create: {
+      sessionId: input.sessionId,
+      visitorId: input.visitorId,
+      isReturning,
+      isBot: false,
+      ipHash,
+      userAgent: input.userAgent ?? null,
+      referrer: input.referrer ?? null,
+      landingPath: input.path,
+      lastPath: input.path,
+      pageViewCount: 1,
+      startedAt: now,
+      lastActiveAt: now,
+      device: {
+        create: {
+          deviceType: ua.deviceType,
+          browser: ua.browser,
+          browserVersion: ua.browserVersion ?? null,
+          os: ua.os,
+          osVersion: ua.osVersion ?? null,
+          screenWidth: input.screenWidth ?? null,
+          screenHeight: input.screenHeight ?? null,
         },
       },
-    });
-
-    if (input.countAsVisit !== false && isNewVisitorToday) {
-      await upsertDailyRollup({
-        uniqueDelta: 1,
-        returningDelta: isReturning ? 1 : 0,
-      });
-    }
-  } else {
-    await prisma.visitorSession.update({
-      where: { id: session.id },
-      data: {
-        lastPath: input.path,
-        lastActiveAt: now,
-        pageViewCount: { increment: 1 },
+      location: {
+        create: {
+          country: input.country ?? null,
+          countryCode: input.countryCode ?? null,
+          state: input.state ?? null,
+          city: input.city ?? null,
+        },
       },
-    });
-
-    await prisma.visitorPageView.create({
-      data: {
-        sessionId: session.id,
-        path: input.path,
-        pageCategory,
-        title: input.title ?? null,
-        referrer: input.referrer ?? null,
-        utmSource: input.utmSource ?? null,
-        utmMedium: input.utmMedium ?? null,
-        utmCampaign: input.utmCampaign ?? null,
-        utmTerm: input.utmTerm ?? null,
-        utmContent: input.utmContent ?? null,
-        durationMs: input.durationMs ?? null,
-        viewedAt: now,
+      trafficSource: {
+        create: {
+          source: traffic.source,
+          medium: traffic.medium,
+          campaign: input.utmCampaign ?? null,
+          term: input.utmTerm ?? null,
+          content: input.utmContent ?? null,
+          referrerDomain: extractReferrerDomain(input.referrer),
+        },
       },
-    });
+    },
+    update: {
+      lastPath: input.path,
+      lastActiveAt: now,
+      pageViewCount: { increment: 1 },
+    },
+  });
 
-    if (input.countAsVisit !== false && isNewVisitorToday) {
-      await upsertDailyRollup({
-        uniqueDelta: 1,
-        returningDelta: isReturning ? 1 : 0,
-      });
-    }
+  await prisma.visitorPageView.create({
+    data: {
+      sessionId: session.id,
+      path: input.path,
+      pageCategory,
+      title: input.title ?? null,
+      referrer: input.referrer ?? null,
+      utmSource: input.utmSource ?? null,
+      utmMedium: input.utmMedium ?? null,
+      utmCampaign: input.utmCampaign ?? null,
+      utmTerm: input.utmTerm ?? null,
+      utmContent: input.utmContent ?? null,
+      durationMs: input.durationMs ?? null,
+      viewedAt: now,
+    },
+  });
+
+  if (input.countAsVisit !== false && isNewVisitorToday) {
+    await upsertDailyRollup({
+      uniqueDelta: 1,
+      returningDelta: isReturning ? 1 : 0,
+    });
   }
 
   invalidateStatsCache();
