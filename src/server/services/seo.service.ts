@@ -5,6 +5,10 @@ import { SITE_URL } from "@/config/site";
 const SITE_NAME = "Shiksha Mahakumbh Abhiyan";
 const ORG_NAME = "Department of Holistic Education (DHE)";
 
+/** Prisma maps entity_id to Postgres UUID — skip lookup for non-UUID keys (e.g. route slugs). */
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 export type SeoInput = {
   entityType: string;
   entityId: string;
@@ -208,6 +212,10 @@ export async function getSeoForEntity(
   entityId: string,
   locale: ContentLocale = "en"
 ) {
+  if (!UUID_RE.test(entityId)) {
+    return null;
+  }
+
   return prisma.seoMetadata.findUnique({
     where: { entityType_entityId_locale: { entityType, entityId, locale } },
   });

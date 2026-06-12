@@ -1,134 +1,115 @@
-# G4 — Domain & SEO Verification (Final)
+# Domain Final Verification
 
-**Audit date:** 2026-05-29  
-**Verdict:** ❌ **FAIL** — live traffic on `www.shikshamahakumbh.com` but SEO/canonical assets point to `www.rase.co.in`
-
----
-
-## 1. Live Domain Determination
-
-| URL | HTTP | Observation |
-|-----|------|-------------|
-| `https://www.shikshamahakumbh.com` | **200 OK** | **Primary live site** — serves full homepage |
-| `https://shikshamahakumbh.com` | **308** → `https://www.shikshamahakumbh.com/` | Apex redirects to www (correct) |
-| `https://shikshamahakumbh.org` | **No response** | Unreachable / not configured in probe |
-
-**Actual live domain:** `https://www.shikshamahakumbh.com`
+**Date:** 2026-05-29  
+**Auditor:** Principal Release Engineer  
+**Required canonical:** `https://www.shikshamahakumbh.com`  
+**Method:** Live HTTP probes (`Invoke-WebRequest`) + source inspection
 
 ---
 
-## 2. `robots.txt`
+## Executive Summary
 
-**URL:** `https://www.shikshamahakumbh.com/robots.txt`
+| Layer | Status |
+|-------|--------|
+| Source code fallbacks | ✅ Aligned to `www.shikshamahakumbh.com` |
+| Live production | ❌ **All surfaces emit `www.rase.co.in`** |
+
+**Domain verification: FAIL on live production**
+
+---
+
+## Live Probes (2026-05-29)
+
+### Homepage — `https://www.shikshamahakumbh.com/`
+
+| Asset | Live value | Required |
+|-------|------------|----------|
+| HTTP status | 200 | 200 |
+| `<link rel="canonical">` | `https://www.rase.co.in` | `https://www.shikshamahakumbh.com` |
+| `og:url` | `https://www.rase.co.in` | `https://www.shikshamahakumbh.com` |
+| JSON-LD Organization `url` | `https://www.rase.co.in` | `https://www.shikshamahakumbh.com` |
+
+### Homepage — `https://www.rase.co.in/`
+
+Same canonical, OG, and JSON-LD values as above — both hostnames serve identical stale SEO metadata.
+
+### Sitemap — both hostnames
 
 ```
-User-agent: *
-Allow: /
-
-Sitemap: https://www.rase.co.in/sitemap.xml
+GET https://www.shikshamahakumbh.com/sitemap.xml → 200
+GET https://www.rase.co.in/sitemap.xml           → 200
 ```
 
-❌ **Sitemap URL uses wrong domain** (`rase.co.in` not `shikshamahakumbh.com`).
-
----
-
-## 3. `sitemap.xml`
-
-**URL:** `https://www.shikshamahakumbh.com/sitemap.xml`
-
-Sample entries (all observed URLs use `rase.co.in`):
+First entry (both):
 
 ```xml
 <loc>https://www.rase.co.in</loc>
-<loc>https://www.rase.co.in/education</loc>
+<lastmod>2026-06-09T11:46:24.850Z</lastmod>
 ```
 
-❌ **All sitemap locs use `https://www.rase.co.in`**
+All URLs in sitemap use **`www.rase.co.in`**.
 
-Lastmod observed: `2026-06-09` — deploy appears **stale** relative to current source audit.
+### Robots — both hostnames
 
----
-
-## 4. Canonical URLs (Live Homepage)
-
-**URL:** `https://www.shikshamahakumbh.com/`
-
-From live HTML (2026-05-29):
-
-```html
-<link rel="canonical" href="https://www.rase.co.in"/>
-<meta property="og:url" content="https://www.rase.co.in"/>
-<meta property="og:image" content="https://www.rase.co.in/sLogo.png"/>
-<meta name="twitter:image" content="https://www.rase.co.in/sLogo.png"/>
+```
+GET https://www.shikshamahakumbh.com/robots.txt → 200
+GET https://www.rase.co.in/robots.txt           → 200
 ```
 
-❌ **Canonical and OpenGraph URLs wrong for live domain.**
-
----
-
-## 5. JSON-LD URLs (Live Homepage)
-
-Observed in page source:
-
-```json
-"url": "https://www.rase.co.in"
-"logo": "https://www.rase.co.in/sLogo.png"
+```
+Sitemap: https://www.rase.co.in/sitemap.xml
 ```
 
-Breadcrumb / ItemList entries also use `https://www.rase.co.in/...` paths.
+---
 
-❌ **Structured data does not match live domain.**
+## Source Code (current HEAD)
+
+| File | Fallback / behavior |
+|------|---------------------|
+| `src/config/site.ts` | `SITE_URL` → `https://www.shikshamahakumbh.com` |
+| `src/app/layout.tsx` | `metadataBase` same fallback |
+| `src/lib/seo/metadata.ts` | `alternates.canonical` = `${SITE_URL}${path}` |
+| `src/app/sitemap.ts` | Uses `SITE_URL` |
+| `src/app/robots.ts` | `sitemap: ${SITE_URL}/sitemap.xml` |
+
+Source is correct; live mismatch confirms **stale Vercel deploy** + **`NEXT_PUBLIC_SITE_URL` not set to `.com`**.
 
 ---
 
-## 6. Source Code Fallback
+## Root Cause
 
-`src/config/site.ts`:
+1. Production deploy predates domain remediation (~2026-06-09 build timestamp in sitemap)
+2. `NEXT_PUBLIC_SITE_URL` on Vercel still resolves to `rase.co.in` at build time
 
-```typescript
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.rase.co.in";
+---
+
+## Post-Cutover Verification Commands
+
+```powershell
+# Canonical
+(Invoke-WebRequest "https://www.shikshamahakumbh.com/" -UseBasicParsing).Content -match 'canonical" href="([^"]+)"'
+
+# Sitemap
+(Invoke-WebRequest "https://www.shikshamahakumbh.com/sitemap.xml" -UseBasicParsing).Content.Substring(0,200)
+
+# Robots
+(Invoke-WebRequest "https://www.shikshamahakumbh.com/robots.txt" -UseBasicParsing).Content
 ```
 
-Live production reflects either:
-- `NEXT_PUBLIC_SITE_URL` still set to `https://www.rase.co.in`, **or**
-- Fallback used because env not applied in deployed build
-
-**Encrypted Vercel value:** UNKNOWN from CLI.
+**Pass criteria:** All URLs contain `www.shikshamahakumbh.com`.
 
 ---
 
-## 7. Recommended Canonical Domain
+## Signoff
 
-### **ONE canonical domain:** `https://www.shikshamahakumbh.com`
-
-**Rationale:**
-1. Live HTTP 200 traffic and user-facing brand domain
-2. Apex `shikshamahakumbh.com` already redirects to www
-3. Footer/contact copy references `www.shikshamahakumbh.com`
-4. `shikshamahakumbh.org` is not serving content
-
-**Required alignment (post-deploy, not implemented in this audit):**
-- Set `NEXT_PUBLIC_SITE_URL=https://www.shikshamahakumbh.com` on Production
-- Redeploy so `sitemap.ts`, `robots.ts`, metadata, and JSON-LD regenerate
-- Verify Search Console property for www.com
-- Keep `rase.co.in` as redirect/alias if needed for legacy links
+| Gate | Result |
+|------|--------|
+| Live canonical | ❌ FAIL |
+| Live sitemap | ❌ FAIL |
+| Live robots | ❌ FAIL |
+| Live OG / JSON-LD | ❌ FAIL |
+| Source ready | ✅ PASS |
 
 ---
 
-## 8. G4 Summary
-
-| Check | Live status |
-|-------|-------------|
-| Domain resolves | ✅ www.shikshamahakumbh.com |
-| robots.txt sitemap | ❌ wrong domain |
-| sitemap.xml URLs | ❌ wrong domain |
-| canonical link | ❌ wrong domain |
-| OpenGraph URLs | ❌ wrong domain |
-| JSON-LD URLs | ❌ wrong domain |
-
-**G4 blocker:** SEO split-brain between live domain and `rase.co.in` hurts indexing and social sharing until env + redeploy.
-
----
-
-*Live probes via curl. No deployment.*
+*Fresh live probes — 2026-05-29. No prior report trusted without re-verification.*

@@ -1,0 +1,31 @@
+[
+  {
+    "id": "Im8yQc0E2KH9T6HT3R81",
+    "fullName": "Release Verify",
+    "gender": "Male",
+    "designation": "Engineer",
+    "institution": "RASE QA",
+    "address": "Test Address",
+    "country": "India",
+    "email": "release-verify+20260609@rase.co.in",
+    "contactNumber": "9999999999",
+    "vidyaBharti": "Non Vidya Bharti",
+    "accommodationRequired": "No",
+    "conclaveSelection": "Research Conclave",
+    "participationType": "Observer",
+    "registrationId": "SMK2026-000001",
+    "registrationType": "Conclave",
+    "paymentStatus": "Not Required",
+    "registrationStatus": "Submitted",
+    "accommodationStatus": "Not Required",
+    "createdAt": {
+      "_seconds": 1781008267,
+      "_nanoseconds": 278000000
+    },
+    "emailDeliveryStatus": "skipped",
+    "updatedAt": {
+      "_seconds": 1781011955,
+      "_nanoseconds": 991000000
+    }
+  }
+]

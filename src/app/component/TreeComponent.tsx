@@ -36,16 +36,17 @@ const ShikshaMahakumbhTimeline: React.FC = () => {
 
   // Animate connecting line on scroll
   useEffect(() => {
+    const scrollEl = scrollRef.current;
     const handleScroll = () => {
-      if (scrollRef.current && lineRef.current) {
-        const scrollWidth = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
-        const scrollLeft = scrollRef.current.scrollLeft;
+      if (scrollEl && lineRef.current) {
+        const scrollWidth = scrollEl.scrollWidth - scrollEl.clientWidth;
+        const scrollLeft = scrollEl.scrollLeft;
         const progress = (scrollLeft / scrollWidth) * 100;
         lineRef.current.style.width = `${progress}%`;
       }
     };
-    scrollRef.current?.addEventListener("scroll", handleScroll);
-    return () => scrollRef.current?.removeEventListener("scroll", handleScroll);
+    scrollEl?.addEventListener("scroll", handleScroll);
+    return () => scrollEl?.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (

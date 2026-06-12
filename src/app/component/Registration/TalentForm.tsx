@@ -1,5 +1,6 @@
 "use client";
 import { ChangeEvent, useState } from "react";
+import Image from "next/image";
 import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 import toast, { Toaster } from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
@@ -203,7 +204,14 @@ const TalentForm = () => {
         {/* Image Preview */}
         {previewUrl && (
           <div className="mb-4">
-            <img src={previewUrl} alt="Preview" className="max-w-full rounded-md" />
+            <Image
+              src={previewUrl}
+              alt="Preview"
+              width={400}
+              height={300}
+              unoptimized
+              className="max-w-full h-auto rounded-md"
+            />
           </div>
         )}
 

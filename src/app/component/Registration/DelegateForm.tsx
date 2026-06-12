@@ -1,5 +1,6 @@
 'use client'
 import { useState, ChangeEvent, FormEvent } from 'react';
+import Image from 'next/image';
 import { submitLegacyForm } from '@/lib/legacyFormSubmit';
 import  toast , { Toaster } from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
@@ -296,7 +297,7 @@ else  if (value === 'ResearchScholar' ) {
                 <label className='block text-sm font-medium  text-black'>
                   <b>Fees: {formData.feeAmount}</b>
                   <br />
-                  <img className='p-2 h-50 w-50' src='/fee.png' alt='Fee' />
+                  <Image className='p-2 h-50 w-50' src='/fee.png' alt='Fee' width={200} height={200} />
                 </label>
               </div>
             )}
@@ -346,7 +347,16 @@ else  if (value === 'ResearchScholar' ) {
               </div>
             )}
 
-            {imageUrl && <img src={imageUrl} alt='Uploaded' style={{ maxWidth: '100%' }} />}
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt='Uploaded'
+                width={800}
+                height={600}
+                unoptimized
+                className="max-w-full h-auto"
+              />
+            )}
           </>
         )}
     {formData.type === 'Institutions' && (
@@ -392,7 +402,7 @@ else  if (value === 'ResearchScholar' ) {
                 <label className='block text-sm font-medium  text-black'>
                   <b>Fees: {formData.feeAmount}</b>
                   <br />
-                  <img className='p-2' src='/fee.png' alt='Fee' />
+                  <Image className='p-2' src='/fee.png' alt='Fee' width={200} height={200} />
                 </label>
               </div>
             )}
@@ -464,7 +474,16 @@ else  if (value === 'ResearchScholar' ) {
               </div>
             )}
 
-            {imageUrl && <img src={imageUrl} alt='Uploaded' style={{ maxWidth: '100%' }} />}
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt='Uploaded'
+                width={800}
+                height={600}
+                unoptimized
+                className="max-w-full h-auto"
+              />
+            )}
           </>
         )}
         <label className='block text-sm font-medium text-red-900'>Note:There is no regestration fee for  non-Indian delegates.</label>
