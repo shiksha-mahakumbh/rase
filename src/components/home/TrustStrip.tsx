@@ -7,7 +7,7 @@ import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 const DEFAULT_LOGOS = [
   { src: "/logo.png", alt: "Department of Holistic Education", href: "https://www.dhe.org.in/" },
   { src: "/vidyabharti.png", alt: "Vidya Bharati", href: "https://vidyabharti.net/" },
-  { src: "/shiksha.png", alt: "Shiksha Mahakumbh", href: "https://www.rase.co.in/" },
+  { src: "/shiksha.png", alt: "Shiksha Mahakumbh", href: "https://www.shikshamahakumbh.com/" },
   { src: "/sLogo.png", alt: "RASE", href: "https://www.rase.co.in/" },
 ];
 

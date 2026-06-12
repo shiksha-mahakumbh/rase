@@ -13,7 +13,7 @@ import { ROUTES } from "@/constants/routes";
 import { CtaButton } from "@/components/ui";
 
 function buildCalendarIcs(id: string) {
-  const uid = `${id}@shikshamahakumbh.org`;
+  const uid = `${id}@shikshamahakumbh.com`;
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
