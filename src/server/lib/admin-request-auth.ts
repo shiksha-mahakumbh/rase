@@ -20,6 +20,11 @@ export async function verifyAdminRequest(
     }
   }
 
+  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "").trim();
+  if (!token) {
+    throw new ServiceError("Unauthorized", 401, "UNAUTHORIZED");
+  }
+
   return verifySupabaseAdmin(request);
 }
 

@@ -26,6 +26,8 @@ export const SUPPORTED_V2_TYPES = [
   "Abstract Submission",
   "Projects",
   "Organiser",
+  "Bal Shodh Patrika",
+  "Cultural Program",
 ] as const;
 
 export type SupportedRegistrationType = (typeof SUPPORTED_V2_TYPES)[number];
@@ -47,6 +49,8 @@ const TYPE_MAP: Record<string, PrismaRegistrationType> = {
   "Abstract Submission": "Legacy_Other",
   Projects: "Exhibition",
   Organiser: "Legacy_Other",
+  "Bal Shodh Patrika": "Legacy_Other",
+  "Cultural Program": "Legacy_Other",
 };
 
 export function toPrismaRegistrationType(type: string): PrismaRegistrationType {

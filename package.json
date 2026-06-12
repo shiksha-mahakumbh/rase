@@ -28,7 +28,7 @@
     "db:validate": "prisma validate",
     "db:seed": "node scripts/supabase/seed-rbac.mjs",
     "db:deploy-supabase": "node scripts/deploy-supabase-production.mjs",
-    "test:security": "node scripts/staging-security-check.mjs && node scripts/test-registration-lookup-security.mjs",
+    "test:security": "node scripts/staging-security-check.mjs && node scripts/test-registration-lookup-security.mjs && node scripts/test-registration-types.mjs",
     "test:visitor-analytics": "node scripts/test-visitor-analytics-race.mjs",
     "test": "npm run test:security && npm run test:visitor-analytics",
     "seed:cms": "node scripts/seed-cms-content.mjs"

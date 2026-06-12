@@ -187,7 +187,7 @@ export default function CulturalPage() {
         through inspiring cultural expressions at Shiksha Mahakumbh 6.0.
       </ACFooterStatement>
 
-      <SectionCTA buttonText="प्रतिभागिता हेतु पंजीकरण करें" href={REG_LINKS.talent} />
+      <SectionCTA buttonText="प्रतिभागिता हेतु पंजीकरण करें" href={REG_LINKS.general} />
     </ACPage>
   );
 }
