@@ -1,114 +1,102 @@
-# G1 — Data Migration Readiness
+# Data Migration Readiness
 
-**Audit date:** 2026-06-12  
-**Constraint:** Scripts reviewed only — **not executed**
-
----
-
-## Scripts audited
-
-| Script | Purpose | Status |
-|--------|---------|--------|
-| `scripts/firebase-export.mjs` | Firestore → JSON | Implemented |
-| `scripts/firebase-import-supabase.mjs` | JSON → Prisma `Registration` | Implemented |
-| `docs/firebase-exit/DATA_MIGRATION_RUNBOOK.md` | Full runbook | Exists (partially outdated paths) |
+**Date:** 2026-05-29  
+**Status:** Ready in tooling — **NOT EXECUTED** (explicit approval required)
 
 ---
 
-## Target Supabase state (live read-only probe)
+## Scripts Audited
 
-Connected database: `db.rcpbfrauyyyorptckrlp.supabase.co`  
-Prisma migrate status: **7/7 applied, schema up to date**
-
-| Table | Row count (2026-06-12) | Expected at cutover |
-|-------|------------------------|---------------------|
-| `registrations` | **0** | Firestore production count |
-| `payment_records` | **0** | Firestore payment count |
-| `uploaded_files` | **0** | Storage manifest count |
-| `registration_counters` | **0 rows** | Must match `SMK2026` counter |
-
-**Critical finding:** Production Supabase Postgres is **empty**. No cutover has occurred.
+| Script | npm command | Purpose |
+|--------|-------------|---------|
+| `scripts/firebase-export.mjs` | `npm run firebase:export` | Export Firestore → JSON |
+| `scripts/firebase-import-supabase.mjs` | `npm run firebase:import` | Import JSON → Prisma/Supabase |
 
 ---
 
-## Export script coverage
+## Export (`firebase:export`)
 
-### Included collections
+**Requirements:**
 
-`registrations`, `registrationCounters`, type-specific legacy collections (NGO, Volunteer, papers, etc.), CMS-ish (`events`, `wishesReceived`, `keynoteSpeakers`).
+- `FIREBASE_SERVICE_ACCOUNT_JSON` env var
+- `firebase-admin` package (**not in `package.json`** — install temporarily: `npm i -D firebase-admin`)
 
-### Gaps vs runbook
+**Usage:**
 
-| Gap | Severity |
-|-----|----------|
-| No dedicated `paymentRecords` export collection | **P0** — payments not in export list |
-| No `adminUsers` → `users` / `user_roles` export | **P1** |
-| No Firebase Storage object export / manifest | **P0** — attachments orphaned after DB-only import |
-| No `audit_logs` export | **P2** |
-| Requires temporary `firebase-admin` install | Documented |
+```bash
+npm run firebase:export -- --out=./exports/firebase
+```
 
----
+**Collections exported:** registrations, registrationCounters, conclave/delegate/NGO/volunteer/participant, abstracts, best practices, talent, accommodation, organiser, school/HEI projects, etc.
 
-## Import script analysis
-
-### What it does
-
-- Maps 14 collection JSON files → `Registration.registrationType`
-- Idempotent skip when `registrationId` already exists
-- Stores full Firestore doc in `Registration.metadata` JSON
-- Sets defaults for payment/accommodation status (`Not_Required`, `Submitted`)
-
-### What it does **not** do
-
-| Gap | Impact |
-|-----|--------|
-| **No `PaymentRecord` import** | Razorpay history lost; webhook dedup weakened |
-| **No `UploadedFile` rows** | File URLs in metadata only; no signed-url pipeline |
-| **No type extension tables** | `ConclaveRegistration`, `DelegateRegistration`, etc. not populated |
-| **No counter sync** | `registrationCounters` export ignored by import script |
-| **No `firebaseMasterDocId` / `source=migration` fields set** | Traceability reduced |
-| **Synthetic IDs** when `registrationId` missing | `LEGACY-{collection}-{docId}` — may break user-facing lookups |
-| **Skips rows without email** | Silent data loss for incomplete legacy docs |
-| **No transaction/batch** | Large imports slow; partial failure possible |
-
-### ID preservation
-
-| ID type | Preserved? |
-|---------|------------|
-| Public `registrationId` (SMK2026-*) | Yes, if present in export doc |
-| Firestore document ID | Only inside `metadata.id` |
-| Prisma UUID (`Registration.id`) | **New** on import |
-| Payment Razorpay IDs | **Not imported** |
-
-### Foreign keys
-
-Import creates flat `Registration` rows only. Relations to `payment_records`, `uploaded_files`, and type-specific tables are **not wired**.
+**Status:** Script present and documented. **Not run** during this audit.
 
 ---
 
-## Rollback strategy
+## Import (`firebase:import`)
 
-| Scenario | Rollback |
-|----------|----------|
-| Pre-cutover (Firebase still live) | Do not switch DNS/env; no rollback needed |
-| Post-import, pre-traffic switch | `DELETE FROM registrations WHERE source = 'migration'` (after adding source flag); restore counter from export |
-| Post-cutover with dual-write failure | **No automated rollback** — requires Firestore backup restore + redeploy previous build |
-| Storage migration failure | Re-point URLs to Firebase Storage until re-upload completes |
+**Requirements:**
 
-**Recommendation:** Take Firestore + Storage backup; run import on **staging** clone first; validate counts ±0.1%.
+- `DATABASE_URL` (or DIRECT_URL for bulk writes)
+- Export directory from export step
+
+**Usage:**
+
+```bash
+npm run firebase:import -- --in=./exports/firebase
+```
+
+**Behavior:**
+
+- Idempotent on `registrationId` — skips existing rows
+- Maps Firestore collection names → Prisma registration types via `COLLECTION_TYPE_MAP`
+- Normalizes email/name fields from heterogeneous Firebase documents
+
+**Status:** Script present. **Not run** — production import forbidden without explicit approval.
 
 ---
 
-## G1 readiness checklist
+## Current Data State
 
-| Item | Ready? |
+| Store | Registrations | Notes |
+|-------|---------------|-------|
+| Firebase (live) | ≥1 (`SMK2026-000001`) | Served by production API |
+| Supabase | **0** | Empty, ready for import |
+
+**Risk if cutover without import:** New registrations on Supabase; legacy Firebase data orphaned unless import runs first.
+
+---
+
+## Pre-Import Checklist
+
+- [ ] Explicit stakeholder approval for production Firebase read
+- [ ] Install `firebase-admin` dev dependency
+- [ ] Verify `FIREBASE_SERVICE_ACCOUNT_JSON` (Vercel legacy var or local)
+- [ ] Export to `./exports/firebase` with manifest / row counts
+- [ ] Dry-run import against staging Supabase (recommended)
+- [ ] Production import with operator monitoring
+- [ ] Post-import: `SELECT count(*) FROM registrations`
+- [ ] Reconcile `registration_counters.last_number` with max registration ID
+- [ ] Remove `FIREBASE_SERVICE_ACCOUNT_JSON` from Vercel
+
+---
+
+## Counter Alignment
+
+Supabase counter seeded: `SMK2026`, `lastNumber=1`.  
+Live Firebase has `SMK2026-000001` — post-import, counter must be bumped to prevent ID collision.
+
+---
+
+## Verdict
+
+| Gate | Result |
 |------|--------|
-| Export script exists | ✅ |
-| Import script exists | ✅ |
-| Payment migration path | ❌ |
-| Attachment/storage migration path | ❌ |
-| Counter sync | ❌ |
-| Staging dry-run completed | ❌ |
-| Production Supabase has data | ❌ |
+| Export script | ✅ Ready (needs firebase-admin) |
+| Import script | ✅ Ready |
+| Staging dry-run | ❌ Not done |
+| Production import | ❌ **BLOCKED** — awaiting approval |
 
-**G1 verdict:** **NOT READY** — scripts are MVP; runbook gaps remain; production DB empty.
+---
+
+*Scripts reviewed from source — no production data operations performed.*

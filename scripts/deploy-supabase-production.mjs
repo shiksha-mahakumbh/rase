@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * Apply Supabase production SQL (buckets, seed, RLS) via Prisma direct connection.
+ * Uses DIRECT_URL when set (required for storage + multi-statement SQL).
  * Usage: node scripts/deploy-supabase-production.mjs [--buckets-only|--seed-only|--rls-only]
  */
 import { PrismaClient } from "@prisma/client";
@@ -10,29 +11,41 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
+
+if (process.env.DIRECT_URL) {
+  process.env.DATABASE_URL = process.env.DIRECT_URL;
+}
+
 const prisma = new PrismaClient();
 
 function readSql(relativePath) {
   return readFileSync(join(root, relativePath), "utf8");
 }
 
-async function execSqlFile(label, relativePath) {
-  const sql = readSql(relativePath);
-  const statements = sql
+function splitSqlStatements(sql) {
+  if (sql.includes("$$")) {
+    return [sql];
+  }
+  return sql
     .split(/;\s*\n/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0 && !s.startsWith("--") && !s.startsWith("\\"));
+}
+
+async function execSqlFile(label, relativePath) {
+  const sql = readSql(relativePath);
+  const statements = splitSqlStatements(sql);
 
   for (const stmt of statements) {
     try {
-      await prisma.$executeRawUnsafe(`${stmt};`);
+      await prisma.$executeRawUnsafe(stmt.endsWith(";") ? stmt : `${stmt};`);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (/already exists|duplicate key|policy .* already exists/i.test(msg)) {
-        console.warn(`[skip] ${label}: ${msg.slice(0, 100)}`);
+        console.warn(`[skip] ${label}: ${msg.slice(0, 120)}`);
         continue;
       }
-      throw new Error(`${label} failed on statement: ${stmt.slice(0, 80)}... — ${msg}`);
+      throw new Error(`${label} failed: ${msg}`);
     }
   }
   console.log(`[ok] ${label}`);
