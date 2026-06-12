@@ -1,14 +1,21 @@
-import { createPageMetadata } from "@/lib/seo/metadata";
 import LegalPageShell from "@/components/layouts/LegalPageShell";
+import {
+  generateLegalPageMetadata,
+  renderLegalPage,
+} from "@/lib/cms/legal-page-loader";
 
-export const metadata = createPageMetadata({
-  title: "Terms and Conditions",
-  description: "Terms and conditions for using the Shiksha Mahakumbh Abhiyan website and registration services.",
-  path: "/terms-and-conditions",
-});
+export async function generateMetadata() {
+  return generateLegalPageMetadata("terms-and-conditions", {
+    title: "Terms and Conditions",
+    description:
+      "Terms and conditions for using the Shiksha Mahakumbh Abhiyan website and registration services.",
+    path: "/terms-and-conditions",
+  });
+}
 
-export default function TermsPage() {
-  return (
+export default async function TermsPage() {
+  return renderLegalPage(
+    "terms-and-conditions",
     <LegalPageShell title="Terms and Conditions">
       <p>Last updated: May 2026</p>
       <h2>Acceptance</h2>
@@ -29,9 +36,8 @@ export default function TermsPage() {
       </p>
       <h2>Liability</h2>
       <p>
-        The website is provided as-is. The organizers are not liable for
-        indirect damages arising from use of the site or third-party payment
-        gateways.
+        The organizers are not liable for indirect damages arising from use of this
+        site or participation in events, to the extent permitted by law.
       </p>
     </LegalPageShell>
   );

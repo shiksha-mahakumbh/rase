@@ -2,7 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useCms } from "@/lib/cms/context";
+import { getSection, sectionItems } from "@/lib/cms/utils";
 
 export const REGISTRATION_PATH = "/registration";
 
@@ -10,6 +12,8 @@ interface Event {
   title: string;
   date: string;
   venue: string;
+  href?: string;
+  registrationLink?: string;
 }
 
 const defaultEvents: Event[] = [
@@ -30,8 +34,32 @@ interface UpcomingEventProps {
 }
 
 const UpcomingEvent: React.FC<UpcomingEventProps> = ({
-  events = defaultEvents,
+  events: eventsProp,
 }) => {
+  const cms = useCms();
+  const section = getSection(cms?.homepage, "featured_events");
+  const cmsEvents = sectionItems<{
+    title: string;
+    date: string;
+    url?: string;
+    venue?: string;
+    imageUrl?: string;
+  }>(section);
+
+  const events =
+    eventsProp ??
+    (cmsEvents.length
+      ? cmsEvents.map((e) => ({
+          title: e.title,
+          date: e.date,
+          venue: e.venue ?? "TBA",
+          href: e.url,
+          registrationLink: e.url ?? REGISTRATION_PATH,
+        }))
+      : defaultEvents);
+
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="mx-auto max-w-5xl px-4 py-8 md:py-10">
       <div className="mb-6 text-center">
@@ -47,10 +75,10 @@ const UpcomingEvent: React.FC<UpcomingEventProps> = ({
         {events.map((event, index) => (
           <motion.article
             key={event.title}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: index * 0.08 }}
+            transition={{ delay: reduceMotion ? 0 : index * 0.08 }}
             className="home-glass home-card-hover flex flex-col justify-between rounded-2xl border border-primary/10 p-5 md:p-6"
           >
             <div>
@@ -72,8 +100,8 @@ const UpcomingEvent: React.FC<UpcomingEventProps> = ({
               </dl>
             </div>
             <Link
-              href={REGISTRATION_PATH}
-              className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-primary to-[#7a4343] px-4 py-2.5 text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+              href={event.registrationLink ?? event.href ?? REGISTRATION_PATH}
+              className="mt-5 inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-gradient-to-r from-primary to-[#7a4343] px-4 py-2.5 text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Register Now
             </Link>
@@ -84,8 +112,4 @@ const UpcomingEvent: React.FC<UpcomingEventProps> = ({
   );
 };
 
-const MyPage: React.FC = () => {
-  return <UpcomingEvent />;
-};
-
-export default MyPage;
+export default UpcomingEvent;

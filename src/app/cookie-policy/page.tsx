@@ -1,15 +1,21 @@
 import LegalPageShell from "@/components/layouts/LegalPageShell";
-import { createPageMetadata } from "@/lib/seo/metadata";
+import {
+  generateLegalPageMetadata,
+  renderLegalPage,
+} from "@/lib/cms/legal-page-loader";
 
-export const metadata = createPageMetadata({
-  title: "Cookie Policy",
-  description:
-    "How Shiksha Mahakumbh Abhiyan uses cookies, analytics, and your consent choices.",
-  path: "/cookie-policy",
-});
+export async function generateMetadata() {
+  return generateLegalPageMetadata("cookie-policy", {
+    title: "Cookie Policy",
+    description:
+      "How Shiksha Mahakumbh Abhiyan uses cookies, analytics, and your consent choices.",
+    path: "/cookie-policy",
+  });
+}
 
-export default function CookiePolicyPage() {
-  return (
+export default async function CookiePolicyPage() {
+  return renderLegalPage(
+    "cookie-policy",
     <LegalPageShell title="Cookie Policy">
       <section>
         <h2>What are cookies?</h2>

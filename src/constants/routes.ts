@@ -42,4 +42,5 @@ export const PROTECTED_DATA_ROUTE_PREFIXES = [
   "/accomodationdata",
   "/DelegateForm",
   "/heiprojectregistrationdata",
+  "/noticeboarddata",
 ] as const;

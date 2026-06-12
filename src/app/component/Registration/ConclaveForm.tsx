@@ -1,7 +1,6 @@
 'use client';
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/app/firebase';
+import { submitLegacyForm } from '@/lib/legacyFormSubmit';
 import toast, { Toaster } from 'react-hot-toast';
 import RegistrationFormWrapper from '../ui/RegistrationFormWrapper';
 
@@ -51,7 +50,20 @@ const ConclaveForm = () => {
     setLoading(true);
 
     try {
-      await addDoc(collection(db, 'ConclaveRegistrations'), formData);
+      await submitLegacyForm({
+        registrationType: 'Conclave',
+        data: {
+          fullName: formData.name,
+          designation: formData.designation,
+          institution: formData.institutionName,
+          email: formData.email,
+          contactNumber: formData.contactNumber,
+          address: formData.address,
+          conclaveSelection: formData.typeofConclave,
+          views: formData.views,
+          accommodationRequired: formData.accommodation === 'yes' ? 'Yes' : 'No',
+        },
+      });
       toast.success('Form submitted successfully!');
       setFormData(initialFormData); // Reset the form after successful submission
       if (formData.accommodation === 'yes') {

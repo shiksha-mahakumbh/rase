@@ -1,7 +1,11 @@
+"use client";
+
 import { EventCard, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
+import { useCms } from "@/lib/cms/context";
+import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 
-const tracks = [
+const DEFAULT_TRACKS = [
   {
     title: "Multi-Track Conclaves",
     date: "During SMK 6.0",
@@ -53,13 +57,39 @@ const tracks = [
 ];
 
 export default function EventTracksSection() {
+  const cms = useCms();
+  const section = getSection(cms?.homepage, "featured_programs");
+  const programs = sectionItems<{
+    title: string;
+    description: string;
+    url?: string;
+    date?: string;
+    venue?: string;
+    badge?: string;
+  }>(section);
+
+  const tracks = programs.length
+    ? programs.map((p) => ({
+        title: p.title,
+        date: p.date ?? "During SMK 6.0",
+        venue: p.venue ?? "NIT Hamirpur",
+        description: p.description,
+        href: p.url ?? ROUTES.registration,
+        badge: p.badge ?? "Programme",
+      }))
+    : DEFAULT_TRACKS;
+
   return (
     <section className="bg-brand-surface py-12 md:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Programme"
-          title="Tracks & Experiences"
-          description="Conferences, research, competitions, exhibitions, and networking — one integrated summit."
+          title={section?.title ?? "Tracks & Experiences"}
+          description={sectionField(
+            section,
+            "subtitle",
+            "Conferences, research, competitions, exhibitions, and networking — one integrated summit."
+          )}
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {tracks.map((t) => (

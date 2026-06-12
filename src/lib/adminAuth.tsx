@@ -7,26 +7,18 @@ import {
   useState,
   ReactNode,
 } from "react";
-import {
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-  User,
-} from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import { AdminRole } from "@/types/registration";
-import { resolveAdminRole } from "@/lib/resolveAdminRole";
-import {
-  setAdminSessionCookie,
-  clearAdminSessionCookie,
-} from "@/constants/auth";
+
+export type AdminUser = {
+  uid: string;
+  email: string;
+};
 
 interface AdminContextValue {
-  user: User | null;
+  user: AdminUser | null;
   role: AdminRole | null;
   loading: boolean;
-  login: () => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   isAdmin: boolean;
 }
@@ -36,7 +28,7 @@ const AdminContext = createContext<AdminContextValue | undefined>(undefined);
 const AUTH_INIT_TIMEOUT_MS = 12000;
 
 export function AdminProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AdminUser | null>(null);
   const [role, setRole] = useState<AdminRole | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -55,44 +47,51 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       finishLoading();
     }, AUTH_INIT_TIMEOUT_MS);
 
-    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-      void (async () => {
-        try {
-          setUser(firebaseUser);
-          if (firebaseUser) {
-            const resolvedRole = await resolveAdminRole(firebaseUser);
-            setRole(resolvedRole);
-            if (resolvedRole) setAdminSessionCookie();
-            else clearAdminSessionCookie();
-          } else {
-            setRole(null);
-            clearAdminSessionCookie();
-          }
-        } catch (error) {
-          console.error("Admin auth error:", error);
-          setRole(null);
-        } finally {
-          window.clearTimeout(timeoutId);
-          finishLoading();
+    void (async () => {
+      try {
+        const res = await fetch("/api/admin/session/bootstrap", {
+          credentials: "include",
+          cache: "no-store",
+        });
+        const data = await res.json();
+        if (data.authenticated) {
+          setUser({ uid: data.uid, email: data.email });
+          setRole(data.role as AdminRole);
         }
-      })();
-    });
+      } catch (error) {
+        console.error("Admin session bootstrap failed:", error);
+      } finally {
+        window.clearTimeout(timeoutId);
+        finishLoading();
+      }
+    })();
 
     return () => {
       settled = true;
       window.clearTimeout(timeoutId);
-      unsub();
     };
   }, []);
 
-  const login = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+  const login = async (email: string, password: string) => {
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(typeof err.error === "string" ? err.error : "Login failed");
+    }
+    const data = await res.json();
+    setUser({ uid: data.uid ?? "", email: data.email });
+    setRole(data.role as AdminRole);
   };
 
   const logout = async () => {
-    clearAdminSessionCookie();
-    await signOut(auth);
+    await fetch("/api/admin/session", { method: "DELETE", credentials: "include" });
+    setUser(null);
+    setRole(null);
   };
 
   return (

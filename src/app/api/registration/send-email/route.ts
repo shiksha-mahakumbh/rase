@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { FieldValue } from "firebase-admin/firestore";
-import { getAdminFirestore } from "@/lib/firebase-admin";
 import { EVENT_NAME } from "@/types/registration";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { prisma } from "@/server/db/prisma";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REG_ID_RE = /^SMK2026-\d{6}$/;
 
 export async function POST(request: NextRequest) {
-  let masterDocId: string | undefined;
-
   const ip = getClientIp(request);
   const limited = rateLimit({
     key: `email:${ip}`,
@@ -39,10 +36,12 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  let registrationUuid: string | undefined;
+
   try {
     const body = await request.json();
     const { registrationId, registrationType, fullName, email } = body;
-    masterDocId = body.masterDocId;
+    registrationUuid = body.registrationUuid ?? body.masterDocId;
 
     if (!registrationId || !email || !fullName) {
       return NextResponse.json(
@@ -62,6 +61,14 @@ export async function POST(request: NextRequest) {
         { error: "Invalid email or name" },
         { status: 400 }
       );
+    }
+
+    if (!registrationUuid) {
+      const row = await prisma.registration.findFirst({
+        where: { registrationId, deletedAt: null },
+        select: { id: true },
+      });
+      registrationUuid = row?.id;
     }
 
     const smtpHost = process.env.SMTP_HOST;
@@ -105,29 +112,23 @@ export async function POST(request: NextRequest) {
       emailStatus = "sent";
     }
 
-    if (masterDocId) {
-      await getAdminFirestore()
-        .collection("registrations")
-        .doc(masterDocId)
-        .update({
-          emailDeliveryStatus: emailStatus,
-          updatedAt: FieldValue.serverTimestamp(),
-        });
+    if (registrationUuid) {
+      await prisma.registration.update({
+        where: { id: registrationUuid },
+        data: { emailDeliveryStatus: emailStatus },
+      });
     }
 
     return NextResponse.json({ success: true, emailStatus });
   } catch (error) {
     console.error("Email send error:", error);
 
-    if (masterDocId) {
+    if (registrationUuid) {
       try {
-        await getAdminFirestore()
-          .collection("registrations")
-          .doc(masterDocId)
-          .update({
-            emailDeliveryStatus: "failed",
-            updatedAt: FieldValue.serverTimestamp(),
-          });
+        await prisma.registration.update({
+          where: { id: registrationUuid },
+          data: { emailDeliveryStatus: "failed" },
+        });
       } catch (updateError) {
         console.error("email status update failed:", updateError);
       }

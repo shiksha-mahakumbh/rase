@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
-import { db } from "@/lib/firebase";
 import {
   AdminProvider,
   useAdmin,
   canManageStatus,
 } from "@/lib/adminAuth";
+import { fetchRegistrationByPublicId } from "@/lib/admin/registrations-client";
 import { formatFirestoreDate } from "@/lib/saveRegistration";
 import { downloadAcknowledgementPdf } from "@/lib/generateAcknowledgementPdf";
 import toast, { Toaster } from "react-hot-toast";
@@ -31,13 +30,30 @@ function DetailContent() {
   const { user, role, loading, login, isAdmin } = useAdmin();
   const [record, setRecord] = useState<Record<string, unknown> | null>(null);
   const [fetching, setFetching] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const load = async () => {
-    const snap = await getDoc(doc(db, "registrations", id));
-    if (snap.exists()) {
-      setRecord(snap.data());
+    setFetching(true);
+    try {
+      const row = await fetchRegistrationByPublicId(id);
+      if (row) {
+        const metadata =
+          row.metadata && typeof row.metadata === "object"
+            ? (row.metadata as Record<string, unknown>)
+            : {};
+        setRecord({ ...metadata, ...row });
+      } else {
+        setRecord(null);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load registration");
+      setRecord(null);
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
   };
 
   useEffect(() => {
@@ -49,12 +65,38 @@ function DetailContent() {
     value: string
   ) => {
     if (!canManageStatus(role)) return;
-    await updateDoc(doc(db, "registrations", id), {
-      [field]: value,
-      updatedAt: new Date(),
-    });
-    toast.success("Status updated");
-    load();
+    try {
+      const res = await fetch(
+        `/api/admin/gateway/registrations/${encodeURIComponent(id)}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ field, value }),
+        }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(typeof err.error === "string" ? err.error : "Update failed");
+      }
+      toast.success("Status updated");
+      load();
+    } catch (error) {
+      console.error(error);
+      toast.error(error instanceof Error ? error.message : "Update failed");
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    try {
+      await login(email, password);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Login failed");
+    } finally {
+      setLoginLoading(false);
+    }
   };
 
   if (loading || fetching) {
@@ -69,13 +111,31 @@ function DetailContent() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-4">
         <p className="mb-4 text-gray-600">Admin login required</p>
-        <button
-          type="button"
-          onClick={login}
-          className="rounded-xl bg-primary px-6 py-3 font-semibold text-white"
-        >
-          Sign in
-        </button>
+        <form onSubmit={handleLogin} className="w-full max-w-sm space-y-3">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+            className="w-full rounded-xl border px-4 py-3"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+            className="w-full rounded-xl border px-4 py-3"
+          />
+          <button
+            type="submit"
+            disabled={loginLoading}
+            className="w-full rounded-xl bg-primary px-6 py-3 font-semibold text-white disabled:opacity-60"
+          >
+            {loginLoading ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
       </div>
     );
   }
@@ -226,6 +286,7 @@ function DetailContent() {
                     "supportingPhotos",
                     "recommendationLetter",
                     "studentList",
+                    "metadata",
                   ].includes(key)
               )
             )}

@@ -1,14 +1,21 @@
-import { createPageMetadata } from "@/lib/seo/metadata";
 import LegalPageShell from "@/components/layouts/LegalPageShell";
+import {
+  generateLegalPageMetadata,
+  renderLegalPage,
+} from "@/lib/cms/legal-page-loader";
 
-export const metadata = createPageMetadata({
-  title: "Disclaimer",
-  description: "Disclaimer for Shiksha Mahakumbh Abhiyan website content and event information.",
-  path: "/disclaimer",
-});
+export async function generateMetadata() {
+  return generateLegalPageMetadata("disclaimer", {
+    title: "Disclaimer",
+    description:
+      "Disclaimer for Shiksha Mahakumbh Abhiyan website content and event information.",
+    path: "/disclaimer",
+  });
+}
 
-export default function DisclaimerPage() {
-  return (
+export default async function DisclaimerPage() {
+  return renderLegalPage(
+    "disclaimer",
     <LegalPageShell title="Disclaimer">
       <p>
         Information on this website is published by the Shiksha Mahakumbh organizing

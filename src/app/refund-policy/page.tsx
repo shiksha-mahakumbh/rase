@@ -1,14 +1,20 @@
-import { createPageMetadata } from "@/lib/seo/metadata";
 import LegalPageShell from "@/components/layouts/LegalPageShell";
+import {
+  generateLegalPageMetadata,
+  renderLegalPage,
+} from "@/lib/cms/legal-page-loader";
 
-export const metadata = createPageMetadata({
-  title: "Refund Policy",
-  description: "Refund policy for Shiksha Mahakumbh registration and related fees.",
-  path: "/refund-policy",
-});
+export async function generateMetadata() {
+  return generateLegalPageMetadata("refund-policy", {
+    title: "Refund Policy",
+    description: "Refund policy for Shiksha Mahakumbh registration and related fees.",
+    path: "/refund-policy",
+  });
+}
 
-export default function RefundPolicyPage() {
-  return (
+export default async function RefundPolicyPage() {
+  return renderLegalPage(
+    "refund-policy",
     <LegalPageShell title="Refund Policy">
       <h2>Registration fees</h2>
       <p>
@@ -22,7 +28,10 @@ export default function RefundPolicyPage() {
         with your Registration ID and payment receipt within 15 days.
       </p>
       <h2>Processing time</h2>
-      <p>Approved refunds are processed within 21 working days to the original payment method where possible.</p>
+      <p>
+        Approved refunds are processed within 21 working days to the original payment
+        method where possible.
+      </p>
     </LegalPageShell>
   );
 }

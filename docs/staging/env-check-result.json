@@ -1,0 +1,121 @@
+{
+  "timestamp": "2026-06-12T05:02:17.696Z",
+  "total": 21,
+  "passed": 20,
+  "failed": 1,
+  "checks": [
+    {
+      "group": "Security",
+      "key": "ADMIN_SESSION_SECRET",
+      "ok": true,
+      "note": "ADMIN_OPS_SECRET fallback"
+    },
+    {
+      "group": "Security",
+      "key": "REGISTRATION_LOOKUP_SECRET",
+      "ok": true,
+      "note": "fallback chain"
+    },
+    {
+      "group": "Security",
+      "key": "ADMIN_OPS_SECRET",
+      "ok": true
+    },
+    {
+      "group": "Database",
+      "key": "DATABASE_URL",
+      "ok": true
+    },
+    {
+      "group": "Database",
+      "key": "DIRECT_URL",
+      "ok": true
+    },
+    {
+      "group": "Supabase",
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "alt": "SUPABASE_URL",
+      "ok": true
+    },
+    {
+      "group": "Supabase",
+      "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "alt": "SUPABASE_ANON_KEY",
+      "ok": true
+    },
+    {
+      "group": "Supabase",
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "ok": true
+    },
+    {
+      "group": "Supabase Auth",
+      "key": "Supabase URL + keys",
+      "ok": true
+    },
+    {
+      "group": "SMTP",
+      "key": "SMTP_HOST",
+      "ok": true
+    },
+    {
+      "group": "SMTP",
+      "key": "SMTP_PORT",
+      "ok": true
+    },
+    {
+      "group": "SMTP",
+      "key": "SMTP_USER",
+      "ok": true
+    },
+    {
+      "group": "SMTP",
+      "key": "SMTP_PASS",
+      "ok": true
+    },
+    {
+      "group": "SMTP",
+      "key": "SMTP_FROM",
+      "ok": true
+    },
+    {
+      "group": "Razorpay",
+      "key": "RAZORPAY_KEY_ID",
+      "ok": true
+    },
+    {
+      "group": "Razorpay",
+      "key": "RAZORPAY_KEY_SECRET",
+      "ok": true
+    },
+    {
+      "group": "Razorpay",
+      "key": "RAZORPAY_WEBHOOK_SECRET",
+      "ok": true
+    },
+    {
+      "group": "Site",
+      "key": "NEXT_PUBLIC_SITE_URL",
+      "ok": true
+    },
+    {
+      "group": "Registration",
+      "key": "REGISTRATION_BACKEND",
+      "ok": false,
+      "note": "expected: supabase (or unset)"
+    },
+    {
+      "group": "Registration",
+      "key": "RECAPTCHA_SECRET_KEY",
+      "ok": true
+    },
+    {
+      "group": "Registration",
+      "key": "NEXT_PUBLIC_RECAPTCHA_SITE_KEY",
+      "ok": true
+    }
+  ],
+  "missingKeys": [
+    "REGISTRATION_BACKEND"
+  ]
+}

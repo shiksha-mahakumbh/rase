@@ -2,9 +2,25 @@
 
 import SlideShow from "@/app/component/SlideShow";
 import { SectionHeader } from "@/components/ui";
-import { homeSlides } from "./slides-data";
+import { useCms } from "@/lib/cms/context";
+import { getSection, sectionItems } from "@/lib/cms/utils";
+import { homeSlides, type HomeSlide } from "./slides-data";
 
 export default function GallerySection() {
+  const cms = useCms();
+  const gallery = getSection(cms?.homepage, "gallery");
+  const items = sectionItems<{ src?: string; alt?: string; legend?: string }>(
+    gallery,
+    "items"
+  );
+  const resolved = items
+    .filter((item) => item.src)
+    .map((item) => ({
+      src: item.src!,
+      alt: item.alt ?? "",
+      legend: item.legend ?? "",
+    }));
+  const slides: HomeSlide[] = resolved.length > 0 ? resolved : homeSlides;
   return (
     <section aria-label="Event gallery" className="bg-brand-navy py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -15,7 +31,7 @@ export default function GallerySection() {
           align="center"
         />
         <div className="rounded-2xl border border-white/10 bg-white/5 p-2 md:p-4">
-          <SlideShow slides={homeSlides} />
+          <SlideShow slides={slides} />
         </div>
       </div>
     </section>

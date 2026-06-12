@@ -1,15 +1,21 @@
-import { createPageMetadata } from "@/lib/seo/metadata";
 import LegalPageShell from "@/components/layouts/LegalPageShell";
+import {
+  generateLegalPageMetadata,
+  renderLegalPage,
+} from "@/lib/cms/legal-page-loader";
 
-export const metadata = createPageMetadata({
-  title: "Privacy Policy",
-  description:
-    "Privacy policy for Shiksha Mahakumbh Abhiyan — how we collect, use, and protect your personal information.",
-  path: "/privacy-policy",
-});
+export async function generateMetadata() {
+  return generateLegalPageMetadata("privacy-policy", {
+    title: "Privacy Policy",
+    description:
+      "Privacy policy for Shiksha Mahakumbh Abhiyan — how we collect, use, and protect your personal information.",
+    path: "/privacy-policy",
+  });
+}
 
-export default function PrivacyPolicyPage() {
-  return (
+export default async function PrivacyPolicyPage() {
+  return renderLegalPage(
+    "privacy-policy",
     <LegalPageShell title="Privacy Policy">
       <p>Last updated: May 2026</p>
       <h2>Information we collect</h2>

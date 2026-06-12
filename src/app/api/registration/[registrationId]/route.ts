@@ -1,22 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminFirestore } from "@/lib/firebase-admin";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
-
-const REG_ID_RE = /^SMK2026-\d{6}$/;
+import {
+  REG_ID_RE,
+  verifyRegistrationLookupToken,
+} from "@/lib/security/registration-lookup";
+import { getPublicRegistrationSummary } from "@/server/services/registration.service";
 
 type RouteContext = {
   params: Promise<{ registrationId: string }>;
 };
 
-function toIsoString(value: unknown): string | null {
-  if (!value) return null;
-  if (typeof value === "string") return value;
-  if (value instanceof Date) return value.toISOString();
-  if (typeof value === "object" && value !== null && "toDate" in value) {
-    const maybeDate = (value as { toDate?: () => Date }).toDate?.();
-    if (maybeDate instanceof Date) return maybeDate.toISOString();
+async function resolveVerifiedEmail(
+  registrationId: string,
+  request: NextRequest
+): Promise<string | null> {
+  const token = request.nextUrl.searchParams.get("token")?.trim();
+  if (token) {
+    const verified = verifyRegistrationLookupToken(registrationId, token);
+    return verified?.email ?? null;
   }
-  return null;
+
+  const email = request.nextUrl.searchParams.get("email")?.trim();
+  return email || null;
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
@@ -25,7 +30,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
   const ip = getClientIp(request);
   const limited = rateLimit({
     key: `registration-lookup:${ip}`,
-    limit: 60,
+    limit: 10,
     windowMs: 60_000,
   });
 
@@ -40,32 +45,20 @@ export async function GET(request: NextRequest, context: RouteContext) {
     return NextResponse.json({ error: "Invalid registration ID" }, { status: 400 });
   }
 
-  try {
-    const db = getAdminFirestore();
-    const snap = await db
-      .collection("registrations")
-      .where("registrationId", "==", registrationId)
-      .limit(1)
-      .get();
+  const email = await resolveVerifiedEmail(registrationId, request);
+  if (!email) {
+    return NextResponse.json(
+      { error: "Email or confirmation token required" },
+      { status: 401 }
+    );
+  }
 
-    if (snap.empty) {
+  try {
+    const summary = await getPublicRegistrationSummary(registrationId, email);
+    if (!summary) {
       return NextResponse.json({ error: "Registration not found" }, { status: 404 });
     }
-
-    const data = snap.docs[0]!.data();
-
-    return NextResponse.json({
-      registrationId: data.registrationId,
-      registrationType: data.registrationType,
-      fullName: data.fullName,
-      institution: data.institution,
-      email: data.email,
-      contactNumber: data.contactNumber,
-      paymentStatus: data.paymentStatus,
-      accommodationRequired: data.accommodationRequired,
-      accommodationStatus: data.accommodationStatus,
-      createdAt: toIsoString(data.createdAt),
-    });
+    return NextResponse.json(summary);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("registration lookup error:", message);

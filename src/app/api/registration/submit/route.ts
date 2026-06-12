@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { saveRegistration } from "@/lib/saveRegistration.server";
+import { saveRegistration } from "@/server/services/registration.service";
+import { isSupportedType } from "@/server/lib/registration-types";
 import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
-import {
-  REGISTRATION_TYPE_OPTIONS,
-  type PaymentStatus,
-  type RegistrationType,
-} from "@/types/registration";
+import { getRequestContext } from "@/server/lib/request";
+import type { PaymentStatus } from "@/types/registration";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function isRegistrationType(value: unknown): value is RegistrationType {
-  return (
-    typeof value === "string" &&
-    (REGISTRATION_TYPE_OPTIONS as readonly string[]).includes(value)
-  );
-}
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
@@ -46,12 +37,14 @@ export async function POST(request: NextRequest) {
       paymentStatus?: PaymentStatus;
     };
 
-    if (!isRegistrationType(registrationType)) {
+    if (typeof registrationType !== "string" || !isSupportedType(registrationType)) {
       return NextResponse.json(
         { error: "Invalid registration type" },
         { status: 400 }
       );
     }
+
+    const type = registrationType;
 
     if (!data || typeof data !== "object") {
       return NextResponse.json({ error: "Invalid registration data" }, { status: 400 });
@@ -77,23 +70,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const ctx = getRequestContext(request);
     const result = await saveRegistration({
-      registrationType,
+      registrationType: type,
       data,
       paymentStatus,
+      submittedIp: ctx.ip,
+      userAgent: ctx.userAgent,
     });
 
     console.info("registration submitted", {
       registrationId: result.registrationId,
-      registrationType,
-      masterDocId: result.masterDocId,
+      registrationType: type,
+      id: result.id,
     });
+
+    const { createRegistrationLookupToken } = await import(
+      "@/lib/security/registration-lookup"
+    );
+    const lookupToken = createRegistrationLookupToken(result.registrationId, email);
 
     return NextResponse.json({
       success: true,
       registrationId: result.registrationId,
-      masterDocId: result.masterDocId,
+      masterDocId: result.id,
       typeDocId: result.typeDocId,
+      lookupToken,
     });
   } catch (error) {
     console.error("registration submit error:", error);

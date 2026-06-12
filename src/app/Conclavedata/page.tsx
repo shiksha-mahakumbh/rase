@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { db } from '@/app/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { fetchGatewayRegistrations, mergedRegistrationFields } from '@/lib/admin/legacy-registration-fetch';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -28,12 +27,21 @@ const ConclaveDataPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const colRef = collection(db, 'ConclaveRegistrations');
-        const querySnapshot = await getDocs(colRef);
-        const fetchedData: ConclaveData[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as ConclaveData;
-          fetchedData.push({ ...data, serial: fetchedData.length + 1 });
+        const items = await fetchGatewayRegistrations('Conclave');
+        const fetchedData: ConclaveData[] = items.map((item, index) => {
+          const row = mergedRegistrationFields(item);
+          return {
+            serial: index + 1,
+            typeofConclave: String(row.conclaveSelection ?? row.typeofConclave ?? ''),
+            name: String(row.fullName ?? row.name ?? ''),
+            designation: String(row.designation ?? ''),
+            institutionName: String(row.institution ?? row.institutionName ?? ''),
+            email: String(row.email ?? ''),
+            contactNumber: String(row.contactNumber ?? ''),
+            address: String(row.address ?? ''),
+            views: String(row.views ?? ''),
+            accommodation: String(row.accommodationRequired ?? row.accommodation ?? ''),
+          };
         });
         setDataList(fetchedData);
       } catch (error) {

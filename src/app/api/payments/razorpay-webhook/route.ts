@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
-import { processRazorpayWebhookEvent } from "@/lib/firestore/payments.server";
+import { processRazorpayWebhookEvent } from "@/server/services/payment.service";
 
 /**
  * Razorpay webhook — verify signature and process payment events.

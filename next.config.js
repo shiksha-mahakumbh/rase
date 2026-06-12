@@ -17,15 +17,6 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  /** Avoids missing vendor-chunks/@firebase.js from incomplete Firebase SSR bundling */
-  serverExternalPackages: [
-    "firebase",
-    "firebase/app",
-    "firebase/auth",
-    "firebase/firestore",
-    "firebase/storage",
-    "firebase/analytics",
-  ],
   /** Reduces dev memory spikes from PackFileCacheStrategy on large codebases */
   webpack: (config, { dev }) => {
     if (dev) {

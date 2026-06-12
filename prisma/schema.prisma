@@ -1,0 +1,1722 @@
+// Shiksha Mahakumbh 2026 — Supabase PostgreSQL schema
+// Generator: Prisma · Runtime: Next.js Route Handlers + Server Actions
+// Firebase remains active during parallel build; cutover after migration verification.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum YesNo {
+  Yes
+  No
+}
+
+enum VidyaBhartiStatus {
+  Vidya_Bharti      @map("Vidya Bharti")
+  Non_Vidya_Bharti  @map("Non Vidya Bharti")
+}
+
+enum RegistrationType {
+  Conclave
+  Delegate
+  Exhibition
+  Accommodation
+  Awards
+  Best_Practices    @map("Best Practices")
+  Olympiad
+  Talent
+  Volunteer
+  NGO
+  Participant
+  // Legacy — migration only, no new submissions
+  Legacy_Other      @map("Legacy Other")
+}
+
+enum RegistrationStatus {
+  Pending
+  Submitted
+  Verified
+  Approved
+  Rejected
+}
+
+enum PaymentStatus {
+  Pending_Payment @map("Pending Payment")
+  Paid
+  Failed
+  Submitted
+  Not_Required    @map("Not Required")
+}
+
+enum AccommodationStatus {
+  Not_Required @map("Not Required")
+  Requested
+  Confirmed
+  Allocated
+}
+
+enum EmailDeliveryStatus {
+  sent
+  failed
+  pending
+  skipped
+}
+
+enum EmailLogStatus {
+  queued
+  sending
+  sent
+  failed
+  skipped
+}
+
+enum AuditAction {
+  registration_created
+  registration_updated
+  registration_deleted
+  registration_status_changed
+  payment_created
+  payment_completed
+  payment_captured
+  payment_failed
+  payment_refunded
+  file_uploaded
+  file_deleted
+  email_sent
+  email_failed
+  committee_member_added
+  committee_member_removed
+  event_created
+  event_updated
+  admin_login
+  admin_logout
+  admin_action
+  migration_import
+  system_event
+  page_created
+  page_updated
+  page_published
+  page_deleted
+  media_asset_created
+  media_asset_deleted
+  notice_created
+  notice_updated
+  notice_published
+  notice_deleted
+  download_updated
+  settings_updated
+  menu_updated
+  announcement_bar_updated
+  visitor_tracked
+}
+
+enum EventStatus {
+  draft
+  published
+  unpublished
+  archived
+}
+
+enum NewsletterStatus {
+  subscribed
+  unsubscribed
+  bounced
+}
+
+enum ContactStatus {
+  new
+  in_progress
+  replied
+  closed
+  spam
+}
+
+enum FeedbackStatus {
+  new
+  reviewed
+  replied
+  archived
+}
+
+enum CommitteeCategory {
+  National_Advisory_Board
+  Advisory_Board
+  National_Organizing_Committee
+  Steering_Committee
+  Event_Committee
+  Patrons
+  Chief_Patrons
+  Organizing_Committee
+  Academic_Committee
+  Technical_Committee
+  Research_Committee
+  Volunteer_Committee
+  Media_Committee
+  Hospitality_Committee
+  Other
+}
+
+enum PartnerCategory {
+  academic
+  knowledge
+  industry
+  media
+  csr
+  government
+  ngo
+  international
+  technology
+  research
+  other
+}
+
+enum SpeakerCategory {
+  keynote
+  plenary
+  track_chair
+  panelist
+  guest
+  other
+}
+
+enum EventCategory {
+  summit
+  conclave
+  workshop
+  olympiad
+  exhibition
+  ceremony
+  other
+}
+
+enum MediaCenterCategory {
+  news
+  press_release
+  media_mention
+  photo_gallery
+  video
+  interview
+  publication
+}
+
+enum MediaType {
+  image
+  video
+  document
+  press_release
+  album
+  interview
+  publication
+}
+
+enum StorageBucket {
+  registrations
+  awards
+  best_practices
+  brochures
+  gallery
+  committee
+  documents
+  receipts
+  exports
+  media
+  downloads
+}
+
+enum NotificationChannel {
+  email
+  in_app
+  sms
+}
+
+// ─── Phase 3.5 CMS Foundation ─────────────────────────────────────────────────
+
+enum ContentLocale {
+  en
+  hi
+  es
+  fr
+  ar
+  ru
+}
+
+enum PageStatus {
+  draft
+  scheduled
+  published
+  archived
+}
+
+enum PageType {
+  static
+  homepage
+  about
+  policy
+  international
+  landing
+  custom
+  article
+  department
+}
+
+enum AlbumType {
+  gallery
+  homepage
+  edition
+  press
+}
+
+enum FaqStatus {
+  draft
+  published
+  archived
+}
+
+enum PageSectionType {
+  hero
+  content
+  cta
+  stats
+  gallery
+  faq
+  custom
+  counter
+  testimonial
+  partner
+  announcement
+  featured_events
+  featured_programs
+}
+
+enum NoticeStatus {
+  draft
+  scheduled
+  published
+  archived
+}
+
+enum DownloadType {
+  brochure
+  report
+  guidelines
+  circular
+  poster
+  presentation
+  other
+}
+
+enum DownloadStatus {
+  draft
+  published
+  archived
+}
+
+enum MenuType {
+  header
+  footer
+  quick_links
+  mobile
+}
+
+enum AnnouncementBarType {
+  global
+  registration_alert
+  deadline_reminder
+  emergency
+}
+
+enum DeviceType {
+  desktop
+  mobile
+  tablet
+  bot
+  unknown
+}
+
+enum PageCategory {
+  homepage
+  registration
+  conclave
+  event
+  download
+  noticeboard
+  media
+  committee
+  press
+  other
+}
+
+enum MediaAssetType {
+  image
+  pdf
+  document
+  video
+  brochure
+  other
+}
+
+// ─── Auth & RBAC ─────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  authUserId    String?   @unique @map("auth_user_id") @db.Uuid // Supabase auth.users.id
+  email         String    @unique
+  fullName      String?   @map("full_name")
+  avatarUrl     String?   @map("avatar_url")
+  phone         String?
+  isActive      Boolean   @default(true) @map("is_active")
+  lastLoginAt   DateTime? @map("last_login_at") @db.Timestamptz(6)
+  lastLoginIp   String?   @map("last_login_ip")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  userRoles     UserRole[]
+  auditLogs     AuditLog[]       @relation("AuditActor")
+  emailLogs     EmailLog[]
+  uploadedFiles UploadedFile[]   @relation("UploadedBy")
+  contactReplies ContactMessage[] @relation("ContactReplier")
+  feedbackReplies Feedback[]      @relation("FeedbackReplier")
+
+  @@index([email])
+  @@index([authUserId])
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique // Super Admin, Admin, Data Entry, Coordinator, etc.
+  slug        String   @unique
+  description String?
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(uuid()) @db.Uuid
+  resource    String   // registrations, committees, media, settings, users
+  action      String   // read, create, update, delete, export, manage
+  slug        String   @unique // registrations.read, committees.manage
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  rolePermissions RolePermission[]
+
+  @@unique([resource, action])
+  @@map("permissions")
+}
+
+model UserRole {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  roleId    String   @map("role_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  id           String @id @default(uuid()) @db.Uuid
+  roleId       String @map("role_id") @db.Uuid
+  permissionId String @map("permission_id") @db.Uuid
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+// ─── System ───────────────────────────────────────────────────────────────────
+
+model SystemSetting {
+  id        String   @id @default(uuid()) @db.Uuid
+  key       String   @unique
+  value     Json
+  category  String   @default("general")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("system_settings")
+}
+
+model RegistrationCounter {
+  id         String   @id @default(uuid()) @db.Uuid
+  year       Int      @default(2026)
+  prefix     String   @default("SMK2026")
+  lastNumber Int      @default(0) @map("last_number")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([prefix])
+  @@unique([year])
+  @@map("registration_counters")
+}
+
+// ─── Core Registration Engine ─────────────────────────────────────────────────
+
+model Registration {
+  id                   String              @id @default(uuid()) @db.Uuid
+  registrationId       String              @unique @map("registration_id") // SMK2026-000001
+  registrationType     RegistrationType    @map("registration_type")
+  registrationStatus   RegistrationStatus  @default(Submitted) @map("registration_status")
+  paymentStatus        PaymentStatus       @default(Not_Required) @map("payment_status")
+  accommodationStatus  AccommodationStatus @default(Not_Required) @map("accommodation_status")
+  emailDeliveryStatus  EmailDeliveryStatus? @map("email_delivery_status")
+
+  // Common participant fields
+  fullName       String  @map("full_name")
+  gender         Gender
+  designation    String
+  institution    String
+  address        String
+  country        String  @default("India")
+  email          String
+  contactNumber  String  @map("contact_number")
+  whatsappNumber String? @map("whatsapp_number")
+  vidyaBharti    VidyaBhartiStatus @map("vidya_bharti")
+
+  // Accommodation
+  accommodationRequired YesNo  @default(No) @map("accommodation_required")
+  accommodationDate     String? @map("accommodation_date")
+  accommodationType     String? @map("accommodation_type")
+  participantCategory   String? @map("participant_category")
+
+  // Payment snapshot
+  registrationFee  Decimal? @map("registration_fee") @db.Decimal(12, 2)
+  utrNumber        String?  @map("utr_number")
+  transactionId    String?  @map("transaction_id")
+  razorpayOrderId  String?  @map("razorpay_order_id")
+  razorpayPaymentId String? @map("razorpay_payment_id")
+
+  // Flexible payload for type-specific fields not yet normalized
+  metadata Json @default("{}")
+
+  // Migration traceability
+  firebaseMasterDocId String? @map("firebase_master_doc_id")
+  firebaseTypeDocId   String? @map("firebase_type_doc_id")
+  source              String  @default("supabase") // supabase | firebase | migration
+
+  submittedIp String? @map("submitted_ip")
+  userAgent   String? @map("user_agent")
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  statusHistory        RegistrationStatusHistory[]
+  uploadedFiles        UploadedFile[]
+  paymentRecords       PaymentRecord[]
+  accommodationRequest AccommodationRequest?
+  emailLogs            EmailLog[]
+  auditLogs            AuditLog[]
+
+  conclaveRegistration      ConclaveRegistration?
+  delegateRegistration      DelegateRegistration?
+  exhibitionRegistration    ExhibitionRegistration?
+  awardsRegistration        AwardsRegistration?
+  bestPracticeRegistration  BestPracticeRegistration?
+  olympiadRegistration      OlympiadRegistration?
+  talentRegistration        TalentRegistration?
+  volunteerApplication      VolunteerApplication?
+  ngoRegistration           NgoRegistration?
+  participantRegistration   ParticipantRegistration?
+
+  @@index([registrationType])
+  @@index([registrationStatus])
+  @@index([paymentStatus])
+  @@index([email])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@map("registrations")
+}
+
+model RegistrationStatusHistory {
+  id               String             @id @default(uuid()) @db.Uuid
+  registrationId   String             @map("registration_id") @db.Uuid
+  fromStatus       RegistrationStatus? @map("from_status")
+  toStatus         RegistrationStatus @map("to_status")
+  changedByUserId  String?            @map("changed_by_user_id") @db.Uuid
+  reason           String?
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([registrationId, createdAt])
+  @@map("registration_status_history")
+}
+
+// ─── Type-specific registration tables ───────────────────────────────────────
+
+model ConclaveRegistration {
+  id               String @id @default(uuid()) @db.Uuid
+  registrationId   String @unique @map("registration_id") @db.Uuid
+  conclaveSelection String @map("conclave_selection")
+  participationType String @map("participation_type")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("conclave_registrations")
+}
+
+model DelegateRegistration {
+  id               String @id @default(uuid()) @db.Uuid
+  registrationId   String @unique @map("registration_id") @db.Uuid
+  delegateCategory String @map("delegate_category")
+  panNumber        String? @map("pan_number")
+  chequeNumber     String? @map("cheque_number")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("delegate_registrations")
+}
+
+model ExhibitionRegistration {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  projectTitle   String? @map("project_title")
+  projectSummary String? @map("project_summary") @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("exhibition_registrations")
+}
+
+model AwardsRegistration {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  awardCategory  String @map("award_category")
+  nominationDetails String? @map("nomination_details") @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("award_registrations")
+}
+
+model BestPracticeRegistration {
+  id               String @id @default(uuid()) @db.Uuid
+  registrationId   String @unique @map("registration_id") @db.Uuid
+  title            String
+  organizationName String @map("organization_name")
+  areaOfWork       String @map("area_of_work")
+  description      String @db.Text
+  wordCount        Int?   @map("word_count")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("best_practice_registrations")
+}
+
+model OlympiadRegistration {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  olympiadTrack  String @map("olympiad_track")
+  schoolName     String? @map("school_name")
+  grade          String?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("olympiad_registrations")
+}
+
+model TalentRegistration {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  talentCategory String @map("talent_category")
+  performanceTitle String? @map("performance_title")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("talent_registrations")
+}
+
+model VolunteerApplication {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  volunteerRole  String @map("volunteer_role")
+  availability   String?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("volunteer_applications")
+}
+
+model NgoRegistration {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  ngoName        String @map("ngo_name")
+  registrationNumber String? @map("registration_number")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("ngo_registrations")
+}
+
+model ParticipantRegistration {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  participantType String @map("participant_type")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("participant_registrations")
+}
+
+model AccommodationRequest {
+  id             String @id @default(uuid()) @db.Uuid
+  registrationId String @unique @map("registration_id") @db.Uuid
+  status         AccommodationStatus @default(Requested)
+  notes          String? @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("accommodation_requests")
+}
+
+// ─── Files ────────────────────────────────────────────────────────────────────
+
+model UploadedFile {
+  id             String        @id @default(uuid()) @db.Uuid
+  registrationId String?       @map("registration_id") @db.Uuid
+  bucket         StorageBucket
+  storagePath    String        @map("storage_path")
+  fieldName      String        @map("field_name")
+  originalName   String        @map("original_name")
+  contentType    String?       @map("content_type")
+  sizeBytes      Int?          @map("size_bytes")
+  version        Int           @default(1)
+  isCurrent      Boolean       @default(true) @map("is_current")
+  signedUrl      String?       @map("signed_url") @db.Text
+  uploadedById   String?       @map("uploaded_by_id") @db.Uuid
+  metadata       Json          @default("{}")
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration? @relation(fields: [registrationId], references: [id], onDelete: SetNull)
+  uploadedBy   User?         @relation("UploadedBy", fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+  @@index([bucket, storagePath])
+  @@map("uploaded_files")
+}
+
+// ─── Payments ─────────────────────────────────────────────────────────────────
+
+model PaymentRecord {
+  id                String        @id @default(uuid()) @db.Uuid
+  registrationId    String        @map("registration_id") @db.Uuid
+  razorpayOrderId   String?       @map("razorpay_order_id")
+  razorpayPaymentId String?       @unique @map("razorpay_payment_id")
+  razorpaySignature String?       @map("razorpay_signature")
+  amount            Decimal       @db.Decimal(12, 2)
+  currency          String        @default("INR")
+  status            PaymentStatus
+  webhookEventId    String?       @map("webhook_event_id")
+  isDuplicate       Boolean       @default(false) @map("is_duplicate")
+  refundId          String?       @map("refund_id")
+  refundStatus      String?       @map("refund_status")
+  metadata          Json          @default("{}")
+  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt         DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  webhookEvents WebhookEvent[]
+
+  @@index([registrationId])
+  @@index([razorpayOrderId])
+  @@map("payment_records")
+}
+
+model WebhookEvent {
+  id              String   @id @default(uuid()) @db.Uuid
+  paymentRecordId String?  @map("payment_record_id") @db.Uuid
+  eventType       String   @map("event_type")
+  razorpayEventId String?  @unique @map("razorpay_event_id")
+  payload         Json     @default("{}")
+  signatureValid  Boolean  @default(false) @map("signature_valid")
+  processed       Boolean  @default(false)
+  errorMessage    String?  @map("error_message") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  paymentRecord PaymentRecord? @relation(fields: [paymentRecordId], references: [id], onDelete: SetNull)
+
+  @@index([eventType, createdAt])
+  @@map("webhook_events")
+}
+
+// ─── Audit & Email ────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id             String      @id @default(uuid()) @db.Uuid
+  action         AuditAction
+  actorUserId    String?     @map("actor_user_id") @db.Uuid
+  registrationId String?     @map("registration_id") @db.Uuid
+  entityType     String?     @map("entity_type")
+  entityId       String?     @map("entity_id")
+  ipAddress      String?     @map("ip_address")
+  userAgent      String?     @map("user_agent")
+  payload        Json        @default("{}")
+  createdAt      DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  actor        User?         @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  registration Registration? @relation(fields: [registrationId], references: [id], onDelete: SetNull)
+
+  @@index([action, createdAt])
+  @@index([registrationId])
+  @@map("audit_logs")
+}
+
+model EmailLog {
+  id             String           @id @default(uuid()) @db.Uuid
+  registrationId String?          @map("registration_id") @db.Uuid
+  toEmail        String           @map("to_email")
+  subject        String
+  template       String?
+  status         EmailLogStatus   @default(queued)
+  provider       String           @default("brevo")
+  providerMsgId  String?          @map("provider_msg_id")
+  errorMessage   String?          @map("error_message") @db.Text
+  retryCount     Int              @default(0) @map("retry_count")
+  sentAt         DateTime?        @map("sent_at") @db.Timestamptz(6)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  registration Registration? @relation(fields: [registrationId], references: [id], onDelete: SetNull)
+  user         User?         @relation(fields: [userId], references: [id])
+  userId       String?       @map("user_id") @db.Uuid
+
+  @@index([status, createdAt])
+  @@index([registrationId])
+  @@map("email_logs")
+}
+
+// ─── Committees ───────────────────────────────────────────────────────────────
+
+model Committee {
+  id          String            @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String
+  category    CommitteeCategory
+  description String?           @db.Text
+  edition     String?
+  locale      ContentLocale     @default(en)
+  status      PageStatus        @default(draft)
+  publishAt   DateTime?         @map("publish_at") @db.Timestamptz(6)
+  sortOrder   Int               @default(0) @map("sort_order")
+  isPublished Boolean           @default(true) @map("is_published")
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?         @map("deleted_at") @db.Timestamptz(6)
+
+  members CommitteeMember[]
+
+  @@unique([slug, edition, locale])
+  @@index([category, sortOrder])
+  @@index([edition, locale, status])
+  @@map("committees")
+}
+
+model CommitteeMember {
+  id            String         @id @default(uuid()) @db.Uuid
+  committeeId   String         @map("committee_id") @db.Uuid
+  fullName      String         @map("full_name")
+  designation   String?
+  institution   String?
+  email         String?
+  phone         String?
+  socialLinks   Json           @default("{}") @map("social_links")
+  locale        ContentLocale?
+  photoUrl      String?        @map("photo_url")
+  mediaAssetId  String?        @map("media_asset_id") @db.Uuid
+  bio           String?        @db.Text
+  sortOrder     Int            @default(0) @map("sort_order")
+  isActive      Boolean        @default(true) @map("is_active")
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime?      @map("deleted_at") @db.Timestamptz(6)
+
+  committee  Committee   @relation(fields: [committeeId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@index([committeeId, sortOrder])
+  @@map("committee_members")
+}
+
+// ─── Events & Media ───────────────────────────────────────────────────────────
+
+model Event {
+  id                 String        @id @default(uuid()) @db.Uuid
+  title              String
+  slug               String
+  description        String?       @db.Text
+  edition            String?
+  locale             ContentLocale @default(en)
+  category           EventCategory @default(other)
+  eventDate          DateTime?     @map("event_date") @db.Timestamptz(6)
+  startDate          DateTime?     @map("start_date") @db.Timestamptz(6)
+  endDate            DateTime?     @map("end_date") @db.Timestamptz(6)
+  publishAt          DateTime?     @map("publish_at") @db.Timestamptz(6)
+  venue              String?
+  location           String?
+  bannerUrl          String?       @map("banner_url")
+  highlights         Json          @default("[]")
+  brochureDownloadId String?       @map("brochure_download_id") @db.Uuid
+  registrationLink   String?       @map("registration_link")
+  status             EventStatus   @default(draft)
+  isFeatured         Boolean       @default(false) @map("is_featured")
+  isPublished        Boolean       @default(false) @map("is_published")
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  media            EventMedia[]
+  brochureDownload Download? @relation("EventBrochure", fields: [brochureDownloadId], references: [id], onDelete: SetNull)
+
+  @@unique([slug, locale])
+  @@index([status, startDate])
+  @@index([locale, isFeatured])
+  @@map("events")
+}
+
+model EventMedia {
+  id                  String              @id @default(uuid()) @db.Uuid
+  eventId             String?             @map("event_id") @db.Uuid
+  slug                String?
+  locale              ContentLocale       @default(en)
+  status              PageStatus          @default(draft)
+  mediaType           MediaType           @map("media_type")
+  mediaCenterCategory MediaCenterCategory? @map("media_center_category")
+  title               String?
+  excerpt             String?
+  description         String?             @db.Text
+  url                 String
+  storagePath         String?             @map("storage_path")
+  category            String?
+  tags                String[]            @default([])
+  edition             String?
+  publishAt           DateTime?           @map("publish_at") @db.Timestamptz(6)
+  relatedIds          Json                @default("[]") @map("related_ids")
+  mediaAssetId        String?             @map("media_asset_id") @db.Uuid
+  isFeatured          Boolean             @default(false) @map("is_featured")
+  sortOrder           Int                 @default(0) @map("sort_order")
+  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime?           @map("deleted_at") @db.Timestamptz(6)
+
+  event      Event?      @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@index([mediaType, isFeatured])
+  @@index([mediaCenterCategory, status, publishAt])
+  @@index([slug, locale])
+  @@map("event_media")
+}
+
+model Download {
+  id            String         @id @default(uuid()) @db.Uuid
+  title         String
+  slug          String?
+  description   String?        @db.Text
+  fileUrl       String         @map("file_url")
+  storagePath   String?        @map("storage_path")
+  category      String?
+  downloadType  DownloadType   @default(other) @map("download_type")
+  tags          String[]       @default([])
+  sortOrder     Int            @default(0) @map("sort_order")
+  downloadCount Int            @default(0) @map("download_count")
+  version       Int            @default(1)
+  isCurrent     Boolean        @default(true) @map("is_current")
+  replacedById  String?        @map("replaced_by_id") @db.Uuid
+  status        DownloadStatus @default(published)
+  isPublished   Boolean        @default(true) @map("is_published")
+  expiresAt     DateTime?      @map("expires_at") @db.Timestamptz(6)
+  mediaAssetId  String?        @map("media_asset_id") @db.Uuid
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime?      @map("deleted_at") @db.Timestamptz(6)
+
+  replacedBy Download?  @relation("DownloadVersion", fields: [replacedById], references: [id], onDelete: SetNull)
+  replaces   Download[] @relation("DownloadVersion")
+  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+  eventBrochures Event[] @relation("EventBrochure")
+
+  @@index([status, isCurrent, expiresAt])
+  @@index([downloadType, category])
+  @@index([tags])
+  @@map("downloads")
+}
+
+model NewsletterSubscription {
+  id             String           @id @default(uuid()) @db.Uuid
+  email          String           @unique
+  fullName       String?          @map("full_name")
+  status         NewsletterStatus @default(subscribed)
+  source         String?          @default("website")
+  subscribedIp   String?          @map("subscribed_ip")
+  unsubscribedAt DateTime?        @map("unsubscribed_at") @db.Timestamptz(6)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?        @map("deleted_at") @db.Timestamptz(6)
+
+  @@index([status, createdAt])
+  @@map("newsletter_subscriptions")
+}
+
+// ─── Contact & Feedback ───────────────────────────────────────────────────────
+
+model ContactMessage {
+  id          String        @id @default(uuid()) @db.Uuid
+  fullName    String        @map("full_name")
+  email       String
+  phone       String?
+  subject     String?
+  message     String        @db.Text
+  status      ContactStatus @default(new)
+  adminReply  String?       @map("admin_reply") @db.Text
+  repliedById String?       @map("replied_by_id") @db.Uuid
+  repliedAt   DateTime?     @map("replied_at") @db.Timestamptz(6)
+  submittedIp String?       @map("submitted_ip")
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  repliedBy User? @relation("ContactReplier", fields: [repliedById], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@map("contact_messages")
+}
+
+model Feedback {
+  id          String         @id @default(uuid()) @db.Uuid
+  fullName    String?        @map("full_name")
+  email       String?
+  rating      Int?
+  category    String?
+  message     String         @db.Text
+  status      FeedbackStatus @default(new)
+  adminReply  String?        @map("admin_reply") @db.Text
+  repliedById String?        @map("replied_by_id") @db.Uuid
+  repliedAt   DateTime?      @map("replied_at") @db.Timestamptz(6)
+  submittedIp String?        @map("submitted_ip")
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?      @map("deleted_at") @db.Timestamptz(6)
+
+  repliedBy User? @relation("FeedbackReplier", fields: [repliedById], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@map("feedback")
+}
+
+// ─── Announcements & Notifications ───────────────────────────────────────────
+
+model Announcement {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  body        String   @db.Text
+  isPinned    Boolean  @default(false) @map("is_pinned")
+  isPublished Boolean  @default(true) @map("is_published")
+  publishAt   DateTime? @map("publish_at") @db.Timestamptz(6)
+  expiresAt   DateTime? @map("expires_at") @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  @@index([isPublished, publishAt])
+  @@map("announcements")
+}
+
+model Notification {
+  id        String              @id @default(uuid()) @db.Uuid
+  userId    String?             @map("user_id") @db.Uuid
+  channel   NotificationChannel
+  title     String
+  body      String              @db.Text
+  isRead    Boolean             @default(false) @map("is_read")
+  metadata  Json                @default("{}")
+  createdAt DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+// ─── Speakers, Sponsors, Partners ─────────────────────────────────────────────
+
+model SpeakerProfile {
+  id           String          @id @default(uuid()) @db.Uuid
+  slug         String
+  fullName     String          @map("full_name")
+  title        String?
+  designation  String?
+  institution  String?
+  country      String?
+  bio          String?         @db.Text
+  photoUrl     String?         @map("photo_url")
+  mediaAssetId String?         @map("media_asset_id") @db.Uuid
+  category     SpeakerCategory @default(other)
+  edition      String?
+  locale       ContentLocale   @default(en)
+  status       PageStatus      @default(draft)
+  publishAt    DateTime?       @map("publish_at") @db.Timestamptz(6)
+  socialLinks  Json            @default("{}") @map("social_links")
+  topics       String[]        @default([])
+  tags         String[]        @default([])
+  languages    String[]        @default([])
+  isFeatured   Boolean         @default(false) @map("is_featured")
+  sortOrder    Int             @default(0) @map("sort_order")
+  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?       @map("deleted_at") @db.Timestamptz(6)
+
+  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@unique([slug, locale])
+  @@index([status, locale, isFeatured])
+  @@map("speaker_profiles")
+}
+
+model Sponsor {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  logoUrl   String?  @map("logo_url")
+  website   String?
+  tier      String?
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  @@map("sponsors")
+}
+
+model Partner {
+  id              String          @id @default(uuid()) @db.Uuid
+  name            String
+  slug            String?
+  logoUrl         String?         @map("logo_url")
+  website         String?
+  description     String?         @db.Text
+  category        String?
+  partnerCategory PartnerCategory @default(other) @map("partner_category")
+  locale          ContentLocale   @default(en)
+  status          PageStatus      @default(draft)
+  isActive        Boolean         @default(true) @map("is_active")
+  isFeatured      Boolean         @default(false) @map("is_featured")
+  mediaAssetId    String?         @map("media_asset_id") @db.Uuid
+  sortOrder       Int             @default(0) @map("sort_order")
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime?       @map("deleted_at") @db.Timestamptz(6)
+
+  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@index([partnerCategory, status, locale, sortOrder])
+  @@map("partners")
+}
+
+// ─── Phase C: Entity Revision History ─────────────────────────────────────────
+
+model EntityRevision {
+  id          String   @id @default(uuid()) @db.Uuid
+  entityType  String   @map("entity_type")
+  entityId    String   @map("entity_id") @db.Uuid
+  version     Int
+  snapshot    Json
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([entityType, entityId, version])
+  @@index([entityType, entityId, createdAt])
+  @@map("entity_revisions")
+}
+
+// ─── Analytics — Phase B.5 Visitor Intelligence ─────────────────────────────
+
+model VisitorAnalytics {
+  id         String   @id @default(uuid()) @db.Uuid
+  date       DateTime @db.Date
+  dailyCount Int      @default(0) @map("daily_count")
+  totalCount Int      @default(0) @map("total_count")
+  uniqueCount Int     @default(0) @map("unique_count")
+  returningCount Int  @default(0) @map("returning_count")
+  botFiltered Int     @default(0) @map("bot_filtered")
+  metadata   Json     @default("{}")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([date])
+  @@map("visitor_analytics")
+}
+
+model VisitorSession {
+  id            String    @id @default(uuid()) @db.Uuid
+  sessionId     String    @unique @map("session_id")
+  visitorId     String    @map("visitor_id")
+  isReturning   Boolean   @default(false) @map("is_returning")
+  isBot         Boolean   @default(false) @map("is_bot")
+  ipHash        String?   @map("ip_hash")
+  userAgent     String?   @map("user_agent") @db.Text
+  referrer      String?   @db.Text
+  landingPath   String    @map("landing_path")
+  lastPath      String?   @map("last_path")
+  pageViewCount Int       @default(1) @map("page_view_count")
+  startedAt     DateTime  @default(now()) @map("started_at") @db.Timestamptz(6)
+  lastActiveAt  DateTime  @default(now()) @map("last_active_at") @db.Timestamptz(6)
+  endedAt       DateTime? @map("ended_at") @db.Timestamptz(6)
+
+  device        VisitorDevice?
+  location      VisitorLocation?
+  trafficSource TrafficSource?
+  pageViews     VisitorPageView[]
+  events        VisitorEvent[]
+
+  @@index([visitorId])
+  @@index([startedAt])
+  @@index([lastActiveAt])
+  @@index([isBot, startedAt])
+  @@map("visitor_sessions")
+}
+
+model VisitorPageView {
+  id           String       @id @default(uuid()) @db.Uuid
+  sessionId    String       @map("session_id") @db.Uuid
+  path         String
+  pageCategory PageCategory @default(other) @map("page_category")
+  title        String?
+  referrer     String?      @db.Text
+  utmSource    String?      @map("utm_source")
+  utmMedium    String?      @map("utm_medium")
+  utmCampaign  String?      @map("utm_campaign")
+  utmTerm      String?      @map("utm_term")
+  utmContent   String?      @map("utm_content")
+  durationMs   Int?         @map("duration_ms")
+  viewedAt     DateTime     @default(now()) @map("viewed_at") @db.Timestamptz(6)
+
+  session VisitorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([path])
+  @@index([pageCategory, viewedAt])
+  @@index([viewedAt])
+  @@map("visitor_page_views")
+}
+
+model VisitorEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  sessionId  String   @map("session_id") @db.Uuid
+  eventType  String   @map("event_type")
+  eventName  String   @map("event_name")
+  path       String?
+  entityType String?  @map("entity_type")
+  entityId   String?  @map("entity_id") @db.Uuid
+  metadata   Json     @default("{}")
+  occurredAt DateTime @default(now()) @map("occurred_at") @db.Timestamptz(6)
+
+  session VisitorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([eventType, occurredAt])
+  @@index([entityType, entityId])
+  @@map("visitor_events")
+}
+
+model VisitorDevice {
+  id             String     @id @default(uuid()) @db.Uuid
+  sessionId      String     @unique @map("session_id") @db.Uuid
+  deviceType     DeviceType @default(unknown) @map("device_type")
+  browser        String?
+  browserVersion String?    @map("browser_version")
+  os             String?
+  osVersion      String?    @map("os_version")
+  screenWidth    Int?       @map("screen_width")
+  screenHeight   Int?       @map("screen_height")
+
+  session VisitorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([deviceType])
+  @@map("visitor_devices")
+}
+
+model VisitorLocation {
+  id          String  @id @default(uuid()) @db.Uuid
+  sessionId   String  @unique @map("session_id") @db.Uuid
+  country     String?
+  countryCode String? @map("country_code")
+  state       String?
+  city        String?
+
+  session VisitorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([countryCode])
+  @@index([country, state])
+  @@map("visitor_locations")
+}
+
+model TrafficSource {
+  id             String  @id @default(uuid()) @db.Uuid
+  sessionId      String  @unique @map("session_id") @db.Uuid
+  source         String?
+  medium         String?
+  campaign       String?
+  term           String?
+  content        String?
+  referrerDomain String? @map("referrer_domain")
+
+  session VisitorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([source, medium])
+  @@map("traffic_sources")
+}
+
+// ─── Phase 3.5: Dynamic Pages CMS ─────────────────────────────────────────────
+
+model Page {
+  id          String     @id @default(uuid()) @db.Uuid
+  title       String
+  slug        String
+  pageType    PageType   @default(static) @map("page_type")
+  locale      ContentLocale @default(en)
+  excerpt     String?    @db.Text
+  content     String?    @db.Text
+  status      PageStatus @default(draft)
+  publishAt   DateTime?  @map("publish_at") @db.Timestamptz(6)
+  publishedAt DateTime?  @map("published_at") @db.Timestamptz(6)
+  createdById String?    @map("created_by_id") @db.Uuid
+  updatedById String?    @map("updated_by_id") @db.Uuid
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?  @map("deleted_at") @db.Timestamptz(6)
+
+  sections  PageSection[]
+  revisions PageRevision[]
+
+  @@unique([slug, locale])
+  @@index([status, publishAt])
+  @@index([pageType, locale])
+  @@map("pages")
+}
+
+model PageSection {
+  id          String          @id @default(uuid()) @db.Uuid
+  pageId      String          @map("page_id") @db.Uuid
+  sectionKey  String          @map("section_key")
+  sectionType PageSectionType @default(content) @map("section_type")
+  title       String?
+  content     Json            @default("{}")
+  sortOrder   Int             @default(0) @map("sort_order")
+  isVisible   Boolean         @default(true) @map("is_visible")
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, sectionKey])
+  @@index([pageId, sortOrder])
+  @@map("page_sections")
+}
+
+model PageRevision {
+  id          String   @id @default(uuid()) @db.Uuid
+  pageId      String   @map("page_id") @db.Uuid
+  version     Int
+  title       String
+  slug        String
+  content     String?  @db.Text
+  sectionsSnapshot Json @default("[]") @map("sections_snapshot")
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, version])
+  @@index([pageId, createdAt])
+  @@map("page_revisions")
+}
+
+// ─── Phase 3.5: Global SEO Engine ───────────────────────────────────────────
+
+model SeoMetadata {
+  id               String        @id @default(uuid()) @db.Uuid
+  entityType       String        @map("entity_type")
+  entityId         String        @map("entity_id") @db.Uuid
+  locale           ContentLocale @default(en)
+  seoTitle         String?       @map("seo_title")
+  metaDescription  String?       @map("meta_description") @db.Text
+  metaKeywords     String[]      @map("meta_keywords")
+  canonicalUrl     String?       @map("canonical_url")
+  robots           String        @default("index,follow")
+  ogTitle          String?       @map("og_title")
+  ogDescription    String?       @map("og_description") @db.Text
+  ogImageUrl       String?       @map("og_image_url")
+  twitterCard      String        @default("summary_large_image") @map("twitter_card")
+  twitterTitle     String?       @map("twitter_title")
+  twitterDescription String?     @map("twitter_description") @db.Text
+  twitterImageUrl  String?       @map("twitter_image_url")
+  schemaJsonLd     Json?         @map("schema_json_ld")
+  hreflangAlternates Json?       @default("[]") @map("hreflang_alternates")
+  sitemapInclude   Boolean       @default(true) @map("sitemap_include")
+  sitemapPriority  Decimal?      @map("sitemap_priority") @db.Decimal(2, 1)
+  sitemapChangefreq String?      @map("sitemap_changefreq")
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([entityType, entityId, locale])
+  @@index([entityType, sitemapInclude])
+  @@map("seo_metadata")
+}
+
+// ─── Phase 3.5: Media Library ─────────────────────────────────────────────────
+
+model MediaFolder {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String
+  parentId  String?  @map("parent_id") @db.Uuid
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  parent   MediaFolder?  @relation("FolderTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children MediaFolder[] @relation("FolderTree")
+  assets   MediaAsset[]
+
+  @@unique([slug, parentId])
+  @@map("media_folders")
+}
+
+model MediaAsset {
+  id           String         @id @default(uuid()) @db.Uuid
+  folderId     String?        @map("folder_id") @db.Uuid
+  fileName     String         @map("file_name")
+  originalName String         @map("original_name")
+  storagePath  String         @map("storage_path")
+  publicUrl    String?        @map("public_url") @db.Text
+  mimeType     String         @map("mime_type")
+  assetType    MediaAssetType @default(other) @map("asset_type")
+  sizeBytes    Int            @map("size_bytes")
+  altText      String?        @map("alt_text")
+  tags         String[]       @default([])
+  usageCount   Int            @default(0) @map("usage_count")
+  version      Int            @default(1)
+  isCurrent    Boolean        @default(true) @map("is_current")
+  replacedById String?        @map("replaced_by_id") @db.Uuid
+  uploadedById String?        @map("uploaded_by_id") @db.Uuid
+  metadata     Json           @default("{}")
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?      @map("deleted_at") @db.Timestamptz(6)
+
+  folder     MediaFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  replacedBy MediaAsset?  @relation("AssetReplacement", fields: [replacedById], references: [id], onDelete: SetNull)
+  replaces   MediaAsset[] @relation("AssetReplacement")
+  downloads         Download[]
+  noticeAttachments NoticeAttachment[]
+  albumItems        MediaAlbumItem[]
+  committeeMembers  CommitteeMember[]
+  speakerProfiles   SpeakerProfile[]
+  partners          Partner[]
+  eventMediaItems   EventMedia[]
+
+  @@index([folderId])
+  @@index([tags])
+  @@index([assetType, isCurrent])
+  @@map("media_assets")
+}
+
+// ─── Phase B: Notice Board ────────────────────────────────────────────────────
+
+model NoticeCategory {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  notices Notice[]
+
+  @@map("notice_categories")
+}
+
+model Notice {
+  id          String       @id @default(uuid()) @db.Uuid
+  title       String
+  slug        String
+  categoryId  String?      @map("category_id") @db.Uuid
+  description String       @db.Text
+  priority    Int          @default(0)
+  status      NoticeStatus @default(draft)
+  isPinned    Boolean      @default(false) @map("is_pinned")
+  locale      ContentLocale @default(en)
+  publishAt   DateTime?    @map("publish_at") @db.Timestamptz(6)
+  expireAt    DateTime?    @map("expire_at") @db.Timestamptz(6)
+  publishedAt DateTime?    @map("published_at") @db.Timestamptz(6)
+  createdById String?      @map("created_by_id") @db.Uuid
+  updatedById String?      @map("updated_by_id") @db.Uuid
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?    @map("deleted_at") @db.Timestamptz(6)
+
+  category    NoticeCategory?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  attachments NoticeAttachment[]
+
+  @@unique([slug, locale])
+  @@index([status, publishAt, expireAt])
+  @@index([isPinned, priority])
+  @@map("notices")
+}
+
+model NoticeAttachment {
+  id           String   @id @default(uuid()) @db.Uuid
+  noticeId     String   @map("notice_id") @db.Uuid
+  mediaAssetId String?  @map("media_asset_id") @db.Uuid
+  fileName     String   @map("file_name")
+  fileUrl      String   @map("file_url")
+  mimeType     String   @map("mime_type")
+  sizeBytes    Int      @default(0) @map("size_bytes")
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  notice     Notice      @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@index([noticeId, sortOrder])
+  @@map("notice_attachments")
+}
+
+// ─── Phase B: Global Settings ─────────────────────────────────────────────────
+
+model SiteSetting {
+  id                String        @id @default(uuid()) @db.Uuid
+  locale            ContentLocale @default(en)
+  organizationName  String?       @map("organization_name")
+  tagline           String?
+  logoUrl           String?       @map("logo_url")
+  faviconUrl        String?       @map("favicon_url")
+  contactEmail      String?       @map("contact_email")
+  supportEmail      String?       @map("support_email")
+  phoneNumbers      Json          @default("[]") @map("phone_numbers")
+  officeAddresses   Json          @default("[]") @map("office_addresses")
+  socialLinks       Json          @default("{}") @map("social_links")
+  copyrightText     String?       @map("copyright_text")
+  footerContent     Json?         @map("footer_content")
+  registrationOpen  Boolean       @default(true) @map("registration_open")
+  maintenanceMode   Boolean       @default(false) @map("maintenance_mode")
+  extra             Json          @default("{}")
+  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([locale])
+  @@map("site_settings")
+}
+
+// ─── Phase B: Navigation ────────────────────────────────────────────────────────
+
+model Menu {
+  id        String        @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String
+  menuType  MenuType      @map("menu_type")
+  locale    ContentLocale @default(en)
+  isActive  Boolean       @default(true) @map("is_active")
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  items MenuItem[]
+
+  @@unique([slug, locale])
+  @@map("menus")
+}
+
+model MenuItem {
+  id           String   @id @default(uuid()) @db.Uuid
+  menuId       String   @map("menu_id") @db.Uuid
+  parentId     String?  @map("parent_id") @db.Uuid
+  label        String
+  url          String
+  isExternal   Boolean  @default(false) @map("is_external")
+  openInNewTab Boolean  @default(false) @map("open_in_new_tab")
+  icon         String?
+  sortOrder    Int      @default(0) @map("sort_order")
+  isVisible    Boolean  @default(true) @map("is_visible")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  menu     Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  parent   MenuItem?  @relation("MenuItemTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children MenuItem[] @relation("MenuItemTree")
+
+  @@index([menuId, sortOrder])
+  @@index([parentId])
+  @@map("menu_items")
+}
+
+// ─── Phase B: Announcement Bar ────────────────────────────────────────────────
+
+// ─── Phase S2: FAQ Module ─────────────────────────────────────────────────────
+
+model FaqCategory {
+  id        String        @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String
+  locale    ContentLocale @default(en)
+  sortOrder Int           @default(0) @map("sort_order")
+  isActive  Boolean       @default(true) @map("is_active")
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  faqs Faq[]
+
+  @@unique([slug, locale])
+  @@map("faq_categories")
+}
+
+model Faq {
+  id         String        @id @default(uuid()) @db.Uuid
+  categoryId String?       @map("category_id") @db.Uuid
+  question   String
+  answer     String        @db.Text
+  locale     ContentLocale @default(en)
+  isFeatured Boolean       @default(false) @map("is_featured")
+  sortOrder  Int           @default(0) @map("sort_order")
+  status     FaqStatus     @default(draft)
+  createdAt  DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt  DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  category FaqCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([status, locale, isFeatured])
+  @@index([categoryId, sortOrder])
+  @@map("faqs")
+}
+
+// ─── Phase S2: Media Albums ───────────────────────────────────────────────────
+
+model MediaAlbum {
+  id           String        @id @default(uuid()) @db.Uuid
+  title        String
+  slug         String
+  description  String?       @db.Text
+  albumType    AlbumType     @default(gallery) @map("album_type")
+  locale       ContentLocale @default(en)
+  edition      String?
+  year         Int?
+  coverAssetId String?       @map("cover_asset_id") @db.Uuid
+  status       PageStatus    @default(draft)
+  sortOrder    Int           @default(0) @map("sort_order")
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  items MediaAlbumItem[]
+
+  @@unique([slug, locale])
+  @@index([albumType, status])
+  @@map("media_albums")
+}
+
+model MediaAlbumItem {
+  id           String   @id @default(uuid()) @db.Uuid
+  albumId      String   @map("album_id") @db.Uuid
+  mediaAssetId String?  @map("media_asset_id") @db.Uuid
+  imageUrl     String?  @map("image_url")
+  caption      String?
+  altText      String?  @map("alt_text")
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  album      MediaAlbum  @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@index([albumId, sortOrder])
+  @@map("media_album_items")
+}
+
+model AnnouncementBar {
+  id           String              @id @default(uuid()) @db.Uuid
+  title        String
+  message      String              @db.Text
+  barType      AnnouncementBarType @default(global) @map("bar_type")
+  colorTheme   String              @default("primary") @map("color_theme")
+  ctaLabel     String?             @map("cta_label")
+  ctaUrl       String?             @map("cta_url")
+  locale       ContentLocale       @default(en)
+  isDismissible Boolean            @default(true) @map("is_dismissible")
+  isActive     Boolean             @default(true) @map("is_active")
+  priority     Int                 @default(0)
+  startsAt     DateTime?           @map("starts_at") @db.Timestamptz(6)
+  endsAt       DateTime?           @map("ends_at") @db.Timestamptz(6)
+  createdAt    DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?           @map("deleted_at") @db.Timestamptz(6)
+
+  @@index([isActive, startsAt, endsAt])
+  @@index([barType, locale])
+  @@map("announcement_bars")
+}

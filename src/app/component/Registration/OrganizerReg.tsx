@@ -1,15 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { message } from "antd"; // Import Ant Design's message component
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore"; // Modular Firestore imports
-import { initializeApp } from "firebase/app"; // Import initializeApp
-import { getFirestore as getFirestoreFromApp } from "firebase/firestore"; // Import getFirestore
-import { firebaseConfig } from "../../firebase"; // Import your Firebase configuration
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig); // Ensure firebaseConfig is correctly exported from your firebaseConfig file
-const firestore = getFirestoreFromApp(app); // Initialize Firestore with the configured app
+import { message } from "antd";
+import { submitLegacyForm } from "@/lib/legacyFormSubmit";
 
 const OrganiserRegistration = () => {
   // Define allowed state codes
@@ -55,17 +48,7 @@ const OrganiserRegistration = () => {
     });
   };
 
-  // Check if phone number already exists in Firestore
-  const isPhoneNumberRegistered = async (phone: string) => {
-    const q = query(
-      collection(firestore, "organiserregistration"),
-      where("phone", "==", phone)
-    );
-    const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty;
-  };
-
-  // Submit form to Firebase
+  // Submit form via registration API
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.designation || !formData.institution || !formData.duty || !formData.accommodation) {
@@ -74,22 +57,21 @@ const OrganiserRegistration = () => {
     }
 
     try {
-      // Check if the phone number is already registered
-      const phoneExists = await isPhoneNumberRegistered(formData.phone);
-      if (phoneExists) {
-        message.error("This phone number is already registered.");
-        return;
-      }
-
-      // Add the form data to Firestore using the modular API
-      await addDoc(collection(firestore, "organiserregistration"), {
-        ...formData,
-        state: stateCodes[stateCode as keyof typeof stateCodes],
-        stateCode,
+      await submitLegacyForm({
+        registrationType: "Organiser",
+        data: {
+          ...formData,
+          fullName: formData.name,
+          email: formData.email || `${formData.phone}@organiser.local`,
+          contactNumber: formData.phone,
+          institution: formData.institution,
+          state: stateCodes[stateCode as keyof typeof stateCodes],
+          stateCode,
+          accommodationRequired: formData.accommodation === "yes" ? "Yes" : "No",
+        },
       });
       message.success("Registration successful!");
 
-      // Clear the form fields and state code
       setFormData({
         name: "",
         phone: "",
@@ -100,11 +82,11 @@ const OrganiserRegistration = () => {
         accommodation: "",
       });
       setStateCode("");
-      setIsCodeValid(false); // Reset the code validation
-      setFormSubmitted(true); // Set formSubmitted to true to hide the form
+      setIsCodeValid(false);
+      setFormSubmitted(true);
     } catch (error) {
       message.error("Error while submitting the form. Please try again.");
-      console.error("Error adding document: ", error);
+      console.error("Error submitting registration: ", error);
     }
   };
 

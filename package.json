@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:turbo": "next dev --turbo",
     "dev:clean": "node scripts/clean-next-cache.js && next dev",
+    "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -16,7 +17,20 @@
     "validate:p3c": "node scripts/p3c-staging-validation.mjs",
     "verify:env": "node scripts/verify-env.mjs",
     "seed:counter": "node scripts/seed-firestore-counter.mjs",
-    "browserslist:update": "npx browserslist@latest --update-db"
+    "firebase:export": "node scripts/firebase-export.mjs",
+    "firebase:import": "node scripts/firebase-import-supabase.mjs",
+    "browserslist:update": "npx browserslist@latest --update-db",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:validate": "prisma validate",
+    "db:seed": "node scripts/supabase/seed-rbac.mjs",
+    "seed:cms": "node scripts/seed-cms-content.mjs"
+  },
+  "prisma": {
+    "seed": "node scripts/supabase/seed-rbac.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
@@ -27,13 +41,14 @@
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^5.4.0",
     "@nextui-org/react": "^2.4.8",
+    "@prisma/client": "^6.19.3",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
+    "@supabase/ssr": "^0.12.0",
+    "@supabase/supabase-js": "^2.108.1",
     "antd": "^5.12.8",
     "axios": "^1.7.8",
     "dotenv": "^16.4.5",
-    "firebase": "^10.14.1",
-    "firebase-admin": "^12.7.0",
     "formidable": "^3.5.2",
     "framer-motion": "^11.2.13",
     "jspdf": "^2.5.2",
@@ -83,6 +98,7 @@
     "eslint-config-next": "14.0.1",
     "playwright": "^1.60.0",
     "postcss": "^8.4.47",
+    "prisma": "^6.19.3",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.7.2"
   }

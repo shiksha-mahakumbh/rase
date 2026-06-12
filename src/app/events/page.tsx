@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ConferenceHubPage from "@/components/conferences/ConferenceHubPage";
+import { EventsListing } from "@/components/events/CmsEventView";
 import {
   CONFERENCE_YEAR_ARCHIVE,
   EVENT_HUB_ROUTES,
   EVENTS_HUB,
 } from "@/lib/knowledge-graph/conference-catalog";
+import { loadCmsEvents } from "@/lib/cms/organizational";
 import {
   buildBreadcrumbSchema,
   buildCollectionPageSchema,
@@ -19,7 +21,9 @@ export const metadata: Metadata = {
   alternates: { canonical: EVENTS_HUB.path },
 };
 
-export default function EventsHubPage() {
+export default async function EventsHubPage() {
+  const cmsEvents = await loadCmsEvents();
+
   const schemas = [
     buildCollectionPageSchema({
       name: EVENTS_HUB.title,
@@ -34,6 +38,10 @@ export default function EventsHubPage() {
     buildItemListSchema({
       name: "Event programmes",
       items: [
+        ...cmsEvents.map((e) => ({
+          name: e.title,
+          url: `${SITE_URL}${e.href}`,
+        })),
         ...EVENT_HUB_ROUTES.map((r) => ({
           name: r.label,
           url: `${SITE_URL}${r.path}`,
@@ -54,6 +62,8 @@ export default function EventsHubPage() {
       schemas={schemas}
       breadcrumbParent={{ label: "Conferences", href: "/conferences" }}
     >
+      <EventsListing events={cmsEvents} />
+
       <section className="mt-8" aria-labelledby="event-routes">
         <h2 id="event-routes" className="text-lg font-bold text-brand-navy">
           Event calendar

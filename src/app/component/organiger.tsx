@@ -5,15 +5,10 @@ import Marquee from "react-fast-marquee";
 import { motion } from "framer-motion";
 import SectionShell from "./home/SectionShell";
 import GlassCard from "./home/GlassCard";
+import { useCms } from "@/lib/cms/context";
+import { getHomepagePartners } from "@/lib/cms/partners";
 
-const Organiger: React.FC = () => {
-  interface Item {
-    imageUrl: string;
-    text: string;
-    link: string;
-  }
-
-  const marquees: Item[] = [
+const DEFAULT_HIGHLIGHTS = [
     {
       imageUrl: "/l1.jpeg",
       text: "Shiksha Mahakumbh - IIT Ropar",
@@ -64,7 +59,19 @@ const Organiger: React.FC = () => {
       text: "Shiksha Mahakumbh - IIT Ropar",
       link: "https://www.youtube.com/watch?v=FFfdSd8_XOw",
     },
-  ];
+];
+
+const Organiger: React.FC = () => {
+  const cms = useCms();
+  const cmsSponsors = getHomepagePartners(cms?.homepage, "sponsor");
+  const marquees =
+    cmsSponsors.length > 0
+      ? cmsSponsors.map((p) => ({
+          imageUrl: p.logoUrl ?? p.imageUrl ?? "",
+          text: p.name,
+          link: p.website ?? p.link ?? "#",
+        }))
+      : DEFAULT_HIGHLIGHTS;
 
   return (
     <SectionShell
@@ -100,10 +107,11 @@ const Organiger: React.FC = () => {
           >
             {marquees.map((sponsor, index) => (
               <a
-                key={index}
+                key={`${sponsor.imageUrl}-${index}`}
                 href={sponsor.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={sponsor.text}
                 className="group mx-6"
               >
                 <motion.div
@@ -113,7 +121,8 @@ const Organiger: React.FC = () => {
                   <Image
                     className="h-24 w-24 object-contain"
                     src={sponsor.imageUrl}
-                    alt={`Sponsor ${index + 1}`}
+                    alt={sponsor.text}
+                    loading="lazy"
                     height={100}
                     width={100}
                   />

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { DHE_ORGANIZATION } from "@/config/organization";
 import { impactStatistics } from "@/data/authority";
 import { normalizeStaticImageSrc } from "./home/normalizeImageSrc";
@@ -15,6 +16,8 @@ import {
   legalLinks,
   socialLinks,
 } from "./footer-content";
+import { useCms } from "@/lib/cms/context";
+import type { CmsMenu, CmsSiteSettings } from "@/lib/cms/types";
 
 const FooterContactForm = dynamic(
   () => import("@/components/footer/FooterContactForm"),
@@ -65,8 +68,54 @@ function FooterLinkList({
 }
 
 const Footer: React.FC = () => {
+  const cms = useCms();
+  const [fetched, setFetched] = useState<{
+    settings: CmsSiteSettings | null;
+    footerMenu: CmsMenu | null;
+  } | null>(null);
+
+  useEffect(() => {
+    if (cms?.settings || cms?.footerMenu) return;
+    Promise.all([
+      fetch("/api/v2/settings").then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/v2/menus?type=footer").then((r) => (r.ok ? r.json() : null)),
+    ])
+      .then(([settingsRes, menuRes]) => {
+        setFetched({
+          settings: settingsRes?.settings ?? null,
+          footerMenu: menuRes?.menu ?? null,
+        });
+      })
+      .catch(() => null);
+  }, [cms]);
+
+  const settings = cms?.settings ?? fetched?.settings ?? null;
+  const footerMenu = cms?.footerMenu ?? fetched?.footerMenu ?? null;
   const { address, emails, phones, websites, intro, mission, name, abhiyan } =
     DHE_ORGANIZATION;
+
+  const cmsPhones = Array.isArray(settings?.phoneNumbers)
+    ? (settings.phoneNumbers as string[])
+    : null;
+  const cmsEmails = settings?.contactEmail
+    ? [settings.contactEmail, settings.supportEmail].filter(Boolean) as string[]
+    : null;
+  const displayPhones = cmsPhones?.length ? cmsPhones : phones;
+  const displayEmails = cmsEmails?.length ? cmsEmails : emails;
+
+  const cmsSocial = settings?.socialLinks ?? {};
+  const mergedSocial: Array<{ id: string; href: string; label: string }> =
+    Object.keys(cmsSocial).length
+      ? Object.entries(cmsSocial).map(([key, url]) => ({
+          id: key,
+          href: url,
+          label: socialLabels[key] ?? key,
+        }))
+      : [...socialLinks];
+
+  const footerQuickLinks = footerMenu?.items?.length
+    ? footerMenu.items.map((i) => ({ name: i.label, href: i.url }))
+    : quickLinks;
 
   const footerStats = impactStatistics.slice(0, 4);
 
@@ -155,24 +204,24 @@ const Footer: React.FC = () => {
                 {mission}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
-                {socialLinks.map((social) => (
+                {mergedSocial.map((social) => (
                   <a
                     key={social.id}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-base transition-all hover:border-brand-saffron/50 hover:bg-brand-saffron/15 hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-base transition-all hover:border-brand-saffron/50 hover:bg-brand-saffron/15 hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
                   >
                     <span className="text-xs font-bold" aria-hidden>
-                      {socialLabels[social.id]}
+                      {socialLabels[social.id] ?? social.label}
                     </span>
                   </a>
                 ))}
               </div>
             </div>
 
-            <FooterLinkList title="Quick Links" links={quickLinks} />
+            <FooterLinkList title="Quick Links" links={footerQuickLinks} />
             <FooterLinkList title="Departments" links={departmentLinks} />
             <FooterLinkList title="Education & Research" links={educationLinks} />
             <FooterLinkList title="Programs" links={programLinks} />
@@ -196,7 +245,7 @@ const Footer: React.FC = () => {
                 <div>
                   <span className="font-semibold text-white/80">Email</span>
                   <ul className="mt-1 space-y-0.5">
-                    {emails.slice(0, 2).map((email) => (
+                    {displayEmails.slice(0, 2).map((email) => (
                       <li key={email}>
                         <a
                           href={`mailto:${email}`}
@@ -211,7 +260,7 @@ const Footer: React.FC = () => {
                 <div>
                   <span className="font-semibold text-white/80">Phone</span>
                   <ul className="mt-1 space-y-0.5">
-                    {phones.map((phone) => (
+                    {displayPhones.map((phone) => (
                       <li key={phone}>
                         <a
                           href={`tel:${phone.replace(/\s/g, "")}`}

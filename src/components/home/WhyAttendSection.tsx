@@ -1,6 +1,10 @@
-import { FeatureCard, SectionHeader } from "@/components/ui";
+"use client";
 
-const features = [
+import { FeatureCard, SectionHeader } from "@/components/ui";
+import { useCms } from "@/lib/cms/context";
+import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
+
+const DEFAULT_FEATURES = [
   {
     title: "Policy & NEP 2020",
     description:
@@ -45,22 +49,36 @@ function IconGrid() {
 }
 
 export default function WhyAttendSection() {
+  const cms = useCms();
+  const section = getSection(cms?.homepage, "stats");
+  const cmsFeatures = sectionItems<{
+    title: string;
+    description: string;
+    badge?: string;
+  }>(section, "features");
+
+  const features = cmsFeatures.length ? cmsFeatures : DEFAULT_FEATURES;
+
   return (
-    <section aria-labelledby="why-attend-heading" className="bg-brand-surface py-12 md:py-16 lg:py-20">
+    <section aria-label="Why attend Shiksha Mahakumbh" className="bg-brand-surface py-12 md:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Why Attend"
-          title="Why Shiksha Mahakumbh Matters"
-          description="A multidimensional movement — not a single conference session — designed for measurable national impact."
+          eyebrow={sectionField(section, "eyebrow", "Why Attend")}
+          title={section?.title ?? "Why Shiksha Mahakumbh?"}
+          description={sectionField(
+            section,
+            "subtitle",
+            "Six reasons educators, researchers, students, and institutions join India's flagship education summit."
+          )}
         />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
             <FeatureCard
               key={f.title}
               title={f.title}
               description={f.description}
-              icon={<IconGrid />}
               badge={f.badge}
+              icon={<IconGrid />}
             />
           ))}
         </div>

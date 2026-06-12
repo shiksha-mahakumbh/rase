@@ -33,6 +33,7 @@ function buildCalendarIcs(id: string) {
 function SuccessInner() {
   const searchParams = useSearchParams();
   const registrationId = searchParams.get("id");
+  const lookupToken = searchParams.get("token");
   const [record, setRecord] = useState<Record<string, unknown> | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,12 +46,14 @@ function SuccessInner() {
 
     const fetchRecord = async () => {
       try {
-        const res = await fetch(
-          `/api/registration/${encodeURIComponent(registrationId)}`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setRecord(data as Record<string, unknown>);
+        if (lookupToken) {
+          const res = await fetch(
+            `/api/registration/${encodeURIComponent(registrationId)}?token=${encodeURIComponent(lookupToken)}`
+          );
+          if (res.ok) {
+            const data = await res.json();
+            setRecord(data as Record<string, unknown>);
+          }
         }
       } catch {
         // Leave record null — page still shows registration ID from URL
@@ -59,7 +62,7 @@ function SuccessInner() {
     };
 
     fetchRecord();
-  }, [registrationId]);
+  }, [registrationId, lookupToken]);
 
   useEffect(() => {
     if (!registrationId) return;

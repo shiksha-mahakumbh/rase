@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { db } from "@/app/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { useAdminRegistrationData, rowToLegacyRecord } from "@/lib/legacy/useAdminRegistrationData";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -23,30 +22,16 @@ interface BestPracticeData {
 const BestPracticesPage: React.FC = () => {
   const [dataList, setDataList] = useState<BestPracticeData[]>([]);
 
+  const { rows, loading: dataLoading } = useAdminRegistrationData("Best Practices");
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const colRef = collection(db, "BestPractices");
-        const querySnapshot = await getDocs(colRef);
-
-        const fetchedData: BestPracticeData[] = [];
-        querySnapshot.forEach((doc) => {
-          fetchedData.push(doc.data() as BestPracticeData);
-        });
-
-        const dataWithSerial = fetchedData.map((item, index) => ({
-          ...item,
-          serial: index + 1,
-        }));
-        setDataList(dataWithSerial);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        toast.error("Error fetching data!");
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (dataLoading) return;
+    const dataList = rows.map((row, index) => ({
+      ...(rowToLegacyRecord(row) as Record<string, unknown>),
+      serial: index + 1,
+    }));
+    setDataList(dataList as BestPracticeData[]);
+  }, [rows, dataLoading]);
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(dataList);

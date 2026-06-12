@@ -1,9 +1,6 @@
 'use client';
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/app/firebase';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/app/firebase';
+import { submitLegacyForm } from '@/lib/legacyFormSubmit';
 import toast, { Toaster } from "react-hot-toast";
 import RegistrationFormWrapper from "../ui/RegistrationFormWrapper";
 
@@ -48,46 +45,37 @@ const VolReg = () => {
     }
   };
 
-  const handleAddDocument = async (downloadURL: string | null) => {
-    try {
-      const docRef = await addDoc(collection(db, 'RegestrationVolsm24'), {
-        ...formData,
-        feeReceipt: downloadURL,
-      });
-      console.log('Document added with ID:', docRef.id);
-      setLoading(false);
-      setFormData(initialFormData);
-      toast.success("Successfully Registered!");
-
-      if (formData.accommodation === 'yes') {
-        setShowAccommodationButton(true); // Show the button if 'Yes' is selected
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.error("Something broke while registering!");
-      console.error('Error adding document:', error);
-    }
-  };
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
-    if (image) {
-      try {
-        const imageRef = ref(storage, `images/${image.name}`);
-        await uploadBytes(imageRef, image);
-        const downloadURL = await getDownloadURL(imageRef);
-        handleAddDocument(downloadURL);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        setLoading(false);
+    try {
+      await submitLegacyForm({
+        registrationType: 'Volunteer',
+        data: {
+          ...formData,
+          fullName: formData.name,
+          email: formData.email,
+          contactNumber: formData.PhoneNumber,
+          institution: formData.Affiliation,
+          accommodationRequired: formData.accommodation === 'yes' ? 'Yes' : 'No',
+        },
+        file: image,
+        uploadFolder: 'volunteer',
+        fileField: 'feeReceipt',
+      });
+      setFormData(initialFormData);
+      setImage(null);
+      toast.success("Successfully Registered!");
+      if (formData.accommodation === 'yes') {
+        setShowAccommodationButton(true);
       }
-    } else {
-      handleAddDocument(null);
+    } catch (error) {
+      toast.error("Something broke while registering!");
+      console.error('Error submitting registration:', error);
+    } finally {
+      setLoading(false);
     }
-
-    console.log(formData);
   };
 
   return (

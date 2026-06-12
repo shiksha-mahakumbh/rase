@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { CtaButton } from "@/components/ui";
+import type { CmsArticleCard } from "@/lib/cms/types";
 import proceeding1 from "/public/2024M/press2.jpg";
 import proceeding2 from "/public/2024M/press1.jpg";
 import proceeding3 from "/public/2024M/res/res9.jpg";
@@ -53,12 +54,27 @@ const cardData = [
   },
 ];
 
-export default function PressHub() {
+export default function PressHub({ articles = [] }: { articles?: CmsArticleCard[] }) {
+  const cards =
+    articles.length > 0
+      ? articles.map((article) => ({
+          title: article.title,
+          description: article.excerpt ?? "",
+          image: article.heroImage ?? "/2024M/Press7.jpg",
+          readLink: article.href,
+        }))
+      : cardData.map((data) => ({
+          title: data.title,
+          description: data.description,
+          image: data.image,
+          readLink: data.readLink,
+        }));
+
   return (
     <div>
       <h2 className="home-section-title mb-8 text-center">Latest Press Notes</h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {cardData.map((data) => (
+        {cards.map((data) => (
           <article
             key={data.readLink}
             className="home-card-hover flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
