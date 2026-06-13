@@ -1,35 +1,17 @@
 "use client";
 
 import Script from "next/script";
+import {
+  markRecaptchaScriptFailed,
+  markRecaptchaScriptLoaded,
+} from "@/lib/security/recaptcha-client";
 
 const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 export function useRecaptcha() {
-  const execute = async (action: string): Promise<string | null> => {
-    if (!SITE_KEY) {
-      if (process.env.NODE_ENV !== "production") return "dev-bypass-token";
-      return null;
-    }
-
-    const grecaptcha = (
-      window as unknown as {
-        grecaptcha?: {
-          ready: (cb: () => void) => void;
-          execute: (key: string, opts: { action: string }) => Promise<string>;
-        };
-      }
-    ).grecaptcha;
-
-    if (!grecaptcha) return null;
-
-    return new Promise((resolve) => {
-      grecaptcha.ready(() => {
-        grecaptcha
-          .execute(SITE_KEY, { action })
-          .then(resolve)
-          .catch(() => resolve(null));
-      });
-    });
+  const execute = async (action: string) => {
+    const { executeRecaptcha } = await import("@/lib/security/recaptcha-client");
+    return executeRecaptcha(action);
   };
 
   const verifyWithServer = async (action: string) => {
@@ -56,7 +38,9 @@ export default function RecaptchaScript() {
   return (
     <Script
       src={`https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`}
-      strategy="lazyOnload"
+      strategy="afterInteractive"
+      onLoad={() => markRecaptchaScriptLoaded()}
+      onError={() => markRecaptchaScriptFailed()}
     />
   );
 }

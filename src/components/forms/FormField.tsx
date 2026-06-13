@@ -206,6 +206,9 @@ export function PaymentBlock({
   fee,
   showPayButton = true,
   onPaymentVerified,
+  customerName,
+  customerEmail,
+  customerPhone,
 }: {
   fee?: number;
   showPayButton?: boolean;
@@ -213,11 +216,14 @@ export function PaymentBlock({
     razorpay_payment_id: string;
     razorpay_order_id: string;
   }) => void;
+  customerName?: string;
+  customerEmail?: string;
+  customerPhone?: string;
 }) {
   const amount = typeof fee === "number" && fee > 0 ? fee : undefined;
 
   return (
-    <div className={`registration-payment ${formClasses.notice} md:col-span-2`}>
+    <div className={`registration-razorpay ${formClasses.notice} md:col-span-2`}>
       {typeof fee === "number" && (
         <p className="mb-2 font-semibold">
           Registration Fee: ₹{fee.toLocaleString("en-IN")}
@@ -232,6 +238,9 @@ export function PaymentBlock({
           <RazorpayCheckout
             amountInRupees={amount}
             description="Shiksha Mahakumbh Registration Fee"
+            customerName={customerName}
+            customerEmail={customerEmail}
+            customerPhone={customerPhone}
             onSuccess={(result) => {
               onPaymentVerified?.({
                 razorpay_payment_id: result.razorpay_payment_id,

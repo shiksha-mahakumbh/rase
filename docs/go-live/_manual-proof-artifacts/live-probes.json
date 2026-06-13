@@ -1,0 +1,84 @@
+{
+  "db": {
+    "checkedAt": "2026-06-13T08:35:47.741Z",
+    "count": 1,
+    "counters": [
+      {
+        "id": "489bd9fc-84fe-4fa5-b100-bbea8520be98",
+        "year": 2026,
+        "prefix": "SMK2026",
+        "lastNumber": 1,
+        "createdAt": "2026-06-12T06:24:27.301Z",
+        "updatedAt": "2026-06-12T06:24:27.301Z"
+      }
+    ],
+    "emailLogs": 0,
+    "payments": 0,
+    "webhooks": 0,
+    "latest": [
+      {
+        "registrationId": "SMK2026-000001",
+        "email": "release-verify+20260609@rase.co.in",
+        "registrationType": "Legacy_Other",
+        "createdAt": "2026-06-12T17:00:12.598Z",
+        "emailDeliveryStatus": null,
+        "paymentStatus": "Not_Required",
+        "razorpayOrderId": null,
+        "razorpayPaymentId": null
+      }
+    ]
+  },
+  "live": {
+    "checkedAt": "2026-06-13T08:35:49.192Z",
+    "balShodhTypeGate": {
+      "status": 400,
+      "body": {
+        "error": "Invalid registration data"
+      }
+    },
+    "lookup": {
+      "status": 401,
+      "body": {
+        "error": "Email or confirmation token required"
+      }
+    },
+    "gateway": {
+      "status": 401,
+      "body": {
+        "error": "Unauthorized",
+        "code": "UNAUTHORIZED"
+      }
+    },
+    "webhookUnsigned": {
+      "status": 401,
+      "body": {
+        "error": "Invalid signature"
+      }
+    },
+    "rateLimit": {
+      "statuses": [
+        400,
+        429
+      ],
+      "triggered429": true
+    },
+    "seo": {
+      "canonical": "https://www.shikshamahakumbh.com",
+      "ogUrl": "https://www.shikshamahakumbh.com",
+      "raseCoInRefs": 8,
+      "sitemapLocCount": 114,
+      "sitemapComRefs": 114,
+      "sitemapRaseRefs": 0,
+      "robotsSitemap": "https://www.shikshamahakumbh.com/sitemap.xml"
+    },
+    "createOrder": {
+      "status": 200,
+      "body": {
+        "order_id": "order_T13GdyUoF1g2pq",
+        "amount": 500,
+        "currency": "INR",
+        "key_id": "rzp_live_Sz5hsyGHWPtgbT"
+      }
+    }
+  }
+}

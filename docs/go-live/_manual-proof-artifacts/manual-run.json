@@ -1,0 +1,66 @@
+{
+  "log": {
+    "checkedAt": "2026-06-13T08:34:03.631Z",
+    "testEmail": "manual-proof-1781339639856@audit.shikshamahakumbh.test",
+    "before": {
+      "count": 1,
+      "counter": {
+        "id": "489bd9fc-84fe-4fa5-b100-bbea8520be98",
+        "year": 2026,
+        "prefix": "SMK2026",
+        "lastNumber": 1,
+        "createdAt": "2026-06-12T06:24:27.301Z",
+        "updatedAt": "2026-06-12T06:24:27.301Z"
+      }
+    },
+    "screenshots": {
+      "before": "C:\\Users\\LENOVO\\OneDrive\\Desktop\\rase.co.in\\rase\\docs\\go-live\\_manual-proof-artifacts\\01-hub.png",
+      "formStep": "C:\\Users\\LENOVO\\OneDrive\\Desktop\\rase.co.in\\rase\\docs\\go-live\\_manual-proof-artifacts\\02-form-step.png",
+      "beforeSubmit": "C:\\Users\\LENOVO\\OneDrive\\Desktop\\rase.co.in\\rase\\docs\\go-live\\_manual-proof-artifacts\\03-before-submit.png",
+      "afterSubmit": "C:\\Users\\LENOVO\\OneDrive\\Desktop\\rase.co.in\\rase\\docs\\go-live\\_manual-proof-artifacts\\04-after-submit.png"
+    },
+    "network": [
+      {
+        "at": "2026-06-13T08:34:20.475Z",
+        "url": "https://www.shikshamahakumbh.com/api/registration/submit",
+        "method": "POST",
+        "status": 403,
+        "body": {
+          "error": "Security verification failed"
+        }
+      }
+    ],
+    "submitResponse": {
+      "at": "2026-06-13T08:34:20.475Z",
+      "url": "https://www.shikshamahakumbh.com/api/registration/submit",
+      "method": "POST",
+      "status": 403,
+      "body": {
+        "error": "Security verification failed"
+      }
+    },
+    "sendEmailResponse": null,
+    "error": null,
+    "steps": {
+      "pageLoad": true,
+      "formFilled": true,
+      "finalUrl": "https://www.shikshamahakumbh.com/registration",
+      "pageText": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Shiksha Mahakumbh Abhiyan\",\"url\":\"https://www.shikshamahakumbh.com\",\"inLanguage\":[\"en-IN\",\"hi-IN\"],\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://www.shikshamahakumbh.com/downloads?search={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}Skip to main contentOfficial eventShiksha Mahakumbh 6.0 · NIT HamirpurRegistration deadline31 August 2026National participation10,000+ participants (movement scale)Institutions engaged500+ partnersNational MovementShiksha MahakumbhHomeRegistrationAboutResearchEventsMediaCommitteeContactSearch siteSelect languageEnglishहिन्दीSearch siteSelect languageEnglishहिन्दीRegister{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Shiksha Mahakumbh Abhiyan\",\"url\":\"https://www.shikshamahakumbh.com\",\"logo\":\"https://www.shikshamahakumbh.com/sLogo.png\",\"sameAs\":[\"https://www.facebook.com/shikshamahakumbh\",\"https://www.youtube.com/@ShikshaMahakumbh\",\"https://www.linkedin.com/in/shiksha-mahakumbh-abhiyan-3a134a283\"]}{\"@context\":\"https://schema.org\",\"@type\":\"EducationalOrganization\",\"name\":\"Shiksha Mahakumbh Abhiyan\",\"alternateName\":\"शिक्षा महाकुंभ अभियान\",\"url\":\"https://www.shikshamahakumbh.com\",\"logo\":\"https://www.shikshamahakumbh.com/sLogo.png\",\"sameAs\":[\"https://www.facebook.com/shikshamahakumbh\",\"https://www.youtube.com/@ShikshaMahakumbh\",\"https://www.linkedin.com/in/shiksha-mahakumbh-abhiyan-3a134a283\"],\"descript",
+      "registrationIdFromPage": null
+    }
+  },
+  "after": {
+    "count": 1,
+    "counter": {
+      "id": "489bd9fc-84fe-4fa5-b100-bbea8520be98",
+      "year": 2026,
+      "prefix": "SMK2026",
+      "lastNumber": 1,
+      "createdAt": "2026-06-12T06:24:27.301Z",
+      "updatedAt": "2026-06-12T06:24:27.301Z"
+    },
+    "row": null,
+    "emails": [],
+    "recentEmails": []
+  }
+}

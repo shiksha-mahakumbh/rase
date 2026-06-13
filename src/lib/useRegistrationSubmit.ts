@@ -28,30 +28,17 @@ interface SubmitOptions {
 }
 
 async function getCaptchaToken(): Promise<string | null> {
-  if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
+  const { executeRecaptcha, isRecaptchaConfigured, waitForRecaptcha } =
+    await import("@/lib/security/recaptcha-client");
+
+  if (!isRecaptchaConfigured()) {
     return process.env.NODE_ENV !== "production" ? "dev-bypass" : null;
   }
 
-  const grecaptcha = (
-    window as unknown as {
-      grecaptcha?: {
-        ready: (cb: () => void) => void;
-        execute: (key: string, opts: { action: string }) => Promise<string>;
-      };
-    }
-  ).grecaptcha;
+  const ready = await waitForRecaptcha();
+  if (!ready) return null;
 
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!grecaptcha || !siteKey) return null;
-
-  return new Promise<string | null>((resolve) => {
-    grecaptcha.ready(() => {
-      grecaptcha
-        .execute(siteKey, { action: "registration" })
-        .then(resolve)
-        .catch(() => resolve(null));
-    });
-  });
+  return executeRecaptcha("registration");
 }
 
 async function uploadRegistrationFile(
@@ -94,7 +81,9 @@ export function useRegistrationSubmit() {
     try {
       const captchaToken = await getCaptchaToken();
       if (!captchaToken) {
-        toast.error("Security verification failed. Please refresh and try again.");
+        toast.error(
+          "Security check is still loading. Please wait a moment and try again."
+        );
         return;
       }
 

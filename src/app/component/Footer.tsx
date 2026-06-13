@@ -47,7 +47,7 @@ function FooterLinkList({
   links: { name: string; href: string }[];
 }) {
   return (
-    <div>
+        <div>
       <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron">
         {title}
       </h3>
@@ -58,12 +58,12 @@ function FooterLinkList({
               href={link.href}
               className="text-sm text-gray-300 transition-colors hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
             >
-              {link.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
   );
 }
 
@@ -147,7 +147,7 @@ const Footer: React.FC = () => {
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-white/70">
                   {stat.label}
                 </p>
-              </div>
+            </div>
             ))}
           </div>
         </div>
@@ -218,8 +218,8 @@ const Footer: React.FC = () => {
                     </span>
                   </a>
                 ))}
-              </div>
-            </div>
+        </div>
+      </div>
 
             <FooterLinkList title="Quick Links" links={footerQuickLinks} />
             <FooterLinkList title="Departments" links={departmentLinks} />
@@ -342,8 +342,8 @@ const Footer: React.FC = () => {
               <FooterVisitorCounter />
             </div>
           </div>
-        </div>
-      </footer>
+      </div>
+    </footer>
       <ScrollToTopButton />
     </>
   );

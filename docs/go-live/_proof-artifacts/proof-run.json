@@ -1,0 +1,216 @@
+{
+  "evidence": {
+    "checkedAt": "2026-06-13T08:28:28.183Z",
+    "testEmail": "proof-e2e-1781339304337@audit.shikshamahakumbh.test",
+    "before": {
+      "count": 1,
+      "counter": {
+        "id": "489bd9fc-84fe-4fa5-b100-bbea8520be98",
+        "year": 2026,
+        "prefix": "SMK2026",
+        "lastNumber": 1,
+        "createdAt": "2026-06-12T06:24:27.301Z",
+        "updatedAt": "2026-06-12T06:24:27.301Z"
+      },
+      "latest": null,
+      "emails": [],
+      "allEmailCount": 0,
+      "payments": 0
+    },
+    "network": [
+      {
+        "url": "https://www.shikshamahakumbh.com/api/v2/menus?type=footer",
+        "method": "GET",
+        "status": 200,
+        "body": {
+          "success": true,
+          "menu": {
+            "id": "50000000-0000-4000-8000-000000000021",
+            "name": "Footer Navigation",
+            "slug": "footer",
+            "menuType": "footer",
+            "locale": "en",
+            "isActive": true,
+            "createdAt": "2026-06-10T17:10:21.920Z",
+            "updatedAt": "2026-06-10T17:10:21.920Z",
+            "deletedAt": null,
+            "items": []
+          }
+        }
+      },
+      {
+        "url": "https://www.shikshamahakumbh.com/api/v2/menus?type=header",
+        "method": "GET",
+        "status": 200,
+        "body": {
+          "success": true,
+          "menu": {
+            "id": "50000000-0000-4000-8000-000000000020",
+            "name": "Header Navigation",
+            "slug": "header",
+            "menuType": "header",
+            "locale": "en",
+            "isActive": true,
+            "createdAt": "2026-06-10T17:10:21.920Z",
+            "updatedAt": "2026-06-10T17:10:21.920Z",
+            "deletedAt": null,
+            "items": []
+          }
+        }
+      },
+      {
+        "url": "https://www.shikshamahakumbh.com/api/v2/announcement-bars",
+        "method": "GET",
+        "status": 200,
+        "body": {
+          "success": true,
+          "items": []
+        }
+      },
+      {
+        "url": "https://www.shikshamahakumbh.com/api/v2/settings",
+        "method": "GET",
+        "status": 200,
+        "body": {
+          "success": true,
+          "settings": {
+            "organizationName": "Department of Holistic Education (DHE)",
+            "tagline": "Shiksha Mahakumbh Abhiyan",
+            "logoUrl": null,
+            "faviconUrl": null,
+            "contactEmail": null,
+            "supportEmail": null,
+            "phoneNumbers": [],
+            "officeAddresses": [],
+            "socialLinks": {},
+            "copyrightText": null,
+            "footerContent": null,
+            "registrationOpen": true,
+            "maintenanceMode": false
+          }
+        }
+      },
+      {
+        "url": "https://www.shikshamahakumbh.com/api/registration/submit",
+        "method": "POST",
+        "status": 403,
+        "body": {
+          "error": "Security verification failed"
+        }
+      },
+      {
+        "url": "https://www.shikshamahakumbh.com/api/v2/analytics/track",
+        "method": "POST",
+        "status": 500,
+        "body": {
+          "error": "Internal server error"
+        }
+      },
+      {
+        "url": "https://www.shikshamahakumbh.com/api/visitors",
+        "method": "POST",
+        "status": 504,
+        "body": "An error occurred with your deployment\n\nFUNCTION_INVOCATION_TIMEOUT\n\nbom1::5xv4v-1781339318288-98a2508941f5\n"
+      },
+      {
+        "url": "https://www.shikshamahakumbh.com/api/visitors",
+        "method": "GET",
+        "status": 200,
+        "body": {
+          "daily": 1,
+          "total": 7,
+          "displayTotal": 94574,
+          "activeUsers": 1,
+          "source": "supabase"
+        }
+      }
+    ],
+    "submitResponse": {
+      "url": "https://www.shikshamahakumbh.com/api/registration/submit",
+      "method": "POST",
+      "status": 403,
+      "body": {
+        "error": "Security verification failed"
+      }
+    },
+    "sendEmailResponse": null,
+    "steps": {
+      "pageLoad": {
+        "url": "https://www.shikshamahakumbh.com/registration",
+        "title": "Register — Shiksha Mahakumbh 6.0 | Shiksha Mahakumbh Abhiyan"
+      },
+      "categorySelected": true,
+      "formFilled": true,
+      "recaptchaLoaded": true,
+      "afterSubmit": {
+        "url": "https://www.shikshamahakumbh.com/registration",
+        "hasSuccess": true
+      }
+    },
+    "error": null
+  },
+  "after": {
+    "count": 1,
+    "counter": {
+      "id": "489bd9fc-84fe-4fa5-b100-bbea8520be98",
+      "year": 2026,
+      "prefix": "SMK2026",
+      "lastNumber": 1,
+      "createdAt": "2026-06-12T06:24:27.301Z",
+      "updatedAt": "2026-06-12T06:24:27.301Z"
+    },
+    "latest": null,
+    "emails": [],
+    "allEmailCount": 0,
+    "payments": 0
+  },
+  "adminList": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "limit": 5,
+      "offset": 0
+    }
+  },
+  "securitySeo": {
+    "lookup": {
+      "status": 401,
+      "body": {
+        "error": "Email or confirmation token required"
+      }
+    },
+    "gateway": {
+      "status": 401,
+      "body": {
+        "error": "Unauthorized",
+        "code": "UNAUTHORIZED"
+      }
+    },
+    "webhook": {
+      "status": 401,
+      "body": {
+        "error": "Invalid signature"
+      }
+    },
+    "canonical": "https://www.shikshamahakumbh.com",
+    "sitemapCom": 114,
+    "sitemapRase": 0,
+    "robotsSitemap": "https://www.shikshamahakumbh.com/sitemap.xml"
+  },
+  "createOrder": {
+    "status": 200,
+    "body": {
+      "order_id": "order_T139KjQCD561mz",
+      "amount": 10000,
+      "currency": "INR",
+      "key_id": "rzp_live_Sz5hsyGHWPtgbT"
+    }
+  },
+  "proof": {
+    "registrationId": null,
+    "countDelta": 0,
+    "counterDelta": 0,
+    "emailRows": []
+  }
+}
