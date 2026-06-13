@@ -181,7 +181,7 @@ export default function RazorpayCheckout({
     <>
       <Script
         src={CHECKOUT_SCRIPT}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         onLoad={() => setScriptReady(true)}
         onError={() => toast.error("Failed to load payment gateway")}
       />

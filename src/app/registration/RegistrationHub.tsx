@@ -17,12 +17,14 @@ import RegistrationProgress from "@/components/registration/RegistrationProgress
 import CategoryStep from "@/components/registration/CategoryStep";
 import { loadMeta, saveMeta } from "@/lib/registration/draftStorage";
 import RecaptchaScript from "@/components/security/RecaptchaProvider";
+import { RegistrationFlowProvider } from "@/components/registration/RegistrationFlowContext";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
 import RegistrationTrustBar from "@/components/registration/RegistrationTrustBar";
 import {
   isExternalRedirectType,
   requiresPaymentStep,
 } from "@/lib/registration/config";
+import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
 
 function RegistrationFormRouter({
   type,
@@ -111,9 +113,18 @@ function RegistrationFormRouter({
 }
 
 export default function RegistrationHub() {
+  return (
+    <RegistrationFlowProvider>
+      <RegistrationHubInner />
+    </RegistrationFlowProvider>
+  );
+}
+
+function RegistrationHubInner() {
   const [step, setStep] = useState(1);
   const [registrationType, setRegistrationType] =
     useState<RegistrationType>("Delegate Registration");
+  const flow = useRegistrationFlow();
 
   const paidFlow = useMemo(
     () => requiresPaymentStep(registrationType),
@@ -142,7 +153,9 @@ export default function RegistrationHub() {
     }
   }, [step, registrationType]);
 
-  const goToPayment = () => {
+  const goToPayment = async () => {
+    const ok = (await flow?.requestPaymentStep()) ?? true;
+    if (!ok) return;
     setStep(3);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
