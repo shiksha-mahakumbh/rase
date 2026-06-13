@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -22,13 +22,16 @@ import {
 } from "@/components/forms/FormField";
 import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
-import {
-  PROJECT_REGISTRATION_FEE,
-  RegistrationType,
-} from "@/types/registration";
+import { RegistrationType } from "@/types/registration";
 import { resolvePaymentStatus } from "@/lib/registration/config";
+import {
+  accommodationFeeForBedType,
+  projectFeeForStudentType,
+} from "@/lib/registration/fees";
 import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 import { useRegisterPaymentGate } from "@/hooks/useRegisterPaymentGate";
+import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
+import { panRequiredForAmount } from "@/lib/registration/validation";
 import toast from "react-hot-toast";
 
 interface GenericRegistrationFormProps {
@@ -43,12 +46,10 @@ export default function GenericRegistrationForm({
   requiresPayment = false,
 }: GenericRegistrationFormProps) {
   const { submitRegistration, loading } = useRegistrationSubmit();
+  const flow = useRegistrationFlow();
   const [receipt, setReceipt] = useState<File | null>(null);
   const [receiptError, setReceiptError] = useState<string>();
   const [paymentVerified, setPaymentVerified] = useState(false);
-
-  const fee =
-    registrationType === "Projects" ? PROJECT_REGISTRATION_FEE : undefined;
 
   const {
     register,
@@ -60,14 +61,45 @@ export default function GenericRegistrationForm({
     formState: { errors },
   } = useForm<GenericFormValues>({
     resolver: zodResolver(genericSchema),
-    defaultValues: { accommodationRequired: "No" },
+    defaultValues: {
+      accommodationRequired: "No",
+      projectStudentType: "School Student",
+      accommodationBedType: "Single Bed",
+    },
   });
 
   useRegistrationDraft(registrationType, watch, reset);
 
+  const projectStudentType = watch("projectStudentType");
+  const accommodationBedType = watch("accommodationBedType");
   const fullName = watch("fullName");
   const email = watch("email");
   const contactNumber = watch("contactNumber");
+
+  const fee = useMemo(() => {
+    if (registrationType === "Projects") {
+      return projectFeeForStudentType(projectStudentType ?? "School Student");
+    }
+    if (registrationType === "Accommodation") {
+      return accommodationFeeForBedType(accommodationBedType ?? "Single Bed");
+    }
+    return 0;
+  }, [registrationType, projectStudentType, accommodationBedType]);
+
+  useEffect(() => {
+    flow?.setCurrentFee(requiresPayment ? fee : 0);
+  }, [fee, flow, requiresPayment]);
+
+  useEffect(() => {
+    setValue("registrationFee", fee);
+  }, [fee, setValue]);
+
+  useEffect(() => {
+    if (registrationType === "Accommodation") {
+      setValue("title", `Accommodation — ${accommodationBedType ?? "Single Bed"}`);
+      setValue("description", "Accommodation portal registration");
+    }
+  }, [registrationType, accommodationBedType, setValue]);
 
   const validateDetails = useCallback(async () => {
     const fields: (keyof GenericFormValues)[] = [
@@ -80,12 +112,16 @@ export default function GenericRegistrationForm({
       "country",
       "gender",
       "vidyaBharti",
-      "title",
-      "description",
       "accommodationRequired",
     ];
+    if (registrationType === "Projects") fields.push("projectStudentType");
+    if (registrationType === "Accommodation") {
+      fields.push("accommodationBedType");
+    } else {
+      fields.push("title", "description");
+    }
     return trigger(fields);
-  }, [trigger]);
+  }, [trigger, registrationType]);
 
   useRegisterPaymentGate(requiresPayment ? validateDetails : async () => true);
 
@@ -94,11 +130,11 @@ export default function GenericRegistrationForm({
   const watchShared = sharedWatch(watch);
 
   const onSubmit = async (data: GenericFormValues) => {
-    if (requiresPayment && fee) {
+    if (requiresPayment && fee > 0) {
       const paidOnline = Boolean(data.razorpayPaymentId?.trim());
-      if (!paidOnline && !data.utrNumber?.trim()) {
-        setReceiptError("Complete Razorpay payment or enter payment ID");
-        toast.error("Please complete Razorpay payment before submitting.");
+      if (!paidOnline && !receipt && !data.utrNumber?.trim()) {
+        setReceiptError("Complete Razorpay payment or upload payment receipt");
+        toast.error("Payment proof is required before submitting.");
         return;
       }
     }
@@ -108,14 +144,23 @@ export default function GenericRegistrationForm({
       registrationType,
       data: {
         ...data,
-        category: data.title,
-        registrationFee: fee ?? 0,
+        category:
+          registrationType === "Projects"
+            ? data.projectStudentType
+            : registrationType === "Accommodation"
+              ? data.accommodationBedType
+              : data.title,
+        registrationFee: fee,
+        title:
+          registrationType === "Accommodation"
+            ? `Accommodation — ${data.accommodationBedType}`
+            : data.title,
       },
       files: requiresPayment && receipt ? { receipt } : undefined,
       paymentStatus: resolvePaymentStatus(registrationType, {
         registrationFee: fee,
         hasPaymentProof: Boolean(
-          data.utrNumber?.trim() || data.razorpayPaymentId?.trim()
+          data.utrNumber?.trim() || data.razorpayPaymentId?.trim() || receipt
         ),
       }),
     });
@@ -126,37 +171,85 @@ export default function GenericRegistrationForm({
       <CommonParticipantFields register={reg} errors={errs} />
 
       <FormSection title={sectionTitle} className="registration-details">
-        <FormField
-          label="Title / Subject"
-          name="title"
-          required
-          register={reg}
-          errors={errs}
-        />
-        <FormField
-          label="Description"
-          name="description"
-          as="textarea"
-          rows={6}
-          required
-          register={reg}
-          errors={errs}
-        />
-        {requiresPayment && fee && (
+        {registrationType === "Projects" && (
+          <FormField
+            label="Student Type"
+            name="projectStudentType"
+            as="select"
+            required
+            register={reg}
+            errors={errs}
+            options={[
+              { value: "School Student", label: "School Student — ₹200" },
+              { value: "College Student", label: "College Student — ₹400" },
+            ]}
+          />
+        )}
+
+        {registrationType === "Accommodation" && (
+          <>
+            <FormField
+              label="Bed Type"
+              name="accommodationBedType"
+              as="select"
+              required
+              register={reg}
+              errors={errs}
+              options={[
+                { value: "Single Bed", label: "Single Bed — ₹3,000" },
+                { value: "Double Bed", label: "Double Bed — ₹6,000" },
+              ]}
+            />
+            <FormField
+              label="Additional Notes"
+              name="description"
+              as="textarea"
+              rows={4}
+              register={reg}
+              errors={errs}
+              placeholder="Any special requirements"
+            />
+          </>
+        )}
+
+        {registrationType !== "Accommodation" && (
+          <>
+            <FormField
+              label="Title / Subject"
+              name="title"
+              required
+              register={reg}
+              errors={errs}
+            />
+            <FormField
+              label="Description"
+              name="description"
+              as="textarea"
+              rows={6}
+              required
+              register={reg}
+              errors={errs}
+            />
+          </>
+        )}
+
+        {requiresPayment && fee > 0 && (
           <div className="md:col-span-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm">
             <p className="font-semibold text-brand-navy">
               Registration Fee: ₹{fee.toLocaleString("en-IN")}
             </p>
             <p className="mt-1 text-slate-600">
-              You will pay via Razorpay on the next step after confirming your details.
+              Pay via Razorpay on the next step after confirming your details.
             </p>
           </div>
         )}
       </FormSection>
 
-      <AccommodationSection register={reg} watch={watchShared} errors={errs} />
+      {registrationType !== "Accommodation" && (
+        <AccommodationSection register={reg} watch={watchShared} errors={errs} />
+      )}
 
-      {requiresPayment && fee && (
+      {requiresPayment && fee > 0 && (
         <FormSection title="Payment" className="registration-payment">
           <PaymentBlock
             fee={fee}
@@ -183,8 +276,16 @@ export default function GenericRegistrationForm({
             errors={errs}
             placeholder="Auto-filled after Razorpay payment"
           />
+          <FormField
+            label={`PAN Number${panRequiredForAmount(fee) ? "" : " (Optional)"}`}
+            name="panNumber"
+            required={panRequiredForAmount(fee)}
+            register={reg}
+            errors={errs}
+            placeholder="ABCDE1234F"
+          />
           <FileUploadField
-            label="Upload Receipt (optional if paid online)"
+            label="Upload Receipt (required if not paid online)"
             name="receipt"
             accept=".jpg,.jpeg,.png,.pdf"
             onChange={setReceipt}

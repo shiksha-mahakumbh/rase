@@ -1,11 +1,7 @@
-import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Fulllengthpaper from "../component/Fulllengthpaper";
-import { PAGE_HEROES } from "@/lib/page-heroes";
+import { redirect } from "next/navigation";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
+/** Legacy route — consolidated into Multi Track Conference (CMT) */
 export default function FullLengthPaperPage() {
-  return (
-    <PublicPageShell hero={PAGE_HEROES.fullLengthPaper} relatedPath="/fulllengthpaper">
-      <Fulllengthpaper />
-    </PublicPageShell>
-  );
+  redirect(CMT_SUBMISSION_URL);
 }

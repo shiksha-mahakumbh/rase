@@ -17,10 +17,10 @@ const insights = [
     tag: "Research",
   },
   {
-    title: "Abstract Submission Guidelines",
+    title: "Multi Track Conference",
     date: "Open",
     author: "Research Track",
-    href: "/abstract",
+    href: "https://cmt3.research.microsoft.com/SMK2026/",
     tag: "Submit",
   },
   {

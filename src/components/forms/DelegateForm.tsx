@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -26,6 +26,8 @@ import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { resolvePaymentStatus } from "@/lib/registration/config";
 import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 import { useRegisterPaymentGate } from "@/hooks/useRegisterPaymentGate";
+import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
+import { panRequiredForAmount } from "@/lib/registration/validation";
 import toast from "react-hot-toast";
 
 const defaultValues: Partial<DelegateFormValues> = {
@@ -36,6 +38,7 @@ const defaultValues: Partial<DelegateFormValues> = {
 
 export default function DelegateForm() {
   const { submitRegistration, loading } = useRegistrationSubmit();
+  const flow = useRegistrationFlow();
   const [receipt, setReceipt] = useState<File | null>(null);
   const [receiptError, setReceiptError] = useState<string>();
   const [paymentVerified, setPaymentVerified] = useState(false);
@@ -63,6 +66,10 @@ export default function DelegateForm() {
     () => (category ? DELEGATE_FEES[category] ?? 0 : 0),
     [category]
   );
+
+  useEffect(() => {
+    flow?.setCurrentFee(fee);
+  }, [fee, flow]);
 
   const validateDetails = useCallback(async () => {
     const fields: (keyof DelegateFormValues)[] = [
@@ -129,7 +136,7 @@ export default function DelegateForm() {
             label: k,
           }))}
         />
-        {fee > 0 && (
+        {fee > 0 ? (
           <div className="md:col-span-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm">
             <p className="font-semibold text-brand-navy">
               Registration Fee: ₹{fee.toLocaleString("en-IN")}
@@ -138,7 +145,11 @@ export default function DelegateForm() {
               You will pay via Razorpay on the next step after confirming your details.
             </p>
           </div>
-        )}
+        ) : category ? (
+          <div className="md:col-span-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+            No payment required for this category. Submit directly after filling details.
+          </div>
+        ) : null}
       </FormSection>
 
       <AccommodationSection register={sharedRegister(register)} watch={sharedWatch(watch)} errors={sharedErrors(errors)} />
@@ -184,13 +195,15 @@ export default function DelegateForm() {
             errors={sharedErrors(errors)}
           />
           <FormField
-            label="PAN Number"
+            label={`PAN Number${panRequiredForAmount(fee) ? "" : " (Optional)"}`}
             name="panNumber"
+            required={panRequiredForAmount(fee)}
             register={sharedRegister(register)}
             errors={sharedErrors(errors)}
+            placeholder="ABCDE1234F"
           />
           <FileUploadField
-            label="Upload Receipt (optional if paid online)"
+            label="Upload Receipt (optional if paid online via Razorpay)"
             name="receipt"
             accept=".jpg,.jpeg,.png,.pdf"
             onChange={setReceipt}

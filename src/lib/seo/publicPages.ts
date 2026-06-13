@@ -107,13 +107,13 @@ export const PUBLIC_PAGE_META = {
     path: "/Topics",
   }),
   abstract: createPageMetadata({
-    title: "Abstract Submission",
-    description: "Submit research abstracts for Shiksha Mahakumbh.",
+    title: "Multi Track Conference",
+    description: "Submit research papers and abstracts via Microsoft CMT for Shiksha Mahakumbh.",
     path: "/abstract",
   }),
   fulllengthpaper: createPublicationMetadata({
-    title: "Full-Length Paper",
-    description: "Full-length paper submission guidelines.",
+    title: "Multi Track Conference",
+    description: "Multi Track Conference submission via Microsoft CMT.",
     path: "/fulllengthpaper",
     publicationType: "Paper",
   }),
@@ -152,8 +152,8 @@ export const PUBLIC_PAGE_META = {
     path: "/keynotespeakers",
   }),
   paper: createPageMetadata({
-    title: "Call for Papers",
-    description: "Research paper and abstract submission information for Shiksha Mahakumbh.",
+    title: "Multi Track Conference",
+    description: "Research paper and abstract submission via Microsoft CMT for Shiksha Mahakumbh.",
     path: "/paper",
   }),
   pastEventSm24: createEventMetadata({

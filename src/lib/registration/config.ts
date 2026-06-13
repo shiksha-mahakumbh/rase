@@ -1,4 +1,5 @@
 import { PaymentStatus, RegistrationType } from "@/types/registration";
+import { requiresPaymentForFee } from "@/lib/registration/fees";
 
 export const CMT_SUBMISSION_URL =
   "https://cmt3.research.microsoft.com/SMK2026/";
@@ -6,29 +7,34 @@ export const CMT_SUBMISSION_URL =
 /** Microsoft CMT — immediate redirect, no on-site form */
 export const EXTERNAL_REDIRECT_TYPES = [
   "Multi Track Conference",
-  "Paper Submission",
-  "Abstract Submission",
 ] as const satisfies readonly RegistrationType[];
 
-/** Razorpay / payment step required */
-export const PAID_REGISTRATION_TYPES = [
+/** Categories that may require payment (actual step depends on fee > 0) */
+export const PAID_CAPABLE_TYPES = [
   "Delegate Registration",
   "Accommodation",
   "Projects",
 ] as const satisfies readonly RegistrationType[];
 
-export const PROJECT_REGISTRATION_FEE = 200;
-
 export function isExternalRedirectType(type: RegistrationType): boolean {
   return (EXTERNAL_REDIRECT_TYPES as readonly string[]).includes(type);
 }
 
-export function isPaidRegistrationType(type: RegistrationType): boolean {
-  return (PAID_REGISTRATION_TYPES as readonly string[]).includes(type);
+export function isPaidCapableType(type: RegistrationType): boolean {
+  return (PAID_CAPABLE_TYPES as readonly string[]).includes(type);
 }
 
-export function requiresPaymentStep(type: RegistrationType): boolean {
-  return isPaidRegistrationType(type);
+/** @deprecated use requiresPaymentStep(type, fee) */
+export function isPaidRegistrationType(type: RegistrationType): boolean {
+  return isPaidCapableType(type);
+}
+
+export function requiresPaymentStep(
+  type: RegistrationType,
+  fee = 0
+): boolean {
+  if (!isPaidCapableType(type)) return false;
+  return requiresPaymentForFee(fee);
 }
 
 export function redirectToExternalSubmission(type: RegistrationType): void {
@@ -47,17 +53,14 @@ export function resolvePaymentStatus(
 ): PaymentStatus {
   if (options.explicit) return options.explicit;
 
-  if (!isPaidRegistrationType(registrationType)) {
+  const fee = options.registrationFee ?? 0;
+
+  if (!isPaidCapableType(registrationType) || fee === 0) {
     return "Submitted";
   }
 
   if (options.hasPaymentProof) {
     return "Paid";
-  }
-
-  const fee = options.registrationFee ?? 0;
-  if (fee === 0 && registrationType === "Delegate Registration") {
-    return "Submitted";
   }
 
   return "Pending Payment";

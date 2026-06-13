@@ -1,17 +1,7 @@
-import PublicPageShell from "@/components/layouts/PublicPageShell";
-import PaperSubmission from "../component/Papersubmit";
+import { redirect } from "next/navigation";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
-const PAGE_HERO = {
-  eyebrow: "Research",
-  title: "Paper Submission Portal",
-  subtitle: "Redirecting to the academic council paper submission portal.",
-  accent: "emerald" as const,
-};
-
+/** Legacy route — consolidated into Multi Track Conference (CMT) */
 export default function PaperPage() {
-  return (
-    <PublicPageShell hero={PAGE_HERO} showCta={false}>
-      <PaperSubmission />
-    </PublicPageShell>
-  );
+  redirect(CMT_SUBMISSION_URL);
 }

@@ -4,7 +4,11 @@ import { isSupportedType } from "@/server/lib/registration-types";
 import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { getRequestContext } from "@/server/lib/request";
-import type { PaymentStatus } from "@/types/registration";
+import { sendRegistrationConfirmation } from "@/server/services/email.service";
+import { prisma } from "@/server/db/prisma";
+import { normalizePhoneInput, validatePanForAmount } from "@/lib/registration/validation";
+import { resolveRegistrationFee } from "@/lib/registration/fees";
+import type { PaymentStatus, RegistrationType } from "@/types/registration";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -61,6 +65,65 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Valid email is required" }, { status: 400 });
     }
 
+    const contact = normalizePhoneInput(String(data.contactNumber ?? ""));
+    if (contact.length !== 10) {
+      return NextResponse.json(
+        { error: "Valid 10-digit contact number is required" },
+        { status: 400 }
+      );
+    }
+    data.contactNumber = contact;
+
+    const payment = data.payment as Record<string, unknown> | undefined;
+    const fee = Number(data.registrationFee ?? payment?.registrationFee ?? 0);
+    const expectedFee = resolveRegistrationFee(type as RegistrationType, {
+      delegateCategory: String(data.delegateCategory ?? ""),
+      projectStudentType:
+        data.projectStudentType === "College Student"
+          ? "College Student"
+          : data.projectStudentType === "School Student"
+            ? "School Student"
+            : String(data.category ?? "").includes("College")
+              ? "College Student"
+              : "School Student",
+      accommodationBedType:
+        data.accommodationBedType === "Double Bed"
+          ? "Double Bed"
+          : String(data.title ?? "").includes("Double")
+            ? "Double Bed"
+            : "Single Bed",
+    });
+
+    if (type !== "Olympiad" && fee !== expectedFee) {
+      return NextResponse.json(
+        { error: "Registration fee does not match selected category" },
+        { status: 400 }
+      );
+    }
+    const panErr = validatePanForAmount(
+      String(data.panNumber ?? payment?.panNumber ?? ""),
+      fee
+    );
+    if (panErr) {
+      return NextResponse.json({ error: panErr }, { status: 400 });
+    }
+
+    if (fee > 0) {
+      const hasProof = Boolean(
+        data.razorpayPaymentId ||
+          payment?.razorpayPaymentId ||
+          data.utrNumber ||
+          payment?.utrNumber ||
+          data.paymentReceipt
+      );
+      if (!hasProof) {
+        return NextResponse.json(
+          { error: "Payment proof is required for paid registration" },
+          { status: 400 }
+        );
+      }
+    }
+
     const captcha = await verifyRecaptchaToken(captchaToken, "registration");
     if (!captcha.ok) {
       console.warn("registration submit captcha failed:", captcha.error);
@@ -89,6 +152,26 @@ export async function POST(request: NextRequest) {
       "@/lib/security/registration-lookup"
     );
     const lookupToken = createRegistrationLookupToken(result.registrationId, email);
+
+    void sendRegistrationConfirmation({
+      registrationId: result.registrationId,
+      fullName,
+      email,
+    })
+      .then(async (log) => {
+        await prisma.registration.update({
+          where: { id: result.id },
+          data: {
+            emailDeliveryStatus:
+              log.status === "sent"
+                ? "sent"
+                : log.status === "failed" || log.status === "skipped"
+                  ? "failed"
+                  : "pending",
+          },
+        });
+      })
+      .catch((err) => console.error("email queue failed:", err));
 
     return NextResponse.json({
       success: true,

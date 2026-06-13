@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  PAID_REGISTRATION_TYPES,
+  PAID_CAPABLE_TYPES,
   EXTERNAL_REDIRECT_TYPES,
 } from "@/lib/registration/config";
-import { REGISTRATION_TYPE_OPTIONS, RegistrationType } from "@/types/registration";
+import { REGISTRATION_TYPE_OPTIONS } from "@/types/registration";
 
 const FREE_HUB_TYPES = REGISTRATION_TYPE_OPTIONS.filter(
   (t) =>
-    !PAID_REGISTRATION_TYPES.includes(t as (typeof PAID_REGISTRATION_TYPES)[number]) &&
+    !PAID_CAPABLE_TYPES.includes(t as (typeof PAID_CAPABLE_TYPES)[number]) &&
     !EXTERNAL_REDIRECT_TYPES.includes(t as (typeof EXTERNAL_REDIRECT_TYPES)[number])
 );
 
@@ -21,7 +21,7 @@ export default function AdminRegistrationCategories() {
           Status: <strong>Pending Payment</strong> → <strong>Paid</strong>
         </p>
         <ul className="mt-2 list-inside list-disc text-sm text-amber-950">
-          {PAID_REGISTRATION_TYPES.map((t) => (
+          {PAID_CAPABLE_TYPES.map((t) => (
             <li key={t}>{t}</li>
           ))}
         </ul>

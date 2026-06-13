@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
-import { EVENT_NAME } from "@/types/registration";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { sendRegistrationConfirmation } from "@/server/services/email.service";
 import { prisma } from "@/server/db/prisma";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,12 +35,10 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  let registrationUuid: string | undefined;
-
   try {
     const body = await request.json();
-    const { registrationId, registrationType, fullName, email } = body;
-    registrationUuid = body.registrationUuid ?? body.masterDocId;
+    const { registrationId, fullName, email } = body;
+    const registrationUuid = body.registrationUuid ?? body.masterDocId;
 
     if (!registrationId || !email || !fullName) {
       return NextResponse.json(
@@ -63,81 +60,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!registrationUuid) {
-      const row = await prisma.registration.findFirst({
-        where: { registrationId, deletedAt: null },
-        select: { id: true },
-      });
-      registrationUuid = row?.id;
-    }
-
-    const smtpHost = process.env.SMTP_HOST;
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
-    const smtpFrom =
-      process.env.SMTP_FROM ?? "noreply@shikshamahakumbh.com";
-
-    let emailStatus: "sent" | "failed" | "skipped" = "skipped";
-
-    if (smtpHost && smtpUser && smtpPass) {
-      const port = Number(process.env.SMTP_PORT ?? 587);
-      const transporter = nodemailer.createTransport({
-        host: smtpHost,
-        port,
-        secure: port === 465,
-        requireTLS: port === 587,
-        auth: {
-          user: smtpUser,
-          pass: smtpPass.replace(/\s+/g, ""),
-        },
-      });
-
-      const html = `
-        <p>Dear ${fullName},</p>
-        <p>Your registration has been successfully submitted.</p>
-        <p><strong>Registration ID:</strong><br/>${registrationId}</p>
-        <p><strong>Registration Type:</strong><br/>${registrationType}</p>
-        <p>Please keep this Registration ID for future communication.</p>
-        <p>Regards,<br/>${EVENT_NAME} Organizing Team</p>
-      `;
-
-      await transporter.verify();
-      await transporter.sendMail({
-        from: `"${EVENT_NAME}" <${smtpFrom}>`,
-        to: email,
-        subject: `${EVENT_NAME} Registration Confirmation`,
-        html,
-      });
-
-      emailStatus = "sent";
-    }
+    const log = await sendRegistrationConfirmation({
+      registrationId,
+      fullName: String(fullName),
+      email: String(email),
+    });
 
     if (registrationUuid) {
       await prisma.registration.update({
         where: { id: registrationUuid },
-        data: { emailDeliveryStatus: emailStatus },
+        data: {
+          emailDeliveryStatus:
+            log.status === "sent"
+              ? "sent"
+              : log.status === "queued" || log.status === "sending"
+                ? "pending"
+                : log.status,
+        },
       });
     }
 
-    return NextResponse.json({ success: true, emailStatus });
+    return NextResponse.json({
+      success: true,
+      emailStatus: log.status === "sent" ? "sent" : "queued",
+      emailLogId: log.id,
+    });
   } catch (error) {
     console.error("Email send error:", error);
-
-    if (registrationUuid) {
-      try {
-        await prisma.registration.update({
-          where: { id: registrationUuid },
-          data: { emailDeliveryStatus: "failed" },
-        });
-      } catch (updateError) {
-        console.error("email status update failed:", updateError);
-      }
-    }
-
-    return NextResponse.json({
-      success: false,
-      emailStatus: "failed",
-      error: "Failed to send email",
-    });
+    return NextResponse.json(
+      { success: false, emailStatus: "failed", error: "Failed to queue email" },
+      { status: 500 }
+    );
   }
 }

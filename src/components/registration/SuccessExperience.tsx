@@ -1,33 +1,58 @@
 "use client";
 
-import { useEffect, useState, Suspense, type ReactNode } from "react";
+import { useEffect, useMemo, useState, Suspense, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import QRCode from "qrcode";
-import { downloadAcknowledgementPdf } from "@/lib/generateAcknowledgementPdf";
 import { formatFirestoreDate } from "@/lib/saveRegistration";
 import { EVENT_NAME } from "@/types/registration";
 import { event } from "@/design/tokens";
 import { ROUTES } from "@/constants/routes";
 import { CtaButton } from "@/components/ui";
+import RegistrationReceipt, {
+  type ReceiptData,
+  downloadRegistrationReceiptPdf,
+  printRegistrationReceipt,
+} from "@/components/registration/RegistrationReceipt";
 
-function buildCalendarIcs(id: string) {
-  const uid = `${id}@shikshamahakumbh.com`;
-  return [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "BEGIN:VEVENT",
-    `UID:${uid}`,
-    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`,
-    "DTSTART;VALUE=DATE:20261009",
-    "DTEND;VALUE=DATE:20261012",
-    `SUMMARY:${EVENT_NAME}`,
-    `LOCATION:${event.venue}, ${event.location}`,
-    "DESCRIPTION:Shiksha Mahakumbh Abhiyan — official registration confirmed",
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ].join("\r\n");
+function buildReceiptData(
+  record: Record<string, unknown>,
+  registrationId: string
+): ReceiptData {
+  const payment = record.payment as Record<string, unknown> | undefined;
+  const fee = Number(record.registrationFee ?? payment?.registrationFee ?? 0);
+  const hasRazorpay = Boolean(payment?.razorpayPaymentId ?? record.razorpayPaymentId);
+
+  return {
+    receiptNumber: registrationId.replace(/^SMK/, "RCP"),
+    registrationId,
+    date: formatFirestoreDate(record.createdAt),
+    fullName: String(record.fullName ?? "—"),
+    category: String(
+      record.delegateCategory ??
+        record.category ??
+        record.projectStudentType ??
+        record.accommodationBedType ??
+        record.registrationType ??
+        "—"
+    ),
+    institution: String(record.institution ?? "—"),
+    email: String(record.email ?? "—"),
+    contactNumber: String(record.contactNumber ?? "—"),
+    amount: fee,
+    paymentId: String(payment?.razorpayPaymentId ?? record.razorpayPaymentId ?? "—"),
+    orderId: String(payment?.razorpayOrderId ?? record.razorpayOrderId ?? "—"),
+    paymentMode: hasRazorpay
+      ? "Online (Razorpay)"
+      : payment?.utrNumber || record.utrNumber
+        ? "NEFT / RTGS / UTR"
+        : fee > 0
+          ? "Manual receipt"
+          : "Not applicable",
+    transactionDate: formatFirestoreDate(record.updatedAt ?? record.createdAt),
+    panNumber: String(payment?.panNumber ?? record.panNumber ?? "") || undefined,
+  };
 }
 
 function SuccessInner() {
@@ -71,45 +96,18 @@ function SuccessInner() {
       .catch(() => setQrDataUrl(null));
   }, [registrationId]);
 
-  const handleDownloadPdf = () => {
-    if (!record || !registrationId) return;
-    downloadAcknowledgementPdf({
-      registrationId,
-      registrationType: String(record.registrationType ?? "—"),
-      fullName: String(record.fullName ?? "—"),
-      institution: String(record.institution ?? "—"),
-      email: String(record.email ?? "—"),
-      contactNumber: String(record.contactNumber ?? "—"),
-      paymentStatus: String(record.paymentStatus ?? "Pending"),
-      submissionDate: formatFirestoreDate(record.createdAt),
-    });
+  const receiptData = useMemo(() => {
+    if (!record || !registrationId) return null;
+    return buildReceiptData(record, registrationId);
+  }, [record, registrationId]);
+
+  const handleDownloadReceipt = () => {
+    if (!receiptData) return;
+    void downloadRegistrationReceiptPdf(receiptData);
   };
 
-  const handleAddToCalendar = () => {
-    if (!registrationId) return;
-    const blob = new Blob([buildCalendarIcs(registrationId)], {
-      type: "text/calendar;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "shiksha-mahakumbh-2026.ics";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleShare = async () => {
-    if (!registrationId) return;
-    const text = `I registered for ${EVENT_NAME}. Registration ID: ${registrationId}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: EVENT_NAME, text, url: window.location.href });
-      } catch {
-        // user cancelled
-      }
-    } else {
-      await navigator.clipboard.writeText(text);
-    }
+  const handlePrintReceipt = () => {
+    printRegistrationReceipt();
   };
 
   if (loading) {
@@ -126,7 +124,13 @@ function SuccessInner() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-      <div className="overflow-hidden rounded-3xl border border-brand-emerald/30 bg-white shadow-xl">
+      {receiptData ? (
+        <div className="fixed -left-[9999px] top-0 print:static print:left-auto">
+          <RegistrationReceipt data={receiptData} />
+        </div>
+      ) : null}
+
+      <div className="overflow-hidden rounded-3xl border border-brand-emerald/30 bg-white shadow-xl print:hidden">
         <div className="bg-gradient-to-r from-brand-navy to-brand-navy-light px-6 py-8 text-center text-white md:px-10">
           <p className="text-sm font-bold uppercase tracking-widest text-brand-saffron">
             Registration confirmed
@@ -171,17 +175,19 @@ function SuccessInner() {
           )}
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <ActionCard title="Download receipt" onClick={handleDownloadPdf} disabled={!record}>
-              PDF acknowledgement
+            <ActionCard
+              title="Download receipt"
+              onClick={handleDownloadReceipt}
+              disabled={!receiptData}
+            >
+              PDF fee receipt
             </ActionCard>
-            <ActionCard title="Add to calendar" onClick={handleAddToCalendar}>
-              Save event dates
-            </ActionCard>
-            <ActionCard title="Share" onClick={handleShare}>
-              Tell colleagues
-            </ActionCard>
-            <ActionCard title="Print" onClick={() => window.print()}>
-              Print confirmation
+            <ActionCard
+              title="Print receipt"
+              onClick={handlePrintReceipt}
+              disabled={!receiptData}
+            >
+              Print fee receipt only
             </ActionCard>
           </div>
 
@@ -193,7 +199,7 @@ function SuccessInner() {
               {accommodation && (
                 <li>Accommodation requests are processed separately — you will be contacted.</li>
               )}
-              <li>Bring payment receipt if your track requires fee verification.</li>
+              <li>Download or print your receipt for paid registrations.</li>
             </ul>
           </section>
 
@@ -219,7 +225,7 @@ function SuccessInner() {
             </div>
           </section>
 
-          <div className="flex flex-wrap justify-center gap-3 print:hidden">
+          <div className="flex flex-wrap justify-center gap-3">
             <CtaButton href={ROUTES.home} variant="ghost">
               Back to home
             </CtaButton>

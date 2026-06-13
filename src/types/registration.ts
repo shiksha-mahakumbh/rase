@@ -5,8 +5,6 @@ export const REGISTRATION_ID_PREFIX = "SMK2026";
 export type RegistrationType =
   | "Delegate Registration"
   | "Multi Track Conference"
-  | "Paper Submission"
-  | "Abstract Submission"
   | "Conclave"
   | "Awards"
   | "Olympiad"
@@ -210,9 +208,7 @@ export interface GenericRegistrationData extends BaseRegistration {
     | "Bal Shodh Patrika"
     | "Cultural Program"
     | "Accommodation"
-    | "Multi Track Conference"
-    | "Paper Submission"
-    | "Abstract Submission";
+    | "Multi Track Conference";
   title?: string;
   description?: string;
 }
@@ -236,8 +232,6 @@ export interface AdminUser {
 export const REGISTRATION_TYPE_OPTIONS: RegistrationType[] = [
   "Delegate Registration",
   "Multi Track Conference",
-  "Paper Submission",
-  "Abstract Submission",
   "Conclave",
   "Awards",
   "Olympiad",
@@ -252,8 +246,6 @@ export const REGISTRATION_TYPE_OPTIONS: RegistrationType[] = [
 export const TYPE_COLLECTION_MAP: Record<RegistrationType, string> = {
   "Delegate Registration": "delegate_registrations",
   "Multi Track Conference": "registrations",
-  "Paper Submission": "registrations",
-  "Abstract Submission": "registrations",
   Conclave: "conclave_registrations",
   "Best Practices": "best_practices",
   Olympiad: "olympiad_registrations",
@@ -276,4 +268,6 @@ export const DELEGATE_FEES: Record<string, number> = {
 
 export const OLYMPIAD_FEE_PER_STUDENT = 200;
 
+/** @deprecated use PROJECT_SCHOOL_STUDENT_FEE / PROJECT_COLLEGE_STUDENT_FEE from @/lib/registration/fees */
 export const PROJECT_REGISTRATION_FEE = 200;
+export const PROJECT_COLLEGE_REGISTRATION_FEE = 400;

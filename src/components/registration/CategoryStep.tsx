@@ -10,8 +10,6 @@ import {
 const TYPE_HINTS: Partial<Record<RegistrationType, string>> = {
   "Delegate Registration": "Faculty, researchers, and institutional delegates",
   "Multi Track Conference": "Opens Microsoft CMT submission portal",
-  "Paper Submission": "Full-length papers via Microsoft CMT",
-  "Abstract Submission": "Abstracts via Microsoft CMT",
   Conclave: "Multi-track holistic education sessions",
   Olympiad: "School and student competitive programmes",
   Awards: "Recognition and excellence categories",
@@ -45,8 +43,8 @@ export default function CategoryStep({
   return (
     <div className="space-y-6">
       <p className="text-sm text-slate-600">
-        Select the track that best matches your participation. Paper, abstract, and
-        multi-track conference submissions open in{" "}
+        Select the track that best matches your participation. Multi Track
+        Conference submissions open in{" "}
         <a
           href={CMT_SUBMISSION_URL}
           className="font-semibold text-brand-saffron underline"
