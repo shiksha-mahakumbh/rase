@@ -22,12 +22,11 @@ export const SUPPORTED_V2_TYPES = [
   "Best Practices",
   "Talent",
   "NGO",
-  "Paper Submission",
-  "Abstract Submission",
   "Projects",
   "Organiser",
   "Bal Shodh Patrika",
   "Cultural Program",
+  "Multi Track Conference",
 ] as const;
 
 export type SupportedRegistrationType = (typeof SUPPORTED_V2_TYPES)[number];
@@ -45,10 +44,9 @@ const TYPE_MAP: Record<string, PrismaRegistrationType> = {
   "Best Practices": "Best_Practices",
   Talent: "Talent",
   NGO: "NGO",
-  "Paper Submission": "Legacy_Other",
-  "Abstract Submission": "Legacy_Other",
   Projects: "Exhibition",
   Organiser: "Legacy_Other",
+  "Multi Track Conference": "Legacy_Other",
   "Bal Shodh Patrika": "Legacy_Other",
   "Cultural Program": "Legacy_Other",
 };

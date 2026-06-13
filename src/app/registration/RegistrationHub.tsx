@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import RegistrationShell from "@/app/component/ui/RegistrationShell";
-import {
-  EVENT_NAME,
-  RegistrationType,
-} from "@/types/registration";
+import { EVENT_NAME, RegistrationType } from "@/types/registration";
 import DelegateForm from "@/components/forms/DelegateForm";
 import ConclaveForm from "@/components/forms/ConclaveForm";
 import BestPracticeForm from "@/components/forms/BestPracticeForm";
@@ -15,6 +12,7 @@ import AwardsForm from "@/components/forms/AwardsForm";
 import GenericRegistrationForm from "@/components/forms/GenericRegistrationForm";
 import RegistrationProgress from "@/components/registration/RegistrationProgress";
 import CategoryStep from "@/components/registration/CategoryStep";
+import CategoryInstructionsPanel from "@/components/registration/CategoryInstructionsPanel";
 import { loadMeta, saveMeta } from "@/lib/registration/draftStorage";
 import RecaptchaScript from "@/components/security/RecaptchaProvider";
 import { RegistrationFlowProvider } from "@/components/registration/RegistrationFlowContext";
@@ -26,44 +24,52 @@ import {
 } from "@/lib/registration/config";
 import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
 
+const MemoDelegateForm = memo(DelegateForm);
+const MemoConclaveForm = memo(ConclaveForm);
+const MemoBestPracticeForm = memo(BestPracticeForm);
+const MemoOlympiadForm = memo(OlympiadForm);
+const MemoAwardsForm = memo(AwardsForm);
+const MemoGenericForm = memo(GenericRegistrationForm);
+
 function RegistrationFormRouter({
   type,
   step,
   onContinueToPayment,
+  showPaymentStep,
 }: {
   type: RegistrationType;
   step: number;
   onContinueToPayment: () => void;
+  showPaymentStep: boolean;
 }) {
-  const paid = requiresPaymentStep(type);
-  const visibilityClass = paid
+  const visibilityClass = showPaymentStep
     ? step === 2
       ? "[&_.registration-payment]:hidden [&_button[type=submit]]:hidden"
       : "[&_.registration-details]:hidden"
     : "";
 
-  const form = (() => {
+  const form = useMemo(() => {
     switch (type) {
       case "Delegate Registration":
-        return <DelegateForm />;
+        return <MemoDelegateForm />;
       case "Conclave":
-        return <ConclaveForm />;
+        return <MemoConclaveForm />;
       case "Best Practices":
-        return <BestPracticeForm />;
+        return <MemoBestPracticeForm />;
       case "Olympiad":
-        return <OlympiadForm />;
+        return <MemoOlympiadForm />;
       case "Awards":
-        return <AwardsForm />;
+        return <MemoAwardsForm />;
       case "Exhibition":
         return (
-          <GenericRegistrationForm
+          <MemoGenericForm
             registrationType="Exhibition"
             sectionTitle="Exhibition Registration"
           />
         );
       case "Projects":
         return (
-          <GenericRegistrationForm
+          <MemoGenericForm
             registrationType="Projects"
             sectionTitle="Projects Registration"
             requiresPayment
@@ -71,21 +77,21 @@ function RegistrationFormRouter({
         );
       case "Bal Shodh Patrika":
         return (
-          <GenericRegistrationForm
+          <MemoGenericForm
             registrationType="Bal Shodh Patrika"
             sectionTitle="Bal Shodh Patrika Registration"
           />
         );
       case "Cultural Program":
         return (
-          <GenericRegistrationForm
+          <MemoGenericForm
             registrationType="Cultural Program"
             sectionTitle="Cultural Program Registration"
           />
         );
       case "Accommodation":
         return (
-          <GenericRegistrationForm
+          <MemoGenericForm
             registrationType="Accommodation"
             sectionTitle="Accommodation Registration"
             requiresPayment
@@ -94,12 +100,12 @@ function RegistrationFormRouter({
       default:
         return null;
     }
-  })();
+  }, [type]);
 
   return (
     <div className={visibilityClass}>
       {form}
-      {paid && step === 2 && (
+      {showPaymentStep && step === 2 && (
         <button
           type="button"
           onClick={onContinueToPayment}
@@ -125,23 +131,23 @@ function RegistrationHubInner() {
   const [registrationType, setRegistrationType] =
     useState<RegistrationType>("Delegate Registration");
   const flow = useRegistrationFlow();
+  const currentFee = flow?.currentFee ?? 0;
 
-  const paidFlow = useMemo(
-    () => requiresPaymentStep(registrationType),
-    [registrationType]
-  );
-  const totalSteps = paidFlow ? 3 : 2;
+  const showPaymentStep = requiresPaymentStep(registrationType, currentFee);
+  const totalSteps = showPaymentStep ? 3 : 2;
 
   useEffect(() => {
     const meta = loadMeta();
     if (meta?.registrationType && !isExternalRedirectType(meta.registrationType)) {
       setRegistrationType(meta.registrationType);
       if (meta.step >= 2) {
-        const maxStep = requiresPaymentStep(meta.registrationType) ? 3 : 2;
+        const maxStep = requiresPaymentStep(meta.registrationType, currentFee)
+          ? 3
+          : 2;
         setStep(Math.min(meta.step, maxStep));
       }
     }
-  }, []);
+  }, [currentFee]);
 
   useEffect(() => {
     if (step > 1 && !isExternalRedirectType(registrationType)) {
@@ -153,12 +159,18 @@ function RegistrationHubInner() {
     }
   }, [step, registrationType]);
 
-  const goToPayment = async () => {
+  useEffect(() => {
+    if (!showPaymentStep && step === 3) {
+      setStep(2);
+    }
+  }, [showPaymentStep, step]);
+
+  const goToPayment = useCallback(async () => {
     const ok = (await flow?.requestPaymentStep()) ?? true;
     if (!ok) return;
     setStep(3);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    window.scrollTo(0, 0);
+  }, [flow]);
 
   return (
     <>
@@ -169,10 +181,15 @@ function RegistrationHubInner() {
         subtitle="Official registration — national education movement & global summit"
         step={step}
         totalSteps={totalSteps}
+        sidebar={
+          step >= 2 && !isExternalRedirectType(registrationType) ? (
+            <CategoryInstructionsPanel registrationType={registrationType} />
+          ) : undefined
+        }
       >
         <RegistrationProgress
           currentStep={step}
-          requiresPayment={paidFlow}
+          requiresPayment={showPaymentStep}
         />
         <RegistrationTrustBar />
 
@@ -183,6 +200,7 @@ function RegistrationHubInner() {
               if (!isExternalRedirectType(t)) {
                 setRegistrationType(t);
                 setStep(1);
+                flow?.setCurrentFee(0);
               }
             }}
             onContinue={() => {
@@ -201,7 +219,7 @@ function RegistrationHubInner() {
             <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
               <span>
                 <strong className="text-brand-navy">{registrationType}</strong>
-                {paidFlow ? (
+                {showPaymentStep ? (
                   <span className="ml-2 text-xs text-amber-700">(Paid registration)</span>
                 ) : (
                   <span className="ml-2 text-xs text-emerald-700">(Free registration)</span>
@@ -218,26 +236,25 @@ function RegistrationHubInner() {
 
             {step === 2 && (
               <p className="text-sm text-slate-600">
-                {paidFlow
+                {showPaymentStep
                   ? "Fill your details below. Progress is saved automatically if you leave this page."
                   : "Complete your details and submit — no payment required for this category."}
               </p>
             )}
-            {paidFlow && step === 3 && (
+            {showPaymentStep && step === 3 && (
               <p className="text-sm text-slate-600">
                 Complete payment and submit your registration.
               </p>
             )}
 
-            {(step === 2 || (paidFlow && step === 3)) && (
-              <RegistrationFormRouter
-                type={registrationType}
-                step={step}
-                onContinueToPayment={goToPayment}
-              />
-            )}
+            <RegistrationFormRouter
+              type={registrationType}
+              step={step}
+              onContinueToPayment={goToPayment}
+              showPaymentStep={showPaymentStep}
+            />
 
-            {paidFlow && step === 3 && (
+            {showPaymentStep && step === 3 && (
               <button
                 type="button"
                 className="text-sm font-semibold text-brand-navy underline"

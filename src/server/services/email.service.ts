@@ -22,6 +22,12 @@ type QueueItem = {
 const queue: QueueItem[] = [];
 let processing = false;
 
+function emailProviderLabel(): string {
+  const host = process.env.SMTP_HOST ?? "";
+  if (host.includes("brevo") || host.includes("sendinblue")) return "brevo";
+  return "smtp";
+}
+
 function getTransporter() {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
@@ -62,7 +68,7 @@ export async function queueEmail(item: QueueItem) {
       subject: item.subject,
       template: item.template,
       status: "queued",
-      provider: "smtp",
+      provider: emailProviderLabel(),
     },
   });
 

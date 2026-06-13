@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useRef,
+  useState,
   type ReactNode,
 } from "react";
 
@@ -13,6 +14,8 @@ type BeforePaymentFn = () => Promise<boolean>;
 type RegistrationFlowContextValue = {
   registerBeforePayment: (fn: BeforePaymentFn) => () => void;
   requestPaymentStep: () => Promise<boolean>;
+  currentFee: number;
+  setCurrentFee: (fee: number) => void;
 };
 
 const RegistrationFlowContext = createContext<RegistrationFlowContextValue | null>(
@@ -21,6 +24,7 @@ const RegistrationFlowContext = createContext<RegistrationFlowContextValue | nul
 
 export function RegistrationFlowProvider({ children }: { children: ReactNode }) {
   const handlerRef = useRef<BeforePaymentFn | null>(null);
+  const [currentFee, setCurrentFee] = useState(0);
 
   const registerBeforePayment = useCallback((fn: BeforePaymentFn) => {
     handlerRef.current = fn;
@@ -36,7 +40,12 @@ export function RegistrationFlowProvider({ children }: { children: ReactNode }) 
 
   return (
     <RegistrationFlowContext.Provider
-      value={{ registerBeforePayment, requestPaymentStep }}
+      value={{
+        registerBeforePayment,
+        requestPaymentStep,
+        currentFee,
+        setCurrentFee,
+      }}
     >
       {children}
     </RegistrationFlowContext.Provider>

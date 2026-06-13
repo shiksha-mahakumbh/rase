@@ -96,6 +96,16 @@ export function FormField({
           className={className}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${name}-error` : undefined}
+          inputMode={type === "tel" ? "numeric" : undefined}
+          maxLength={type === "tel" ? 10 : undefined}
+          onInput={
+            type === "tel"
+              ? (e) => {
+                  const el = e.currentTarget;
+                  el.value = el.value.replace(/\D/g, "").slice(0, 10);
+                }
+              : undefined
+          }
           {...register(name)}
         />
       )}

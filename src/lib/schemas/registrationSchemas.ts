@@ -1,10 +1,68 @@
 import { z } from "zod";
+import {
+  isValidPan,
+  isValidPhone,
+  normalizePhoneInput,
+  panRequiredForAmount,
+  validatePanForAmount,
+} from "@/lib/registration/validation";
 
 export const yesNoSchema = z.enum(["Yes", "No"]);
-
 export const genderSchema = z.enum(["Male", "Female", "Other"]);
-
 export const vidyaBhartiSchema = z.enum(["Vidya Bharti", "Non Vidya Bharti"]);
+
+export const phoneSchema = z
+  .string()
+  .transform(normalizePhoneInput)
+  .refine(isValidPhone, "Enter a valid 10-digit mobile number");
+
+export const optionalPhoneSchema = z
+  .string()
+  .trim()
+  .optional()
+  .refine(
+    (v) => !v || isValidPhone(normalizePhoneInput(v)),
+    "Enter a valid 10-digit mobile number"
+  );
+
+export const panSchema = z.string().optional();
+
+export function panRefineForFee(
+  data: { panNumber?: string; registrationFee?: number },
+  ctx: z.RefinementCtx
+) {
+  const fee = data.registrationFee ?? 0;
+  const err = validatePanForAmount(data.panNumber, fee);
+  if (err) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, message: err, path: ["panNumber"] });
+  }
+}
+
+export function paymentProofRefine(
+  data: {
+    registrationFee?: number;
+    razorpayPaymentId?: string;
+    utrNumber?: string;
+    paymentReceipt?: unknown;
+  },
+  ctx: z.RefinementCtx,
+  receiptProvided?: boolean
+) {
+  const fee = data.registrationFee ?? 0;
+  if (fee <= 0) return;
+  const hasProof = Boolean(
+    data.razorpayPaymentId?.trim() ||
+      data.utrNumber?.trim() ||
+      receiptProvided
+  );
+  if (!hasProof) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Payment proof is required (Razorpay payment or receipt upload)",
+      path: ["utrNumber"],
+    });
+  }
+}
 
 export const accommodationSchema = z
   .object({
@@ -47,11 +105,8 @@ export const commonParticipantSchema = z.object({
   address: z.string().min(5, "Address is required"),
   country: z.string().min(2, "Country is required"),
   email: z.string().email("Valid email is required"),
-  contactNumber: z
-    .string()
-    .min(10, "Contact number must be at least 10 digits")
-    .max(15),
-  whatsappNumber: z.string().optional(),
+  contactNumber: phoneSchema,
+  whatsappNumber: optionalPhoneSchema,
   vidyaBharti: vidyaBhartiSchema,
 });
 
@@ -59,7 +114,8 @@ export const paymentSchema = z.object({
   utrNumber: z.string().optional(),
   transactionId: z.string().optional(),
   chequeNumber: z.string().optional(),
-  panNumber: z.string().optional(),
+  panNumber: panSchema,
+  registrationFee: z.number().optional(),
 });
 
 export const delegateSchema = commonParticipantSchema
@@ -73,10 +129,11 @@ export const delegateSchema = commonParticipantSchema
       "Director / VC / Chairperson (₹3000)",
       "Industry Delegate (₹8000)",
     ]),
+    registrationFee: z.number().optional(),
     utrNumber: z.string().optional(),
     transactionId: z.string().optional(),
     chequeNumber: z.string().optional(),
-    panNumber: z.string().optional(),
+    panNumber: panSchema,
     razorpayPaymentId: z.string().optional(),
     razorpayOrderId: z.string().optional(),
   })
@@ -90,15 +147,11 @@ export const delegateSchema = commonParticipantSchema
       "Industry Delegate (₹8000)": 8000,
     };
     const fee = feeMap[data.delegateCategory] ?? 0;
+    data.registrationFee = fee;
     if (fee > 0) {
-      if (!data.utrNumber?.trim()) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "UTR number is required after payment",
-          path: ["utrNumber"],
-        });
-      }
+      paymentProofRefine(data, ctx);
     }
+    panRefineForFee({ panNumber: data.panNumber, registrationFee: fee }, ctx);
   });
 
 export const conclaveSchema = commonParticipantSchema
@@ -155,9 +208,7 @@ export const olympiadSchema = commonParticipantSchema
     principalName: z.string().min(2, "Principal name is required"),
     principalEmail: z.string().email("Valid principal email is required"),
     coordinatorName: z.string().min(2, "Coordinator name is required"),
-    coordinatorContact: z
-      .string()
-      .min(10, "Coordinator contact must be at least 10 digits"),
+    coordinatorContact: phoneSchema,
     coordinatorEmail: z.string().email("Valid coordinator email is required"),
     studentCount: z.number().min(1, "Upload a valid student list"),
     registrationFee: z.number().min(0),
@@ -188,9 +239,20 @@ export const genericSchema = commonParticipantSchema
   .extend({
     title: z.string().min(3, "Title is required"),
     description: z.string().min(10, "Description is required"),
+    projectStudentType: z.enum(["School Student", "College Student"]).optional(),
+    accommodationBedType: z.enum(["Single Bed", "Double Bed"]).optional(),
+    registrationFee: z.number().optional(),
     utrNumber: z.string().optional(),
+    panNumber: panSchema,
     razorpayPaymentId: z.string().optional(),
     razorpayOrderId: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const fee = data.registrationFee ?? 0;
+    if (fee > 0) {
+      paymentProofRefine(data, ctx);
+      panRefineForFee({ panNumber: data.panNumber, registrationFee: fee }, ctx);
+    }
   });
 
 export type DelegateFormValues = z.infer<typeof delegateSchema>;

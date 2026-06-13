@@ -34,13 +34,13 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     href: "/journals",
   },
   {
-    slug: "abstract-submission",
-    title: "Abstract Submission",
-    excerpt: "Call for papers and submission guidelines.",
+    slug: "multi-track-conference",
+    title: "Multi Track Conference",
+    excerpt: "Submit papers and abstracts via Microsoft CMT.",
     category: "research",
-    tags: ["CFP", "abstract"],
+    tags: ["CFP", "CMT", "conference"],
     publishedAt: "2025-01-01",
-    href: "/abstract",
+    href: "https://cmt3.research.microsoft.com/SMK2026/",
   },
   {
     slug: "nep-policy",

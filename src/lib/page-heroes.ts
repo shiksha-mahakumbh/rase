@@ -78,14 +78,14 @@ export const PAGE_HEROES = {
   },
   abstract: {
     eyebrow: "Research",
-    title: "Abstract Submission",
-    subtitle: "Submit your research abstract for Shiksha Mahakumbh proceedings.",
+    title: "Multi Track Conference",
+    subtitle: "Redirecting to Microsoft CMT submission portal.",
     accent: "emerald",
   },
   fullLengthPaper: {
     eyebrow: "Research",
-    title: "Full-Length Paper Submission",
-    subtitle: "Submit full-length research papers for Shiksha Mahakumbh proceedings.",
+    title: "Multi Track Conference",
+    subtitle: "Redirecting to Microsoft CMT submission portal.",
     accent: "emerald",
   },
   comingSoon: {

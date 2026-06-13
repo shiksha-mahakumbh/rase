@@ -16,7 +16,7 @@ import {
   UploadedFileMeta,
 } from "@/types/registration";
 import {
-  isPaidRegistrationType,
+  isPaidCapableType,
   resolvePaymentStatus,
 } from "@/lib/registration/config";
 
@@ -67,6 +67,23 @@ async function uploadRegistrationFile(
   return body.file as UploadedFileMeta;
 }
 
+/** Fire-and-forget — never block success navigation */
+function queueConfirmationEmail(payload: {
+  registrationId: string;
+  registrationType: RegistrationType;
+  fullName: string;
+  email: string;
+  masterDocId?: string;
+}) {
+  void fetch("/api/registration/send-email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  }).catch(() => {
+    /* submit route already queues email; this is a client fallback */
+  });
+}
+
 export function useRegistrationSubmit() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -88,25 +105,29 @@ export function useRegistrationSubmit() {
       }
 
       const uploaded: Record<string, unknown> = {};
+      const uploadEntries = Object.entries(files).filter(([, v]) => v);
 
-      for (const [key, value] of Object.entries(files)) {
-        if (!value) continue;
-
-        if (Array.isArray(value)) {
-          const results: UploadedFileMeta[] = [];
-          for (const file of value) {
-            results.push(
-              await uploadRegistrationFile(file, registrationType, key)
-            );
-          }
-          uploaded[key] = results;
-        } else {
-          uploaded[key] = await uploadRegistrationFile(
-            value,
-            registrationType,
-            key
-          );
-        }
+      if (uploadEntries.length > 0) {
+        await Promise.all(
+          uploadEntries.map(async ([key, value]) => {
+            if (!value) return;
+            if (Array.isArray(value)) {
+              const results: UploadedFileMeta[] = [];
+              for (const file of value) {
+                results.push(
+                  await uploadRegistrationFile(file, registrationType, key)
+                );
+              }
+              uploaded[key] = results;
+            } else {
+              uploaded[key] = await uploadRegistrationFile(
+                value,
+                registrationType,
+                key
+              );
+            }
+          })
+        );
       }
 
       const fee = data.registrationFee as number | undefined;
@@ -119,9 +140,10 @@ export function useRegistrationSubmit() {
           ),
         });
 
-      const payment = isPaidRegistrationType(registrationType)
-        ? buildPaymentPayload(data, uploaded, resolvedPaymentStatus)
-        : undefined;
+      const payment =
+        isPaidCapableType(registrationType) && (fee ?? 0) > 0
+          ? buildPaymentPayload(data, uploaded, resolvedPaymentStatus)
+          : undefined;
 
       const payload = {
         ...data,
@@ -159,21 +181,13 @@ export function useRegistrationSubmit() {
 
       const result = await res.json();
 
-      try {
-        await fetch("/api/registration/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            registrationId: result.registrationId,
-            registrationType,
-            fullName: data.fullName,
-            email: data.email,
-            masterDocId: result.masterDocId,
-          }),
-        });
-      } catch {
-        // Email failure should not block registration
-      }
+      queueConfirmationEmail({
+        registrationId: result.registrationId,
+        registrationType,
+        fullName: String(data.fullName),
+        email: String(data.email),
+        masterDocId: result.masterDocId,
+      });
 
       trackEvent(ANALYTICS_EVENTS.registrationCompleted, {
         registrationType,

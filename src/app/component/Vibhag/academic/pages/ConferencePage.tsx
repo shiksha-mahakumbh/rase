@@ -70,9 +70,9 @@ export default function ConferencePage() {
         </ACGlassPanel>
       </ACSection>
 
-      <ACSection title="📢 Call for Papers">
+      <ACSection title="📢 Multi Track Conference">
         <h3 className="mb-4 text-lg font-semibold text-indigo-700">
-          📝 Submission Details
+          📝 Submission via Microsoft CMT
         </h3>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <ACCard>
@@ -92,13 +92,25 @@ export default function ConferencePage() {
             </h3>
           </ACCard>
         </div>
+        <p className="mt-4 text-sm text-indigo-800">
+          All abstracts and full-length papers are submitted through the{" "}
+          <a
+            href="https://cmt3.research.microsoft.com/SMK2026/"
+            className="font-semibold underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Multi Track Conference (CMT) portal
+          </a>
+          .
+        </p>
       </ACSection>
 
       <ACSection title="📅 Important Dates">
         <div className="grid gap-3 md:grid-cols-2">
-          <ACCard>📌 Abstract Submission: 30 June 2026</ACCard>
+          <ACCard>📌 CMT submission opens: 30 June 2026</ACCard>
           <ACCard>📌 Acceptance Notification: 31 July 2026</ACCard>
-          <ACCard>📌 Full Paper Submission: 31 August 2026</ACCard>
+          <ACCard>📌 Final manuscript deadline: 31 August 2026</ACCard>
           <ACCard>📌 Registration Deadline: 31 August 2026</ACCard>
         </div>
       </ACSection>
