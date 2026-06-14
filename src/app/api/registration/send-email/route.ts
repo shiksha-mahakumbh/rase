@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
-import { sendRegistrationConfirmation } from "@/server/services/email.service";
+import { sendRegistrationConfirmation, mapDeliveryStatus } from "@/server/services/email.service";
 import { prisma } from "@/server/db/prisma";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -62,6 +62,7 @@ export async function POST(request: NextRequest) {
 
     const log = await sendRegistrationConfirmation({
       registrationId,
+      registrationUuid: registrationUuid ?? null,
       fullName: String(fullName),
       email: String(email),
     });
@@ -70,20 +71,16 @@ export async function POST(request: NextRequest) {
       await prisma.registration.update({
         where: { id: registrationUuid },
         data: {
-          emailDeliveryStatus:
-            log.status === "sent"
-              ? "sent"
-              : log.status === "queued" || log.status === "sending"
-                ? "pending"
-                : log.status,
+          emailDeliveryStatus: mapDeliveryStatus(log.status),
         },
       });
     }
 
     return NextResponse.json({
-      success: true,
-      emailStatus: log.status === "sent" ? "sent" : "queued",
+      success: log.status === "sent",
+      emailStatus: log.status,
       emailLogId: log.id,
+      errorMessage: log.errorMessage ?? undefined,
     });
   } catch (error) {
     console.error("Email send error:", error);
