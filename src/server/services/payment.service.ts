@@ -112,6 +112,12 @@ export async function markPaymentCompleted(input: {
     payload: { razorpayPaymentId: input.razorpayPaymentId },
   });
 
+  void import("@/server/services/ops/workflow-automation.service")
+    .then(({ fireWorkflowForRegistration }) =>
+      fireWorkflowForRegistration("payment_complete", record.registrationId)
+    )
+    .catch(() => {});
+
   return { success: true, record, duplicate: false };
 }
 

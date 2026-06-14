@@ -8,9 +8,11 @@ export interface CommitteeEdition {
   edition: string;
 }
 
+import { editionTitle } from "@/data/past-editions";
+
 export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
   {
-    title: "Shiksha Mahakumbh 1.0",
+    title: editionTitle("1.0"),
     year: "2023",
     edition: "1.0",
     description:
@@ -20,7 +22,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     onCommitteeSelect: "Shiksha Mahakumbh 1.0 Committee",
   },
   {
-    title: "Shiksha Mahakumbh 2.0",
+    title: editionTitle("2.0"),
     year: "2023",
     edition: "2.0",
     description:
@@ -30,7 +32,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     onCommitteeSelect: "Shiksha Mahakumbh 2.0 Committee",
   },
   {
-    title: "Shiksha Mahakumbh 3.0",
+    title: editionTitle("3.0"),
     year: "2024",
     edition: "3.0",
     description:
@@ -40,7 +42,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     onCommitteeSelect: "Shiksha Mahakumbh 3.0 Committee",
   },
   {
-    title: "Shiksha Mahakumbh 4.0",
+    title: editionTitle("4.0"),
     year: "2024",
     edition: "4.0",
     description:
@@ -50,7 +52,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     onCommitteeSelect: "Shiksha Mahakumbh 4.0 Committee",
   },
   {
-    title: "Shiksha Mahakumbh 5.0",
+    title: editionTitle("5.0"),
     year: "2025",
     edition: "5.0",
     description:

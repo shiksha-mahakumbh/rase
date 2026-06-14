@@ -10,9 +10,9 @@ export const PAGE_HEROES = {
   },
   glimpses: {
     eyebrow: "Media Archive",
-    title: "Glimpses of Shiksha Mahakumbh",
+    title: "Glimpses of Shiksha Mahakumbh Abhiyan",
     subtitle:
-      "Explore digital and print media from Mahakumbh and Kumbh editions — celebrating education, innovation, and national development.",
+      "Explore digital and print media from Abhiyan editions — celebrating education, innovation, and national development.",
     accent: "emerald",
   },
   gallery: {
@@ -42,20 +42,14 @@ export const PAGE_HEROES = {
   },
   upcomingEvents: {
     eyebrow: "Programmes",
-    title: "Upcoming Events",
-    subtitle: "Summits, workshops, and national programmes on the Shiksha Mahakumbh calendar.",
+    title: "शिक्षा महाकुंभ 6.0",
+    subtitle: "Summits, workshops, and national programmes on the Shiksha Mahakumbh Abhiyan calendar.",
     accent: "saffron",
   },
-  shikshaMahakumbh: {
-    eyebrow: "Editions",
-    title: "Shiksha Mahakumbh",
-    subtitle: "India's multidisciplinary education summit — editions, themes, and archives.",
-    accent: "navy",
-  },
-  shikshaKumbh: {
-    eyebrow: "Editions",
-    title: "Shiksha Kumbh",
-    subtitle: "Regional Kumbh editions connecting institutions, youth, and educators.",
+  abhiyan: {
+    eyebrow: "Abhiyan",
+    title: "शिक्षा महाकुंभ अभियान",
+    subtitle: "Unified timeline of editions 1.0 through 6.0 — venues, themes, and national impact.",
     accent: "navy",
   },
   talkShow: {

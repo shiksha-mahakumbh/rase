@@ -181,6 +181,10 @@ export function useRegistrationSubmit() {
 
       const result = await res.json();
 
+      if (result.duplicate) {
+        toast.success("Registration already completed for this payment.");
+      }
+
       queueConfirmationEmail({
         registrationId: result.registrationId,
         registrationType,

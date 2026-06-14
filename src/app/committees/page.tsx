@@ -9,9 +9,9 @@ export default function CommitteesPage() {
     <PublicPageShell
       hero={{
         eyebrow: "Governance & Leadership",
-        title: "Shiksha Mahakumbh Timeline",
+        title: "Abhiyan Edition Timeline",
         subtitle:
-          "Explore organising committees across Mahakumbh editions — the leadership backbone of India's national education movement.",
+          "Explore organising committees across Abhiyan editions — the leadership backbone of India's national education movement.",
         accent: "navy",
       }}
       relatedPath={CANONICAL_ROUTES.committees}
@@ -20,7 +20,7 @@ export default function CommitteesPage() {
       <BreadcrumbNav
         items={[
           { label: "Home", href: "/" },
-          { label: "Shiksha Mahakumbh", href: "/shikshamahakumbh" },
+          { label: "Abhiyan", href: "/abhiyan" },
           { label: "Organising Committees" },
         ]}
         className="mb-8"

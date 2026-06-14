@@ -10,10 +10,9 @@ interface Item {
 }
 
 const items: Item[] = [
-    { imageUrl: '/new.gif', text: 'Shiksha Kumbh 2023 Live Streaming', link: 'https://www.youtube.com/watch?v=FFfdSd8_XOw' },
-    { imageUrl: '/new.gif', text: 'Visit Shiksha Kumbh 2024', link: 'https://sk24.rase.co.in/' },
-    { imageUrl: '/new.gif', text: 'Dates of Shiksha Kumbh 2024', link: 'https://sk24.rase.co.in/impDate' },
-   
+    { imageUrl: '/new.gif', text: 'शिक्षा महाकुंभ 6.0 — Register Now', link: '/registration' },
+    { imageUrl: '/new.gif', text: 'Abhiyan Edition Timeline', link: '/abhiyan' },
+    { imageUrl: '/new.gif', text: 'Past Editions Archive', link: '/past-events' },
 ];
 
 const MarqueeUpcomingEvent: React.FC = () => {

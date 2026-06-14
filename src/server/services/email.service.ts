@@ -11,6 +11,13 @@ export type EmailTemplate =
   | "contact_acknowledgement"
   | "feedback_acknowledgement";
 
+type EmailAttachment = {
+  filename: string;
+  content: Buffer;
+  contentType: string;
+  cid?: string;
+};
+
 type QueueItem = {
   toEmail: string;
   subject: string;
@@ -20,6 +27,7 @@ type QueueItem = {
   publicRegistrationId?: string;
   /** registrations.id UUID — required for email_logs FK */
   registrationUuid?: string | null;
+  attachments?: EmailAttachment[];
 };
 
 const MAX_ATTEMPTS = 3;
@@ -79,7 +87,20 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
     case "registration_confirmation":
       return `<p>Dear ${data.fullName},</p><p>Your registration for ${EVENT_NAME} is confirmed.</p><p>Registration ID: <strong>${data.registrationId}</strong></p>`;
     case "payment_confirmation":
-      return `<p>Dear ${data.fullName},</p><p>Payment received for registration <strong>${data.registrationId}</strong>.</p>`;
+      return `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b">
+        <p>Dear ${data.fullName},</p>
+        <p>Your payment for <strong>${EVENT_NAME}</strong> has been received successfully.</p>
+        <table style="border-collapse:collapse;margin:16px 0;width:100%;max-width:480px">
+          <tr><td style="padding:6px 0;font-weight:600">Registration ID</td><td>${data.registrationId}</td></tr>
+          <tr><td style="padding:6px 0;font-weight:600">Transaction ID</td><td>${data.transactionId ?? "—"}</td></tr>
+          <tr><td style="padding:6px 0;font-weight:600">Amount Paid</td><td>${data.amountPaid ?? "—"}</td></tr>
+          <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>
+        </table>
+        ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">Download receipt online</a></p>` : ""}
+        ${data.hasQr ? `<p style="margin-top:16px">Your entry QR code is attached and shown below:</p><img src="cid:registration-qr" alt="Registration QR Code" width="200" height="200" />` : ""}
+        <p style="margin-top:16px">Please bring this QR code to the event venue for check-in.</p>
+        <p>Regards,<br/>${EVENT_NAME} Team</p>
+      </div>`;
     case "admin_alert":
       return `<p>Admin alert: ${data.message}</p>`;
     case "contact_acknowledgement":
@@ -164,6 +185,12 @@ async function deliverEmailLog(logId: string, item: QueueItem) {
         to: item.toEmail,
         subject: item.subject,
         html: item.html,
+        attachments: item.attachments?.map((a) => ({
+          filename: a.filename,
+          content: a.content,
+          contentType: a.contentType,
+          cid: a.cid,
+        })),
       });
 
       await prisma.emailLog.update({
@@ -320,17 +347,48 @@ export async function sendPaymentConfirmation(options: {
   registrationUuid?: string | null;
   fullName: string;
   email: string;
+  transactionId?: string;
+  amountPaid: number;
+  category: string;
+  receiptUrl?: string;
+  receiptPdf?: Buffer;
+  qrPng?: Buffer;
 }) {
+  const attachments: EmailAttachment[] = [];
+
+  if (options.receiptPdf) {
+    attachments.push({
+      filename: `receipt-${options.registrationId}.pdf`,
+      content: options.receiptPdf,
+      contentType: "application/pdf",
+    });
+  }
+
+  if (options.qrPng) {
+    attachments.push({
+      filename: `qr-${options.registrationId}.png`,
+      content: options.qrPng,
+      contentType: "image/png",
+      cid: "registration-qr",
+    });
+  }
+
   return queueEmail({
     toEmail: options.email,
     subject: `${EVENT_NAME} — Payment Confirmed`,
     html: buildHtml("payment_confirmation", {
       fullName: options.fullName,
       registrationId: options.registrationId,
+      transactionId: options.transactionId ?? "",
+      amountPaid: `₹${options.amountPaid.toLocaleString("en-IN")}`,
+      category: options.category,
+      receiptUrl: options.receiptUrl ?? "",
+      hasQr: options.qrPng ? "1" : "",
     }),
     template: "payment_confirmation",
     publicRegistrationId: options.registrationId,
     registrationUuid: options.registrationUuid ?? null,
+    attachments,
   });
 }
 

@@ -19,7 +19,7 @@ export const footerLogos: FooterLogo[] = [
   { href: "https://poojawala.in/", src: "/pooja.png", alt: "Pooja" },
   { href: "https://www.swadeshibazaar.co.in/", src: "/sb.png", alt: "Swadeshi Bazar" },
   { href: "https://tredul.in/", src: "/tre-dul.png", alt: "Tredul" },
-  { href: "https://www.itrchandigarh.org/", src: "/logo%202.png", alt: "ITR" },
+  { href: "https://www.itrchandigarh.org/", src: "/logo 2.png", alt: "ITR" },
   { href: "https://vi.rase.co.in/", src: "/vi.png", alt: "Vikas India" },
   { href: "https://tudu.co.in/", src: "/tudu.png", alt: "Tudu" },
   { href: "https://punjabsuper100.com/", src: "/pb100.png", alt: "Punjab Super 100" },
@@ -27,10 +27,11 @@ export const footerLogos: FooterLogo[] = [
 
 export const quickLinks: FooterLink[] = [
   { name: "Home", href: "/" },
+  { name: "Abhiyan Timeline", href: "/abhiyan" },
   { name: "Introduction", href: "/introduction" },
   { name: "Registration", href: "/registration" },
-  { name: "Upcoming Events", href: "/upcoming-events" },
-  { name: "Past Events", href: "/past-events" },
+  { name: "शिक्षा महाकुंभ 6.0", href: "/upcoming-events" },
+  { name: "Past Editions", href: "/past-events" },
   { name: "Committees", href: "/committees" },
   { name: "Media Centre", href: "/media-center" },
   { name: "Press Releases", href: "/press" },
@@ -57,7 +58,7 @@ export const educationLinks: FooterLink[] = [
 ];
 
 export const programLinks: FooterLink[] = [
-  { name: "Shiksha Mahakumbh 6.0", href: "/registration" },
+  { name: "शिक्षा महाकुंभ 6.0", href: "/registration" },
   { name: "Conclave", href: "/conclave" },
   { name: "Workshops", href: "/workshops" },
   { name: "Summits", href: "/summits" },

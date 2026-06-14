@@ -105,7 +105,7 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
     id: "educational-technology",
     label: "Educational Technology",
     description: "Digital media, videos, and EdTech showcases.",
-    routes: ["/videos", "/media/shiksha-mahakumbh/2024/digital"],
+    routes: ["/videos", "/media/shiksha-mahakumbh/4.0/digital"],
     schemaTypes: ["VideoObject"],
   },
   {
@@ -125,8 +125,8 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
   {
     id: "conferences",
     label: "Conferences",
-    description: "Shiksha Mahakumbh and Shiksha Kumbh editions.",
-    routes: ["/shikshamahakumbh", "/shikshakumbh", "/registration"],
+    description: "Shiksha Mahakumbh Abhiyan national editions.",
+    routes: ["/abhiyan", "/introduction", "/registration"],
     schemaTypes: ["EducationEvent"],
   },
   {

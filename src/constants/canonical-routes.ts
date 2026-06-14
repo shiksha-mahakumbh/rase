@@ -1,10 +1,13 @@
 /**
  * Canonical public URLs (P2). Legacy paths redirect here via next.config.js.
  */
+export { MEDIA_ARCHIVE_CANONICAL } from "@/constants/canonical-routes-media";
+
 export const CANONICAL_ROUTES = {
   home: "/",
   registration: "/registration",
   introduction: "/introduction",
+  abhiyan: "/abhiyan",
   pastEvents: "/past-events",
   upcomingEvents: "/upcoming-events",
   contact: "/contact-us",
@@ -37,53 +40,3 @@ export const PRESS_CANONICAL_PATHS: Record<number, string> = {
   8: "/press/education-movement",
   9: "/press/summit-highlights",
 };
-
-export const MEDIA_ARCHIVE_CANONICAL: Record<
-  string,
-  { edition: string; year: string; type: string }
-> = {
-  "/shikshamahakumbh2024digitalmedia": {
-    edition: "shiksha-mahakumbh",
-    year: "2024",
-    type: "digital",
-  },
-  "/shikshamahakumbh2023digitalmedia": {
-    edition: "shiksha-mahakumbh",
-    year: "2023",
-    type: "digital",
-  },
-  "/shikshakumbh2024digitalmedia": {
-    edition: "shiksha-kumbh",
-    year: "2024",
-    type: "digital",
-  },
-  "/shikshakumbh2023digitalmedia": {
-    edition: "shiksha-kumbh",
-    year: "2023",
-    type: "digital",
-  },
-  "/printmediashikshamahakumbh2024": {
-    edition: "shiksha-mahakumbh",
-    year: "2024",
-    type: "print",
-  },
-  "/printmediashikshamahakumbh2023": {
-    edition: "shiksha-mahakumbh",
-    year: "2023",
-    type: "print",
-  },
-  "/printmediashikshakumbh2024": {
-    edition: "shiksha-kumbh",
-    year: "2024",
-    type: "print",
-  },
-  "/printmediashikshakumbh2023": {
-    edition: "shiksha-kumbh",
-    year: "2023",
-    type: "print",
-  },
-};
-
-export function mediaArchivePath(edition: string, year: string, type: string) {
-  return `/media/${edition}/${year}/${type}`;
-}

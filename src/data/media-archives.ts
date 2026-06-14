@@ -1,3 +1,9 @@
+import {
+  getEditionByNumber,
+  mediaArchivePath,
+  PAST_EDITIONS,
+} from "@/data/past-editions";
+
 export interface MediaArchiveChild {
   label: string;
   link: string;
@@ -20,55 +26,47 @@ export interface MediaArchiveItem {
   }[];
 }
 
+function editionMediaItem(
+  editionNum: string,
+  color: string,
+  image: string,
+  archiveEdition?: string
+): MediaArchiveItem {
+  const e = getEditionByNumber(editionNum)!;
+  const item: MediaArchiveItem = {
+    label: e.title,
+    engLabel: `Shiksha Mahakumbh ${editionNum}`,
+    year: e.year,
+    theme: e.theme,
+    color,
+    image,
+    category: "edition",
+    children: [
+      { label: "Digital Media", link: mediaArchivePath(editionNum, "digital") },
+      { label: "Print Media", link: mediaArchivePath(editionNum, "print") },
+    ],
+  };
+  if (archiveEdition) {
+    const arch = getEditionByNumber(archiveEdition)!;
+    item.archive = [
+      {
+        year: arch.year,
+        label: arch.title,
+        engLabel: arch.title,
+        children: [
+          { label: "Digital Media", link: mediaArchivePath(archiveEdition, "digital") },
+          { label: "Print Media", link: mediaArchivePath(archiveEdition, "print") },
+        ],
+      },
+    ];
+  }
+  return item;
+}
+
+/** Primary media navigation cards — editions 4.0 & 3.0 with nested 1.0 / 2.0 archives */
 export const MEDIA_ARCHIVE_ITEMS: MediaArchiveItem[] = [
-  {
-    label: "शिक्षा महाकुंभ 4.0",
-    engLabel: "Shiksha Mahakumbh 4.0",
-    year: "2024",
-    theme: "Indian Education System for Global Development",
-    color: "from-blue-700 to-indigo-800",
-    image: "/images/smk4.jpg",
-    category: "edition",
-    children: [
-      { label: "Digital Media", link: "/media/shiksha-mahakumbh/2024/digital" },
-      { label: "Print Media", link: "/media/shiksha-mahakumbh/2024/print" },
-    ],
-    archive: [
-      {
-        year: "2023",
-        label: "शिक्षा महाकुंभ 1.0",
-        engLabel: "Shiksha Mahakumbh 1.0",
-        children: [
-          { label: "Digital Media", link: "/media/shiksha-mahakumbh/2023/digital" },
-          { label: "Print Media", link: "/media/shiksha-mahakumbh/2023/print" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "शिक्षा महाकुंभ 3.0",
-    engLabel: "Shiksha Mahakumbh 3.0",
-    year: "2024",
-    theme: "Role of Startups in Developing Economy of",
-    color: "from-orange-500 to-red-600",
-    image: "/images/smk3.jpg",
-    category: "edition",
-    children: [
-      { label: "Digital Media", link: "/media/shiksha-kumbh/2024/digital" },
-      { label: "Print Media", link: "/media/shiksha-kumbh/2024/print" },
-    ],
-    archive: [
-      {
-        year: "2023",
-        label: "शिक्षा महाकुंभ 2.0",
-        engLabel: "Shiksha Mahakumbh 2.0",
-        children: [
-          { label: "Digital Media", link: "/media/shiksha-kumbh/2023/digital" },
-          { label: "Print Media", link: "/media/shiksha-kumbh/2023/print" },
-        ],
-      },
-    ],
-  },
+  editionMediaItem("4.0", "from-blue-700 to-indigo-800", "/images/smk4.jpg", "1.0"),
+  editionMediaItem("3.0", "from-orange-500 to-red-600", "/images/smk3.jpg", "2.0"),
 ];
 
 export const PRESS_COVERAGE_LINKS = [
@@ -99,3 +97,13 @@ export type MediaFilter =
   | "print"
   | "press"
   | "gallery";
+
+/** All past editions with media links — for programmatic menus */
+export function allEditionMediaLinks() {
+  return PAST_EDITIONS.map((e) => ({
+    edition: e.edition,
+    title: e.title,
+    digital: mediaArchivePath(e.edition, "digital"),
+    print: mediaArchivePath(e.edition, "print"),
+  }));
+}

@@ -48,12 +48,24 @@ export const PUBLIC_PAGE_META = {
     publicationType: "Book",
   }),
   upcomingevent: createEventMetadata({
-    title: "Upcoming Events",
-    description: "Upcoming Shiksha Mahakumbh events and national education programmes.",
+    title: "शिक्षा महाकुंभ 6.0 — Upcoming Programmes",
+    description:
+      "Upcoming programmes and registration for Shiksha Mahakumbh Abhiyan edition 6.0.",
     path: "/upcoming-events",
   }),
+  abhiyan: createPageMetadata({
+    title: "शिक्षा महाकुंभ अभियान — Edition Timeline",
+    description:
+      "Unified timeline of Shiksha Mahakumbh Abhiyan editions 1.0 through 6.0 — venues, themes, core focus, and outcomes.",
+    path: "/abhiyan",
+    keywords: [
+      "Shiksha Mahakumbh Abhiyan",
+      "शिक्षा महाकुंभ",
+      "education movement India",
+    ],
+  }),
   pastevent: createEventMetadata({
-    title: "Past Editions — Shiksha Mahakumbh 1.0 to 5.0",
+    title: "Past Editions — शिक्षा महाकुंभ 1.0 to 5.0",
     description:
       "Official archive of five completed Shiksha Mahakumbh Abhiyan editions: NIT Jalandhar, NIT Kurukshetra, NIT Srinagar, Kurukshetra University, and NIPER Mohali. Themes, venues, impact, and galleries.",
     path: "/past-events",
@@ -117,16 +129,6 @@ export const PUBLIC_PAGE_META = {
     path: "/fulllengthpaper",
     publicationType: "Paper",
   }),
-  shikshamahakumbh: createEventMetadata({
-    title: "Shiksha Mahakumbh",
-    description: "National multidisciplinary education summit.",
-    path: "/shikshamahakumbh",
-  }),
-  shikshakumbh: createEventMetadata({
-    title: "Shiksha Kumbh",
-    description: "Shiksha Kumbh national education programmes.",
-    path: "/shikshakumbh",
-  }),
   conclave: createEventMetadata({
     title: "VC & Policy Conclaves",
     description:
@@ -143,7 +145,7 @@ export const PUBLIC_PAGE_META = {
   }),
   videos: createPageMetadata({
     title: "Videos",
-    description: "Video gallery from Shiksha Mahakumbh and Shiksha Kumbh national editions.",
+    description: "Video gallery from Shiksha Mahakumbh Abhiyan national editions.",
     path: "/videos",
   }),
   keynotespeakers: createPageMetadata({
@@ -157,35 +159,35 @@ export const PUBLIC_PAGE_META = {
     path: "/paper",
   }),
   pastEventSm24: createEventMetadata({
-    title: "Shiksha Mahakumbh 4.0 — Kurukshetra University (2024)",
+    title: "शिक्षा महाकुंभ 4.0 — Kurukshetra University (2024)",
     description:
       "Shiksha Mahakumbh 4.0 at Kurukshetra University, 16–17 December 2024. Theme: Indian Education System for Global Development.",
     path: "/past_event/sm24",
     keywords: ["SMK 4.0", "Kurukshetra University", "Indian Education Conference"],
   }),
   pastEventSm23: createEventMetadata({
-    title: "Shiksha Mahakumbh 1.0 — NIT Jalandhar (2023)",
+    title: "शिक्षा महाकुंभ 1.0 — NIT Jalandhar (2023)",
     description:
       "Shiksha Mahakumbh 1.0 at NIT Jalandhar, 9–11 June 2023. Theme: Recent Advances in School Education.",
     path: "/past_event/sm23",
     keywords: ["SMK 1.0", "NIT Jalandhar", "School Education Conference"],
   }),
   pastEventSm25: createEventMetadata({
-    title: "Shiksha Mahakumbh 5.0 — NIPER Mohali (2025)",
+    title: "शिक्षा महाकुंभ 5.0 — NIPER Mohali (2025)",
     description:
       "Shiksha Mahakumbh 5.0 at NIPER Mohali, 31 October – 2 November 2025. Theme: Classroom to Society — Building a Healthier World through Education.",
     path: "/past_event/sm25",
     keywords: ["SMK 5.0", "NIPER Mohali", "Higher Education Summit"],
   }),
   pastEventSk24: createEventMetadata({
-    title: "Shiksha Mahakumbh 3.0 — NIT Srinagar (2024)",
+    title: "शिक्षा महाकुंभ 3.0 — NIT Srinagar (2024)",
     description:
       "Shiksha Mahakumbh 3.0 at NIT Srinagar, 29–30 June 2024. Theme: Academic-driven Startups in Developing Economy of J & K.",
     path: "/past_event/sk24",
     keywords: ["SMK 3.0", "NIT Srinagar", "Academic Innovation Summit"],
   }),
   pastEventSk23: createEventMetadata({
-    title: "Shiksha Mahakumbh 2.0 — NIT Kurukshetra (2023)",
+    title: "शिक्षा महाकुंभ 2.0 — NIT Kurukshetra (2023)",
     description:
       "Shiksha Mahakumbh 2.0 at NIT Kurukshetra, 20 December 2023. Theme: Role of Academic-driven Startups in Economy.",
     path: "/past_event/sk23",

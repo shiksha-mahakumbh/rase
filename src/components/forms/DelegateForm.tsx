@@ -162,6 +162,12 @@ export default function DelegateForm() {
             customerName={fullName}
             customerEmail={email}
             customerPhone={contactNumber}
+            orderNotes={{
+              registrationType: "Delegate Registration",
+              email: email?.trim() || "unknown",
+              category: category ?? "General",
+              amount: String(fee),
+            }}
             onPaymentVerified={(p) => {
               setPaymentVerified(true);
               setValue("transactionId", p.razorpay_payment_id);

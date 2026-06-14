@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import RegistrationShell from "@/app/component/ui/RegistrationShell";
 import { EVENT_NAME, RegistrationType } from "@/types/registration";
@@ -13,7 +13,7 @@ import GenericRegistrationForm from "@/components/forms/GenericRegistrationForm"
 import RegistrationProgress from "@/components/registration/RegistrationProgress";
 import CategoryStep from "@/components/registration/CategoryStep";
 import CategoryInstructionsPanel from "@/components/registration/CategoryInstructionsPanel";
-import { loadMeta, saveMeta } from "@/lib/registration/draftStorage";
+import { loadMeta, saveMeta, switchRegistrationCategory } from "@/lib/registration/draftStorage";
 import RecaptchaScript from "@/components/security/RecaptchaProvider";
 import { RegistrationFlowProvider } from "@/components/registration/RegistrationFlowContext";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
@@ -132,11 +132,14 @@ function RegistrationHubInner() {
     useState<RegistrationType>("Delegate Registration");
   const flow = useRegistrationFlow();
   const currentFee = flow?.currentFee ?? 0;
+  const metaLoadedRef = useRef(false);
 
   const showPaymentStep = requiresPaymentStep(registrationType, currentFee);
   const totalSteps = showPaymentStep ? 3 : 2;
 
   useEffect(() => {
+    if (metaLoadedRef.current) return;
+    metaLoadedRef.current = true;
     const meta = loadMeta();
     if (meta?.registrationType && !isExternalRedirectType(meta.registrationType)) {
       setRegistrationType(meta.registrationType);
@@ -201,6 +204,7 @@ function RegistrationHubInner() {
                 setRegistrationType(t);
                 setStep(1);
                 flow?.setCurrentFee(0);
+                switchRegistrationCategory(t);
               }
             }}
             onContinue={() => {
@@ -248,6 +252,7 @@ function RegistrationHubInner() {
             )}
 
             <RegistrationFormRouter
+              key={registrationType}
               type={registrationType}
               step={step}
               onContinueToPayment={goToPayment}

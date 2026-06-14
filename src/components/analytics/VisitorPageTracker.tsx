@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { shouldTrackAnalytics } from "@/lib/analytics/track-path";
 import { getSessionId, getVisitorId } from "@/lib/analytics/visitor-ids";
 
+const VISIT_COUNTED_KEY = "smk_analytics_visit_counted";
+
 function utmParams(): Record<string, string | undefined> {
   if (typeof window === "undefined") return {};
   const params = new URLSearchParams(window.location.search);
@@ -15,6 +17,14 @@ function utmParams(): Record<string, string | undefined> {
     utmTerm: params.get("utm_term") ?? undefined,
     utmContent: params.get("utm_content") ?? undefined,
   };
+}
+
+function shouldCountAsVisit(sessionId: string): boolean {
+  if (typeof sessionStorage === "undefined") return true;
+  const key = `${VISIT_COUNTED_KEY}:${sessionId}`;
+  if (sessionStorage.getItem(key)) return false;
+  sessionStorage.setItem(key, "1");
+  return true;
 }
 
 export default function VisitorPageTracker() {
@@ -31,8 +41,9 @@ export default function VisitorPageTracker() {
     lastPath.current = pathname;
     enteredAt.current = Date.now();
 
+    const sessionId = getSessionId();
     const payload = {
-      sessionId: getSessionId(),
+      sessionId,
       visitorId: getVisitorId(),
       path: pathname,
       title: typeof document !== "undefined" ? document.title : undefined,
@@ -40,7 +51,7 @@ export default function VisitorPageTracker() {
       screenWidth: typeof window !== "undefined" ? window.screen.width : undefined,
       screenHeight: typeof window !== "undefined" ? window.screen.height : undefined,
       durationMs,
-      countAsVisit: false,
+      countAsVisit: shouldCountAsVisit(sessionId),
       ...utmParams(),
     };
 

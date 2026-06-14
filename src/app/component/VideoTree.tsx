@@ -18,15 +18,13 @@ const TreeComponent: React.FC = () => {
       <div className="container mx-auto p-4">
         {/* Heading at the top */}
         <div className="text-center mb-8 bg-primary p-4 rounded-lg">
-          <h1 className="text-4xl font-bold text-white">RASE Conferences</h1>
+          <h1 className="text-4xl font-bold text-white">Shiksha Mahakumbh Abhiyan — Documentaries</h1>
         </div>
 
-        {/* Grid layout for Shiksha Kumbh and Shiksha MahaKumbh */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Shiksha Kumbh Box */}
           <div className="p-4 bg-gray-100 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold text-center mb-4 text-primary">
-              Shiksha Kumbh
+              Edition 2.0 (2023)
             </h2>
             <Tree
               lineWidth={"2px"}
@@ -60,10 +58,9 @@ const TreeComponent: React.FC = () => {
             </Tree>
           </div>
 
-          {/* Shiksha MahaKumbh Box */}
           <div className="p-4 bg-gray-100 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold text-center mb-4 text-primary">
-              Shiksha MahaKumbh
+              Edition 1.0 (2023)
             </h2>
             <Tree
               lineWidth={"2px"}
