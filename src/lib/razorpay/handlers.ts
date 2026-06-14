@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRazorpayClient } from "@/lib/razorpay/client.server";
-import { getRazorpayKeyId, getRazorpayKeySecret, isRazorpayConfigured } from "@/lib/razorpay/config";
-import { verifyRazorpayPaymentSignature } from "@/lib/razorpay/verify";
+import { getRazorpayKeyId, isRazorpayConfigured } from "@/lib/razorpay/config";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { recordVerifiedPayment } from "@/server/services/razorpay-verified.service";
+import { SITE_URL } from "@/config/site";
+import { writeAuditLog } from "@/server/services/audit.service";
 
 const MIN_AMOUNT_PAISE = 100;
+
+function paymentLog(event: string, payload: Record<string, unknown>) {
+  console.info("PAYMENT_FLOW", { event, ...payload });
+}
 
 export async function handleCreateOrder(request: NextRequest) {
   const ip = getClientIp(request);
@@ -57,6 +63,25 @@ export async function handleCreateOrder(request: NextRequest) {
       notes,
     });
 
+    paymentLog("order_created", {
+      order_id: order.id,
+      amount: order.amount,
+      receipt,
+      origin: request.headers.get("origin") ?? null,
+      referer: request.headers.get("referer") ?? null,
+      site_url: SITE_URL,
+    });
+
+    void writeAuditLog({
+      action: "order_created",
+      payload: {
+        order_id: order.id,
+        amount: order.amount,
+        receipt,
+        user_email: notes?.email ?? null,
+      },
+    });
+
     return NextResponse.json({
       order_id: order.id,
       amount: order.amount,
@@ -101,26 +126,61 @@ export async function handleVerifyPayment(request: NextRequest) {
     const razorpay_signature = body.razorpay_signature as string | undefined;
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
+      paymentLog("verify_missing_fields", {
+        payment_id: razorpay_payment_id ?? null,
+        order_id: razorpay_order_id ?? null,
+      });
       return NextResponse.json({ error: "Missing payment verification fields" }, { status: 400 });
     }
 
-    const keySecret = getRazorpayKeySecret()!;
-    const valid = verifyRazorpayPaymentSignature(
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-      keySecret
-    );
-
-    if (!valid) {
-      return NextResponse.json({ ok: false, error: "Invalid payment signature" }, { status: 400 });
-    }
-
-    return NextResponse.json({
-      ok: true,
-      razorpay_payment_id,
-      razorpay_order_id,
+    paymentLog("verify_start", {
+      order_id: razorpay_order_id,
+      payment_id: razorpay_payment_id,
     });
+
+    const amountPaise =
+      body.amount_paise != null ? Number(body.amount_paise) : undefined;
+    const metadata =
+      body.metadata && typeof body.metadata === "object"
+        ? (body.metadata as Record<string, unknown>)
+        : undefined;
+
+    try {
+      const result = await recordVerifiedPayment({
+        razorpayPaymentId: razorpay_payment_id,
+        razorpayOrderId: razorpay_order_id,
+        razorpaySignature: razorpay_signature,
+        amountPaise,
+        metadata,
+      });
+
+      if (result.duplicate) {
+        return NextResponse.json({
+          ok: true,
+          duplicate: true,
+          razorpay_payment_id,
+          razorpay_order_id,
+          registration_id: result.registrationPublicId,
+        });
+      }
+
+      return NextResponse.json({
+        ok: true,
+        razorpay_payment_id,
+        razorpay_order_id,
+        verified_payment_id: result.verifiedPaymentId,
+        amount_paise: result.amountPaise,
+      });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Payment verification failed";
+      paymentLog("verify_failed", {
+        order_id: razorpay_order_id,
+        payment_id: razorpay_payment_id,
+        error: message,
+      });
+      return NextResponse.json({ ok: false, error: message }, { status: 400 });
+    }
   } catch {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }

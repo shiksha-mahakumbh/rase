@@ -47,7 +47,7 @@ export default function PrintMediaShikshaKumbh2023() {
   return (
     <div className="min-h-screen p-4 bg-gray-100">
       <h1 className="text-4xl font-bold text-center mb-8">
-        Shiksha Kumbh 2023
+        Shiksha Mahakumbh 2.0 — Print Media
       </h1>
       <div className="flex flex-wrap -mx-2">
         {Object.keys(groupedImages).map((columnKey) => (

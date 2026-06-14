@@ -13,7 +13,7 @@ export default function PastEditionsSection({ className = "" }: Props) {
         <SectionHeader
           eyebrow="Heritage"
           title="Past Editions"
-          description="A growing national movement spanning Shiksha Kumbh and Shiksha Mahakumbh."
+          description="A growing national movement under the Shiksha Mahakumbh Abhiyan — editions 1.0 through 5.0."
           align="center"
         />
         <div className="mt-8 grid gap-6 md:grid-cols-3">

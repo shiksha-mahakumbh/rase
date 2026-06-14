@@ -1,12 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import EventImageSlider from "@/components/media/LazyEventImageSlider";
-// import { Link } from "react-router-dom";
-// import { link } from "fs";
+import { getEditionByHref } from "@/data/past-editions";
 
-// Sample event data
+const edition = getEditionByHref("/past_event/sm24")!;
+
 const eventDetails = {
-  title: "Shiksha Mahakumbh 2024",
+  title: edition.title,
   introduction: "International Conference on the Indian Education System for Global Development",
    
    

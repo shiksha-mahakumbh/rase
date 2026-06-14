@@ -4,13 +4,34 @@ import { isSupportedType } from "@/server/lib/registration-types";
 import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { getRequestContext } from "@/server/lib/request";
-import { sendRegistrationConfirmation, mapDeliveryStatus } from "@/server/services/email.service";
+import {
+  sendRegistrationConfirmation,
+  sendPaymentConfirmation,
+  mapDeliveryStatus,
+} from "@/server/services/email.service";
 import { prisma } from "@/server/db/prisma";
 import { normalizePhoneInput, validatePanForAmount } from "@/lib/registration/validation";
 import { resolveRegistrationFee } from "@/lib/registration/fees";
 import type { PaymentStatus, RegistrationType } from "@/types/registration";
+import {
+  assertVerifiedPaymentForSubmit,
+  markVerifiedPaymentConsumed,
+} from "@/server/services/razorpay-verified.service";
+import {
+  generateReceiptPdfBuffer,
+  generateRegistrationQrBuffer,
+  receiptDownloadUrl,
+  qrStoragePathFor,
+} from "@/server/services/receipt.service";
+import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
+import { ServiceError } from "@/server/lib/errors";
+import { writeAuditLog } from "@/server/services/audit.service";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function submitLog(event: string, payload: Record<string, unknown>) {
+  console.info("REGISTRATION_SUBMIT", { event, ...payload });
+}
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
@@ -124,6 +145,44 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const razorpayPaymentId = String(
+      data.razorpayPaymentId ?? payment?.razorpayPaymentId ?? ""
+    ).trim();
+
+    if (fee > 0 && razorpayPaymentId) {
+      const paymentCheck = await assertVerifiedPaymentForSubmit(
+        razorpayPaymentId,
+        fee
+      );
+
+      submitLog("payment_check", {
+        payment_id: razorpayPaymentId,
+        fee,
+        already_registered: paymentCheck.alreadyRegistered,
+      });
+
+      if (paymentCheck.alreadyRegistered && paymentCheck.registrationPublicId) {
+        const lookupToken = createRegistrationLookupToken(
+          paymentCheck.registrationPublicId,
+          email
+        );
+        return NextResponse.json({
+          success: true,
+          duplicate: true,
+          registrationId: paymentCheck.registrationPublicId,
+          masterDocId: paymentCheck.registrationUuid,
+          lookupToken,
+        });
+      }
+
+      if (!paymentCheck.alreadyRegistered && paymentCheck.orderId) {
+        data.razorpayOrderId = data.razorpayOrderId ?? paymentCheck.orderId;
+        if (payment && !payment.razorpayOrderId) {
+          payment.razorpayOrderId = paymentCheck.orderId;
+        }
+      }
+    }
+
     const captcha = await verifyRecaptchaToken(captchaToken, "registration");
     if (!captcha.ok) {
       console.warn("registration submit captcha failed:", captcha.error);
@@ -142,43 +201,136 @@ export async function POST(request: NextRequest) {
       userAgent: ctx.userAgent,
     });
 
-    console.info("registration submitted", {
-      registrationId: result.registrationId,
-      registrationType: type,
-      id: result.id,
+    submitLog("saved", {
+      registration_id: result.registrationId,
+      registration_uuid: result.id,
+      registration_type: type,
+      payment_id: razorpayPaymentId || null,
+      fee,
     });
 
-    const { createRegistrationLookupToken } = await import(
-      "@/lib/security/registration-lookup"
-    );
+    if (razorpayPaymentId) {
+      await markVerifiedPaymentConsumed(
+        razorpayPaymentId,
+        result.id,
+        result.registrationId
+      );
+    }
+
+    await writeAuditLog({
+      action: "registration_saved",
+      registrationId: result.id,
+      ipAddress: ctx.ip,
+      userAgent: ctx.userAgent,
+      payload: {
+        registration_id: result.registrationId,
+        registration_type: type,
+        payment_id: razorpayPaymentId || null,
+        order_id: data.razorpayOrderId ?? payment?.razorpayOrderId ?? null,
+        user_email: email,
+      },
+    });
+
     const lookupToken = createRegistrationLookupToken(result.registrationId, email);
 
-    void sendRegistrationConfirmation({
-      registrationId: result.registrationId,
-      registrationUuid: result.id,
-      fullName,
-      email,
-    })
-      .then(async (log) => {
-        await prisma.registration.update({
-          where: { id: result.id },
-          data: {
-            emailDeliveryStatus: mapDeliveryStatus(log.status),
-          },
-        });
-      })
-      .catch((err) => {
-        console.error("[registration submit] email queue failed:", {
-          registrationId: result.registrationId,
-          registrationUuid: result.id,
-          recipient: email,
-          error: err instanceof Error ? err.message : String(err),
-        });
-        void prisma.registration.update({
-          where: { id: result.id },
-          data: { emailDeliveryStatus: "failed" },
-        });
+    const categoryLabel = String(
+      data.category ??
+        data.projectStudentType ??
+        data.accommodationBedType ??
+        data.delegateCategory ??
+        type
+    );
+
+    const isPaidOnline = fee > 0 && Boolean(razorpayPaymentId);
+
+    if (isPaidOnline) {
+      const receiptPdf = generateReceiptPdfBuffer({
+        registrationId: result.registrationId,
+        fullName,
+        category: categoryLabel,
+        institution: String(data.institution ?? "N/A"),
+        email,
+        contactNumber: contact,
+        amount: fee,
+        paymentId: razorpayPaymentId,
+        orderId: String(data.razorpayOrderId ?? payment?.razorpayOrderId ?? ""),
+        panNumber: String(data.panNumber ?? payment?.panNumber ?? "") || undefined,
       });
+      const qrPng = await generateRegistrationQrBuffer(result.registrationId);
+      const artifactNow = new Date();
+
+      void prisma.registration.update({
+        where: { id: result.id },
+        data: {
+          receiptGeneratedAt: artifactNow,
+          qrGeneratedAt: artifactNow,
+          qrStoragePath: qrStoragePathFor(result.registrationId),
+        },
+      });
+
+      void sendPaymentConfirmation({
+        registrationId: result.registrationId,
+        registrationUuid: result.id,
+        fullName,
+        email,
+        transactionId: razorpayPaymentId,
+        amountPaid: fee,
+        category: categoryLabel,
+        receiptUrl: receiptDownloadUrl(result.registrationId, lookupToken),
+        receiptPdf,
+        qrPng,
+      })
+        .then(async (log) => {
+          const sentNow = new Date();
+          await prisma.registration.update({
+            where: { id: result.id },
+            data: {
+              emailDeliveryStatus: mapDeliveryStatus(log.status),
+              receiptSentAt: log.status === "sent" ? sentNow : undefined,
+              qrSentAt: log.status === "sent" ? sentNow : undefined,
+            },
+          });
+        })
+        .catch((err) => {
+          console.error("[registration submit] payment email failed:", {
+            registrationId: result.registrationId,
+            registrationUuid: result.id,
+            recipient: email,
+            error: err instanceof Error ? err.message : String(err),
+          });
+          void prisma.registration.update({
+            where: { id: result.id },
+            data: { emailDeliveryStatus: "failed" },
+          });
+        });
+    } else {
+      void sendRegistrationConfirmation({
+        registrationId: result.registrationId,
+        registrationUuid: result.id,
+        fullName,
+        email,
+      })
+        .then(async (log) => {
+          await prisma.registration.update({
+            where: { id: result.id },
+            data: {
+              emailDeliveryStatus: mapDeliveryStatus(log.status),
+            },
+          });
+        })
+        .catch((err) => {
+          console.error("[registration submit] email queue failed:", {
+            registrationId: result.registrationId,
+            registrationUuid: result.id,
+            recipient: email,
+            error: err instanceof Error ? err.message : String(err),
+          });
+          void prisma.registration.update({
+            where: { id: result.id },
+            data: { emailDeliveryStatus: "failed" },
+          });
+        });
+    }
 
     return NextResponse.json({
       success: true,
@@ -188,7 +340,13 @@ export async function POST(request: NextRequest) {
       lookupToken,
     });
   } catch (error) {
+    submitLog("error", {
+      error: error instanceof Error ? error.message : String(error),
+    });
     console.error("registration submit error:", error);
+    if (error instanceof ServiceError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
     return NextResponse.json(
       { error: "Registration failed. Please try again." },
       { status: 500 }

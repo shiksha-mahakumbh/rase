@@ -165,9 +165,9 @@ export const PILLAR_REGISTRY: PillarRegistryEntry[] = [
     slug: "conferences",
     path: "/conferences",
     label: "Conferences",
-    tagline: "Shiksha Mahakumbh & Shiksha Kumbh editions",
+    tagline: "Shiksha Mahakumbh Abhiyan editions",
     intro:
-      "National multidisciplinary conferences — Shiksha Mahakumbh and Shiksha Kumbh — unite delegates, researchers, and institutions biennially.",
+      "National multidisciplinary conferences under the Shiksha Mahakumbh Abhiyan unite delegates, researchers, and institutions across editions 1.0 through 6.0.",
     keywords: ["Shiksha Mahakumbh conference", "education summit 2026"],
   },
   {

@@ -1,9 +1,11 @@
 import React from "react";
 import EventImageSlider from "@/components/media/LazyEventImageSlider";
+import { getEditionByHref } from "@/data/past-editions";
 
-// Sample event data
+const edition = getEditionByHref("/past_event/sm23")!;
+
 const eventDetails = {
-  title: "Shiksha MahaKumbh 2023",
+  title: edition.title,
   introduction: `The primary objective of the conference is to create an atmosphere for the implementation of NEP 2020. Further, the conference aims to bring together leading academic scientists, researchers, research scholars, and industry to exchange and share their experiences and research results about all aspects of School Education. It also provides the premier interdisciplinary forum for researchers, practitioners, educators, and industry to present and discuss the most recent innovations, trends, concerns, practical challenges encountered, and the solutions adopted in the field of Global School Education for the sustainable growth of society.`,
   venue: {
     name: "NIT Jalandhar",

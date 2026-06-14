@@ -7,14 +7,15 @@ import {
   type MediaArchiveKey,
 } from "@/data/media-archive-components";
 
+import { getEditionByNumber } from "@/data/past-editions";
+
 function archiveHero(key: MediaArchiveKey) {
-  const [edition, year, type] = key.split("/");
-  const editionLabel =
-    edition === "shiksha-mahakumbh" ? "Shiksha Mahakumbh" : "Shiksha Kumbh";
+  const [, edition, type] = key.split("/");
+  const ed = getEditionByNumber(edition);
   const typeLabel = type === "digital" ? "Digital Media" : "Print Media";
   return {
     eyebrow: "Media Archive",
-    title: `${editionLabel} ${year} — ${typeLabel}`,
+    title: `${ed?.title ?? `Shiksha Mahakumbh ${edition}`} — ${typeLabel}`,
     subtitle: `Edition-wise ${typeLabel.toLowerCase()} coverage and highlights.`,
     accent: "navy" as const,
   };

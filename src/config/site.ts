@@ -4,7 +4,7 @@ export const SITE_URL =
 export const SITE_NAME = "Shiksha Mahakumbh Abhiyan";
 export const SITE_NAME_HINDI = "शिक्षा महाकुंभ अभियान";
 export const EVENT_EDITION = "6.0";
-export const EVENT_NAME = `Shiksha Mahakumbh ${EVENT_EDITION}`;
+export const EVENT_NAME = `Shiksha Mahakumbh Abhiyan ${EVENT_EDITION}`;
 
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/sLogo.png`;
 
@@ -24,7 +24,7 @@ export const ORGANIZATION_SCHEMA = {
 export const EVENT_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Event",
-  name: `Shiksha Mahakumbh ${EVENT_EDITION}`,
+  name: `Shiksha Mahakumbh Abhiyan ${EVENT_EDITION}`,
   startDate: "2026-10-09",
   endDate: "2026-10-11",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",

@@ -3,14 +3,8 @@ import EventImageSlider from "@/components/media/LazyEventImageSlider";
 
 // Sample event data
 const eventDetails = {
-  title: "Shiksha Kumbh 2023",
-  introduction: `The Department of Holistic Education, Vidya Bharti, stands at the forefront of a noble mission to promote education rooted in Bhartiya values and culture on a global scale. With unwavering dedication spanning several decades, we have been committed to ensuring the welfare of all through holistic education. This journey has seen the successful launch of the "Shiksha Mahakumbh" initiative, which made its historic debut in June 2023, with the inaugural session held at NIT Jalandhar, marking a momentous stride in our quest to reimagine education.
-
-Owing to the overwhelming demand from educational institutions to host future editions of Shiksha Mahakumbh, we are thrilled to announce that the quota for this groundbreaking initiative has been booked until 2025. However, we recognize the pressing need to reach every corner of our educational ecosystem and maintain the momentum of Shiksha Mahakumbh's transformative impact.
-
-To this end, we introduce "Shiksha Kumbh," a groundbreaking concept designed to complement Shiksha Mahakumbh and ensure that the light of education reaches every institution. The first edition of Shiksha Kumbh is scheduled to take place at NIT Kurukshetra in December 2023. This event represents a focused and area-specific effort, allowing us to concentrate on select groups and address unique challenges while upholding our commitment to holistic and culturally rooted education.
-
-Shiksha Kumbh promises to be a beacon of educational innovation, collaboration, and empowerment, reinforcing our mission to revitalize education and ensure its alignment with India's timeless cultural and philosophical values. We invite you to join us on this incredible journey as we work together to redefine education and ensure the welfare of all.`,
+  title: "Shiksha Mahakumbh 2.0",
+  introduction: `Edition 2.0 of the Shiksha Mahakumbh Abhiyan was held at NIT Kurukshetra on 20 December 2023, themed "Role of Academic-driven Startups in Economy." This edition extended the national education movement's reach — connecting academia, entrepreneurship, and economic development through holistic, culturally rooted education.`,
 
   venue: {
     name: "NIT Kurukshetra",

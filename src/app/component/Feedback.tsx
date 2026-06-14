@@ -1,8 +1,17 @@
 "use client";
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
+import { PAST_EDITIONS, UPCOMING_EDITION } from "@/data/past-editions";
 
 import { toast } from 'react-hot-toast';
+
+const FEEDBACK_EVENTS = [
+  { value: "smk-6.0", label: `${UPCOMING_EDITION.title} (2026)` },
+  ...[...PAST_EDITIONS].reverse().map((e) => ({
+    value: `smk-${e.edition}`,
+    label: `${e.title} (${e.year})`,
+  })),
+];
 
 const FeedbackForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -118,10 +127,11 @@ const FeedbackForm: React.FC = () => {
             required
           >
             <option value="">Select event</option>
-            <option value="shiksha-kumbh-2023">शिक्षा कुंभ 2023</option>
-            <option value="shiksha-kumbh-2024">शिक्षा कुंभ 2024</option>
-            <option value="shiksha-mahakumbh-2023">शिक्षा महाकुंभ 2023</option>
-            <option value="shiksha-mahakumbh-2024">शिक्षा महाकुंभ 2024</option>
+            {FEEDBACK_EVENTS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
           </select>
         </motion.div>
         <motion.div

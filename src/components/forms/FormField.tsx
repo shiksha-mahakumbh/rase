@@ -219,6 +219,7 @@ export function PaymentBlock({
   customerName,
   customerEmail,
   customerPhone,
+  orderNotes,
 }: {
   fee?: number;
   showPayButton?: boolean;
@@ -229,6 +230,7 @@ export function PaymentBlock({
   customerName?: string;
   customerEmail?: string;
   customerPhone?: string;
+  orderNotes?: Record<string, string>;
 }) {
   const amount = typeof fee === "number" && fee > 0 ? fee : undefined;
 
@@ -251,6 +253,7 @@ export function PaymentBlock({
             customerName={customerName}
             customerEmail={customerEmail}
             customerPhone={customerPhone}
+            orderNotes={orderNotes}
             onSuccess={(result) => {
               onPaymentVerified?.({
                 razorpay_payment_id: result.razorpay_payment_id,

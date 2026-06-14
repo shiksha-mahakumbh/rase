@@ -3,7 +3,7 @@ import EventImageSlider from "@/components/media/LazyEventImageSlider";
 
 // Sample event data
 const eventDetails = {
-  title: "Shiksha Kumbh 2024",
+  title: "Shiksha Mahakumbh 3.0",
   introduction: `"Role of Academic driven Startups in Economy" is to explore and discuss the crucial role that academic-driven startups play in contributing to the economy. This includes examining how educational institutions, particularly technical and technology-focused institutions, can foster a culture of entrepreneurship and innovation, helping students and society benefit from startup ventures.`,
   objectives: [
     "Highlighting the Importance of Academic-driven Startups: Showcasing the impact that startups originating from academic institutions can have on the economy, job creation, and innovation.",

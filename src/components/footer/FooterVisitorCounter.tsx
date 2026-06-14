@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import { shouldTrackAnalytics } from "@/lib/analytics/track-path";
-import { getSessionId, getVisitorId, LEGACY_VISITOR_OFFSET } from "@/lib/analytics/visitor-ids";
+import { useEffect, useState } from "react";
+import { LEGACY_VISITOR_OFFSET } from "@/lib/analytics/visitor-ids";
 
 type VisitorCounts = {
   daily: number;
@@ -31,34 +29,18 @@ function CounterSkeleton() {
 }
 
 export default function FooterVisitorCounter() {
-  const pathname = usePathname();
   const [dailyVisitors, setDailyVisitors] = useState<number | null>(null);
   const [displayTotal, setDisplayTotal] = useState<number | null>(null);
   const [activeUsers, setActiveUsers] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [degraded, setDegraded] = useState(false);
-  const countedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
 
     async function loadCounts() {
       try {
-        const trackVisit = shouldTrackAnalytics(pathname);
-
-        if (trackVisit && !countedRef.current) {
-          const postRes = await fetch("/api/visitors", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              sessionId: getSessionId(),
-              visitorId: getVisitorId(),
-              path: pathname ?? "/",
-            }),
-          });
-          if (postRes.ok) countedRef.current = true;
-        }
-
         const res = await fetch("/api/visitors", { cache: "no-store" });
         const data = (await res.json()) as VisitorCounts;
         if (cancelled) return;
@@ -90,10 +72,13 @@ export default function FooterVisitorCounter() {
     }
 
     loadCounts();
+    intervalId = setInterval(loadCounts, 60_000);
+
     return () => {
       cancelled = true;
+      if (intervalId) clearInterval(intervalId);
     };
-  }, [pathname]);
+  }, []);
 
   return (
     <div

@@ -20,7 +20,7 @@ export default function PastEventsLayout({ children }: { children: React.ReactNo
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "Shiksha Mahakumbh", path: "/shikshamahakumbh" },
+          { name: "Abhiyan", path: "/abhiyan" },
           { name: "Past Events", path: CANONICAL_ROUTES.pastEvents },
         ]}
       />

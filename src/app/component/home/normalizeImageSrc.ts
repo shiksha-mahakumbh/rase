@@ -11,5 +11,9 @@ export function normalizeStaticImageSrc(src: string): string {
   }
 
   const path = src.startsWith("/") ? src : `/${src}`;
-  return encodeURI(path);
+  try {
+    return encodeURI(decodeURI(path));
+  } catch {
+    return encodeURI(path);
+  }
 }

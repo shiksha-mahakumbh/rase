@@ -10,7 +10,7 @@ export default function PastEventsPage() {
         eyebrow: "Programmes",
         title: "Past Events",
         subtitle:
-          "Explore Shiksha Mahakumbh and Shiksha Kumbh editions, workshops, and national programmes.",
+          "Explore Shiksha Mahakumbh Abhiyan editions 1.0 through 5.0, workshops, and national programmes.",
         accent: "saffron",
       }}
       relatedPath={CANONICAL_ROUTES.pastEvents}
@@ -21,7 +21,7 @@ export default function PastEventsPage() {
         <BreadcrumbNav
           items={[
             { label: "Home", href: "/" },
-            { label: "Shiksha Mahakumbh", href: "/shikshamahakumbh" },
+            { label: "Abhiyan", href: "/abhiyan" },
             { label: "Past Events" },
           ]}
           className="mb-2"

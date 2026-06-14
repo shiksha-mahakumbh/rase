@@ -37,6 +37,8 @@ type RazorpayCheckoutProps = {
   customerName?: string;
   customerEmail?: string;
   customerPhone?: string;
+  /** Passed to Razorpay order notes for webhook / audit traceability */
+  orderNotes?: Record<string, string>;
   disabled?: boolean;
   className?: string;
   onSuccess?: (result: RazorpayPaymentResult) => void;
@@ -52,6 +54,7 @@ export default function RazorpayCheckout({
   customerName,
   customerEmail,
   customerPhone,
+  orderNotes,
   disabled = false,
   className,
   onSuccess,
@@ -87,6 +90,7 @@ export default function RazorpayCheckout({
           amount: amountPaise,
           currency: "INR",
           receipt: receipt ?? `reg_${Date.now()}`,
+          notes: orderNotes,
         }),
       });
 
@@ -111,6 +115,8 @@ export default function RazorpayCheckout({
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_signature: response.razorpay_signature,
+                amount_paise: amountPaise,
+                metadata: orderNotes,
               }),
             });
             const verifyData = await verifyRes.json();
@@ -164,6 +170,7 @@ export default function RazorpayCheckout({
     keyId,
     onDismiss,
     onSuccess,
+    orderNotes,
     receipt,
     scriptReady,
   ]);

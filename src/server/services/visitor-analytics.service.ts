@@ -1,4 +1,5 @@
 import type { PageCategory, Prisma } from "@prisma/client";
+import { Prisma as PrismaNamespace } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import {
@@ -55,16 +56,38 @@ function invalidateStatsCache() {
   statsCache = null;
 }
 
+/** Handles concurrent first-hit races on the same sessionId (P2002). */
+async function upsertVisitorSession(
+  sessionId: string,
+  create: Prisma.VisitorSessionCreateInput,
+  update: Prisma.VisitorSessionUpdateInput
+) {
+  try {
+    return await prisma.visitorSession.upsert({
+      where: { sessionId },
+      create,
+      update,
+    });
+  } catch (error) {
+    if (
+      error instanceof PrismaNamespace.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return prisma.visitorSession.update({
+        where: { sessionId },
+        data: update,
+      });
+    }
+    throw error;
+  }
+}
+
 async function upsertDailyRollup(input: {
   uniqueDelta: number;
   returningDelta: number;
   botFiltered?: number;
 }) {
   const today = startOfDay();
-  const existing = await prisma.visitorAnalytics.findUnique({ where: { date: today } });
-  const totalUnique = await prisma.visitorSession.count({
-    where: { isBot: false },
-  });
 
   await prisma.visitorAnalytics.upsert({
     where: { date: today },
@@ -73,14 +96,14 @@ async function upsertDailyRollup(input: {
       dailyCount: input.uniqueDelta,
       uniqueCount: input.uniqueDelta,
       returningCount: input.returningDelta,
-      totalCount: totalUnique,
+      totalCount: input.uniqueDelta,
       botFiltered: input.botFiltered ?? 0,
     },
     update: {
       dailyCount: { increment: input.uniqueDelta },
       uniqueCount: { increment: input.uniqueDelta },
       returningCount: { increment: input.returningDelta },
-      totalCount: totalUnique,
+      totalCount: input.uniqueDelta > 0 ? { increment: input.uniqueDelta } : undefined,
       botFiltered: input.botFiltered ? { increment: input.botFiltered } : undefined,
     },
   });
@@ -99,24 +122,34 @@ export async function trackVisit(input: TrackVisitInput) {
 
   let sessionBefore = await prisma.visitorSession.findUnique({
     where: { sessionId: input.sessionId },
+    select: { id: true, isReturning: true },
   });
 
-  const priorVisitor = await prisma.visitorSession.findFirst({
-    where: { visitorId: input.visitorId, isBot: false },
-    orderBy: { startedAt: "asc" },
-    select: { id: true },
-  });
-  const isReturning = Boolean(priorVisitor && priorVisitor.id !== sessionBefore?.id);
+  let isReturning: boolean;
+  let isNewVisitorToday: boolean;
 
-  const isNewVisitorToday = !(await prisma.visitorSession.findFirst({
-    where: {
-      visitorId: input.visitorId,
-      isBot: false,
-      startedAt: { gte: startOfDay() },
-      ...(sessionBefore ? { NOT: { id: sessionBefore.id } } : {}),
-    },
-    select: { id: true },
-  }));
+  if (sessionBefore) {
+    isReturning = sessionBefore.isReturning;
+    isNewVisitorToday = false;
+  } else {
+    const [priorVisitor, todayVisitor] = await Promise.all([
+      prisma.visitorSession.findFirst({
+        where: { visitorId: input.visitorId, isBot: false },
+        orderBy: { startedAt: "asc" },
+        select: { id: true },
+      }),
+      prisma.visitorSession.findFirst({
+        where: {
+          visitorId: input.visitorId,
+          isBot: false,
+          startedAt: { gte: startOfDay() },
+        },
+        select: { id: true },
+      }),
+    ]);
+    isReturning = Boolean(priorVisitor);
+    isNewVisitorToday = !todayVisitor;
+  }
 
   const traffic = resolveTrafficSource({
     utmSource: input.utmSource,
@@ -125,9 +158,9 @@ export async function trackVisit(input: TrackVisitInput) {
   });
   const ua = parseUserAgent(input.userAgent ?? "");
 
-  const session = await prisma.visitorSession.upsert({
-    where: { sessionId: input.sessionId },
-    create: {
+  const session = await upsertVisitorSession(
+    input.sessionId,
+    {
       sessionId: input.sessionId,
       visitorId: input.visitorId,
       isReturning,
@@ -170,12 +203,12 @@ export async function trackVisit(input: TrackVisitInput) {
         },
       },
     },
-    update: {
+    {
       lastPath: input.path,
       lastActiveAt: now,
       pageViewCount: { increment: 1 },
-    },
-  });
+    }
+  );
 
   await prisma.visitorPageView.create({
     data: {
@@ -281,7 +314,7 @@ export async function getPublicVisitorStats(useCache = true): Promise<PublicVisi
 export async function recordVisitorHit(input: Omit<TrackVisitInput, "countAsVisit">) {
   const result = await trackVisit({ ...input, countAsVisit: true });
   if (result.tracked) {
-    await writeAuditLog({
+    void writeAuditLog({
       action: "visitor_tracked",
       entityType: "visitor_sessions",
       entityId: result.sessionId ?? null,

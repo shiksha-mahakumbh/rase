@@ -28,7 +28,7 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     routes: [
       { path: "/past_event/sm24", label: "SMK 4.0 — Kurukshetra University" },
       { path: "/past_event/sk24", label: "SMK 3.0 — NIT Srinagar" },
-      { path: "/media/shiksha-mahakumbh/2024/digital", label: "Digital Media 2024" },
+      { path: "/media/shiksha-mahakumbh/4.0/digital", label: "Digital Media 4.0" },
       { path: "/proceeding1", label: "Proceedings 2024" },
     ],
   },
@@ -38,7 +38,7 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     routes: [
       { path: "/past_event/sm23", label: "SMK 1.0 — NIT Jalandhar" },
       { path: "/past_event/sk23", label: "SMK 2.0 — NIT Kurukshetra" },
-      { path: "/media/shiksha-mahakumbh/2023/digital", label: "Digital Media 2023" },
+      { path: "/media/shiksha-mahakumbh/1.0/digital", label: "Digital Media 1.0" },
     ],
   },
 ];
@@ -59,23 +59,23 @@ export const WORKSHOP_ARCHIVE = [
 ] as const;
 
 export const SUMMIT_ROUTES = [
-  { path: "/shikshamahakumbh", label: "Shiksha Mahakumbh" },
-  { path: "/shikshakumbh", label: "Shiksha Kumbh" },
+  { path: "/abhiyan", label: "Abhiyan Timeline" },
+  { path: "/introduction", label: "Introduction" },
   { path: "/conferences", label: "Conferences Hub" },
 ] as const;
 
 export const EVENT_HUB_ROUTES = [
-  { path: "/upcoming-events", label: "Upcoming Events" },
-  { path: "/past-events", label: "Past Events" },
-  { path: "/past_event/sk24", label: "Shiksha Kumbh 2024" },
-  { path: "/past_event/sk23", label: "Shiksha Kumbh 2023" },
+  { path: "/upcoming-events", label: "शिक्षा महाकुंभ 6.0" },
+  { path: "/past-events", label: "Past Editions" },
+  { path: "/past_event/sk24", label: "SMK 3.0 — NIT Srinagar" },
+  { path: "/past_event/sk23", label: "SMK 2.0 — NIT Kurukshetra" },
 ] as const;
 
 export const EVENTS_HUB = {
   path: "/events",
-  title: "Events — Shiksha Mahakumbh",
+  title: "Events — Shiksha Mahakumbh Abhiyan",
   description:
-    "Upcoming and past Shiksha Mahakumbh events, editions by year, and registration pathways.",
+    "Upcoming and past Shiksha Mahakumbh Abhiyan editions, registration pathways, and national programmes.",
 } as const;
 
 export const SUMMITS_HUB = {

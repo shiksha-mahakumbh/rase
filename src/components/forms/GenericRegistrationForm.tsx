@@ -129,6 +129,27 @@ export default function GenericRegistrationForm({
   const errs = sharedErrors(errors);
   const watchShared = sharedWatch(watch);
 
+  const orderNotes = useMemo(
+    () => ({
+      registrationType,
+      email: email?.trim() || "unknown",
+      category:
+        registrationType === "Projects"
+          ? projectStudentType ?? "School Student"
+          : registrationType === "Accommodation"
+            ? accommodationBedType ?? "Single Bed"
+            : registrationType,
+      amount: String(fee),
+    }),
+    [
+      registrationType,
+      email,
+      projectStudentType,
+      accommodationBedType,
+      fee,
+    ]
+  );
+
   const onSubmit = async (data: GenericFormValues) => {
     if (requiresPayment && fee > 0) {
       const paidOnline = Boolean(data.razorpayPaymentId?.trim());
@@ -257,6 +278,7 @@ export default function GenericRegistrationForm({
             customerName={fullName}
             customerEmail={email}
             customerPhone={contactNumber}
+            orderNotes={orderNotes}
             onPaymentVerified={(p) => {
               setPaymentVerified(true);
               setValue("utrNumber", p.razorpay_payment_id);

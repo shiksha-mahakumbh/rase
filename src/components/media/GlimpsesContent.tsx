@@ -4,55 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { CtaButton } from "@/components/ui";
-
-const items = [
-  {
-    label: "शिक्षा महाकुंभ 4.0",
-    engLabel: "Shiksha Mahakumbh 4.0",
-    year: "2024",
-    theme: "Indian Education System for Global Development",
-    color: "from-brand-navy to-brand-navy-light",
-    image: "/images/smk4.jpg",
-    children: [
-      { label: "Digital Media", link: "/media/shiksha-mahakumbh/2024/digital" },
-      { label: "Print Media", link: "/media/shiksha-mahakumbh/2024/print" },
-    ],
-    archive: [
-      {
-        year: "2023",
-        label: "शिक्षा महाकुंभ 1.0",
-        engLabel: "Shiksha Mahakumbh 1.0",
-        children: [
-          { label: "Digital Media", link: "/media/shiksha-mahakumbh/2023/digital" },
-          { label: "Print Media", link: "/media/shiksha-mahakumbh/2023/print" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "शिक्षा महाकुंभ 3.0",
-    engLabel: "Shiksha Mahakumbh 3.0",
-    year: "2024",
-    theme: "Role of Startups in Developing Economy",
-    color: "from-brand-saffron-dark to-brand-saffron",
-    image: "/images/smk3.jpg",
-    children: [
-      { label: "Digital Media", link: "/media/shiksha-kumbh/2024/digital" },
-      { label: "Print Media", link: "/media/shiksha-kumbh/2024/print" },
-    ],
-    archive: [
-      {
-        year: "2023",
-        label: "शिक्षा महाकुंभ 2.0",
-        engLabel: "Shiksha Mahakumbh 2.0",
-        children: [
-          { label: "Digital Media", link: "/media/shiksha-kumbh/2023/digital" },
-          { label: "Print Media", link: "/media/shiksha-kumbh/2023/print" },
-        ],
-      },
-    ],
-  },
-];
+import { MEDIA_ARCHIVE_ITEMS } from "@/data/media-archives";
 
 export default function GlimpsesContent() {
   const [open, setOpen] = useState<string | null>(null);
@@ -65,7 +17,7 @@ export default function GlimpsesContent() {
       </h2>
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {items.map((item) => (
+        {MEDIA_ARCHIVE_ITEMS.map((item) => (
           <article
             key={item.label}
             className="home-card-hover overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
@@ -105,38 +57,42 @@ export default function GlimpsesContent() {
                 ))}
               </div>
 
-              <div className="mt-6 text-center">
-                <button
-                  type="button"
-                  onClick={() => toggle(item.label)}
-                  className="text-sm font-semibold text-brand-navy transition hover:text-brand-saffron"
-                  aria-expanded={open === item.label}
-                >
-                  {open === item.label ? "Hide Archived Media ▲" : "View Archived Media ▼"}
-                </button>
-              </div>
+              {item.archive && item.archive.length > 0 && (
+                <>
+                  <div className="mt-6 text-center">
+                    <button
+                      type="button"
+                      onClick={() => toggle(item.label)}
+                      className="text-sm font-semibold text-brand-navy transition hover:text-brand-saffron"
+                      aria-expanded={open === item.label}
+                    >
+                      {open === item.label ? "Hide Archived Media ▲" : "View Archived Media ▼"}
+                    </button>
+                  </div>
 
-              {open === item.label && (
-                <div className="mt-4 border-t border-slate-200 pt-4">
-                  {item.archive.map((arch) => (
-                    <div key={arch.label} className="mb-3">
-                      <h4 className="mb-2 text-center text-sm font-semibold text-brand-navy">
-                        {arch.label} ({arch.year})
-                      </h4>
-                      <div className="flex flex-col gap-2">
-                        {arch.children.map((child) => (
-                          <Link
-                            key={child.link}
-                            href={child.link}
-                            className="block rounded-xl border border-slate-200 bg-slate-50 py-2.5 text-center text-sm font-medium text-brand-navy transition hover:border-brand-saffron/40 hover:bg-white"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
+                  {open === item.label && (
+                    <div className="mt-4 border-t border-slate-200 pt-4">
+                      {item.archive.map((arch) => (
+                        <div key={arch.label} className="mb-3">
+                          <h4 className="mb-2 text-center text-sm font-semibold text-brand-navy">
+                            {arch.label} ({arch.year})
+                          </h4>
+                          <div className="flex flex-col gap-2">
+                            {arch.children.map((child) => (
+                              <Link
+                                key={child.link}
+                                href={child.link}
+                                className="block rounded-xl border border-slate-200 bg-slate-50 py-2.5 text-center text-sm font-medium text-brand-navy transition hover:border-brand-saffron/40 hover:bg-white"
+                              >
+                                {child.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               )}
             </div>
           </article>

@@ -57,6 +57,16 @@ export function saveMeta(meta: RegistrationMeta) {
   localStorage.setItem(META_KEY, JSON.stringify(meta));
 }
 
+/** Reset hub state when user picks a different registration category. */
+export function switchRegistrationCategory(type: RegistrationType) {
+  if (typeof window === "undefined") return;
+  saveMeta({
+    step: 1,
+    registrationType: type,
+    updatedAt: new Date().toISOString(),
+  });
+}
+
 export function clearDraft(type: RegistrationType) {
   if (typeof window === "undefined") return;
   localStorage.removeItem(draftKey(type));

@@ -2,14 +2,13 @@
 
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import Introduction from "@/app/component/Introduction";
-import { AuthoritySections } from "@/components/authority";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 
 const PAGE_HERO = {
-  eyebrow: "About the Movement",
-  title: "Introduction to Shiksha Mahakumbh Abhiyan",
+  eyebrow: "शिक्षा महाकुंभ अभियान",
+  title: "Introduction",
   subtitle:
-    "India's national education movement aligning with NEP 2020 and Bharat@2047 — uniting institutions, educators, researchers, and youth.",
+    "A People's Movement for Global Educational Transformation — uniting education, policy, industry, civil society, and youth.",
   accent: "navy" as const,
 };
 
@@ -23,23 +22,11 @@ export default function IntroductionContent() {
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "About", path: "/introduction" },
+          { name: "Abhiyan", path: "/abhiyan" },
+          { name: "Introduction", path: "/introduction" },
         ]}
       />
       <Introduction />
-      <AuthoritySections
-        sections={[
-          "impact",
-          "editions",
-          "speakers",
-          "research",
-          "institutions",
-          "partners",
-          "government",
-          "stories",
-        ]}
-        impactVariant="compact"
-      />
     </PublicPageShell>
   );
 }

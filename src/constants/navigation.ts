@@ -18,6 +18,7 @@ export const NAV_MENUS: Menu[] = [
     title: "About",
     subMenu: [
       { path: ROUTES.introduction, title: "Introduction" },
+      { path: "/abhiyan", title: "Abhiyan Timeline" },
       { path: "/abhiyanphotoframe.pdf", title: "Photo Frames" },
       { path: ROUTES.academicCouncil, title: "शैक्षिक विभाग" },
       { path: "/departments/vitt", title: "वित्त विभाग" },
@@ -43,8 +44,9 @@ export const NAV_MENUS: Menu[] = [
     path: ROUTES.home,
     title: "Events",
     subMenu: [
-      { path: "/past-events", title: "Past Events" },
-      { path: ROUTES.upcomingEvents, title: "Upcoming Events" },
+      { path: "/abhiyan", title: "Abhiyan Timeline" },
+      { path: "/past-events", title: "Past Editions" },
+      { path: ROUTES.upcomingEvents, title: "शिक्षा महाकुंभ 6.0" },
     ],
   },
   {

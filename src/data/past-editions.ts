@@ -1,5 +1,12 @@
+import { SITE_NAME_HINDI } from "@/config/site";
+
+/** Display title for an edition e.g. शिक्षा महाकुंभ 2.0 */
+export function editionTitle(edition: string) {
+  return `${SITE_NAME_HINDI.replace(" अभियान", "")} ${edition}`;
+}
+
 /**
- * Canonical Shiksha Mahakumbh past editions (1.0–5.0).
+ * Canonical Shiksha Mahakumbh Abhiyan past editions (1.0–5.0).
  * Single source of truth — do not duplicate edition facts elsewhere.
  */
 
@@ -27,7 +34,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
   {
     id: "smk-1",
     edition: "1.0",
-    title: "Shiksha Mahakumbh 1.0",
+    title: editionTitle("1.0"),
     venue: "NIT Jalandhar",
     venueFull: "Dr. B. R. Ambedkar National Institute of Technology, Jalandhar",
     dates: "9–11 June 2023",
@@ -47,7 +54,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
   {
     id: "smk-2",
     edition: "2.0",
-    title: "Shiksha Mahakumbh 2.0",
+    title: editionTitle("2.0"),
     venue: "NIT Kurukshetra",
     venueFull: "National Institute of Technology, Kurukshetra",
     dates: "20 December 2023",
@@ -66,7 +73,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
   {
     id: "smk-3",
     edition: "3.0",
-    title: "Shiksha Mahakumbh 3.0",
+    title: editionTitle("3.0"),
     venue: "NIT Srinagar",
     venueFull: "National Institute of Technology, Srinagar",
     dates: "29–30 June 2024",
@@ -86,7 +93,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
   {
     id: "smk-4",
     edition: "4.0",
-    title: "Shiksha Mahakumbh 4.0",
+    title: editionTitle("4.0"),
     venue: "Kurukshetra University",
     venueFull: "Kurukshetra University, Kurukshetra",
     dates: "16–17 December 2024",
@@ -106,7 +113,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
   {
     id: "smk-5",
     edition: "5.0",
-    title: "Shiksha Mahakumbh 5.0",
+    title: editionTitle("5.0"),
     venue: "NIPER Mohali",
     venueFull: "National Institute of Pharmaceutical Education and Research, Mohali",
     dates: "31 October – 2 November 2025",
@@ -130,6 +137,47 @@ export const PAST_EDITION_BY_ID = Object.fromEntries(
 
 export function getEditionByHref(href: string): PastEditionRecord | undefined {
   return PAST_EDITIONS.find((e) => e.href === href);
+}
+
+/** Canonical media archive URL — /media/shiksha-mahakumbh/{edition}/{type} */
+export function mediaArchivePath(edition: string, type: "digital" | "print") {
+  return `/media/shiksha-mahakumbh/${edition}/${type}`;
+}
+
+export function getEditionByNumber(edition: string): PastEditionRecord | undefined {
+  return PAST_EDITIONS.find((e) => e.edition === edition);
+}
+
+/** Upcoming edition 6.0 — single source for hero/widgets */
+export const UPCOMING_EDITION = {
+  edition: "6.0",
+  title: editionTitle("6.0"),
+  venue: "NIT Hamirpur",
+  venueFull: "National Institute of Technology, Hamirpur",
+  dates: "9–11 October 2026",
+  theme: "Current National Edition",
+  coreEssence: "Registration open for delegates, researchers, institutions, and volunteers",
+  href: "/upcoming-events",
+  registrationHref: "/registration",
+} as const;
+
+/** Authority strip / homepage widgets — derived from PAST_EDITIONS + upcoming */
+export function buildAuthorityPastEditions() {
+  const upcoming = {
+    year: "2026",
+    title: UPCOMING_EDITION.title,
+    venue: `${UPCOMING_EDITION.venue} · ${UPCOMING_EDITION.dates}`,
+    highlight: UPCOMING_EDITION.coreEssence,
+    href: UPCOMING_EDITION.registrationHref,
+  };
+  const completed = [...PAST_EDITIONS].reverse().map((e) => ({
+    year: e.year,
+    title: e.title,
+    venue: `${e.venue} · ${e.dates}`,
+    highlight: e.theme,
+    href: e.href,
+  }));
+  return [upcoming, ...completed];
 }
 
 export const PAST_EDITIONS_SEO_KEYWORDS = [

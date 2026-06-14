@@ -3,6 +3,8 @@
  * about, and Vibhag surfaces.
  */
 
+import { buildAuthorityPastEditions } from "@/data/past-editions";
+
 export type AuthorityStat = {
   value: number;
   label: string;
@@ -27,51 +29,7 @@ export type PastEdition = {
   href?: string;
 };
 
-export const pastEditions: PastEdition[] = [
-  {
-    year: "2026",
-    title: "Shiksha Mahakumbh 6.0",
-    venue: "NIT Hamirpur · 9–11 October 2026",
-    highlight:
-      "Hybrid multi-track conference, conclaves, olympiads, cultural programme, and national registration at rase.co.in.",
-    href: "/registration",
-  },
-  {
-    year: "2025",
-    title: "Shiksha Mahakumbh 5.0",
-    venue: "NIPER Mohali · 31 Oct – 2 Nov 2025",
-    highlight: "Classroom to Society: Building a Healthier World through Education.",
-    href: "/past_event/sm25",
-  },
-  {
-    year: "2024",
-    title: "Shiksha Mahakumbh 4.0",
-    venue: "Kurukshetra University · 16–17 Dec 2024",
-    highlight: "Indian Education System for Global Development.",
-    href: "/past_event/sm24",
-  },
-  {
-    year: "2024",
-    title: "Shiksha Mahakumbh 3.0",
-    venue: "NIT Srinagar · 29–30 Jun 2024",
-    highlight: "Academic-driven startups in developing economy of J & K.",
-    href: "/past_event/sk24",
-  },
-  {
-    year: "2023",
-    title: "Shiksha Mahakumbh 2.0",
-    venue: "NIT Kurukshetra · 20 Dec 2023",
-    highlight: "Role of Academic-driven Startups in Economy.",
-    href: "/past_event/sk23",
-  },
-  {
-    year: "2023",
-    title: "Shiksha Mahakumbh 1.0",
-    venue: "NIT Jalandhar · 9–11 Jun 2023",
-    highlight: "Recent Advances in School Education.",
-    href: "/past_event/sm23",
-  },
-];
+export const pastEditions: PastEdition[] = buildAuthorityPastEditions();
 
 export type ResearchOutputItem = {
   title: string;

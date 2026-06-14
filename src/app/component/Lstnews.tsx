@@ -21,9 +21,9 @@ const ScrollableListWithLinks: React.FC<{ items: { text: string; path: string }[
 
 const Lstnews = () => {
   const items = [
-    { text: "Visit Shiksha Mahakumbh 2024", path: "/" },
-    { text: "Dates of Shiksha Mahakumbh 2024", path: "/" },
-    { text: "Launching of Shiksha Kumbh 2024 Campaign", path: "/" }
+    { text: "Register for शिक्षा महाकुंभ 6.0", path: "/registration" },
+    { text: "Abhiyan Edition Timeline", path: "/abhiyan" },
+    { text: "Past Editions Archive", path: "/past-events" }
   ];
   return (
     <div className='newcntt'>

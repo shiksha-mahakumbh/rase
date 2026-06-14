@@ -254,6 +254,12 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
     },
   });
 
+  void import("@/server/services/ops/workflow-automation.service")
+    .then(({ fireWorkflowForRegistration }) =>
+      fireWorkflowForRegistration("registration_complete", result.master.id)
+    )
+    .catch(() => {});
+
   return {
     registrationId,
     id: result.master.id,
