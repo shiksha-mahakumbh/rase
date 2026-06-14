@@ -2,7 +2,7 @@ import { PaymentStatus, RegistrationType } from "@/types/registration";
 import { requiresPaymentForFee } from "@/lib/registration/fees";
 
 export const CMT_SUBMISSION_URL =
-  "https://cmt3.research.microsoft.com/SMK2026/";
+  "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/";
 
 /** Microsoft CMT — immediate redirect, no on-site form */
 export const EXTERNAL_REDIRECT_TYPES = [

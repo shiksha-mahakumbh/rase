@@ -20,7 +20,7 @@ const insights = [
     title: "Multi Track Conference",
     date: "Open",
     author: "Research Track",
-    href: "https://cmt3.research.microsoft.com/SMK2026/",
+    href: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
     tag: "Submit",
   },
   {

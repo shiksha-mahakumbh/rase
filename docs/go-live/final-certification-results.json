@@ -1,0 +1,92 @@
+{
+  "checkedAt": "2026-06-14T03:33:55.421Z",
+  "baseUrl": "https://www.shikshamahakumbh.com",
+  "security": [
+    {
+      "name": "lookup_no_auth",
+      "path": "/api/registration/SMK2026-000001",
+      "status": 401,
+      "body": {
+        "error": "Email or confirmation token required"
+      }
+    },
+    {
+      "name": "admin_gateway",
+      "path": "/api/admin/gateway/registrations",
+      "status": 401,
+      "body": {
+        "error": "Unauthorized",
+        "code": "UNAUTHORIZED"
+      }
+    },
+    {
+      "name": "webhook_unsigned",
+      "path": "/api/payments/razorpay-webhook",
+      "status": 401,
+      "body": {
+        "error": "Invalid signature"
+      }
+    }
+  ],
+  "redirects": [
+    {
+      "path": "/abstract",
+      "status": 307,
+      "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+    },
+    {
+      "path": "/paper",
+      "status": 307,
+      "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+    },
+    {
+      "path": "/fulllengthpaper",
+      "status": 307,
+      "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+    }
+  ],
+  "bundleStrings": {
+    "School Student": true,
+    "College Student": true,
+    "Single Bed": true,
+    "Double Bed": true,
+    "setCurrentFee": true,
+    "Student (Free)": true,
+    "inputMode": true,
+    "ABCDE1234F": true,
+    "Eligibility": true,
+    "Documents Required": true,
+    "Submit Paper": false,
+    "Abstract Submission": false,
+    "Paper Submission": false,
+    "Call for Papers": false,
+    "ShikshaMahakumbh2025": true,
+    "SMK2026": false
+  },
+  "ui": {
+    "homepage": {
+      "hasSubmitPaper": false,
+      "hasMultiTrack": true,
+      "hasAbstractSubmission": false
+    },
+    "freeDelegate": {
+      "paymentStepVisible": false,
+      "showsFreeFee": true,
+      "stepCount": "Step 2 of 2"
+    }
+  },
+  "performance": {},
+  "blockers": [
+    "locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Projects', exact: true })\n"
+  ],
+  "razorpayCreateOrder": {
+    "status": 200,
+    "body": {
+      "order_id": "order_T1MejyzYKR4EPt",
+      "amount": 20000,
+      "currency": "INR",
+      "key_id": "rzp_live_Sz5hsyGHWPtgbT"
+    }
+  },
+  "error": "locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Projects', exact: true })\n"
+}

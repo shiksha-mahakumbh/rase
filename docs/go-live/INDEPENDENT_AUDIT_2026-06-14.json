@@ -1,0 +1,604 @@
+{
+  "auditedAt": "2026-06-14T03:53:10.568Z",
+  "baseUrl": "https://www.shikshamahakumbh.com",
+  "deploymentCommit": "082f8f6",
+  "phase1_registration": {
+    "categoriesOnHub": [
+      {
+        "category": "Conclave",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Delegate Registration",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Exhibition",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Projects",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Talent",
+        "visibleOnHub": false
+      },
+      {
+        "category": "NGO",
+        "visibleOnHub": false
+      },
+      {
+        "category": "Volunteer",
+        "visibleOnHub": false
+      },
+      {
+        "category": "Accommodation",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Awards",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Best Practices",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Olympiad",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Participant",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Multi Track Conference",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Bal Shodh Patrika",
+        "visibleOnHub": true
+      },
+      {
+        "category": "Cultural Program",
+        "visibleOnHub": true
+      }
+    ],
+    "delegateStudentFlow": {
+      "steps": {
+        "stepIndicator": "Step 2 of 2",
+        "paymentSkipped": true,
+        "studentFreeMessage": true,
+        "instructionsPanel": true
+      }
+    },
+    "note": "Full submit/upload E2E not executed — read-only audit avoids creating live registrations"
+  },
+  "phase2_fees": {
+    "delegate": {
+      "studentFreeUi": true,
+      "stepCount": "Step 2 of 2"
+    },
+    "projects": {
+      "error": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Projects$/ }).first()\n"
+    },
+    "accommodation": {
+      "error": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Accommodation$/ }).first()\n"
+    }
+  },
+  "phase3_payment": {
+    "createOrderProbe": {
+      "status": 200,
+      "ms": 1765,
+      "body": {
+        "order_id": "order_T1N0G0RQIjXNS7",
+        "amount": 20000,
+        "currency": "INR",
+        "key_id": "rzp_live_Sz5hsyGHWPtgbT"
+      }
+    },
+    "dbLatestPayment": {
+      "id": "f0b04672-dee6-4e6b-8e30-4e8f8f80d83b",
+      "registrationId": "99993c76-7a2b-4705-b1e2-1204a13a9b2e",
+      "razorpayOrderId": "order_T18GAWiy8vlqXN",
+      "razorpayPaymentId": "pay_T18JCcwJNxqVoi",
+      "razorpaySignature": null,
+      "amount": "1000",
+      "currency": "INR",
+      "status": "Paid",
+      "webhookEventId": null,
+      "isDuplicate": false,
+      "refundId": null,
+      "refundStatus": null,
+      "metadata": {
+        "amount": 1000,
+        "status": "Paid",
+        "receipt": {
+          "url": "https://rcpbfrauyyyorptckrlp.supabase.co/storage/v1/object/sign/registrations/registrations/1781357564819-Font_Page_Degine_For_DRDO.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMGY2NGY4Yy1kZWZhLTQ2NTgtODM2NS0zZWI5ZTg1ZjE0NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJyZWdpc3RyYXRpb25zL3JlZ2lzdHJhdGlvbnMvMTc4MTM1NzU2NDgxOS1Gb250X1BhZ2VfRGVnaW5lX0Zvcl9EUkRPLmpwZWciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgxMzU3NTY3LCJleHAiOjE3ODEzNjExNjd9.yqtY7PzySkEraj5bGuO6qJ5e4RIg86hvc-KiL2L_lK0",
+          "name": "Font Page Degine For DRDO.jpeg",
+          "path": "registrations/1781357564819-Font_Page_Degine_For_DRDO.jpeg",
+          "size": 276325,
+          "contentType": "image/jpeg"
+        },
+        "panNumber": "",
+        "utrNumber": "pay_T18JCcwJNxqVoi",
+        "chequeNumber": "",
+        "transactionId": "pay_T18JCcwJNxqVoi",
+        "razorpayOrderId": "order_T18GAWiy8vlqXN",
+        "registrationFee": 1000,
+        "razorpayPaymentId": "pay_T18JCcwJNxqVoi"
+      },
+      "createdAt": "2026-06-13T13:32:52.881Z",
+      "updatedAt": "2026-06-13T13:32:52.881Z",
+      "deletedAt": null,
+      "registration": {
+        "registrationId": "SMK2026-000003",
+        "registrationType": "Delegate",
+        "registrationFee": "1000"
+      }
+    },
+    "liveFreeRegistrationExecuted": false,
+    "livePaidRegistrationExecuted": false,
+    "note": "No live Razorpay payment or registration submit performed in read-only audit"
+  },
+  "phase4_email": {
+    "latestSent": {
+      "id": "07e8c24d-f4b5-42a3-986e-4f45ac4688f0",
+      "registrationId": "93422d01-b466-49af-8545-09998e93c03c",
+      "toEmail": "interns.dhe@gmail.com",
+      "subject": "Shiksha Mahakumbh 6.0 — Registration Confirmed",
+      "template": "registration_confirmation",
+      "status": "sent",
+      "provider": "brevo",
+      "providerMsgId": "<111c87d4-5e1b-0afd-0c1b-7d17c1be7273@shikshamahakumbh.com>",
+      "errorMessage": null,
+      "retryCount": 0,
+      "sentAt": "2026-06-14T03:17:08.997Z",
+      "createdAt": "2026-06-14T03:17:06.186Z",
+      "updatedAt": "2026-06-14T03:17:08.999Z",
+      "userId": null
+    },
+    "processingMs": 2811,
+    "brevoConfigured": true,
+    "inboxVerified": false,
+    "spfDkimVerified": false,
+    "note": "Inbox/SPF/DKIM cannot be verified programmatically in read-only mode"
+  },
+  "phase5_receipt": {
+    "downloadReceipt": true,
+    "printReceipt": true,
+    "addToCalendar": false,
+    "tellColleagues": false,
+    "shareButtons": false,
+    "registrationIdVisible": true,
+    "dheLogo": true,
+    "printHiddenClasses": true
+  },
+  "phase6_database": {
+    "counts": {
+      "registrations": 4,
+      "payment_records": 1,
+      "email_logs": 2,
+      "audit_logs": 33,
+      "uploaded_files": 1,
+      "accommodation_requests": 0
+    },
+    "counter": {
+      "id": "489bd9fc-84fe-4fa5-b100-bbea8520be98",
+      "year": 2026,
+      "prefix": "SMK2026",
+      "lastNumber": 4,
+      "createdAt": "2026-06-12T06:24:27.301Z",
+      "updatedAt": "2026-06-13T17:01:25.671Z"
+    },
+    "emailByStatus": [
+      {
+        "_count": {
+          "status": 1
+        },
+        "status": "sent"
+      },
+      {
+        "_count": {
+          "status": 1
+        },
+        "status": "failed"
+      }
+    ],
+    "payByStatus": [
+      {
+        "_count": {
+          "status": 1
+        },
+        "status": "Paid"
+      }
+    ],
+    "latestRegistrations": [
+      {
+        "id": "93422d01-b466-49af-8545-09998e93c03c",
+        "registrationId": "SMK2026-000004",
+        "registrationType": "Conclave",
+        "email": "interns.dhe@gmail.com",
+        "registrationFee": null,
+        "paymentStatus": "Submitted",
+        "emailDeliveryStatus": "sent",
+        "createdAt": "2026-06-13T17:01:26.771Z"
+      },
+      {
+        "id": "99993c76-7a2b-4705-b1e2-1204a13a9b2e",
+        "registrationId": "SMK2026-000003",
+        "registrationType": "Delegate",
+        "email": "interns.dhe@gmail.com",
+        "registrationFee": "1000",
+        "paymentStatus": "Paid",
+        "emailDeliveryStatus": "failed",
+        "createdAt": "2026-06-13T13:32:52.005Z"
+      },
+      {
+        "id": "c82e3cec-d42e-42d0-80ef-24d7705d7bdc",
+        "registrationId": "SMK2026-000002",
+        "registrationType": "Legacy_Other",
+        "email": "interns.dhe@gmail.com",
+        "registrationFee": "0",
+        "paymentStatus": "Submitted",
+        "emailDeliveryStatus": "failed",
+        "createdAt": "2026-06-13T12:58:52.673Z"
+      },
+      {
+        "id": "209b2bb3-c27e-4a4d-b6e3-4ddb147c3e64",
+        "registrationId": "SMK2026-000001",
+        "registrationType": "Legacy_Other",
+        "email": "release-verify+20260609@rase.co.in",
+        "registrationFee": null,
+        "paymentStatus": "Not_Required",
+        "emailDeliveryStatus": null,
+        "createdAt": "2026-06-12T17:00:12.598Z"
+      }
+    ],
+    "latestEmailLogs": [
+      {
+        "id": "07e8c24d-f4b5-42a3-986e-4f45ac4688f0",
+        "registrationId": "93422d01-b466-49af-8545-09998e93c03c",
+        "toEmail": "interns.dhe@gmail.com",
+        "subject": "Shiksha Mahakumbh 6.0 — Registration Confirmed",
+        "template": "registration_confirmation",
+        "status": "sent",
+        "provider": "brevo",
+        "providerMsgId": "<111c87d4-5e1b-0afd-0c1b-7d17c1be7273@shikshamahakumbh.com>",
+        "errorMessage": null,
+        "retryCount": 0,
+        "sentAt": "2026-06-14T03:17:08.997Z",
+        "createdAt": "2026-06-14T03:17:06.186Z",
+        "updatedAt": "2026-06-14T03:17:08.999Z",
+        "userId": null
+      },
+      {
+        "id": "da39dab3-9878-4b3d-8c95-9eec36cf92d7",
+        "registrationId": "93422d01-b466-49af-8545-09998e93c03c",
+        "toEmail": "interns.dhe@gmail.com",
+        "subject": "Shiksha Mahakumbh 6.0 — Registration Confirmed",
+        "template": "registration_confirmation",
+        "status": "failed",
+        "provider": "gmail",
+        "providerMsgId": null,
+        "errorMessage": "Invalid login: 534-5.7.9 Please log in with your web browser and then try again. For more\n534-5.7.9 information, go to\n534 5.7.9  https://support.google.com/mail/?p=WebLoginRequired 98e67ed59e1d1-37a2678375fsm7155250a91.17 - gsmtp",
+        "retryCount": 3,
+        "sentAt": null,
+        "createdAt": "2026-06-13T19:19:01.615Z",
+        "updatedAt": "2026-06-13T19:19:13.800Z",
+        "userId": null
+      }
+    ],
+    "latestPaymentRecords": [
+      {
+        "id": "f0b04672-dee6-4e6b-8e30-4e8f8f80d83b",
+        "registrationId": "99993c76-7a2b-4705-b1e2-1204a13a9b2e",
+        "razorpayOrderId": "order_T18GAWiy8vlqXN",
+        "razorpayPaymentId": "pay_T18JCcwJNxqVoi",
+        "razorpaySignature": null,
+        "amount": "1000",
+        "currency": "INR",
+        "status": "Paid",
+        "webhookEventId": null,
+        "isDuplicate": false,
+        "refundId": null,
+        "refundStatus": null,
+        "metadata": {
+          "amount": 1000,
+          "status": "Paid",
+          "receipt": {
+            "url": "https://rcpbfrauyyyorptckrlp.supabase.co/storage/v1/object/sign/registrations/registrations/1781357564819-Font_Page_Degine_For_DRDO.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lMGY2NGY4Yy1kZWZhLTQ2NTgtODM2NS0zZWI5ZTg1ZjE0NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJyZWdpc3RyYXRpb25zL3JlZ2lzdHJhdGlvbnMvMTc4MTM1NzU2NDgxOS1Gb250X1BhZ2VfRGVnaW5lX0Zvcl9EUkRPLmpwZWciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgxMzU3NTY3LCJleHAiOjE3ODEzNjExNjd9.yqtY7PzySkEraj5bGuO6qJ5e4RIg86hvc-KiL2L_lK0",
+            "name": "Font Page Degine For DRDO.jpeg",
+            "path": "registrations/1781357564819-Font_Page_Degine_For_DRDO.jpeg",
+            "size": 276325,
+            "contentType": "image/jpeg"
+          },
+          "panNumber": "",
+          "utrNumber": "pay_T18JCcwJNxqVoi",
+          "chequeNumber": "",
+          "transactionId": "pay_T18JCcwJNxqVoi",
+          "razorpayOrderId": "order_T18GAWiy8vlqXN",
+          "registrationFee": 1000,
+          "razorpayPaymentId": "pay_T18JCcwJNxqVoi"
+        },
+        "createdAt": "2026-06-13T13:32:52.881Z",
+        "updatedAt": "2026-06-13T13:32:52.881Z",
+        "deletedAt": null,
+        "registration": {
+          "registrationId": "SMK2026-000003",
+          "registrationType": "Delegate",
+          "registrationFee": "1000"
+        }
+      }
+    ],
+    "orphanEmailLogs": [],
+    "orphanPaymentRecords": [],
+    "duplicateRegistrationIds": [],
+    "smk2026FormatValid": true
+  },
+  "phase7_security": {
+    "endpoints": [
+      {
+        "id": "admin_gateway_regs",
+        "method": "GET",
+        "path": "/api/admin/gateway/registrations",
+        "body": {
+          "error": "Unauthorized",
+          "code": "UNAUTHORIZED"
+        },
+        "expect": [
+          401
+        ],
+        "status": 401,
+        "ms": 1364,
+        "verdict": "PASS"
+      },
+      {
+        "id": "admin_gateway_stats",
+        "method": "GET",
+        "path": "/api/admin/gateway/stats",
+        "body": {
+          "error": "Unauthorized",
+          "code": "UNAUTHORIZED"
+        },
+        "expect": [
+          401
+        ],
+        "status": 401,
+        "ms": 669,
+        "verdict": "PASS"
+      },
+      {
+        "id": "admin_gateway_emails",
+        "method": "GET",
+        "path": "/api/admin/gateway/email-logs",
+        "body": {
+          "error": "Unauthorized",
+          "code": "UNAUTHORIZED"
+        },
+        "expect": [
+          401
+        ],
+        "status": 401,
+        "ms": 409,
+        "verdict": "PASS"
+      },
+      {
+        "id": "registration_lookup",
+        "method": "GET",
+        "path": "/api/registration/SMK2026-000001",
+        "body": {
+          "error": "Email or confirmation token required"
+        },
+        "expect": [
+          401
+        ],
+        "status": 401,
+        "ms": 623,
+        "verdict": "PASS"
+      },
+      {
+        "id": "registration_submit_empty",
+        "method": "POST",
+        "path": "/api/registration/submit",
+        "body": {
+          "error": "Invalid registration type"
+        },
+        "expect": [
+          400,
+          403,
+          429
+        ],
+        "status": 400,
+        "ms": 502,
+        "verdict": "PASS"
+      },
+      {
+        "id": "registration_send_email_bad",
+        "method": "POST",
+        "path": "/api/registration/send-email",
+        "body": {
+          "error": "Invalid registration ID"
+        },
+        "expect": [
+          400
+        ],
+        "status": 400,
+        "ms": 365,
+        "verdict": "PASS"
+      },
+      {
+        "id": "webhook_unsigned",
+        "method": "POST",
+        "path": "/api/payments/razorpay-webhook",
+        "body": {
+          "error": "Invalid signature"
+        },
+        "expect": [
+          401,
+          400
+        ],
+        "status": 401,
+        "ms": 358,
+        "verdict": "PASS"
+      },
+      {
+        "id": "create_order_open",
+        "method": "POST",
+        "path": "/api/payments/create-order",
+        "body": {
+          "order_id": "order_T1Mz9TdssSL3Tw",
+          "amount": 20000,
+          "currency": "INR",
+          "key_id": "rzp_live_Sz5hsyGHWPtgbT"
+        },
+        "expect": [
+          200,
+          401,
+          400
+        ],
+        "status": 200,
+        "ms": 1148,
+        "verdict": "WARNING"
+      },
+      {
+        "id": "verify_payment_empty",
+        "method": "POST",
+        "path": "/api/payments/verify",
+        "body": "<!DOCTYPE html><html lang=\"en-IN\" class=\"__variable_f367f3\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/e4af272ccee01ff0-s.p.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" as=\"image\" imageSrcSet=\"/_next/image?url=%2Fshiksha.png&amp;w=48&amp;q=75 1x, /_next/image?url=%2Fshiksha.png&amp;w=96&amp;q=75 2x\"/><link rel=\"stylesheet\" href=\"/_next/static/css/f0aa736df958819e.css\" da",
+        "expect": [
+          400,
+          401,
+          403
+        ],
+        "status": 404,
+        "ms": 478,
+        "verdict": "FAIL"
+      }
+    ],
+    "rateLimitBurst": {
+      "statuses": [
+        400,
+        429
+      ],
+      "triggered429": true
+    }
+  },
+  "phase8_content": {
+    "pages": {
+      "/": {
+        "status": 200,
+        "ms": 820,
+        "forbiddenFound": [],
+        "hasMultiTrack": false,
+        "hasCmt": false
+      },
+      "/registration": {
+        "status": 200,
+        "ms": 192,
+        "forbiddenFound": [],
+        "hasMultiTrack": false,
+        "hasCmt": false
+      },
+      "/introduction": {
+        "status": 200,
+        "ms": 104,
+        "forbiddenFound": [],
+        "hasMultiTrack": false,
+        "hasCmt": false
+      },
+      "/research-papers": {
+        "status": 200,
+        "ms": 190,
+        "forbiddenFound": [],
+        "hasMultiTrack": false,
+        "hasCmt": false
+      },
+      "/about": {
+        "status": 404,
+        "ms": 415,
+        "forbiddenFound": [],
+        "hasMultiTrack": false,
+        "hasCmt": false
+      }
+    },
+    "redirects": [
+      {
+        "path": "/paper",
+        "status": 307,
+        "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+      },
+      {
+        "path": "/abstract",
+        "status": 307,
+        "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+      },
+      {
+        "path": "/fulllengthpaper",
+        "status": 307,
+        "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+      }
+    ],
+    "bundleForbidden": {
+      "Submit Paper": false,
+      "Paper Submission": false,
+      "Abstract Submission": false,
+      "Full Length Paper": false,
+      "Call For Papers": false,
+      "Call for Paper": false
+    },
+    "regHtmlUnused": true
+  },
+  "phase9_performance": {
+    "http": {
+      "registration": {
+        "avg": 140,
+        "max": 156,
+        "samples": [
+          149,
+          115,
+          156
+        ]
+      },
+      "success": {
+        "avg": 124,
+        "max": 132,
+        "samples": [
+          110,
+          129,
+          132
+        ]
+      },
+      "homepage": {
+        "avg": 124,
+        "max": 145,
+        "samples": [
+          145,
+          109,
+          117
+        ]
+      }
+    },
+    "registrationPageInteractiveMs": 733,
+    "successPageLoadMs": 312,
+    "emailProcessingMs": 2811
+  },
+  "phase10_verdict": {
+    "issues": {
+      "critical": [],
+      "medium": [
+        "POST /api/payments/create-order returns 200 without authentication",
+        "Projects School ₹200 not confirmed in UI probe",
+        "Projects College ₹400 not confirmed in UI probe"
+      ],
+      "low": [
+        "Categories not on hub: Talent, NGO, Volunteer"
+      ]
+    },
+    "decision": "CONDITIONAL GO",
+    "emailOk": true,
+    "secOk": true,
+    "contentOk": true
+  }
+}

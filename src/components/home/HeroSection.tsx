@@ -4,6 +4,7 @@ import Image from "next/image";
 import { CtaButton, StatCard } from "@/components/ui";
 import { event, impactStats } from "@/design/tokens";
 import { ROUTES } from "@/constants/routes";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 import CountdownBanner from "./CountdownBanner";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
@@ -84,8 +85,8 @@ export default function HeroSection() {
               <CtaButton href={ROUTES.registration} variant="primary">
                 Register Now
               </CtaButton>
-              <CtaButton href="/abstract" variant="secondary">
-                Submit Paper
+              <CtaButton href={CMT_SUBMISSION_URL} variant="secondary">
+                Multi Track Conference
               </CtaButton>
             </div>
 
