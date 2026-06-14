@@ -4,7 +4,7 @@ import { isSupportedType } from "@/server/lib/registration-types";
 import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { getRequestContext } from "@/server/lib/request";
-import { sendRegistrationConfirmation } from "@/server/services/email.service";
+import { sendRegistrationConfirmation, mapDeliveryStatus } from "@/server/services/email.service";
 import { prisma } from "@/server/db/prisma";
 import { normalizePhoneInput, validatePanForAmount } from "@/lib/registration/validation";
 import { resolveRegistrationFee } from "@/lib/registration/fees";
@@ -155,6 +155,7 @@ export async function POST(request: NextRequest) {
 
     void sendRegistrationConfirmation({
       registrationId: result.registrationId,
+      registrationUuid: result.id,
       fullName,
       email,
     })
@@ -162,16 +163,22 @@ export async function POST(request: NextRequest) {
         await prisma.registration.update({
           where: { id: result.id },
           data: {
-            emailDeliveryStatus:
-              log.status === "sent"
-                ? "sent"
-                : log.status === "failed" || log.status === "skipped"
-                  ? "failed"
-                  : "pending",
+            emailDeliveryStatus: mapDeliveryStatus(log.status),
           },
         });
       })
-      .catch((err) => console.error("email queue failed:", err));
+      .catch((err) => {
+        console.error("[registration submit] email queue failed:", {
+          registrationId: result.registrationId,
+          registrationUuid: result.id,
+          recipient: email,
+          error: err instanceof Error ? err.message : String(err),
+        });
+        void prisma.registration.update({
+          where: { id: result.id },
+          data: { emailDeliveryStatus: "failed" },
+        });
+      });
 
     return NextResponse.json({
       success: true,

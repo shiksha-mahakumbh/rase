@@ -16,25 +16,56 @@ type QueueItem = {
   subject: string;
   html: string;
   template: EmailTemplate;
-  registrationId?: string;
+  /** Public ID e.g. SMK2026-000001 — for logs only */
+  publicRegistrationId?: string;
+  /** registrations.id UUID — required for email_logs FK */
+  registrationUuid?: string | null;
 };
 
-const queue: QueueItem[] = [];
-let processing = false;
+const MAX_ATTEMPTS = 3;
 
-function emailProviderLabel(): string {
-  const host = process.env.SMTP_HOST ?? "";
+function emailProviderLabel(host: string): string {
   if (host.includes("brevo") || host.includes("sendinblue")) return "brevo";
+  if (host.includes("gmail")) return "gmail";
   return "smtp";
 }
 
+function getSmtpConfig() {
+  const brevoHost = process.env.BREVO_SMTP_HOST?.trim();
+  const brevoUser = process.env.BREVO_SMTP_USER?.trim();
+  const brevoPass = process.env.BREVO_SMTP_PASS?.trim();
+  const brevoConfigured = Boolean(brevoHost && brevoUser && brevoPass);
+
+  if (brevoConfigured) {
+    return {
+      host: brevoHost,
+      user: brevoUser,
+      pass: brevoPass,
+      port: Number(process.env.BREVO_SMTP_PORT ?? 587),
+      from:
+        process.env.BREVO_SMTP_FROM?.trim() ??
+        process.env.SMTP_FROM?.trim() ??
+        "noreply@shikshamahakumbh.com",
+    };
+  }
+
+  return {
+    host: process.env.SMTP_HOST?.trim(),
+    user: process.env.SMTP_USER?.trim(),
+    pass: process.env.SMTP_PASS?.trim() ?? process.env.SMTP_PASSWORD?.trim(),
+    port: Number(process.env.SMTP_PORT ?? 587),
+    from: process.env.SMTP_FROM?.trim() ?? "noreply@shikshamahakumbh.com",
+  };
+}
+
+function debugEmail(event: string, payload: Record<string, unknown>) {
+  console.info("[email.service]", event, payload);
+}
+
 function getTransporter() {
-  const host = process.env.SMTP_HOST;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const { host, user, pass, port } = getSmtpConfig();
   if (!host || !user || !pass) return null;
 
-  const port = Number(process.env.SMTP_PORT ?? 587);
   return nodemailer.createTransport({
     host,
     port,
@@ -60,50 +91,74 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
   }
 }
 
-export async function queueEmail(item: QueueItem) {
-  const log = await prisma.emailLog.create({
-    data: {
-      registrationId: item.registrationId ?? null,
-      toEmail: item.toEmail,
-      subject: item.subject,
-      template: item.template,
-      status: "queued",
-      provider: emailProviderLabel(),
-    },
-  });
-
-  queue.push(item);
-  void processQueue();
-
-  return log;
+function mapDeliveryStatus(status: EmailLogStatus): "sent" | "failed" | "pending" | "skipped" {
+  if (status === "sent") return "sent";
+  if (status === "failed" || status === "skipped") return "failed";
+  return "pending";
 }
 
-async function processQueue() {
-  if (processing) return;
-  processing = true;
+function smtpErrorDetails(error: unknown) {
+  const err = error as Error & { code?: string; response?: string; responseCode?: number };
+  return {
+    message: err instanceof Error ? err.message : String(error),
+    code: err.code ?? null,
+    response: err.response ?? null,
+    responseCode: err.responseCode ?? null,
+  };
+}
 
+async function deliverEmailLog(logId: string, item: QueueItem) {
+  const { host, port, from } = getSmtpConfig();
   const transporter = getTransporter();
-  const from = process.env.SMTP_FROM ?? "noreply@shikshamahakumbh.com";
+  const provider = emailProviderLabel(host ?? "");
 
-  while (queue.length > 0) {
-    const item = queue.shift()!;
-    const log = await prisma.emailLog.findFirst({
-      where: { toEmail: item.toEmail, subject: item.subject, status: "queued" },
-      orderBy: { createdAt: "desc" },
+  debugEmail("deliver_start", {
+    emailLogId: logId,
+    registrationId: item.publicRegistrationId ?? null,
+    registrationUuid: item.registrationUuid ?? null,
+    recipient: item.toEmail,
+    template: item.template,
+  });
+
+  console.info("EMAIL_SEND_START", {
+    registrationId: item.publicRegistrationId ?? null,
+    registrationUuid: item.registrationUuid ?? null,
+    recipient: item.toEmail,
+    provider,
+    smtpHost: host ?? null,
+    smtpPort: port,
+    emailLogId: logId,
+  });
+
+  if (!transporter) {
+    const smtpError = "SMTP not configured (check SMTP_* or BREVO_SMTP_* env)";
+    await prisma.emailLog.update({
+      where: { id: logId },
+      data: {
+        status: "skipped",
+        errorMessage: smtpError,
+      },
     });
+    console.error("EMAIL_SEND_FAILED", {
+      registrationId: item.publicRegistrationId ?? null,
+      registrationUuid: item.registrationUuid ?? null,
+      recipient: item.toEmail,
+      provider,
+      emailLogId: logId,
+      error: { message: smtpError, code: "SMTP_NOT_CONFIGURED", response: null },
+    });
+    return;
+  }
 
-    if (!transporter) {
-      if (log) {
-        await prisma.emailLog.update({
-          where: { id: log.id },
-          data: { status: "skipped", errorMessage: "SMTP not configured" },
-        });
-      }
-      continue;
-    }
+  let lastError = "send failed";
 
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
-      if (log) await prisma.emailLog.update({ where: { id: log.id }, data: { status: "sending" } });
+      await prisma.emailLog.update({
+        where: { id: logId },
+        data: { status: "sending", retryCount: attempt - 1 },
+      });
+
       const info = await transporter.sendMail({
         from,
         to: item.toEmail,
@@ -111,49 +166,139 @@ async function processQueue() {
         html: item.html,
       });
 
-      if (log) {
-        await prisma.emailLog.update({
-          where: { id: log.id },
-          data: {
-            status: "sent",
-            sentAt: new Date(),
-            providerMsgId: info.messageId ?? null,
-          },
-        });
-      }
+      await prisma.emailLog.update({
+        where: { id: logId },
+        data: {
+          status: "sent",
+          sentAt: new Date(),
+          providerMsgId: info.messageId ?? null,
+          errorMessage: null,
+          retryCount: attempt - 1,
+        },
+      });
+
+      debugEmail("smtp_sent", {
+        emailLogId: logId,
+        registrationId: item.publicRegistrationId ?? null,
+        recipient: item.toEmail,
+        attempt,
+        messageId: info.messageId ?? null,
+        smtpResponse: info.response ?? null,
+      });
+
+      console.info("EMAIL_SEND_SUCCESS", {
+        registrationId: item.publicRegistrationId ?? null,
+        registrationUuid: item.registrationUuid ?? null,
+        recipient: item.toEmail,
+        provider,
+        messageId: info.messageId ?? null,
+        accepted: info.accepted ?? [],
+        rejected: info.rejected ?? [],
+        smtpResponse: info.response ?? null,
+        emailLogId: logId,
+      });
 
       await writeAuditLog({
         action: "email_sent",
-        registrationId: item.registrationId ?? null,
-        payload: { to: item.toEmail, template: item.template },
+        registrationId: item.registrationUuid ?? null,
+        payload: {
+          to: item.toEmail,
+          template: item.template,
+          publicRegistrationId: item.publicRegistrationId,
+        },
       });
+
+      transporter.close();
+      return;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "send failed";
-      if (log) {
-        const retryCount = (log.retryCount ?? 0) + 1;
-        await prisma.emailLog.update({
-          where: { id: log.id },
-          data: {
-            status: retryCount < 3 ? "queued" : "failed",
-            retryCount,
-            errorMessage: message,
-          },
-        });
-        if (retryCount < 3) queue.push(item);
-      }
-      await writeAuditLog({
-        action: "email_failed",
-        registrationId: item.registrationId ?? null,
-        payload: { to: item.toEmail, error: message },
+      const details = smtpErrorDetails(error);
+      lastError = details.message;
+      debugEmail("smtp_rejected", {
+        emailLogId: logId,
+        registrationId: item.publicRegistrationId ?? null,
+        recipient: item.toEmail,
+        attempt,
+        reason: lastError,
+        code: details.code,
+        response: details.response,
       });
+
+      console.error("EMAIL_SEND_FAILED", {
+        registrationId: item.publicRegistrationId ?? null,
+        registrationUuid: item.registrationUuid ?? null,
+        recipient: item.toEmail,
+        provider,
+        attempt,
+        emailLogId: logId,
+        error: {
+          message: details.message,
+          code: details.code,
+          response: details.response,
+        },
+      });
+
+      if (attempt < MAX_ATTEMPTS) {
+        await new Promise((r) => setTimeout(r, attempt * 1000));
+      }
     }
   }
 
-  processing = false;
+  await prisma.emailLog.update({
+    where: { id: logId },
+    data: {
+      status: "failed",
+      retryCount: MAX_ATTEMPTS,
+      errorMessage: lastError,
+    },
+  });
+
+  await writeAuditLog({
+    action: "email_failed",
+    registrationId: item.registrationUuid ?? null,
+    payload: {
+      to: item.toEmail,
+      error: lastError,
+      publicRegistrationId: item.publicRegistrationId,
+    },
+  });
+
+  transporter.close();
 }
+
+/** Create email_logs row first, then attempt SMTP delivery (serverless-safe). */
+export async function queueEmail(item: QueueItem) {
+  const { host } = getSmtpConfig();
+
+  const log = await prisma.emailLog.create({
+    data: {
+      registrationId: item.registrationUuid ?? null,
+      toEmail: item.toEmail,
+      subject: item.subject,
+      template: item.template,
+      status: "queued",
+      provider: emailProviderLabel(host ?? ""),
+    },
+  });
+
+  console.info("EMAIL_QUEUE_CREATED", {
+    emailLogId: log.id,
+    registrationId: item.publicRegistrationId ?? null,
+    registrationUuid: item.registrationUuid ?? null,
+    recipient: item.toEmail,
+    provider: emailProviderLabel(host ?? ""),
+    status: "queued",
+  });
+
+  await deliverEmailLog(log.id, item);
+
+  return prisma.emailLog.findUniqueOrThrow({ where: { id: log.id } });
+}
+
+export { mapDeliveryStatus };
 
 export async function sendRegistrationConfirmation(options: {
   registrationId: string;
+  registrationUuid?: string | null;
   fullName: string;
   email: string;
 }) {
@@ -165,12 +310,14 @@ export async function sendRegistrationConfirmation(options: {
       registrationId: options.registrationId,
     }),
     template: "registration_confirmation",
-    registrationId: options.registrationId,
+    publicRegistrationId: options.registrationId,
+    registrationUuid: options.registrationUuid ?? null,
   });
 }
 
 export async function sendPaymentConfirmation(options: {
   registrationId: string;
+  registrationUuid?: string | null;
   fullName: string;
   email: string;
 }) {
@@ -182,7 +329,8 @@ export async function sendPaymentConfirmation(options: {
       registrationId: options.registrationId,
     }),
     template: "payment_confirmation",
-    registrationId: options.registrationId,
+    publicRegistrationId: options.registrationId,
+    registrationUuid: options.registrationUuid ?? null,
   });
 }
 
@@ -208,7 +356,7 @@ export async function sendFeedbackAcknowledgement(options: { email: string }) {
 }
 
 export async function sendAdminAlert(options: { message: string; toEmail?: string }) {
-  const adminEmail = options.toEmail ?? process.env.SMTP_FROM;
+  const adminEmail = options.toEmail ?? process.env.SMTP_FROM ?? process.env.BREVO_SMTP_FROM;
   if (!adminEmail) return null;
   return queueEmail({
     toEmail: adminEmail,

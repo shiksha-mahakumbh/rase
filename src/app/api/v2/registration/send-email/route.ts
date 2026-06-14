@@ -7,6 +7,8 @@ export const POST = createApiHandler(
   async (request: NextRequest) => {
     const body = assertBody<{
       registrationId?: string;
+      registrationUuid?: string;
+      masterDocId?: string;
       fullName?: string;
       email?: string;
     }>(await request.json());
@@ -17,6 +19,7 @@ export const POST = createApiHandler(
 
     const log = await sendRegistrationConfirmation({
       registrationId: body.registrationId,
+      registrationUuid: body.registrationUuid ?? body.masterDocId ?? null,
       fullName: body.fullName,
       email: body.email,
     });
