@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 import Link from "next/link";
 import { useCms } from "@/lib/cms/context";
 import { extractFaqsFromCmsData } from "@/lib/cms/faq";
@@ -25,9 +26,10 @@ const DEFAULT_FAQS = [
     answer: "9–11 October 2026 at NIT Hamirpur, Himachal Pradesh, India.",
   },
   {
-    question: "How do I submit a research paper?",
-    answer: "Visit the abstract submission page for guidelines, deadlines, and the peer-review process.",
-    abstractLink: true,
+    question: "How do I submit to the Multi Track Conference?",
+    answer:
+      "Use the official Microsoft CMT portal for paper and abstract submissions, deadlines, and peer review.",
+    mtcLink: true,
   },
   {
     question: "Is accommodation available?",
@@ -58,7 +60,7 @@ export default function HomeFaqSection() {
           description={sectionField(
             section,
             "faqSubtitle",
-            "Quick answers before you register or submit your paper."
+            "Quick answers before you register or submit to the Multi Track Conference."
           )}
         />
         <div className="space-y-3">
@@ -106,15 +108,18 @@ export default function HomeFaqSection() {
                       .
                     </>
                   )}
-                  {faq.question.includes("research paper") && (
+                  {(faq.question.includes("Multi Track Conference") ||
+                    faq.question.includes("research paper")) && (
                     <>
                       {" "}
-                      <Link
-                        href="/abstract"
+                      <a
+                        href={CMT_SUBMISSION_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="font-semibold text-brand-navy underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
                       >
-                        Submit abstract
-                      </Link>
+                        Multi Track Conference (CMT)
+                      </a>
                       .
                     </>
                   )}

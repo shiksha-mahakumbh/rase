@@ -38,9 +38,9 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     title: "Multi Track Conference",
     excerpt: "Submit papers and abstracts via Microsoft CMT.",
     category: "research",
-    tags: ["CFP", "CMT", "conference"],
+    tags: ["CMT", "conference"],
     publishedAt: "2025-01-01",
-    href: "https://cmt3.research.microsoft.com/SMK2026/",
+    href: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
   },
   {
     slug: "nep-policy",

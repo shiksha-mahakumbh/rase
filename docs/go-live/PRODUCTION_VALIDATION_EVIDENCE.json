@@ -1,0 +1,347 @@
+{
+  "auditedAt": "2026-06-14T03:23:28.467Z",
+  "productionUrl": "https://www.shikshamahakumbh.com",
+  "deployment": {
+    "commit": "082f8f6",
+    "id": "dpl_FwiRjnoLKijanFjC3XNQwu9cHHSX"
+  },
+  "phase1_registration": {
+    "email": "prod-val-1781407429820@audit.shikshamahakumbh.test",
+    "submitResponse": null,
+    "sendEmailResponse": null,
+    "registrationId": null,
+    "masterDocId": null,
+    "successUrl": null,
+    "steps": {
+      "hubLoaded": true,
+      "stepIndicator": "Step 2 of 2",
+      "paymentStepSkipped": false
+    },
+    "error": "Error: locator.fill: Error: strict mode violation: getByLabel(/^Email/i) resolved to 2 elements:\n    1) <input id=\"email\" type=\"email\" name=\"email\" class=\"mt-1 block w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 shadow-sm transition focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/20\"/> aka getByRole('textbox', { name: 'Email ID *' })\n    2) <input value=\"\" required=\"\" type=\"email\" id=\"footer-newsletter-email\" placeholder=\"your@email.com\" class=\"min-h-[44px] flex-1 rounded-lg border border-white/20 bg-white/10 px-3 text-sm text-white placeholder:text-gray-500 focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron\"/> aka getByRole('textbox', { name: 'Email for newsletter' })\n\nCall log:\n  - waiting for getByLabel(/^Email/i)\n"
+  },
+  "phase2_payment": {
+    "api_create_order_unauthenticated": {
+      "status": 200,
+      "body": {
+        "order_id": "order_T1MUI2BpX7FD8s",
+        "amount": 20000,
+        "currency": "INR",
+        "key_id": "rzp_live_Sz5hsyGHWPtgbT"
+      }
+    },
+    "ui_fee_probe": {
+      "schoolFee": null,
+      "collegeFee": null,
+      "paymentStepVisible": null,
+      "stepLabel": null
+    },
+    "db_latest_payment": {
+      "id": "f0b04672-dee6-4e6b-8e30-4e8f8f80d83b",
+      "registrationId": "99993c76-7a2b-4705-b1e2-1204a13a9b2e",
+      "razorpayOrderId": "order_T18GAWiy8vlqXN",
+      "razorpayPaymentId": "pay_T18JCcwJNxqVoi",
+      "amount": "1000",
+      "status": "Paid",
+      "createdAt": "2026-06-13T13:32:52.881Z",
+      "registration": {
+        "registrationId": "SMK2026-000003",
+        "email": "interns.dhe@gmail.com"
+      },
+      "publicRegistrationId": "SMK2026-000003",
+      "email": "interns.dhe@gmail.com"
+    },
+    "note": "Full Razorpay checkout completion requires live payment — not executed in read-only audit"
+  },
+  "phase3_database": {
+    "registrations_latest": [
+      {
+        "id": "93422d01-b466-49af-8545-09998e93c03c",
+        "registrationId": "SMK2026-000004",
+        "registrationType": "Conclave",
+        "email": "interns.dhe@gmail.com",
+        "fullName": "Deaprtment of Holastic Education",
+        "paymentStatus": "Submitted",
+        "emailDeliveryStatus": "sent",
+        "createdAt": "2026-06-13T17:01:26.771Z"
+      },
+      {
+        "id": "99993c76-7a2b-4705-b1e2-1204a13a9b2e",
+        "registrationId": "SMK2026-000003",
+        "registrationType": "Delegate",
+        "email": "interns.dhe@gmail.com",
+        "fullName": "Deaprtment of Holastic Education",
+        "paymentStatus": "Paid",
+        "emailDeliveryStatus": "failed",
+        "createdAt": "2026-06-13T13:32:52.005Z"
+      },
+      {
+        "id": "c82e3cec-d42e-42d0-80ef-24d7705d7bdc",
+        "registrationId": "SMK2026-000002",
+        "registrationType": "Legacy_Other",
+        "email": "interns.dhe@gmail.com",
+        "fullName": "Deaprtment of Holastic Education",
+        "paymentStatus": "Submitted",
+        "emailDeliveryStatus": "failed",
+        "createdAt": "2026-06-13T12:58:52.673Z"
+      },
+      {
+        "id": "209b2bb3-c27e-4a4d-b6e3-4ddb147c3e64",
+        "registrationId": "SMK2026-000001",
+        "registrationType": "Legacy_Other",
+        "email": "release-verify+20260609@rase.co.in",
+        "fullName": "Release Verify",
+        "paymentStatus": "Not_Required",
+        "emailDeliveryStatus": null,
+        "createdAt": "2026-06-12T17:00:12.598Z"
+      }
+    ],
+    "payment_records_latest": [
+      {
+        "id": "f0b04672-dee6-4e6b-8e30-4e8f8f80d83b",
+        "registrationId": "99993c76-7a2b-4705-b1e2-1204a13a9b2e",
+        "razorpayOrderId": "order_T18GAWiy8vlqXN",
+        "razorpayPaymentId": "pay_T18JCcwJNxqVoi",
+        "amount": "1000",
+        "status": "Paid",
+        "createdAt": "2026-06-13T13:32:52.881Z",
+        "registration": {
+          "registrationId": "SMK2026-000003",
+          "email": "interns.dhe@gmail.com"
+        },
+        "publicRegistrationId": "SMK2026-000003",
+        "email": "interns.dhe@gmail.com"
+      }
+    ],
+    "email_logs_status_distribution": [
+      {
+        "_count": {
+          "status": 1
+        },
+        "status": "sent"
+      },
+      {
+        "_count": {
+          "status": 1
+        },
+        "status": "failed"
+      }
+    ],
+    "email_logs_latest": [
+      {
+        "id": "07e8c24d-f4b5-42a3-986e-4f45ac4688f0",
+        "registrationId": "93422d01-b466-49af-8545-09998e93c03c",
+        "toEmail": "interns.dhe@gmail.com",
+        "status": "sent",
+        "provider": "brevo",
+        "providerMsgId": "<111c87d4-5e1b-0afd-0c1b-7d17c1be7273@shikshamahakumbh.com>",
+        "template": "registration_confirmation",
+        "errorMessage": null,
+        "sentAt": "2026-06-14T03:17:08.997Z",
+        "createdAt": "2026-06-14T03:17:06.186Z"
+      },
+      {
+        "id": "da39dab3-9878-4b3d-8c95-9eec36cf92d7",
+        "registrationId": "93422d01-b466-49af-8545-09998e93c03c",
+        "toEmail": "interns.dhe@gmail.com",
+        "status": "failed",
+        "provider": "gmail",
+        "providerMsgId": null,
+        "template": "registration_confirmation",
+        "errorMessage": "Invalid login: 534-5.7.9 Please log in with your web browser and then try again. For more\n534-5.7.9 information, go to\n534 5.7.9  https://support.google.com/mail/?p=WebLoginRequired 98e67ed59e1d1-37a2678375fsm7155250a91.17 - gsmtp",
+        "sentAt": null,
+        "createdAt": "2026-06-13T19:19:01.615Z"
+      }
+    ],
+    "checks": {
+      "has_sent_email_log": true,
+      "payment_records_exist": true,
+      "uuid_fk_on_latest_sent": false
+    }
+  },
+  "phase4_email": {
+    "latest_sent_log": {
+      "id": "07e8c24d-f4b5-42a3-986e-4f45ac4688f0",
+      "registrationId": "93422d01-b466-49af-8545-09998e93c03c",
+      "toEmail": "interns.dhe@gmail.com",
+      "subject": "Shiksha Mahakumbh 6.0 — Registration Confirmed",
+      "template": "registration_confirmation",
+      "status": "sent",
+      "provider": "brevo",
+      "providerMsgId": "<111c87d4-5e1b-0afd-0c1b-7d17c1be7273@shikshamahakumbh.com>",
+      "errorMessage": null,
+      "retryCount": 0,
+      "sentAt": "2026-06-14T03:17:08.997Z",
+      "createdAt": "2026-06-14T03:17:06.186Z",
+      "updatedAt": "2026-06-14T03:17:08.999Z",
+      "userId": null
+    },
+    "new_registration_email_log": null,
+    "send_email_api": null,
+    "inbox_verification": {
+      "status": "NOT_AUTOMATED",
+      "note": "Inbox/spam/promotions cannot be verified programmatically — check recipient mailbox manually",
+      "expected_subject_contains": "Registration Confirmed",
+      "expected_sender": "academics@shikshamahakumbh.com",
+      "recipient_if_test_ran": "prod-val-1781407429820@audit.shikshamahakumbh.test"
+    },
+    "checks": {
+      "sent_log_exists": true,
+      "provider_msg_id_populated": true,
+      "new_reg_email_log_created": false,
+      "new_reg_status_sent": false
+    }
+  },
+  "phase5_receipt": {
+    "url": "https://www.shikshamahakumbh.com/registration/success?id=SMK2026-000004",
+    "downloadReceipt": true,
+    "printReceipt": true,
+    "hasRegistrationId": true,
+    "hasDheLogo": true,
+    "screenshot": "06-receipt-known-registration.png"
+  },
+  "phase6_navigation": {
+    "pages": {
+      "homepage": {
+        "status": 200,
+        "finalUrl": "https://www.shikshamahakumbh.com/",
+        "forbiddenFound": [],
+        "allowedFound": [
+          "Multi Track Conference",
+          "CMT",
+          "cmt3.research.microsoft.com"
+        ],
+        "pass": true
+      },
+      "registration": {
+        "status": 200,
+        "finalUrl": "https://www.shikshamahakumbh.com/registration",
+        "forbiddenFound": [],
+        "allowedFound": [
+          "Multi Track Conference",
+          "CMT",
+          "cmt3.research.microsoft.com"
+        ],
+        "pass": true
+      },
+      "sitemap": {
+        "status": 200,
+        "finalUrl": "https://www.shikshamahakumbh.com/sitemap.xml",
+        "forbiddenFound": [],
+        "allowedFound": [],
+        "pass": true
+      },
+      "about_intro": {
+        "status": 200,
+        "finalUrl": "https://www.shikshamahakumbh.com/introduction",
+        "forbiddenFound": [],
+        "allowedFound": [
+          "Multi Track Conference",
+          "CMT",
+          "cmt3.research.microsoft.com"
+        ],
+        "pass": true
+      },
+      "research_papers": {
+        "status": 200,
+        "finalUrl": "https://www.shikshamahakumbh.com/research-papers",
+        "forbiddenFound": [],
+        "allowedFound": [
+          "Multi Track Conference",
+          "CMT",
+          "cmt3.research.microsoft.com"
+        ],
+        "pass": true
+      },
+      "abstract_redirect": {
+        "status": 200,
+        "finalUrl": "https://cmt3.research.microsoft.com/User/Login?ReturnUrl=%2FShikshaMahakumbh2025%2F",
+        "forbiddenFound": [
+          "Paper Submission",
+          "Abstract Submission"
+        ],
+        "allowedFound": [
+          "CMT",
+          "cmt3.research.microsoft.com"
+        ],
+        "pass": false
+      },
+      "paper_redirect": {
+        "status": 200,
+        "finalUrl": "https://cmt3.research.microsoft.com/User/Login?ReturnUrl=%2FShikshaMahakumbh2025%2F",
+        "forbiddenFound": [
+          "Paper Submission",
+          "Abstract Submission"
+        ],
+        "allowedFound": [
+          "CMT",
+          "cmt3.research.microsoft.com"
+        ],
+        "pass": false
+      }
+    },
+    "checks": {
+      "all_pages_clean": false,
+      "any_forbidden": true
+    }
+  },
+  "phase7_security": {
+    "admin_gateway": {
+      "/api/admin/gateway/registrations": {
+        "status": 401,
+        "body": {
+          "error": "Unauthorized",
+          "code": "UNAUTHORIZED"
+        }
+      },
+      "/api/admin/gateway/stats": {
+        "status": 401,
+        "body": {
+          "error": "Unauthorized",
+          "code": "UNAUTHORIZED"
+        }
+      },
+      "/api/admin/gateway/email-logs": {
+        "status": 401,
+        "body": {
+          "error": "Unauthorized",
+          "code": "UNAUTHORIZED"
+        }
+      }
+    },
+    "registration_submit_empty_body": {
+      "status": 400
+    },
+    "razorpay_webhook_unsigned": {
+      "status": 401,
+      "body": {
+        "error": "Invalid signature"
+      }
+    },
+    "registration_lookup": {
+      "status": 401,
+      "body": {
+        "error": "Email or confirmation token required"
+      }
+    },
+    "checks": {
+      "gateway_returns_401": true,
+      "submit_rejects_empty": true,
+      "webhook_protected": true
+    }
+  },
+  "verdict": {
+    "blockers": [
+      "Forbidden paper/abstract references on production pages",
+      "Registration flow error: Error: locator.fill: Error: strict mode violation: getByLabel(/^Email/i) resolved to 2 elements:\n    1) <input id=\"email\" type=\"email\" name=\"email\" class=\"mt-1 block w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 shadow-sm transition focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/20\"/> aka getByRole('textbox', { name: 'Email ID *' })\n    2) <input value=\"\" required=\"\" type=\"email\" id=\"footer-newsletter-email\" placeholder=\"your@email.com\" class=\"min-h-[44px] flex-1 rounded-lg border border-white/20 bg-white/10 px-3 text-sm text-white placeholder:text-gray-500 focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron\"/> aka getByRole('textbox', { name: 'Email for newsletter' })\n\nCall log:\n  - waiting for getByLabel(/^Email/i)\n",
+      "Free delegate submit did not return 200"
+    ],
+    "passes": {
+      "email_pipeline": true,
+      "security": true,
+      "navigation_clean": false,
+      "free_delegate_submit": false
+    },
+    "decision": "NO GO",
+    "screenshotDir": "C:\\Users\\LENOVO\\OneDrive\\Desktop\\rase.co.in\\rase\\docs\\go-live\\prod-validation-2026-06-14"
+  }
+}

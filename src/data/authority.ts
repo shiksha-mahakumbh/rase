@@ -100,10 +100,10 @@ export const researchOutput: ResearchOutputItem[] = [
     href: "/departments/academic-council",
   },
   {
-    title: "Abstract & Full-Length Submission",
+    title: "Multi Track Conference",
     type: "Policy Brief",
-    description: "Open calls for scholars and practitioners.",
-    href: "/abstract",
+    description: "Submit via the official Microsoft CMT portal.",
+    href: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
   },
 ];
 

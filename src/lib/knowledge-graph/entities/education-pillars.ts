@@ -62,8 +62,8 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
   {
     id: "research",
     label: "Research",
-    description: "Abstracts, full papers, and proceedings.",
-    routes: ["/abstract", "/fulllengthpaper", "/proceedings", "/paper"],
+    description: "Multi Track Conference submissions and proceedings.",
+    routes: ["https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", "/proceedings"],
     schemaTypes: ["ScholarlyArticle", "PublicationVolume"],
   },
   {

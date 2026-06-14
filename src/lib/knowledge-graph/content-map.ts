@@ -22,7 +22,7 @@ export const CONTENT_MAP: ContentMapEntry[] = [
   { path: "/departments/prachar", title: "Prachar Vibhag", pillarId: "school-education", clusterId: "school-programmes" },
   { path: "/departments/prabandhan", title: "Prabandhan Vibhag", pillarId: "conferences", clusterId: "conf-mahakumbh" },
   { path: "/conclave", title: "Conclaves", pillarId: "policy", clusterId: "policy-conclave" },
-  { path: "https://cmt3.research.microsoft.com/SMK2026/", title: "Multi Track Conference", pillarId: "research", clusterId: "research-submit" },
+  { path: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", title: "Multi Track Conference", pillarId: "research", clusterId: "research-submit" },
   { path: "/proceedings", title: "Proceedings", pillarId: "publications", clusterId: "pub-proceedings" },
   { path: "/proceeding1", title: "Proceedings Vol. I", pillarId: "publications", clusterId: "pub-proceedings" },
   { path: "/proceeding2", title: "Proceedings Vol. II", pillarId: "publications", clusterId: "pub-proceedings" },

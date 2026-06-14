@@ -95,7 +95,7 @@ export default function ConferencePage() {
         <p className="mt-4 text-sm text-indigo-800">
           All abstracts and full-length papers are submitted through the{" "}
           <a
-            href="https://cmt3.research.microsoft.com/SMK2026/"
+            href="https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
             className="font-semibold underline"
             target="_blank"
             rel="noopener noreferrer"

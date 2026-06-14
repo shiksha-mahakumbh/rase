@@ -35,7 +35,7 @@ const META: Record<RegistrationType, CategoryMeta> = {
     instructions: ["You will be redirected to the official CMT portal", "Use the same email for CMT and registration"],
     eligibility: ["Researchers", "Faculty", "Doctoral scholars", "Practitioners"],
     fee: "As per CMT submission guidelines",
-    documentsRequired: ["Paper/abstract as per CMT"],
+    documentsRequired: ["Submission materials as per CMT guidelines"],
     importantNotes: [`Portal: ${CMT_SUBMISSION_URL}`],
   },
   Conclave: {

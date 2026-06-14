@@ -2,6 +2,7 @@
 
 import { EventCard, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 
@@ -15,11 +16,11 @@ const DEFAULT_TRACKS = [
     badge: "Conclave",
   },
   {
-    title: "Research & Papers",
+    title: "Multi Track Conference",
     date: "Submissions open",
-    venue: "Online + onsite",
-    description: "Abstract and full-length papers with peer-review process.",
-    href: "/abstract",
+    venue: "Microsoft CMT",
+    description: "Submit papers and abstracts via the official CMT portal.",
+    href: CMT_SUBMISSION_URL,
     badge: "Research",
   },
   {

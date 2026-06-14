@@ -54,7 +54,7 @@ const HOMEPAGE_SECTIONS = {
   featured_programs: {
     items: [
       { title: "Multi-Track Conclaves", description: "Holistic education, policy, and Bharatiya knowledge systems.", url: "/departments/academic-council", badge: "Conclave" },
-      { title: "Research & Papers", description: "Abstract and full-length papers with peer-review process.", url: "/abstract", badge: "Research" },
+      { title: "Multi Track Conference", description: "Submit papers and abstracts via Microsoft CMT.", url: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", badge: "Research" },
       { title: "Olympiads & Awards", description: "Student olympiads, best practices, and recognition awards.", url: "/registration", badge: "Students" },
     ],
   },
