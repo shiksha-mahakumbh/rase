@@ -10,7 +10,7 @@ import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
-import { sendPaymentConfirmation } from "@/server/services/email.service";
+import { sendRegistrationCompleteEmail } from "@/server/services/email.service";
 
 const PRISMA_TYPE_LABEL: Record<string, string> = {
   Conclave: "Conclave",
@@ -93,7 +93,8 @@ export async function getRegistrationByPublicId(publicId: string) {
 export async function regenerateReceipt(publicId: string, actorUserId?: string) {
   const reg = await getRegistrationByPublicId(publicId);
   const payload = buildReceiptPayloadFromRegistration(reg);
-  const pdf = generateReceiptPdfBuffer(payload);
+  const qrPng = await generateRegistrationQrBuffer(publicId);
+  const pdf = generateReceiptPdfBuffer(payload, qrPng);
   const now = new Date();
 
   await prisma.registration.update({
@@ -145,31 +146,27 @@ export async function resendPaymentEmail(publicId: string, actorUserId?: string)
   const reg = await getRegistrationByPublicId(publicId);
   const payload = buildReceiptPayloadFromRegistration(reg);
   const fee = payload.amount;
+  const isPaidOnline = fee > 0 && Boolean(reg.razorpayPaymentId);
 
-  if (fee <= 0 || !reg.razorpayPaymentId) {
-    throw new ServiceError(
-      "Receipt email requires a paid Razorpay registration",
-      400,
-      "NOT_PAID"
-    );
-  }
-
-  const receiptPdf = generateReceiptPdfBuffer(payload);
   const qrPng = await generateRegistrationQrBuffer(publicId);
+  const receiptPdf = generateReceiptPdfBuffer(payload, qrPng);
   const lookupToken = createRegistrationLookupToken(publicId, reg.email);
   const now = new Date();
 
-  const log = await sendPaymentConfirmation({
+  const log = await sendRegistrationCompleteEmail({
     registrationId: publicId,
     registrationUuid: reg.id,
     fullName: reg.fullName,
     email: reg.email,
-    transactionId: reg.razorpayPaymentId,
-    amountPaid: fee,
     category: payload.category,
-    receiptUrl: receiptDownloadUrl(publicId, lookupToken),
+    amountPaid: fee,
+    transactionId: reg.razorpayPaymentId ?? undefined,
+    receiptUrl: isPaidOnline
+      ? receiptDownloadUrl(publicId, lookupToken)
+      : undefined,
     receiptPdf,
     qrPng,
+    isPaid: isPaidOnline,
   });
 
   await prisma.registration.update({
@@ -191,7 +188,7 @@ export async function resendPaymentEmail(publicId: string, actorUserId?: string)
     payload: {
       registration_id: publicId,
       payment_id: reg.razorpayPaymentId,
-      template: "payment_confirmation",
+      template: "registration_complete",
       user_email: reg.email,
       email_log_id: log.id,
     },

@@ -6,6 +6,12 @@ import { sendWhatsAppMessage } from "@/server/services/ops/whatsapp.service";
 import { EVENT_NAME } from "@/types/registration";
 import { SITE_URL } from "@/config/site";
 
+/** Registration emails are sent only by sendRegistrationCompleteEmail() on submit */
+const REGISTRATION_EMAIL_TRIGGERS: WorkflowTrigger[] = [
+  "registration_complete",
+  "payment_complete",
+];
+
 function interpolate(template: string, vars: Record<string, string>) {
   return template.replace(/\{\{(\w+)\}\}/g, (_, key: string) => vars[key] ?? "");
 }
@@ -74,7 +80,11 @@ export async function triggerWorkflows(
     const body = interpolate(rule.templateBody ?? `<p>${rule.name}</p>`, vars);
     const html = body.includes("<") ? body : `<p>${body.replace(/\n/g, "<br/>")}</p>`;
 
-    if ((rule.channel === "email" || rule.channel === "both") && context.email) {
+    if (
+      (rule.channel === "email" || rule.channel === "both") &&
+      context.email &&
+      !REGISTRATION_EMAIL_TRIGGERS.includes(trigger)
+    ) {
       try {
         await queueEmail({
           toEmail: context.email,

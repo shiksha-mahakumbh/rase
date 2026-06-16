@@ -24,6 +24,7 @@ import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { RegistrationType } from "@/types/registration";
 import { resolvePaymentStatus } from "@/lib/registration/config";
+import { buildRazorpayOrderNotes } from "@/lib/razorpay/order-notes";
 import {
   accommodationFeeForBedType,
   projectFeeForStudentType,
@@ -75,6 +76,7 @@ export default function GenericRegistrationForm({
   const fullName = watch("fullName");
   const email = watch("email");
   const contactNumber = watch("contactNumber");
+  const institution = watch("institution");
 
   const fee = useMemo(() => {
     if (registrationType === "Projects") {
@@ -130,20 +132,27 @@ export default function GenericRegistrationForm({
   const watchShared = sharedWatch(watch);
 
   const orderNotes = useMemo(
-    () => ({
-      registrationType,
-      email: email?.trim() || "unknown",
-      category:
-        registrationType === "Projects"
-          ? projectStudentType ?? "School Student"
-          : registrationType === "Accommodation"
-            ? accommodationBedType ?? "Single Bed"
-            : registrationType,
-      amount: String(fee),
-    }),
+    () =>
+      buildRazorpayOrderNotes({
+        registrationType,
+        fullName: fullName?.trim(),
+        email: email?.trim(),
+        phone: contactNumber?.trim(),
+        institution: institution?.trim(),
+        category:
+          registrationType === "Projects"
+            ? projectStudentType ?? "School Student"
+            : registrationType === "Accommodation"
+              ? accommodationBedType ?? "Single Bed"
+              : registrationType,
+        amount: fee,
+      }),
     [
       registrationType,
+      fullName,
       email,
+      contactNumber,
+      institution,
       projectStudentType,
       accommodationBedType,
       fee,

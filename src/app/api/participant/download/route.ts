@@ -3,6 +3,7 @@ import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
 import { prisma } from "@/server/db/prisma";
 import { generateReceiptPdfBuffer } from "@/server/services/receipt.service";
+import { generateRegistrationQrBuffer } from "@/server/services/receipt.service";
 import { generateBadgePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { generateCertificatePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
@@ -58,21 +59,25 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    if (reg.paymentStatus !== "Paid") {
+    if (reg.paymentStatus !== "Paid" && reg.paymentStatus !== "Not_Required") {
       return NextResponse.json({ error: "Receipt not available" }, { status: 403 });
     }
 
-    const pdf = generateReceiptPdfBuffer({
-      registrationId: reg.registrationId,
-      fullName: reg.fullName,
-      email: reg.email,
-      institution: reg.institution,
-      contactNumber: reg.contactNumber,
-      category: displayRegistrationType(String(reg.registrationType)),
-      amount: Number(reg.registrationFee ?? 0),
-      paymentId: reg.razorpayPaymentId ?? reg.transactionId ?? undefined,
-      transactionDate: reg.updatedAt.toISOString(),
-    });
+    const qrPng = await generateRegistrationQrBuffer(reg.registrationId);
+    const pdf = generateReceiptPdfBuffer(
+      {
+        registrationId: reg.registrationId,
+        fullName: reg.fullName,
+        email: reg.email,
+        institution: reg.institution,
+        contactNumber: reg.contactNumber,
+        category: displayRegistrationType(String(reg.registrationType)),
+        amount: Number(reg.registrationFee ?? 0),
+        paymentId: reg.razorpayPaymentId ?? reg.transactionId ?? undefined,
+        transactionDate: reg.updatedAt.toISOString(),
+      },
+      qrPng
+    );
 
     return new NextResponse(pdf, {
       headers: {

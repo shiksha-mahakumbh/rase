@@ -6,6 +6,28 @@ import { ServiceError } from "@/server/lib/errors";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 
+function inferMimeType(fileName: string, reportedType: string): string {
+  const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
+  const byExt: Record<string, string> = {
+    pdf: "application/pdf",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    png: "image/png",
+    webp: "image/webp",
+    gif: "image/gif",
+    mp4: "video/mp4",
+    doc: "application/msword",
+    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    xls: "application/vnd.ms-excel",
+    xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    csv: "text/csv",
+  };
+  if (reportedType && reportedType !== "application/octet-stream" && MIME_ALLOWLIST.has(reportedType)) {
+    return reportedType;
+  }
+  return byExt[ext] ?? reportedType ?? "application/octet-stream";
+}
+
 const MIME_ALLOWLIST = new Set([
   "application/pdf",
   "image/jpeg",
@@ -15,6 +37,10 @@ const MIME_ALLOWLIST = new Set([
   "video/mp4",
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "text/csv",
+  "text/plain",
 ]);
 
 export type UploadBucket =
@@ -52,11 +78,14 @@ export function validateUploadFile(file: {
     throw new ServiceError("File exceeds 10 MB limit", 400, "FILE_TOO_LARGE");
   }
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-  const allowedExt = new Set(["pdf", "jpg", "jpeg", "png", "webp", "gif", "mp4", "doc", "docx"]);
+  const allowedExt = new Set([
+    "pdf", "jpg", "jpeg", "png", "webp", "gif", "mp4", "doc", "docx", "xls", "xlsx", "csv",
+  ]);
   if (!allowedExt.has(ext)) {
     throw new ServiceError("File type not allowed", 400, "FILE_TYPE_DENIED");
   }
-  if (file.type && !MIME_ALLOWLIST.has(file.type)) {
+  const resolvedType = inferMimeType(file.name, file.type);
+  if (!MIME_ALLOWLIST.has(resolvedType)) {
     throw new ServiceError("MIME type not allowed", 400, "MIME_DENIED");
   }
 }
@@ -78,7 +107,7 @@ export async function uploadFile(options: {
 }) {
   validateUploadFile({
     name: options.fileName,
-    type: options.contentType,
+    type: inferMimeType(options.fileName, options.contentType),
     size: options.file.length,
   });
   await virusScanHook(options.file, options.fileName);
@@ -86,12 +115,13 @@ export async function uploadFile(options: {
   const storageBucket = mapUploadBucket(options.bucket);
   const safeName = options.fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
   const storagePath = `${options.bucket}/${Date.now()}-${safeName}`;
+  const contentType = inferMimeType(options.fileName, options.contentType);
 
   const supabase = getSupabaseAdmin();
   const { error } = await supabase.storage
     .from(options.bucket)
     .upload(storagePath, options.file, {
-      contentType: options.contentType,
+      contentType,
       upsert: false,
     });
 

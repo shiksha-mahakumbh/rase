@@ -103,7 +103,17 @@ export async function fetchRegistrationByPublicId(
     }
   );
   if (res.status === 404) return null;
-  if (!res.ok) throw new Error("Failed to load registration");
+  if (!res.ok) {
+    let detail = `HTTP ${res.status}`;
+    try {
+      const errBody = await res.json();
+      if (typeof errBody.error === "string") detail = errBody.error;
+    } catch {
+      /* ignore */
+    }
+    console.error("ADMIN_VIEW_FAILED", { registrationId, detail, status: res.status });
+    throw new Error(`Failed to load registration: ${detail}`);
+  }
   const body = await res.json();
   return (body.registration ?? body) as Record<string, unknown>;
 }

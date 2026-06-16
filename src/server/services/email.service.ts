@@ -17,7 +17,50 @@ type EmailAttachment = {
   content: Buffer;
   contentType: string;
   cid?: string;
+  contentDisposition?: "attachment" | "inline";
 };
+
+function attachmentBufferOk(buf: Buffer | undefined, label: string, registrationId: string): buf is Buffer {
+  if (!buf || buf.length === 0) {
+    console.error("EMAIL_ATTACHMENT_MISSING", { registrationId, attachment: label });
+    return false;
+  }
+  console.info("EMAIL_ATTACHMENT_CREATED", {
+    registrationId,
+    attachment: label,
+    bytes: buf.length,
+  });
+  return true;
+}
+
+function buildEmailAttachments(options: {
+  registrationId: string;
+  receiptPdf?: Buffer;
+  qrPng?: Buffer;
+}): EmailAttachment[] {
+  const attachments: EmailAttachment[] = [];
+
+  if (attachmentBufferOk(options.receiptPdf, "receipt.pdf", options.registrationId)) {
+    attachments.push({
+      filename: `receipt-${options.registrationId}.pdf`,
+      content: options.receiptPdf,
+      contentType: "application/pdf",
+      contentDisposition: "attachment",
+    });
+  }
+
+  if (attachmentBufferOk(options.qrPng, "qr.png", options.registrationId)) {
+    attachments.push({
+      filename: `qr-${options.registrationId}.png`,
+      content: options.qrPng,
+      contentType: "image/png",
+      cid: "registration-qr",
+      contentDisposition: "inline",
+    });
+  }
+
+  return attachments;
+}
 
 type QueueItem = {
   toEmail: string;
@@ -196,17 +239,31 @@ async function deliverEmailLog(logId: string, item: QueueItem) {
         data: { status: "sending", retryCount: attempt - 1 },
       });
 
+      const mailAttachments = item.attachments?.map((a) => ({
+        filename: a.filename,
+        content: a.content,
+        contentType: a.contentType,
+        cid: a.cid,
+        contentDisposition: a.contentDisposition ?? (a.cid ? "inline" : "attachment"),
+      }));
+
+      if (mailAttachments?.length) {
+        console.info("EMAIL_ATTACHMENT_SENT", {
+          registrationId: item.publicRegistrationId ?? null,
+          recipient: item.toEmail,
+          attachments: mailAttachments.map((a) => ({
+            filename: a.filename,
+            bytes: Buffer.isBuffer(a.content) ? a.content.length : 0,
+          })),
+        });
+      }
+
       const info = await transporter.sendMail({
         from,
         to: item.toEmail,
         subject: item.subject,
         html: item.html,
-        attachments: item.attachments?.map((a) => ({
-          filename: a.filename,
-          content: a.content,
-          contentType: a.contentType,
-          cid: a.cid,
-        })),
+        attachments: mailAttachments,
       });
 
       await prisma.emailLog.update({
@@ -312,19 +369,12 @@ async function deliverEmailLog(logId: string, item: QueueItem) {
 export async function queueEmail(item: QueueItem) {
   const { host } = getSmtpConfig();
 
-  if (
-    item.registrationUuid &&
-    (item.template === "registration_complete" ||
-      item.template === "registration_confirmation" ||
-      item.template === "payment_confirmation")
-  ) {
+  if (item.registrationUuid && item.template === "registration_complete") {
     const recent = await prisma.emailLog.findFirst({
       where: {
         registrationId: item.registrationUuid,
-        template: {
-          in: ["registration_complete", "registration_confirmation", "payment_confirmation"],
-        },
-        status: { in: ["queued", "sending", "sent"] },
+        template: "registration_complete",
+        status: "sent",
         createdAt: { gte: new Date(Date.now() - 5 * 60 * 1000) },
       },
       orderBy: { createdAt: "desc" },
@@ -334,6 +384,7 @@ export async function queueEmail(item: QueueItem) {
         registrationUuid: item.registrationUuid,
         existingLogId: recent.id,
         template: item.template,
+        reason: "recent_sent",
       });
       return recent;
     }
@@ -379,33 +430,22 @@ export async function sendRegistrationCompleteEmail(options: {
   qrPng?: Buffer;
   isPaid: boolean;
 }) {
-  const attachments: EmailAttachment[] = [];
+  const attachments = buildEmailAttachments({
+    registrationId: options.registrationId,
+    receiptPdf: options.receiptPdf,
+    qrPng: options.qrPng,
+  });
 
-  if (options.receiptPdf) {
-    attachments.push({
-      filename: `receipt-${options.registrationId}.pdf`,
-      content: options.receiptPdf,
-      contentType: "application/pdf",
-    });
-    console.info("EMAIL_RECEIPT_ATTACHED", {
+  if (attachments.length < 2) {
+    console.error("EMAIL_ATTACHMENT_MISSING", {
       registrationId: options.registrationId,
       recipient: options.email,
-      template: "registration_complete",
+      present: attachments.map((a) => a.filename),
+      expected: ["receipt.pdf", "qr.png"],
     });
-  }
-
-  if (options.qrPng) {
-    attachments.push({
-      filename: `qr-${options.registrationId}.png`,
-      content: options.qrPng,
-      contentType: "image/png",
-      cid: "registration-qr",
-    });
-    console.info("EMAIL_QR_ATTACHED", {
-      registrationId: options.registrationId,
-      recipient: options.email,
-      template: "registration_complete",
-    });
+    throw new Error(
+      `Registration email missing required attachments for ${options.registrationId}`
+    );
   }
 
   const subject = options.isPaid
@@ -422,13 +462,13 @@ export async function sendRegistrationCompleteEmail(options: {
       amountPaid: `₹${options.amountPaid.toLocaleString("en-IN")}`,
       category: options.category,
       receiptUrl: options.receiptUrl ?? "",
-      hasQr: options.qrPng ? "1" : "",
+      hasQr: options.qrPng && options.qrPng.length > 0 ? "1" : "",
       isPaid: options.isPaid ? "1" : "",
     }),
     template: "registration_complete",
     publicRegistrationId: options.registrationId,
     registrationUuid: options.registrationUuid ?? null,
-    attachments: attachments.length > 0 ? attachments : undefined,
+    attachments,
   });
 }
 
@@ -440,50 +480,12 @@ export async function sendRegistrationConfirmation(options: {
   receiptPdf?: Buffer;
   qrPng?: Buffer;
 }) {
-  const attachments: EmailAttachment[] = [];
-
-  if (options.receiptPdf) {
-    attachments.push({
-      filename: `receipt-${options.registrationId}.pdf`,
-      content: options.receiptPdf,
-      contentType: "application/pdf",
-    });
-    console.info("EMAIL_RECEIPT_ATTACHED", {
-      registrationId: options.registrationId,
-      recipient: options.email,
-      template: "registration_confirmation",
-    });
-  }
-
-  if (options.qrPng) {
-    attachments.push({
-      filename: `qr-${options.registrationId}.png`,
-      content: options.qrPng,
-      contentType: "image/png",
-      cid: "registration-qr",
-    });
-    console.info("EMAIL_QR_ATTACHED", {
-      registrationId: options.registrationId,
-      recipient: options.email,
-      template: "registration_confirmation",
-    });
-  }
-
-  return queueEmail({
-    toEmail: options.email,
-    subject: `${EVENT_NAME} — Registration Confirmed`,
-    html: buildHtml("registration_confirmation", {
-      fullName: options.fullName,
-      registrationId: options.registrationId,
-    }),
-    template: "registration_confirmation",
-    publicRegistrationId: options.registrationId,
-    registrationUuid: options.registrationUuid ?? null,
-    attachments: attachments.length > 0 ? attachments : undefined,
-  });
+  throw new Error(
+    "sendRegistrationConfirmation is disabled. Use sendRegistrationCompleteEmail() instead."
+  );
 }
 
-export async function sendPaymentConfirmation(options: {
+export async function sendPaymentConfirmation(_options: {
   registrationId: string;
   registrationUuid?: string | null;
   fullName: string;
@@ -495,52 +497,9 @@ export async function sendPaymentConfirmation(options: {
   receiptPdf?: Buffer;
   qrPng?: Buffer;
 }) {
-  const attachments: EmailAttachment[] = [];
-
-  if (options.receiptPdf) {
-    attachments.push({
-      filename: `receipt-${options.registrationId}.pdf`,
-      content: options.receiptPdf,
-      contentType: "application/pdf",
-    });
-    console.info("EMAIL_RECEIPT_ATTACHED", {
-      registrationId: options.registrationId,
-      recipient: options.email,
-      template: "payment_confirmation",
-    });
-  }
-
-  if (options.qrPng) {
-    attachments.push({
-      filename: `qr-${options.registrationId}.png`,
-      content: options.qrPng,
-      contentType: "image/png",
-      cid: "registration-qr",
-    });
-    console.info("EMAIL_QR_ATTACHED", {
-      registrationId: options.registrationId,
-      recipient: options.email,
-      template: "payment_confirmation",
-    });
-  }
-
-  return queueEmail({
-    toEmail: options.email,
-    subject: `Payment Confirmation — ${EVENT_NAME}`,
-    html: buildHtml("payment_confirmation", {
-      fullName: options.fullName,
-      registrationId: options.registrationId,
-      transactionId: options.transactionId ?? "",
-      amountPaid: `₹${options.amountPaid.toLocaleString("en-IN")}`,
-      category: options.category,
-      receiptUrl: options.receiptUrl ?? "",
-      hasQr: options.qrPng ? "1" : "",
-    }),
-    template: "payment_confirmation",
-    publicRegistrationId: options.registrationId,
-    registrationUuid: options.registrationUuid ?? null,
-    attachments,
-  });
+  throw new Error(
+    "sendPaymentConfirmation is disabled. Use sendRegistrationCompleteEmail() instead."
+  );
 }
 
 export async function sendContactAcknowledgement(options: {

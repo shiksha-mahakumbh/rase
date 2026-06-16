@@ -261,10 +261,13 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
   };
 }
 
-/** Admin-only — full registration row. */
-export async function getRegistrationByPublicId(registrationId: string) {
+/** Admin-only — full registration row (public ID or UUID). */
+export async function getRegistrationForAdminView(idOrPublicId: string) {
+  const isPublicId = /^SMK/.test(idOrPublicId);
   const row = await prisma.registration.findFirst({
-    where: { registrationId, deletedAt: null },
+    where: isPublicId
+      ? { registrationId: idOrPublicId, deletedAt: null }
+      : { id: idOrPublicId, deletedAt: null },
     include: {
       conclaveRegistration: true,
       delegateRegistration: true,
@@ -279,11 +282,34 @@ export async function getRegistrationByPublicId(registrationId: string) {
       accommodationRequest: true,
       uploadedFiles: { where: { isCurrent: true, deletedAt: null } },
       paymentRecords: { where: { deletedAt: null }, orderBy: { createdAt: "desc" }, take: 1 },
+      emailLogs: { orderBy: { createdAt: "desc" }, take: 20 },
     },
   });
 
   if (!row) return null;
-  return row;
+  return serializeRegistrationForAdmin(row);
+}
+
+function serializeRegistrationForAdmin(row: object) {
+  return JSON.parse(
+    JSON.stringify(row, (_key, value) => {
+      if (value instanceof Date) return value.toISOString();
+      if (
+        value != null &&
+        typeof value === "object" &&
+        "toNumber" in value &&
+        typeof (value as { toNumber: () => number }).toNumber === "function"
+      ) {
+        return (value as { toNumber: () => number }).toNumber();
+      }
+      return value;
+    })
+  ) as Record<string, unknown>;
+}
+
+/** Admin-only — full registration row by public ID. */
+export async function getRegistrationByPublicId(registrationId: string) {
+  return getRegistrationForAdminView(registrationId);
 }
 
 /** Public lookup — requires verified email; returns summary fields only. */

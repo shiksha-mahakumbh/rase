@@ -1,30 +1,15 @@
 import { NextRequest } from "next/server";
-import { createApiHandler, assertBody } from "@/server/lib/api-handler";
-import { sendRegistrationConfirmation } from "@/server/services/email.service";
+import { createApiHandler } from "@/server/lib/api-handler";
 import { ServiceError } from "@/server/lib/errors";
 
+/** Disabled — registration emails are sent only via submit → sendRegistrationCompleteEmail() */
 export const POST = createApiHandler(
-  async (request: NextRequest) => {
-    const body = assertBody<{
-      registrationId?: string;
-      registrationUuid?: string;
-      masterDocId?: string;
-      fullName?: string;
-      email?: string;
-    }>(await request.json());
-
-    if (!body.registrationId || !body.fullName || !body.email) {
-      throw new ServiceError("Missing required fields", 400);
-    }
-
-    const log = await sendRegistrationConfirmation({
-      registrationId: body.registrationId,
-      registrationUuid: body.registrationUuid ?? body.masterDocId ?? null,
-      fullName: body.fullName,
-      email: body.email,
-    });
-
-    return { success: true, emailStatus: log?.status ?? "queued" };
+  async (_request: NextRequest) => {
+    throw new ServiceError(
+      "This endpoint is disabled. Registration emails are sent automatically on submit.",
+      410,
+      "EMAIL_PATH_DISABLED"
+    );
   },
   { rateLimitKey: "v2-registration-email", limit: 10 }
 );
