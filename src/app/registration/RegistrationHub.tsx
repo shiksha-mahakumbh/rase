@@ -23,6 +23,7 @@ import {
   usesMultiStepPaymentFlow,
 } from "@/lib/registration/config";
 import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
+import { loadRazorpayCheckoutScript } from "@/lib/razorpay/load-checkout-script";
 
 const MemoDelegateForm = memo(DelegateForm);
 const MemoConclaveForm = memo(ConclaveForm);
@@ -44,8 +45,10 @@ function RegistrationFormRouter({
 }) {
   const visibilityClass = showPaymentStep
     ? step === 2
-      ? "[&_.registration-payment]:hidden"
-      : "[&_.registration-details]:hidden"
+      ? "[&_.registration-payment]:hidden [&_button[type=submit]]:hidden"
+      : step === 3
+        ? "[&_.registration-details]:hidden"
+        : "[&_.registration-details]:hidden [&_.registration-payment]:hidden"
     : "";
 
   const form = useMemo(() => {
@@ -180,6 +183,16 @@ function RegistrationHubInner() {
       setStep(2);
     }
   }, [showPaymentStep, step]);
+
+  useEffect(() => {
+    if (!showPaymentStep) return;
+    void loadRazorpayCheckoutScript().catch((err) => {
+      console.error("RAZORPAY_SCRIPT_LOAD_FAILED", {
+        phase: "hub_preload",
+        error: err instanceof Error ? err.message : String(err),
+      });
+    });
+  }, [showPaymentStep]);
 
   const goToPayment = useCallback(async () => {
     const ok = (await flow?.requestPaymentStep()) ?? true;

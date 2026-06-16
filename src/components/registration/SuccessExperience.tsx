@@ -5,16 +5,17 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import QRCode from "qrcode";
-import { formatFirestoreDate } from "@/lib/saveRegistration";
 import { EVENT_NAME } from "@/types/registration";
 import { event } from "@/design/tokens";
 import { ROUTES } from "@/constants/routes";
 import { CtaButton } from "@/components/ui";
 import RegistrationReceipt, {
   type ReceiptData,
+  buildReceiptData as buildReceiptDataShared,
   downloadRegistrationReceiptPdf,
   printRegistrationReceipt,
 } from "@/components/registration/RegistrationReceipt";
+import { serializeQrPayload } from "@/lib/receipt/qr-payload";
 
 function buildReceiptData(
   record: Record<string, unknown>,
@@ -24,10 +25,8 @@ function buildReceiptData(
   const fee = Number(record.registrationFee ?? payment?.registrationFee ?? 0);
   const hasRazorpay = Boolean(payment?.razorpayPaymentId ?? record.razorpayPaymentId);
 
-  return {
-    receiptNumber: registrationId.replace(/^SMK/, "RCP"),
+  return buildReceiptDataShared({
     registrationId,
-    date: formatFirestoreDate(record.createdAt),
     fullName: String(record.fullName ?? "—"),
     category: String(
       record.delegateCategory ??
@@ -41,18 +40,11 @@ function buildReceiptData(
     email: String(record.email ?? "—"),
     contactNumber: String(record.contactNumber ?? "—"),
     amount: fee,
-    paymentId: String(payment?.razorpayPaymentId ?? record.razorpayPaymentId ?? "—"),
-    orderId: String(payment?.razorpayOrderId ?? record.razorpayOrderId ?? "—"),
-    paymentMode: hasRazorpay
-      ? "Online (Razorpay)"
-      : payment?.utrNumber || record.utrNumber
-        ? "NEFT / RTGS / UTR"
-        : fee > 0
-          ? "Manual receipt"
-          : "Not applicable",
-    transactionDate: formatFirestoreDate(record.updatedAt ?? record.createdAt),
+    paymentId: String(payment?.razorpayPaymentId ?? record.razorpayPaymentId ?? "") || undefined,
+    orderId: String(payment?.razorpayOrderId ?? record.razorpayOrderId ?? "") || undefined,
     panNumber: String(payment?.panNumber ?? record.panNumber ?? "") || undefined,
-  };
+    transactionDate: String(record.updatedAt ?? record.createdAt ?? ""),
+  });
 }
 
 function SuccessInner() {
@@ -90,11 +82,25 @@ function SuccessInner() {
   }, [registrationId, lookupToken]);
 
   useEffect(() => {
-    if (!registrationId) return;
-    QRCode.toDataURL(registrationId, { width: 200, margin: 2 })
+    if (!registrationId || !record) return;
+    const payload = serializeQrPayload({
+      registrationId,
+      fullName: String(record.fullName ?? ""),
+      registrationType: String(record.registrationType ?? ""),
+      category: String(
+        record.delegateCategory ??
+          record.category ??
+          record.projectStudentType ??
+          record.accommodationBedType ??
+          ""
+      ),
+      institution: String(record.institution ?? ""),
+      email: String(record.email ?? ""),
+    });
+    QRCode.toDataURL(payload, { width: 200, margin: 2 })
       .then(setQrDataUrl)
       .catch(() => setQrDataUrl(null));
-  }, [registrationId]);
+  }, [registrationId, record]);
 
   const receiptData = useMemo(() => {
     if (!record || !registrationId) return null;
@@ -125,7 +131,7 @@ function SuccessInner() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 md:py-14">
       {receiptData ? (
-        <div className="fixed -left-[9999px] top-0 print:static print:left-auto">
+        <div id="registration-receipt-root" className="sr-only print:not-sr-only print:fixed print:inset-0 print:z-[9999] print:bg-white">
           <RegistrationReceipt data={receiptData} />
         </div>
       ) : null}
