@@ -250,7 +250,9 @@ function RegistrationHubInner() {
                 type="button"
                 className="font-semibold text-brand-saffron underline"
                 onClick={() => {
+                  clearDraft(registrationType);
                   clearRegistrationMeta();
+                  setRegistrationType("Delegate Registration");
                   setStep(1);
                   flow?.setCurrentFee(0);
                 }}
