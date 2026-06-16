@@ -54,8 +54,10 @@ function DashboardContent() {
       setPage(pageIndex);
       setHasMore(result.hasMore);
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to load registrations");
+      const message =
+        error instanceof Error ? error.message : "Failed to load registrations";
+      console.error("ADMIN_FETCH_FAILED", { context: "loadRegistrations", message, error });
+      toast.error(message.startsWith("Failed to load registrations") ? message : `Failed to load registrations: ${message}`);
     } finally {
       setFetching(false);
       setLoadingMore(false);
@@ -66,8 +68,10 @@ function DashboardContent() {
     try {
       return await fetchAllRegistrations();
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to load full export data");
+      const message =
+        error instanceof Error ? error.message : "Failed to load full export data";
+      console.error("ADMIN_FETCH_FAILED", { context: "loadAllForExport", message, error });
+      toast.error(message.startsWith("Failed to load") ? message : `Failed to load full export data: ${message}`);
       return registrations;
     }
   };

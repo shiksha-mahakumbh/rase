@@ -67,23 +67,6 @@ async function uploadRegistrationFile(
   return body.file as UploadedFileMeta;
 }
 
-/** Fire-and-forget — never block success navigation */
-function queueConfirmationEmail(payload: {
-  registrationId: string;
-  registrationType: RegistrationType;
-  fullName: string;
-  email: string;
-  masterDocId?: string;
-}) {
-  void fetch("/api/registration/send-email", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  }).catch(() => {
-    /* submit route already queues email; this is a client fallback */
-  });
-}
-
 export function useRegistrationSubmit() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -191,14 +174,6 @@ export function useRegistrationSubmit() {
       if (result.duplicate) {
         toast.success("Registration already completed for this payment.");
       }
-
-      queueConfirmationEmail({
-        registrationId: result.registrationId,
-        registrationType,
-        fullName: String(data.fullName),
-        email: String(data.email),
-        masterDocId: result.masterDocId,
-      });
 
       trackEvent(ANALYTICS_EVENTS.registrationCompleted, {
         registrationType,

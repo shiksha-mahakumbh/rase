@@ -103,7 +103,11 @@ export async function POST(request: NextRequest) {
     data.contactNumber = contact;
 
     const payment = data.payment as Record<string, unknown> | undefined;
-    const fee = Number(data.registrationFee ?? payment?.registrationFee ?? 0);
+    const rawFee = Number(data.registrationFee ?? payment?.registrationFee ?? 0);
+    const fee = type === "Olympiad" ? 0 : rawFee;
+    if (type === "Olympiad") {
+      data.registrationFee = 0;
+    }
     const expectedFee = resolveRegistrationFee(type as RegistrationType, {
       delegateCategory: String(data.delegateCategory ?? ""),
       projectStudentType:

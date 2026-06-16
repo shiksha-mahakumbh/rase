@@ -21,7 +21,6 @@ import {
 import { formClasses } from "@/app/component/ui/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { resolvePaymentStatus } from "@/lib/registration/config";
-import { OLYMPIAD_FEE_PER_STUDENT } from "@/types/registration";
 import {
   parseStudentListFile,
   validateStudentListFile,
@@ -55,13 +54,11 @@ export default function OlympiadForm() {
   const watchShared = sharedWatch(watch);
 
   const studentCount = watch("studentCount");
-  const registrationFee = watch("registrationFee");
 
   const handleStudentFile = async (file: File | null) => {
     setStudentFile(file);
     setParsedStudents([]);
     setValue("studentCount", 0);
-    setValue("registrationFee", 0);
 
     if (!file) return;
 
@@ -75,7 +72,6 @@ export default function OlympiadForm() {
       const { students, count } = await parseStudentListFile(file);
       setParsedStudents(students);
       setValue("studentCount", count);
-      setValue("registrationFee", count * OLYMPIAD_FEE_PER_STUDENT);
       toast.success(`Parsed ${count} students`);
     } catch (error) {
       toast.error(
@@ -96,6 +92,8 @@ export default function OlympiadForm() {
         ...data,
         category: data.olympiadType,
         parsedStudents,
+        registrationFee: 0,
+        studentCount: parsedStudents.length,
       },
       files: { studentList: studentFile },
       paymentStatus: resolvePaymentStatus("Olympiad"),
