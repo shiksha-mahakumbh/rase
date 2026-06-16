@@ -121,11 +121,14 @@ export async function recordVerifiedPayment(input: RecordVerifiedPaymentInput) {
   });
 
   paymentLog("verified_payment_saved", {
+    event: "PAYMENT_VERIFIED",
     order_id: input.razorpayOrderId,
     payment_id: input.razorpayPaymentId,
     amount_paise: amountPaise,
     remote_status: remoteStatus,
     verified_payment_id: row.id,
+    user_email: (input.metadata as Record<string, unknown>)?.email ?? null,
+    category: (input.metadata as Record<string, unknown>)?.registrationType ?? null,
   });
 
   return {

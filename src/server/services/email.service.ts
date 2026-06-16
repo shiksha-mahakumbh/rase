@@ -328,7 +328,38 @@ export async function sendRegistrationConfirmation(options: {
   registrationUuid?: string | null;
   fullName: string;
   email: string;
+  receiptPdf?: Buffer;
+  qrPng?: Buffer;
 }) {
+  const attachments: EmailAttachment[] = [];
+
+  if (options.receiptPdf) {
+    attachments.push({
+      filename: `receipt-${options.registrationId}.pdf`,
+      content: options.receiptPdf,
+      contentType: "application/pdf",
+    });
+    console.info("EMAIL_RECEIPT_ATTACHED", {
+      registrationId: options.registrationId,
+      recipient: options.email,
+      template: "registration_confirmation",
+    });
+  }
+
+  if (options.qrPng) {
+    attachments.push({
+      filename: `qr-${options.registrationId}.png`,
+      content: options.qrPng,
+      contentType: "image/png",
+      cid: "registration-qr",
+    });
+    console.info("EMAIL_QR_ATTACHED", {
+      registrationId: options.registrationId,
+      recipient: options.email,
+      template: "registration_confirmation",
+    });
+  }
+
   return queueEmail({
     toEmail: options.email,
     subject: `${EVENT_NAME} — Registration Confirmed`,
@@ -339,6 +370,7 @@ export async function sendRegistrationConfirmation(options: {
     template: "registration_confirmation",
     publicRegistrationId: options.registrationId,
     registrationUuid: options.registrationUuid ?? null,
+    attachments: attachments.length > 0 ? attachments : undefined,
   });
 }
 
@@ -362,6 +394,11 @@ export async function sendPaymentConfirmation(options: {
       content: options.receiptPdf,
       contentType: "application/pdf",
     });
+    console.info("EMAIL_RECEIPT_ATTACHED", {
+      registrationId: options.registrationId,
+      recipient: options.email,
+      template: "payment_confirmation",
+    });
   }
 
   if (options.qrPng) {
@@ -371,11 +408,16 @@ export async function sendPaymentConfirmation(options: {
       contentType: "image/png",
       cid: "registration-qr",
     });
+    console.info("EMAIL_QR_ATTACHED", {
+      registrationId: options.registrationId,
+      recipient: options.email,
+      template: "payment_confirmation",
+    });
   }
 
   return queueEmail({
     toEmail: options.email,
-    subject: `${EVENT_NAME} — Payment Confirmed`,
+    subject: `Payment Confirmation — ${EVENT_NAME}`,
     html: buildHtml("payment_confirmation", {
       fullName: options.fullName,
       registrationId: options.registrationId,

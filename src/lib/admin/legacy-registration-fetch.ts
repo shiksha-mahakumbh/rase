@@ -14,7 +14,14 @@ export async function fetchGatewayRegistrations(
   });
 
   if (!res.ok) {
-    throw new Error("Failed to load registrations");
+    let detail = `HTTP ${res.status}`;
+    try {
+      const errBody = await res.json();
+      if (typeof errBody.error === "string") detail = errBody.error;
+    } catch {
+      /* ignore */
+    }
+    throw new Error(`Failed to load registrations: ${detail}`);
   }
 
   const body = await res.json();
