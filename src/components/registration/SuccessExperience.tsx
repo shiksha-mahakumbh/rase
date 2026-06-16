@@ -109,11 +109,12 @@ function SuccessInner() {
 
   const handleDownloadReceipt = () => {
     if (!receiptData) return;
-    void downloadRegistrationReceiptPdf(receiptData);
+    void downloadRegistrationReceiptPdf(receiptData, qrDataUrl);
   };
 
   const handlePrintReceipt = () => {
-    printRegistrationReceipt();
+    if (!receiptData) return;
+    printRegistrationReceipt(receiptData, qrDataUrl);
   };
 
   if (loading) {
@@ -131,9 +132,7 @@ function SuccessInner() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 md:py-14">
       {receiptData ? (
-        <div id="registration-receipt-root" className="sr-only print:not-sr-only print:fixed print:inset-0 print:z-[9999] print:bg-white">
-          <RegistrationReceipt data={receiptData} />
-        </div>
+        <RegistrationReceipt data={receiptData} qrDataUrl={qrDataUrl} visible />
       ) : null}
 
       <div className="overflow-hidden rounded-3xl border border-brand-emerald/30 bg-white shadow-xl print:hidden">

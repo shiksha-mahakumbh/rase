@@ -148,7 +148,7 @@ export default function RegistrationTable({
                 </span>
               </label>
               <Link
-                href={`/admin/registrations/${row.id}`}
+                href={`/admin/registrations/${row.registrationId}`}
                 className="text-sm font-semibold text-primary"
               >
                 View
@@ -238,7 +238,7 @@ export default function RegistrationTable({
                 </td>
                 <td className="px-4 py-3">
                   <Link
-                    href={`/admin/registrations/${row.id}`}
+                    href={`/admin/registrations/${row.registrationId}`}
                     className="font-semibold text-primary hover:underline"
                   >
                     View

@@ -24,6 +24,7 @@ import { formClasses } from "@/app/component/ui/formClasses";
 import { DELEGATE_FEES } from "@/types/registration";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { resolvePaymentStatus } from "@/lib/registration/config";
+import { buildRazorpayOrderNotes } from "@/lib/razorpay/order-notes";
 import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 import { useRegisterPaymentGate } from "@/hooks/useRegisterPaymentGate";
 import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
@@ -62,6 +63,7 @@ export default function DelegateForm() {
   const fullName = watch("fullName");
   const email = watch("email");
   const contactNumber = watch("contactNumber");
+  const institution = watch("institution");
   const fee = useMemo(
     () => (category ? DELEGATE_FEES[category] ?? 0 : 0),
     [category]
@@ -162,12 +164,15 @@ export default function DelegateForm() {
             customerName={fullName}
             customerEmail={email}
             customerPhone={contactNumber}
-            orderNotes={{
+            orderNotes={buildRazorpayOrderNotes({
               registrationType: "Delegate Registration",
-              email: email?.trim() || "unknown",
+              fullName: fullName?.trim(),
+              email: email?.trim(),
+              phone: contactNumber?.trim(),
+              institution: institution?.trim(),
               category: category ?? "General",
-              amount: String(fee),
-            }}
+              amount: fee,
+            })}
             onPaymentVerified={(p) => {
               setPaymentVerified(true);
               setValue("transactionId", p.razorpay_payment_id);

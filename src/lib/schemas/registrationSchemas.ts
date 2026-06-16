@@ -210,7 +210,7 @@ export const olympiadSchema = commonParticipantSchema
     coordinatorName: z.string().min(2, "Coordinator name is required"),
     coordinatorContact: phoneSchema,
     coordinatorEmail: z.string().email("Valid coordinator email is required"),
-    studentCount: z.number().min(1, "Upload a valid student list"),
+    studentCount: z.number().min(0),
     registrationFee: z.number().min(0),
     utrNumber: z.string().optional(),
   });

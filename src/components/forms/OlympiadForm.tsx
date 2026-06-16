@@ -86,6 +86,9 @@ export default function OlympiadForm() {
       return;
     }
 
+    setValue("studentCount", parsedStudents.length);
+    setValue("registrationFee", 0);
+
     await submitRegistration({
       registrationType: "Olympiad",
       data: {
@@ -101,7 +104,19 @@ export default function OlympiadForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!studentFile || !parsedStudents.length) {
+          toast.error("Please upload a valid student list");
+          return;
+        }
+        setValue("studentCount", parsedStudents.length, { shouldValidate: true });
+        setValue("registrationFee", 0);
+        void handleSubmit(onSubmit)(e);
+      }}
+      className="space-y-6"
+    >
       <CommonParticipantFields register={reg} errors={errs} />
 
       <FormSection title="Olympiad Registration">

@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
-import { sendRegistrationConfirmation, mapDeliveryStatus } from "@/server/services/email.service";
+import {
+  sendRegistrationCompleteEmail,
+  mapDeliveryStatus,
+} from "@/server/services/email.service";
 import { prisma } from "@/server/db/prisma";
+import {
+  generateReceiptPdfBuffer,
+  generateRegistrationQrBuffer,
+  receiptDownloadUrl,
+} from "@/server/services/receipt.service";
+import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REG_ID_RE = /^SMK2026-\d{6}$/;
@@ -60,21 +69,67 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const log = await sendRegistrationConfirmation({
-      registrationId,
-      registrationUuid: registrationUuid ?? null,
-      fullName: String(fullName),
-      email: String(email),
+    const reg = await prisma.registration.findFirst({
+      where: registrationUuid
+        ? { id: String(registrationUuid), deletedAt: null }
+        : { registrationId, deletedAt: null },
     });
 
-    if (registrationUuid) {
-      await prisma.registration.update({
-        where: { id: registrationUuid },
-        data: {
-          emailDeliveryStatus: mapDeliveryStatus(log.status),
-        },
-      });
+    if (!reg) {
+      return NextResponse.json({ error: "Registration not found" }, { status: 404 });
     }
+
+    const fee = reg.registrationFee != null ? Number(reg.registrationFee) : 0;
+    const categoryLabel = String(reg.registrationType);
+    const lookupToken = createRegistrationLookupToken(reg.registrationId, reg.email);
+    const isPaidOnline = fee > 0 && Boolean(reg.razorpayPaymentId);
+
+    const qrPng = await generateRegistrationQrBuffer({
+      registrationId: reg.registrationId,
+      fullName: reg.fullName,
+      registrationType: String(reg.registrationType),
+      category: categoryLabel,
+      institution: reg.institution ?? "N/A",
+      email: reg.email,
+    });
+
+    const receiptPdf = generateReceiptPdfBuffer(
+      {
+        registrationId: reg.registrationId,
+        fullName: reg.fullName,
+        category: categoryLabel,
+        institution: reg.institution ?? "N/A",
+        email: reg.email,
+        contactNumber: reg.contactNumber,
+        amount: fee,
+        paymentId: reg.razorpayPaymentId ?? undefined,
+        orderId: reg.razorpayOrderId ?? undefined,
+      },
+      qrPng
+    );
+
+    const log = await sendRegistrationCompleteEmail({
+      registrationId: reg.registrationId,
+      registrationUuid: reg.id,
+      fullName: reg.fullName,
+      email: reg.email,
+      category: categoryLabel,
+      amountPaid: fee,
+      transactionId: reg.razorpayPaymentId ?? undefined,
+      receiptUrl: isPaidOnline
+        ? receiptDownloadUrl(reg.registrationId, lookupToken)
+        : undefined,
+      receiptPdf,
+      qrPng,
+      isPaid: isPaidOnline,
+    });
+
+    await prisma.registration.update({
+      where: { id: reg.id },
+      data: {
+        emailDeliveryStatus: mapDeliveryStatus(log.status),
+      },
+    });
 
     return NextResponse.json({
       success: log.status === "sent",
@@ -85,7 +140,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Email send error:", error);
     return NextResponse.json(
-      { success: false, emailStatus: "failed", error: "Failed to queue email" },
+      {
+        success: false,
+        emailStatus: "failed",
+        error: error instanceof Error ? error.message : "Failed to queue email",
+      },
       { status: 500 }
     );
   }

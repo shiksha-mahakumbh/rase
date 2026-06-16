@@ -53,8 +53,11 @@ export async function generateRegistrationQrDataUrl(
   return `data:image/png;base64,${buffer.toString("base64")}`;
 }
 
-export function generateReceiptPdfBuffer(data: ReceiptPayload): Buffer {
-  return generateReceiptPdfBufferShared(data);
+export function generateReceiptPdfBuffer(
+  data: ReceiptPayload,
+  qrPng?: Buffer | null
+): Buffer {
+  return generateReceiptPdfBufferShared(data, qrPng);
 }
 
 export function receiptDownloadUrl(registrationId: string, token?: string) {
