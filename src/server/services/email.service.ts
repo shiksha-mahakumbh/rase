@@ -6,6 +6,7 @@ import { EVENT_NAME } from "@/types/registration";
 
 export type EmailTemplate =
   | "registration_confirmation"
+  | "registration_complete"
   | "payment_confirmation"
   | "admin_alert"
   | "contact_acknowledgement"
@@ -86,6 +87,21 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
   switch (template) {
     case "registration_confirmation":
       return `<p>Dear ${data.fullName},</p><p>Your registration for ${EVENT_NAME} is confirmed.</p><p>Registration ID: <strong>${data.registrationId}</strong></p>`;
+    case "registration_complete":
+      return `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b">
+        <p>Dear ${data.fullName},</p>
+        <p>Your registration for <strong>${EVENT_NAME}</strong> is confirmed.</p>
+        <table style="border-collapse:collapse;margin:16px 0;width:100%;max-width:480px">
+          <tr><td style="padding:6px 0;font-weight:600">Registration ID</td><td>${data.registrationId}</td></tr>
+          ${data.isPaid === "1" ? `<tr><td style="padding:6px 0;font-weight:600">Payment ID</td><td>${data.transactionId ?? "—"}</td></tr>
+          <tr><td style="padding:6px 0;font-weight:600">Amount Paid</td><td>${data.amountPaid ?? "—"}</td></tr>
+          <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>` : ""}
+        </table>
+        ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">Download receipt online</a></p>` : ""}
+        ${data.hasQr ? `<p style="margin-top:16px">Your entry QR code is attached and shown below:</p><img src="cid:registration-qr" alt="Registration QR Code" width="200" height="200" />` : ""}
+        <p style="margin-top:16px">Your receipt PDF is attached. Please bring your QR code to the event venue for check-in.</p>
+        <p>Regards,<br/>${EVENT_NAME} Team</p>
+      </div>`;
     case "payment_confirmation":
       return `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b">
         <p>Dear ${data.fullName},</p>
@@ -296,6 +312,33 @@ async function deliverEmailLog(logId: string, item: QueueItem) {
 export async function queueEmail(item: QueueItem) {
   const { host } = getSmtpConfig();
 
+  if (
+    item.registrationUuid &&
+    (item.template === "registration_complete" ||
+      item.template === "registration_confirmation" ||
+      item.template === "payment_confirmation")
+  ) {
+    const recent = await prisma.emailLog.findFirst({
+      where: {
+        registrationId: item.registrationUuid,
+        template: {
+          in: ["registration_complete", "registration_confirmation", "payment_confirmation"],
+        },
+        status: { in: ["queued", "sending", "sent"] },
+        createdAt: { gte: new Date(Date.now() - 5 * 60 * 1000) },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    if (recent) {
+      console.info("EMAIL_DEDUPED", {
+        registrationUuid: item.registrationUuid,
+        existingLogId: recent.id,
+        template: item.template,
+      });
+      return recent;
+    }
+  }
+
   const log = await prisma.emailLog.create({
     data: {
       registrationId: item.registrationUuid ?? null,
@@ -322,6 +365,72 @@ export async function queueEmail(item: QueueItem) {
 }
 
 export { mapDeliveryStatus };
+
+export async function sendRegistrationCompleteEmail(options: {
+  registrationId: string;
+  registrationUuid?: string | null;
+  fullName: string;
+  email: string;
+  category: string;
+  amountPaid: number;
+  transactionId?: string;
+  receiptUrl?: string;
+  receiptPdf?: Buffer;
+  qrPng?: Buffer;
+  isPaid: boolean;
+}) {
+  const attachments: EmailAttachment[] = [];
+
+  if (options.receiptPdf) {
+    attachments.push({
+      filename: `receipt-${options.registrationId}.pdf`,
+      content: options.receiptPdf,
+      contentType: "application/pdf",
+    });
+    console.info("EMAIL_RECEIPT_ATTACHED", {
+      registrationId: options.registrationId,
+      recipient: options.email,
+      template: "registration_complete",
+    });
+  }
+
+  if (options.qrPng) {
+    attachments.push({
+      filename: `qr-${options.registrationId}.png`,
+      content: options.qrPng,
+      contentType: "image/png",
+      cid: "registration-qr",
+    });
+    console.info("EMAIL_QR_ATTACHED", {
+      registrationId: options.registrationId,
+      recipient: options.email,
+      template: "registration_complete",
+    });
+  }
+
+  const subject = options.isPaid
+    ? `${EVENT_NAME} — Registration & Payment Confirmed`
+    : `${EVENT_NAME} — Registration Confirmed`;
+
+  return queueEmail({
+    toEmail: options.email,
+    subject,
+    html: buildHtml("registration_complete", {
+      fullName: options.fullName,
+      registrationId: options.registrationId,
+      transactionId: options.transactionId ?? "",
+      amountPaid: `₹${options.amountPaid.toLocaleString("en-IN")}`,
+      category: options.category,
+      receiptUrl: options.receiptUrl ?? "",
+      hasQr: options.qrPng ? "1" : "",
+      isPaid: options.isPaid ? "1" : "",
+    }),
+    template: "registration_complete",
+    publicRegistrationId: options.registrationId,
+    registrationUuid: options.registrationUuid ?? null,
+    attachments: attachments.length > 0 ? attachments : undefined,
+  });
+}
 
 export async function sendRegistrationConfirmation(options: {
   registrationId: string;

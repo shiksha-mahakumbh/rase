@@ -1,8 +1,11 @@
 "use client";
 
-import Script from "next/script";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import {
+  isRazorpayCheckoutReady,
+  loadRazorpayCheckoutScript,
+} from "@/lib/razorpay/load-checkout-script";
 
 export type RazorpayPaymentResult = {
   razorpay_payment_id: string;
@@ -45,8 +48,6 @@ type RazorpayCheckoutProps = {
   onDismiss?: () => void;
 };
 
-const CHECKOUT_SCRIPT = "https://checkout.razorpay.com/v1/checkout.js";
-
 export default function RazorpayCheckout({
   amountInRupees,
   receipt,
@@ -66,15 +67,47 @@ export default function RazorpayCheckout({
 
   const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
+  useEffect(() => {
+    let cancelled = false;
+    void loadRazorpayCheckoutScript()
+      .then(() => {
+        if (!cancelled) setScriptReady(isRazorpayCheckoutReady());
+      })
+      .catch(() => {
+        if (!cancelled) setScriptReady(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handlePay = useCallback(async () => {
     if (!keyId) {
       toast.error("Payment gateway is not configured. Please contact support.");
       return;
     }
-    if (!scriptReady || !window.Razorpay) {
+
+    try {
+      if (!isRazorpayCheckoutReady()) {
+        console.info("RAZORPAY_SCRIPT_LOAD_START", { phase: "pay_click" });
+        await loadRazorpayCheckoutScript();
+        setScriptReady(true);
+      }
+    } catch (err) {
+      console.error("RAZORPAY_SCRIPT_LOAD_FAILED", {
+        phase: "pay_click",
+        error: err instanceof Error ? err.message : String(err),
+      });
+      toast.error("Payment gateway failed to load. Please refresh and try again.");
+      return;
+    }
+
+    if (!window.Razorpay) {
+      console.error("RAZORPAY_OPEN_FAILED", { reason: "window.Razorpay missing" });
       toast.error("Payment gateway is still loading. Please try again.");
       return;
     }
+
     if (amountInRupees <= 0) {
       toast.error("Invalid payment amount.");
       return;
@@ -83,6 +116,11 @@ export default function RazorpayCheckout({
     setLoading(true);
     try {
       const amountPaise = Math.round(amountInRupees * 100);
+      console.info("RAZORPAY_CREATE_ORDER_START", {
+        amountPaise,
+        receipt: receipt ?? null,
+      });
+
       const orderRes = await fetch("/api/payments/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -96,8 +134,18 @@ export default function RazorpayCheckout({
 
       const orderData = await orderRes.json();
       if (!orderRes.ok) {
+        console.error("RAZORPAY_CREATE_ORDER_FAILED", {
+          status: orderRes.status,
+          error: orderData.error ?? null,
+        });
         throw new Error(orderData.error ?? "Failed to create order");
       }
+
+      console.info("RAZORPAY_CREATE_ORDER_SUCCESS", {
+        order_id: orderData.order_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+      });
 
       const options: Record<string, unknown> = {
         key: keyId,
@@ -121,9 +169,17 @@ export default function RazorpayCheckout({
             });
             const verifyData = await verifyRes.json();
             if (!verifyRes.ok || !verifyData.ok) {
+              console.error("PAYMENT_VERIFY_FAILED", {
+                payment_id: response.razorpay_payment_id,
+                error: verifyData.error ?? null,
+              });
               toast.error(verifyData.error ?? "Payment verification failed");
               return;
             }
+            console.info("PAYMENT_VERIFIED", {
+              payment_id: response.razorpay_payment_id,
+              order_id: response.razorpay_order_id,
+            });
             setVerified(true);
             toast.success("Payment successful!");
             onSuccess?.({
@@ -131,7 +187,10 @@ export default function RazorpayCheckout({
               razorpay_order_id: response.razorpay_order_id,
               verified: true,
             });
-          } catch {
+          } catch (err) {
+            console.error("PAYMENT_VERIFY_FAILED", {
+              error: err instanceof Error ? err.message : String(err),
+            });
             toast.error("Payment verification failed. Please contact support.");
           }
         },
@@ -154,9 +213,11 @@ export default function RazorpayCheckout({
           response.error?.description ?? "Payment failed. Please try again.";
         toast.error(msg);
       });
+      console.info("RAZORPAY_OPEN", { order_id: orderData.order_id });
       rzp.open();
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Payment failed";
+      console.error("RAZORPAY_OPEN_FAILED", { error: msg });
       toast.error(msg);
     } finally {
       setLoading(false);
@@ -172,7 +233,6 @@ export default function RazorpayCheckout({
     onSuccess,
     orderNotes,
     receipt,
-    scriptReady,
   ]);
 
   if (!keyId) {
@@ -185,28 +245,22 @@ export default function RazorpayCheckout({
   }
 
   return (
-    <>
-      <Script
-        src={CHECKOUT_SCRIPT}
-        strategy="afterInteractive"
-        onLoad={() => setScriptReady(true)}
-        onError={() => toast.error("Failed to load payment gateway")}
-      />
-      <button
-        type="button"
-        onClick={handlePay}
-        disabled={disabled || loading || verified}
-        className={
-          className ??
-          "inline-flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
-        }
-      >
-        {verified
-          ? "Payment verified ✓"
-          : loading
-            ? "Processing…"
+    <button
+      type="button"
+      onClick={handlePay}
+      disabled={disabled || loading || verified}
+      className={
+        className ??
+        "inline-flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+      }
+    >
+      {verified
+        ? "Payment verified ✓"
+        : loading
+          ? "Processing…"
+          : !scriptReady
+            ? "Loading payment…"
             : `Pay ₹${amountInRupees.toLocaleString("en-IN")}`}
-      </button>
-    </>
+    </button>
   );
 }

@@ -1,29 +1,19 @@
 "use client";
 
 import { EVENT_NAME } from "@/types/registration";
+import {
+  buildReceiptData,
+  type ReceiptData,
+} from "@/lib/receipt/receipt-data";
+import { downloadReceiptPdfClient } from "@/lib/receipt/generate-receipt-pdf";
 
-export type ReceiptData = {
-  receiptNumber: string;
-  registrationId: string;
-  date: string;
-  fullName: string;
-  category: string;
-  institution: string;
-  email: string;
-  contactNumber: string;
-  amount: number;
-  paymentId?: string;
-  orderId?: string;
-  paymentMode: string;
-  transactionDate: string;
-  panNumber?: string;
-};
+export type { ReceiptData };
 
 export default function RegistrationReceipt({ data }: { data: ReceiptData }) {
   return (
     <div
       id="registration-receipt"
-      className="mx-auto max-w-[720px] border-2 border-brand-navy/20 bg-white p-6 text-sm text-gray-900 print:m-0 print:border-black print:p-4"
+      className="mx-auto max-w-[720px] border-2 border-brand-navy/20 bg-white p-6 text-sm text-gray-900 print:m-0 print:max-h-[277mm] print:border-black print:p-4 print:[break-inside:avoid]"
     >
       <header className="border-b border-brand-navy/30 pb-4 text-center">
         <div className="flex items-start justify-between gap-4">
@@ -101,50 +91,34 @@ function Row({ label, value }: { label: string; value: string }) {
 
 export function printRegistrationReceipt() {
   const style = document.createElement("style");
+  style.id = "registration-receipt-print";
   style.textContent = `@media print {
+    @page { size: A4 portrait; margin: 10mm; }
+    html, body { height: auto !important; overflow: visible !important; margin: 0 !important; padding: 0 !important; }
     body * { visibility: hidden !important; }
     #registration-receipt, #registration-receipt * { visibility: visible !important; }
-    #registration-receipt { position: absolute; left: 0; top: 0; width: 100%; }
+    #registration-receipt {
+      position: absolute !important;
+      left: 0 !important;
+      top: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      page-break-after: avoid !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    nav, header, footer, main > :not(#registration-receipt-root) { display: none !important; }
   }`;
   document.head.appendChild(style);
   window.print();
-  document.head.removeChild(style);
+  window.setTimeout(() => {
+    document.getElementById("registration-receipt-print")?.remove();
+  }, 1000);
 }
 
 export async function downloadRegistrationReceiptPdf(data: ReceiptData) {
-  const { jsPDF } = await import("jspdf");
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
-  const left = 40;
-  let y = 48;
-
-  const line = (text: string, bold = false) => {
-    doc.setFont("helvetica", bold ? "bold" : "normal");
-    doc.text(text, left, y);
-    y += 18;
-  };
-
-  line("DEPARTMENT OF HOLISTIC EDUCATION", true);
-  line(`${EVENT_NAME} — Registration Fee Receipt`, true);
-  y += 8;
-  line(`Receipt No.: ${data.receiptNumber}`);
-  line(`Registration ID: ${data.registrationId}`);
-  line(`Date: ${data.date}`);
-  y += 8;
-  line("Registrant", true);
-  line(`Name: ${data.fullName}`);
-  line(`Category: ${data.category}`);
-  line(`Institution: ${data.institution}`);
-  line(`Email: ${data.email}`);
-  line(`Phone: ${data.contactNumber}`);
-  y += 8;
-  line("Payment", true);
-  line(`Amount: ₹${data.amount.toLocaleString("en-IN")}`);
-  line(`Payment ID: ${data.paymentId ?? "—"}`);
-  line(`Order ID: ${data.orderId ?? "—"}`);
-  line(`Mode: ${data.paymentMode}`);
-  line(`Transaction Date: ${data.transactionDate}`);
-  y += 16;
-  line("Department of Holistic Education", true);
-
-  doc.save(`receipt-${data.registrationId}.pdf`);
+  await downloadReceiptPdfClient(data);
 }
+
+export { buildReceiptData };
