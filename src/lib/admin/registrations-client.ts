@@ -46,13 +46,29 @@ export async function fetchRegistrationsPage(
   });
 
   if (!res.ok) {
-    throw new Error("Failed to load registrations");
+    let detail = `HTTP ${res.status}`;
+    try {
+      const errBody = await res.json();
+      if (typeof errBody.error === "string") detail = errBody.error;
+      if (typeof errBody.code === "string") detail += ` (${errBody.code})`;
+    } catch {
+      /* non-JSON body */
+    }
+    console.error("ADMIN_FETCH_FAILED", { status: res.status, detail, offset, type });
+    throw new Error(`Failed to load registrations: ${detail}`);
   }
 
   const body = await res.json();
   const items = (body.items ?? []) as Record<string, unknown>[];
   const total = Number(body.total ?? items.length);
   const rows = items.map(mapItemToRow);
+
+  console.info("ADMIN_FETCH_SUCCESS", {
+    count: rows.length,
+    total,
+    offset,
+    type: type ?? null,
+  });
 
   return {
     rows,

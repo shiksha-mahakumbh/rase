@@ -5,11 +5,56 @@ import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { recordVerifiedPayment } from "@/server/services/razorpay-verified.service";
 import { SITE_URL } from "@/config/site";
 import { writeAuditLog } from "@/server/services/audit.service";
+import { resolveRegistrationFee } from "@/lib/registration/fees";
+import { isSupportedType } from "@/server/lib/registration-types";
+import type { RegistrationType } from "@/types/registration";
+import type { AccommodationBedType, ProjectStudentType } from "@/lib/registration/fees";
 
 const MIN_AMOUNT_PAISE = 100;
 
 function paymentLog(event: string, payload: Record<string, unknown>) {
   console.info("PAYMENT_FLOW", { event, ...payload });
+}
+
+function expectedAmountPaiseFromOrderNotes(
+  notes: Record<string, string>
+): number | null {
+  const registrationType = notes.registrationType;
+  if (!registrationType || !isSupportedType(registrationType)) {
+    return null;
+  }
+
+  const category = notes.category ?? "";
+
+  const projectStudentType: ProjectStudentType | undefined =
+    category === "College Student"
+      ? "College Student"
+      : category === "School Student"
+        ? "School Student"
+        : registrationType === "Projects"
+          ? "School Student"
+          : undefined;
+
+  const accommodationBedType: AccommodationBedType | undefined =
+    category === "Double Bed"
+      ? "Double Bed"
+      : category === "Single Bed"
+        ? "Single Bed"
+        : registrationType === "Accommodation"
+          ? "Single Bed"
+          : undefined;
+
+  const feeRupees = resolveRegistrationFee(registrationType as RegistrationType, {
+    delegateCategory: category,
+    projectStudentType,
+    accommodationBedType,
+  });
+
+  if (feeRupees <= 0) {
+    return null;
+  }
+
+  return Math.round(feeRupees * 100);
 }
 
 export async function handleCreateOrder(request: NextRequest) {
@@ -55,6 +100,22 @@ export async function handleCreateOrder(request: NextRequest) {
       body.notes && typeof body.notes === "object"
         ? (body.notes as Record<string, string>)
         : undefined;
+
+    if (notes?.registrationType) {
+      const expectedPaise = expectedAmountPaiseFromOrderNotes(notes);
+      if (expectedPaise != null && Math.abs(amount - expectedPaise) > 1) {
+        paymentLog("order_amount_rejected", {
+          registration_type: notes.registrationType,
+          client_amount_paise: amount,
+          expected_amount_paise: expectedPaise,
+          user_email: notes.email ?? null,
+        });
+        return NextResponse.json(
+          { error: "Amount does not match registration fee for selected category" },
+          { status: 400 }
+        );
+      }
+    }
 
     const order = await razorpay.orders.create({
       amount: Math.round(amount),

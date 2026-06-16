@@ -13,14 +13,14 @@ import GenericRegistrationForm from "@/components/forms/GenericRegistrationForm"
 import RegistrationProgress from "@/components/registration/RegistrationProgress";
 import CategoryStep from "@/components/registration/CategoryStep";
 import CategoryInstructionsPanel from "@/components/registration/CategoryInstructionsPanel";
-import { loadMeta, saveMeta, switchRegistrationCategory } from "@/lib/registration/draftStorage";
+import { loadMeta, saveMeta, switchRegistrationCategory, clearRegistrationMeta, clearDraft } from "@/lib/registration/draftStorage";
 import RecaptchaScript from "@/components/security/RecaptchaProvider";
 import { RegistrationFlowProvider } from "@/components/registration/RegistrationFlowContext";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
 import RegistrationTrustBar from "@/components/registration/RegistrationTrustBar";
 import {
   isExternalRedirectType,
-  requiresPaymentStep,
+  usesMultiStepPaymentFlow,
 } from "@/lib/registration/config";
 import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
 
@@ -44,7 +44,7 @@ function RegistrationFormRouter({
 }) {
   const visibilityClass = showPaymentStep
     ? step === 2
-      ? "[&_.registration-payment]:hidden [&_button[type=submit]]:hidden"
+      ? "[&_.registration-payment]:hidden"
       : "[&_.registration-details]:hidden"
     : "";
 
@@ -134,8 +134,21 @@ function RegistrationHubInner() {
   const currentFee = flow?.currentFee ?? 0;
   const metaLoadedRef = useRef(false);
 
-  const showPaymentStep = requiresPaymentStep(registrationType, currentFee);
+  const showPaymentStep = usesMultiStepPaymentFlow(registrationType, currentFee);
   const totalSteps = showPaymentStep ? 3 : 2;
+
+  useEffect(() => {
+    if (!flow) return;
+    return flow.registerPaymentVerifiedHandler(() => {
+      setStep(3);
+      saveMeta({
+        step: 3,
+        registrationType,
+        updatedAt: new Date().toISOString(),
+      });
+      window.scrollTo(0, 0);
+    });
+  }, [flow, registrationType]);
 
   useEffect(() => {
     if (metaLoadedRef.current) return;
@@ -144,7 +157,7 @@ function RegistrationHubInner() {
     if (meta?.registrationType && !isExternalRedirectType(meta.registrationType)) {
       setRegistrationType(meta.registrationType);
       if (meta.step >= 2) {
-        const maxStep = requiresPaymentStep(meta.registrationType, currentFee)
+        const maxStep = usesMultiStepPaymentFlow(meta.registrationType, currentFee)
           ? 3
           : 2;
         setStep(Math.min(meta.step, maxStep));
@@ -201,10 +214,14 @@ function RegistrationHubInner() {
             value={registrationType}
             onChange={(t) => {
               if (!isExternalRedirectType(t)) {
+                if (t !== registrationType) {
+                  clearDraft(registrationType);
+                }
                 setRegistrationType(t);
                 setStep(1);
                 flow?.setCurrentFee(0);
                 switchRegistrationCategory(t);
+                console.info("CATEGORY_SELECTED", { registrationType: t });
               }
             }}
             onContinue={() => {
@@ -232,7 +249,11 @@ function RegistrationHubInner() {
               <button
                 type="button"
                 className="font-semibold text-brand-saffron underline"
-                onClick={() => setStep(1)}
+                onClick={() => {
+                  clearRegistrationMeta();
+                  setStep(1);
+                  flow?.setCurrentFee(0);
+                }}
               >
                 Change category
               </button>

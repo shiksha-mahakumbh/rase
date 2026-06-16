@@ -245,6 +245,13 @@ export async function manualLinkPayment(input: {
     },
   });
 
+  console.info("ORPHAN_PAYMENT_RECOVERED", {
+    registrationId: input.registrationId,
+    paymentId: input.razorpayPaymentId,
+    orderId: verified.razorpayOrderId,
+    userEmail: reg.email,
+  });
+
   return { success: true, registrationId: input.registrationId };
 }
 

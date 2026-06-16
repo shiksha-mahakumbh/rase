@@ -37,6 +37,15 @@ export function requiresPaymentStep(
   return requiresPaymentForFee(fee);
 }
 
+/** Projects & Accommodation always use the 3-step pay flow (fee is never 0). */
+export function usesMultiStepPaymentFlow(
+  type: RegistrationType,
+  fee = 0
+): boolean {
+  if (type === "Projects" || type === "Accommodation") return true;
+  return requiresPaymentStep(type, fee);
+}
+
 export function redirectToExternalSubmission(type: RegistrationType): void {
   if (isExternalRedirectType(type)) {
     window.location.assign(CMT_SUBMISSION_URL);

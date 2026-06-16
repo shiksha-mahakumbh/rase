@@ -19,14 +19,15 @@ export function saveDraft(type: RegistrationType, data: Record<string, unknown>)
     const sanitized = { ...data };
     delete sanitized.receipt;
     localStorage.setItem(draftKey(type), JSON.stringify(sanitized));
-    localStorage.setItem(
-      META_KEY,
-      JSON.stringify({
-        step: 2,
+    // Meta step/type is owned by RegistrationHub — do not force step:2 here.
+    const existing = loadMeta();
+    if (existing?.registrationType === type) {
+      saveMeta({
+        ...existing,
         registrationType: type,
         updatedAt: new Date().toISOString(),
-      } satisfies RegistrationMeta)
-    );
+      });
+    }
   } catch {
     // Quota or private mode — ignore
   }
@@ -65,6 +66,14 @@ export function switchRegistrationCategory(type: RegistrationType) {
     registrationType: type,
     updatedAt: new Date().toISOString(),
   });
+  console.info("CATEGORY_RESET", { registrationType: type });
+}
+
+/** Clear persisted hub navigation (category picker only). */
+export function clearRegistrationMeta() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(META_KEY);
+  console.info("CATEGORY_RESET", { registrationType: null, cleared: true });
 }
 
 export function clearDraft(type: RegistrationType) {

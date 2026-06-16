@@ -375,7 +375,13 @@ export async function listRegistrations(options: {
     prisma.registration.count({ where }),
   ]);
 
-  return { items, total, limit, offset };
+  const serialized = items.map((row) => ({
+    ...row,
+    registrationFee:
+      row.registrationFee != null ? Number(row.registrationFee) : null,
+  }));
+
+  return { items: serialized, total, limit, offset };
 }
 
 export type BulkStatusField =

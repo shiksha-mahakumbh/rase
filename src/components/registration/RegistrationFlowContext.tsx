@@ -16,6 +16,9 @@ type RegistrationFlowContextValue = {
   requestPaymentStep: () => Promise<boolean>;
   currentFee: number;
   setCurrentFee: (fee: number) => void;
+  /** After Razorpay verify — hub advances to payment/submit step. */
+  notifyPaymentVerified: () => void;
+  registerPaymentVerifiedHandler: (fn: () => void) => () => void;
 };
 
 const RegistrationFlowContext = createContext<RegistrationFlowContextValue | null>(
@@ -24,6 +27,7 @@ const RegistrationFlowContext = createContext<RegistrationFlowContextValue | nul
 
 export function RegistrationFlowProvider({ children }: { children: ReactNode }) {
   const handlerRef = useRef<BeforePaymentFn | null>(null);
+  const paymentVerifiedRef = useRef<(() => void) | null>(null);
   const [currentFee, setCurrentFee] = useState(0);
 
   const registerBeforePayment = useCallback((fn: BeforePaymentFn) => {
@@ -31,6 +35,17 @@ export function RegistrationFlowProvider({ children }: { children: ReactNode }) 
     return () => {
       if (handlerRef.current === fn) handlerRef.current = null;
     };
+  }, []);
+
+  const registerPaymentVerifiedHandler = useCallback((fn: () => void) => {
+    paymentVerifiedRef.current = fn;
+    return () => {
+      if (paymentVerifiedRef.current === fn) paymentVerifiedRef.current = null;
+    };
+  }, []);
+
+  const notifyPaymentVerified = useCallback(() => {
+    paymentVerifiedRef.current?.();
   }, []);
 
   const requestPaymentStep = useCallback(async () => {
@@ -45,6 +60,8 @@ export function RegistrationFlowProvider({ children }: { children: ReactNode }) 
         requestPaymentStep,
         currentFee,
         setCurrentFee,
+        notifyPaymentVerified,
+        registerPaymentVerifiedHandler,
       }}
     >
       {children}

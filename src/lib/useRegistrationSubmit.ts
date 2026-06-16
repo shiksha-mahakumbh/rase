@@ -159,6 +159,13 @@ export function useRegistrationSubmit() {
         });
       }
 
+      console.info("REGISTRATION_START", {
+        registrationType,
+        userEmail: data.email,
+        fee,
+        paymentId: data.razorpayPaymentId ?? null,
+      });
+
       const res = await fetch("/api/registration/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

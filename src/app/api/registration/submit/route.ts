@@ -62,6 +62,13 @@ export async function POST(request: NextRequest) {
       paymentStatus?: PaymentStatus;
     };
 
+    console.info("REGISTRATION_START", {
+      registrationType,
+      userEmail: data?.email ?? null,
+      fee: data?.registrationFee ?? null,
+      paymentId: data?.razorpayPaymentId ?? null,
+    });
+
     if (typeof registrationType !== "string" || !isSupportedType(registrationType)) {
       return NextResponse.json(
         { error: "Invalid registration type" },
@@ -202,11 +209,13 @@ export async function POST(request: NextRequest) {
     });
 
     submitLog("saved", {
+      event: "REGISTRATION_SAVED",
       registration_id: result.registrationId,
       registration_uuid: result.id,
       registration_type: type,
       payment_id: razorpayPaymentId || null,
       fee,
+      user_email: email,
     });
 
     if (razorpayPaymentId) {
@@ -243,29 +252,48 @@ export async function POST(request: NextRequest) {
 
     const isPaidOnline = fee > 0 && Boolean(razorpayPaymentId);
 
-    if (isPaidOnline) {
-      const receiptPdf = generateReceiptPdfBuffer({
-        registrationId: result.registrationId,
-        fullName,
-        category: categoryLabel,
-        institution: String(data.institution ?? "N/A"),
-        email,
-        contactNumber: contact,
-        amount: fee,
-        paymentId: razorpayPaymentId,
-        orderId: String(data.razorpayOrderId ?? payment?.razorpayOrderId ?? ""),
-        panNumber: String(data.panNumber ?? payment?.panNumber ?? "") || undefined,
-      });
-      const qrPng = await generateRegistrationQrBuffer(result.registrationId);
-      const artifactNow = new Date();
+    const receiptPdf = generateReceiptPdfBuffer({
+      registrationId: result.registrationId,
+      fullName,
+      category: categoryLabel,
+      institution: String(data.institution ?? "N/A"),
+      email,
+      contactNumber: contact,
+      amount: fee,
+      paymentId: razorpayPaymentId || undefined,
+      orderId: String(data.razorpayOrderId ?? payment?.razorpayOrderId ?? ""),
+      panNumber: String(data.panNumber ?? payment?.panNumber ?? "") || undefined,
+    });
+    const qrPng = await generateRegistrationQrBuffer(result.registrationId, {
+      fullName,
+      category: categoryLabel,
+    });
+    const artifactNow = new Date();
 
-      void prisma.registration.update({
-        where: { id: result.id },
-        data: {
-          receiptGeneratedAt: artifactNow,
-          qrGeneratedAt: artifactNow,
-          qrStoragePath: qrStoragePathFor(result.registrationId),
-        },
+    void prisma.registration.update({
+      where: { id: result.id },
+      data: {
+        receiptGeneratedAt: artifactNow,
+        qrGeneratedAt: artifactNow,
+        qrStoragePath: qrStoragePathFor(result.registrationId),
+      },
+    });
+
+    if (isPaidOnline) {
+      void sendRegistrationConfirmation({
+        registrationId: result.registrationId,
+        registrationUuid: result.id,
+        fullName,
+        email,
+        receiptPdf,
+        qrPng,
+      }).catch((err) => {
+        console.error("EMAIL_FAILED", {
+          template: "registration_confirmation",
+          registrationId: result.registrationId,
+          recipient: email,
+          error: err instanceof Error ? err.message : String(err),
+        });
       });
 
       void sendPaymentConfirmation({
@@ -309,12 +337,17 @@ export async function POST(request: NextRequest) {
         registrationUuid: result.id,
         fullName,
         email,
+        receiptPdf,
+        qrPng,
       })
         .then(async (log) => {
+          const sentNow = new Date();
           await prisma.registration.update({
             where: { id: result.id },
             data: {
               emailDeliveryStatus: mapDeliveryStatus(log.status),
+              receiptSentAt: log.status === "sent" ? sentNow : undefined,
+              qrSentAt: log.status === "sent" ? sentNow : undefined,
             },
           });
         })
@@ -341,6 +374,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     submitLog("error", {
+      event: "REGISTRATION_FAILED",
       error: error instanceof Error ? error.message : String(error),
     });
     console.error("registration submit error:", error);

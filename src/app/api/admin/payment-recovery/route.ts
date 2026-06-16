@@ -4,8 +4,6 @@ import { verifyAdminSessionToken } from "@/lib/security/admin-session";
 import { verifyAdminRequest } from "@/server/lib/admin-request-auth";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
 
-type RouteContext = { params: Promise<{ path: string[] }> };
-
 function hasAdminCredentials(request: NextRequest): boolean {
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
   if (cookie && cookie !== "1" && verifyAdminSessionToken(cookie)) {
@@ -15,16 +13,12 @@ function hasAdminCredentials(request: NextRequest): boolean {
   return Boolean(token);
 }
 
-function unauthorizedResponse() {
-  return NextResponse.json(
-    { error: "Unauthorized", code: "UNAUTHORIZED" },
-    { status: 401 }
-  );
-}
-
-async function proxyToV2Admin(request: NextRequest, segments: string[]) {
+async function proxyPaymentRecovery(request: NextRequest) {
   if (!hasAdminCredentials(request)) {
-    throw new ServiceError("Unauthorized", 401, "UNAUTHORIZED");
+    return NextResponse.json(
+      { error: "Unauthorized", code: "UNAUTHORIZED" },
+      { status: 401 }
+    );
   }
 
   await verifyAdminRequest(request);
@@ -32,12 +26,14 @@ async function proxyToV2Admin(request: NextRequest, segments: string[]) {
   const secret =
     process.env.ADMIN_OPS_SECRET ?? process.env.REGISTRATION_EMAIL_SECRET;
   if (!secret) {
-    throw new ServiceError("Admin authentication not configured", 503, "ADMIN_NOT_CONFIGURED");
+    return NextResponse.json(
+      { error: "Admin authentication not configured", code: "ADMIN_NOT_CONFIGURED" },
+      { status: 503 }
+    );
   }
 
   const incoming = new URL(request.url);
-  const targetPath = `/api/v2/admin/${segments.join("/")}`;
-  const targetUrl = new URL(targetPath, incoming.origin);
+  const targetUrl = new URL("/api/v2/admin/payment-recovery", incoming.origin);
   targetUrl.search = incoming.search;
 
   const headers = new Headers();
@@ -61,33 +57,28 @@ async function proxyToV2Admin(request: NextRequest, segments: string[]) {
   const upstreamType = upstream.headers.get("content-type");
   if (upstreamType) responseHeaders.set("content-type", upstreamType);
 
+  if (upstream.status >= 400) {
+    console.error("ADMIN_FETCH_FAILED", {
+      path: "payment-recovery",
+      status: upstream.status,
+    });
+  } else if (method === "GET") {
+    console.info("ADMIN_FETCH_SUCCESS", { path: "payment-recovery", status: upstream.status });
+  }
+
   return new NextResponse(responseBody, {
     status: upstream.status,
     headers: responseHeaders,
   });
 }
 
-async function handleGateway(request: NextRequest, context: RouteContext) {
-  if (!hasAdminCredentials(request)) {
-    return unauthorizedResponse();
-  }
+export async function GET(request: NextRequest) {
   try {
-    const { path } = await context.params;
-    const segments = path.join("/");
-    const response = await proxyToV2Admin(request, path);
-    if (response.status >= 400) {
-      console.error("ADMIN_FETCH_FAILED", {
-        path: segments,
-        status: response.status,
-      });
-    } else if (request.method === "GET") {
-      console.info("ADMIN_FETCH_SUCCESS", { path: segments, status: response.status });
-    }
-    return response;
+    return await proxyPaymentRecovery(request);
   } catch (error) {
     const mapped = toErrorResponse(error);
     console.error("ADMIN_FETCH_FAILED", {
-      path: (await context.params).path.join("/"),
+      path: "payment-recovery",
       status: mapped.status,
       error: mapped.error,
       code: mapped.code,
@@ -99,22 +90,23 @@ async function handleGateway(request: NextRequest, context: RouteContext) {
   }
 }
 
-export async function GET(request: NextRequest, context: RouteContext) {
-  return handleGateway(request, context);
-}
-
-export async function POST(request: NextRequest, context: RouteContext) {
-  return handleGateway(request, context);
-}
-
-export async function PUT(request: NextRequest, context: RouteContext) {
-  return handleGateway(request, context);
-}
-
-export async function PATCH(request: NextRequest, context: RouteContext) {
-  return handleGateway(request, context);
-}
-
-export async function DELETE(request: NextRequest, context: RouteContext) {
-  return handleGateway(request, context);
+export async function POST(request: NextRequest) {
+  try {
+    return await proxyPaymentRecovery(request);
+  } catch (error) {
+    const mapped = toErrorResponse(error);
+    if (error instanceof ServiceError && mapped.error.includes("Unknown action")) {
+      return NextResponse.json({ error: mapped.error }, { status: mapped.status });
+    }
+    console.error("ADMIN_FETCH_FAILED", {
+      path: "payment-recovery",
+      status: mapped.status,
+      error: mapped.error,
+      code: mapped.code,
+    });
+    return NextResponse.json(
+      { error: mapped.error, code: mapped.code },
+      { status: mapped.status }
+    );
+  }
 }

@@ -30,9 +30,14 @@ function formatDate(value?: string | Date) {
   });
 }
 
-export async function generateRegistrationQrBuffer(registrationId: string) {
+export async function generateRegistrationQrBuffer(
+  registrationId: string,
+  options?: { fullName?: string; category?: string }
+) {
   const payload = JSON.stringify({
     registrationId,
+    fullName: options?.fullName ?? undefined,
+    category: options?.category ?? undefined,
     event: EVENT_NAME,
     verifyUrl: `${SITE_URL}/registration/success?id=${encodeURIComponent(registrationId)}`,
   });
@@ -44,8 +49,11 @@ export async function generateRegistrationQrBuffer(registrationId: string) {
   });
 }
 
-export async function generateRegistrationQrDataUrl(registrationId: string) {
-  const buffer = await generateRegistrationQrBuffer(registrationId);
+export async function generateRegistrationQrDataUrl(
+  registrationId: string,
+  options?: { fullName?: string; category?: string }
+) {
+  const buffer = await generateRegistrationQrBuffer(registrationId, options);
   return `data:image/png;base64,${buffer.toString("base64")}`;
 }
 
