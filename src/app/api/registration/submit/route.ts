@@ -25,11 +25,34 @@ import {
 import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
 import { ServiceError } from "@/server/lib/errors";
 import { writeAuditLog } from "@/server/services/audit.service";
+import type { EmailLogStatus } from "@prisma/client";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+export const maxDuration = 60;
+
 function submitLog(event: string, payload: Record<string, unknown>) {
   console.info("REGISTRATION_SUBMIT", { event, ...payload });
+}
+
+async function updateEmailStatus(
+  registrationUuid: string,
+  outcome: "sent" | "failed",
+  emailLog?: { id: string; status: EmailLogStatus } | null
+) {
+  const sentNow = new Date();
+  const delivered = outcome === "sent" && emailLog?.status === "sent";
+  await prisma.registration.update({
+    where: { id: registrationUuid },
+    data: {
+      emailDeliveryStatus:
+        outcome === "sent" && emailLog
+          ? mapDeliveryStatus(emailLog.status)
+          : outcome,
+      receiptSentAt: delivered ? sentNow : undefined,
+      qrSentAt: delivered ? sentNow : undefined,
+    },
+  });
 }
 
 export async function POST(request: NextRequest) {
@@ -295,44 +318,48 @@ export async function POST(request: NextRequest) {
       qr_png_bytes: qrPng.length,
     });
 
-    try {
-      const emailLog = await sendRegistrationCompleteEmail({
-        registrationId: result.registrationId,
-        registrationUuid: result.id,
-        fullName,
-        email,
-        category: categoryLabel,
-        amountPaid: fee,
-        transactionId: razorpayPaymentId || undefined,
-        receiptUrl: isPaidOnline
-          ? receiptDownloadUrl(result.registrationId, lookupToken)
-          : undefined,
-        receiptPdf,
-        qrPng,
-        isPaid: isPaidOnline,
+    void sendRegistrationCompleteEmail({
+      registrationId: result.registrationId,
+      registrationUuid: result.id,
+      fullName,
+      email,
+      category: categoryLabel,
+      amountPaid: fee,
+      transactionId: razorpayPaymentId || undefined,
+      receiptUrl: isPaidOnline
+        ? receiptDownloadUrl(result.registrationId, lookupToken)
+        : undefined,
+      receiptPdf,
+      qrPng,
+      isPaid: isPaidOnline,
+    })
+      .then(async (emailLog) => {
+        try {
+          await updateEmailStatus(result.id, "sent", emailLog);
+        } catch (err) {
+          console.error("EMAIL_STATUS_UPDATE_FAILED", {
+            registrationId: result.registrationId,
+            emailLogId: emailLog?.id ?? null,
+            error: err instanceof Error ? err.message : String(err),
+          });
+        }
+      })
+      .catch(async (err) => {
+        console.error("EMAIL_SEND_FAILED", {
+          template: "registration_complete",
+          registrationId: result.registrationId,
+          recipient: email,
+          error: err instanceof Error ? err.message : String(err),
+        });
+        try {
+          await updateEmailStatus(result.id, "failed");
+        } catch (updateErr) {
+          console.error("EMAIL_FAILURE_STATUS_UPDATE_FAILED", {
+            registrationId: result.registrationId,
+            error: updateErr instanceof Error ? updateErr.message : String(updateErr),
+          });
+        }
       });
-
-      const sentNow = new Date();
-      await prisma.registration.update({
-        where: { id: result.id },
-        data: {
-          emailDeliveryStatus: mapDeliveryStatus(emailLog.status),
-          receiptSentAt: emailLog.status === "sent" ? sentNow : undefined,
-          qrSentAt: emailLog.status === "sent" ? sentNow : undefined,
-        },
-      });
-    } catch (err) {
-      console.error("EMAIL_FAILED", {
-        template: "registration_complete",
-        registrationId: result.registrationId,
-        recipient: email,
-        error: err instanceof Error ? err.message : String(err),
-      });
-      await prisma.registration.update({
-        where: { id: result.id },
-        data: { emailDeliveryStatus: "failed" },
-      });
-    }
 
     return NextResponse.json({
       success: true,
