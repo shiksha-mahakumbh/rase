@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import { PAST_EDITIONS } from "@/data/past-editions";
 import { getSpeakersForEdition } from "@/data/mahakumbh-abhiyan-speakers";
-import { EDITION_FRAME_IMAGES } from "@/data/abhiyan-photo-frame-images";
 import EditionSpeakersList from "./EditionSpeakersList";
 import EditionChiefGuests from "./EditionChiefGuests";
 import PastEditionsJsonLd from "./PastEditionsJsonLd";
@@ -75,25 +73,12 @@ export default function PastEditionsShowcase() {
               />
 
               <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
-                {edition.imageSrc ? (
-                  <div className="relative h-44 w-full bg-slate-100 md:h-52">
-                    <Image
-                      src={edition.imageSrc}
-                      alt={edition.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-brand-navy/20 to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <span className="rounded-full bg-brand-saffron px-3 py-1 text-xs font-bold text-brand-navy">
-                        Edition {edition.edition}
-                      </span>
-                      <h3 className="mt-2 text-xl font-bold text-white">{edition.title}</h3>
-                    </div>
-                  </div>
-                ) : null}
+                <div className="bg-gradient-to-r from-brand-navy to-brand-navy/80 px-6 py-5">
+                  <span className="rounded-full bg-brand-saffron px-3 py-1 text-xs font-bold text-brand-navy">
+                    Edition {edition.edition}
+                  </span>
+                  <h3 className="mt-2 text-xl font-bold text-white">{edition.title}</h3>
+                </div>
 
                 <div className="p-6">
                   <div className="flex flex-wrap gap-2 text-sm">
@@ -121,24 +106,6 @@ export default function PastEditionsShowcase() {
                   <p className="mt-1 text-slate-700">{edition.impact}</p>
 
                   <EditionChiefGuests edition={edition.edition} />
-
-                  {EDITION_FRAME_IMAGES[edition.edition]?.speakers ? (
-                    <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
-                      <div className="relative h-40 w-full bg-slate-100 md:h-48">
-                        <Image
-                          src={EDITION_FRAME_IMAGES[edition.edition].speakers}
-                          alt={`${edition.title} speakers — photo frame`}
-                          fill
-                          className="object-cover object-top"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          loading="lazy"
-                        />
-                      </div>
-                      <p className="px-3 py-2 text-xs text-slate-500">
-                        वक्ता सूची — अभियान फोटो फ्रेम से
-                      </p>
-                    </div>
-                  ) : null}
 
                   <EditionSpeakersList
                     edition={edition.edition}

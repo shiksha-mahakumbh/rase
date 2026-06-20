@@ -1,5 +1,4 @@
 import { SITE_NAME_HINDI } from "@/config/site";
-import { EDITION_FRAME_IMAGES } from "@/data/abhiyan-photo-frame-images";
 
 /** Display title for an edition e.g. शिक्षा महाकुंभ 2.0 */
 export function editionTitle(edition: string) {
@@ -49,7 +48,6 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq",
     campaignPdf: "/RASE_2023_1ST_EDITION_Campaign.pdf",
-    imageSrc: EDITION_FRAME_IMAGES["1.0"].hero,
     year: "2023",
   },
   {
@@ -68,7 +66,6 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
     campaignPdf: "/RASE_2023_2ND_EDITION_Campaign.pdf",
-    imageSrc: EDITION_FRAME_IMAGES["2.0"].hero,
     year: "2023",
   },
   {
@@ -88,7 +85,6 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
     campaignPdf: "/RASE_2024_3RD_EDITION_Campaign.pdf",
-    imageSrc: EDITION_FRAME_IMAGES["3.0"].hero,
     year: "2024",
   },
   {
@@ -108,7 +104,6 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
     campaignPdf: "/RASE_2024_4TH_EDITION_Campaign.pdf",
-    imageSrc: EDITION_FRAME_IMAGES["4.0"].hero,
     year: "2024",
   },
   {
@@ -127,7 +122,6 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     href: "/past_event/sm25",
     galleryUrl:
       "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
-    imageSrc: EDITION_FRAME_IMAGES["5.0"].hero,
     year: "2025",
   },
 ];

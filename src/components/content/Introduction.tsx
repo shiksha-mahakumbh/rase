@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { ABIYAN_PHOTO_FRAME } from "@/data/abhiyan-photo-frame";
-import { ABIYAN_FRAME_IMAGES } from "@/data/abhiyan-photo-frame-images";
 import { PAST_EDITIONS } from "@/data/past-editions";
 
 const PILLARS = [
@@ -35,7 +33,7 @@ export default function Introduction() {
       theme: e.theme,
       coreFocus: e.coreEssence,
       href: e.href,
-      imageSrc: e.imageSrc,
+      imageSrc: undefined,
       upcoming: false,
     })),
     {
@@ -79,19 +77,6 @@ export default function Introduction() {
         </div>
       </section>
 
-      {/* NEP banner from photo frame */}
-      <section className="overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
-        <div className="relative aspect-[21/9] w-full bg-slate-100">
-          <Image
-            src={ABIYAN_FRAME_IMAGES.nefBanner}
-            alt="NEP 2020 alignment — Shiksha Mahakumbh Abhiyan"
-            fill
-            className="object-cover object-center"
-            sizes="(max-width: 1024px) 100vw, 1152px"
-          />
-        </div>
-      </section>
-
       {/* Leadership */}
       <section>
         <h2 className="text-xl font-bold md:text-2xl">Leadership</h2>
@@ -100,17 +85,9 @@ export default function Introduction() {
             संरक्षक (Patron)
           </p>
           <div className="mt-4 flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-            {patron.imageSrc ? (
-              <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-brand-saffron/40 shadow-md">
-                <Image
-                  src={patron.imageSrc}
-                  alt={patron.name}
-                  fill
-                  className="object-cover object-top"
-                  sizes="128px"
-                />
-              </div>
-            ) : null}
+            <div className="flex h-32 w-32 shrink-0 items-center justify-center rounded-full border-4 border-brand-saffron/40 bg-brand-blue/10 text-3xl font-bold text-brand-blue shadow-md">
+              {patron.name.charAt(0)}
+            </div>
             <div>
               <p className="text-lg font-bold">{patron.name}</p>
               <p className="text-sm text-slate-600">
@@ -130,15 +107,9 @@ export default function Introduction() {
               key={a.name}
               className="flex gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:border-brand-saffron/30"
             >
-              {"imageSrc" in a && a.imageSrc ? (
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-slate-100">
-                  <Image src={a.imageSrc} alt="" fill className="object-cover object-top" sizes="48px" />
-                </div>
-              ) : (
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-sm font-bold text-brand-blue">
-                  {a.name.charAt(0)}
-                </div>
-              )}
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-sm font-bold text-brand-blue">
+                {a.name.charAt(0)}
+              </div>
               <div>
                 <span className="font-semibold">{a.name}</span>
                 <span className="block text-xs text-slate-600">
@@ -166,25 +137,14 @@ export default function Introduction() {
                 e.upcoming ? "border-brand-saffron/50 ring-2 ring-brand-saffron/20" : "border-slate-200"
               }`}
             >
-              {e.imageSrc ? (
-                <div className="relative aspect-[16/7] bg-slate-100">
-                  <Image
-                    src={e.imageSrc}
-                    alt={`Shiksha Mahakumbh ${e.edition}`}
-                    fill
-                    className="object-cover object-top"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  {e.upcoming ? (
-                    <span className="absolute left-3 top-3 rounded-full bg-brand-saffron px-3 py-0.5 text-xs font-bold text-brand-navy">
-                      Upcoming
-                    </span>
-                  ) : null}
-                </div>
-              ) : null}
               <div className="p-5">
                 <p className="font-bold text-brand-saffron-dark">
                   शिक्षा महाकुंभ {e.edition} · {e.venue}
+                  {e.upcoming ? (
+                    <span className="ml-2 rounded-full bg-brand-saffron px-2 py-0.5 text-xs font-bold text-brand-navy">
+                      Upcoming
+                    </span>
+                  ) : null}
                 </p>
                 <p className="text-sm text-slate-500">{e.dates}</p>
                 <p className="mt-2 text-sm">

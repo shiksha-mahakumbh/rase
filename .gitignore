@@ -15,3 +15,4 @@ exports/gcp-storage/
 exports/**/*.json
 !exports/**/manifest.example.json
 public/abhiyanphotoframe.pdf
+public/abhiyan-photo-frame/

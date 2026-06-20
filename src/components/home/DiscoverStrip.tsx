@@ -1,7 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
 import { SectionHeader } from "@/components/ui";
-import { EDITION_FRAME_IMAGES } from "@/data/abhiyan-photo-frame-images";
 
 const insights = [
   {
@@ -10,8 +8,8 @@ const insights = [
     author: "Academic Council",
     href: "/departments/academic-council",
     tag: "Policy",
-    accent: "bg-brand-blue",
-    image: "/abhiyan-photo-frame/pages/page-03.jpg",
+    accent: "from-brand-blue/20 to-brand-blue/5",
+    tagBg: "bg-brand-blue",
   },
   {
     title: "Research Proceedings & Souvenir",
@@ -19,8 +17,8 @@ const insights = [
     author: "SMK Proceedings",
     href: "/proceedings",
     tag: "Research",
-    accent: "bg-brand-saffron",
-    image: "/abhiyan-photo-frame/pages/page-31.jpg",
+    accent: "from-brand-saffron/25 to-brand-saffron/5",
+    tagBg: "bg-brand-saffron",
   },
   {
     title: "Multi Track Conference",
@@ -28,8 +26,8 @@ const insights = [
     author: "Research Track",
     href: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
     tag: "Submit",
-    accent: "bg-brand-emerald",
-    image: "/abhiyan-photo-frame/pages/page-30.jpg",
+    accent: "from-brand-emerald/20 to-brand-emerald/5",
+    tagBg: "bg-brand-emerald",
   },
   {
     title: "Upcoming Edition — NIT Hamirpur",
@@ -37,8 +35,8 @@ const insights = [
     author: "Events",
     href: "/upcoming-events",
     tag: "Event",
-    accent: "bg-violet-600",
-    image: EDITION_FRAME_IMAGES["5.0"].hero,
+    accent: "from-violet-200/80 to-violet-50",
+    tagBg: "bg-violet-600",
   },
 ];
 
@@ -50,7 +48,7 @@ export default function DiscoverStrip() {
         <SectionHeader
           eyebrow="Insights & Updates"
           title="Research Highlights & Announcements"
-          description="Policy, research, conclaves, and edition updates — curated from the Abhiyan photo frame."
+          description="Policy, research, conclaves, and edition updates from Shiksha Mahakumbh Abhiyan."
         />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {insights.map((item) => (
@@ -59,16 +57,11 @@ export default function DiscoverStrip() {
               href={item.href}
               className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:border-brand-saffron/40 hover:shadow-lg"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-                <Image
-                  src={item.image}
-                  alt=""
-                  fill
-                  className="object-cover object-top transition duration-300 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, 25vw"
-                />
+              <div
+                className={`relative flex aspect-[16/10] items-end bg-gradient-to-br p-5 ${item.accent}`}
+              >
                 <span
-                  className={`absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-xs font-bold text-white ${item.accent}`}
+                  className={`rounded-full px-2.5 py-0.5 text-xs font-bold text-white ${item.tagBg}`}
                 >
                   {item.tag}
                 </span>
