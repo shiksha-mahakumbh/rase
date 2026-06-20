@@ -1,6 +1,9 @@
 /**
  * Standalone PDF extractor (uses isolated pdfjs-dist@4.8.69 + canvas@2.11.2).
  * Run from repo root: node scripts/pdf-extract-tmp/extract.mjs
+ *
+ * Canonical PDF is hosted on Google Drive (not in repo). Download locally to
+ * public/abhiyanphotoframe.pdf before re-running extraction.
  */
 import fs from "fs";
 import path from "path";
@@ -148,7 +151,8 @@ async function main() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
-        sourcePdf: "/abhiyanphotoframe.pdf",
+        sourcePdf:
+          "https://drive.google.com/file/d/1v8d87TR4xgd3S028unVBIjrZsNewR75n/view?usp=drive_link",
         pageCount: doc.numPages,
         pages,
         assets,

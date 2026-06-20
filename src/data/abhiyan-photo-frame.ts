@@ -69,7 +69,11 @@ export const ABIYAN_PHOTO_FRAME = {
     "सामाजिक उत्तरदायित्व और समानता कॉनक्लेव",
   ],
   olympiadCities: ["पठानकोट", "मोहाली", "पटियाला", "मोरिंडा", "पंचकुला", "कुरुक्षेत्र", "चंडीगढ़"],
-  pdfPath: "/abhiyanphotoframe.pdf",
+  /** Hosted on Google Drive — not bundled in repo (see public/ removal). */
+  pdfUrl:
+    "https://drive.google.com/file/d/1v8d87TR4xgd3S028unVBIjrZsNewR75n/view?usp=drive_link",
+  pdfEmbedUrl:
+    "https://drive.google.com/file/d/1v8d87TR4xgd3S028unVBIjrZsNewR75n/preview",
   pagePath: "/abhiyaninphotoframe",
   coverImageSrc: ABIYAN_FRAME_IMAGES.cover,
 } as const;
