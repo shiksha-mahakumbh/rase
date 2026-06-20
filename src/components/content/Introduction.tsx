@@ -2,8 +2,9 @@ import Link from "next/link";
 import { ABIYAN_PHOTO_FRAME } from "@/data/abhiyan-photo-frame";
 import {
   INTRODUCTION_CLOSING,
+  INTRODUCTION_MEETING_TAGLINE,
+  INTRODUCTION_OBJECTIVES,
   INTRODUCTION_PARAGRAPHS,
-  INTRODUCTION_PILLARS,
   INTRODUCTION_SECTION_NAV,
   INTRODUCTION_STATS,
 } from "@/data/introduction-content";
@@ -142,26 +143,43 @@ export default function Introduction() {
         </ul>
       </nav>
 
-      {/* Vision pillars */}
-      <section aria-labelledby="vision-heading">
-        <SectionHeading
-          id="vision"
-          title="Our Vision & Strengths"
-          description="Four pillars that define how Shiksha Mahakumbh Abhiyan connects Bharatiya wisdom with global educational transformation."
-        />
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {INTRODUCTION_PILLARS.map((pillar) => (
-            <article
-              key={pillar.title}
-              className={`overflow-hidden rounded-2xl border bg-gradient-to-br ${pillar.accent} p-5 shadow-sm transition hover:shadow-md md:p-6`}
-            >
-              <span className="text-2xl" aria-hidden>
-                {pillar.icon}
-              </span>
-              <h3 className="mt-3 text-lg font-bold text-brand-navy">{pillar.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{pillar.desc}</p>
-            </article>
-          ))}
+      {/* Our Objectives — हमारे उद्देश्य */}
+      <section aria-labelledby="objectives-heading">
+        <div className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy/5 via-white to-brand-saffron/5 p-6 md:p-8">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron">
+              {INTRODUCTION_MEETING_TAGLINE.titleHi} · {INTRODUCTION_MEETING_TAGLINE.subtitle}
+            </p>
+            <p className="mt-1 text-sm font-semibold text-brand-blue">
+              {INTRODUCTION_MEETING_TAGLINE.titleEn} — {INTRODUCTION_MEETING_TAGLINE.subtitle}
+            </p>
+          </div>
+
+          <SectionHeading
+            id="objectives"
+            title="Our Objectives"
+            description="हमारे उद्देश्य — Eight guiding aims that shape every Shiksha Mahakumbh edition and programme."
+          />
+
+          <ol className="mt-6 grid gap-4 sm:grid-cols-2">
+            {INTRODUCTION_OBJECTIVES.map((item) => (
+              <li
+                key={item.number}
+                className="flex gap-4 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm transition hover:border-brand-saffron/35 hover:shadow-md md:p-5"
+              >
+                <span
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-saffron to-brand-saffron/80 text-sm font-bold text-brand-navy shadow-sm"
+                  aria-hidden
+                >
+                  {item.number}
+                </span>
+                <div className="min-w-0">
+                  <h3 className="font-bold leading-snug text-brand-navy">{item.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
