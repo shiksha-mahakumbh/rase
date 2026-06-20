@@ -1,63 +1,47 @@
+"use client";
+
 import Link from "next/link";
 import { SectionHeader, SpeakerCard } from "@/components/ui";
+import { FEATURED_HOME_SPEAKERS } from "@/data/mahakumbh-abhiyan-speakers";
 import type { CmsSpeakerCard } from "@/lib/cms/types";
 
-const FALLBACK_SPEAKERS = [
-  {
-    name: "National Policymakers",
-    role: "Cabinet ministers, governors, and education leaders at past editions",
-    imageSrc: "/2023M/anurag_singh_thakur.JPG",
-  },
-  {
-    name: "Academic Leadership",
-    role: "INI directors, vice-chancellors, and research scholars",
-    imageSrc: "/2024K/k7.png",
-  },
-  {
-    name: "Spiritual & Cultural Guides",
-    role: "Dignitaries inaugurating the Mahakumbh tradition",
-    imageSrc: "/2024M/Press7.jpg",
-  },
-  {
-    name: "Organising Secretaries",
-    role: "Vidya Bharati, BSM, and national partner organisations",
-    imageSrc: "/2023M/raghunandan.JPG",
-  },
-];
+function formatCmsRole(s: CmsSpeakerCard): string {
+  return [s.designation, s.institution].filter(Boolean).join(" · ") || s.title || "";
+}
 
 export default function SpeakerHighlightsSection({
   speakers = [],
 }: {
   speakers?: CmsSpeakerCard[];
 }) {
-  const featured =
-    speakers.length > 0
-      ? (speakers.filter((s) => s.isFeatured).length >= 4
-          ? speakers.filter((s) => s.isFeatured)
-          : speakers
-        ).slice(0, 4)
-      : [];
+  const cmsCards = speakers
+    .filter((s) => s.fullName && s.fullName.length > 2)
+    .slice(0, 8)
+    .map((s) => ({
+      key: s.id,
+      name: s.fullName,
+      role: formatCmsRole(s),
+      imageSrc: s.photoUrl ?? undefined,
+      href: s.slug ? s.href : undefined,
+    }));
 
-  const cards =
-    featured.length > 0
-      ? featured.map((s) => ({
-          key: s.id,
-          name: s.fullName,
-          role: s.designation ?? s.title ?? s.institution ?? "",
-          imageSrc: s.photoUrl ?? undefined,
-          href: s.href,
-        }))
-      : FALLBACK_SPEAKERS.map((s) => ({
-          key: s.name,
-          name: s.name,
-          role: s.role,
-          imageSrc: s.imageSrc,
-          href: undefined as string | undefined,
-        }));
+  const staticCards = FEATURED_HOME_SPEAKERS.map((s) => ({
+    key: s.name,
+    name: s.name,
+    role: s.role,
+    imageSrc: s.imageSrc,
+    href: undefined as string | undefined,
+  }));
+
+  const cards = cmsCards.length >= 4 ? cmsCards.slice(0, 8) : staticCards.slice(0, 8);
 
   return (
-    <section className="bg-white py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-brand-surface-warm py-12 md:py-16">
+      <div
+        className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-brand-saffron/10 blur-3xl"
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Leadership"
           title="Voices That Shape the Movement"
@@ -74,6 +58,14 @@ export default function SpeakerHighlightsSection({
             )
           )}
         </div>
+        <p className="mt-8 text-center">
+          <Link
+            href="/speakers/directory"
+            className="text-sm font-semibold text-brand-navy hover:text-brand-saffron hover:underline"
+          >
+            शिक्षा महाकुंभ 1.0–5.0 — पूर्ण वक्ता सूची →
+          </Link>
+        </p>
       </div>
     </section>
   );

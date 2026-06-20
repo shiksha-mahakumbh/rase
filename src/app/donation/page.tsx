@@ -1,16 +1,16 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Donation from "../component/donate";
-
-const PAGE_HERO = {
-  eyebrow: "Support",
-  title: "Donation",
-  subtitle: "Support the Shiksha Mahakumbh national education movement.",
-  accent: "emerald" as const,
-};
+import Donation from "@/components/content/donate";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function DonationPage() {
   return (
-    <PublicPageShell hero={PAGE_HERO}>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Donation",
+        "Support the Shiksha Mahakumbh national education movement.",
+        "Support"
+      )}
+    >
       <Donation />
     </PublicPageShell>
   );

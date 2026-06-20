@@ -1,41 +1,17 @@
 #!/usr/bin/env node
 /**
- * Production Registration Verification Audit
+ * Production Registration Verification Audit (Supabase backend).
+ *
  * Usage: node scripts/production-registration-audit.mjs [baseUrl]
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  runTransaction,
-  collection,
-  addDoc,
-  serverTimestamp,
-  getDocs,
-  query,
-  limit,
-  orderBy,
-} from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { getAuth, signInAnonymously } from "firebase/auth";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const BASE = (process.argv[2] || "https://www.rase.co.in").replace(/\/$/, "");
+const BASE = (process.argv[2] || "https://www.shikshamahakumbh.com").replace(/\/$/, "");
 const OUT = path.join(ROOT, "docs", "production-registration-audit.json");
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDL6UJwLh8KaNHARuedHNTjWIcFixkfv5s",
-  authDomain: "shiksha-mahakumbh-abhiyan.firebaseapp.com",
-  projectId: "shiksha-mahakumbh-abhiyan",
-  storageBucket: "shiksha-mahakumbh-abhiyan.firebasestorage.app",
-  messagingSenderId: "316847987997",
-  appId: "1:316847987997:web:90e1d6b1971bbe1091d5f4",
-};
 
 const HUB_CATEGORIES = [
   "Delegate Registration",
@@ -54,14 +30,16 @@ const LEGACY_ROUTES = [
   { name: "Volunteer", path: "/registration/volunteer" },
   { name: "NGO", path: "/registration/ngo" },
   { name: "Talent", path: "/registration/talent" },
-  { name: "Accommodation2025", path: "/registration/Accomodation" },
-  { name: "TalentData", path: "/Talentdata" },
-  { name: "NGOData", path: "/ngoregistrationdatadekh" },
+  { name: "AllData", path: "/AllData" },
+  { name: "DelegateData", path: "/participantregistrationdatadekh" },
   { name: "VolunteerData", path: "/volunteerdatadekh" },
+  { name: "NGOData", path: "/ngoregistrationdatadekh" },
+  { name: "ConclaveData", path: "/Conclavedata" },
 ];
 
 const report = {
   baseUrl: BASE,
+  backend: "supabase",
   checkedAt: new Date().toISOString(),
   phases: {},
 };
@@ -71,209 +49,108 @@ function errMsg(e) {
   return e.code || e.message || String(e);
 }
 
-async function fetchText(urlPath, opts = {}) {
-  const res = await fetch(`${BASE}${urlPath}`, { redirect: "follow", ...opts });
+async function fetchJson(urlPath, opts = {}) {
+  const url = urlPath.startsWith("http") ? urlPath : `${BASE}${urlPath}`;
+  const res = await fetch(url, { redirect: "follow", ...opts });
   const text = await res.text();
-  return { res, text, url: `${BASE}${urlPath}` };
+  let json = null;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    json = { _raw: text.slice(0, 300) };
+  }
+  return { res, json, text, url };
 }
 
-// ─── PHASE 1: Firestore reality check ───────────────────────────────────────
-async function phase1Firestore() {
-  const app = initializeApp(firebaseConfig, "prod-audit-firestore");
-  const db = getFirestore(app);
-  const results = {
-    counterRead: null,
-    counterWrite: null,
-    masterCreate: null,
-    categoryCreate: null,
-    auditLogCreate: null,
-    masterRead: null,
-    recentRegistrationsSample: null,
-    rulesVsRepo: "unknown",
-  };
-
-  // Counter read
-  try {
-    const snap = await getDoc(doc(db, "registrationCounters", "smk2026"));
-    results.counterRead = {
-      status: snap.exists() ? "PASS" : "FAIL",
-      exists: snap.exists(),
-      lastNumber: snap.exists() ? snap.data()?.lastNumber : null,
-      error: null,
-    };
-  } catch (e) {
-    results.counterRead = { status: "FAIL", exists: false, error: errMsg(e) };
-  }
-
-  // Counter write (transaction increment) — rollback not possible; report only
-  try {
-    const counterRef = doc(db, "registrationCounters", "smk2026");
-    const next = await runTransaction(db, async (tx) => {
-      const s = await tx.get(counterRef);
-      const cur = s.exists() ? (s.data().lastNumber ?? 0) : 0;
-      const updated = cur + 1;
-      tx.set(counterRef, { lastNumber: updated, updatedAt: serverTimestamp() }, { merge: true });
-      return updated;
-    });
-    results.counterWrite = { status: "PASS", nextNumber: next, error: null };
-  } catch (e) {
-    results.counterWrite = { status: "FAIL", error: errMsg(e) };
-  }
-
-  const testPayload = {
-    registrationId: "SMK2026-999998",
-    registrationType: "Exhibition",
-    fullName: "PROD_AUDIT_PROBE",
-    email: "prod-audit-probe@rase.co.in.invalid",
-    paymentStatus: "Submitted",
-    registrationStatus: "Submitted",
-    accommodationStatus: "Not Required",
-    _prodAuditProbe: true,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  };
-
-  // Master create
-  try {
-    const ref = await addDoc(collection(db, "registrations"), testPayload);
-    results.masterCreate = { status: "PASS", docId: ref.id, error: null };
-  } catch (e) {
-    results.masterCreate = { status: "FAIL", error: errMsg(e) };
-  }
-
-  // Category create
-  try {
-    const ref = await addDoc(collection(db, "delegate_registrations"), {
-      ...testPayload,
-      registrationType: "Delegate Registration",
-    });
-    results.categoryCreate = { status: "PASS", docId: ref.id, collection: "delegate_registrations", error: null };
-  } catch (e) {
-    results.categoryCreate = { status: "FAIL", collection: "delegate_registrations", error: errMsg(e) };
-  }
-
-  // Audit log create
-  try {
-    const ref = await addDoc(collection(db, "audit_logs"), {
-      action: "prod_audit_probe",
-      registrationId: "SMK2026-999998",
-      createdAt: serverTimestamp(),
-      _prodAuditProbe: true,
-    });
-    results.auditLogCreate = { status: "PASS", docId: ref.id, error: null };
-  } catch (e) {
-    results.auditLogCreate = { status: "FAIL", error: errMsg(e) };
-  }
-
-  // Unauthenticated read attempt
-  try {
-    const snap = await getDocs(query(collection(db, "registrations"), orderBy("createdAt", "desc"), limit(3)));
-    results.masterRead = {
-      status: "PASS",
-      count: snap.size,
-      samples: snap.docs.map((d) => ({
-        id: d.id,
-        registrationId: d.data().registrationId,
-        type: d.data().registrationType,
-        paymentStatus: d.data().paymentStatus,
-        hasRazorpayOrderId: Boolean(d.data()?.payment?.razorpayOrderId ?? d.data().razorpayOrderId),
-        hasUtr: Boolean(d.data()?.payment?.utrNumber ?? d.data().utrNumber),
-      })),
-      error: null,
-    };
-  } catch (e) {
-    results.masterRead = { status: "FAIL", error: errMsg(e) };
-  }
-
-  const repoRulesPath = path.join(ROOT, "firebase", "firestore.rules");
-  const repoRules = fs.existsSync(repoRulesPath) ? fs.readFileSync(repoRulesPath, "utf8") : "";
-
-  const counterBlockedInRepo = /registrationCounters[\s\S]*allow write: if false/.test(repoRules);
-  const categoryBlockedInRepo = /match \/\\{collection\\}\/\\{docId\\}/.test(repoRules);
-
-  if (results.counterWrite.status === "PASS" && counterBlockedInRepo) {
-    results.rulesVsRepo = "PRODUCTION_RULES_DIFFER_FROM_REPO";
-  } else if (results.counterWrite.status === "FAIL" && counterBlockedInRepo) {
-    results.rulesVsRepo = "MATCHES_REPO_BLOCKED";
-  } else if (results.counterWrite.status === "PASS") {
-    results.rulesVsRepo = "PRODUCTION_ALLOWS_WRITES";
-  }
-
-  results.overall =
-    results.masterCreate.status === "PASS" &&
-    results.categoryCreate.status === "PASS" &&
-    results.counterWrite.status === "PASS"
-      ? "PASS"
-      : results.masterCreate.status === "PASS"
-        ? "PARTIAL"
-        : "FAIL";
-
-  return results;
+async function fetchText(urlPath, opts = {}) {
+  const { res, text, url } = await fetchJson(urlPath, opts);
+  return { res, text, url };
 }
 
-// ─── PHASE 2: Storage verification ──────────────────────────────────────────
+async function phase1Health() {
+  const basic = await fetchJson("/api/health");
+  const v2 = await fetchJson("/api/v2/health");
+
+  const database =
+    v2.json?.supabase?.database ?? v2.json?.database ?? "unknown";
+
+  return {
+    basic: {
+      status: basic.res.ok ? "PASS" : "FAIL",
+      http: basic.res.status,
+      body: basic.json,
+    },
+    v2: {
+      status: v2.res.ok && v2.json?.backend === "supabase" ? "PASS" : "FAIL",
+      http: v2.res.status,
+      backend: v2.json?.backend ?? null,
+      database,
+      body: v2.json,
+    },
+    overall:
+      basic.res.ok && v2.res.ok && database === "connected" ? "PASS" : "PARTIAL",
+  };
+}
+
 async function phase2Storage() {
-  const app = initializeApp(firebaseConfig, "prod-audit-storage");
-  const storage = getStorage(app);
-  const auth = getAuth(app);
-  const results = { anonymousAuth: null, uploads: [] };
+  const noFile = await fetchJson("/api/registration/upload", {
+    method: "POST",
+    body: new FormData(),
+  });
 
-  try {
-    const cred = await signInAnonymously(auth);
-    results.anonymousAuth = { status: "PASS", uid: cred.user.uid };
-  } catch (e) {
-    results.anonymousAuth = { status: "FAIL", error: errMsg(e) };
-  }
+  const form = new FormData();
+  const pdf = new Blob(["%PDF-1.4 prod-audit\n"], { type: "application/pdf" });
+  form.append("file", pdf, "prod-audit.pdf");
+  form.append("registrationType", "Best Practices");
+  form.append("field", "supportingPdf");
+  const pdfUpload = await fetchJson("/api/registration/upload", {
+    method: "POST",
+    body: form,
+  });
 
-  const samples = [
-    { label: "payment-receipt-png", folder: "registrations/Delegate Registration/receipt", contentType: "image/png", bytes: pngBytes() },
-    { label: "pdf-upload", folder: "registrations/Best Practices/supportingPdf", contentType: "application/pdf", bytes: minimalPdfBytes() },
-    { label: "csv-upload", folder: "registrations/Olympiad/studentList", contentType: "text/csv", bytes: new TextEncoder().encode("name,class\nAudit,10\n") },
-    { label: "xlsx-upload", folder: "registrations/Olympiad/studentList", contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", bytes: minimalXlsxBytes() },
+  const pngForm = new FormData();
+  const png = new Blob([Uint8Array.from(atob("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="), (c) => c.charCodeAt(0))], {
+    type: "image/png",
+  });
+  pngForm.append("file", png, "receipt.png");
+  pngForm.append("registrationType", "Delegate Registration");
+  pngForm.append("field", "receipt");
+  const pngUpload = await fetchJson("/api/registration/upload", {
+    method: "POST",
+    body: pngForm,
+  });
+
+  const uploads = [
+    {
+      label: "reject-empty",
+      status: !noFile.res.ok ? "PASS" : "FAIL",
+      http: noFile.res.status,
+      body: noFile.json,
+    },
+    {
+      label: "pdf-upload",
+      status: pdfUpload.res.ok && pdfUpload.json?.url ? "PASS" : "FAIL",
+      http: pdfUpload.res.status,
+      url: pdfUpload.json?.url ?? null,
+    },
+    {
+      label: "png-upload",
+      status: pngUpload.res.ok && pngUpload.json?.url ? "PASS" : "FAIL",
+      http: pngUpload.res.status,
+      url: pngUpload.json?.url ?? null,
+    },
   ];
 
-  for (const s of samples) {
-    const storagePath = `${s.folder}/prod_audit_${Date.now()}_${s.label}`;
-    const entry = { label: s.label, path: storagePath, status: "FAIL", url: null, error: null };
-    try {
-      const r = ref(storage, storagePath);
-      await uploadBytes(r, s.bytes, { contentType: s.contentType });
-      const url = await getDownloadURL(r);
-      entry.status = "PASS";
-      entry.url = url;
-      try {
-        await deleteObject(r);
-        entry.cleaned = true;
-      } catch {
-        entry.cleaned = false;
-      }
-    } catch (e) {
-      entry.error = errMsg(e);
-    }
-    results.uploads.push(entry);
-  }
-
-  results.overall = results.uploads.every((u) => u.status === "PASS") ? "PASS" : results.uploads.some((u) => u.status === "PASS") ? "PARTIAL" : "FAIL";
-  return results;
+  return {
+    uploads,
+    overall: uploads.every((u) => u.status === "PASS")
+      ? "PASS"
+      : uploads.some((u) => u.status === "PASS")
+        ? "PARTIAL"
+        : "FAIL",
+  };
 }
 
-function pngBytes() {
-  // 1x1 PNG
-  const b64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
-  return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-}
-
-function minimalPdfBytes() {
-  const pdf = "%PDF-1.1\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 0>>endobj\nxref\n0 3\ntrailer<</Root 1 0 R>>\n%%EOF";
-  return new TextEncoder().encode(pdf);
-}
-
-function minimalXlsxBytes() {
-  // Not a valid xlsx — tests MIME enforcement
-  return new TextEncoder().encode("PK\x03\x04fake-xlsx-probe");
-}
-
-// ─── PHASE 3 & 4: Pages + legacy routes ─────────────────────────────────────
 async function phase3And4Pages() {
   const matrix = [];
   const legacy = [];
@@ -282,51 +159,57 @@ async function phase3And4Pages() {
   const hasRecaptcha = /recaptcha|grecaptcha|NEXT_PUBLIC_RECAPTCHA/i.test(regHtml);
 
   for (const cat of HUB_CATEGORIES) {
-    const slug = cat.toLowerCase().replace(/\s+/g, " ");
-    const renders = regHtml.includes(cat) || new RegExp(cat.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(regHtml);
+    const renders =
+      regHtml.includes(cat) ||
+      new RegExp(cat.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(regHtml);
     matrix.push({
       category: cat,
       frontend: renders ? "PASS" : "UNKNOWN",
-      note: renders ? "Category label found on /registration HTML" : "Client-rendered; label may load via JS",
+      note: renders
+        ? "Category label found on /registration HTML"
+        : "Client-rendered; label may load via JS",
     });
   }
 
-  // API probes
   const api = {};
+
   try {
-    const cap = await fetch(`${BASE}/api/registration/verify-captcha`, {
+    const cap = await fetchJson("/api/registration/verify-captcha", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token: "probe", action: "registration" }),
     });
-    const capBody = await cap.json();
     api.captcha = {
-      status: cap.ok || capBody.error === "Missing captcha token" || capBody.error?.includes("token") ? "PASS" : "FAIL",
-      http: cap.status,
-      body: capBody,
+      status:
+        cap.res.ok ||
+        cap.json?.error === "Missing captcha token" ||
+        String(cap.json?.error ?? "").includes("token")
+          ? "PASS"
+          : "FAIL",
+      http: cap.res.status,
+      body: cap.json,
     };
   } catch (e) {
     api.captcha = { status: "FAIL", error: errMsg(e) };
   }
 
   try {
-    const order = await fetch(`${BASE}/api/payments/create-order`, {
+    const order = await fetchJson("/api/payments/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: 10000, currency: "INR", receipt: "prod_audit" }),
     });
-    const orderBody = await order.json();
     api.createOrder = {
-      status: order.ok && orderBody.order_id ? "PASS" : "FAIL",
-      http: order.status,
-      hasOrderId: Boolean(orderBody.order_id),
+      status: order.res.ok && order.json?.order_id ? "PASS" : "FAIL",
+      http: order.res.status,
+      hasOrderId: Boolean(order.json?.order_id),
     };
   } catch (e) {
     api.createOrder = { status: "FAIL", error: errMsg(e) };
   }
 
   try {
-    const email = await fetch(`${BASE}/api/registration/send-email`, {
+    const email = await fetchJson("/api/registration/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -335,11 +218,10 @@ async function phase3And4Pages() {
         email: "prod-audit-probe@rase.co.in.invalid",
       }),
     });
-    const emailBody = await email.json();
     api.sendEmail = {
-      status: email.ok ? "PASS" : "FAIL",
-      http: email.status,
-      emailStatus: emailBody.emailStatus ?? emailBody.error,
+      status: email.res.ok ? "PASS" : "FAIL",
+      http: email.res.status,
+      emailStatus: email.json?.emailStatus ?? email.json?.error,
     };
   } catch (e) {
     api.sendEmail = { status: "FAIL", error: errMsg(e) };
@@ -360,70 +242,91 @@ async function phase3And4Pages() {
     });
   }
 
-  return { matrix, legacy, hasRecaptcha, api, registrationPageStatus: regHtml.length > 1000 ? "PASS" : "FAIL" };
+  return {
+    matrix,
+    legacy,
+    hasRecaptcha,
+    api,
+    registrationPageStatus: regHtml.length > 1000 ? "PASS" : "FAIL",
+  };
 }
 
 function classifyLegacy(route, res, text, redirected, finalUrl) {
-  if (!res.ok) return "BROKEN";
-  if (route.path.includes("datadekh") || route.path === "/Talentdata") {
-    if (res.status === 200 && text.length > 200) return "ACTIVE";
-    return "BROKEN";
-  }
-  if (route.path === "/registration/Accomodation" && !redirected && /Accommodation|accommodation/i.test(text)) {
-    return "ACTIVE";
-  }
-  if (redirected && /\/registration\/?$/.test(finalUrl)) return "LEGACY";
+  if (!res.ok && !redirected) return "BROKEN";
+  if (redirected && /\/admin\/?$/.test(finalUrl)) return "REDIRECTED";
+  if (redirected && /\/registration\/?$/.test(finalUrl)) return "REDIRECTED";
   if (redirected) return "LEGACY";
   return "ACTIVE";
 }
 
-// ─── PHASE 5: Payment data integrity (from readable samples) ────────────────
-function phase5PaymentIntegrity(masterRead) {
-  if (!masterRead?.samples?.length) {
-    return { status: "INCONCLUSIVE", reason: "Cannot read registrations without permission", overall: "FAIL" };
-  }
-  const samples = masterRead.samples;
-  const withOrderId = samples.filter((s) => s.hasRazorpayOrderId).length;
-  const withUtr = samples.filter((s) => s.hasUtr).length;
+async function phase5Security() {
+  const submit = await fetchJson("/api/registration/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      registrationType: "Conclave",
+      data: {
+        fullName: "Security Probe",
+        email: "security-probe@rase.co.in",
+        gender: "Male",
+        designation: "Tester",
+        institution: "QA",
+        address: "Test",
+        country: "India",
+        contactNumber: "9999999999",
+        vidyaBharti: "Non Vidya Bharti",
+        accommodationRequired: "No",
+        conclaveSelection: "Research Conclave",
+        participationType: "Observer",
+      },
+    }),
+  });
+
+  const badSig = await fetchJson("/api/payments/razorpay-webhook", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-razorpay-signature": "invalid",
+    },
+    body: JSON.stringify({ event: "payment.captured" }),
+  });
+
+  const noSig = await fetchJson("/api/payments/razorpay-webhook", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event: "payment.captured" }),
+  });
+
+  const lookup = await fetchJson("/api/registration/SMK2026-000001");
+
   return {
-    status: "PASS",
-    sampleSize: samples.length,
-    withRazorpayOrderId: withOrderId,
-    withUtr,
-    webhookCorrelatable: withOrderId > 0 ? "PASS" : "FAIL",
-    samples,
-    overall: withOrderId > 0 ? "PASS" : samples.length > 0 ? "FAIL" : "INCONCLUSIVE",
+    submitWithoutCaptcha: {
+      status: !submit.res.ok ? "PASS" : "FAIL",
+      http: submit.res.status,
+      body: submit.json,
+    },
+    webhookInvalidSignature: {
+      status: badSig.res.status === 401 || badSig.res.status === 400 ? "PASS" : "FAIL",
+      http: badSig.res.status,
+    },
+    webhookMissingSignature: {
+      status: noSig.res.status === 401 || noSig.res.status === 400 ? "PASS" : "FAIL",
+      http: noSig.res.status,
+    },
+    publicLookupWithoutAuth: {
+      status: lookup.res.status === 401 || lookup.res.status === 400 ? "PASS" : "FAIL",
+      http: lookup.res.status,
+    },
+    overall:
+      !submit.res.ok &&
+      (badSig.res.status === 401 || badSig.res.status === 400) &&
+      (lookup.res.status === 401 || lookup.res.status === 400)
+        ? "PASS"
+        : "PARTIAL",
   };
 }
 
-// ─── PHASE 6: Webhook audit logs probe ──────────────────────────────────────
-async function phase6WebhookLogs(db) {
-  try {
-    const snap = await getDocs(
-      query(collection(db, "audit_logs"), orderBy("createdAt", "desc"), limit(10))
-    );
-    const logs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    const webhookLogs = logs.filter((l) => l.action === "razorpay_webhook");
-    return {
-      status: snap.size > 0 ? "PASS" : "FAIL",
-      totalLogs: snap.size,
-      webhookLogs: webhookLogs.length,
-      recent: logs.slice(0, 5).map((l) => ({
-        action: l.action,
-        registrationId: l.registrationId,
-        paymentStatus: l.paymentStatus,
-        razorpayOrderId: l.razorpayOrderId,
-      })),
-      overall: webhookLogs.length > 0 ? "PASS" : "FAIL",
-      note: webhookLogs.length === 0 ? "No razorpay_webhook audit logs visible to unauthenticated client" : null,
-    };
-  } catch (e) {
-    return { status: "FAIL", error: errMsg(e), overall: "FAIL" };
-  }
-}
-
-// ─── Playwright UI verification ─────────────────────────────────────────────
-async function phase3Playwright() {
+async function phasePlaywright() {
   let chromium;
   try {
     const pw = await import("playwright");
@@ -434,7 +337,7 @@ async function phase3Playwright() {
 
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
-  const ui = { categories: [], conclaveValidation: null, captchaScript: null };
+  const ui = { categories: [], captchaScript: null };
 
   try {
     await page.goto(`${BASE}/registration`, { waitUntil: "networkidle", timeout: 60000 });
@@ -445,9 +348,17 @@ async function phase3Playwright() {
     });
 
     for (const cat of HUB_CATEGORIES) {
-      const entry = { category: cat, renders: false, canSelect: false, validationBlocked: null, submitBlocked: null };
+      const entry = {
+        category: cat,
+        renders: false,
+        canSelect: false,
+        validationBlocked: null,
+        hasSubmit: false,
+      };
       try {
-        const btn = page.getByRole("button", { name: new RegExp(cat.replace(/[()]/g, "\\$&"), "i") }).first();
+        const btn = page
+          .getByRole("button", { name: new RegExp(cat.replace(/[()]/g, "\\$&"), "i") })
+          .first();
         if (await btn.count()) {
           entry.renders = true;
           await btn.click();
@@ -482,33 +393,30 @@ async function phase3Playwright() {
   return ui;
 }
 
-// ─── Score ──────────────────────────────────────────────────────────────────
 function computeScore(phases) {
   let score = 0;
-  if (phases.firestore?.overall === "PASS") score += 20;
-  else if (phases.firestore?.overall === "PARTIAL") score += 10;
-  if (phases.storage?.overall === "PASS") score += 10;
-  else if (phases.storage?.overall === "PARTIAL") score += 5;
+  if (phases.health?.overall === "PASS") score += 20;
+  else if (phases.health?.overall === "PARTIAL") score += 10;
+  if (phases.storage?.overall === "PASS") score += 15;
+  else if (phases.storage?.overall === "PARTIAL") score += 8;
   if (phases.pages?.registrationPageStatus === "PASS") score += 5;
   if (phases.playwright?.status === "PASS") score += 15;
   else if (phases.playwright?.status === "PARTIAL") score += 8;
   if (phases.pages?.api?.captcha?.status === "PASS") score += 5;
   if (phases.pages?.api?.createOrder?.status === "PASS") score += 10;
-  if (phases.payment?.overall === "PASS") score += 15;
-  if (phases.webhook?.overall === "PASS") score += 10;
+  if (phases.security?.overall === "PASS") score += 15;
+  else if (phases.security?.overall === "PARTIAL") score += 8;
   if (phases.pages?.api?.sendEmail?.status === "PASS") score += 5;
   if (phases.email?.smtpWorking) score += 5;
+  if (phases.admin?.pageReachable === "PASS") score += 5;
   return Math.min(100, score);
 }
 
 async function main() {
-  console.log(`Production Registration Audit: ${BASE}\n`);
+  console.log(`Production Registration Audit (Supabase): ${BASE}\n`);
 
-  console.log("Phase 1: Firestore...");
-  report.phases.firestore = await phase1Firestore();
-
-  const app2 = initializeApp(firebaseConfig, "prod-audit-logs");
-  const db2 = getFirestore(app2);
+  console.log("Phase 1: Health...");
+  report.phases.health = await phase1Health();
 
   console.log("Phase 2: Storage...");
   report.phases.storage = await phase2Storage();
@@ -516,28 +424,21 @@ async function main() {
   console.log("Phase 3/4: Pages & legacy...");
   report.phases.pages = await phase3And4Pages();
 
-  console.log("Phase 5: Payment integrity...");
-  report.phases.payment = phase5PaymentIntegrity(report.phases.firestore.masterRead);
+  console.log("Phase 5: Security...");
+  report.phases.security = await phase5Security();
 
-  console.log("Phase 6: Webhook logs...");
-  report.phases.webhook = await phase6WebhookLogs(db2);
-
-  console.log("Phase 3 UI: Playwright...");
-  report.phases.playwright = await phase3Playwright();
+  console.log("Phase 6: Playwright...");
+  report.phases.playwright = await phasePlaywright();
 
   report.phases.email = {
     apiReachable: report.phases.pages.api?.sendEmail?.status === "PASS",
     smtpWorking: report.phases.pages.api?.sendEmail?.emailStatus === "sent",
     emailStatus: report.phases.pages.api?.sendEmail?.emailStatus,
-    adminNotification: "NOT_PROBED",
-    emailDeliveryStatusUpdate: "INCONCLUSIVE",
   };
 
   report.phases.admin = {
-    pageReachable: null,
-    canViewAll: report.phases.firestore.masterRead?.status === "PASS" ? "PASS" : "BLOCKED_WITHOUT_ADMIN",
-    legacyInAdmin: "FAIL",
-    note: "Admin UI requires Google OAuth; data read used unauthenticated Firestore client",
+    pageReachable: "FAIL",
+    note: "Admin UI requires Supabase email/password session",
   };
 
   try {
@@ -547,25 +448,12 @@ async function main() {
     report.phases.admin.pageReachable = "FAIL";
   }
 
-  report.phases.dataIntegrity = {
-    duplicateCheck: "INCONCLUSIVE",
-    orphanPayments: "INCONCLUSIVE",
-    note: "Full integrity counts require admin/service-account Firestore access",
-  };
-
-  if (report.phases.firestore.masterRead?.samples) {
-    const ids = report.phases.firestore.masterRead.samples.map((s) => s.registrationId).filter(Boolean);
-    report.phases.dataIntegrity.sampleRegistrationIds = ids;
-    report.phases.dataIntegrity.duplicateCheck = new Set(ids).size === ids.length ? "PASS" : "FAIL";
-  }
-
   report.score = computeScore(report.phases);
 
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(report, null, 2));
   console.log(`\nWrote ${OUT}`);
   console.log(`Production Registration Score: ${report.score}/100`);
-  console.log(JSON.stringify(report.phases, null, 2));
 }
 
 main().catch((e) => {

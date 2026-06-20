@@ -18,16 +18,16 @@ export default function FooterNewsletterSlot() {
   };
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm md:p-6">
-      <h3 className="mb-1 text-sm font-bold uppercase tracking-wider text-brand-saffron">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+      <h3 className="mb-1 text-sm font-bold uppercase tracking-wider text-brand-saffron-dark">
         Stay Informed
       </h3>
-      <p className="mb-4 text-xs leading-relaxed text-gray-400">
+      <p className="mb-4 text-xs leading-relaxed text-slate-500">
         Subscribe for updates on Shiksha Mahakumbh programmes, registrations,
         and academic announcements.
       </p>
       {status === "submitted" ? (
-        <p className="text-sm text-emerald-400" role="status">
+        <p className="text-sm text-brand-emerald" role="status">
           Thank you. Newsletter integration coming soon — your interest is noted.
         </p>
       ) : (
@@ -42,7 +42,7 @@ export default function FooterNewsletterSlot() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
             required
-            className="min-h-[44px] flex-1 rounded-lg border border-white/20 bg-white/10 px-3 text-sm text-white placeholder:text-gray-500 focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron"
+            className="min-h-[44px] flex-1 rounded-lg border border-slate-200 bg-brand-surface-warm px-3 text-sm text-brand-navy placeholder:text-slate-400 focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron"
           />
           <button
             type="submit"

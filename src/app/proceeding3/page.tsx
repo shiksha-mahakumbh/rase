@@ -1,14 +1,15 @@
 "use client";
 import React from "react";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Proceeding3 from "../component/Proceeding3";
+import Proceeding3 from "@/components/proceedings/Proceeding3";
 
-const PAGE_HERO = {
-  eyebrow: "Publications",
-  title: "Proceedings Volume III",
-  subtitle: "Research outcomes from Shiksha Mahakumbh editions.",
-  accent: "navy",
-} as const;
+import { brandPageHero } from "@/lib/page-heroes";
+
+const PAGE_HERO = brandPageHero(
+  "Proceedings Volume III",
+  "Research outcomes from Shiksha Mahakumbh editions.",
+  "Publications"
+);
 
 // Sample data for demonstration. Replace this with your actual data source or fetch method.
 const data = {

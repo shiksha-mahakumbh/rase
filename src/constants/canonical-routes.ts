@@ -7,7 +7,6 @@ export const CANONICAL_ROUTES = {
   home: "/",
   registration: "/registration",
   introduction: "/introduction",
-  abhiyan: "/abhiyan",
   pastEvents: "/past-events",
   upcomingEvents: "/upcoming-events",
   contact: "/contact-us",
@@ -19,7 +18,8 @@ export const CANONICAL_ROUTES = {
   merchandise: "/merchandise",
   press: "/press",
   comingSoon: "/coming-soon",
-  accommodation: "/accommodation",
+  /** Accommodation registration — unified hub only (legacy `/accommodation` redirects here) */
+  accommodation: "/registration",
   departments: {
     academicCouncil: "/departments/academic-council",
     prabandhan: "/departments/prabandhan",

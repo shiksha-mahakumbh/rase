@@ -29,12 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({ ...FALLBACK_META, ogImageUrl: ogImage ?? undefined });
 }
 
-const PAGE_HERO = {
-  eyebrow: "Resources",
-  title: "Downloads Center",
-  subtitle: "Official brochures, reports, guidelines, circulars, and presentations.",
-  accent: "navy" as const,
-};
+import { brandPageHero } from "@/lib/page-heroes";
 
 const BREADCRUMBS = [
   { name: "Home", path: "/" },
@@ -51,7 +46,15 @@ export default async function DownloadsPage() {
   });
 
   return (
-    <PublicPageShell hero={PAGE_HERO} showCta={false} breadcrumbs={BREADCRUMBS}>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Downloads Center",
+        "Official brochures, reports, guidelines, circulars, and presentations.",
+        "Resources"
+      )}
+      showCta={false}
+      breadcrumbs={BREADCRUMBS}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

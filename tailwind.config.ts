@@ -19,6 +19,8 @@ const config: Config = {
         brand: {
           navy: "#0B1F3B",
           "navy-light": "#1E3A5F",
+          blue: "#1A56DB",
+          "blue-light": "#3B82F6",
           saffron: "#FF9933",
           "saffron-dark": "#E67E00",
           emerald: "#059669",

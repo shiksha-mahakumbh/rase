@@ -8,6 +8,7 @@ import { SITE_URL } from "@/config/site";
 import type { CmsLoadedEvent } from "@/lib/cms/types";
 import { formatEventDateRange } from "@/lib/cms/organizational";
 import { buildEventSchema } from "@/server/services/seo.service";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function CmsEventView({ event }: { event: CmsLoadedEvent }) {
   const dateLabel = formatEventDateRange(event.startDate, event.endDate);
@@ -34,10 +35,12 @@ export default function CmsEventView({ event }: { event: CmsLoadedEvent }) {
       <JsonLd data={eventJsonLd as Record<string, unknown>} />
       <PublicPageShell
         hero={{
-          eyebrow: event.edition ?? "Event",
-          title: event.title,
-          subtitle: [dateLabel, location].filter(Boolean).join(" · "),
-          accent: "navy",
+          ...brandPageHero(
+            event.title,
+            [dateLabel, location].filter(Boolean).join(" · "),
+            event.edition ?? "Event"
+          ),
+          imageSrc: event.bannerUrl ?? undefined,
         }}
         relatedPath="/events"
         showCta={false}

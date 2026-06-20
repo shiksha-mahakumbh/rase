@@ -1,6 +1,6 @@
 "use client";
 
-import SlideShow from "@/app/component/SlideShow";
+import SlideShow from "@/components/home/sections/SlideShow";
 import { SectionHeader } from "@/components/ui";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionItems } from "@/lib/cms/utils";

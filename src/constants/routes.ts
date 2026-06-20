@@ -23,24 +23,5 @@ export const ROUTES = {
   refund: "/refund-policy",
 } as const;
 
-/** Routes that expose PII exports — require admin session cookie */
-export const PROTECTED_DATA_ROUTE_PREFIXES = [
-  "/admin",
-  "/AllData",
-  "/participantregistrationdatadekh",
-  "/volunteerdatadekh",
-  "/volunteerregistrationdatadekh",
-  "/ngoregistrationdatadekh",
-  "/abstractdatadekh",
-  "/fulllengthdatadekh",
-  "/fulllengthpaperdatadekh",
-  "/organiserdatadekh",
-  "/schooldata",
-  "/Talentdata",
-  "/Conclavedata",
-  "/Bestpracticedata",
-  "/accomodationdata",
-  "/DelegateForm",
-  "/heiprojectregistrationdata",
-  "/noticeboarddata",
-] as const;
+/** Routes that expose PII — require admin session cookie */
+export const PROTECTED_DATA_ROUTE_PREFIXES = ["/admin"] as const;

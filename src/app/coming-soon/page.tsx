@@ -1,5 +1,5 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import ComingSoon from "../component/CommingSoon";
+import ComingSoon from "@/components/content/CommingSoon";
 import { PAGE_HEROES } from "@/lib/page-heroes";
 
 export default function ComingSoonPage() {

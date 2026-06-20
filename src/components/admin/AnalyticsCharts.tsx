@@ -13,7 +13,7 @@ import {
   Legend,
 } from "recharts";
 import { RegistrationRow } from "@/lib/exportRegistrations";
-import { formatFirestoreDate } from "@/lib/saveRegistration";
+import { formatRegistrationDate } from "@/lib/format-date";
 
 const COLORS = [
   "#502A2A",
@@ -43,7 +43,7 @@ export default function AnalyticsCharts({
     const type = r.registrationType ?? "Unknown";
     typeMap.set(type, (typeMap.get(type) ?? 0) + 1);
 
-    const day = formatFirestoreDate(r.createdAt).split(",")[0];
+    const day = formatRegistrationDate(r.createdAt).split(",")[0];
     dailyMap.set(day, (dailyMap.get(day) ?? 0) + 1);
 
     const country = String(r.country ?? "Unknown");

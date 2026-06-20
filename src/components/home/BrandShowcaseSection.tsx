@@ -1,0 +1,109 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
+
+const PILLARS = [
+  {
+    title: "NEP 2020",
+    subtitle: "Policy & Implementation",
+    color: "from-brand-blue to-brand-blue-light",
+    href: "/introduction",
+  },
+  {
+    title: "Research",
+    subtitle: "Papers & Proceedings",
+    color: "from-brand-saffron to-brand-saffron-dark",
+    href: "/proceedings",
+  },
+  {
+    title: "Olympiads",
+    subtitle: "Talent & Excellence",
+    color: "from-brand-emerald to-emerald-600",
+    href: "/abhiyaninphotoframe",
+  },
+  {
+    title: "Conclaves",
+    subtitle: "8 Multi-track Forums",
+    color: "from-violet-600 to-violet-500",
+    href: "/committees",
+  },
+];
+
+export default function BrandShowcaseSection() {
+  return (
+    <section
+      aria-label="Shiksha Mahakumbh brand vision"
+      className="relative overflow-hidden border-y border-brand-saffron/20 bg-gradient-to-b from-white via-brand-surface-warm to-white py-12 md:py-16"
+    >
+      <div className="brand-grid-pattern pointer-events-none absolute inset-0 opacity-40" aria-hidden />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron-dark">
+              Department of Holistic Education
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold text-brand-navy md:text-3xl">
+              Where Bharatiya wisdom meets{" "}
+              <span className="text-brand-blue">modern science</span>
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-slate-600">
+              From ISRO&apos;s reach to the call of the conch — Shiksha Mahakumbh Abhiyan celebrates
+              holistic education that is vibrant, inclusive, and globally relevant. Our visual identity
+              reflects energy, tradition, and forward-looking innovation.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href={ROUTES.registration}
+                className="inline-flex min-h-[44px] items-center rounded-xl bg-brand-saffron px-5 py-2.5 text-sm font-bold text-brand-navy shadow-lg shadow-brand-saffron/25 transition hover:bg-brand-saffron-dark hover:text-white"
+              >
+                Join the movement
+              </Link>
+              <Link
+                href="/past-events"
+                className="inline-flex min-h-[44px] items-center rounded-xl border-2 border-brand-blue/30 px-5 py-2.5 text-sm font-bold text-brand-blue transition hover:bg-brand-blue/5"
+              >
+                Explore past editions
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div
+              className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-brand-saffron/20 blur-2xl"
+              aria-hidden
+            />
+            <Image
+              src="/branding/shiksha-mahakumbh-brand-hero.png"
+              alt="Shiksha Mahakumbh Abhiyan brand artwork"
+              width={640}
+              height={480}
+              className="relative z-10 w-full rounded-2xl shadow-xl"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
+        </div>
+
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {PILLARS.map((p) => (
+            <Link
+              key={p.title}
+              href={p.href}
+              className="group overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className={`h-2 bg-gradient-to-r ${p.color}`} />
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-brand-navy group-hover:text-brand-saffron">
+                  {p.title}
+                </h3>
+                <p className="mt-1 text-sm text-slate-500">{p.subtitle}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -46,7 +46,7 @@ export default function TrustStrip() {
   return (
     <section
       aria-label="Organizing partners"
-      className="border-y border-slate-200 bg-white py-6"
+      className="border-y border-brand-saffron/15 bg-gradient-to-r from-brand-surface-warm via-white to-brand-surface-warm py-6"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-slate-500">

@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import NavBar from "@/components/layout/NavBar";
+import Footer from "@/components/layout/Footer";
 
 export default function Error({
   error,

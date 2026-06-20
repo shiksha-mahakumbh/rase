@@ -325,7 +325,7 @@ export async function getRobotsConfig() {
   });
   return {
     allow: "/",
-    disallow: ["/admin", "/api/", "/AllData", "/datadekh"],
+    disallow: ["/admin", "/api/"],
     sitemap: `${SITE_URL}/sitemap.xml`,
     cmsNoindexEntities: noindex,
   };

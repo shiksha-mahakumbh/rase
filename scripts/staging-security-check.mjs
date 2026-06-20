@@ -147,6 +147,42 @@ if (!srcHasFirebaseRuntime()) {
   fail("src_no_firebase_runtime", "Firebase runtime imports still present under src/");
 }
 
+const firebaseInfraPaths = [
+  "firebase.json",
+  ".firebaserc",
+  "firestore.indexes.json",
+  "firebase",
+  "scripts/legacy",
+];
+const presentInfra = firebaseInfraPaths.filter((p) => fs.existsSync(path.resolve(p)));
+if (presentInfra.length === 0) {
+  pass("no_firebase_infra", "No Firebase config, rules, or legacy scripts in repo");
+} else {
+  fail("no_firebase_infra", `Firebase artifacts remain: ${presentInfra.join(", ")}`);
+}
+
+const pkg = JSON.parse(fs.readFileSync(path.resolve("package.json"), "utf8"));
+const hasFirebasePkg =
+  Boolean(pkg.dependencies?.["firebase-admin"] || pkg.dependencies?.firebase);
+if (!hasFirebasePkg) {
+  pass("no_firebase_npm_package", "No firebase or firebase-admin in runtime dependencies");
+} else {
+  fail("no_firebase_npm_package", "firebase or firebase-admin still listed in dependencies");
+}
+
+const nextConfig = fs.readFileSync(path.resolve("next.config.js"), "utf8");
+if (!/firebasestorage\.googleapis\.com/.test(nextConfig)) {
+  pass("next_config_no_legacy_storage_host", "next.config.js does not allow legacy Firebase storage host");
+} else {
+  fail("next_config_no_legacy_storage_host", "Legacy Firebase storage host still in next.config.js");
+}
+
+if (/\.supabase\.co/.test(nextConfig)) {
+  pass("next_config_supabase_storage", "next.config.js allows Supabase storage images");
+} else {
+  fail("next_config_supabase_storage", "Supabase storage host missing from next.config.js");
+}
+
 const passed = results.filter((r) => r.status === "PASS").length;
 const failed = results.filter((r) => r.status === "FAIL").length;
 

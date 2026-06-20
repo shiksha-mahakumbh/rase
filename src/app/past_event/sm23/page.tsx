@@ -1,20 +1,15 @@
 "use client";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import SM23 from "../../component/sm23/SM23";
-import { getEditionByHref } from "@/data/past-editions";
-
-const edition = getEditionByHref("/past_event/sm23")!;
-
-const PAGE_HERO = {
-  eyebrow: "शिक्षा महाकुंभ अभियान",
-  title: edition.title,
-  subtitle: `${edition.venue} · ${edition.dates} · ${edition.theme}`,
-  accent: "navy",
-} as const;
+import SM23 from "@/components/past-editions/editions/sm23/SM23";
+import { editionPageHero } from "@/data/past-editions";
 
 export default function Sm23PastEventPage() {
   return (
-    <PublicPageShell hero={PAGE_HERO} relatedPath="/abhiyan">
+    <PublicPageShell
+      hero={editionPageHero("/past_event/sm23")}
+      relatedPath="/past-events"
+      containerClassName="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12"
+    >
       <SM23 />
     </PublicPageShell>
   );

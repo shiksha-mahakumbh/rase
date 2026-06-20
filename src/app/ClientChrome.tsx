@@ -7,7 +7,7 @@ import Script from "next/script";
 import ErrorBoundary from "@/components/errors/ErrorBoundary";
 import type { CmsAnnouncementBar } from "@/lib/cms/types";
 
-const Modal = dynamic(() => import("./component/Modal"), { ssr: false });
+const Modal = dynamic(() => import("@/components/layout/Modal"), { ssr: false });
 
 const CookieConsent = dynamic(
   () => import("@/components/common/CookieConsent"),

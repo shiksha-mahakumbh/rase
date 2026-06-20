@@ -1,13 +1,14 @@
 import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
 
-const NavBar = dynamic(() => import("@/app/component/NavBar"), {
+const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
   loading: () => (
     <div className="h-16 w-full border-b border-slate-200 bg-white/90" aria-hidden />
   ),
 });
 import TrustStrip from "./TrustStrip";
-import SectionShell from "@/app/component/home/SectionShell";
+import BrandShowcaseSection from "./BrandShowcaseSection";
+import SectionShell from "@/components/home/legacy/SectionShell";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
@@ -23,21 +24,21 @@ import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
 
-const Marquees = dynamic(() => import("@/app/component/Marquees"));
-const Footer = dynamic(() => import("@/app/component/Footer"));
-const Announcement = dynamic(() => import("@/app/component/Annoucement"));
-const NoticeBoard = dynamic(() => import("@/app/component/NoticeBoard"));
-const GlassCard = dynamic(() => import("@/app/component/home/GlassCard"));
-const UpcomingEvent = dynamic(() => import("@/app/component/UpcomingEvent"));
+const Marquees = dynamic(() => import("@/components/layout/Marquees"));
+const Footer = dynamic(() => import("@/components/layout/Footer"));
+const Announcement = dynamic(() => import("@/components/home/sections/Annoucement"));
+const NoticeBoard = dynamic(() => import("@/components/home/sections/NoticeBoard"));
+const GlassCard = dynamic(() => import("@/components/home/legacy/GlassCard"));
+const UpcomingEvent = dynamic(() => import("@/components/home/sections/UpcomingEvent"));
 const TestimonialsSection = dynamic(() => import("./TestimonialsSection"));
 const GallerySection = dynamic(() => import("./GallerySection"));
 const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
 const CustomCard = dynamic(() =>
-  import("@/app/component/card").then((m) => ({ default: m.CustomCard }))
+  import("@/components/home/sections/card").then((m) => ({ default: m.CustomCard }))
 );
-const ConferenceSupport = dynamic(() => import("@/app/component/Conference_Support"));
-const MediaPartners = dynamic(() => import("@/app/component/Media_Partners"));
-const Organiger = dynamic(() => import("@/app/component/organiger"));
+const ConferenceSupport = dynamic(() => import("@/components/home/sections/Conference_Support"));
+const MediaPartners = dynamic(() => import("@/components/home/sections/Media_Partners"));
+const Organiger = dynamic(() => import("@/components/home/sections/organiger"));
 const HomeEditionCta = dynamic(() => import("./HomeEditionCta"));
 import HomePageChrome from "./HomePageChrome";
 
@@ -49,16 +50,17 @@ export default function HomePage({
   cmsPartners?: CmsPartnerCard[];
 }) {
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <div className="min-h-screen bg-white">
       <NavBar />
       <Marquees />
 
       <main id="main-content">
         <HeroSection />
         <TrustStrip />
+        <BrandShowcaseSection />
 
         <SectionShell
-          background="cool"
+          background="warm"
           className="px-4 py-8 md:px-8 md:py-10"
           ariaLabel="Programmes and notices"
         >

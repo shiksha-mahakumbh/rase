@@ -9,6 +9,8 @@ import CountdownBanner from "./CountdownBanner";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 
+const BRAND_HERO = "/branding/shiksha-mahakumbh-brand-hero.png";
+
 export default function HeroSection() {
   const cms = useCms();
   const hero = getSection(cms?.homepage, "hero");
@@ -18,17 +20,17 @@ export default function HeroSection() {
   const subheadline = sectionField(
     hero,
     "subheadline",
-    "A National Movement for Global Education"
+    "वैश्विक विमर्श निर्माण को समर्पित"
   );
   const description = sectionField(
     hero,
     "description",
-    "Join policymakers, researchers, institutions, and youth at India's premier multidisciplinary education summit — aligned with NEP 2020 and the Bharat@2047 vision."
+    "Department of Holistic Education · A national movement aligning NEP 2020, research, innovation, and Bharatiya knowledge traditions on one vibrant global platform."
   );
   const badge = sectionField(hero, "badge", `${event.name} · Registration Open`);
   const dates = sectionField(hero, "dates", "📅 9–11 October 2026");
   const venue = sectionField(hero, "venue", `📍 ${event.venue}, HP`);
-  const heroImage = sectionField(hero, "imageUrl", "/shiksha.png");
+  const heroImage = sectionField(hero, "imageUrl", BRAND_HERO);
   const stats = sectionItems<{ label: string; value: string | number; suffix?: string }>(
     counters
   );
@@ -39,7 +41,9 @@ export default function HeroSection() {
         return {
           label: s.label,
           value: Number.isFinite(numeric) ? numeric : 0,
-          suffix: s.suffix ?? (typeof s.value === "string" && Number.isNaN(Number(s.value)) ? s.value : ""),
+          suffix:
+            s.suffix ??
+            (typeof s.value === "string" && Number.isNaN(Number(s.value)) ? s.value : ""),
         };
       })
     : impactStats;
@@ -47,38 +51,52 @@ export default function HeroSection() {
   return (
     <section
       aria-label="Shiksha Mahakumbh hero"
-      className="relative overflow-hidden bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy"
+      className="brand-hero-bg relative overflow-hidden"
     >
+      {/* Decorative graphics */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-20"
+        className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-brand-saffron/15 blur-3xl"
         aria-hidden
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 50%, #FF9933 0%, transparent 40%), radial-gradient(circle at 80% 20%, #059669 0%, transparent 35%)",
-        }}
       />
-      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:py-20 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
-          <div className="text-center lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand-saffron/40 bg-brand-saffron/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-saffron">
+      <div
+        className="pointer-events-none absolute -right-16 top-1/3 h-72 w-72 rounded-full bg-brand-blue/10 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute bottom-0 left-1/2 h-48 w-[120%] -translate-x-1/2 bg-gradient-to-t from-brand-saffron/8 to-transparent"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-14 lg:px-8 lg:py-16">
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
+          <div className="order-2 text-center lg:order-1 lg:text-left">
+            <span className="inline-flex items-center gap-2 rounded-full border border-brand-saffron/50 bg-brand-saffron/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-saffron-dark">
               <span className="h-2 w-2 animate-pulse rounded-full bg-brand-saffron" />
               {badge}
             </span>
 
-            <h1 className="mt-4 text-3xl font-extrabold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
-              {headline}
-              <span className="mt-2 block text-2xl font-bold text-brand-saffron sm:text-3xl">
+            <h1 className="mt-5 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
+              <span className="text-brand-blue">शिक्षा </span>
+              <span className="text-brand-saffron">महाकुंभ</span>
+              <span className="mt-1 block text-brand-navy">
+                {headline.includes("अभियान") ? "अभियान" : headline}
+              </span>
+              <span className="mt-2 block text-xl font-bold text-brand-blue/80 sm:text-2xl">
                 {subheadline}
               </span>
             </h1>
 
-            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/90 md:text-lg lg:mx-0">
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 md:text-lg lg:mx-0">
               {description}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm text-white/80 lg:justify-start">
-              <span className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold">{dates}</span>
-              <span className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold">{venue}</span>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm lg:justify-start">
+              <span className="rounded-xl border border-brand-blue/15 bg-white px-4 py-2 font-semibold text-brand-navy shadow-sm">
+                {dates}
+              </span>
+              <span className="rounded-xl border border-brand-saffron/25 bg-brand-surface-warm px-4 py-2 font-semibold text-brand-navy shadow-sm">
+                {venue}
+              </span>
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
@@ -88,31 +106,43 @@ export default function HeroSection() {
               <CtaButton href={CMT_SUBMISSION_URL} variant="secondary">
                 Multi Track Conference
               </CtaButton>
+              <CtaButton href="/abhiyaninphotoframe" variant="ghost">
+                Abhiyan Photo Frame
+              </CtaButton>
             </div>
 
             <div className="mt-8">
-              <CountdownBanner />
+              <CountdownBanner theme="light" />
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/20 shadow-2xl">
-              <Image
-                src={heroImage}
-                alt="Shiksha Mahakumbh Abhiyan"
-                fill
-                className="object-contain p-6"
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
+          <div className="order-1 lg:order-2">
+            <div className="relative mx-auto max-w-lg lg:max-w-none">
+              <div
+                className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-brand-saffron/30 via-white to-brand-blue/20 blur-sm"
+                aria-hidden
               />
+              <div className="relative overflow-hidden rounded-2xl border-2 border-white bg-white p-2 shadow-[0_20px_60px_rgba(255,153,51,0.18)]">
+                <Image
+                  src={heroImage}
+                  alt="Shiksha Mahakumbh Abhiyan — Department of Holistic Education"
+                  width={800}
+                  height={600}
+                  className="h-auto w-full rounded-xl object-contain"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3">
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
               {displayStats.map((s) => (
                 <StatCard
                   key={s.label}
                   value={s.value}
                   label={s.label}
                   suffix={s.suffix}
+                  variant="light"
                 />
               ))}
             </div>

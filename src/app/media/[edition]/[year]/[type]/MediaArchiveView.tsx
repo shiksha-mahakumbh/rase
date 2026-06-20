@@ -8,17 +8,17 @@ import {
 } from "@/data/media-archive-components";
 
 import { getEditionByNumber } from "@/data/past-editions";
+import { brandPageHero } from "@/lib/page-heroes";
 
 function archiveHero(key: MediaArchiveKey) {
   const [, edition, type] = key.split("/");
   const ed = getEditionByNumber(edition);
   const typeLabel = type === "digital" ? "Digital Media" : "Print Media";
-  return {
-    eyebrow: "Media Archive",
-    title: `${ed?.title ?? `Shiksha Mahakumbh ${edition}`} — ${typeLabel}`,
-    subtitle: `Edition-wise ${typeLabel.toLowerCase()} coverage and highlights.`,
-    accent: "navy" as const,
-  };
+  return brandPageHero(
+    `${ed?.title ?? `Shiksha Mahakumbh ${edition}`} — ${typeLabel}`,
+    `Edition-wise ${typeLabel.toLowerCase()} coverage and highlights.`,
+    "Media Archive"
+  );
 }
 
 export default function MediaArchiveView({ archiveKey }: { archiveKey: MediaArchiveKey }) {

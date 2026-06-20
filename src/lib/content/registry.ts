@@ -1,7 +1,7 @@
 import type { ContentCategory, ContentItem, ContentHubFilters } from "./types";
 
 /**
- * Static registry — migrate to Firestore/CMS without changing public types.
+ * Static registry — migrate to CMS without changing public types.
  */
 export const CONTENT_REGISTRY: ContentItem[] = [
   {

@@ -1,5 +1,6 @@
 /**
  * One-time splitter: AcademicCouncil24.tsx → academic/pages/*.tsx
+ * @deprecated Completed — src/app/component/ removed. Pages live under src/components/vibhag/.
  * Run: node scripts/split-academic-council.mjs
  */
 import fs from "fs";
@@ -7,11 +8,11 @@ import path from "path";
 
 const srcPath = path.join(
   process.cwd(),
-  "src/app/component/Vibhag/AcademicCouncil24.tsx"
+  "src/components/vibhag/AcademicCouncil24.tsx"
 );
 const outDir = path.join(
   process.cwd(),
-  "src/app/component/Vibhag/academic/pages"
+  "src/components/vibhag/academic/pages"
 );
 
 const content = fs.readFileSync(srcPath, "utf8");
@@ -84,7 +85,7 @@ const tracksEnd = lines.findIndex(
 if (tracksStart >= 0 && tracksEnd > tracksStart) {
   const tracksBlock = lines.slice(tracksStart, tracksEnd + 1).join("\n");
   fs.writeFileSync(
-    path.join(process.cwd(), "src/app/component/Vibhag/academic/tracks-data.ts"),
+    path.join(process.cwd(), "src/components/vibhag/academic/tracks-data.ts"),
     `${tracksBlock}\n\nexport { tracks };\n`
   );
   console.log("Wrote tracks-data.ts");

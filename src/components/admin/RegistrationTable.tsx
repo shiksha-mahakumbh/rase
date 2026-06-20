@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { RegistrationRow } from "@/lib/exportRegistrations";
-import { formatFirestoreDate } from "@/lib/saveRegistration";
+import { formatRegistrationDate } from "@/lib/format-date";
 
 interface RegistrationTableProps {
   rows: RegistrationRow[];
@@ -234,7 +234,7 @@ export default function RegistrationTable({
                   <StatusBadge value={row.accommodationStatus} />
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap">
-                  {formatFirestoreDate(row.createdAt)}
+                  {formatRegistrationDate(row.createdAt)}
                 </td>
                 <td className="px-4 py-3">
                   <Link

@@ -1,8 +1,8 @@
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
-import RegistrationTrustBar from "@/components/registration/RegistrationTrustBar";
+import NavBar from "@/components/layout/NavBar";
+import Footer from "@/components/layout/Footer";
 import SuccessExperience from "@/components/registration/SuccessExperience";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 
 export const metadata = createPageMetadata({
   title: "Registration Confirmed",
@@ -14,9 +14,15 @@ export const metadata = createPageMetadata({
 
 export default function RegistrationSuccessPage() {
   return (
-    <div className="min-h-screen bg-brand-surface">
-      <RegistrationTrustBar />
+    <div className="min-h-screen bg-white">
       <NavBar />
+      <ShowcaseHero
+        eyebrow="Shiksha Mahakumbh 6.0"
+        title="Registration Confirmed"
+        subtitle="Thank you for joining India's national education movement. Download your receipt and review next steps below."
+        accent="brand"
+        imageSrc="/branding/shiksha-mahakumbh-brand-hero.png"
+      />
       <main id="main-content">
         <SuccessExperience />
       </main>

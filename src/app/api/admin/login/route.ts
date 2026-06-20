@@ -4,11 +4,25 @@ import {
   adminSessionCookieOptions,
   createAdminSessionToken,
 } from "@/lib/security/admin-session";
+import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { ServiceError } from "@/server/lib/errors";
 import { signInWithEmailPassword } from "@/server/services/auth.service";
 
 /** Email/password admin login → signed HttpOnly session cookie. */
 export async function POST(request: NextRequest) {
+  const ip = getClientIp(request);
+  const limited = rateLimit({
+    key: `admin-login:${ip}`,
+    limit: 10,
+    windowMs: 60_000,
+  });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many login attempts. Try again later." },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } }
+    );
+  }
+
   try {
     const body = await request.json();
     const email = typeof body.email === "string" ? body.email : "";

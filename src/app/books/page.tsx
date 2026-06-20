@@ -1,16 +1,16 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Books from "../component/Books";
-
-const PAGE_HERO = {
-  eyebrow: "Publications",
-  title: "Books",
-  subtitle: "Published works from Shiksha Mahakumbh programmes and partners.",
-  accent: "navy" as const,
-};
+import Books from "@/components/content/Books";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function BooksPage() {
   return (
-    <PublicPageShell hero={PAGE_HERO}>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Books",
+        "Published works from Shiksha Mahakumbh programmes and partners.",
+        "Publications"
+      )}
+    >
       <Books />
     </PublicPageShell>
   );

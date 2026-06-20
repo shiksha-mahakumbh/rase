@@ -18,7 +18,7 @@ import {
   sharedErrors,
   sharedWatch,
 } from "@/components/forms/FormField";
-import { formClasses } from "@/app/component/ui/formClasses";
+import { formClasses } from "@/components/forms/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { resolvePaymentStatus } from "@/lib/registration/config";
 import {

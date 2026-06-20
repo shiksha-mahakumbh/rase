@@ -25,49 +25,24 @@ const env = {
   ...process.env,
 };
 
-function isValidServiceAccountJson(raw) {
-  if (!raw?.trim()) return false;
-  try {
-    const parsed = JSON.parse(raw);
-    return Boolean(
-      parsed.project_id &&
-        parsed.client_email &&
-        parsed.private_key
-    );
-  } catch {
-    return false;
-  }
-}
-
 const groups = {
   site: [
     { key: "NEXT_PUBLIC_SITE_URL", required: true, staging: true },
   ],
-  firebase: [
-    {
-      key: "FIREBASE_SERVICE_ACCOUNT_JSON",
-      required: true,
-      production: true,
-      validate: isValidServiceAccountJson,
-      note: "Firebase Admin SDK service account JSON (single-line)",
-    },
-    {
-      key: "NEXT_PUBLIC_FIREBASE_API_KEY",
-      required: false,
-      note: "Uses inline config in lib/firebase/client.ts if unset",
-    },
-    { key: "FIREBASE_PROJECT_ID", required: false },
-  ],
-  email: [
-    { key: "SMTP_HOST", required: true, staging: true, production: true },
-    { key: "SMTP_USER", required: true, staging: true, production: true },
-    { key: "SMTP_PASS", required: true, staging: true, production: true },
-    { key: "SMTP_FROM", required: false },
-    { key: "SMTP_PORT", required: false },
-    { key: "REGISTRATION_EMAIL_SECRET", required: false },
-    { key: "REGISTRATION_EMAIL_REQUIRE_SECRET", required: false },
+  supabase: [
+    { key: "DATABASE_URL", required: true, production: true },
+    { key: "DIRECT_URL", required: true, production: true },
+    { key: "NEXT_PUBLIC_SUPABASE_URL", required: true, production: true },
+    { key: "NEXT_PUBLIC_SUPABASE_ANON_KEY", required: true, production: true },
+    { key: "SUPABASE_SERVICE_ROLE_KEY", required: true, production: true },
   ],
   registration: [
+    {
+      key: "REGISTRATION_BACKEND",
+      required: false,
+      validate: (raw) => !raw || raw === "supabase",
+      note: "expected: supabase (or unset; runtime is Supabase-only)",
+    },
     {
       key: "NEXT_PUBLIC_RECAPTCHA_SITE_KEY",
       required: true,
@@ -83,6 +58,15 @@ const groups = {
     { key: "RAZORPAY_KEY_SECRET", required: true, production: true },
     { key: "RAZORPAY_WEBHOOK_SECRET", required: true, production: true },
   ],
+  email: [
+    { key: "SMTP_HOST", required: true, staging: true, production: true },
+    { key: "SMTP_USER", required: true, staging: true, production: true },
+    { key: "SMTP_PASS", required: true, staging: true, production: true },
+    { key: "SMTP_FROM", required: false },
+    { key: "SMTP_PORT", required: false },
+    { key: "REGISTRATION_EMAIL_SECRET", required: false },
+    { key: "REGISTRATION_EMAIL_REQUIRE_SECRET", required: false },
+  ],
   analytics: [
     { key: "NEXT_PUBLIC_GA_ID", required: false },
     { key: "NEXT_PUBLIC_GTM_ID", required: false },
@@ -95,7 +79,6 @@ const groups = {
   ],
   monitoring: [
     { key: "NEXT_PUBLIC_SENTRY_DSN", required: false },
-    { key: "VISITOR_COUNTER_USE_FIRESTORE", required: false },
   ],
 };
 

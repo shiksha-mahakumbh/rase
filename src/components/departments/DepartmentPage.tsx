@@ -2,6 +2,7 @@ import PublicPageShell from "@/components/layouts/PublicPageShell";
 import VibhagPageShell from "@/components/vibhag/VibhagPageShell";
 import { getVibhagBySlug } from "@/data/vibhag-pages";
 import type { ReactNode } from "react";
+import { brandPageHero } from "@/lib/page-heroes";
 
 interface DepartmentPageProps {
   slug: string;
@@ -20,13 +21,12 @@ export default function DepartmentPage({
 
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "Departments",
-        title: page?.title ?? "Department",
-        subtitle: page?.description,
-        accent: "navy",
-      }}
-      showHero={false}
+      hero={brandPageHero(
+        page?.title ?? "Department",
+        page?.description ?? "",
+        "Departments"
+      )}
+      showHero
       relatedPath={canonicalPath}
       skipContainer
       showCta={slug !== "AcademicCouncil24"}

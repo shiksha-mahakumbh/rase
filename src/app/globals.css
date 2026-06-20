@@ -10,9 +10,11 @@
 
   :root {
     --color-brand-navy: #0b1f3b;
+    --color-brand-blue: #1a56db;
     --color-brand-saffron: #ff9933;
     --color-brand-emerald: #059669;
     --color-brand-surface: #f8fafc;
+    --color-brand-warm: #fffbf5;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -57,6 +59,21 @@
   .home-card-hover {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
   }
+
+  .brand-hero-bg {
+    @apply bg-gradient-to-br from-white via-brand-surface-warm to-orange-50/60;
+    background-image:
+      linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(255, 251, 245, 0.9)),
+      radial-gradient(circle at 15% 20%, rgba(255, 153, 51, 0.12) 0%, transparent 45%),
+      radial-gradient(circle at 85% 30%, rgba(26, 86, 219, 0.08) 0%, transparent 40%);
+  }
+
+  .brand-grid-pattern {
+    background-image:
+      linear-gradient(rgba(26, 86, 219, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 86, 219, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
 }
 
 @layer components {
@@ -65,17 +82,48 @@
   }
 
   .registration-form-fields form {
-    @apply rounded-2xl border border-gray-100 bg-white p-4 md:p-6;
+    @apply rounded-2xl border border-slate-100 bg-white p-4 md:p-6;
   }
 
   .registration-form-fields input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
   .registration-form-fields select,
   .registration-form-fields textarea {
-    @apply rounded-xl border-gray-200 shadow-sm transition focus:border-primary focus:ring-2 focus:ring-primary/15;
+    @apply rounded-xl border-slate-200 shadow-sm transition focus:border-brand-navy focus:ring-2 focus:ring-brand-navy/15;
   }
 
   .registration-form-fields button[type="submit"],
-  .registration-form-fields button.bg-primary {
-    @apply rounded-xl shadow-md transition hover:-translate-y-0.5 hover:shadow-lg;
+  .registration-form-fields button.bg-primary,
+  .registration-form-fields button.bg-blue-600,
+  .registration-form-fields button.bg-blue-500 {
+    @apply min-h-[48px] rounded-xl bg-brand-saffron font-bold text-brand-navy shadow-lg transition hover:bg-brand-saffron-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  /** Legacy press / proceedings content — brand restyle via container class */
+  .proceeding-container {
+    @apply mx-auto max-w-4xl space-y-6 bg-transparent p-0 shadow-none;
+  }
+
+  .proceeding-container > h1 {
+    @apply mb-6 text-center text-2xl font-extrabold text-brand-navy md:text-3xl;
+  }
+
+  .proceeding-container > h2 {
+    @apply mb-4 text-xl font-bold text-brand-navy md:text-2xl;
+  }
+
+  .proceeding-container .section {
+    @apply mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm;
+  }
+
+  .proceeding-container .section h3 {
+    @apply mb-4 text-xl font-bold text-brand-navy;
+  }
+
+  .proceeding-container .section h4 {
+    @apply mb-2 text-base font-semibold text-brand-saffron-dark;
+  }
+
+  .proceeding-container .section li {
+    @apply mb-2 rounded-lg border border-slate-100 bg-brand-surface-warm p-4 text-slate-700;
   }
 }

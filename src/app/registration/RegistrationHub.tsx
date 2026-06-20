@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import RegistrationShell from "@/app/component/ui/RegistrationShell";
+import RegistrationShell from "@/components/registration/RegistrationShell";
 import { EVENT_NAME, RegistrationType } from "@/types/registration";
 import DelegateForm from "@/components/forms/DelegateForm";
 import ConclaveForm from "@/components/forms/ConclaveForm";
@@ -112,7 +112,7 @@ function RegistrationFormRouter({
         <button
           type="button"
           onClick={onContinueToPayment}
-          className="mt-4 w-full min-h-[48px] rounded-xl bg-brand-navy font-bold text-white hover:bg-brand-navy-light"
+          className="mt-4 w-full min-h-[48px] rounded-xl bg-brand-saffron font-bold text-brand-navy shadow-lg transition hover:bg-brand-saffron-dark hover:text-white"
         >
           Continue to payment &amp; confirmation →
         </button>

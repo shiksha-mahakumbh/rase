@@ -60,8 +60,9 @@ export default function WhyAttendSection() {
   const features = cmsFeatures.length ? cmsFeatures : DEFAULT_FEATURES;
 
   return (
-    <section aria-label="Why attend Shiksha Mahakumbh" className="bg-brand-surface py-12 md:py-16 lg:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section aria-label="Why attend Shiksha Mahakumbh" className="relative overflow-hidden bg-white py-12 md:py-16 lg:py-20">
+      <div className="brand-grid-pattern pointer-events-none absolute inset-0 opacity-25" aria-hidden />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow={sectionField(section, "eyebrow", "Why Attend")}
           title={section?.title ?? "Why Shiksha Mahakumbh?"}

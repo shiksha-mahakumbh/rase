@@ -1,4 +1,4 @@
-import type { Menu } from "@/app/component/navbar/types";
+import type { Menu } from "@/components/layout/navbar/types";
 import { NAV_MENUS } from "@/constants/navigation";
 import type { CmsMenu } from "./types";
 

@@ -59,7 +59,7 @@ export const WORKSHOP_ARCHIVE = [
 ] as const;
 
 export const SUMMIT_ROUTES = [
-  { path: "/abhiyan", label: "Abhiyan Timeline" },
+  { path: "/past-events", label: "Past Editions" },
   { path: "/introduction", label: "Introduction" },
   { path: "/conferences", label: "Conferences Hub" },
 ] as const;
@@ -90,4 +90,6 @@ export const WORKSHOPS_HUB = {
   title: "Workshops",
   description:
     "Teacher development, innovation, and skills workshops from past Shiksha Mahakumbh editions.",
+  accent: "brand" as const,
+  imageSrc: "/branding/shiksha-mahakumbh-brand-hero.png",
 } as const;

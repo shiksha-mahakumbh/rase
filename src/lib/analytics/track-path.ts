@@ -1,5 +1,5 @@
 /** Paths excluded from public visitor analytics (admin noise, internal data). */
-const EXCLUDED_PREFIXES = ["/admin", "/api/", "/AllData"];
+const EXCLUDED_PREFIXES = ["/admin", "/api/"];
 
 const EXCLUDED_SEGMENTS = ["datadekh", "noticeboarddata", "DelegateForm"];
 

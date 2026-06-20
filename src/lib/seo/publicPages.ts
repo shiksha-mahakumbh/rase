@@ -53,18 +53,7 @@ export const PUBLIC_PAGE_META = {
       "Upcoming programmes and registration for Shiksha Mahakumbh Abhiyan edition 6.0.",
     path: "/upcoming-events",
   }),
-  abhiyan: createPageMetadata({
-    title: "शिक्षा महाकुंभ अभियान — Edition Timeline",
-    description:
-      "Unified timeline of Shiksha Mahakumbh Abhiyan editions 1.0 through 6.0 — venues, themes, core focus, and outcomes.",
-    path: "/abhiyan",
-    keywords: [
-      "Shiksha Mahakumbh Abhiyan",
-      "शिक्षा महाकुंभ",
-      "education movement India",
-    ],
-  }),
-  pastevent: createEventMetadata({
+  pastEvents: createEventMetadata({
     title: "Past Editions — शिक्षा महाकुंभ 1.0 to 5.0",
     description:
       "Official archive of five completed Shiksha Mahakumbh Abhiyan editions: NIT Jalandhar, NIT Kurukshetra, NIT Srinagar, Kurukshetra University, and NIPER Mohali. Themes, venues, impact, and galleries.",
@@ -322,16 +311,8 @@ export function committeeYearMeta(
 
 export const NO_INDEX_META = {
   admin: createNoIndexMetadata({ title: "Admin", path: "/admin" }),
-  allData: createNoIndexMetadata({ title: "Data", path: "/AllData" }),
   noticeboarddata: createNoIndexMetadata({
     title: "Notice Board Data",
     path: "/noticeboarddata",
   }),
 } as const;
-
-export function datadekhMeta(segment: string) {
-  return createNoIndexMetadata({
-    title: "Internal data",
-    path: `/${segment}`,
-  });
-}

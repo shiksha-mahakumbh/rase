@@ -10,6 +10,15 @@ export const metadata: Metadata = {
   alternates: { canonical: WORKSHOPS_HUB.path },
 };
 
+const WORKSHOP_HINTS: Record<string, string> = {
+  "/past_event/Teacher_Development_Program":
+    "Faculty development in collaboration with NITTTR — March 2024",
+  "/past_event/Spoken_English_Workshop":
+    "Professional spoken English programme for educators — January 2024",
+  "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop":
+    "Innovation & entrepreneurship for students, teachers, and ATL coordinators — May 2024",
+};
+
 export default function WorkshopsHubPage() {
   const schemas = [
     buildCollectionPageSchema({
@@ -30,20 +39,37 @@ export default function WorkshopsHubPage() {
       schemas={schemas}
       breadcrumbParent={{ label: "Conferences", href: "/conferences" }}
     >
-      <ul className="mt-8 space-y-2">
+      <p className="mt-6 text-slate-600">
+        Explore archived workshops from the Shiksha Mahakumbh Abhiyan — teacher development,
+        language skills, and innovation programmes.
+      </p>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {WORKSHOP_ARCHIVE.map((r) => (
-          <li key={r.path}>
-            <Link href={r.path} className="font-medium text-brand-navy hover:underline">
-              {r.label}
-            </Link>
-          </li>
-        ))}
-        <li>
-          <Link href="/proceedings" className="font-medium text-brand-saffron hover:underline">
-            Proceedings
+          <Link
+            key={r.path}
+            href={r.path}
+            className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-brand-saffron/40 hover:shadow-md"
+          >
+            <h2 className="font-bold text-brand-navy group-hover:text-brand-blue">{r.label}</h2>
+            {WORKSHOP_HINTS[r.path] && (
+              <p className="mt-2 text-sm text-slate-600">{WORKSHOP_HINTS[r.path]}</p>
+            )}
+            <span className="mt-3 inline-block text-sm font-semibold text-brand-saffron">
+              View archive →
+            </span>
           </Link>
-        </li>
-      </ul>
+        ))}
+      </div>
+
+      <p className="mt-10">
+        <Link
+          href="/proceedings"
+          className="font-semibold text-brand-blue hover:text-brand-saffron"
+        >
+          Browse proceedings →
+        </Link>
+      </p>
     </ConferenceHubPage>
   );
 }

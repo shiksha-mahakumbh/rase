@@ -9,7 +9,7 @@ import {
   canManageStatus,
 } from "@/lib/adminAuth";
 import { fetchRegistrationByPublicId } from "@/lib/admin/registrations-client";
-import { formatFirestoreDate } from "@/lib/saveRegistration";
+import { formatRegistrationDate } from "@/lib/format-date";
 import { downloadAcknowledgementPdf } from "@/lib/generateAcknowledgementPdf";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -179,7 +179,7 @@ function DetailContent() {
                   email: String(record.email),
                   contactNumber: String(record.contactNumber),
                   paymentStatus: String(record.paymentStatus),
-                  submissionDate: formatFirestoreDate(record.createdAt),
+                  submissionDate: formatRegistrationDate(record.createdAt),
                 })
               }
               className="rounded-lg border px-4 py-2 text-sm font-semibold"
@@ -341,8 +341,8 @@ function DetailContent() {
         )}
 
         <p className="text-sm text-gray-500">
-          Submitted: {formatFirestoreDate(record.createdAt)} · Updated:{" "}
-          {formatFirestoreDate(record.updatedAt)}
+          Submitted: {formatRegistrationDate(record.createdAt)} · Updated:{" "}
+          {formatRegistrationDate(record.updatedAt)}
         </p>
       </main>
     </div>

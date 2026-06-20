@@ -1,11 +1,12 @@
+import PressArticleJsonLd from "@/components/seo/PressArticleJsonLd";
 import PressArticleShell from "@/components/press/PressArticleShell";
+import PressArticleBody from "@/components/press/PressArticleBody";
 import type { CmsLoadedPage } from "@/lib/cms/types";
 import { SITE_URL } from "@/config/site";
 
 type ArticleSection = {
   title?: string;
   body?: string;
-  type?: string;
 };
 
 function parseArticleMeta(cms: CmsLoadedPage) {
@@ -13,11 +14,15 @@ function parseArticleMeta(cms: CmsLoadedPage) {
   const content = section?.content ?? {};
   const heroImage =
     typeof content.heroImage === "string" ? content.heroImage : undefined;
+  const pressNumber =
+    typeof content.pressNumber === "number" ? content.pressNumber : undefined;
+  const shareText =
+    typeof content.shareText === "string" ? content.shareText : cms.page.title;
   const sections = Array.isArray(content.sections)
     ? (content.sections as ArticleSection[])
     : [];
 
-  return { heroImage, sections };
+  return { heroImage, pressNumber, shareText, sections };
 }
 
 export default function CmsPressArticleView({
@@ -29,34 +34,34 @@ export default function CmsPressArticleView({
 }) {
   const canonicalPath = `/press/${slug}`;
   const shareUrl = `${SITE_URL}${canonicalPath}`;
-  const { heroImage, sections } = parseArticleMeta(cms);
+  const { heroImage, pressNumber, shareText, sections } = parseArticleMeta(cms);
 
   return (
-    <PressArticleShell
-      title={cms.page.title}
-      subtitle={cms.page.excerpt ?? undefined}
-      canonicalPath={canonicalPath}
-      shareUrl={shareUrl}
-      shareText={cms.page.title}
-      shareImage={heroImage ?? cms.seo?.ogImageUrl ?? undefined}
-    >
-      {cms.page.content && (
-        <div
-          className="mb-8"
-          dangerouslySetInnerHTML={{ __html: cms.page.content }}
+    <>
+      {pressNumber ? <PressArticleJsonLd pressNumber={pressNumber} /> : null}
+      <PressArticleShell
+        title={cms.page.title}
+        subtitle={cms.page.excerpt ?? undefined}
+        canonicalPath={canonicalPath}
+        shareUrl={shareUrl}
+        shareText={shareText}
+        shareImage={heroImage ?? cms.seo?.ogImageUrl ?? undefined}
+      >
+        {cms.page.content ? (
+          <div
+            className="prose prose-slate mb-8 max-w-none"
+            dangerouslySetInnerHTML={{ __html: cms.page.content }}
+          />
+        ) : null}
+        <PressArticleBody
+          title={cms.page.title}
+          heroImage={heroImage ?? cms.seo?.ogImageUrl ?? undefined}
+          sections={sections.map((s) => ({
+            title: s.title ?? "",
+            body: s.body ?? "",
+          }))}
         />
-      )}
-      {sections.map((section, index) => (
-        <section key={`${section.title ?? "section"}-${index}`} className="mb-8">
-          {section.title && <h2>{section.title}</h2>}
-          {section.body && (
-            <div
-              className="whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{ __html: section.body }}
-            />
-          )}
-        </section>
-      ))}
-    </PressArticleShell>
+      </PressArticleShell>
+    </>
   );
 }

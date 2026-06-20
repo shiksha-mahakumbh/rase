@@ -1,5 +1,6 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import CommitteeDetailShell from "./CommitteeDetailShell";
+import { brandPageHero } from "@/lib/page-heroes";
 import type { ReactNode } from "react";
 
 interface CommitteeEditionPageProps {
@@ -13,13 +14,11 @@ export default function CommitteeEditionPage({
 }: CommitteeEditionPageProps) {
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "Governance & Leadership",
-        title: editionTitle,
-        subtitle:
-          "Committee members guiding and managing initiatives to promote quality education and holistic development across India.",
-        accent: "navy",
-      }}
+      hero={brandPageHero(
+        editionTitle,
+        "Committee members guiding and managing initiatives to promote quality education and holistic development across India.",
+        "Governance & Leadership"
+      )}
       relatedPath="/committees"
       showCta={false}
       skipContainer

@@ -21,7 +21,7 @@ function record(name, pass, detail = "") {
 async function main() {
   console.log(`Production GO-LIVE check: ${BASE}\n`);
 
-  for (const route of ["/glimpses", "/accommodation", "/coming-soon"]) {
+  for (const route of ["/glimpses", "/coming-soon"]) {
     try {
       const res = await fetch(`${BASE}${route}`);
       record(`route ${route}`, res.ok, `HTTP ${res.status}`);
@@ -31,12 +31,24 @@ async function main() {
   }
 
   try {
+    const res = await fetch(`${BASE}/accommodation`, { redirect: "manual" });
+    const location = res.headers.get("location") ?? "";
+    record(
+      "redirect /accommodation → /registration",
+      res.status >= 300 && res.status < 400 && /\/registration\/?$/.test(location),
+      `HTTP ${res.status} → ${location || "none"}`
+    );
+  } catch (e) {
+    record("redirect /accommodation → /registration", false, e.message);
+  }
+
+  try {
     const xml = await (await fetch(`${BASE}/sitemap.xml`)).text();
     const count = (xml.match(/<loc>/g) || []).length;
     const has = (p) => xml.includes(`/${p}`);
     record("sitemap-count", count >= EXPECTED_SITEMAP, `${count} URLs (expected ≥${EXPECTED_SITEMAP})`);
     record("sitemap-glimpses", has("glimpses"));
-    record("sitemap-accommodation", has("accommodation"));
+    record("sitemap-no-standalone-accommodation", !has("accommodation"));
     record("sitemap-coming-soon", has("coming-soon"));
   } catch (e) {
     record("sitemap", false, e.message);

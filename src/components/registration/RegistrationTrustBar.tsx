@@ -16,7 +16,7 @@ export default function RegistrationTrustBar() {
 
   return (
     <div
-      className="mb-4 grid gap-2 rounded-xl border border-brand-saffron/25 bg-brand-surfaceWarm px-4 py-3 text-sm sm:grid-cols-2 lg:grid-cols-4"
+      className="mb-4 grid gap-2 rounded-xl border border-brand-saffron/25 bg-white px-4 py-3 text-sm shadow-sm sm:grid-cols-2 lg:grid-cols-4"
       role="region"
       aria-label="Registration trust indicators"
     >

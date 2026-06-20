@@ -9,21 +9,21 @@ export { MEDIA_ARCHIVE_KEYS, isMediaArchiveKey } from "@/data/media-archive-keys
 
 const LOADERS: Record<MediaArchiveKey, () => Promise<{ default: ComponentType }>> = {
   "shiksha-mahakumbh/1.0/digital": () =>
-    import("@/app/component/ShikshaMahaKumbh2023DigitalMedia"),
+    import("@/components/media/archive/ShikshaMahaKumbh2023DigitalMedia"),
   "shiksha-mahakumbh/2.0/digital": () =>
-    import("@/app/component/ShikshaKumbh2023DigitalMedia"),
+    import("@/components/media/archive/ShikshaKumbh2023DigitalMedia"),
   "shiksha-mahakumbh/3.0/digital": () =>
-    import("@/app/component/ShikshaKumbh2024DigitalMedia"),
+    import("@/components/media/archive/ShikshaKumbh2024DigitalMedia"),
   "shiksha-mahakumbh/4.0/digital": () =>
-    import("@/app/component/ShikshaMahaKumbh2024DigitalMedia"),
+    import("@/components/media/archive/ShikshaMahaKumbh2024DigitalMedia"),
   "shiksha-mahakumbh/1.0/print": () =>
-    import("@/app/component/PrintMediaShikshaMahaKumbh2023"),
+    import("@/components/media/archive/PrintMediaShikshaMahaKumbh2023"),
   "shiksha-mahakumbh/2.0/print": () =>
-    import("@/app/component/PrintMediaShikshaKumbh2023"),
+    import("@/components/media/archive/PrintMediaShikshaKumbh2023"),
   "shiksha-mahakumbh/3.0/print": () =>
-    import("@/app/component/PrintMediaShikshaKumbh2024"),
+    import("@/components/media/archive/PrintMediaShikshaKumbh2024"),
   "shiksha-mahakumbh/4.0/print": () =>
-    import("@/app/component/PrintMediaShikshaMahaKumbh2024"),
+    import("@/components/media/archive/PrintMediaShikshaMahaKumbh2024"),
 };
 
 export function getMediaArchiveComponent(key: MediaArchiveKey) {

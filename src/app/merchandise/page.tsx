@@ -1,16 +1,17 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Merchandise from "@/app/component/Merchandise";
-
-const PAGE_HERO = {
-  eyebrow: "Official Store",
-  title: "Merchandise",
-  subtitle: "Official Shiksha Mahakumbh merchandise and programme materials.",
-  accent: "saffron" as const,
-};
+import Merchandise from "@/components/content/Merchandise";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function MerchandisePage() {
   return (
-    <PublicPageShell hero={PAGE_HERO} showHero={false} skipContainer>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Merchandise",
+        "Official Shiksha Mahakumbh merchandise and programme materials.",
+        "Official Store"
+      )}
+      skipContainer
+    >
       <Merchandise />
     </PublicPageShell>
   );

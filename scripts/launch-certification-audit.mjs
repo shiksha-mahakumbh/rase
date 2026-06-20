@@ -11,14 +11,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const BASE = (process.argv[2] || "https://www.rase.co.in").replace(/\/$/, "");
 
-const DRIFT_ROUTES = ["/glimpses", "/accommodation", "/coming-soon"];
+const DRIFT_ROUTES = ["/glimpses", "/coming-soon"];
 const SMOKE_ROUTES = [
   { path: "/", name: "homepage", check: (t) => /Shiksha/i.test(t) },
   { path: "/registration", name: "registration", check: (t) => /registration|Register/i.test(t) },
   { path: "/press", name: "press", check: (t) => /press|Press/i.test(t) },
   { path: "/media-center", name: "media-center", check: (t) => /media|Media/i.test(t) },
   { path: "/knowledge", name: "knowledge-hub", check: (t) => /knowledge|Knowledge/i.test(t) },
-  { path: "/accommodation", name: "accommodation", check: (t) => t.length > 300 },
   { path: "/glimpses", name: "glimpses", check: (t) => t.length > 300 },
   { path: "/coming-soon", name: "coming-soon", check: (t) => /coming|soon/i.test(t) },
 ];

@@ -10,7 +10,7 @@ const canonicalRoutes = new Set([
   "/media-center",
   "/press",
   "/coming-soon",
-  "/accommodation",
+  "/registration",
   "/departments/academic-council",
   "/departments/prabandhan",
   "/departments/prachar",

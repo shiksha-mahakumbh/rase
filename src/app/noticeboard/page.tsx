@@ -30,17 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({ ...FALLBACK_META, ogImageUrl: ogImage ?? undefined });
 }
 
-const PAGE_HERO = {
-  eyebrow: "Live Updates",
-  title: "Notice Board",
-  subtitle: "Campus notices, deadlines, and programme announcements.",
-  accent: "saffron" as const,
-};
-
-const BREADCRUMBS = [
-  { name: "Home", path: "/" },
-  { name: "Notice Board", path: "/noticeboard" },
-];
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default async function NoticeboardPage() {
   const notices = await loadCmsNotices(50);
@@ -61,7 +51,18 @@ export default async function NoticeboardPage() {
   };
 
   return (
-    <PublicPageShell hero={PAGE_HERO} showCta={false} breadcrumbs={BREADCRUMBS}>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Notice Board",
+        "Campus notices, deadlines, and programme announcements.",
+        "Live Updates"
+      )}
+      showCta={false}
+      breadcrumbs={[
+        { name: "Home", path: "/" },
+        { name: "Notice Board", path: "/noticeboard" },
+      ]}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

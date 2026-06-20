@@ -7,11 +7,19 @@ export default function PastEventsPage() {
   return (
     <PublicPageShell
       hero={{
-        eyebrow: "Programmes",
-        title: "Past Events",
+        eyebrow: "शिक्षा महाकुंभ अभियान",
+        title: (
+          <>
+            <span className="text-brand-blue">Past Editions</span>
+            <span className="mt-1 block text-2xl text-brand-saffron md:text-3xl">
+              1.0 से 5.0 — राष्ट्रीय यात्रा
+            </span>
+          </>
+        ),
         subtitle:
-          "Explore Shiksha Mahakumbh Abhiyan editions 1.0 through 5.0, workshops, and national programmes.",
-        accent: "saffron",
+          "Five completed national editions — from NIT Jalandhar (1.0) to NIPER Mohali (5.0) — advancing school education, academic entrepreneurship, and global Indian education dialogue.",
+        accent: "brand",
+        imageSrc: "/branding/shiksha-mahakumbh-brand-hero.png",
       }}
       relatedPath={CANONICAL_ROUTES.pastEvents}
       skipContainer
@@ -21,7 +29,7 @@ export default function PastEventsPage() {
         <BreadcrumbNav
           items={[
             { label: "Home", href: "/" },
-            { label: "Abhiyan", href: "/abhiyan" },
+            { label: "Introduction", href: "/introduction" },
             { label: "Past Events" },
           ]}
           className="mb-2"

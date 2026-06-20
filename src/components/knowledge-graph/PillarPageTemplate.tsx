@@ -6,6 +6,7 @@ import { getRelatedLinksForPillar } from "@/lib/knowledge-graph/internal-link-en
 import { notFound } from "next/navigation";
 import InternalLinksBlock from "./InternalLinksBlock";
 import PillarJsonLd from "./PillarJsonLd";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function PillarPageTemplate({ slug }: { slug: PillarSlug }) {
   const entry = getPillarEntry(slug);
@@ -16,12 +17,7 @@ export default function PillarPageTemplate({ slug }: { slug: PillarSlug }) {
 
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "Education Pillar",
-        title: entry.label,
-        subtitle: entry.tagline,
-        accent: "navy",
-      }}
+      hero={brandPageHero(entry.label, entry.tagline, "Education Pillar")}
       relatedPath={entry.path}
       containerClassName="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16"
     >

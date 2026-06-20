@@ -1,18 +1,14 @@
 #!/usr/bin/env node
 /**
- * Production go-live audit — live evidence only.
+ * Production go-live audit — live HTTP evidence only (Supabase backend).
  * Usage: node scripts/launch-go-live-audit.mjs [baseUrl]
  */
-const BASE = (process.argv[2] || "https://www.rase.co.in").replace(/\/$/, "");
-const PROJECT = "shiksha-mahakumbh-abhiyan";
-const API_KEY = "AIzaSyDL6UJwLh8KaNHARuedHNTjWIcFixkfv5s";
-const DB = "default";
+const BASE = (process.argv[2] || "https://www.shikshamahakumbh.com").replace(/\/$/, "");
 
 const report = {
   checkedAt: new Date().toISOString(),
   base: BASE,
-  commit: "51672b0",
-  deploymentUrl: "https://rase-co-nzketx6v4-dhe-projects.vercel.app",
+  backend: "supabase",
   phases: {},
 };
 
@@ -29,127 +25,42 @@ async function http(method, path, opts = {}) {
   return { status: res.status, json, text: text.slice(0, 500) };
 }
 
-let adminToken = null;
-async function getAdminToken() {
-  if (adminToken) return adminToken;
-  const fs = await import("node:fs");
-  const { GoogleAuth } = await import("google-auth-library");
-  const candidates = [
-    process.env.FIREBASE_SERVICE_ACCOUNT_JSON,
-    process.env.FIREBASE_SA_PATH,
-  ].filter(Boolean);
-  let raw = candidates[0];
-  if (!raw && process.env.FIREBASE_SA_PATH) {
-    raw = fs.readFileSync(process.env.FIREBASE_SA_PATH, "utf8");
-  }
-  if (!raw) {
-    const local = [
-      ".env.local",
-      "c:/Users/LENOVO/Downloads/shiksha-mahakumbh-abhiyan-firebase-adminsdk-fbsvc-99720e9ed8.json",
-    ];
-    for (const p of local) {
-      if (fs.existsSync(p)) {
-        raw = p.endsWith(".json")
-          ? fs.readFileSync(p, "utf8")
-          : fs
-              .readFileSync(p, "utf8")
-              .split(/\r?\n/)
-              .find((l) => l.startsWith("FIREBASE_SERVICE_ACCOUNT_JSON="))
-              ?.slice("FIREBASE_SERVICE_ACCOUNT_JSON=".length);
-        if (raw) break;
-      }
-    }
-  }
-  if (!raw) throw new Error("No service account for admin Firestore reads");
-  const sa = JSON.parse(raw);
-  const auth = new GoogleAuth({
-    credentials: sa,
-    scopes: ["https://www.googleapis.com/auth/datastore"],
-  });
-  const client = await auth.getClient();
-  adminToken = (await client.getAccessToken()).token;
-  return adminToken;
-}
-
-async function firestoreRest(path, { admin = false } = {}) {
-  const encodedDb = encodeURIComponent(DB);
-  const url = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/${encodedDb}/documents/${path}`;
-  const headers = admin
-    ? { Authorization: `Bearer ${await getAdminToken()}` }
-    : { "x-goog-api-key": API_KEY };
-  const res = await fetch(url, { headers });
-  return { status: res.status, body: await res.json().catch(() => ({})) };
-}
-
-function fieldVal(f) {
-  if (!f) return null;
-  return (
-    f.stringValue ??
-    f.integerValue ??
-    f.timestampValue ??
-    f.booleanValue ??
-    "(complex)"
-  );
-}
-
-async function phase7() {
+async function phaseDiagnostics() {
   const health = await http("GET", "/api/health");
-  const adminHealth = await http("GET", "/api/health/firebase-admin");
+  const v2Health = await http("GET", "/api/v2/health");
   report.phases.diagnostics = {
     health: { status: health.status, body: health.json },
-    firebaseAdmin: { status: adminHealth.status, body: adminHealth.json },
-  };
-}
-
-async function phase2(registrationId = "SMK2026-000001") {
-  const counter = await firestoreRest("registrationCounters/smk2026", {
-    admin: true,
-  });
-  const regs = await firestoreRest(
-    `registrations?pageSize=10`,
-    { admin: true }
-  );
-  const conclave = await firestoreRest(
-    `conclave_registrations?pageSize=10`,
-    { admin: true }
-  );
-  const audits = await firestoreRest(`audit_logs?pageSize=10`, { admin: true });
-
-  const masterDoc = (regs.body.documents || []).find((d) => {
-    const id = fieldVal(d.fields?.registrationId);
-    return id === registrationId;
-  });
-
-  const typeDoc = (conclave.body.documents || []).find((d) => {
-    const id = fieldVal(d.fields?.registrationId);
-    return id === registrationId;
-  });
-
-  const auditDoc = (audits.body.documents || []).find((d) => {
-    const id = fieldVal(d.fields?.registrationId);
-    return id === registrationId;
-  });
-
-  report.phases.firestore = {
-    counter: {
-      status: counter.status,
-      lastNumber: fieldVal(counter.body.fields?.lastNumber),
-      currentNumber: fieldVal(counter.body.fields?.currentNumber),
+    v2Health: {
+      status: v2Health.status,
+      backend: v2Health.json?.backend ?? null,
+      database: v2Health.json?.supabase?.database ?? null,
+      body: v2Health.json,
     },
-    registrationId,
-    masterDocId: masterDoc?.name?.split("/").pop() ?? null,
-    typeDocId: typeDoc?.name?.split("/").pop() ?? null,
-    auditLogId: auditDoc?.name?.split("/").pop() ?? null,
-    masterFields: masterDoc
-      ? Object.fromEntries(
-          Object.entries(masterDoc.fields || {}).map(([k, v]) => [k, fieldVal(v)])
-        )
-      : null,
-    lookup: await http("GET", `/api/registration/${registrationId}`),
   };
 }
 
-async function phase3() {
+async function phaseRegistration(registrationId = "SMK2026-000001") {
+  const lookup = await http("GET", `/api/registration/${registrationId}`);
+  const lookupPost = await http("POST", "/api/registration/lookup", {
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ registrationId, email: "probe@example.invalid" }),
+  });
+
+  report.phases.registration = {
+    registrationId,
+    publicGet: {
+      status: lookup.status,
+      requiresAuth: lookup.status === 401 || lookup.status === 400,
+      body: lookup.json,
+    },
+    lookupPost: {
+      status: lookupPost.status,
+      body: lookupPost.json,
+    },
+  };
+}
+
+async function phaseUpload() {
   const noFile = await http("POST", "/api/registration/upload", {
     method: "POST",
     body: new FormData(),
@@ -169,7 +80,7 @@ async function phase3() {
   };
 }
 
-async function phase4() {
+async function phaseEmail() {
   const missing = await http("POST", "/api/registration/send-email", {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({}),
@@ -181,7 +92,6 @@ async function phase4() {
       registrationType: "Conclave",
       fullName: "Release Verify",
       email: "release-verify+20260609@rase.co.in",
-      masterDocId: "Im8yQc0E2KH9T6HT3R81",
     }),
   });
   report.phases.email = {
@@ -190,7 +100,7 @@ async function phase4() {
   };
 }
 
-async function phase5() {
+async function phaseRazorpay() {
   const badSig = await http("POST", "/api/payments/razorpay-webhook", {
     headers: {
       "Content-Type": "application/json",
@@ -208,7 +118,7 @@ async function phase5() {
   };
 }
 
-async function phase6() {
+async function phaseAdmin() {
   const admin = await http("GET", "/admin");
   const registration = await http("GET", "/registration");
   report.phases.admin = {
@@ -217,7 +127,8 @@ async function phase6() {
       hasSignIn:
         typeof admin.text === "string" &&
         (admin.text.includes("Sign in") ||
-          admin.text.includes("Google") ||
+          admin.text.includes("Email") ||
+          admin.text.includes("Password") ||
           admin.text.includes("Loading")),
       titleSnippet: admin.text.match(/<title>([^<]+)/)?.[1] ?? null,
     },
@@ -225,36 +136,8 @@ async function phase6() {
   };
 }
 
-async function phase8() {
-  const paths = [
-    "registrations",
-    "paymentRecords",
-    "audit_logs",
-    "registrationCounters/smk2026",
-  ];
-  const anonDefault = {};
-  for (const p of paths) {
-    const r = await firestoreRest(p);
-    anonDefault[p] = {
-      status: r.status,
-      error: r.body?.error?.message ?? null,
-      denied:
-        r.status === 403 ||
-        r.body?.error?.status === "PERMISSION_DENIED" ||
-        (r.status === 200 && !r.body.documents && !r.body.fields),
-    };
-  }
-  const wrongDb = await fetch(
-    `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/registrations?pageSize=1`,
-    { headers: { "x-goog-api-key": API_KEY } }
-  );
-  const wrongDbBody = await wrongDb.json().catch(() => ({}));
+async function phaseSecurity() {
   report.phases.security = {
-    anonymousReadsDbDefault: anonDefault,
-    wrongDatabaseId_default: {
-      status: wrongDb.status,
-      error: wrongDbBody?.error?.message ?? null,
-    },
     submitWithoutCaptcha: await http("POST", "/api/registration/submit", {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -275,17 +158,21 @@ async function phase8() {
         },
       }),
     }),
+    captchaProbe: await http("POST", "/api/registration/verify-captcha", {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: "probe", action: "registration" }),
+    }),
   };
 }
 
 async function main() {
-  await phase7();
-  await phase2();
-  await phase3();
-  await phase4();
-  await phase5();
-  await phase6();
-  await phase8();
+  await phaseDiagnostics();
+  await phaseRegistration();
+  await phaseUpload();
+  await phaseEmail();
+  await phaseRazorpay();
+  await phaseAdmin();
+  await phaseSecurity();
   console.log(JSON.stringify(report, null, 2));
 }
 
