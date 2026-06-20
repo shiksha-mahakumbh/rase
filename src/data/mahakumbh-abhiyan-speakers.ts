@@ -1,5 +1,4 @@
 /** शिक्षा महाकुंभ अभियान — वक्ता सूची (संपादित 1.0–5.0) */
-import { ABIYAN_SPEAKER_PORTRAITS } from "@/data/abhiyan-speaker-portraits";
 
 export type AbhiyanSpeaker = {
   name: string;
@@ -273,41 +272,33 @@ export const FEATURED_HOME_SPEAKERS: SpeakerHighlight[] = [
   {
     name: "डॉ. ठाकुर एस. के. रौनजा",
     role: "संरक्षक · ISRO वैज्ञानिक एवं DHE महानिदेशक",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.patron,
   },
   {
     name: "श्री के. एन. रघुनंदन",
     role: "संगठन मंत्री · विद्या भारती",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.advisorRaghunandan,
   },
   {
     name: "प्रो. सोमनाथ सचदेवा",
     role: "कुलगुरु · कुरुक्षेत्र विश्वविद्यालय",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.speakerSomnath,
   },
   {
     name: "डॉ. नागराजन राममूर्ति",
     role: "निदेशक · आईआईएम अमृतसर",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.speakerNagarajan,
   },
   {
     name: "प्रो. पवन कुमार सिंह",
     role: "निदेशक · आईआईएम तिरुचिरापल्ली",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.speakerPawanSingh,
   },
   {
     name: "प्रो. वी.वी. रमण रेड्डी",
     role: "निदेशक · एनआईटी कुरुक्षेत्र",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.speakerRamanReddy,
   },
   {
     name: "प्रो. दीप्ति धर्माणी",
     role: "कुलगुरु · चौधरी बंसीलाल विश्वविद्यालय",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.speakerDeepti,
   },
   {
     name: "श्री देश राज शर्मा",
     role: "महामंत्री · विद्या भारती (उत्तर क्षेत्र)",
-    imageSrc: ABIYAN_SPEAKER_PORTRAITS.speakerDeshRaj,
   },
 ];

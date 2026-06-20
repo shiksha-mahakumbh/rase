@@ -1,9 +1,8 @@
 /**
  * Content sourced from Shiksha Mahakumbh Abhiyan Photo Frame (37 pages).
  * Page mapping verified via full PDF text extraction.
+ * Visual assets are served via Google Drive PDF — not bundled locally.
  */
-
-import { ABIYAN_FRAME_IMAGES } from "./abhiyan-photo-frame-images";
 
 export const ABIYAN_PHOTO_FRAME = {
   dedication: "विवेक व सावधान नमोण को समर्पित",
@@ -26,35 +25,33 @@ export const ABIYAN_PHOTO_FRAME = {
     nameEn: "Dr. Thakur S.K. Raunija (Dr. Thakur SKR)",
     role: "वरिष्ठ वैज्ञानिक, इसरो एवं महानिदेशक",
     organization: "Department of Holistic Education (DHE)",
-    imageSrc: ABIYAN_FRAME_IMAGES.patronPortrait,
-    pageImageSrc: ABIYAN_FRAME_IMAGES.patronPage,
   },
   advisors: [
-    { name: "श्री डी. राम कृष्ण राव", role: "अध्यक्ष", organization: "विद्या भारती - अखिल भारतीय शिक्षा संस्थान", imageSrc: ABIYAN_FRAME_IMAGES.advisorPortraits[0] },
-    { name: "श्री के. एन. रघुनंदन", role: "संगठन मंत्री", organization: "विद्या भारती - उच्च शिक्षा संस्थान", imageSrc: ABIYAN_FRAME_IMAGES.advisorPortraits[1] },
-    { name: "श्री बी. आर. शंकरानंद", role: "संगठन मंत्री", organization: "भारतीय शिक्षण मंडल", imageSrc: ABIYAN_FRAME_IMAGES.advisorPortraits[2] },
-    { name: "श्री कश्मीरी लाल", role: "संगठक", organization: "स्वदेशी जागरण मंच", imageSrc: ABIYAN_FRAME_IMAGES.advisorPortraits[3] },
-    { name: "श्री शिव प्रकाश", role: "सह-संगठन मंत्री", organization: "भाजपा", imageSrc: ABIYAN_FRAME_IMAGES.advisorPortraits[4] },
-    { name: "श्री सतीश कुमार", role: "सह संगठक", organization: "स्वदेशी जागरण मंच", imageSrc: ABIYAN_FRAME_IMAGES.advisorPortraits[5] },
-    { name: "श्री गोविंद चंद महंत", role: "संगठन मंत्री", organization: "विद्या भारती - अखिल भारतीय शिक्षा संस्थान", imageSrc: ABIYAN_FRAME_IMAGES.advisorPortraits[6] },
+    { name: "श्री डी. राम कृष्ण राव", role: "अध्यक्ष", organization: "विद्या भारती - अखिल भारतीय शिक्षा संस्थान" },
+    { name: "श्री के. एन. रघुनंदन", role: "संगठन मंत्री", organization: "विद्या भारती - उच्च शिक्षा संस्थान" },
+    { name: "श्री बी. आर. शंकरानंद", role: "संगठन मंत्री", organization: "भारतीय शिक्षण मंडल" },
+    { name: "श्री कश्मीरी लाल", role: "संगठक", organization: "स्वदेशी जागरण मंच" },
+    { name: "श्री शिव प्रकाश", role: "सह-संगठन मंत्री", organization: "भाजपा" },
+    { name: "श्री सतीश कुमार", role: "सह संगठक", organization: "स्वदेशी जागरण मंच" },
+    { name: "श्री गोविंद चंद महंत", role: "संगठन मंत्री", organization: "विद्या भारती - अखिल भारतीय शिक्षा संस्थान" },
     { name: "श्री विजय कुमार नड्डा", role: "संगठन मंत्री", organization: "विद्या भारती (उत्तर क्षेत्र)" },
   ],
   coordinators: [
-    { name: "मेजर डॉ. शमशेर सिंह", role: "संयोजक", organization: "शिक्षा महाकुंभ अभियान", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[0] },
-    { name: "डॉ. जितेंद्र गर्ग", role: "सचिव", organization: "शिक्षा महाकुंभ अभियान", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[1] },
-    { name: "प्रो. तेजीत सिंह", role: "मुख्य", organization: "Meet Tech Congress", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[2] },
-    { name: "डॉ. विजय कुमार शर्मा", role: "मुख्य", organization: "Campus", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[3] },
-    { name: "सुश्री सोनू शर्मा", role: "मुख्य", organization: "ओलंपियाड", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[4] },
-    { name: "डॉ. कृष्णा पांडे", role: "मुख्य", organization: "Student Project", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[5] },
-    { name: "डॉ. शिक्षा शर्मा", role: "मुख्य", organization: "बाल शोध प्रतियोगिता", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[6] },
-    { name: "श्री संजय सोनी", role: "मुख्य", organization: "प्रदर्शनी", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[7] },
-    { name: "सुश्री मीनू", role: "मुख्य", organization: "सांस्कृतिक कार्यक्रम", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[8] },
-    { name: "प्रो. अवनेश वर्मा", role: "मुख्य", organization: "Panel Discussion", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[9] },
-    { name: "प्रो. विशाल शर्मा", role: "मुख्य", organization: "Award", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[10] },
-    { name: "डॉ. जितेश पांडे", role: "मुख्य", organization: "Guest Lecture", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[11] },
-    { name: "डॉ. मनोज तेवतिया", role: "मुख्य", organization: "Conclave", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[12] },
-    { name: "अधिवक्ता आरती शर्मा", role: "मीडिया प्रभारी", organization: "शिक्षा महाकुंभ अभियान", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[13] },
-    { name: "विंग कमांडर संजीव शर्मा", role: "मुख्य", organization: "अतिथि सत्कार", imageSrc: ABIYAN_FRAME_IMAGES.coordinatorPortraits[14] },
+    { name: "मेजर डॉ. शमशेर सिंह", role: "संयोजक", organization: "शिक्षा महाकुंभ अभियान" },
+    { name: "डॉ. जितेंद्र गर्ग", role: "सचिव", organization: "शिक्षा महाकुंभ अभियान" },
+    { name: "प्रो. तेजीत सिंह", role: "मुख्य", organization: "Meet Tech Congress" },
+    { name: "डॉ. विजय कुमार शर्मा", role: "मुख्य", organization: "Campus" },
+    { name: "सुश्री सोनू शर्मा", role: "मुख्य", organization: "ओलंपियाड" },
+    { name: "डॉ. कृष्णा पांडे", role: "मुख्य", organization: "Student Project" },
+    { name: "डॉ. शिक्षा शर्मा", role: "मुख्य", organization: "बाल शोध प्रतियोगिता" },
+    { name: "श्री संजय सोनी", role: "मुख्य", organization: "प्रदर्शनी" },
+    { name: "सुश्री मीनू", role: "मुख्य", organization: "सांस्कृतिक कार्यक्रम" },
+    { name: "प्रो. अवनेश वर्मा", role: "मुख्य", organization: "Panel Discussion" },
+    { name: "प्रो. विशाल शर्मा", role: "मुख्य", organization: "Award" },
+    { name: "डॉ. जितेश पांडे", role: "मुख्य", organization: "Guest Lecture" },
+    { name: "डॉ. मनोज तेवतिया", role: "मुख्य", organization: "Conclave" },
+    { name: "अधिवक्ता आरती शर्मा", role: "मीडिया प्रभारी", organization: "शिक्षा महाकुंभ अभियान" },
+    { name: "विंग कमांडर संजीव शर्मा", role: "मुख्य", organization: "अतिथि सत्कार" },
     { name: "श्री बलराम वर्मा", role: "विदेशी प्रभारी", organization: "" },
     { name: "श्री रमेश सिंह", role: "कार्यालय प्रबंधक", organization: "" },
   ],
@@ -69,13 +66,12 @@ export const ABIYAN_PHOTO_FRAME = {
     "सामाजिक उत्तरदायित्व और समानता कॉनक्लेव",
   ],
   olympiadCities: ["पठानकोट", "मोहाली", "पटियाला", "मोरिंडा", "पंचकुला", "कुरुक्षेत्र", "चंडीगढ़"],
-  /** Hosted on Google Drive — not bundled in repo (see public/ removal). */
+  /** Hosted on Google Drive — not bundled in repo. */
   pdfUrl:
     "https://drive.google.com/file/d/1v8d87TR4xgd3S028unVBIjrZsNewR75n/view?usp=drive_link",
   pdfEmbedUrl:
     "https://drive.google.com/file/d/1v8d87TR4xgd3S028unVBIjrZsNewR75n/preview",
   pagePath: "/abhiyaninphotoframe",
-  coverImageSrc: ABIYAN_FRAME_IMAGES.cover,
 } as const;
 
 export type EditionDignitary = {

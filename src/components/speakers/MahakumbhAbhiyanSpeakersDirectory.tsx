@@ -5,8 +5,6 @@ import {
   totalAbhiyanSpeakerCount,
   type AbhiyanSpeaker,
 } from "@/data/mahakumbh-abhiyan-speakers";
-import { EDITION_FRAME_IMAGES } from "@/data/abhiyan-photo-frame-images";
-import Image from "next/image";
 
 function SpeakerLine({ speaker }: { speaker: AbhiyanSpeaker }) {
   const detail = [speaker.role, speaker.organization].filter(Boolean).join(" · ");
@@ -56,19 +54,6 @@ export default function MahakumbhAbhiyanSpeakersDirectory() {
                 ({edition.speakers.length})
               </span>
             </h3>
-            {EDITION_FRAME_IMAGES[edition.edition]?.speakers ? (
-              <div className="mb-4 overflow-hidden rounded-lg border border-slate-200 print:hidden">
-                <div className="relative h-36 w-full bg-slate-50 sm:h-44">
-                  <Image
-                    src={EDITION_FRAME_IMAGES[edition.edition].speakers}
-                    alt={`${edition.title} — photo frame`}
-                    fill
-                    className="object-cover object-top"
-                    sizes="(max-width: 768px) 100vw, 900px"
-                  />
-                </div>
-              </div>
-            ) : null}
             <ul className="columns-1 gap-x-6 sm:columns-2 lg:columns-3 xl:columns-4 print:columns-4 print:gap-x-3">
               {edition.speakers.map((speaker) => (
                 <SpeakerLine
