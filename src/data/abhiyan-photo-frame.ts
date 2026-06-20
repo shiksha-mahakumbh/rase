@@ -1,13 +1,14 @@
 /**
  * Content sourced from Shiksha Mahakumbh Abhiyan Photo Frame (37 pages).
- * Page mapping verified via full PDF text extraction.
- * Visual assets are served via Google Drive PDF — not bundled locally.
+ * Visual assets served via Google Drive PDF — not bundled locally.
  */
 
 export const ABIYAN_PHOTO_FRAME = {
   dedication: "विवेक व सावधान नमोण को समर्पित",
   taglineHindi:
     "शिक्षा महाकुंभ अभियान एक दीर्घकालिक, बहु-संस्करणीय, बहु-राष्ट्रीय एवं बहु-आयामी आंदोलन है, जिसकी परिकल्पना एक प्रतिष्ठित ISRO वैज्ञानिक एवं प्रख्यात लेखक द्वारा की गई है तथा जिसे दूरदर्शी शिक्षाविदों एवं समाज सुधारकों के मार्गदर्शन में आकार मिला।",
+  taglineEn:
+    "Shiksha Mahakumbh Abhiyan is a long-term, multi-edition, multi-national education movement conceived by a distinguished ISRO scientist and author, shaped under visionary educators and social reformers.",
   introParagraphs: [
     "यह अभियान शिक्षा, नीति, उद्योग, नागरिक समाज और युवाओं को एक साझा मंच पर लाकर भारतीय शिक्षा प्रणाली के पुनर्निर्माण एवं सुधारीकरण के साथ-साथ वैश्विक शिक्षा परिदृश्य में भारत की भूमिका निर्धारित करता है।",
     "भारतीय ज्ञान परंपराओं में निहित और वैश्विक शैक्षिक संदर्भ के अनुकूल, यह पहल सहयोग, नवाचार और क्रियान्वयन का एक सशक्त मंच है। इसका उद्देश्य शिक्षा को केवल राष्ट्रीय सीमाओं तक सीमित न रखकर, ओलंपिक की भाँति शिक्षा के लिए एक वैश्विक मंच के रूप में विकसित करना है।",
@@ -15,11 +16,6 @@ export const ABIYAN_PHOTO_FRAME = {
   ],
   nefAlignment:
     "राष्ट्रीय शिक्षा नीति 2020 कार्यान्वयन, स्कूल एवं उच्च शिक्षा एवं नवाचार उद्यमिता को समर्पित।",
-  contact: {
-    email: "info@shikshamahakumbh.com",
-    websites: ["www.shikshamahakumbh.com", "www.rase.co.in"],
-    patronMessage: "माननीय राष्ट्रपति श्रीमती द्रौपदी मुर्मू को नमन",
-  },
   patron: {
     name: "डॉ. ठाकुर एस. के. रौनजा",
     nameEn: "Dr. Thakur S.K. Raunija (Dr. Thakur SKR)",
@@ -37,36 +33,24 @@ export const ABIYAN_PHOTO_FRAME = {
     { name: "श्री विजय कुमार नड्डा", role: "संगठन मंत्री", organization: "विद्या भारती (उत्तर क्षेत्र)" },
   ],
   coordinators: [
-    { name: "मेजर डॉ. शमशेर सिंह", role: "संयोजक", organization: "शिक्षा महाकुंभ अभियान" },
-    { name: "डॉ. जितेंद्र गर्ग", role: "सचिव", organization: "शिक्षा महाकुंभ अभियान" },
-    { name: "प्रो. तेजीत सिंह", role: "मुख्य", organization: "Meet Tech Congress" },
-    { name: "डॉ. विजय कुमार शर्मा", role: "मुख्य", organization: "Campus" },
-    { name: "सुश्री सोनू शर्मा", role: "मुख्य", organization: "ओलंपियाड" },
-    { name: "डॉ. कृष्णा पांडे", role: "मुख्य", organization: "Student Project" },
-    { name: "डॉ. शिक्षा शर्मा", role: "मुख्य", organization: "बाल शोध प्रतियोगिता" },
-    { name: "श्री संजय सोनी", role: "मुख्य", organization: "प्रदर्शनी" },
-    { name: "सुश्री मीनू", role: "मुख्य", organization: "सांस्कृतिक कार्यक्रम" },
-    { name: "प्रो. अवनेश वर्मा", role: "मुख्य", organization: "Panel Discussion" },
-    { name: "प्रो. विशाल शर्मा", role: "मुख्य", organization: "Award" },
-    { name: "डॉ. जितेश पांडे", role: "मुख्य", organization: "Guest Lecture" },
-    { name: "डॉ. मनोज तेवतिया", role: "मुख्य", organization: "Conclave" },
+    { name: "मेजर डॉक्टर शमशेर सिंह", role: "संयोजक", organization: "शिक्षा महाकुंभ अभियान" },
+    { name: "डॉ. जतिंदर गर्ग", role: "सचिव", organization: "शिक्षा महाकुंभ अभियान" },
+    { name: "प्रो. ब्रह्मजीत सिंह", role: "प्रमुख", organization: "मल्टी ट्रैक कॉन्फ्रेंस" },
+    { name: "डॉ. प्रवीण कुमार शर्मा", role: "प्रमुख", organization: "कॉनक्लेव" },
+    { name: "श्रीमती सोनू शर्मा", role: "प्रमुख", organization: "ओलंपियाड" },
+    { name: "डॉ. कृष्णा पांडे", role: "प्रमुख", organization: "स्टूडेंट प्रोजेक्ट" },
+    { name: "डॉ. शिक्षा शर्मा", role: "प्रमुख", organization: "बाल शोध पत्रिका" },
+    { name: "श्री संजय सोनी", role: "प्रमुख", organization: "प्रदर्शनी" },
+    { name: "श्रीमती मीनू", role: "प्रमुख", organization: "सांस्कृतिक कार्यक्रम" },
+    { name: "प्रो. अविनेश वर्मा", role: "प्रमुख", organization: "पैनल डिस्कशन" },
+    { name: "प्रो. विशाल शर्मा", role: "प्रमुख", organization: "अवार्ड" },
+    { name: "डॉ. जितेश पांडे", role: "प्रमुख", organization: "अन्य विभिन्न कार्यक्रम" },
+    { name: "डॉ. मनोज तेवतिया", role: "प्रमुख", organization: "कॉन्फ्रेंसेज" },
     { name: "अधिवक्ता आरती शर्मा", role: "मीडिया प्रभारी", organization: "शिक्षा महाकुंभ अभियान" },
-    { name: "विंग कमांडर संजीव शर्मा", role: "मुख्य", organization: "अतिथि सत्कार" },
+    { name: "विंग कमांडर संजीव शर्मा", role: "प्रमुख", organization: "अतिथि सत्कार" },
     { name: "श्री बलराम वर्मा", role: "विदेशी प्रभारी", organization: "" },
-    { name: "श्री रमेश सिंह", role: "कार्यालय प्रबंधक", organization: "" },
+    { name: "श्री रमेंद्र सिंह", role: "कार्यालय प्रबंधक", organization: "" },
   ],
-  conclaveTypes: [
-    "कुलपति/निदेशक कॉनक्लेव",
-    "वैज्ञानिक कॉनक्लेव",
-    "प्रधानाचार्य कॉनक्लेव",
-    "मीडिया कॉनक्लेव",
-    "सोशल मीडिया इन्फ्लुएंसर कॉनक्लेव",
-    "छात्र नेतृत्व कॉनक्लेव",
-    "नीति, शासन और नवाचार कॉनक्लेव",
-    "सामाजिक उत्तरदायित्व और समानता कॉनक्लेव",
-  ],
-  olympiadCities: ["पठानकोट", "मोहाली", "पटियाला", "मोरिंडा", "पंचकुला", "कुरुक्षेत्र", "चंडीगढ़"],
-  /** Hosted on Google Drive — not bundled in repo. */
   pdfUrl:
     "https://drive.google.com/file/d/1v8d87TR4xgd3S028unVBIjrZsNewR75n/view?usp=drive_link",
   pdfEmbedUrl:
@@ -79,6 +63,42 @@ export type EditionDignitary = {
   role: string;
   organization?: string;
 };
+
+/** Invitation campaign — dignitary groups */
+export const INVITATION_CAMPAIGN_GROUPS = [
+  {
+    id: "chief-ministers",
+    titleEn: "Honored Chief Ministers",
+    titleHi: "गरिमामयी मुख्यमंत्री",
+    accent: "from-amber-500/20 to-orange-50 border-amber-200/60",
+    icon: "🏛️",
+    items: "EDITION_HONORED_MINISTERS" as const,
+  },
+  {
+    id: "governors",
+    titleEn: "Honored Governors",
+    titleHi: "गरिमामयी राज्यपाल",
+    accent: "from-brand-blue/20 to-blue-50 border-brand-blue/25",
+    icon: "🎖️",
+    items: "EDITION_HONORED_GOVERNORS" as const,
+  },
+  {
+    id: "union-ministers",
+    titleEn: "Union Ministers",
+    titleHi: "केंद्रीय मंत्री",
+    accent: "from-brand-emerald/20 to-emerald-50 border-emerald-200/60",
+    icon: "🇮🇳",
+    items: "EDITION_UNION_MINISTERS" as const,
+  },
+  {
+    id: "state-ministers",
+    titleEn: "State Ministers",
+    titleHi: "राज्य मंत्री",
+    accent: "from-violet-500/15 to-violet-50 border-violet-200/60",
+    icon: "📜",
+    items: "EDITION_STATE_MINISTERS" as const,
+  },
+] as const;
 
 /** PDF pages 6–10 — chief guests per edition */
 export const EDITION_CHIEF_GUESTS: Record<string, EditionDignitary[]> = {
@@ -145,3 +165,19 @@ export const EDITION_STATE_MINISTERS: EditionDignitary[] = [
   { name: "श्री कुबेर डिंडोर", role: "प्राथमिक शिक्षा एवं शिक्षा", organization: "गुजरात" },
   { name: "श्री इंद्र सिंह परमार", role: "स्कूल शिक्षा मंत्री", organization: "मध्य प्रदेश" },
 ];
+
+const INVITATION_ITEMS: Record<
+  (typeof INVITATION_CAMPAIGN_GROUPS)[number]["items"],
+  EditionDignitary[]
+> = {
+  EDITION_HONORED_MINISTERS,
+  EDITION_HONORED_GOVERNORS,
+  EDITION_UNION_MINISTERS,
+  EDITION_STATE_MINISTERS,
+};
+
+export function getInvitationGroupItems(
+  key: (typeof INVITATION_CAMPAIGN_GROUPS)[number]["items"]
+): EditionDignitary[] {
+  return INVITATION_ITEMS[key];
+}
