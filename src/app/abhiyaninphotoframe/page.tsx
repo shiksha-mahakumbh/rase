@@ -53,11 +53,12 @@ export default function AbhiyanPhotoFramePage() {
 
         <div className="mb-8 flex flex-wrap justify-center gap-3">
           <a
-            href={ABIYAN_PHOTO_FRAME.pdfPath}
-            download
+            href={ABIYAN_PHOTO_FRAME.pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-lg bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90"
           >
-            Download PDF
+            View / Download PDF
           </a>
           <Link
             href="/past-events"
@@ -376,15 +377,21 @@ export default function AbhiyanPhotoFramePage() {
           <h2 className="mb-4 text-lg font-bold text-brand-navy">Full Photo Frame (PDF)</h2>
           <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
             <iframe
-              src={ABIYAN_PHOTO_FRAME.pdfPath}
+              src={ABIYAN_PHOTO_FRAME.pdfEmbedUrl}
               title="Shiksha Mahakumbh Abhiyan Photo Frame"
               className="h-[80vh] min-h-[480px] w-full"
+              allow="autoplay"
             />
           </div>
           <p className="mt-3 text-center text-sm text-slate-500">
             PDF not loading?{" "}
-            <a href={ABIYAN_PHOTO_FRAME.pdfPath} className="font-semibold text-brand-navy underline">
-              Open or download directly
+            <a
+              href={ABIYAN_PHOTO_FRAME.pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-brand-navy underline"
+            >
+              Open on Google Drive
             </a>
           </p>
         </section>

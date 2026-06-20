@@ -14,3 +14,4 @@ exports/gcp-firestore/
 exports/gcp-storage/
 exports/**/*.json
 !exports/**/manifest.example.json
+public/abhiyanphotoframe.pdf
