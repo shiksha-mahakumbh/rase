@@ -23,30 +23,53 @@ export const INTRODUCTION_PARAGRAPHS = [
 export const INTRODUCTION_CLOSING =
   "Shiksha Mahakumbh Abhiyan continues to evolve as a dynamic national and global movement—bridging vision with action, and ideas with impact.";
 
-export const INTRODUCTION_PILLARS = [
+export const INTRODUCTION_MEETING_TAGLINE = {
+  titleEn: "Shiksha Mahakumbh",
+  titleHi: "शिक्षा महाकुंभ",
+  subtitle: "Meeting of the Minds",
+} as const;
+
+/** हमारे उद्देश्य — Our Objectives (English for SEO & global reach) */
+export const INTRODUCTION_OBJECTIVES = [
   {
-    icon: "🌐",
-    title: "Global Education Ecosystem",
-    desc: "Inclusive, interdisciplinary, ethical, and transformation-driven—connected to society's real needs.",
-    accent: "from-brand-blue/20 to-blue-50 border-brand-blue/25",
+    number: 1,
+    title: "NEP 2020 Implementation",
+    desc: "Advance the practical implementation of the National Education Policy 2020 across school, higher, and skill education.",
   },
   {
-    icon: "🤝",
-    title: "Whole-of-Society",
-    desc: "Teachers, students, leaders, policymakers, industry, NGOs & media united in one mission.",
-    accent: "from-brand-saffron/25 to-orange-50 border-brand-saffron/30",
+    number: 2,
+    title: "Industry–Academia Interface",
+    desc: "Build a strong industry–academia interface and inspire educational institutions to prepare the new generation in line with industry needs.",
   },
   {
-    icon: "🎯",
-    title: "Action & Impact",
-    desc: "Action plans, institutional partnerships, and community participation with measurable outcomes.",
-    accent: "from-brand-emerald/20 to-emerald-50 border-emerald-200/60",
+    number: 3,
+    title: "Higher Ed ↔ Schools",
+    desc: "Connect higher educational institutions with schools for continuity, mentorship, and shared learning outcomes.",
   },
   {
-    icon: "📜",
-    title: "NEP 2020 Aligned",
-    desc: "Policy implementation across school, higher education, innovation, and Bharatiya knowledge systems.",
-    accent: "from-violet-500/15 to-violet-50 border-violet-200/60",
+    number: 4,
+    title: "Formal Education & Skills",
+    desc: "Ensure effective coordination between formal education and skill development for employability and lifelong learning.",
+  },
+  {
+    number: 5,
+    title: "Talent for the Classroom",
+    desc: "Create an environment that nurtures talent for the classroom—encouraging the best minds to enter the teaching profession.",
+  },
+  {
+    number: 6,
+    title: "Platform for Excellence",
+    desc: "Provide a stage for exemplary work by individuals and institutions to foster a positive atmosphere across society.",
+  },
+  {
+    number: 7,
+    title: "Forum for Thought Leaders",
+    desc: "Offer a forum for education thinkers, innovators, and social scientists to deliberate on pressing societal themes.",
+  },
+  {
+    number: 8,
+    title: "Atmanirbhar Bharat",
+    desc: "Awaken in every citizen the resolve to make India a global power through self-reliant individuals, institutions, and society.",
   },
 ] as const;
 
@@ -59,7 +82,7 @@ export const INTRODUCTION_STATS = [
 
 export const INTRODUCTION_SECTION_NAV = [
   { id: "overview", label: "Overview" },
-  { id: "vision", label: "Vision" },
+  { id: "objectives", label: "Objectives" },
   { id: "leadership", label: "Leadership" },
   { id: "editions", label: "Editions" },
   { id: "join", label: "Register" },
