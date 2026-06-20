@@ -14,8 +14,6 @@ import {
   REG_LINKS,
 } from "../AcademicCouncilUI";
 import { tracks } from "../tracks-data";
-import OverviewPage from "../AcademicCouncilOverview";
-import { OpenBestPracticesSection } from "../OpenBestPracticesSection";
 
 
 export default function ConferencePage() {
@@ -163,10 +161,16 @@ export default function ConferencePage() {
       </ACSection>
 
       <ACSection title="📚 Publication & Review">
-        <div className="space-y-3 text-base text-gray-700 md:text-lg">
-          <p>Peer-reviewed Open Access Journal (ISSN)</p>
-          <p>Selected papers recommended for Scopus / Web of Science</p>
-        </div>
+        <ACGlassPanel className="border-indigo-100 bg-gradient-to-br from-indigo-50/50 to-white">
+          <div className="space-y-3 text-base text-gray-700 md:text-lg">
+            <p>
+              Papers submitted will be published in SCI / Scopus / Web of Science indexed
+              journals after peer review.
+            </p>
+            <p>Peer-reviewed Open Access Journal (ISSN)</p>
+            <p>Selected papers recommended for Scopus / Web of Science indexing</p>
+          </div>
+        </ACGlassPanel>
       </ACSection>
 
       <ACSection title="🏆 Awards">
@@ -200,106 +204,5 @@ export default function ConferencePage() {
       />
     </ACPage>
   );
-};
-
-const conclaves = [
-  {
-    title: "VC / Directors Conclave",
-    icon: "🎓",
-    participants:
-      "Vice-Chancellors, Directors, Academic Thinkers, NEP Implementers",
-    focus:
-      "Systemic policy transformation, institutional autonomy, global benchmarks",
-    output:
-      "Vision Charter for Higher Education @2047",
-    theme:
-      "Practical Innovation in Education System",
-    coordinators:
-      "Dr. Chander Prakash, NIT Hamirpur",
-  },
-  {
-    title: "Principals & Outstanding Teachers Conclave",
-    icon: "🏫",
-    participants:
-      "School Principals, Outstanding Teachers, DEOs, Education Officers",
-    focus:
-      "Foundational literacy, school leadership, rural-urban equity, pedagogy reforms",
-    output:
-      "Model School Leadership & Teaching Excellence Toolkit",
-    theme:
-      "Transformative Ethical Learning with Innovations",
-    coordinators:
-      "Dr. Siddarath Chauhan, NIT Hamirpur | Dr. Kuldeep Kumar, NIT Hamirpur",
-  },
-  {
-    title: "Scientists & Research Scholars Conclave",
-    icon: "🔬",
-    participants:
-      "Scientists, Research Scholars, PhD Candidates, Innovators, R&D Professionals",
-    focus:
-      "Interdisciplinary R&D, patent ecosystem, Bharatiya knowledge",
-    output:
-      "Research-to-Policy Action Guide",
-    theme:
-      "Lab to the Last Mile",
-    coordinators:
-      "Prof. Ravi Kumar, NIT Hamirpur | Dr. Pooja, CSIR–CSIO Chandigarh",
-  },
-  {
-    title: "Startup Leaders / Entrepreneurs Conclave",
-    icon: "🚀",
-    participants:
-      "Startup Founders, Entrepreneurs, Business Leaders, Innovation Mentors",
-    focus:
-      "Entrepreneurship promotion through education",
-    output:
-      "Student Entrepreneurship Development Framework",
-    theme:
-      "Mitigation of Unemployment through Entrepreneurship",
-    coordinators:
-      "Er. Pankaj Kumar, NIT Hamirpur",
-  },
-  {
-    title: "CSR & NGO Conclave",
-    icon: "🤝",
-    participants:
-      "CSR Leaders, NGOs, Philanthropic Foundations, Social Activists",
-    focus:
-      "Equitable access, girls’ education, underserved communities",
-    output:
-      "Inclusive Education Investment Charter",
-    theme:
-      "Society of Knowledge, Obedience with Practical Responsibility",
-    coordinators:
-      "Dr. Somesh Kumar, NIT Hamirpur",
-  },
-  {
-    title: "Media Conclave",
-    icon: "📢",
-    participants:
-      "Journalists, Edufluencers, Digital Content Creators, Fact-checkers",
-    focus:
-      "Responsible storytelling, fact-based discourse, positive narratives",
-    output:
-      "Shiksha Media Ethics & Impact Code",
-    theme:
-      "Visualize the World with the Power of Truth",
-    coordinators:
-      "Dr. Rakesh Kumar, NIT Hamirpur | Adv. Aarti Sharma, Member, DHE",
-  },
-  {
-    title: "Talent Conclave (90%+ Achievers)",
-    icon: "🌟",
-    participants:
-      "Meritorious Students (90%+), Toppers, Academic Achievers",
-    focus:
-      "Talent recognition, motivation, academic excellence",
-    output:
-      "National Talent Recognition & Mentorship Pathway",
-    theme:
-      "Nurturing Excellence for Viksit Bharat",
-    coordinators:
-      "Dr. Arvind Kumar, NIT Hamirpur",
-  },
-];
+}
 

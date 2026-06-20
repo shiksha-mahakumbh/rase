@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { AcademicCouncilTabId } from "@/data/academic-council-content";
 import OverviewPage from "./academic/AcademicCouncilOverview";
 import ConferencePage from "./academic/pages/ConferencePage";
 import ConclavePage from "./academic/pages/ConclavePage";
@@ -12,40 +13,52 @@ import BestPracticesPage from "./academic/pages/BestPracticesPage";
 import PatrikaPage from "./academic/pages/PatrikaPage";
 import CulturalPage from "./academic/pages/CulturalPage";
 
-const pageMap = {
-  OverviewPage: <OverviewPage />,
-  ConferencePage: <ConferencePage />,
-  ConclavePage: <ConclavePage />,
-  AwardsPage: <AwardsPage />,
-  OlympiadPage: <OlympiadPage />,
-  ExhibitionPage: <ExhibitionPage />,
-  ProjectsPage: <ProjectsPage />,
-  BestPracticesPage: <BestPracticesPage />,
-  PatrikaPage: <PatrikaPage />,
-  CulturalPage: <CulturalPage />,
-} as const;
-
-type PageId = keyof typeof pageMap;
-
-const pages: { id: PageId; label: string }[] = [
+const pages: { id: AcademicCouncilTabId; label: string }[] = [
   { id: "OverviewPage", label: "Overview" },
-    { id: "ConferencePage", label: "Conference" },
-    { id: "ConclavePage", label: "Conclave" },
-    { id: "AwardsPage", label: "Awards" },
-    { id: "OlympiadPage", label: "Olympiad" },
-    { id: "ExhibitionPage", label: "Exhibition" },
-    { id: "ProjectsPage", label: "Projects" },
-    { id: "BestPracticesPage", label: "Best Practices" },
-    { id: "PatrikaPage", label: "Bal Shodh Patrika" },
-    { id: "CulturalPage", label: "Cultural Program" },
-  ];
+  { id: "ConferencePage", label: "Conference" },
+  { id: "ConclavePage", label: "Conclave" },
+  { id: "AwardsPage", label: "Awards" },
+  { id: "OlympiadPage", label: "Olympiad" },
+  { id: "ExhibitionPage", label: "Exhibition" },
+  { id: "ProjectsPage", label: "Projects" },
+  { id: "BestPracticesPage", label: "Best Practices" },
+  { id: "PatrikaPage", label: "Bal Shodh Patrika" },
+  { id: "CulturalPage", label: "Cultural Program" },
+];
+
+function renderPage(id: AcademicCouncilTabId, onNavigate: (tabId: AcademicCouncilTabId) => void) {
+  switch (id) {
+    case "OverviewPage":
+      return <OverviewPage onNavigate={onNavigate} />;
+    case "ConferencePage":
+      return <ConferencePage />;
+    case "ConclavePage":
+      return <ConclavePage />;
+    case "AwardsPage":
+      return <AwardsPage />;
+    case "OlympiadPage":
+      return <OlympiadPage />;
+    case "ExhibitionPage":
+      return <ExhibitionPage />;
+    case "ProjectsPage":
+      return <ProjectsPage />;
+    case "BestPracticesPage":
+      return <BestPracticesPage />;
+    case "PatrikaPage":
+      return <PatrikaPage />;
+    case "CulturalPage":
+      return <CulturalPage />;
+    default:
+      return <OverviewPage onNavigate={onNavigate} />;
+  }
+}
 
 export default function AcademicCouncilDashboard() {
-  const [active, setActive] = useState<PageId>("OverviewPage");
+  const [active, setActive] = useState<AcademicCouncilTabId>("OverviewPage");
   const [menuOpen, setMenuOpen] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
-  const selectPage = useCallback((id: PageId) => {
+  const selectPage = useCallback((id: AcademicCouncilTabId) => {
     setActive(id);
     setMenuOpen(false);
   }, []);
@@ -143,7 +156,7 @@ export default function AcademicCouncilDashboard() {
         className="min-w-0 flex-1 p-3 pt-4 sm:p-4 lg:p-6 lg:pt-8"
       >
         <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-xl sm:rounded-3xl">
-          {pageMap[active]}
+          {renderPage(active, selectPage)}
         </div>
       </main>
     </div>
