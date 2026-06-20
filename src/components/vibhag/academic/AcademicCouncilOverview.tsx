@@ -11,9 +11,16 @@ import {
   SectionCTA,
   REG_LINKS,
 } from "./AcademicCouncilUI";
+import AcademicProgrammeHub from "./AcademicProgrammeHub";
 import { AuthoritySections } from "@/components/authority";
+import { ACADEMIC_COUNCIL_HERO } from "@/data/academic-council-content";
+import type { AcademicCouncilTabId } from "@/data/academic-council-content";
 
-function OverviewPage() {
+interface OverviewPageProps {
+  onNavigate: (tabId: AcademicCouncilTabId) => void;
+}
+
+function OverviewPage({ onNavigate }: OverviewPageProps) {
   return (
     <>
     <ACPage>
@@ -21,11 +28,12 @@ function OverviewPage() {
         title="🎓 Academic Council – Shiksha Mahakumbh 6.0"
         subtitle={
           <p>
-            The Academic Backbone of Shiksha Mahakumbh – Integrating Knowledge,
-            Innovation, and Impact.
+            {ACADEMIC_COUNCIL_HERO.tagline}
           </p>
         }
       />
+
+      <AcademicProgrammeHub onNavigate={onNavigate} />
 
       <ACSection title="🌟 Overview">
         <ACGlassPanel>

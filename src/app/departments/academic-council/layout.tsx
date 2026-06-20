@@ -2,34 +2,39 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { SITE_URL } from "@/config/site";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
+import {
+  ACADEMIC_COUNCIL_EVENT,
+  ACADEMIC_COUNCIL_SEO,
+} from "@/data/academic-council-content";
 
 const path = CANONICAL_ROUTES.departments.academicCouncil;
 
 export const metadata = createPageMetadata({
-  title: "Academic Council — Programmes & Research Tracks",
-  description:
-    "Shiksha Mahakumbh 6.0 Academic Council: multi-track conference, conclaves, olympiads, exhibitions, best practices, and publications at NIT Hamirpur.",
+  title: ACADEMIC_COUNCIL_SEO.title,
+  description: ACADEMIC_COUNCIL_SEO.description,
   path,
-  keywords: [
-    "Academic Council Shiksha Mahakumbh",
-    "research conference India 2026",
-    "NIT Hamirpur education summit",
-    "Department of Holistic Education",
-  ],
+  keywords: [...ACADEMIC_COUNCIL_SEO.keywords],
+  locale: "en_IN",
 });
 
 const educationEvent = {
   "@context": "https://schema.org",
   "@type": "EducationEvent",
   name: "Shiksha Mahakumbh 6.0 — Academic Council Programmes",
-  description:
-    "Academic Council programmes including multi-track conference, conclaves, olympiads, exhibitions, student projects, and Bal Shodh Patrika.",
+  description: ACADEMIC_COUNCIL_SEO.description,
   url: `${SITE_URL}${path}`,
+  startDate: ACADEMIC_COUNCIL_EVENT.startDate,
+  endDate: ACADEMIC_COUNCIL_EVENT.endDate,
   eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
   location: {
     "@type": "Place",
-    name: "NIT Hamirpur",
-    address: { "@type": "PostalAddress", addressCountry: "IN" },
+    name: ACADEMIC_COUNCIL_EVENT.venue,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Hamirpur",
+      addressRegion: "Himachal Pradesh",
+      addressCountry: "IN",
+    },
   },
   organizer: {
     "@type": "Organization",
