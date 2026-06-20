@@ -8,6 +8,7 @@ import {
   buildScholarlyArticleSchema,
 } from "@/lib/seo/schema";
 import type { PublicationTypeEntry } from "@/lib/knowledge-graph/publication-catalog";
+import { brandPageHero } from "@/lib/page-heroes";
 
 type Props = { entry: PublicationTypeEntry };
 
@@ -41,12 +42,7 @@ export default function PublicationTypePage({ entry }: Props) {
 
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "Publications",
-        title: entry.label,
-        subtitle: entry.description,
-        accent: "navy",
-      }}
+      hero={brandPageHero(entry.label, entry.description, "Publications")}
       relatedPath={entry.path}
       containerClassName="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16"
     >

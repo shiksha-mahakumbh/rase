@@ -14,6 +14,7 @@ import {
 } from "@/lib/knowledge-graph/conference-catalog";
 import { getPillarEntry } from "@/lib/knowledge-graph/pillar-registry";
 import { SITE_URL } from "@/config/site";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function ConferenceAuthorityHub() {
   const pillar = getPillarEntry("conferences")!;
@@ -45,12 +46,7 @@ export default function ConferenceAuthorityHub() {
 
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "Education Pillar",
-        title: pillar.label,
-        subtitle: pillar.tagline,
-        accent: "saffron",
-      }}
+      hero={brandPageHero(pillar.label, pillar.tagline, "Education Pillar")}
       relatedPath="/conferences"
       containerClassName="mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-16"
     >

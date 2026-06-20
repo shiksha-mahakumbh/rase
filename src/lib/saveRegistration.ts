@@ -5,8 +5,6 @@ import {
   RegistrationStatus,
   AccommodationStatus,
 } from "@/types/registration";
-import { formatRegistrationDate } from "@/lib/format-date";
-
 export interface SaveRegistrationInput {
   registrationType: RegistrationType | string;
   data: Record<string, unknown>;
@@ -50,5 +48,3 @@ export async function saveRegistration(
 export async function generateRegistrationId(): Promise<string> {
   return `${REGISTRATION_ID_PREFIX}-000000`;
 }
-
-export const formatFirestoreDate = formatRegistrationDate;

@@ -9,31 +9,37 @@ type Props = {
 
 export default function EditionDetailTemplate({ edition, children }: Props) {
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
+    <div className="mx-auto max-w-4xl space-y-8">
       <nav className="text-sm text-slate-600">
-        <Link href="/past-events" className="hover:text-brand-saffron">
+        <Link href="/past-events" className="font-semibold text-brand-blue hover:text-brand-saffron">
           Past Editions
         </Link>
-        <span className="mx-2">/</span>
+        <span className="mx-2 text-slate-400">/</span>
         <span className="font-medium text-brand-navy">{edition.title}</span>
       </nav>
 
-      <header className="mt-6 rounded-2xl bg-gradient-to-br from-brand-navy to-brand-navy-light p-8 text-white">
+      <div className="flex flex-wrap gap-2">
         <span className="rounded-full bg-brand-saffron px-3 py-1 text-xs font-bold text-brand-navy">
           Edition {edition.edition}
         </span>
-        <h1 className="mt-4 text-3xl font-bold">{edition.title}</h1>
-        <p className="mt-2 text-lg text-white/90">{edition.venueFull}</p>
-        <p className="mt-1 text-white/80">{edition.dates}</p>
-        <p className="mt-4 font-semibold text-brand-saffron">Theme: {edition.theme}</p>
-      </header>
+        <span className="rounded-lg bg-brand-blue/10 px-3 py-1 text-xs font-semibold text-brand-blue">
+          {edition.venue}
+        </span>
+        <span className="rounded-lg bg-brand-saffron/10 px-3 py-1 text-xs font-semibold text-brand-saffron-dark">
+          {edition.dates}
+        </span>
+      </div>
 
-      <section className="mt-8 space-y-6">
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+      <p className="text-lg font-semibold text-brand-navy">
+        Theme: <span className="text-brand-saffron-dark">{edition.theme}</span>
+      </p>
+
+      <section className="space-y-6">
+        <div className="rounded-2xl border border-brand-saffron/15 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-bold text-brand-navy">Core Essence (Mool Tatva)</h2>
           <p className="mt-2 text-slate-700">{edition.coreEssence}</p>
         </div>
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-brand-blue/15 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-bold text-brand-navy">Impact &amp; Outcomes</h2>
           <p className="mt-2 text-slate-700">{edition.impact}</p>
         </div>
@@ -41,7 +47,7 @@ export default function EditionDetailTemplate({ edition, children }: Props) {
       </section>
 
       {edition.galleryUrl ? (
-        <section className="mt-10">
+        <section className="rounded-2xl border border-slate-200 bg-brand-surface-warm p-6">
           <h2 className="text-xl font-bold text-brand-navy">Gallery</h2>
           <p className="mt-2 text-slate-600">
             Photographs from {edition.title} at {edition.venue}.
@@ -50,18 +56,21 @@ export default function EditionDetailTemplate({ edition, children }: Props) {
             href={edition.galleryUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-block font-semibold text-brand-saffron hover:underline"
+            className="mt-4 inline-block rounded-xl bg-brand-saffron px-5 py-2.5 text-sm font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white"
           >
-            Open full photo archive on Google Drive →
+            Open full photo archive →
           </a>
         </section>
       ) : null}
 
-      <p className="mt-10">
-        <Link href="/past-events" className="font-semibold text-brand-navy hover:underline">
+      <p>
+        <Link
+          href="/past-events"
+          className="font-semibold text-brand-blue hover:text-brand-saffron"
+        >
           ← All past editions
         </Link>
       </p>
-    </main>
+    </div>
   );
 }

@@ -126,7 +126,7 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
     id: "conferences",
     label: "Conferences",
     description: "Shiksha Mahakumbh Abhiyan national editions.",
-    routes: ["/abhiyan", "/introduction", "/registration"],
+    routes: ["/past-events", "/introduction", "/registration"],
     schemaTypes: ["EducationEvent"],
   },
   {

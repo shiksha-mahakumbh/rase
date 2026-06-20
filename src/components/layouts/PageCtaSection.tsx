@@ -7,7 +7,7 @@ export default function PageCtaSection() {
   return (
     <section
       aria-labelledby="page-cta-heading"
-      className="border-t border-slate-200/80 bg-white px-4 py-12 md:px-8 md:py-16"
+      className="border-t border-brand-saffron/20 bg-gradient-to-r from-brand-surface-warm via-white to-brand-surface-warm px-4 py-12 md:px-8 md:py-16"
     >
       <div className="mx-auto max-w-7xl text-center">
         <h2

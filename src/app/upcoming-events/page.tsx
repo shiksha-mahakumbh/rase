@@ -1,5 +1,5 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import UpcomingEvent from "../component/UpcomingEvent";
+import UpcomingEvent from "@/components/home/sections/UpcomingEvent";
 import { PAGE_HEROES } from "@/lib/page-heroes";
 import { loadCmsEvents, mapCmsEventsToUpcoming } from "@/lib/cms/organizational";
 

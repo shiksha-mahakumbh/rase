@@ -94,6 +94,3 @@ export function attributionForSubmission(): Record<string, string> {
     screenClass: a.screenClass,
   };
 }
-
-/** @deprecated Use attributionForSubmission */
-export const attributionForFirestore = attributionForSubmission;

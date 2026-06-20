@@ -1,7 +1,7 @@
 "use client";
 
 import { FieldErrors, FieldValues, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { formClasses } from "@/app/component/ui/formClasses";
+import { formClasses } from "@/components/forms/formClasses";
 import RazorpayCheckout from "@/components/payments/RazorpayCheckout";
 
 export type SharedFormValues = Record<string, unknown>;

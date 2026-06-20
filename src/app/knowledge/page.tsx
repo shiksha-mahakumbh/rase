@@ -4,14 +4,7 @@ import ContentHubClient from "./ContentHubClient";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import { buildArticleJsonLd } from "@/lib/content/jsonLd";
 import { CONTENT_REGISTRY } from "@/lib/content/registry";
-
-const PAGE_HERO = {
-  eyebrow: "Knowledge Hub",
-  title: "Research & Resources",
-  subtitle:
-    "Proceedings, publications, policy papers, and programme archives from the national education movement.",
-  accent: "navy" as const,
-};
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function KnowledgeHubPage() {
   const collectionJsonLd = {
@@ -23,7 +16,11 @@ export default function KnowledgeHubPage() {
 
   return (
     <PublicPageShell
-      hero={PAGE_HERO}
+      hero={brandPageHero(
+        "Research & Resources",
+        "Proceedings, publications, policy papers, and programme archives from the national education movement.",
+        "Knowledge Hub"
+      )}
       relatedPath="/knowledge"
       containerClassName="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16"
     >

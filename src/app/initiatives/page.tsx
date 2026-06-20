@@ -3,6 +3,8 @@ import PublicPageShell from "@/components/layouts/PublicPageShell";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import { PILLAR_REGISTRY } from "@/lib/knowledge-graph/pillar-registry";
 
+import { brandPageHero } from "@/lib/page-heroes";
+
 const INITIATIVE_SLUGS = [
   "innovation",
   "olympiad",
@@ -20,13 +22,11 @@ const initiatives = PILLAR_REGISTRY.filter((p) =>
 export default function InitiativesPage() {
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "National Programmes",
-        title: "Initiatives",
-        subtitle:
-          "Olympiads, awards, innovation tracks, and skill programmes under Shiksha Mahakumbh Abhiyan.",
-        accent: "emerald",
-      }}
+      hero={brandPageHero(
+        "Initiatives",
+        "Olympiads, awards, innovation tracks, and skill programmes under Shiksha Mahakumbh Abhiyan.",
+        "National Programmes"
+      )}
       relatedPath="/initiatives"
     >
       <BreadcrumbNav

@@ -4,9 +4,8 @@ import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
-import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import AdSlotRegion from "@/components/showcase/AdSlotRegion";
-import { socialLinks } from "@/app/component/footer-content";
+import { socialLinks } from "@/components/layout/footer-content";
 import {
   MEDIA_ARCHIVE_ITEMS,
   MEDIA_HUB_LINKS,
@@ -53,25 +52,6 @@ export default function MediaCenter() {
 
   return (
     <>
-      <ShowcaseHero
-        eyebrow="Media Centre"
-        title={
-          <>
-            झलकियाँ – शिक्षा महाकुंभ अभियान
-            <span className="mt-2 block text-2xl font-semibold text-white/90 md:text-3xl">
-              Glimpses of Shiksha Mahakumbh Abhiyan
-            </span>
-          </>
-        }
-        subtitle={
-          <p>
-            <span className="font-semibold">Shiksha Mahakumbh Abhiyan</span> is a
-            national initiative uniting thinkers, academicians, innovators, and youth —
-            building Bharat&apos;s educational vision for a global future.
-          </p>
-        }
-      />
-
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
         <BreadcrumbNav
           items={[

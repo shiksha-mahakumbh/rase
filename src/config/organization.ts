@@ -35,6 +35,13 @@ export const DHE_ORGANIZATION = {
     "The Department of Holistic Education (DHE) is a visionary initiative dedicated to transforming education through holistic, interdisciplinary, and socially impactful approaches.",
   mission:
     "To integrate innovation, ethics, skill development, research, and Indian Knowledge Systems into mainstream education — aligned with the vision of Viksit Bharat 2047.",
+  abhiyanLeadership: {
+    patron: "Dr. Thakur S.K. Raunija (Dr. Thakur SKR)",
+    patronRole: "Senior Scientist, ISRO & Director, DHE",
+    coordinator: "Maj. Dr. Shamshere Singh",
+    secretary: "Dr. Jitender Garg",
+    photoFramePath: "/abhiyaninphotoframe",
+  },
 } as const;
 
 export const DHE_MAP_EMBED_URL = `https://maps.google.com/maps?q=${DHE_ORGANIZATION.address.mapsQuery}&hl=en&z=16&output=embed`;

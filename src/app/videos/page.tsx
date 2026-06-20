@@ -4,7 +4,7 @@ import React, { Suspense } from "react";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import { PAGE_HEROES } from "@/lib/page-heroes";
 
-const VideoPage = React.lazy(() => import("../component/VideoPage"));
+const VideoPage = React.lazy(() => import("@/components/content/VideoPage"));
 
 export default function VideosRoutePage() {
   return (

@@ -1,5 +1,5 @@
 {
-  "passed": 9,
+  "passed": 13,
   "failed": 0,
   "results": [
     {
@@ -46,6 +46,26 @@
       "test": "src_no_firebase_runtime",
       "status": "PASS",
       "detail": "No Firebase runtime imports under src/"
+    },
+    {
+      "test": "no_firebase_infra",
+      "status": "PASS",
+      "detail": "No Firebase config, rules, or legacy scripts in repo"
+    },
+    {
+      "test": "no_firebase_npm_package",
+      "status": "PASS",
+      "detail": "No firebase or firebase-admin in package.json"
+    },
+    {
+      "test": "next_config_no_legacy_storage_host",
+      "status": "PASS",
+      "detail": "next.config.js does not allow legacy Firebase storage host"
+    },
+    {
+      "test": "next_config_supabase_storage",
+      "status": "PASS",
+      "detail": "next.config.js allows Supabase storage images"
     }
   ]
 }

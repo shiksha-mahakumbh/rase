@@ -4,6 +4,7 @@ import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import PartnersHub from "@/components/partners/PartnersHub";
 import { loadCmsPartners } from "@/lib/cms/organizational";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { brandPageHero } from "@/lib/page-heroes";
 
 const FALLBACK = {
   title: "Partners",
@@ -26,13 +27,11 @@ export default async function PartnersPage() {
         ]}
       />
       <PublicPageShell
-        hero={{
-          eyebrow: "Collaboration",
-          title: "Our Partners",
-          subtitle:
-            "Academic, media, government, and industry organisations united for national education reform.",
-          accent: "navy",
-        }}
+        hero={brandPageHero(
+          "Our Partners",
+          "Academic, media, government, and industry organisations united for national education reform.",
+          "Collaboration"
+        )}
         relatedPath="/partners"
         showCta={false}
       >

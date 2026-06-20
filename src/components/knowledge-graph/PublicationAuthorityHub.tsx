@@ -12,6 +12,7 @@ import {
 } from "@/lib/knowledge-graph/publication-catalog";
 import { getPillarEntry } from "@/lib/knowledge-graph/pillar-registry";
 import { SITE_URL } from "@/config/site";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function PublicationAuthorityHub() {
   const pillar = getPillarEntry("publications")!;
@@ -46,12 +47,7 @@ export default function PublicationAuthorityHub() {
 
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "Education Pillar",
-        title: pillar.label,
-        subtitle: pillar.tagline,
-        accent: "navy",
-      }}
+      hero={brandPageHero(pillar.label, pillar.tagline, "Education Pillar")}
       relatedPath="/publications"
       containerClassName="mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-16"
     >

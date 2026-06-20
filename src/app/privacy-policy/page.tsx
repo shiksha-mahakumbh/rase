@@ -33,7 +33,7 @@ export default async function PrivacyPolicyPage() {
       <h2>Data storage</h2>
       <p>
         Registration data is stored securely using industry-standard cloud
-        infrastructure (Google Firebase). Access is restricted to authorized
+        infrastructure (Supabase / PostgreSQL). Access is restricted to authorized
         administrators.
       </p>
       <h2>Your rights</h2>

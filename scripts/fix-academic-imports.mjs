@@ -1,7 +1,11 @@
+/**
+ * @deprecated One-time migration script — completed. Kept for reference only.
+ * Academic council pages now live under src/components/vibhag/academic/pages/.
+ */
 import fs from "fs";
 import path from "path";
 
-const pagesDir = "src/app/component/Vibhag/academic/pages";
+const pagesDir = "src/components/vibhag/academic/pages";
 
 const pageImports = {
   AwardsPage: ["awardCategories"],
@@ -41,10 +45,6 @@ const pageImports = {
   ConferencePage: [],
 };
 
-const allDataNames = new Set(
-  Object.values(pageImports).flat()
-);
-
 function stripTrailingConsts(source) {
   const marker = source.search(/\n\nconst \w+ =/);
   if (marker === -1) return source;
@@ -57,6 +57,10 @@ function stripTrailingConsts(source) {
 
 for (const [page, names] of Object.entries(pageImports)) {
   const filePath = path.join(pagesDir, `${page}.tsx`);
+  if (!fs.existsSync(filePath)) {
+    console.warn("skip missing", page);
+    continue;
+  }
   let src = fs.readFileSync(filePath, "utf8");
   src = stripTrailingConsts(src);
 
@@ -80,10 +84,11 @@ for (const [page, names] of Object.entries(pageImports)) {
   console.log("fixed", page);
 }
 
-// Remove orphan trailing blocks from ConferencePage only
 const conf = path.join(pagesDir, "ConferencePage.tsx");
-let c = fs.readFileSync(conf, "utf8");
-c = stripTrailingConsts(c);
-fs.writeFileSync(conf, c);
+if (fs.existsSync(conf)) {
+  let c = fs.readFileSync(conf, "utf8");
+  c = stripTrailingConsts(c);
+  fs.writeFileSync(conf, c);
+}
 
 console.log("done");

@@ -46,7 +46,7 @@ for (const dir of dirs) {
 
   src = src.replace(
     /"use client";\s*import React from "react";\s*import CompanyInfo[\s\S]*?import \{ getPressShareUrl \} from "@\/lib\/seo\/pressShare";\s*/,
-    `"use client";\nimport React from "react";\nimport ${pressComp} from "@/app/component/${pressComp}";\nimport WhatsAppIcon from "@/components/common/WhatsAppIcon";\nimport PressArticleShell from "@/components/press/PressArticleShell";\nimport { getPressShareUrl } from "@/lib/seo/pressShare";\n\n`
+    `"use client";\nimport React from "react";\nimport ${pressComp} from "@/components/press/articles/${pressComp}";\nimport WhatsAppIcon from "@/components/common/WhatsAppIcon";\nimport PressArticleShell from "@/components/press/PressArticleShell";\nimport { getPressShareUrl } from "@/lib/seo/pressShare";\n\n`
   );
 
   src = src.replace(

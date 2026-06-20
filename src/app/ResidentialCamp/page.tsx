@@ -1,16 +1,16 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import ResidentialCamp from "../component/Residential_Camp";
-
-const PAGE_HERO = {
-  eyebrow: "Programmes",
-  title: "Residential Camp",
-  subtitle: "Residential training programmes at Shiksha Mahakumbh.",
-  accent: "emerald",
-} as const;
+import ResidentialCamp from "@/components/content/Residential_Camp";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function ResidentialCampPage() {
   return (
-    <PublicPageShell hero={PAGE_HERO}>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Residential Camp",
+        "Residential training programmes at Shiksha Mahakumbh.",
+        "Programmes"
+      )}
+    >
       <ResidentialCamp />
     </PublicPageShell>
   );

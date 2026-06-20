@@ -9,6 +9,7 @@ import {
 import { PILLAR_REGISTRY } from "@/lib/knowledge-graph/pillar-registry";
 import { ENTITY_DIRECTORIES } from "@/lib/knowledge-graph/entity-directories";
 import { getPillarItemListItems } from "@/lib/knowledge-graph/internal-link-engine";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function EducationHubPage() {
   const collection = buildCollectionPageSchema({
@@ -30,13 +31,11 @@ export default function EducationHubPage() {
 
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "National Education Ecosystem",
-        title: "Education at Shiksha Mahakumbh",
-        subtitle:
-          "A multi-dimensional education movement spanning school and higher education, skills, research, innovation, policy, olympiads, awards, conferences, publications, and media.",
-        accent: "navy",
-      }}
+      hero={brandPageHero(
+        "Education at Shiksha Mahakumbh",
+        "A multi-dimensional education movement spanning school and higher education, skills, research, innovation, policy, olympiads, awards, conferences, publications, and media.",
+        "National Education Ecosystem"
+      )}
       relatedPath="/education"
       containerClassName="mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-16"
     >

@@ -1,16 +1,16 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import BatonCeremony from "../component/Baton";
-
-const PAGE_HERO = {
-  eyebrow: "Events",
-  title: "Baton Ceremony",
-  subtitle: "Ceremonial launch of Shiksha Mahakumbh editions.",
-  accent: "saffron",
-} as const;
+import BatonCeremony from "@/components/content/Baton";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function BatonCeremonyPage() {
   return (
-    <PublicPageShell hero={PAGE_HERO}>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Baton Ceremony",
+        "Ceremonial launch of Shiksha Mahakumbh editions.",
+        "Events"
+      )}
+    >
       <BatonCeremony />
     </PublicPageShell>
   );

@@ -44,7 +44,7 @@ export default function AdminGrowthAnalytics({ rows }: AdminGrowthAnalyticsProps
           total,
       },
       {
-        label: "Registration completed (Firestore)",
+        label: "Registration completed (database)",
         count:
           localFunnel[ANALYTICS_EVENTS.registrationCompleted] ?? total,
       },

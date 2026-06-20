@@ -40,7 +40,7 @@ export const CONTENT_MAP: ContentMapEntry[] = [
   { path: "/press/mahakumbh-programme-update", title: "Press 7", pillarId: "media", clusterId: "media-press" },
   { path: "/press/education-movement", title: "Press 8", pillarId: "media", clusterId: "media-press" },
   { path: "/press/summit-highlights", title: "Press 9", pillarId: "media", clusterId: "media-press" },
-  { path: "/abhiyan", title: "Abhiyan Timeline", pillarId: "conferences", clusterId: "conf-mahakumbh" },
+  { path: "/past-events", title: "Past Editions", pillarId: "conferences", clusterId: "conf-mahakumbh" },
   { path: "/upcoming-events", title: "शिक्षा महाकुंभ 6.0", pillarId: "conferences", clusterId: "conf-mahakumbh" },
   { path: "/past-events", title: "Past Events", pillarId: "conferences", clusterId: "conf-mahakumbh" },
   { path: "/past_event/sm25", title: "SMK 5.0", pillarId: "conferences", clusterId: "conf-mahakumbh" },

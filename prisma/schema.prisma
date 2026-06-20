@@ -1,6 +1,5 @@
 // Shiksha Mahakumbh 2026 — Supabase PostgreSQL schema
 // Generator: Prisma · Runtime: Next.js Route Handlers + Server Actions
-// Firebase remains active during parallel build; cutover after migration verification.
 
 generator client {
   provider = "prisma-client-js"
@@ -665,10 +664,10 @@ model Registration {
   // Flexible payload for type-specific fields not yet normalized
   metadata Json @default("{}")
 
-  // Migration traceability
-  firebaseMasterDocId String? @map("firebase_master_doc_id")
-  firebaseTypeDocId   String? @map("firebase_type_doc_id")
-  source              String  @default("supabase") // supabase | firebase | migration
+  // Original Firestore document IDs for migrated rows (column names unchanged)
+  legacyMasterDocId String? @map("firebase_master_doc_id")
+  legacyTypeDocId   String? @map("firebase_type_doc_id")
+  source            String  @default("supabase") // supabase | migration
 
   submittedIp String? @map("submitted_ip")
   userAgent   String? @map("user_agent")

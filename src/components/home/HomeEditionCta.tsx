@@ -1,7 +1,7 @@
 "use client";
 
 import { CtaButton } from "@/components/ui";
-import GlassCard from "@/app/component/home/GlassCard";
+import GlassCard from "@/components/home/legacy/GlassCard";
 import { ROUTES } from "@/constants/routes";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionField } from "@/lib/cms/utils";

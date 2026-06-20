@@ -1,8 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import NavBar from "@/components/layout/NavBar";
+import Footer from "@/components/layout/Footer";
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import PageCtaSection from "./PageCtaSection";
 import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
@@ -12,7 +12,8 @@ export interface PublicPageHero {
   eyebrow?: string;
   title: ReactNode;
   subtitle?: ReactNode;
-  accent?: "navy" | "saffron" | "emerald";
+  accent?: "navy" | "saffron" | "emerald" | "brand";
+  imageSrc?: string;
 }
 
 export interface PublicPageShellProps {
@@ -41,7 +42,7 @@ export default function PublicPageShell({
   skipContainer = false,
 }: PublicPageShellProps) {
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <div className="min-h-screen bg-white">
       {breadcrumbs && breadcrumbs.length > 0 && (
         <BreadcrumbJsonLd items={breadcrumbs} />
       )}
@@ -51,7 +52,8 @@ export default function PublicPageShell({
           eyebrow={hero.eyebrow}
           title={hero.title}
           subtitle={hero.subtitle}
-          accent={hero.accent ?? "navy"}
+          accent={hero.accent ?? "brand"}
+          imageSrc={hero.imageSrc}
         />
       )}
       <main id="main-content" className={mainClassName}>

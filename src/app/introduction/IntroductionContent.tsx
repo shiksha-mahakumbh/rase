@@ -1,15 +1,23 @@
 "use client";
 
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Introduction from "@/app/component/Introduction";
+import Introduction from "@/components/content/Introduction";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 
 const PAGE_HERO = {
   eyebrow: "शिक्षा महाकुंभ अभियान",
-  title: "Introduction",
+  title: (
+    <>
+      <span className="text-brand-blue">Introduction</span>
+      <span className="mt-1 block text-2xl text-brand-saffron md:text-3xl">
+        वैश्विक विमर्श निर्माण को समर्पित
+      </span>
+    </>
+  ),
   subtitle:
-    "A People's Movement for Global Educational Transformation — uniting education, policy, industry, civil society, and youth.",
-  accent: "navy" as const,
+    "A People's Movement for Global Educational Transformation — uniting education, policy, industry, civil society, and youth on one vibrant platform.",
+  accent: "brand" as const,
+  imageSrc: "/branding/shiksha-mahakumbh-brand-hero.png",
 };
 
 export default function IntroductionContent() {
@@ -17,12 +25,12 @@ export default function IntroductionContent() {
     <PublicPageShell
       hero={PAGE_HERO}
       relatedPath="/introduction"
-      containerClassName="mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-12"
+      containerClassName="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12"
     >
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "Abhiyan", path: "/abhiyan" },
+          { name: "Past Events", path: "/past-events" },
           { name: "Introduction", path: "/introduction" },
         ]}
       />

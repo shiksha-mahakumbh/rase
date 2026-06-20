@@ -1,4 +1,4 @@
-import SamparkVibhag from "@/app/component/Vibhag/SamparkVibhag";
+import SamparkVibhag from "@/components/vibhag/SamparkVibhag";
 import DepartmentPage from "@/components/departments/DepartmentPage";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { renderDepartmentPage } from "@/lib/cms/department-page-loader";

@@ -141,7 +141,7 @@ export const CMS_NAV: AdminNavItem[] = [
   {
     label: "Registrations",
     href: "/admin",
-    description: "Firebase registrations",
+    description: "Registration records",
     group: "operations",
   },
   {

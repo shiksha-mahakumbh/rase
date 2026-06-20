@@ -143,7 +143,7 @@ export default function CheckInClient() {
 
             <div className="grid grid-cols-2 gap-2">
               <button type="button" disabled={busy} className="min-h-[52px] rounded-xl bg-emerald-600 font-bold text-white" onClick={() => void act("check_in")}>Mark Check-In</button>
-              <button type="button" disabled={busy || attendee.kitDistributed} className="min-h-[52px] rounded-xl bg-blue-600 font-bold text-white disabled:opacity-50" onClick={() => void act("kit")}>Kit Distributed</button>
+              <button type="button" disabled={busy || attendee.kitDistributed} className="min-h-[52px] rounded-xl bg-brand-saffron font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white disabled:opacity-50" onClick={() => void act("kit")}>Kit Distributed</button>
               <button type="button" disabled={busy || attendee.certificateEligible} className="min-h-[52px] rounded-xl bg-violet-600 font-bold text-white disabled:opacity-50" onClick={() => void act("certificate_eligible")}>Certificate Eligible</button>
             </div>
 

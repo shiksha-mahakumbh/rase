@@ -1,4 +1,5 @@
 import { SITE_NAME_HINDI } from "@/config/site";
+import { EDITION_FRAME_IMAGES } from "@/data/abhiyan-photo-frame-images";
 
 /** Display title for an edition e.g. शिक्षा महाकुंभ 2.0 */
 export function editionTitle(edition: string) {
@@ -48,7 +49,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq",
     campaignPdf: "/RASE_2023_1ST_EDITION_Campaign.pdf",
-    imageSrc: "/2023M/k1.png",
+    imageSrc: EDITION_FRAME_IMAGES["1.0"].hero,
     year: "2023",
   },
   {
@@ -67,7 +68,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
     campaignPdf: "/RASE_2023_2ND_EDITION_Campaign.pdf",
-    imageSrc: "/2023K/k2.JPG",
+    imageSrc: EDITION_FRAME_IMAGES["2.0"].hero,
     year: "2023",
   },
   {
@@ -87,7 +88,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
     campaignPdf: "/RASE_2024_3RD_EDITION_Campaign.pdf",
-    imageSrc: "/2024K/k2.jpeg",
+    imageSrc: EDITION_FRAME_IMAGES["3.0"].hero,
     year: "2024",
   },
   {
@@ -107,7 +108,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
     campaignPdf: "/RASE_2024_4TH_EDITION_Campaign.pdf",
-    imageSrc: "/2024M/press1.jpg",
+    imageSrc: EDITION_FRAME_IMAGES["4.0"].hero,
     year: "2024",
   },
   {
@@ -126,7 +127,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     href: "/past_event/sm25",
     galleryUrl:
       "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
-    imageSrc: "/2024M/press1.jpg",
+    imageSrc: EDITION_FRAME_IMAGES["5.0"].hero,
     year: "2025",
   },
 ];
@@ -137,6 +138,29 @@ export const PAST_EDITION_BY_ID = Object.fromEntries(
 
 export function getEditionByHref(href: string): PastEditionRecord | undefined {
   return PAST_EDITIONS.find((e) => e.href === href);
+}
+
+export type EditionPageHero = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  accent: "brand";
+  imageSrc?: string;
+};
+
+/** Shared brand hero config for `/past_event/*` detail pages */
+export function editionPageHero(href: string): EditionPageHero {
+  const edition = getEditionByHref(href);
+  if (!edition) {
+    throw new Error(`Unknown edition href: ${href}`);
+  }
+  return {
+    eyebrow: "शिक्षा महाकुंभ अभियान",
+    title: edition.title,
+    subtitle: `${edition.venue} · ${edition.dates} · ${edition.theme}`,
+    accent: "brand",
+    imageSrc: edition.imageSrc,
+  };
 }
 
 /** Canonical media archive URL — /media/shiksha-mahakumbh/{edition}/{type} */

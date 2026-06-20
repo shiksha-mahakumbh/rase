@@ -1,5 +1,5 @@
 import * as XLSX from "xlsx";
-import { formatFirestoreDate } from "@/lib/saveRegistration";
+import { formatRegistrationDate } from "@/lib/format-date";
 
 export interface RegistrationRow {
   id: string;
@@ -42,7 +42,7 @@ export function registrationsToCsv(rows: RegistrationRow[]): string {
       r.contactNumber ?? "",
       r.paymentStatus ?? "",
       r.accommodationStatus ?? "",
-      formatFirestoreDate(r.createdAt),
+      formatRegistrationDate(r.createdAt),
     ]
       .map((v) => `"${String(v).replace(/"/g, '""')}"`)
       .join(",")
@@ -67,7 +67,7 @@ export function downloadExcel(rows: RegistrationRow[], filename: string) {
     Phone: r.contactNumber,
     "Payment Status": r.paymentStatus,
     "Accommodation Status": r.accommodationStatus,
-    "Submission Date": formatFirestoreDate(r.createdAt),
+    "Submission Date": formatRegistrationDate(r.createdAt),
   }));
 
   const ws = XLSX.utils.json_to_sheet(data);

@@ -4,8 +4,7 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 
 /**
- * Supabase payment abstraction — does NOT modify existing Firebase Razorpay flow.
- * Used by /api/v2 when REGISTRATION_BACKEND=supabase.
+ * Supabase payment abstraction — Razorpay webhook and order lifecycle via Prisma.
  */
 
 export async function createPaymentRecord(input: {

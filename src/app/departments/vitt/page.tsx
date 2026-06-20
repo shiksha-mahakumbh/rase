@@ -1,4 +1,4 @@
-import VittVibhag from "@/app/component/Vibhag/VittVibhag";
+import VittVibhag from "@/components/vibhag/VittVibhag";
 import DepartmentPage from "@/components/departments/DepartmentPage";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { renderDepartmentPage } from "@/lib/cms/department-page-loader";

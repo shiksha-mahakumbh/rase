@@ -1,6 +1,6 @@
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
-import ContactUs from "@/app/component/ContactUs";
+import NavBar from "@/components/layout/NavBar";
+import Footer from "@/components/layout/Footer";
+import ContactUs from "@/components/content/ContactUs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { getTranslations } from "next-intl/server";
 

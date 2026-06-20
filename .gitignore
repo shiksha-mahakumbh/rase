@@ -10,5 +10,7 @@ docs/production-go-live-results.json
 scripts/link-verify-result.json
 .vercel
 exports/firebase/
+exports/gcp-firestore/
+exports/gcp-storage/
 exports/**/*.json
 !exports/**/manifest.example.json

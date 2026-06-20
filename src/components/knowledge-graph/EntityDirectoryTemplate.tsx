@@ -14,6 +14,7 @@ import { ENTITY_LANDING_REGISTRY } from "@/lib/knowledge-graph/entities/landing-
 import InternalLinksBlock from "./InternalLinksBlock";
 import { getInternalLinksForPath } from "@/lib/knowledge-graph/internal-link-engine";
 import { SITE_URL } from "@/config/site";
+import { brandPageHero } from "@/lib/page-heroes";
 
 type Props = {
   directory: EntityDirectoryConfig;
@@ -68,12 +69,7 @@ export default function EntityDirectoryTemplate({ directory }: Props) {
 
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: "National Directory",
-        title: directory.label,
-        subtitle: directory.description,
-        accent: "navy",
-      }}
+      hero={brandPageHero(directory.label, directory.description, "National Directory")}
       relatedPath={directory.path}
       containerClassName="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16"
     >

@@ -1,20 +1,15 @@
 "use client";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import EventPage from "../../component/sk24/SK24";
-import { getEditionByHref } from "@/data/past-editions";
-
-const edition = getEditionByHref("/past_event/sk24")!;
-
-const PAGE_HERO = {
-  eyebrow: "शिक्षा महाकुंभ अभियान",
-  title: edition.title,
-  subtitle: `${edition.venue} · ${edition.dates} · ${edition.theme}`,
-  accent: "saffron",
-} as const;
+import EventPage from "@/components/past-editions/editions/sk24/SK24";
+import { editionPageHero } from "@/data/past-editions";
 
 export default function Sk24PastEventPage() {
   return (
-    <PublicPageShell hero={PAGE_HERO} relatedPath="/abhiyan">
+    <PublicPageShell
+      hero={editionPageHero("/past_event/sk24")}
+      relatedPath="/past-events"
+      containerClassName="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12"
+    >
       <EventPage />
     </PublicPageShell>
   );

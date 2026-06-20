@@ -1,8 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import NavBar from "@/app/component/NavBar";
-import Footer from "@/app/component/Footer";
+import NavBar from "@/components/layout/NavBar";
+import Footer from "@/components/layout/Footer";
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import PageCtaSection from "@/components/layouts/PageCtaSection";
 import PressShareButtons from "./PressShareButtons";

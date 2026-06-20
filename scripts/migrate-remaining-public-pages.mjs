@@ -185,7 +185,7 @@ export default function InnovationWorkshopPage() {
     content: `"use client";
 
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import AccomodationForm from "@/app/component/Registration/AccomodationReg";
+import AccomodationForm from "@/components/forms/AccommodationLegacyForm";
 import { PAGE_HEROES } from "@/lib/page-heroes";
 
 /** Legacy registration path — preserved for bookmarks */

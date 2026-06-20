@@ -34,7 +34,7 @@ export default function AdminSystemHealth() {
           status={sentryConfigured ? "ok" : "warn"}
           detail={sentryConfigured ? "Sentry DSN set" : "Client-error API only"}
         />
-        <HealthRow label="Firestore rules" status="warn" detail="Verify deployed in Console" />
+        <HealthRow label="Database RLS policies" status="warn" detail="Verify Supabase policies deployed" />
         <HealthRow label="reCAPTCHA" status="warn" detail="Verify production keys" />
       </ul>
     </section>

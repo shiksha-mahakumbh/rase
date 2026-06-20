@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import PressArticleJsonLd from "@/components/seo/PressArticleJsonLd";
 import CmsPressArticleView from "@/components/press/CmsPressArticleView";
+import StaticPressArticleView from "@/components/press/StaticPressArticleView";
 import { loadCmsPageBySlug } from "@/lib/cms/server";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { pressArticleMeta } from "@/lib/seo/publicPages";
-import { getPressLegacyEntry, PRESS_LEGACY_SLUGS } from "@/lib/press/legacy-registry";
+import {
+  getPressArticleBySlug,
+  PRESS_ARTICLE_SLUGS,
+} from "@/lib/press/articles";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const cms = await loadCmsPageBySlug(slug);
-  const legacy = getPressLegacyEntry(slug);
+  const fallback = getPressArticleBySlug(slug);
 
   if (cms?.page.pageType === "article") {
     return metadataFromCmsSeo(cms.seo, {
@@ -23,8 +26,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     });
   }
 
-  if (legacy?.pressNumber) {
-    return pressArticleMeta(legacy.pressNumber);
+  if (fallback) {
+    return pressArticleMeta(fallback.pressNumber);
   }
 
   return { title: "Press Release" };
@@ -38,22 +41,12 @@ export default async function PressSlugPage({ params }: PageProps) {
     return <CmsPressArticleView cms={cms} slug={slug} />;
   }
 
-  const legacy = getPressLegacyEntry(slug);
-  if (!legacy) notFound();
+  const fallback = getPressArticleBySlug(slug);
+  if (!fallback) notFound();
 
-  const { default: LegacyArticle } = await legacy.component();
-  const jsonLd = legacy.pressNumber ? (
-    <PressArticleJsonLd pressNumber={legacy.pressNumber} />
-  ) : null;
-
-  return (
-    <>
-      {jsonLd}
-      <LegacyArticle />
-    </>
-  );
+  return <StaticPressArticleView article={fallback} />;
 }
 
 export function generateStaticParams() {
-  return PRESS_LEGACY_SLUGS.map((slug) => ({ slug }));
+  return PRESS_ARTICLE_SLUGS.map((slug) => ({ slug }));
 }

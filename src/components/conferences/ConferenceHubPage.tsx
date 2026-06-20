@@ -8,7 +8,8 @@ export interface ConferenceHubConfig {
   title: string;
   description: string;
   eyebrow?: string;
-  accent?: "navy" | "saffron" | "emerald";
+  accent?: "navy" | "saffron" | "emerald" | "brand";
+  imageSrc?: string;
 }
 
 interface ConferenceHubPageProps {
@@ -30,7 +31,8 @@ export default function ConferenceHubPage({
         eyebrow: hub.eyebrow ?? "Conferences",
         title: hub.title,
         subtitle: hub.description,
-        accent: hub.accent ?? "saffron",
+        accent: hub.accent ?? "brand",
+        imageSrc: hub.imageSrc,
       }}
       relatedPath={hub.path}
       containerClassName="mx-auto max-w-4xl px-4 py-10 md:px-8 md:py-14"

@@ -1,4 +1,4 @@
-/** Format registration timestamps (ISO string, Date, or legacy Firestore-like shapes). */
+/** Format registration timestamps (ISO string, Date, or legacy { seconds } / toDate shapes). */
 export function formatRegistrationDate(value: unknown): string {
   if (!value) return "—";
   if (typeof value === "string") {

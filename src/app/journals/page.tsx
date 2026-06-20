@@ -1,16 +1,16 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Journals from "../component/Journals";
-
-const PAGE_HERO = {
-  eyebrow: "Publications",
-  title: "Journals",
-  subtitle: "Academic journals affiliated with the national education movement.",
-  accent: "navy" as const,
-};
+import Journals from "@/components/content/Journals";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export default function JournalsPage() {
   return (
-    <PublicPageShell hero={PAGE_HERO}>
+    <PublicPageShell
+      hero={brandPageHero(
+        "Journals",
+        "Academic journals affiliated with the national education movement.",
+        "Publications"
+      )}
+    >
       <Journals />
     </PublicPageShell>
   );
