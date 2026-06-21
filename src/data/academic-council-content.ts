@@ -50,7 +50,7 @@ export interface ProgrammeHubSection {
   titleEn: string;
   titleHi: string;
   description: string;
-  accent: "navy" | "saffron" | "emerald" | "sky" | "amber" | "rose" | "indigo" | "teal" | "violet";
+  accent: "navy" | "saffron";
   items: ProgrammeHubItem[];
   footerNote?: string;
 }
@@ -83,7 +83,7 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleHi: "बहु-विषयक सम्मेलन",
     description:
       "Hybrid international research conference with peer-reviewed publication pathways across sciences, engineering, education, health, culture, and Indian Knowledge Systems.",
-    accent: "indigo",
+    accent: "saffron",
     footerNote:
       "Papers submitted will be published in SCI / Scopus / Web of Science indexed journals after peer review.",
     items: [
@@ -162,7 +162,7 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleHi: "डीएचई ओलंपियाड",
     description:
       "Nationwide school outreach in English, Mathematics, and Technology for Classes 3–10. Top achievers honoured at Shiksha Mahakumbh 2026.",
-    accent: "emerald",
+    accent: "navy",
     items: [
       { titleEn: "DHE English Olympiad", titleHi: "अंग्रेज़ी" },
       { titleEn: "DHE Maths Olympiad", titleHi: "गणित" },
@@ -178,7 +178,7 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleHi: "पुरस्कार",
     description:
       "Faculty and student excellence across research publications, books, patents, startups, and funded projects.",
-    accent: "amber",
+    accent: "saffron",
     items: [
       { titleEn: "Faculty Excellence Award", titleHi: "संकाय एवं छात्र उत्कृष्टता पुरस्कार" },
       { titleEn: "School Level Recognition", titleHi: "विद्यालय स्तर" },
@@ -193,7 +193,7 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleHi: "प्रदर्शनी",
     description:
       "Theme: Shiksha, Prakriti aur Pragati — educating for development and harmony with nature. 9–11 October 2026 at NIT Hamirpur.",
-    accent: "teal",
+    accent: "navy",
     items: [
       { titleEn: "Innovation & Research Exhibition", titleHi: "नवाचार एवं अनुसंधान प्रदर्शनी" },
       { titleEn: "EdTech & Skill Development Exhibition", titleHi: "एडटेक एवं कौशल विकास प्रदर्शनी" },
@@ -209,7 +209,7 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleHi: "सांस्कृतिक कार्यक्रम",
     description:
       "Folk dance, music, and artistic presentations celebrating Bharat's diverse cultural heritage alongside Himachali traditions.",
-    accent: "rose",
+    accent: "saffron",
     items: [
       {
         titleEn: "Cultural performances representing Bharat's diverse heritage",
@@ -226,7 +226,7 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleHi: "बाल शोध पत्रिका",
     description:
       "National student research journal nurturing inquiry and innovation among school learners in Classes 9–12.",
-    accent: "sky",
+    accent: "navy",
     items: [
       { titleEn: "Section 1 — Classes 9–10: Basic research & project documentation" },
       { titleEn: "Section 2 — Classes 11–12: Advanced research & analytical studies" },
@@ -240,7 +240,7 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleHi: "सर्वोत्तम प्रथाएँ",
     description:
       "Identify, showcase, and scale replicable education, governance, and community engagement models aligned with Viksit Bharat 2047.",
-    accent: "violet",
+    accent: "saffron",
     items: [
       { titleEn: "Academic Innovations & EdTech Integration" },
       { titleEn: "Community & Social Impact Initiatives" },

@@ -2,6 +2,7 @@
 
 import {
   ACADEMIC_COUNCIL_EVENT,
+  ACADEMIC_COUNCIL_HERO,
   ACADEMIC_COUNCIL_STATS,
   ACADEMIC_PROGRAMME_HUB,
   type AcademicCouncilTabId,
@@ -13,58 +14,16 @@ const accentStyles: Record<
   { border: string; bg: string; icon: string; btn: string }
 > = {
   navy: {
-    border: "border-brand-navy/20",
-    bg: "from-brand-navy/5 to-white",
+    border: "border-brand-navy/15",
+    bg: "from-brand-navy/[0.04] to-white",
     icon: "bg-brand-navy/10 text-brand-navy",
     btn: "bg-brand-navy text-white hover:bg-brand-navy-light",
   },
   saffron: {
-    border: "border-brand-saffron/30",
+    border: "border-brand-saffron/25",
     bg: "from-brand-surface-warm to-white",
     icon: "bg-brand-saffron/20 text-brand-navy",
     btn: "bg-brand-saffron text-brand-navy hover:bg-brand-saffron-dark hover:text-white",
-  },
-  emerald: {
-    border: "border-emerald-200",
-    bg: "from-emerald-50/80 to-white",
-    icon: "bg-emerald-100 text-emerald-800",
-    btn: "bg-emerald-700 text-white hover:bg-emerald-800",
-  },
-  sky: {
-    border: "border-sky-200",
-    bg: "from-sky-50/80 to-white",
-    icon: "bg-sky-100 text-sky-800",
-    btn: "bg-sky-700 text-white hover:bg-sky-800",
-  },
-  amber: {
-    border: "border-amber-200",
-    bg: "from-amber-50/80 to-white",
-    icon: "bg-amber-100 text-amber-900",
-    btn: "bg-amber-600 text-white hover:bg-amber-700",
-  },
-  rose: {
-    border: "border-rose-200",
-    bg: "from-rose-50/80 to-white",
-    icon: "bg-rose-100 text-rose-800",
-    btn: "bg-rose-700 text-white hover:bg-rose-800",
-  },
-  indigo: {
-    border: "border-indigo-200",
-    bg: "from-indigo-50/80 to-white",
-    icon: "bg-indigo-100 text-indigo-800",
-    btn: "bg-indigo-700 text-white hover:bg-indigo-800",
-  },
-  teal: {
-    border: "border-teal-200",
-    bg: "from-teal-50/80 to-white",
-    icon: "bg-teal-100 text-teal-800",
-    btn: "bg-teal-700 text-white hover:bg-teal-800",
-  },
-  violet: {
-    border: "border-violet-200",
-    bg: "from-violet-50/80 to-white",
-    icon: "bg-violet-100 text-violet-800",
-    btn: "bg-violet-700 text-white hover:bg-violet-800",
   },
 };
 
@@ -80,7 +39,6 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
       aria-labelledby="ac-hub-heading"
     >
       <div className="mx-auto max-w-5xl">
-        {/* Event banner */}
         <div className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-8">
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
             Global Academic Platform · Viksit Bharat 2047
@@ -89,6 +47,9 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
             Academic Programmes at a Glance
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
+            {ACADEMIC_COUNCIL_HERO.tagline}
+          </p>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/70 md:text-base">
             Explore conclaves, research tracks, olympiads, awards, exhibitions, cultural programmes,
             Bal Shodh Patrika, best practices, and student innovation — unified under the Academic
             Council.
@@ -106,7 +67,7 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
               </dt>
               <dd className="mt-1 text-sm font-bold md:text-base">{ACADEMIC_COUNCIL_EVENT.venue}</dd>
             </div>
-            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm sm:col-span-1">
+            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
               <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
                 Reach
               </dt>
@@ -117,7 +78,6 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
           </dl>
         </div>
 
-        {/* Stats */}
         <dl className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {ACADEMIC_COUNCIL_STATS.map((stat) => (
             <div
@@ -133,10 +93,10 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
           ))}
         </dl>
 
-        {/* Programme cards */}
-        <div className="mt-8 space-y-6">
+        <div className="mt-8 space-y-5">
           {ACADEMIC_PROGRAMME_HUB.map((section) => {
             const styles = accentStyles[section.accent];
+            const hasManyItems = section.items.length > 4;
             return (
               <article
                 key={section.id}
@@ -171,11 +131,17 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
                   </button>
                 </div>
 
-                <ul className="grid gap-2 border-t border-slate-100/80 px-5 py-4 sm:grid-cols-2 md:px-6">
+                <ul
+                  className={`grid gap-2 border-t border-slate-100/80 px-5 py-4 md:px-6 ${
+                    hasManyItems
+                      ? "sm:grid-cols-2"
+                      : "sm:grid-cols-2"
+                  }`}
+                >
                   {section.items.map((item, idx) => (
                     <li
                       key={idx}
-                      className="rounded-lg border border-white/60 bg-white/70 px-3 py-2.5 text-sm"
+                      className="rounded-lg border border-white/80 bg-white/80 px-3 py-2.5 text-sm"
                     >
                       <p className="font-medium text-brand-navy">{item.titleEn}</p>
                       {item.titleHi ? (
@@ -191,7 +157,7 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
                 </ul>
 
                 {section.footerNote ? (
-                  <p className="border-t border-slate-100/80 bg-white/50 px-5 py-3 text-xs font-medium text-indigo-800 md:px-6 md:text-sm">
+                  <p className="border-t border-slate-100/80 bg-brand-navy/[0.03] px-5 py-3 text-xs font-medium text-brand-navy md:px-6 md:text-sm">
                     {section.footerNote}
                   </p>
                 ) : null}
@@ -200,7 +166,6 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
           })}
         </div>
 
-        {/* Contact strip */}
         <div className="mt-8 rounded-2xl border border-brand-navy/10 bg-brand-surface-warm px-5 py-4 text-center md:px-8">
           <p className="text-sm font-semibold text-brand-navy">Academic enquiries</p>
           <p className="mt-2 text-sm text-slate-600">

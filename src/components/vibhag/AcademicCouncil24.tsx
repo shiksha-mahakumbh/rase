@@ -64,7 +64,7 @@ export default function AcademicCouncilDashboard() {
   }, []);
 
   useEffect(() => {
-    mainRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    mainRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [active]);
 
   return (

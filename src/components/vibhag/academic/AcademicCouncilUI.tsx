@@ -14,6 +14,8 @@ export interface ACHeroProps {
   title: ReactNode;
   subtitle?: ReactNode;
   accent?: "brand" | "primary" | "indigo" | "purple" | "amber" | "emerald" | "rose" | "sky" | "cyan";
+  /** Compact tab header — use when page already has a site-level hero (single H1). */
+  compact?: boolean;
 }
 
 export interface ACSectionProps {
@@ -44,30 +46,34 @@ export const ACHero: React.FC<ACHeroProps> = ({
   title,
   subtitle,
   accent = "brand",
+  compact = true,
 }) => {
+  const sectionPad = compact
+    ? "px-4 py-5 md:px-8 md:py-7"
+    : "px-4 py-10 md:px-8 md:py-14";
+  const titleSize = compact
+    ? "text-xl font-bold md:text-2xl lg:text-3xl"
+    : "text-2xl font-extrabold md:text-4xl lg:text-5xl";
+
   if (accent === "brand") {
     return (
       <section
-        className="brand-hero-bg relative overflow-hidden border-b border-brand-saffron/20 px-4 py-10 md:px-8 md:py-14"
-        aria-labelledby="ac-hero-title"
+        className={`brand-hero-bg relative overflow-hidden border-b border-brand-saffron/20 ${sectionPad}`}
+        aria-labelledby="ac-tab-title"
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-0 h-48 w-48 rounded-full bg-brand-saffron/15 blur-3xl"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-brand-blue/10 blur-3xl"
+          className="pointer-events-none absolute -right-16 top-0 h-32 w-32 rounded-full bg-brand-saffron/10 blur-3xl"
         />
         <div className="animate-fade-in relative z-10 mx-auto max-w-5xl text-center">
-          <h1
-            id="ac-hero-title"
-            className="text-2xl font-extrabold leading-tight tracking-tight text-brand-navy md:text-4xl lg:text-5xl"
+          <h2
+            id="ac-tab-title"
+            className={`leading-tight tracking-tight text-brand-navy ${titleSize}`}
           >
             {title}
-          </h1>
+          </h2>
           {subtitle && (
-            <div className="mt-5 text-base leading-relaxed text-slate-600 md:text-lg md:leading-8">
+            <div className="mt-3 text-sm leading-relaxed text-slate-600 md:text-base md:leading-7">
               {subtitle}
             </div>
           )}
@@ -76,33 +82,29 @@ export const ACHero: React.FC<ACHeroProps> = ({
     );
   }
 
+  const coloredPad = compact
+    ? "px-4 py-6 md:px-8 md:py-8"
+    : "px-4 py-12 md:px-8 md:py-16";
+
   return (
-  <section
-    className={`relative overflow-hidden bg-gradient-to-br ${accentGradients[accent]} px-4 py-12 text-white md:px-8 md:py-16`}
-    aria-labelledby="ac-hero-title"
-  >
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute -right-24 top-0 h-64 w-64 rounded-full bg-brand-saffron/15 blur-3xl"
-    />
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute -left-24 bottom-0 h-64 w-64 rounded-full bg-white/5 blur-3xl"
-    />
-    <div className="animate-fade-in relative z-10 mx-auto max-w-5xl text-center">
-      <h1
-        id="ac-hero-title"
-        className="text-2xl font-extrabold leading-tight tracking-tight md:text-4xl lg:text-5xl"
-      >
-        {title}
-      </h1>
-      {subtitle && (
-        <div className="mt-5 text-base leading-relaxed text-white/90 md:text-lg md:leading-8">
-          {subtitle}
-        </div>
-      )}
-    </div>
-  </section>
+    <section
+      className={`relative overflow-hidden bg-gradient-to-br ${accentGradients[accent]} ${coloredPad} text-white`}
+      aria-labelledby="ac-tab-title"
+    >
+      <div className="animate-fade-in relative z-10 mx-auto max-w-5xl text-center">
+        <h2
+          id="ac-tab-title"
+          className={`leading-tight tracking-tight ${titleSize}`}
+        >
+          {title}
+        </h2>
+        {subtitle && (
+          <div className="mt-3 text-sm leading-relaxed text-white/90 md:text-base md:leading-7">
+            {subtitle}
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 
