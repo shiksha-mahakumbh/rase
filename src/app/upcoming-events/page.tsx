@@ -1,15 +1,29 @@
+import UpcomingEventsShowcase from "@/components/upcoming-events/UpcomingEventsShowcase";
+import UpcomingEventsJsonLd from "@/components/upcoming-events/UpcomingEventsJsonLd";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import UpcomingEvent from "@/components/home/sections/UpcomingEvent";
-import { PAGE_HEROES } from "@/lib/page-heroes";
-import { loadCmsEvents, mapCmsEventsToUpcoming } from "@/lib/cms/organizational";
+import { UPCOMING_EVENTS_PAGE_HERO } from "@/data/upcoming-events-hub";
+import { brandPageHero } from "@/lib/page-heroes";
 
-export default async function UpcomingEventsPage() {
-  const cmsEvents = await loadCmsEvents("en", true);
-  const events = cmsEvents.length > 0 ? mapCmsEventsToUpcoming(cmsEvents) : undefined;
+const BREADCRUMBS = [
+  { name: "Home", path: "/" },
+  { name: "Upcoming Events", path: "/upcoming-events" },
+];
 
+export default function UpcomingEventsPage() {
   return (
-    <PublicPageShell hero={PAGE_HEROES.upcomingEvents} skipContainer>
-      <UpcomingEvent events={events} />
+    <PublicPageShell
+      hero={brandPageHero(
+        UPCOMING_EVENTS_PAGE_HERO.title,
+        UPCOMING_EVENTS_PAGE_HERO.subtitle,
+        UPCOMING_EVENTS_PAGE_HERO.eyebrow
+      )}
+      showCta={false}
+      breadcrumbs={BREADCRUMBS}
+      relatedPath="/upcoming-events"
+      skipContainer
+    >
+      <UpcomingEventsJsonLd />
+      <UpcomingEventsShowcase />
     </PublicPageShell>
   );
 }

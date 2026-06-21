@@ -49,9 +49,9 @@ export const PUBLIC_PAGE_META = {
     publicationType: "Book",
   }),
   upcomingevent: createEventMetadata({
-    title: "शिक्षा महाकुंभ 6.0 — Upcoming Programmes",
+    title: "Upcoming Events — Shiksha Mahakumbh 6.0 & 7.0",
     description:
-      "Upcoming programmes and registration for Shiksha Mahakumbh Abhiyan edition 6.0.",
+      "Register for Shiksha Mahakumbh 6.0 at NIT Hamirpur (October 2026). Shiksha Mahakumbh 7.0 at IIT Jammu — coming soon. National education summit aligned with NEP 2020.",
     path: "/upcoming-events",
   }),
   pastEvents: createEventMetadata({

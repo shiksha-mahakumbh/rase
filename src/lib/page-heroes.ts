@@ -63,7 +63,7 @@ export const PAGE_HEROES = {
   ),
   upcomingEvents: registryHero(
     "Programmes",
-    "शिक्षा महाकुंभ 6.0",
+    "Shiksha Mahakumbh 6.0 & Upcoming Programmes",
     "Summits, workshops, and national programmes on the Shiksha Mahakumbh Abhiyan calendar."
   ),
   abhiyan: registryHero(

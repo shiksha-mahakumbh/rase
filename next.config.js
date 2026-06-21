@@ -17,6 +17,8 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  /** Keep heavy native deps out of the webpack bundle (Vercel function size). */
+  serverExternalPackages: ["@prisma/client", "prisma", "jspdf", "nodemailer"],
   /** Typecheck runs via scripts/build-production.js — skip duplicate in-build pass (OOM on low RAM). */
   typescript: {
     ignoreBuildErrors: process.env.SKIP_NEXT_STATIC_CHECKS === "1",
@@ -26,6 +28,21 @@ const nextConfig = {
   },
   experimental: {
     webpackMemoryOptimizations: true,
+  },
+  /** Prevent ~600MB `public/` from being traced into donation API routes. */
+  outputFileTracingExcludes: {
+    "/api/donation/complete": ["./public/**"],
+    "/api/donation/receipt": ["./public/**"],
+  },
+  outputFileTracingIncludes: {
+    "/api/donation/complete": [
+      "./public/images/dhe-logo.png",
+      "./public/images/shiksha-mahakumbh-logo.png",
+    ],
+    "/api/donation/receipt": [
+      "./public/images/dhe-logo.png",
+      "./public/images/shiksha-mahakumbh-logo.png",
+    ],
   },
   /** Reduces dev memory spikes from PackFileCacheStrategy on large codebases */
   webpack: (config, { dev }) => {

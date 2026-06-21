@@ -4,8 +4,8 @@ import { prisma } from "@/server/db/prisma";
 import { ServiceError } from "@/server/lib/errors";
 import {
   buildDonationReceiptData,
-  generateDonationReceiptPdfBuffer,
 } from "@/lib/receipt/donation-receipt";
+import { generateDonationReceiptPdfBuffer } from "@/lib/receipt/donation-receipt-pdf";
 import { sendDonationReceiptEmail } from "@/server/services/donation-email.service";
 import { markVerifiedPaymentConsumed } from "@/server/services/razorpay-verified.service";
 import { SITE_URL } from "@/config/site";

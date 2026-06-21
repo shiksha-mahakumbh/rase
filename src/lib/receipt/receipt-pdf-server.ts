@@ -15,11 +15,11 @@ import {
 
 export { RECEIPT_DHE_LOGO_PATH, RECEIPT_EVENT_LOGO_PATH, RECEIPT_LOGO_PATH };
 
-function publicImagePath(filename: string): string {
+function publicImagePath(filename: "dhe-logo.png" | "shiksha-mahakumbh-logo.png"): string {
   return path.join(process.cwd(), "public", "images", filename);
 }
 
-function loadPublicImage(filename: string): Buffer | null {
+function loadPublicImage(filename: "dhe-logo.png" | "shiksha-mahakumbh-logo.png"): Buffer | null {
   try {
     const file = publicImagePath(filename);
     if (!fs.existsSync(file)) return null;
