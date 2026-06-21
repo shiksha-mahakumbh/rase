@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ConferenceIcon, GlobeEducationIcon } from "@/components/home/legacy/icons";
-import { REGISTRATION_PATH } from "@/components/home/sections/UpcomingEvent";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionItems } from "@/lib/cms/utils";
 
@@ -21,7 +21,7 @@ const DEFAULT_ITEMS = [
     id: "register",
     title: "Registration Open — Shiksha Mahakumbh 6.0",
     summary: "9–11 Oct 2026 · NIT Hamirpur · All registration types",
-    href: REGISTRATION_PATH,
+    href: CANONICAL_ROUTES.registration,
     cta: "Register Now",
     icon: GlobeEducationIcon,
   },
@@ -42,7 +42,7 @@ const Announcement = () => {
         id: `announcement-${i}`,
         title: item.title,
         summary: item.body,
-        href: item.url ?? REGISTRATION_PATH,
+        href: item.url ?? CANONICAL_ROUTES.registration,
         cta: item.cta ?? "Learn more",
         icon: i % 2 === 0 ? ConferenceIcon : GlobeEducationIcon,
       }))

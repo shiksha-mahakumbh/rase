@@ -65,7 +65,7 @@ export const SUMMIT_ROUTES = [
 ] as const;
 
 export const EVENT_HUB_ROUTES = [
-  { path: "/upcoming-events", label: "शिक्षा महाकुंभ 6.0" },
+  { path: "/upcoming-events", label: "Upcoming Events — 6.0 & 7.0" },
   { path: "/past-events", label: "Past Editions" },
   { path: "/past_event/sk24", label: "SMK 3.0 — NIT Srinagar" },
   { path: "/past_event/sk23", label: "SMK 2.0 — NIT Kurukshetra" },
