@@ -5,6 +5,7 @@ import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import { SITE_URL } from "@/config/site";
 import type { CmsLoadedSpeaker } from "@/lib/cms/types";
 import { buildPersonJsonLd } from "@/lib/seo/schemas";
+import { ROUTES } from "@/constants/routes";
 import { BRAND_HERO_IMAGE } from "@/lib/page-heroes";
 
 export default function CmsSpeakerView({ speaker }: { speaker: CmsLoadedSpeaker }) {
@@ -25,7 +26,7 @@ export default function CmsSpeakerView({ speaker }: { speaker: CmsLoadedSpeaker 
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "Speakers", path: "/speakers" },
+          { name: "Speakers", path: ROUTES.speakers },
           { name: speaker.fullName, path: `/speakers/${speaker.slug}` },
         ]}
       />
@@ -38,7 +39,7 @@ export default function CmsSpeakerView({ speaker }: { speaker: CmsLoadedSpeaker 
           accent: "brand",
           imageSrc: speaker.photoUrl ?? BRAND_HERO_IMAGE,
         }}
-        relatedPath="/speakers"
+        relatedPath={ROUTES.speakers}
         showCta={false}
         containerClassName="mx-auto max-w-4xl px-4 py-8 md:px-8 md:py-12"
       >

@@ -1,53 +1,27 @@
-import type { ComponentType } from "react";
-
-export type CommitteeLegacyEntry = {
-  slug: string;
-  edition: string;
-  year: string;
-  breadcrumbLabel: string;
-  component: () => Promise<{ default: ComponentType }>;
-};
-
-export const COMMITTEE_LEGACY_EDITIONS: CommitteeLegacyEntry[] = [
-  {
-    slug: "shikshamahakumbh2025",
-    edition: "Shiksha Mahakumbh 5.0 — NIPER Mohali",
-    year: "2025",
-    breadcrumbLabel: "Shiksha Mahakumbh 5.0",
-    component: () => import("@/app/committee/shikshamahakumbh2025/LegacyEdition"),
-  },
-  {
-    slug: "shikshamahakumbh2024",
-    edition: "Shiksha Mahakumbh 4.0 — Kurukshetra University",
-    year: "2024",
-    breadcrumbLabel: "Shiksha Mahakumbh 4.0",
-    component: () => import("@/app/committee/shikshamahakumbh2024/LegacyEdition"),
-  },
-  {
-    slug: "shikshamahakumbh2023",
-    edition: "Shiksha Mahakumbh 1.0 — NIT Jalandhar",
-    year: "2023",
-    breadcrumbLabel: "Shiksha Mahakumbh 1.0",
-    component: () => import("@/app/committee/shikshamahakumbh2023/LegacyEdition"),
-  },
-  {
-    slug: "shikshakumbh2024",
-    edition: "Shiksha Mahakumbh 3.0 — NIT Srinagar",
-    year: "2024",
-    breadcrumbLabel: "Shiksha Mahakumbh 3.0",
-    component: () => import("@/app/committee/shikshakumbh2024/LegacyEdition"),
-  },
-  {
-    slug: "shikshakumbh2023",
-    edition: "Shiksha Mahakumbh 2.0 — NIT Kurukshetra",
-    year: "2023",
-    breadcrumbLabel: "Shiksha Mahakumbh 2.0",
-    component: () => import("@/app/committee/shikshakumbh2023/LegacyEdition"),
-  },
-];
-
-export function getCommitteeLegacyEntry(slug: string) {
-  return COMMITTEE_LEGACY_EDITIONS.find((entry) => entry.slug === slug) ?? null;
-}
-
-export const COMMITTEE_LEGACY_SLUGS = COMMITTEE_LEGACY_EDITIONS.map((entry) => entry.slug);
+import { ALL_COMMITTEE_EDITIONS, type CommitteeEditionData } from "@/data/committee-members";
+import { normalizeCommitteeSlug } from "@/lib/committee/edition-slugs";
+
+export type CommitteeLegacyEntry = {
+  editionData: CommitteeEditionData;
+};
+
+export const COMMITTEE_LEGACY_EDITIONS: CommitteeLegacyEntry[] = ALL_COMMITTEE_EDITIONS.map(
+  (editionData) => ({ editionData })
+);
+
+export function getCommitteeLegacyEntry(slug: string): CommitteeLegacyEntry | null {
+  const normalized = normalizeCommitteeSlug(slug);
+  return (
+    COMMITTEE_LEGACY_EDITIONS.find((entry) => entry.editionData.slug === normalized) ?? null
+  );
+}
+
+export const COMMITTEE_LEGACY_SLUGS = COMMITTEE_LEGACY_EDITIONS.map(
+  (entry) => entry.editionData.slug
+);
+
+export function committeeLegacyDetail(entry: CommitteeLegacyEntry): string {
+  const { breadcrumbLabel, venue } = entry.editionData;
+  return `${breadcrumbLabel} — ${venue}`;
+}
+

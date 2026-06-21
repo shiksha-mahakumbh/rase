@@ -1,6 +1,5 @@
 import type { BadgeTemplate, CertificateType } from "@prisma/client";
 import { jsPDF } from "jspdf";
-import QRCode from "qrcode";
 import { randomBytes } from "crypto";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
@@ -53,12 +52,6 @@ export async function generateBadgePdf(publicId: string, template?: BadgeTemplat
   const reg = await getReg(publicId);
   const badgeTemplate = template ?? defaultBadgeTemplate(String(reg.registrationType));
   const category = displayRegistrationType(String(reg.registrationType));
-  const qrPayload = JSON.stringify({
-    registrationId: reg.registrationId,
-    event: EVENT_NAME,
-  });
-  const qrDataUrl = await QRCode.toDataURL(qrPayload, { width: 160, margin: 1 });
-
   const doc = new jsPDF({ unit: "mm", format: [90, 140] });
   doc.setFillColor(30, 58, 95);
   doc.rect(0, 0, 90, 28, "F");
@@ -75,10 +68,6 @@ export async function generateBadgePdf(publicId: string, template?: BadgeTemplat
   doc.text(reg.registrationId, 45, 52, { align: "center" });
   doc.text(category, 45, 60, { align: "center", maxWidth: 80 });
   doc.text(reg.institution, 45, 68, { align: "center", maxWidth: 80 });
-
-  doc.addImage(qrDataUrl, "PNG", 30, 78, 30, 30);
-  doc.setFontSize(7);
-  doc.text("Scan at venue check-in", 45, 115, { align: "center" });
 
   const buffer = Buffer.from(doc.output("arraybuffer"));
   const now = new Date();
@@ -129,7 +118,6 @@ export async function generateCertificatePdf(
   const certificateNo = `CERT-${reg.registrationId.replace(/^SMK/, "")}`;
   const verifyUrl = `${SITE_URL}/certificate/verify/${verifyCode}`;
 
-  const qrDataUrl = await QRCode.toDataURL(verifyUrl, { width: 140, margin: 1 });
   const doc = new jsPDF({ unit: "pt", format: "a4", orientation: "landscape" });
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
@@ -161,10 +149,7 @@ export async function generateCertificatePdf(
   doc.text(`Institution: ${reg.institution}`, w / 2, 230, { align: "center" });
   doc.text(`Certificate No: ${certificateNo}`, w / 2, 260, { align: "center" });
   doc.text(`Registration ID: ${reg.registrationId}`, w / 2, 280, { align: "center" });
-
-  doc.addImage(qrDataUrl, "PNG", w - 170, h - 170, 100, 100);
-  doc.setFontSize(9);
-  doc.text("Verify at shikshamahakumbh.com", w - 120, h - 55, { align: "center" });
+  doc.text(`Verify: ${verifyUrl}`, w / 2, 300, { align: "center", maxWidth: w - 120 });
 
   doc.setFontSize(11);
   doc.text("Department of Holistic Education", 80, h - 80);

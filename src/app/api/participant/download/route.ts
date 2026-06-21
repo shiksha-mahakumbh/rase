@@ -3,7 +3,6 @@ import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
 import { prisma } from "@/server/db/prisma";
 import { generateReceiptPdfBuffer } from "@/server/services/receipt.service";
-import { generateRegistrationQrBuffer } from "@/server/services/receipt.service";
 import { generateBadgePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { generateCertificatePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
@@ -63,7 +62,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Receipt not available" }, { status: 403 });
     }
 
-    const qrPng = await generateRegistrationQrBuffer(reg.registrationId);
     const pdf = generateReceiptPdfBuffer(
       {
         registrationId: reg.registrationId,
@@ -76,7 +74,7 @@ export async function GET(request: NextRequest) {
         paymentId: reg.razorpayPaymentId ?? reg.transactionId ?? undefined,
         transactionDate: reg.updatedAt.toISOString(),
       },
-      qrPng
+      null
     );
 
     return new NextResponse(pdf, {

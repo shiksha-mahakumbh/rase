@@ -127,3 +127,41 @@
     @apply mb-2 rounded-lg border border-slate-100 bg-brand-surface-warm p-4 text-slate-700;
   }
 }
+
+/* Committee edition pages — print / Save as PDF */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  nav,
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .committee-print-root {
+    padding: 0 !important;
+  }
+
+  .committee-print-content section {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .committee-print-content h2 {
+    font-size: 14pt !important;
+  }
+
+  .committee-print-content article {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    break-inside: avoid;
+  }
+}

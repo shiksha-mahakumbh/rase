@@ -111,19 +111,6 @@ export function renderReceiptPdf(
     }
   }
 
-  const qr = assets.qrImage;
-  if (qr) {
-    y += 8;
-    line("Entry QR Code", true);
-    try {
-      addImage(doc, qr, left, y, 100, 100);
-      y += 108;
-      line("Show at event check-in", false, 8);
-    } catch {
-      /* optional */
-    }
-  }
-
   y += 12;
   line(`Amount Due/Paid: ₹${data.amount.toLocaleString("en-IN")}`, true);
   y += 8;

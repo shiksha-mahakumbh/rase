@@ -8,6 +8,7 @@ import {
   createNoIndexMetadata,
 } from "@/lib/seo/metadataBuilders";
 import { getPressOgImageUrl, PRESS_OG_IMAGES } from "@/lib/seo/pressShare";
+import { committeePathFromSlug } from "@/lib/committee/edition-slugs";
 
 /** Central registry for static public routes — extend as layouts are added */
 export const PUBLIC_PAGE_META = {
@@ -93,9 +94,15 @@ export const PUBLIC_PAGE_META = {
     path: "/press",
   }),
   donation: createPageMetadata({
-    title: "Donation & Sponsorship",
-    description: "Support Shiksha Mahakumbh through donation and sponsorship.",
+    title: "Donate & Sponsor — 80G Tax Benefit | Shiksha Mahakumbh",
+    description:
+      "Support Shiksha Mahakumbh with secure Razorpay payments. Instant 80G receipt by email — download or print. PAN mandatory.",
     path: "/donation",
+    keywords: [
+      "Shiksha Mahakumbh donation",
+      "80G tax deductible donation",
+      "sponsor education summit India",
+    ],
   }),
   feedback: createPageMetadata({
     title: "Feedback",
@@ -298,14 +305,20 @@ export function pressArticleMeta(pressNumber: number) {
 
 export function committeeYearMeta(
   slug: string,
-  edition: string,
+  label: string,
+  detail: string,
   year: string
 ) {
   return createCommitteeMetadata({
-    title: "Organising Committee",
-    description: `Committee members for ${edition} (${year}).`,
-    path: `/committee/${slug}`,
-    edition,
+    title: label,
+    description: `Advisory, organising, and conference committee members for ${detail} (${year}). National education leadership from IITs, NITs, universities, Vidya Bharti, and DHE.`,
+    path: committeePathFromSlug(slug),
+    keywords: [
+      "organising committee",
+      "national advisory committee",
+      "Shiksha Mahakumbh",
+      label,
+    ],
   });
 }
 

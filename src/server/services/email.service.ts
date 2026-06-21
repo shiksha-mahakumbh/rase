@@ -36,7 +36,6 @@ function attachmentBufferOk(buf: Buffer | undefined, label: string, registration
 function buildEmailAttachments(options: {
   registrationId: string;
   receiptPdf?: Buffer;
-  qrPng?: Buffer;
 }): EmailAttachment[] {
   const attachments: EmailAttachment[] = [];
 
@@ -46,16 +45,6 @@ function buildEmailAttachments(options: {
       content: options.receiptPdf,
       contentType: "application/pdf",
       contentDisposition: "attachment",
-    });
-  }
-
-  if (attachmentBufferOk(options.qrPng, "qr.png", options.registrationId)) {
-    attachments.push({
-      filename: `qr-${options.registrationId}.png`,
-      content: options.qrPng,
-      contentType: "image/png",
-      cid: "registration-qr",
-      contentDisposition: "inline",
     });
   }
 
@@ -141,8 +130,7 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
           <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>` : ""}
         </table>
         ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">Download receipt online</a></p>` : ""}
-        ${data.hasQr ? `<p style="margin-top:16px">Your entry QR code is attached and shown below:</p><img src="cid:registration-qr" alt="Registration QR Code" width="200" height="200" />` : ""}
-        <p style="margin-top:16px">Your receipt PDF is attached. Please bring your QR code to the event venue for check-in.</p>
+        <p style="margin-top:16px">Your receipt PDF is attached. Please bring your registration number to the event venue for check-in.</p>
         <p>Regards,<br/>${EVENT_NAME} Team</p>
       </div>`;
     case "payment_confirmation":
@@ -156,8 +144,7 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
           <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>
         </table>
         ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">Download receipt online</a></p>` : ""}
-        ${data.hasQr ? `<p style="margin-top:16px">Your entry QR code is attached and shown below:</p><img src="cid:registration-qr" alt="Registration QR Code" width="200" height="200" />` : ""}
-        <p style="margin-top:16px">Please bring this QR code to the event venue for check-in.</p>
+        <p style="margin-top:16px">Please bring your registration number to the event venue for check-in.</p>
         <p>Regards,<br/>${EVENT_NAME} Team</p>
       </div>`;
     case "admin_alert":
@@ -427,24 +414,22 @@ export async function sendRegistrationCompleteEmail(options: {
   transactionId?: string;
   receiptUrl?: string;
   receiptPdf?: Buffer;
-  qrPng?: Buffer;
   isPaid: boolean;
 }) {
   const attachments = buildEmailAttachments({
     registrationId: options.registrationId,
     receiptPdf: options.receiptPdf,
-    qrPng: options.qrPng,
   });
 
-  if (attachments.length < 2) {
+  if (attachments.length < 1) {
     console.error("EMAIL_ATTACHMENT_MISSING", {
       registrationId: options.registrationId,
       recipient: options.email,
       present: attachments.map((a) => a.filename),
-      expected: ["receipt.pdf", "qr.png"],
+      expected: ["receipt.pdf"],
     });
     throw new Error(
-      `Registration email missing required attachments for ${options.registrationId}`
+      `Registration email missing receipt attachment for ${options.registrationId}`
     );
   }
 
@@ -462,7 +447,6 @@ export async function sendRegistrationCompleteEmail(options: {
       amountPaid: `₹${options.amountPaid.toLocaleString("en-IN")}`,
       category: options.category,
       receiptUrl: options.receiptUrl ?? "",
-      hasQr: options.qrPng && options.qrPng.length > 0 ? "1" : "",
       isPaid: options.isPaid ? "1" : "",
     }),
     template: "registration_complete",

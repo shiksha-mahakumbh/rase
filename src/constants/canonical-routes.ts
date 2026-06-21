@@ -11,13 +11,15 @@ export const CANONICAL_ROUTES = {
   upcomingEvents: "/upcoming-events",
   contact: "/contact-us",
   bestWishes: "/best-wishes",
-  wishesReceived: "/wishes-received",
   committees: "/committees",
   mediaCenter: "/media-center",
   glimpses: "/glimpses",
   merchandise: "/merchandise",
   press: "/press",
   comingSoon: "/coming-soon",
+  downloads: "/downloads",
+  speakers: "/speakers/directory",
+  donation: "/donation",
   /** Accommodation registration — unified hub only (legacy `/accommodation` redirects here) */
   accommodation: "/registration",
   departments: {

@@ -18,9 +18,7 @@ import {
 } from "@/server/services/razorpay-verified.service";
 import {
   generateReceiptPdfBuffer,
-  generateRegistrationQrBuffer,
   receiptDownloadUrl,
-  qrStoragePathFor,
 } from "@/server/services/receipt.service";
 import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
 import { ServiceError } from "@/server/lib/errors";
@@ -278,14 +276,6 @@ export async function POST(request: NextRequest) {
 
     const isPaidOnline = fee > 0 && Boolean(razorpayPaymentId);
 
-    const qrPng = await generateRegistrationQrBuffer({
-      registrationId: result.registrationId,
-      fullName,
-      registrationType: type,
-      category: categoryLabel,
-      institution: String(data.institution ?? "N/A"),
-      email,
-    });
     const receiptPdf = generateReceiptPdfBuffer(
       {
         registrationId: result.registrationId,
@@ -299,7 +289,7 @@ export async function POST(request: NextRequest) {
         orderId: String(data.razorpayOrderId ?? payment?.razorpayOrderId ?? ""),
         panNumber: String(data.panNumber ?? payment?.panNumber ?? "") || undefined,
       },
-      qrPng
+      null
     );
     const artifactNow = new Date();
 
@@ -307,15 +297,12 @@ export async function POST(request: NextRequest) {
       where: { id: result.id },
       data: {
         receiptGeneratedAt: artifactNow,
-        qrGeneratedAt: artifactNow,
-        qrStoragePath: qrStoragePathFor(result.registrationId),
       },
     });
 
     submitLog("artifacts", {
       registration_id: result.registrationId,
       receipt_pdf_bytes: receiptPdf.length,
-      qr_png_bytes: qrPng.length,
     });
 
     void sendRegistrationCompleteEmail({
@@ -330,7 +317,6 @@ export async function POST(request: NextRequest) {
         ? receiptDownloadUrl(result.registrationId, lookupToken)
         : undefined,
       receiptPdf,
-      qrPng,
       isPaid: isPaidOnline,
     })
       .then(async (emailLog) => {

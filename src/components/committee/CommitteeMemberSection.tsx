@@ -34,45 +34,17 @@ export default function CommitteeMemberSection({
         <span className="text-sm text-gray-500">{members.length} members</span>
       </div>
 
-      <div className="hidden overflow-x-auto rounded-2xl border border-slate-100 md:block">
-        <table className="w-full min-w-[520px] border-collapse text-left">
-          <thead>
-            <tr className="bg-gradient-to-r from-brand-navy to-brand-navy-light text-white">
-              <th scope="col" className="px-5 py-3.5 text-sm font-semibold">
-                Name
-              </th>
-              <th scope="col" className="px-5 py-3.5 text-sm font-semibold">
-                Designation
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {members.map((member, index) => (
-              <tr
-                key={`${member.name}-${index}`}
-                className="border-t border-slate-100 transition hover:bg-brand-surface-warm"
-              >
-                <td className="px-5 py-3.5 font-medium text-brand-navy">
-                  {member.name}
-                </td>
-                <td className="px-5 py-3.5 text-gray-600">{member.designation}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 md:hidden">
+      <div className="grid gap-3 print:grid-cols-2 print:gap-2 sm:grid-cols-2 xl:grid-cols-3">
         {members.map((member, index) => (
           <article
             key={`${member.name}-card-${index}`}
-            className="animate-fade-in rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+            className="animate-fade-in rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition hover:border-brand-saffron/30 hover:shadow-md print:rounded-none print:p-2 print:shadow-none"
             style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }}
           >
             <h3 className="font-bold text-brand-navy">{member.name}</h3>
-            <p className="mt-1 text-sm leading-relaxed text-gray-600">
-              {member.designation}
-            </p>
+            {member.designation ? (
+              <p className="mt-1 text-sm leading-relaxed text-gray-600">{member.designation}</p>
+            ) : null}
           </article>
         ))}
       </div>

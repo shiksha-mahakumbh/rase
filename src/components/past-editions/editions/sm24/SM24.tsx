@@ -64,8 +64,8 @@ const EventPage: React.FC = () => {
         >
           Visit Gallery
         </a>
-        <Link href="/wishes-received" className={secondaryBtn}>
-          Wishes Received
+        <Link href="/best-wishes" className={secondaryBtn}>
+          Best Wishes
         </Link>
       </div>
     </div>

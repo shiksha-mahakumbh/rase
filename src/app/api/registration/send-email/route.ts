@@ -7,7 +7,6 @@ import {
 import { prisma } from "@/server/db/prisma";
 import {
   generateReceiptPdfBuffer,
-  generateRegistrationQrBuffer,
   receiptDownloadUrl,
 } from "@/server/services/receipt.service";
 import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
@@ -84,15 +83,6 @@ export async function POST(request: NextRequest) {
     const lookupToken = createRegistrationLookupToken(reg.registrationId, reg.email);
     const isPaidOnline = fee > 0 && Boolean(reg.razorpayPaymentId);
 
-    const qrPng = await generateRegistrationQrBuffer({
-      registrationId: reg.registrationId,
-      fullName: reg.fullName,
-      registrationType: String(reg.registrationType),
-      category: categoryLabel,
-      institution: reg.institution ?? "N/A",
-      email: reg.email,
-    });
-
     const receiptPdf = generateReceiptPdfBuffer(
       {
         registrationId: reg.registrationId,
@@ -105,7 +95,7 @@ export async function POST(request: NextRequest) {
         paymentId: reg.razorpayPaymentId ?? undefined,
         orderId: reg.razorpayOrderId ?? undefined,
       },
-      qrPng
+      null
     );
 
     const log = await sendRegistrationCompleteEmail({
@@ -120,7 +110,6 @@ export async function POST(request: NextRequest) {
         ? receiptDownloadUrl(reg.registrationId, lookupToken)
         : undefined,
       receiptPdf,
-      qrPng,
       isPaid: isPaidOnline,
     });
 
