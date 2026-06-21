@@ -43,7 +43,11 @@ export const getMenuIcon = (title: string): React.ReactNode => {
     case "Registration":
       return <NavRegisterIcon />;
     case "About Us":
+    case "About":
       return <NavAboutIcon />;
+    case "Brochures":
+    case "Speakers":
+      return <NavEventsIcon />;
     case "Events":
     case "Publication":
     case "Gallery":

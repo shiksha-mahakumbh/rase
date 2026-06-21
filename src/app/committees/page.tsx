@@ -1,5 +1,6 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import CommitteeTree from "@/components/content/CommitteeTree";
+import CommitteesShowcase from "@/components/committee/CommitteesShowcase";
+import CommitteesJsonLd from "@/components/committee/CommitteesJsonLd";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import AdSlotRegion from "@/components/showcase/AdSlotRegion";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
@@ -9,13 +10,14 @@ export default function CommitteesPage() {
   return (
     <PublicPageShell
       hero={brandPageHero(
-        "Abhiyan Edition Timeline",
-        "Explore organising committees across Abhiyan editions — the leadership backbone of India's national education movement.",
+        "Organising Committees",
+        "National advisory, organising, and conference leadership across Shiksha Mahakumbh editions 1.0–6.0 — IITs, NITs, universities, Vidya Bharti, and DHE.",
         "Governance & Leadership"
       )}
       relatedPath={CANONICAL_ROUTES.committees}
-      containerClassName="mx-auto max-w-6xl px-4 py-12 md:px-8 md:py-16"
+      containerClassName="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14"
     >
+      <CommitteesJsonLd />
       <BreadcrumbNav
         items={[
           { label: "Home", href: "/" },
@@ -24,8 +26,8 @@ export default function CommitteesPage() {
         ]}
         className="mb-8"
       />
-      <CommitteeTree />
-      <AdSlotRegion label="Partner showcase" />
+      <CommitteesShowcase />
+      <AdSlotRegion label="Partner showcase" className="mt-12" />
     </PublicPageShell>
   );
 }

@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState, Suspense, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import QRCode from "qrcode";
 import { EVENT_NAME } from "@/types/registration";
 import { event } from "@/design/tokens";
 import { ROUTES } from "@/constants/routes";
@@ -15,7 +13,6 @@ import RegistrationReceipt, {
   downloadRegistrationReceiptPdf,
   printRegistrationReceipt,
 } from "@/components/registration/RegistrationReceipt";
-import { serializeQrPayload } from "@/lib/receipt/qr-payload";
 
 function buildReceiptData(
   record: Record<string, unknown>,
@@ -23,7 +20,6 @@ function buildReceiptData(
 ): ReceiptData {
   const payment = record.payment as Record<string, unknown> | undefined;
   const fee = Number(record.registrationFee ?? payment?.registrationFee ?? 0);
-  const hasRazorpay = Boolean(payment?.razorpayPaymentId ?? record.razorpayPaymentId);
 
   return buildReceiptDataShared({
     registrationId,
@@ -52,7 +48,6 @@ function SuccessInner() {
   const registrationId = searchParams.get("id");
   const lookupToken = searchParams.get("token");
   const [record, setRecord] = useState<Record<string, unknown> | null>(null);
-  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -81,27 +76,6 @@ function SuccessInner() {
     fetchRecord();
   }, [registrationId, lookupToken]);
 
-  useEffect(() => {
-    if (!registrationId || !record) return;
-    const payload = serializeQrPayload({
-      registrationId,
-      fullName: String(record.fullName ?? ""),
-      registrationType: String(record.registrationType ?? ""),
-      category: String(
-        record.delegateCategory ??
-          record.category ??
-          record.projectStudentType ??
-          record.accommodationBedType ??
-          ""
-      ),
-      institution: String(record.institution ?? ""),
-      email: String(record.email ?? ""),
-    });
-    QRCode.toDataURL(payload, { width: 200, margin: 2 })
-      .then(setQrDataUrl)
-      .catch(() => setQrDataUrl(null));
-  }, [registrationId, record]);
-
   const receiptData = useMemo(() => {
     if (!record || !registrationId) return null;
     return buildReceiptData(record, registrationId);
@@ -109,12 +83,12 @@ function SuccessInner() {
 
   const handleDownloadReceipt = () => {
     if (!receiptData) return;
-    void downloadRegistrationReceiptPdf(receiptData, qrDataUrl);
+    void downloadRegistrationReceiptPdf(receiptData);
   };
 
   const handlePrintReceipt = () => {
     if (!receiptData) return;
-    printRegistrationReceipt(receiptData, qrDataUrl);
+    printRegistrationReceipt(receiptData);
   };
 
   if (loading) {
@@ -131,9 +105,7 @@ function SuccessInner() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-      {receiptData ? (
-        <RegistrationReceipt data={receiptData} qrDataUrl={qrDataUrl} visible />
-      ) : null}
+      {receiptData ? <RegistrationReceipt data={receiptData} visible /> : null}
 
       <div className="overflow-hidden rounded-3xl border border-brand-emerald/30 bg-white shadow-xl print:hidden">
         <div className="bg-gradient-to-r from-brand-navy to-brand-navy-light px-6 py-8 text-center text-white md:px-10">
@@ -150,32 +122,18 @@ function SuccessInner() {
 
         <div className="space-y-6 p-6 md:p-10">
           {registrationId && (
-            <div className="flex flex-col items-center gap-6 rounded-2xl border border-slate-200 bg-brand-surface p-6 md:flex-row md:justify-between">
-              <div className="text-center md:text-left">
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Registration number
+            <div className="rounded-2xl border border-slate-200 bg-brand-surface p-6 text-center md:text-left">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Registration number
+              </p>
+              <p className="mt-1 font-mono text-2xl font-extrabold text-brand-navy">
+                {registrationId}
+              </p>
+              {record?.fullName ? (
+                <p className="mt-2 text-sm text-slate-600">
+                  {String(record.fullName)} · {String(record.registrationType ?? "")}
                 </p>
-                <p className="mt-1 font-mono text-2xl font-extrabold text-brand-navy">
-                  {registrationId}
-                </p>
-                {record?.fullName ? (
-                  <p className="mt-2 text-sm text-slate-600">
-                    {String(record.fullName)} · {String(record.registrationType ?? "")}
-                  </p>
-                ) : null}
-              </div>
-              {qrDataUrl && (
-                <div className="rounded-xl border bg-white p-3 text-center">
-                  <Image
-                    src={qrDataUrl}
-                    alt={`QR code for registration ${registrationId}`}
-                    width={160}
-                    height={160}
-                    className="mx-auto"
-                  />
-                  <p className="mt-2 text-xs text-slate-500">Show at check-in</p>
-                </div>
-              )}
+              ) : null}
             </div>
           )}
 
@@ -199,7 +157,7 @@ function SuccessInner() {
           <section className="rounded-2xl border border-amber-200 bg-amber-50/80 p-5 text-sm text-amber-950">
             <h2 className="font-bold text-brand-navy">Next steps</h2>
             <ul className="mt-2 list-disc space-y-1 pl-5">
-              <li>Save your registration number and QR code.</li>
+              <li>Save your registration number for event check-in.</li>
               <li>Watch your email for verification from the organising team.</li>
               {accommodation && (
                 <li>Accommodation requests are processed separately — you will be contacted.</li>

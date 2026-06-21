@@ -22,23 +22,13 @@ async function fetchAsBase64(url: string): Promise<string | null> {
   }
 }
 
-function qrDataUrlToBase64(qrDataUrl: string): string | null {
-  if (!qrDataUrl.startsWith("data:image")) return null;
-  const base64 = qrDataUrl.split(",")[1];
-  return base64 ?? null;
-}
-
-export async function downloadReceiptPdfClient(
-  data: ReceiptData,
-  qrDataUrl?: string | null
-): Promise<void> {
-  const [dheLogoImage, eventLogoImage, qrImage] = await Promise.all([
+export async function downloadReceiptPdfClient(data: ReceiptData): Promise<void> {
+  const [dheLogoImage, eventLogoImage] = await Promise.all([
     fetchAsBase64(RECEIPT_DHE_LOGO_PATH),
     fetchAsBase64(RECEIPT_EVENT_LOGO_PATH),
-    qrDataUrl ? Promise.resolve(qrDataUrlToBase64(qrDataUrl)) : Promise.resolve(null),
   ]);
 
   const doc = new jsPDF({ unit: "pt", format: "a4" });
-  renderReceiptPdf(doc, data, { dheLogoImage, eventLogoImage, qrImage });
+  renderReceiptPdf(doc, data, { dheLogoImage, eventLogoImage });
   doc.save(`receipt-${data.registrationId}.pdf`);
 }

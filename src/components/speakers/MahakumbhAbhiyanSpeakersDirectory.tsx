@@ -211,10 +211,6 @@ export default function MahakumbhAbhiyanSpeakersDirectory() {
 
       {/* Footer links */}
       <p className="text-center text-sm text-slate-500 print:hidden">
-        <Link href="/speakers" className="font-semibold text-brand-blue hover:text-brand-saffron">
-          ← Featured speakers
-        </Link>
-        {" · "}
         <Link href="/past-events" className="font-semibold text-brand-blue hover:text-brand-saffron">
           Past editions
         </Link>

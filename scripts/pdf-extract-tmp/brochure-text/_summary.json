@@ -1,0 +1,38 @@
+[
+  {
+    "edition": "1.0",
+    "pages": 4,
+    "chars": 8424,
+    "ok": true
+  },
+  {
+    "edition": "2.0",
+    "pages": 8,
+    "chars": 176,
+    "ok": true
+  },
+  {
+    "edition": "3.0",
+    "pages": 5,
+    "chars": 17162,
+    "ok": true
+  },
+  {
+    "edition": "4.0",
+    "pages": 4,
+    "chars": 16029,
+    "ok": true
+  },
+  {
+    "edition": "5.0",
+    "pages": 12,
+    "chars": 28773,
+    "ok": true
+  },
+  {
+    "edition": "6.0",
+    "pages": 20,
+    "chars": 26635,
+    "ok": true
+  }
+]

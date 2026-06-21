@@ -3,9 +3,18 @@ import { SITE_URL } from "@/config/site";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 
 export const metadata = createCommitteeMetadata({
-  title: "Organising Committee",
-  description: "Committee members for Shiksha Mahakumbh Abhiyan.",
+  title: "Organising Committees",
+  description:
+    "Browse advisory, organising, and conference committees for Shiksha Mahakumbh Abhiyan editions 1.0–6.0. National education leadership from IITs, NITs, central universities, Vidya Bharti, and DHE.",
   path: CANONICAL_ROUTES.committees,
+  keywords: [
+    "Shiksha Mahakumbh committee",
+    "organising committee",
+    "national advisory committee",
+    "DHE leadership",
+    "education conference India",
+    "IIT NIT university committee",
+  ],
 });
 
 const breadcrumb = {
@@ -27,8 +36,9 @@ const collection = {
   "@type": "CollectionPage",
   name: "Shiksha Mahakumbh Organising Committees",
   description:
-    "Committee members and governance structure across Shiksha Mahakumbh editions.",
+    "Committee members and governance structure across Shiksha Mahakumbh editions 1.0 through 6.0.",
   url: `${SITE_URL}${CANONICAL_ROUTES.committees}`,
+  inLanguage: "en-IN",
 };
 
 export default function CommitteesLayout({ children }: { children: React.ReactNode }) {

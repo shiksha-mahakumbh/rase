@@ -25,7 +25,7 @@ const SMOKE_ROUTES = [
 const SHELL_MARKERS = [
   { path: "/introduction", marker: "PublicPageShell", alt: /introduction/i },
   { path: "/events", marker: "ConferenceHubPage", alt: /events|summit/i },
-  { path: "/committee/shikshamahakumbh2025", marker: "CommitteeEditionPage", alt: /committee|shiksha/i },
+  { path: "/committee/Shiksha%20Mahakumbh%205.0", marker: "CommitteeEditionPage", alt: /committee|shiksha/i },
   { path: "/departments/academic-council", marker: "DepartmentPage", alt: /academic|council/i },
 ];
 

@@ -107,13 +107,13 @@ export default function CheckInClient() {
 
       <div className="mx-auto max-w-lg space-y-4 p-4">
         <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <label className="block text-sm font-semibold text-slate-700">Scan or enter Registration ID / QR payload</label>
+          <label className="block text-sm font-semibold text-slate-700">Enter Registration ID</label>
           <input
             className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-4 text-lg font-mono"
             value={scanInput}
             onChange={(e) => setScanInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && void lookup()}
-            placeholder="SMK2026-000001 or paste QR JSON"
+            placeholder="SMK2026-000001"
             autoFocus
           />
           <button

@@ -7,8 +7,18 @@ export const POPULAR_LINKS = [
   { path: CMT_SUBMISSION_URL, title: "Multi Track Conference" },
   { path: ROUTES.academicCouncil, title: "Academic Programme" },
   { path: ROUTES.upcomingEvents, title: "Upcoming Events" },
+  { path: ROUTES.downloads, title: "Brochures" },
+  { path: ROUTES.speakers, title: "Speakers" },
   { path: ROUTES.contact, title: "Contact" },
 ] as const;
+
+/** Top-level participate links — also merged into CMS header menus when missing. */
+export const PARTICIPATE_NAV_ITEMS: Menu[] = [
+  { path: ROUTES.downloads, title: "Brochures" },
+  { path: ROUTES.speakers, title: "Speakers" },
+  { path: ROUTES.donation, title: "Donation" },
+  { path: ROUTES.bestWishes, title: "Best Wishes" },
+];
 
 export const NAV_MENUS: Menu[] = [
   { path: ROUTES.home, title: "Home" },
@@ -58,6 +68,7 @@ export const NAV_MENUS: Menu[] = [
       { path: "/press", title: "Press Releases" },
     ],
   },
+  ...PARTICIPATE_NAV_ITEMS,
   { path: "/committees", title: "Committee" },
   { path: "/contact-us", title: "Contact" },
 ];

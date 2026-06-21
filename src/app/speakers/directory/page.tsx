@@ -24,8 +24,7 @@ export default function SpeakersDirectoryPage() {
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "Speakers", path: "/speakers" },
-          { name: "Speaker Directory", path: "/speakers/directory" },
+          { name: "Speakers", path: "/speakers/directory" },
         ]}
       />
       <SpeakersDirectoryJsonLd />

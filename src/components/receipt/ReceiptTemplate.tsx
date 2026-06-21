@@ -7,8 +7,6 @@ import {
 
 export type ReceiptTemplateProps = {
   data: ReceiptData;
-  /** Optional QR image data URL for screen / print */
-  qrDataUrl?: string | null;
   /** Root element id — used by print handler */
   id?: string;
   className?: string;
@@ -16,7 +14,6 @@ export type ReceiptTemplateProps = {
 
 export default function ReceiptTemplate({
   data,
-  qrDataUrl,
   id = "registration-receipt",
   className = "",
 }: ReceiptTemplateProps) {
@@ -98,21 +95,6 @@ export default function ReceiptTemplate({
         <ReceiptRow label="Transaction Date" value={data.transactionDate} />
         {data.panNumber ? <ReceiptRow label="PAN" value={data.panNumber} /> : null}
       </section>
-
-      {qrDataUrl ? (
-        <section className="mt-6 flex flex-col items-center border-t border-dashed border-gray-400 pt-4 print:[break-inside:avoid]">
-          <h2 className="mb-2 font-bold text-brand-navy">Entry QR Code</h2>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={qrDataUrl}
-            alt={`QR code for ${data.registrationId}`}
-            width={160}
-            height={160}
-            className="rounded border border-gray-300 bg-white p-2"
-          />
-          <p className="mt-2 text-xs text-gray-600">Show at event check-in</p>
-        </section>
-      ) : null}
 
       <footer className="mt-8 flex items-end justify-between border-t border-brand-navy/30 pt-6">
         <div className="rounded border-2 border-brand-navy px-6 py-3 text-center font-bold text-red-700">

@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
 import { loadCmsDownloads, loadDefaultOgImage, loadRouteSeo } from "@/lib/cms/server";
-import DownloadsClient from "./DownloadsClient";
+import DownloadsShowcase from "@/components/downloads/DownloadsShowcase";
+import DownloadsJsonLd from "@/components/downloads/DownloadsJsonLd";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
-import { buildWebPageSchema } from "@/server/services/seo.service";
+import { brandPageHero } from "@/lib/page-heroes";
 
 export const revalidate = 300;
 
 const FALLBACK_META = {
-  title: "Downloads — Brochures, Reports & Guidelines",
+  title: "Brochures & Downloads — Shiksha Mahakumbh Editions 1.0–6.0",
   description:
-    "Download official Shiksha Mahakumbh brochures, reports, guidelines, circulars, and presentations.",
+    "Download official Shiksha Mahakumbh Abhiyan edition brochures (PDF), reports, guidelines, and circulars. Free access for national and international education delegates.",
   path: "/downloads",
-  keywords: ["Shiksha Mahakumbh downloads", "brochures", "reports", "guidelines"],
+  keywords: [
+    "Shiksha Mahakumbh brochure",
+    "edition brochure PDF",
+    "Shiksha Mahakumbh downloads",
+    "education conference brochure India",
+    "NEP 2020 conference materials",
+    "international education delegates",
+  ],
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,37 +37,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({ ...FALLBACK_META, ogImageUrl: ogImage ?? undefined });
 }
 
-import { brandPageHero } from "@/lib/page-heroes";
-
 const BREADCRUMBS = [
   { name: "Home", path: "/" },
-  { name: "Downloads", path: "/downloads" },
+  { name: "Brochures & Downloads", path: "/downloads" },
 ];
 
 export default async function DownloadsPage() {
   const downloads = await loadCmsDownloads();
 
-  const jsonLd = buildWebPageSchema({
-    title: "Downloads Center — Shiksha Mahakumbh",
-    description: "Official downloadable resources",
-    url: "/downloads",
-  });
-
   return (
     <PublicPageShell
       hero={brandPageHero(
-        "Downloads Center",
-        "Official brochures, reports, guidelines, circulars, and presentations.",
-        "Resources"
+        "Brochures & Downloads",
+        "Official edition brochures (1.0–6.0), reports, guidelines, and resources — free for national and international delegates.",
+        "Resources · Global Access"
       )}
       showCta={false}
       breadcrumbs={BREADCRUMBS}
+      containerClassName="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14"
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <DownloadsClient initialDownloads={downloads} />
+      <DownloadsJsonLd />
+      <DownloadsShowcase initialDownloads={downloads} />
     </PublicPageShell>
   );
 }

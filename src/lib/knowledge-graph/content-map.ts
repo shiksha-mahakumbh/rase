@@ -71,11 +71,12 @@ export const CONTENT_MAP: ContentMapEntry[] = [
   { path: "/schools", title: "Schools", pillarId: "school-education", clusterId: "school-programmes" },
   { path: "/research-projects", title: "Research Projects", pillarId: "research", clusterId: "research-submit" },
   { path: "/educational-leaders", title: "Educational Leaders", pillarId: "leadership", clusterId: "leadership-speakers" },
-  { path: "/committee/shikshamahakumbh2023", title: "Committee SMK 1.0", pillarId: "conferences", clusterId: "conf-mahakumbh" },
-  { path: "/committee/shikshakumbh2023", title: "Committee SMK 2.0", pillarId: "conferences", clusterId: "conf-mahakumbh" },
-  { path: "/committee/shikshakumbh2024", title: "Committee SMK 3.0", pillarId: "conferences", clusterId: "conf-mahakumbh" },
-  { path: "/committee/shikshamahakumbh2024", title: "Committee SMK 4.0", pillarId: "conferences", clusterId: "conf-mahakumbh" },
-  { path: "/committee/shikshamahakumbh2025", title: "Committee SMK 5.0", pillarId: "conferences", clusterId: "conf-mahakumbh" },
+  { path: "/committee/Shiksha Mahakumbh 1.0", title: "Shiksha Mahakumbh 1.0 Committee", pillarId: "conferences", clusterId: "conf-mahakumbh" },
+  { path: "/committee/Shiksha Mahakumbh 2.0", title: "Shiksha Mahakumbh 2.0 Committee", pillarId: "conferences", clusterId: "conf-mahakumbh" },
+  { path: "/committee/Shiksha Mahakumbh 3.0", title: "Shiksha Mahakumbh 3.0 Committee", pillarId: "conferences", clusterId: "conf-mahakumbh" },
+  { path: "/committee/Shiksha Mahakumbh 4.0", title: "Shiksha Mahakumbh 4.0 Committee", pillarId: "conferences", clusterId: "conf-mahakumbh" },
+  { path: "/committee/Shiksha Mahakumbh 5.0", title: "Shiksha Mahakumbh 5.0 Committee", pillarId: "conferences", clusterId: "conf-mahakumbh" },
+  { path: "/committee/Shiksha Mahakumbh 6.0", title: "Shiksha Mahakumbh 6.0 Committee", pillarId: "conferences", clusterId: "conf-mahakumbh" },
 ];
 
 export function getContentByPath(path: string): ContentMapEntry | undefined {

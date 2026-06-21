@@ -10,30 +10,25 @@ export { buildReceiptData } from "@/lib/receipt/receipt-data";
 
 type RegistrationReceiptProps = {
   data: ReceiptData;
-  qrDataUrl?: string | null;
   /** When true, show on screen (success page preview). When false, hidden until print. */
   visible?: boolean;
 };
 
 export default function RegistrationReceipt({
   data,
-  qrDataUrl,
   visible = false,
 }: RegistrationReceiptProps) {
   return (
     <div className={visible ? "mb-8" : "hidden"} id="registration-receipt-root">
-      <ReceiptTemplate data={data} qrDataUrl={qrDataUrl} />
+      <ReceiptTemplate data={data} />
     </div>
   );
 }
 
-export function printRegistrationReceipt(data: ReceiptData, qrDataUrl?: string | null) {
-  printReceiptDocument(data, qrDataUrl);
+export function printRegistrationReceipt(data: ReceiptData) {
+  printReceiptDocument(data);
 }
 
-export async function downloadRegistrationReceiptPdf(
-  data: ReceiptData,
-  qrDataUrl?: string | null
-) {
-  await downloadReceiptPdfClient(data, qrDataUrl);
+export async function downloadRegistrationReceiptPdf(data: ReceiptData) {
+  await downloadReceiptPdfClient(data);
 }

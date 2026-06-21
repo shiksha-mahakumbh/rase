@@ -9,13 +9,12 @@ const PILLAR_PATH_OVERRIDES: Record<string, string> = {
   media: "media-center",
 };
 
-const COMMITTEE_PATHS = [
-  "committee/shikshamahakumbh2023",
-  "committee/shikshakumbh2023",
-  "committee/shikshakumbh2024",
-  "committee/shikshamahakumbh2024",
-  "committee/shikshamahakumbh2025",
-] as const;
+import { COMMITTEE_LEGACY_SLUGS } from "@/lib/committee/legacy-registry";
+import { committeePathFromSlug } from "@/lib/committee/edition-slugs";
+
+const COMMITTEE_PATHS = COMMITTEE_LEGACY_SLUGS.map((slug) =>
+  committeePathFromSlug(slug).replace(/^\//, "")
+);
 
 const WORKSHOP_PATHS = [
   "past_event/Teacher_Development_Program",
@@ -65,7 +64,6 @@ const STATIC_PATHS = [
   "media-center",
   ...MEDIA_ARCHIVE_PATHS,
   "best-wishes",
-  "wishes-received",
   "merchandise",
   "committees",
   ...COMMITTEE_PATHS,

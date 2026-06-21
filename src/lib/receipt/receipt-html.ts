@@ -10,7 +10,6 @@ import {
 export { RECEIPT_DHE_LOGO_PATH, RECEIPT_EVENT_LOGO_PATH, RECEIPT_LOGO_PATH };
 
 export type ReceiptHtmlOptions = {
-  qrDataUrl?: string | null;
   /** Absolute origin for logo in print popup, e.g. https://www.shikshamahakumbh.com */
   origin?: string;
 };
@@ -55,14 +54,6 @@ export function buildReceiptHtmlDocument(
     options.origin
   );
 
-  const qrBlock = options.qrDataUrl
-    ? `<section style="margin-top:24px;text-align:center;border-top:1px dashed #999;padding-top:16px">
-        <h2 style="font-size:14px;font-weight:bold;color:#1e3a5f">Entry QR Code</h2>
-        <img src="${options.qrDataUrl}" alt="QR" width="160" height="160" style="margin:8px auto;border:1px solid #ccc;padding:8px" />
-        <p style="font-size:11px;color:#666">Show at event check-in</p>
-      </section>`
-    : "";
-
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"/><title>Receipt ${escapeHtml(data.registrationId)}</title>
 <style>
@@ -104,7 +95,6 @@ export function buildReceiptHtmlDocument(
   ${rowHtml("Mode", data.paymentMode)}
   ${rowHtml("Transaction Date", data.transactionDate)}
   ${data.panNumber ? rowHtml("PAN", data.panNumber) : ""}
-  ${qrBlock}
   <div style="margin-top:32px;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid #1e3a5f;padding-top:16px">
     <div style="border:2px solid #1e3a5f;padding:12px 24px;font-weight:bold;color:#b91c1c">₹${data.amount.toLocaleString("en-IN")}</div>
     <div style="text-align:center;font-size:11px">

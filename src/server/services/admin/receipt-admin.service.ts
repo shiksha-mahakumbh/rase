@@ -93,8 +93,7 @@ export async function getRegistrationByPublicId(publicId: string) {
 export async function regenerateReceipt(publicId: string, actorUserId?: string) {
   const reg = await getRegistrationByPublicId(publicId);
   const payload = buildReceiptPayloadFromRegistration(reg);
-  const qrPng = await generateRegistrationQrBuffer(publicId);
-  const pdf = generateReceiptPdfBuffer(payload, qrPng);
+  const pdf = generateReceiptPdfBuffer(payload, null);
   const now = new Date();
 
   await prisma.registration.update({
@@ -148,8 +147,7 @@ export async function resendPaymentEmail(publicId: string, actorUserId?: string)
   const fee = payload.amount;
   const isPaidOnline = fee > 0 && Boolean(reg.razorpayPaymentId);
 
-  const qrPng = await generateRegistrationQrBuffer(publicId);
-  const receiptPdf = generateReceiptPdfBuffer(payload, qrPng);
+  const receiptPdf = generateReceiptPdfBuffer(payload, null);
   const lookupToken = createRegistrationLookupToken(publicId, reg.email);
   const now = new Date();
 
@@ -165,7 +163,6 @@ export async function resendPaymentEmail(publicId: string, actorUserId?: string)
       ? receiptDownloadUrl(publicId, lookupToken)
       : undefined,
     receiptPdf,
-    qrPng,
     isPaid: isPaidOnline,
   });
 
@@ -174,9 +171,6 @@ export async function resendPaymentEmail(publicId: string, actorUserId?: string)
     data: {
       receiptGeneratedAt: now,
       receiptSentAt: now,
-      qrGeneratedAt: now,
-      qrStoragePath: qrStoragePathFor(publicId),
-      qrSentAt: now,
       emailDeliveryStatus: log.status === "sent" ? "sent" : "failed",
     },
   });

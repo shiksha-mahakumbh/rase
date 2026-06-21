@@ -8,7 +8,8 @@ const LEGACY_REDIRECTS = [
   { source: "/upcomingevent", destination: "/upcoming-events", permanent: true },
   { source: "/ContactUs", destination: "/contact-us", permanent: true },
   { source: "/Best_Wishes", destination: "/best-wishes", permanent: true },
-  { source: "/Wishes_Received", destination: "/wishes-received", permanent: true },
+  { source: "/Wishes_Received", destination: "/best-wishes", permanent: true },
+  { source: "/wishes-received", destination: "/best-wishes", permanent: true },
   { source: "/committeepage", destination: "/committees", permanent: true },
   { source: "/media", destination: "/media-center", permanent: true },
   { source: "/Press_Release", destination: "/press", permanent: true },
@@ -117,6 +118,7 @@ const LEGACY_REDIRECTS = [
   { source: "/fulllengthpaperdatadekh", destination: "/admin", permanent: true },
   { source: "/volunteerregistrationdatadekh", destination: "/admin", permanent: true },
   // Legacy path aliases → canonical routes
+  { source: "/speakers", destination: "/speakers/directory", permanent: true },
   { source: "/past_event", destination: "/past-events", permanent: true },
   { source: "/Proceeding1", destination: "/proceeding1", permanent: true },
   { source: "/Proceeding2", destination: "/proceeding2", permanent: true },
@@ -127,6 +129,14 @@ const LEGACY_REDIRECTS = [
   { source: "/residentialcamp", destination: "/ResidentialCamp", permanent: true },
   { source: "/Residential_Camp", destination: "/ResidentialCamp", permanent: true },
   { source: "/Baton", destination: "/BatonCeremony", permanent: true },
+  // Committee edition routes — retired year-based slugs
+  { source: "/committee/shikshamahakumbh2026", destination: "/committee/Shiksha%20Mahakumbh%206.0", permanent: true },
+  { source: "/committee/shikshamahakumbh2025", destination: "/committee/Shiksha%20Mahakumbh%205.0", permanent: true },
+  { source: "/committee/shikshamahakumbh2024", destination: "/committee/Shiksha%20Mahakumbh%204.0", permanent: true },
+  { source: "/committee/shikshakumbh2024", destination: "/committee/Shiksha%20Mahakumbh%203.0", permanent: true },
+  { source: "/committee/shikshakumbh2023", destination: "/committee/Shiksha%20Mahakumbh%202.0", permanent: true },
+  { source: "/committee/shikshakumbh20231", destination: "/committee/Shiksha%20Mahakumbh%202.0", permanent: true },
+  { source: "/committee/shikshamahakumbh2023", destination: "/committee/Shiksha%20Mahakumbh%201.0", permanent: true },
 ];
 
 module.exports = { LEGACY_REDIRECTS };

@@ -18,12 +18,10 @@ export default function CommitteeDetailShell({
           { label: "Committee", href: "/committees" },
           { label: editionTitle },
         ]}
-        className="mb-8"
+        className="mb-8 print:hidden"
       />
-      <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-lg md:rounded-3xl md:p-8">
-        {children}
-      </div>
-      <p className="mt-8 text-center">
+      <div className="space-y-2">{children}</div>
+      <p className="mt-8 text-center print:hidden">
         <Link
           href="/committees"
           className="inline-flex min-h-[44px] items-center text-sm font-semibold text-brand-saffron-dark hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
