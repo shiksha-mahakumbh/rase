@@ -3,182 +3,134 @@
 import {
   ACPage,
   ACHero,
+  ACSection,
+  ACCard,
+  ACGlassPanel,
+  ACObjectiveCard,
+  ACContactBlock,
   SectionCTA,
   ACFooterStatement,
   REG_LINKS,
 } from "../AcademicCouncilUI";
-import { exhibitionSegments, exhibitionParticipants, exhibitionObjectives, exhibitionBenefits } from "../academic-content-data";
+import {
+  exhibitionSegments,
+  exhibitionParticipants,
+  exhibitionObjectives,
+  exhibitionBenefits,
+} from "../academic-content-data";
+
+function ThemeBanner() {
+  return (
+    <ACGlassPanel className="border-brand-saffron/25 bg-gradient-to-br from-brand-navy/5 via-brand-surface-warm to-white text-center">
+      <p className="text-xs font-semibold uppercase tracking-wide text-brand-saffron-dark">
+        Theme
+      </p>
+      <p className="mt-2 text-lg font-bold text-brand-navy md:text-2xl">
+        &ldquo;Shiksha, Prakriti aur Pragati&rdquo;
+      </p>
+      <p className="mt-2 text-sm text-slate-600 md:text-base">
+        Educating for Development and Harmony with Nature
+      </p>
+    </ACGlassPanel>
+  );
+}
 
 export default function ExhibitionPage() {
   return (
     <ACPage>
       <ACHero
-        title="🏛️ Exhibition – Shiksha Mahakumbh 6.0"
+        title="Exhibition – Shiksha Mahakumbh 6.0"
         subtitle={
-          <p className="max-w-5xl mx-auto">
-            A dynamic showcase of innovation, culture,
-            institutional excellence, and transformative ideas
-            bringing together students, universities,
-            organizations, and innovators on one platform.
+          <p>
+            A dynamic showcase of innovation, culture, institutional excellence, and transformative
+            ideas bringing together students, universities, organizations, and innovators on one
+            platform.
           </p>
         }
       />
 
-      {/* Overview */}
-      <section className="max-w-7xl mx-auto py-14 px-6">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-cyan-700 mb-6">
-            🌟 Overview
-          </h2>
-
-          <p className="text-lg leading-8 text-gray-700">
-            The Exhibition at Shiksha Mahakumbh 6.0 serves as a
-            vibrant ecosystem where innovation, sustainability,
-            culture, and education come together. Participants
-            will present impactful ideas, research, working
-            models, and transformative initiatives aligned with
-            the vision of Viksit Bharat 2047.
+      <ACSection title="Overview">
+        <ACGlassPanel>
+          <p className="text-base leading-relaxed text-gray-700 md:text-lg md:leading-8">
+            The Exhibition at Shiksha Mahakumbh 6.0 serves as a vibrant ecosystem where innovation,
+            sustainability, culture, and education come together. Participants will present impactful
+            ideas, research, working models, and transformative initiatives aligned with the vision
+            of Viksit Bharat 2047.
           </p>
-        </div>
-      </section>
+        </ACGlassPanel>
+      </ACSection>
 
-      {/* Theme */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-2xl shadow-xl p-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-5">
-            🌿 Theme
-          </h2>
+      <ACSection title="Theme">
+        <ThemeBanner />
+      </ACSection>
 
-          <h3 className="text-2xl md:text-3xl font-semibold mb-4">
-            “Shiksha, Prakriti aur Pragati”
-          </h3>
-
-          <p className="text-lg md:text-xl">
-            Educating for Development and Harmony with Nature
-          </p>
-        </div>
-      </section>
-
-      {/* Segments */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <h2 className="text-3xl font-bold text-cyan-700 mb-8">
-          🧩 Key Exhibition Segments
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-6">
+      <ACSection title="Key Exhibition Segments">
+        <div className="grid gap-4 md:grid-cols-2">
           {exhibitionSegments.map((segment, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl shadow-md p-6"
-            >
-              <h3 className="text-2xl font-bold text-cyan-700 mb-4">
+            <ACCard key={index}>
+              <h3 className="mb-3 text-lg font-bold text-brand-navy md:text-xl">
                 {segment.icon} {segment.title}
               </h3>
-
-              <p className="text-gray-700 leading-7">
+              <p className="text-sm leading-relaxed text-gray-700 md:text-base">
                 {segment.description}
               </p>
-            </div>
+            </ACCard>
           ))}
         </div>
-      </section>
+      </ACSection>
 
-      {/* Participants */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
-            👥 Participants
-          </h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {exhibitionParticipants.map((participant, index) => (
-              <div
-                key={index}
-                className="bg-cyan-50 rounded-xl p-5 shadow-sm"
-              >
-                🎓 {participant}
-              </div>
-            ))}
-          </div>
+      <ACSection title="Participants">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {exhibitionParticipants.map((participant, index) => (
+            <ACCard key={index} className="text-sm md:text-base">
+              {participant}
+            </ACCard>
+          ))}
         </div>
-      </section>
+      </ACSection>
 
-      {/* Objectives */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
-            🎯 Objectives
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-5">
-            {exhibitionObjectives.map((objective, index) => (
-              <div
-                key={index}
-                className="bg-green-50 rounded-xl p-5 shadow-sm"
-              >
-                ✅ {objective}
-              </div>
-            ))}
-          </div>
+      <ACSection title="Objectives">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {exhibitionObjectives.map((objective, index) => (
+            <ACObjectiveCard key={index} index={index}>
+              {objective}
+            </ACObjectiveCard>
+          ))}
         </div>
-      </section>
+      </ACSection>
 
-      {/* Recognition */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
-            🏆 Opportunities & Recognition
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-5">
-            {exhibitionBenefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="bg-orange-50 rounded-xl p-5 shadow-sm"
-              >
-                🌟 {benefit}
-              </div>
-            ))}
-          </div>
+      <ACSection title="Opportunities & Recognition">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {exhibitionBenefits.map((benefit, index) => (
+            <ACCard key={index} className="text-sm md:text-base">
+              {benefit}
+            </ACCard>
+          ))}
         </div>
-      </section>
+      </ACSection>
 
-      {/* Dates */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-white rounded-2xl shadow-md p-8 text-center">
-          <h2 className="text-3xl font-bold text-cyan-700 mb-8">
-            📅 Exhibition Dates
-          </h2>
-
-          <p className="text-2xl font-bold text-cyan-700">
+      <ACSection title="Exhibition Dates">
+        <ACGlassPanel className="text-center">
+          <p className="text-xl font-bold text-brand-navy md:text-2xl">
             9–11 October 2026 | NIT Hamirpur
           </p>
-        </div>
-      </section>
+        </ACGlassPanel>
+      </ACSection>
 
-      {/* Contact */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
-        <div className="bg-gradient-to-r from-cyan-700 to-blue-700 text-white rounded-2xl shadow-xl p-10">
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            📞 Participation & Enquiries
-          </h2>
+      <ACSection title="Participation & Enquiries">
+        <ACContactBlock />
+      </ACSection>
 
-          <div className="space-y-4 text-lg text-center">
-            <p>📧 academics@shikshamahakumbh.com</p>
-
-            <p>📞 +91-7903431900</p>
-
-            <p>🌐 www.shikshamahakumbh.com</p>
-          </div>
-        </div>
-      </section>
-
-      <ACFooterStatement title="✨ A Confluence of Ideas & Innovation">
-        Explore a vibrant ecosystem where education, innovation, culture, and
-        sustainability come together at the Shiksha Mahakumbh 6.0 Exhibition.
+      <ACFooterStatement title="A Confluence of Ideas & Innovation">
+        Explore a vibrant ecosystem where education, innovation, culture, and sustainability come
+        together at the Shiksha Mahakumbh 6.0 Exhibition.
       </ACFooterStatement>
 
-      <SectionCTA buttonText="अभी जुड़ें" href={REG_LINKS.general} />
+      <SectionCTA
+        title="Join the exhibition"
+        buttonText="Register Now"
+        href={REG_LINKS.general}
+      />
     </ACPage>
   );
 }

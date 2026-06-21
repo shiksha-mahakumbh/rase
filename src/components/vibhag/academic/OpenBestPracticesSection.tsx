@@ -13,18 +13,7 @@ import {
 export function OpenBestPracticesSection() {
   return (
     <>
-      <section className="border-b border-gray-100 bg-gradient-to-br from-emerald-50/50 to-teal-50/30 px-4 py-10 md:px-8">
-        <div className="mx-auto max-w-5xl text-center">
-          <h1 className="text-2xl font-extrabold text-emerald-800 md:text-3xl">
-            🌍 Best Practices – Shiksha Mahakumbh 6.0
-          </h1>
-          <p className="mt-2 text-lg font-semibold text-emerald-700 md:text-xl">
-            &ldquo;From Grassroots to Global Excellence&rdquo;
-          </p>
-        </div>
-      </section>
-
-      <ACSection title="🌟 Overview">
+      <ACSection title="Open & Inclusive Platform — Overview">
         <ACGlassPanel>
           <p className="text-base leading-relaxed text-gray-700 md:leading-8">
             The Best Practices Platform at Shiksha Mahakumbh 6.0 is a
