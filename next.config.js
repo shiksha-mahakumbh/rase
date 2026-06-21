@@ -17,6 +17,16 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  /** Typecheck runs via scripts/build-production.js — skip duplicate in-build pass (OOM on low RAM). */
+  typescript: {
+    ignoreBuildErrors: process.env.SKIP_NEXT_STATIC_CHECKS === "1",
+  },
+  eslint: {
+    ignoreDuringBuilds: process.env.SKIP_NEXT_STATIC_CHECKS === "1",
+  },
+  experimental: {
+    webpackMemoryOptimizations: true,
+  },
   /** Reduces dev memory spikes from PackFileCacheStrategy on large codebases */
   webpack: (config, { dev }) => {
     if (dev) {

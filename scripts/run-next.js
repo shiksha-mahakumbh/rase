@@ -3,6 +3,7 @@
  * Usage: node scripts/run-next.js dev | build | start ...
  */
 const path = require("path");
+const os = require("os");
 const { spawn } = require("child_process");
 
 const projectRoot = path.join(__dirname, "..");
@@ -14,14 +15,24 @@ if (nextArgs.length === 0) {
   process.exit(1);
 }
 
-/** Large Next.js + TS projects often OOM during `next build` type-check on default ~512MB heap. */
-const heapMb = nextArgs[0] === "build" ? 8192 : 4096;
+function heapMbFor(command) {
+  const totalMb = Math.floor(os.totalmem() / 1024 / 1024);
+  const reserve = command === "build" ? 3072 : 2048;
+  const budget = Math.max(2048, Math.min(6144, totalMb - reserve));
+  if (command === "build" && process.env.SKIP_NEXT_STATIC_CHECKS === "1") {
+    return Math.min(4096, budget);
+  }
+  return budget;
+}
+
+const heapMb = heapMbFor(nextArgs[0]);
 
 const nodeOptions = [
   process.env.NODE_OPTIONS || "",
   `--max-old-space-size=${heapMb}`,
-  `--require "${fixPath.replace(/\\/g, "/")}"`,
+  `--require=${fixPath.replace(/\\/g, "/")}`,
 ]
+  .filter(Boolean)
   .join(" ")
   .trim();
 
