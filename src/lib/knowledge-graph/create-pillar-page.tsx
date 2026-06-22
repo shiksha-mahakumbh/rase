@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { createRedirectShellMetadata } from "@/lib/seo/metadataBuilders";
 import PillarPageTemplate from "@/components/knowledge-graph/PillarPageTemplate";
+import { THIN_PILLAR_PATHS } from "./site-cleanup";
 import { getPillarEntry, type PillarSlug } from "./pillar-registry";
 
 export function createPillarMetadata(slug: PillarSlug): Metadata {
@@ -10,6 +12,12 @@ export function createPillarMetadata(slug: PillarSlug): Metadata {
       title: "Education",
       description: "Shiksha Mahakumbh education ecosystem",
       path: "/education",
+    });
+  }
+  if (THIN_PILLAR_PATHS.has(entry.path)) {
+    return createRedirectShellMetadata({
+      title: entry.label,
+      path: entry.path,
     });
   }
   return createPageMetadata({

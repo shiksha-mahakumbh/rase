@@ -32,6 +32,13 @@ export const DOWNLOADS_HUB_STATS = [
   { label: "Formats", value: "PDF", hint: "Print-ready official brochures" },
 ] as const;
 
+export const DOWNLOADS_PAGE_HERO = {
+  eyebrow: "Official Resources · National & International Delegates",
+  title: "Edition Brochures & Download Centre",
+  subtitle:
+    "Download official Shiksha Mahakumbh Abhiyan brochures for editions 1.0 through 6.0 — programmes, conclaves, registration details, and global participation information in print-ready PDF format.",
+} as const;
+
 function committeeHrefForEdition(edition: string): string {
   return committeePathForEdition(edition);
 }

@@ -1,34 +1,15 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/config/site";
-import { ALL_PILLAR_SLUGS } from "@/lib/knowledge-graph/pillar-registry";
-import { MEDIA_ARCHIVE_KEYS } from "@/data/media-archive-keys";
 import { PRESS_CANONICAL_PATHS } from "@/constants/canonical-routes";
-import { generateSitemapIndex } from "@/server/services/seo.service";
-
-const PILLAR_PATH_OVERRIDES: Record<string, string> = {
-  media: "media-center",
-};
-
+import { MEDIA_ARCHIVE_KEYS } from "@/data/media-archive-keys";
 import { COMMITTEE_LEGACY_SLUGS } from "@/lib/committee/legacy-registry";
 import { committeePathFromSlug } from "@/lib/committee/edition-slugs";
+import { SITEMAP_CORE_PATHS } from "@/lib/knowledge-graph/site-cleanup";
+import { generateSitemapIndex } from "@/server/services/seo.service";
 
 const COMMITTEE_PATHS = COMMITTEE_LEGACY_SLUGS.map((slug) =>
   committeePathFromSlug(slug).replace(/^\//, "")
 );
-
-const WORKSHOP_PATHS = [
-  "past_event/Teacher_Development_Program",
-  "past_event/Spoken_English_Workshop",
-  "past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
-] as const;
-
-const DEPARTMENT_PATHS = [
-  "departments/academic-council",
-  "departments/prabandhan",
-  "departments/prachar",
-  "departments/sampark",
-  "departments/vitt",
-] as const;
 
 const MEDIA_ARCHIVE_PATHS = MEDIA_ARCHIVE_KEYS.map((key) => {
   const [edition, year, type] = key.split("/");
@@ -39,74 +20,15 @@ const PRESS_ARTICLE_PATHS = Object.values(PRESS_CANONICAL_PATHS).map((p) =>
   p.replace(/^\//, "")
 );
 
-const PILLAR_PATHS = ALL_PILLAR_SLUGS.map((slug) => PILLAR_PATH_OVERRIDES[slug] ?? slug);
-
-const STATIC_PATHS = [
-  "",
-  "education",
-  ...PILLAR_PATHS,
-  "registration",
-  "registration/success",
-  "introduction",
-  "contact-us",
-  "upcoming-events",
-  "past-events",
-  "abhiyaninphotoframe",
-  "speakers/directory",
-  "past_event/sm23",
-  "past_event/sk23",
-  "past_event/sk24",
-  "past_event/sm24",
-  "past_event/sm25",
-  ...WORKSHOP_PATHS,
-  "gallery",
-  "videos",
-  "media-center",
-  ...MEDIA_ARCHIVE_PATHS,
-  "best-wishes",
-  "merchandise",
-  "committees",
-  ...COMMITTEE_PATHS,
-  ...DEPARTMENT_PATHS,
-  "journals",
-  "books",
-  "proceedings",
-  "proceeding1",
-  "proceeding2",
-  "proceeding3",
-  "keynotespeakers",
-  "noticeboard",
-  "downloads",
-  "conclave",
-  "TalkShow",
-  "Topics",
-  "privacy-policy",
-  "terms-and-conditions",
-  "disclaimer",
-  "refund-policy",
-  "cookie-policy",
-  "knowledge",
-  "initiatives",
-  "glimpses",
-  "coming-soon",
-  "donation",
-  "feedback",
-  "press",
-  ...PRESS_ARTICLE_PATHS,
-  "people",
-  "institutions",
-  "universities",
-  "schools",
-  "research-projects",
-  "educational-leaders",
-  "reports",
-  "whitepapers",
-  "policy-papers",
-  "research-papers",
-  "events",
-  "summits",
-  "workshops",
-];
+/** Core routes + edition committees + media archives + press articles */
+const SITEMAP_PATHS = Array.from(
+  new Set([
+    ...SITEMAP_CORE_PATHS,
+    ...COMMITTEE_PATHS,
+    ...MEDIA_ARCHIVE_PATHS,
+    ...PRESS_ARTICLE_PATHS,
+  ])
+);
 
 function sitemapPriority(path: string): number {
   if (path === "") return 1;
@@ -121,9 +43,8 @@ function sitemapPriority(path: string): number {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const unique = Array.from(new Set(STATIC_PATHS));
 
-  const staticEntries: MetadataRoute.Sitemap = unique.map((path) => ({
+  const staticEntries: MetadataRoute.Sitemap = SITEMAP_PATHS.map((path) => ({
     url: path ? `${SITE_URL}/${path}` : SITE_URL,
     lastModified: now,
     changeFrequency:
@@ -143,11 +64,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     const seen = new Set(staticEntries.map((e) => e.url));
-    const merged = [
+    return [
       ...staticEntries,
       ...cmsMapped.filter((e) => !seen.has(e.url)),
     ];
-    return merged;
   } catch {
     return staticEntries;
   }

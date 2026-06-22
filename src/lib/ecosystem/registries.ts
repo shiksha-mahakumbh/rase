@@ -65,7 +65,7 @@ const publications: EcosystemItem[] = [
     tags: ["journal", "publication"],
     category: "research",
     publishedAt: "2024-01-01",
-    href: "/journals",
+    href: "https://pub.dhe.org.in",
   },
 ];
 

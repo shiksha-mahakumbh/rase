@@ -31,7 +31,7 @@ export default function PastEditionsShowcase() {
             href="/gallery"
             className="rounded-full bg-brand-saffron px-5 py-2 text-sm font-bold text-brand-navy shadow-sm hover:bg-brand-saffron-dark hover:text-white"
           >
-            Photo Gallery
+            Photo & Video Gallery
           </Link>
         </div>
       </section>

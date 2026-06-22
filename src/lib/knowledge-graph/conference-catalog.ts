@@ -72,10 +72,10 @@ export const EVENT_HUB_ROUTES = [
 ] as const;
 
 export const EVENTS_HUB = {
-  path: "/events",
-  title: "Events — Shiksha Mahakumbh Abhiyan",
+  path: "/conferences",
+  title: "Conferences & Programmes — Shiksha Mahakumbh Abhiyan",
   description:
-    "Upcoming and past Shiksha Mahakumbh Abhiyan editions, registration pathways, and national programmes.",
+    "Upcoming and past Shiksha Mahakumbh Abhiyan editions, registration, workshops, and national programmes.",
 } as const;
 
 export const SUMMITS_HUB = {

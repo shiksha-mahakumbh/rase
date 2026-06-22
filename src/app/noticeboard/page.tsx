@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { loadCmsNotices, loadDefaultOgImage, loadRouteSeo } from "@/lib/cms/server";
-import NoticeboardClient from "./NoticeboardClient";
+import NoticeboardShowcase from "@/components/noticeboard/NoticeboardShowcase";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
@@ -12,9 +12,15 @@ export const revalidate = 300;
 const FALLBACK_META = {
   title: "Notice Board — Campus Updates & Announcements",
   description:
-    "Official notices, circulars, deadlines, and programme announcements for Shiksha Mahakumbh Abhiyan.",
+    "Official notices, circulars, deadlines, and programme announcements for Shiksha Mahakumbh Abhiyan — for national and international delegates.",
   path: "/noticeboard",
-  keywords: ["Shiksha Mahakumbh notices", "campus announcements", "education circulars"],
+  keywords: [
+    "Shiksha Mahakumbh notices",
+    "campus announcements",
+    "education circulars",
+    "SMK 6.0 deadlines",
+    "conference announcements India",
+  ],
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,8 +35,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return createPageMetadata({ ...FALLBACK_META, ogImageUrl: ogImage ?? undefined });
 }
-
-import { brandPageHero } from "@/lib/page-heroes";
 
 export default async function NoticeboardPage() {
   const notices = await loadCmsNotices(50);
@@ -52,12 +56,10 @@ export default async function NoticeboardPage() {
 
   return (
     <PublicPageShell
-      hero={brandPageHero(
-        "Notice Board",
-        "Campus notices, deadlines, and programme announcements.",
-        "Live Updates"
-      )}
+      showHero={false}
       showCta={false}
+      relatedPath="/noticeboard"
+      skipContainer
       breadcrumbs={[
         { name: "Home", path: "/" },
         { name: "Notice Board", path: "/noticeboard" },
@@ -67,7 +69,7 @@ export default async function NoticeboardPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <NoticeboardClient initialNotices={notices} />
+      <NoticeboardShowcase initialNotices={notices} />
     </PublicPageShell>
   );
 }

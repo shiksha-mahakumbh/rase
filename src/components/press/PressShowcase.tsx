@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { CtaButton } from "@/components/ui";
+import Link from "next/link";
+import HubGradientBanner from "@/components/ui/HubGradientBanner";
+import { PRESS_PAGE_HERO, PRESS_STATS } from "@/data/press-hub";
 import type { CmsArticleCard } from "@/lib/cms/types";
 import proceeding1 from "/public/2024M/press2.jpg";
 import proceeding2 from "/public/2024M/press1.jpg";
@@ -10,7 +12,7 @@ import proceeding4 from "/public/2024M/press4.jpg";
 import proceeding5 from "/public/2024M/press5.jpg";
 import proceeding6 from "/public/2024M/Press7.jpg";
 
-const cardData = [
+const FALLBACK_CARDS = [
   {
     title: "Shiksha Mahakumbh 2024 begins at Kurukshetra University",
     description:
@@ -54,7 +56,11 @@ const cardData = [
   },
 ];
 
-export default function PressHub({ articles = [] }: { articles?: CmsArticleCard[] }) {
+type Props = {
+  articles?: CmsArticleCard[];
+};
+
+export default function PressShowcase({ articles = [] }: Props) {
   const cards =
     articles.length > 0
       ? articles.map((article) => ({
@@ -63,7 +69,7 @@ export default function PressHub({ articles = [] }: { articles?: CmsArticleCard[
           image: article.heroImage ?? "/2024M/Press7.jpg",
           readLink: article.href,
         }))
-      : cardData.map((data) => ({
+      : FALLBACK_CARDS.map((data) => ({
           title: data.title,
           description: data.description,
           image: data.image,
@@ -71,39 +77,67 @@ export default function PressHub({ articles = [] }: { articles?: CmsArticleCard[
         }));
 
   return (
-    <div>
-      <h2 className="home-section-title mb-8 text-center">Latest Press Notes</h2>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map((data) => (
-          <article
-            key={data.readLink}
-            className="home-card-hover flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+    <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <HubGradientBanner
+        id="press-banner"
+        eyebrow={PRESS_PAGE_HERO.eyebrow}
+        title={PRESS_PAGE_HERO.title}
+        subtitle={PRESS_PAGE_HERO.subtitle}
+        stats={PRESS_STATS}
+      />
+
+      <section className="mt-10" aria-labelledby="press-releases-grid">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 id="press-releases-grid" className="text-lg font-bold text-brand-navy md:text-xl">
+              Latest press notes
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Official releases from Shiksha Mahakumbh national editions.
+            </p>
+          </div>
+          <Link
+            href="/media-center"
+            className="text-sm font-semibold text-brand-blue hover:text-brand-saffron"
           >
-            <div className="relative aspect-video w-full overflow-hidden">
-              <Image
-                alt={data.title}
-                src={data.image}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <h3 className="text-base font-bold text-brand-navy line-clamp-3">
-                {data.title}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600 line-clamp-4">
-                {data.description}
-              </p>
-              <div className="mt-4">
-                <CtaButton href={data.readLink} variant="secondary" className="w-full">
-                  Read Release
-                </CtaButton>
+            Media Centre →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((data) => (
+            <article
+              key={data.readLink}
+              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-saffron/40 hover:shadow-lg"
+            >
+              <div className="h-1.5 bg-gradient-to-r from-brand-navy to-brand-saffron/80" aria-hidden />
+              <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
+                <Image
+                  alt=""
+                  src={data.image}
+                  fill
+                  className="object-cover transition group-hover:scale-[1.02]"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
-            </div>
-          </article>
-        ))}
-      </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h3 className="line-clamp-3 text-base font-bold text-brand-navy group-hover:text-brand-blue">
+                  {data.title}
+                </h3>
+                <p className="mt-2 line-clamp-4 flex-1 text-sm leading-relaxed text-slate-600">
+                  {data.description}
+                </p>
+                <Link
+                  href={data.readLink}
+                  className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-navy-light"
+                >
+                  Read release
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

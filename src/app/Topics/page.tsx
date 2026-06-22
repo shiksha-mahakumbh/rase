@@ -1,11 +1,7 @@
-import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Topics from "@/components/content/Topics";
-import { PAGE_HEROES } from "@/lib/page-heroes";
+import { redirect } from "next/navigation";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
-export default function TopicsPage() {
-  return (
-    <PublicPageShell hero={PAGE_HEROES.topics}>
-      <Topics />
-    </PublicPageShell>
-  );
+/** Legacy call-for-papers topics list → Microsoft CMT submission (Phase 5) */
+export default function TopicsRedirectPage() {
+  redirect(CMT_SUBMISSION_URL);
 }

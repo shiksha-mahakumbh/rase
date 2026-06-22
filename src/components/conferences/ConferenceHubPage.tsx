@@ -17,6 +17,7 @@ interface ConferenceHubPageProps {
   schemas: Record<string, unknown>[];
   breadcrumbParent: { label: string; href: string };
   children: ReactNode;
+  showHero?: boolean;
 }
 
 export default function ConferenceHubPage({
@@ -24,16 +25,22 @@ export default function ConferenceHubPage({
   schemas,
   breadcrumbParent,
   children,
+  showHero = true,
 }: ConferenceHubPageProps) {
   return (
     <PublicPageShell
-      hero={{
-        eyebrow: hub.eyebrow ?? "Conferences",
-        title: hub.title,
-        subtitle: hub.description,
-        accent: hub.accent ?? "brand",
-        imageSrc: hub.imageSrc,
-      }}
+      hero={
+        showHero
+          ? {
+              eyebrow: hub.eyebrow ?? "Conferences",
+              title: hub.title,
+              subtitle: hub.description,
+              accent: hub.accent ?? "brand",
+              imageSrc: hub.imageSrc,
+            }
+          : undefined
+      }
+      showHero={showHero}
       relatedPath={hub.path}
       containerClassName="mx-auto max-w-4xl px-4 py-10 md:px-8 md:py-14"
     >

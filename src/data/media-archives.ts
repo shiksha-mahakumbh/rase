@@ -83,10 +83,9 @@ export const PRESS_COVERAGE_LINKS = [
 ] as const;
 
 export const MEDIA_HUB_LINKS = [
-  { label: "Photo Gallery", href: "/gallery", icon: "📷" },
-  { label: "Video Gallery", href: "/videos", icon: "🎬" },
+  { label: "Gallery", href: "/gallery", icon: "📷" },
   { label: "Best Wishes", href: "/best-wishes", icon: "🙏" },
-  { label: "Journals", href: "/journals", icon: "📘" },
+  { label: "DHE Journal", href: "https://pub.dhe.org.in", icon: "📘" },
   { label: "Proceedings", href: "/proceedings", icon: "📚" },
 ] as const;
 

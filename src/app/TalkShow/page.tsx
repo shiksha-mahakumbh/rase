@@ -1,11 +1,6 @@
-import PublicPageShell from "@/components/layouts/PublicPageShell";
-import TalkShow from "@/components/content/TalkShow";
-import { PAGE_HEROES } from "@/lib/page-heroes";
+import { redirect } from "next/navigation";
 
-export default function TalkShowPage() {
-  return (
-    <PublicPageShell hero={PAGE_HEROES.talkShow}>
-      <TalkShow />
-    </PublicPageShell>
-  );
+/** Legacy talk-show page → media centre (Phase 5) */
+export default function TalkShowRedirectPage() {
+  redirect("/media-center");
 }

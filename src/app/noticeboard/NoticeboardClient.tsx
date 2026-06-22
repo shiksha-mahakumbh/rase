@@ -60,9 +60,9 @@ export default function NoticeboardClient({ initialNotices }: Props) {
 
   return (
     <div className="text-brand-navy">
-      <div className="mx-auto rounded-lg bg-white shadow-lg">
-        <div className="flex items-center justify-between border-b border-gray-200 p-4">
-          <h2 className="text-lg font-semibold">Notice Board</h2>
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50/80 px-4 py-4 md:px-6">
+          <h2 className="text-lg font-bold text-brand-navy">All notices</h2>
           <button
             type="button"
             onClick={refresh}
@@ -80,7 +80,7 @@ export default function NoticeboardClient({ initialNotices }: Props) {
           </div>
         )}
 
-        <div className="p-4">
+        <div className="p-4 md:p-6">
           <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Notice filters">
             {(
               [
@@ -133,7 +133,7 @@ export default function NoticeboardClient({ initialNotices }: Props) {
                 <li
                   key={notice.id}
                   id={notice.slug}
-                  className="scroll-mt-24 rounded-xl border border-slate-200 p-4 md:p-6"
+                  className="scroll-mt-24 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-brand-saffron/30 hover:shadow-sm md:p-6"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <h3 className="text-base font-bold text-brand-navy md:text-lg">{notice.title}</h3>

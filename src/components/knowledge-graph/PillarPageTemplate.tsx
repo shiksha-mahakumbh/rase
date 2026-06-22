@@ -13,12 +13,12 @@ export default function PillarPageTemplate({ slug }: { slug: PillarSlug }) {
   if (!entry) notFound();
 
   const clusters = getClustersForPillar(entry.id);
-  const links = getRelatedLinksForPillar(entry.id, 10);
+  const links = getRelatedLinksForPillar(entry.id, 4);
 
   return (
     <PublicPageShell
       hero={brandPageHero(entry.label, entry.tagline, "Education Pillar")}
-      relatedPath={entry.path}
+      showCta={false}
       containerClassName="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16"
     >
       <PillarJsonLd entry={entry} />
@@ -27,8 +27,8 @@ export default function PillarPageTemplate({ slug }: { slug: PillarSlug }) {
           Home
         </Link>
         <span className="mx-2">/</span>
-        <Link href="/education" className="hover:text-brand-saffron">
-          Education
+        <Link href="/conferences" className="hover:text-brand-saffron">
+          Conferences
         </Link>
         <span className="mx-2">/</span>
         <span className="font-medium text-brand-navy">{entry.label}</span>
@@ -56,7 +56,7 @@ export default function PillarPageTemplate({ slug }: { slug: PillarSlug }) {
       )}
 
       <div className="mt-10">
-        <InternalLinksBlock links={links} title="Explore programmes & pages" />
+        <InternalLinksBlock links={links.slice(0, 4)} title="Explore programmes & pages" />
       </div>
     </PublicPageShell>
   );

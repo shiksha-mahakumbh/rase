@@ -49,7 +49,7 @@ export const researchOutput: ResearchOutputItem[] = [
     title: "Viksit Bharat & Viksit India Journals",
     type: "Journal",
     description: "Publication platform for education and development research.",
-    href: "/journals",
+    href: "https://pub.dhe.org.in",
   },
   {
     title: "Bal Shodh Patrika",

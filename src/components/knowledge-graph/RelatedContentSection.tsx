@@ -1,4 +1,5 @@
 import { getInternalLinksForPath } from "@/lib/knowledge-graph/internal-link-engine";
+import { DEFAULT_RELATED_LINK_LIMIT } from "@/lib/knowledge-graph/site-cleanup";
 import InternalLinksBlock from "./InternalLinksBlock";
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
 export default function RelatedContentSection({
   path,
   title = "Related programmes & resources",
-  limit = 8,
+  limit = DEFAULT_RELATED_LINK_LIMIT,
   excludePaths = [],
   className = "mx-auto max-w-5xl px-4 py-8",
 }: Props) {

@@ -24,8 +24,6 @@ export const AUTHORITY_MAP: AuthorityEntry[] = [
   { path: "/press", tier: "supporting", pillarId: "media", weight: 65 },
   { path: "/publications", tier: "primary", pillarId: "publications", weight: 82 },
   { path: "/conferences", tier: "primary", pillarId: "conferences", weight: 82 },
-  { path: "/events", tier: "secondary", pillarId: "conferences", weight: 72 },
-  { path: "/summits", tier: "secondary", pillarId: "conferences", weight: 72 },
   { path: "/workshops", tier: "secondary", pillarId: "teacher-development", weight: 70 },
   { path: "/people", tier: "supporting", pillarId: "leadership", weight: 60 },
   { path: "/educational-leaders", tier: "supporting", pillarId: "leadership", weight: 60 },
