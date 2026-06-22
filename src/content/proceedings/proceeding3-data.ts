@@ -6,11 +6,7 @@ export const proceeding3Data = {
             {
               title: "Integration of Bhartiya Traditional and Modern Education System for sustainability",
               content: [
-                "Chapter 5 of our National Conference on Integration of Bhartiya Traditional and Modern Education System for sustainability is dedicated to the scholarly exploration and insightful revelations encapsulated in the numerous paper submissions. This crucial segment serves as a platform for intellectual exchange, fostering an environment where ideas converge to shape the contours of academic-driven entrepreneurship.",
-                "A total of 65 papers have been presented, representing a rich tapestry of perspectives and research endeavors. These submissions, spanning both online and offline modes, exemplify the diverse dimensions of academic contributions to the entrepreneurial landscape.",
-                "Categorizing these papers into three distinct themes – Skill & Startup, Entrepreneurship, and Best Practices & Innovations – provides a comprehensive lens to examine the multifaceted impact of academic-driven startups on our economy.",
-                "The papers offer a deep dive into the core areas, unraveling the symbiotic relationship between academia and entrepreneurship. Each category, with its unique focus, contributes to the overarching narrative of innovation, skill development, and the transformative role of startups in the economic paradigm.",
-                "As we traverse through the chapters of these intellectual contributions, we embark on a journey of discovery, exploring the nexus between academia and the vibrant entrepreneurial spirit that propels our nation towards progress and prosperity."
+                "Chapter 5 of the National Conference on Recent Advances in School Education at Shiksha Mahakumbh 1.0, NIT Jalandhar — presents scholarly papers on holistic education, Gurukul traditions, and NEP 2020 implementation. Seven representative papers are indexed online from Proceeding2.pdf; the SMK 1.0 conference presented 81 research papers across school education sections.",
               ]
             },
             {

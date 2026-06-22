@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import type { Menu } from "./navbar/types";
 import { getMenuIcon, NavChevronIcon } from "./navbar/NavMenuIcons";
@@ -11,7 +10,9 @@ import {
   POPULAR_LINKS,
   CTA_PATH,
   MEGA_MENU_INDEX,
+  flattenSubMenu,
 } from "@/constants/navigation";
+import NavBrandBlock from "@/components/layout/navbar/NavBrandBlock";
 import NavBarTools from "@/components/nav/NavBarTools";
 import { useCms } from "@/lib/cms/context";
 import { cmsMenuToNav } from "@/lib/cms/nav-adapter";
@@ -55,27 +56,58 @@ const NavLink: React.FC<NavLinkProps> = ({
 
 function DesktopDropdown({
   item,
-  idx,
   isMega,
   isOpen,
   onClose,
 }: {
   item: Menu;
-  idx: number;
   isMega: boolean;
   isOpen: boolean;
   onClose: () => void;
 }) {
-  if (!isOpen || !item.subMenu) return null;
+  const groups = item.subMenuGroups;
+  const flatItems = flattenSubMenu(item);
+  if (!isOpen || (!flatItems?.length && !groups?.length)) return null;
 
   return (
     <div
       className={`absolute left-0 z-30 mt-2 overflow-hidden rounded-2xl border border-gray-100 bg-white/95 opacity-100 shadow-2xl backdrop-blur-xl transition-opacity duration-200 ${
-        isMega ? "w-[min(90vw,520px)] p-4" : "w-56 py-2"
+        isMega && groups?.length
+          ? "w-[min(92vw,640px)] p-4"
+          : isMega
+            ? "w-[min(90vw,520px)] p-4"
+            : "w-56 py-2"
       }`}
       role="menu"
     >
-      {isMega ? (
+      {isMega && groups?.length ? (
+        <div className="grid gap-4 sm:grid-cols-3">
+          {groups.map((group, groupIdx) => (
+            <div key={group.label ?? `about-group-${groupIdx}`}>
+              {group.label ? (
+                <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                  {group.label}
+                </p>
+              ) : (
+                <div className="mb-2 h-0 sm:h-5" aria-hidden />
+              )}
+              <ul className="space-y-0.5">
+                {group.items.map((subItem) => (
+                  <li key={subItem.path}>
+                    <NavLink
+                      href={subItem.path}
+                      onClick={onClose}
+                      className="block rounded-lg px-3 py-2 text-sm text-gray-700 transition hover:bg-brand-blue/10 hover:text-brand-blue"
+                    >
+                      {subItem.title}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ) : isMega ? (
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
@@ -98,8 +130,8 @@ function DesktopDropdown({
               Overview
             </p>
             <ul className="space-y-0.5">
-              {item.subMenu.slice(0, 2).map((subItem, subIdx) => (
-                <li key={subIdx}>
+              {flatItems?.slice(0, 2).map((subItem) => (
+                <li key={subItem.path}>
                   <NavLink
                     href={subItem.path}
                     onClick={onClose}
@@ -113,11 +145,11 @@ function DesktopDropdown({
           </div>
           <div>
             <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-              विभाग
+              More
             </p>
             <ul className="grid gap-0.5">
-              {item.subMenu.slice(2).map((subItem, subIdx) => (
-                <li key={subIdx}>
+              {flatItems?.slice(2).map((subItem) => (
+                <li key={subItem.path}>
                   <NavLink
                     href={subItem.path}
                     onClick={onClose}
@@ -132,8 +164,8 @@ function DesktopDropdown({
         </div>
       ) : (
         <ul>
-          {item.subMenu.map((subItem, subIdx) => (
-            <li key={subIdx}>
+          {flatItems?.map((subItem) => (
+            <li key={subItem.path}>
               <NavLink
                 href={subItem.path}
                 onClick={onClose}
@@ -233,49 +265,18 @@ const NavBar: React.FC = () => {
           scrolled ? "py-2" : "py-3"
         }`}
       >
-        <Link
-          href="/"
-          className="group flex min-w-0 shrink items-center gap-2 sm:gap-3"
-          aria-label="Shiksha Mahakumbh Abhiyan Home"
-        >
-          <div
-            className={`relative overflow-hidden rounded-xl border-2 border-brand-saffron/30 bg-white shadow-sm transition-all duration-300 group-hover:border-brand-saffron/60 group-hover:shadow-md ${
-              scrolled ? "h-10 w-10" : "h-11 w-11"
-            }`}
-          >
-            <Image
-              src="/branding/shiksha-mahakumbh-brand-hero.png"
-              alt="Shiksha Mahakumbh"
-              width={44}
-              height={44}
-              className="h-full w-full object-cover object-left-top"
-              priority
-            />
-          </div>
-          <div className="hidden sm:block">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-blue">
-              Department of Holistic Education
-            </p>
-            <p
-              className={`font-extrabold leading-tight transition-all ${
-                scrolled ? "text-base" : "text-lg"
-              }`}
-            >
-              <span className="text-brand-blue">Shiksha </span>
-              <span className="text-brand-saffron">Mahakumbh</span>
-            </p>
-          </div>
-        </Link>
+        <NavBrandBlock compact={scrolled} />
 
         <nav
           className="hidden min-w-0 flex-1 flex-wrap items-center justify-end gap-x-0.5 gap-y-1 lg:flex xl:gap-x-1.5"
           aria-label="Main navigation"
         >
           {menus.map((item, idx) => {
-            const active = isActive(item.path, item.subMenu);
+            const subItems = flattenSubMenu(item);
+            const active = isActive(item.path, subItems);
             const icon = getMenuIcon(item.title);
-            const isCta = item.path === CTA_PATH && !item.subMenu;
-            const isMega = idx === MEGA_MENU_INDEX && !!item.subMenu;
+            const isCta = item.path === CTA_PATH && !subItems?.length;
+            const isMega = idx === MEGA_MENU_INDEX && (!!subItems?.length || !!item.subMenuGroups?.length);
 
             if (isCta) {
               return (
@@ -290,7 +291,7 @@ const NavBar: React.FC = () => {
               );
             }
 
-            if (item.subMenu) {
+            if (subItems?.length) {
               return (
                 <div key={idx} className="relative">
                   <button
@@ -314,7 +315,6 @@ const NavBar: React.FC = () => {
                   </button>
                   <DesktopDropdown
                     item={item}
-                    idx={idx}
                     isMega={isMega}
                     isOpen={openSubMenuIndex === idx}
                     onClose={closeDropdown}
@@ -408,7 +408,7 @@ const NavBar: React.FC = () => {
             <ul className="flex flex-col p-4 font-medium">
               {menus.map((item, idx) => (
                 <li key={idx} className="border-b border-gray-50 last:border-0">
-                  {item.subMenu ? (
+                  {flattenSubMenu(item) ? (
                     <details className="group py-2">
                       <summary className="flex cursor-pointer list-none items-center justify-between py-2 text-brand-navy [&::-webkit-details-marker]:hidden">
                         <span className="flex items-center gap-2 font-semibold">
@@ -417,19 +417,46 @@ const NavBar: React.FC = () => {
                         </span>
                         <NavChevronIcon className="h-4 w-4 transition group-open:rotate-180" />
                       </summary>
-                      <ul className="mb-2 space-y-1 border-l-2 border-brand-saffron/30 pl-4">
-                        {item.subMenu.map((subItem, subIdx) => (
-                          <li key={subIdx}>
-                            <NavLink
-                              href={subItem.path}
-                              onClick={closeMobile}
-                              className="block rounded-lg py-2 text-sm text-gray-600 hover:text-brand-blue"
-                            >
-                              {subItem.title}
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
+                      {item.subMenuGroups?.length ? (
+                        <div className="mb-2 space-y-3 border-l-2 border-brand-saffron/30 pl-4">
+                          {item.subMenuGroups.map((group, groupIdx) => (
+                            <div key={group.label ?? `about-group-${groupIdx}`}>
+                              {group.label ? (
+                                <p className="py-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                  {group.label}
+                                </p>
+                              ) : null}
+                              <ul className="space-y-1">
+                                {group.items.map((subItem) => (
+                                  <li key={subItem.path}>
+                                    <NavLink
+                                      href={subItem.path}
+                                      onClick={closeMobile}
+                                      className="block rounded-lg py-2 text-sm text-gray-600 hover:text-brand-blue"
+                                    >
+                                      {subItem.title}
+                                    </NavLink>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <ul className="mb-2 space-y-1 border-l-2 border-brand-saffron/30 pl-4">
+                          {flattenSubMenu(item)?.map((subItem) => (
+                            <li key={subItem.path}>
+                              <NavLink
+                                href={subItem.path}
+                                onClick={closeMobile}
+                                className="block rounded-lg py-2 text-sm text-gray-600 hover:text-brand-blue"
+                              >
+                                {subItem.title}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </details>
                   ) : item.path === CTA_PATH ? (
                     <NavLink

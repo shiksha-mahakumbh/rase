@@ -1,4 +1,12 @@
 import { SITE_NAME_HINDI } from "@/config/site";
+import {
+  EDITION_LEGACY_PATHS,
+  SMK_1_0_PATH,
+  SMK_2_0_PATH,
+  SMK_3_0_PATH,
+  SMK_4_0_PATH,
+  SMK_5_0_PATH,
+} from "@/data/editions/paths";
 
 /** Display title for an edition e.g. शिक्षा महाकुंभ 2.0 */
 export function editionTitle(edition: string) {
@@ -27,6 +35,10 @@ export type PastEditionRecord = {
   galleryUrl?: string;
   campaignPdf?: string;
   imageSrc?: string;
+  /** Top stats for hub timeline cards */
+  featuredStats?: readonly { label: string; value: string }[];
+  /** Online proceedings reader path when a volume exists */
+  proceedingHref?: string;
   year: string;
 };
 
@@ -44,10 +56,17 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     coreEssence: "A strong beginning in innovation within school education",
     impact:
       "Initiated national dialogue on foundational reforms, introduced community-driven school models, and generated a best practices compendium on K–12 innovations.",
-    href: "/past_event/sm23",
+    href: SMK_1_0_PATH,
     galleryUrl:
       "https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq",
     campaignPdf: "/RASE_2023_1ST_EDITION_Campaign.pdf",
+    imageSrc: "/2023M/k3.jpeg",
+    proceedingHref: "/proceeding2",
+    featuredStats: [
+      { label: "Research papers", value: "81" },
+      { label: "Footfall", value: "5,000+" },
+      { label: "States & UTs", value: "14" },
+    ],
     year: "2023",
   },
   {
@@ -62,10 +81,17 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     coreEssence: "From Education to Startups, Startups to Economy",
     impact:
       "Sparked nationwide collaboration between academia and entrepreneurship, resulting in MoUs, startup incubation, and industry-institution integration plans.",
-    href: "/past_event/sk23",
+    href: SMK_2_0_PATH,
     galleryUrl:
       "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
     campaignPdf: "/RASE_2023_2ND_EDITION_Campaign.pdf",
+    imageSrc: "/2023K/k1.jpg",
+    proceedingHref: "/proceeding1",
+    featuredStats: [
+      { label: "Proceedings papers", value: "65" },
+      { label: "Footfall", value: "5,000+" },
+      { label: "Participants", value: "2,000+" },
+    ],
     year: "2023",
   },
   {
@@ -81,10 +107,17 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     coreEssence: "From Education to Enterprise, Enterprise to Regional Development",
     impact:
       "Focused on peace-building and economic empowerment through education in conflict-prone zones; initiated local skilling programs and startup mentorship cells.",
-    href: "/past_event/sk24",
+    href: SMK_3_0_PATH,
     galleryUrl:
       "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
     campaignPdf: "/RASE_2024_3RD_EDITION_Campaign.pdf",
+    imageSrc: "/sk24printmedia/1.jpg",
+    proceedingHref: "/proceeding3",
+    featuredStats: [
+      { label: "Research papers", value: "59" },
+      { label: "Participation", value: "1,800+" },
+      { label: "Schools", value: "156" },
+    ],
     year: "2024",
   },
   {
@@ -100,10 +133,16 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     coreEssence: "Indian Education as a Global Solution",
     impact:
       "Developed a national vision document for Bhartiya as a global education hub, rooted in NEP 2020 and Bhartiya knowledge systems.",
-    href: "/past_event/sm24",
+    href: SMK_4_0_PATH,
     galleryUrl:
       "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
     campaignPdf: "/RASE_2024_4TH_EDITION_Campaign.pdf",
+    imageSrc: "/sm24printmedia/1.jpg",
+    featuredStats: [
+      { label: "Research papers", value: "91" },
+      { label: "Attendees", value: "2,400+" },
+      { label: "Conclaves", value: "21" },
+    ],
     year: "2024",
   },
   {
@@ -119,9 +158,15 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     coreEssence: "The Journey of Education from Classroom to Society",
     impact:
       "Advanced the national dialogue on linking classroom learning with societal wellbeing and health-oriented education outcomes.",
-    href: "/past_event/sm25",
+    href: SMK_5_0_PATH,
     galleryUrl:
       "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
+    imageSrc: "/sm25printmedia/1.jpg",
+    featuredStats: [
+      { label: "Research papers", value: "284" },
+      { label: "Olympiad students", value: "10,400" },
+      { label: "Conclaves", value: "10" },
+    ],
     year: "2025",
   },
 ];
@@ -130,8 +175,11 @@ export const PAST_EDITION_BY_ID = Object.fromEntries(
   PAST_EDITIONS.map((e) => [e.id, e])
 ) as Record<string, PastEditionRecord>;
 
+const EDITION_HREF_ALIASES: Record<string, string> = EDITION_LEGACY_PATHS;
+
 export function getEditionByHref(href: string): PastEditionRecord | undefined {
-  return PAST_EDITIONS.find((e) => e.href === href);
+  const canonical = EDITION_HREF_ALIASES[href] ?? href;
+  return PAST_EDITIONS.find((e) => e.href === canonical);
 }
 
 export type EditionPageHero = {
@@ -209,4 +257,9 @@ export const PAST_EDITIONS_SEO_KEYWORDS = [
   "National Education Event",
   "School Education Conference",
   "Higher Education Summit",
+  "NEP 2020 conference India",
+  "NIT Jalandhar education summit",
+  "NIT Srinagar Jammu Kashmir",
+  "Kurukshetra University education",
+  "NIPER Mohali health education",
 ];

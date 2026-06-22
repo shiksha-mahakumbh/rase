@@ -15,7 +15,7 @@ const insights = [
     title: "Research Proceedings & Souvenir",
     date: "2025",
     author: "SMK Proceedings",
-    href: "/proceedings",
+    href: "/publications/souvenir-abstracts-mtc",
     tag: "Research",
     accent: "from-brand-saffron/25 to-brand-saffron/5",
     tagBg: "bg-brand-saffron",

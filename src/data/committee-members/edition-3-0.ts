@@ -13,7 +13,7 @@ export const COMMITTEE_EDITION_3_0: CommitteeEditionData = {
   dates: "29–30 June 2024",
   theme: "Role of Academic-driven Startups in Developing Economy of J&K",
   year: "2024",
-  eventHref: "/past_event/sk24",
+  eventHref: "/past_event/shiksha-mahakumbh-3.0",
   sections: [
     {
       title: "Chief Patron",

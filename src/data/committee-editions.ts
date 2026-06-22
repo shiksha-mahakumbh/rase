@@ -29,7 +29,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     edition: "5.0",
     description:
       "Classroom to Society — linking education with health and societal wellbeing at NIPER SAS Nagar.",
-    link: "/past_event/sm25",
+    link: "/past_event/shiksha-mahakumbh-5.0",
     committeeLink: committeePathForEdition("5.0"),
     onCommitteeSelect: "Shiksha Mahakumbh 5.0 Committee",
   },
@@ -39,7 +39,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     edition: "4.0",
     description:
       "Indian Education System for Global Development — leadership conclaves at Kurukshetra University.",
-    link: "/past_event/sm24",
+    link: "/past_event/shiksha-mahakumbh-4.0",
     committeeLink: committeePathForEdition("4.0"),
     onCommitteeSelect: "Shiksha Mahakumbh 4.0 Committee",
   },
@@ -49,7 +49,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     edition: "3.0",
     description:
       "Academic-driven startups and J&K economic development at NIT Srinagar.",
-    link: "/past_event/sk24",
+    link: "/past_event/shiksha-mahakumbh-3.0",
     committeeLink: committeePathForEdition("3.0"),
     onCommitteeSelect: "Shiksha Mahakumbh 3.0 Committee",
   },
@@ -59,7 +59,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     edition: "2.0",
     description:
       "Role of academic-driven startups in the economy — NIT Kurukshetra edition.",
-    link: "/past_event/sk23",
+    link: "/past_event/shiksha-mahakumbh-2.0",
     committeeLink: committeePathForEdition("2.0"),
     onCommitteeSelect: "Shiksha Mahakumbh 2.0 Committee",
   },
@@ -69,7 +69,7 @@ export const COMMITTEE_EDITIONS: CommitteeEdition[] = [
     edition: "1.0",
     description:
       "The inaugural edition setting the foundation for the Mahakumbh series at NIT Jalandhar.",
-    link: "/past_event/sm23",
+    link: "/past_event/shiksha-mahakumbh-1.0",
     committeeLink: committeePathForEdition("1.0"),
     onCommitteeSelect: "Shiksha Mahakumbh 1.0 Committee",
   },

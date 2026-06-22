@@ -1,56 +1,15 @@
 import { createPageMetadata } from "@/lib/seo/metadata";
-import { SITE_URL } from "@/config/site";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
+import { MEDIA_CENTER_SEO_KEYWORDS, MEDIA_CENTER_PAGE_HERO } from "@/data/media-center-hub";
 
 export const metadata = createPageMetadata({
-  title: "Media Centre — Press, Archives & Coverage",
-  description:
-    "Shiksha Mahakumbh media centre: press releases, digital and print archives, photo and video galleries, and national coverage.",
+  title: "Media Centre — Press, Archives & Global Coverage | Shiksha Mahakumbh",
+  description: MEDIA_CENTER_PAGE_HERO.subtitle,
   path: CANONICAL_ROUTES.mediaCenter,
-  keywords: [
-    "Shiksha Mahakumbh media",
-    "education press India",
-    "Mahakumbh digital media archive",
-    "Indian education conference coverage",
-    "international education delegates media",
-  ],
+  keywords: [...MEDIA_CENTER_SEO_KEYWORDS],
+  locale: "en_IN",
 });
 
-const breadcrumb = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Media Centre",
-      item: `${SITE_URL}${CANONICAL_ROUTES.mediaCenter}`,
-    },
-  ],
-};
-
-const collection = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  name: "Shiksha Mahakumbh Media Centre",
-  description:
-    "Media coverage, press releases, digital and print archives of Shiksha Mahakumbh Abhiyan.",
-  url: `${SITE_URL}${CANONICAL_ROUTES.mediaCenter}`,
-};
-
 export default function MediaCenterLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collection) }}
-      />
-      {children}
-    </>
-  );
+  return children;
 }

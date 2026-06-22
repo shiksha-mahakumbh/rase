@@ -42,4 +42,14 @@ export const MEDIA_ARCHIVE_CANONICAL: Record<
     year: "2.0",
     type: "print",
   },
+  "/shikshamahakumbh2025digitalmedia": {
+    edition: "shiksha-mahakumbh",
+    year: "5.0",
+    type: "digital",
+  },
+  "/printmediashikshamahakumbh2025": {
+    edition: "shiksha-mahakumbh",
+    year: "5.0",
+    type: "print",
+  },
 };

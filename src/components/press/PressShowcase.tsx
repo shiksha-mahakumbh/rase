@@ -1,80 +1,37 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
-import { PRESS_PAGE_HERO, PRESS_STATS } from "@/data/press-hub";
-import type { CmsArticleCard } from "@/lib/cms/types";
-import proceeding1 from "/public/2024M/press2.jpg";
-import proceeding2 from "/public/2024M/press1.jpg";
-import proceeding3 from "/public/2024M/res/res9.jpg";
-import proceeding4 from "/public/2024M/press4.jpg";
-import proceeding5 from "/public/2024M/press5.jpg";
-import proceeding6 from "/public/2024M/Press7.jpg";
+import {
+  PRESS_PAGE_HERO,
+  PRESS_QUICK_LINKS,
+  PRESS_STATS,
+  filterPressCatalog,
+  getFeaturedPressRelease,
+  type PressLocaleFilter,
+  type PressReleaseCard,
+} from "@/data/press-hub";
 
-const FALLBACK_CARDS = [
-  {
-    title: "Shiksha Mahakumbh 2024 begins at Kurukshetra University",
-    description:
-      "Human behaviour has indispensable role in Indian education. Entrepreneurship cells must be established in Higher Education.",
-    image: proceeding6,
-    readLink: "/press/education-summit-coverage",
-  },
-  {
-    title: "राष्ट्रीय शिक्षा नीति से राष्ट्रीय भावना को मिला सम्मानः प्रोफेसर सोमनाथ सचदेवा",
-    description:
-      "कुवि में डिपार्टमेंट ऑफ होलिस्टिक एजुकेशन तथा केयू के संयुक्त तत्वावधान में दो दिवसीय शिक्षा महाकुंभ का सफल समारोप।",
-    image: proceeding5,
-    readLink: "/press/national-coverage",
-  },
-  {
-    title: '"हवन रश्म" के साथ शिक्षा महाकुंभ 2.0 का शुरू हुआ काउंटडाउन',
-    description:
-      'शिक्षा महाकुंभ 2.0 की तैयारियों के अंतर्गत UIET, कुरुक्षेत्र विश्वविद्यालय में "हवन रश्म" का आयोजन।',
-    image: proceeding4,
-    readLink: "/press/residential-camp-hindi",
-  },
-  {
-    title: "शिक्षा महाकुंभ-2024 (द्वितीय संस्करण)",
-    description: "आवासीय अभ्यास वर्ग – सफलता की ओर एक और कदम",
-    image: proceeding3,
-    readLink: "/press/residential-camp-success",
-  },
-  {
-    title: "कुरुक्षेत्र हरियाणा में आयोजित होगा द्वितीय शिक्षा महाकुंभ 2024।",
-    description:
-      "आगामी 16 तथा 17 दिसंबर 2024 को कुरुक्षेत्र विश्वविद्यालय में द्वितीय शिक्षा महाकुंभ का आयोजन।",
-    image: proceeding1,
-    readLink: "/press/shiksha-mahakumbh-4-0",
-  },
-  {
-    title: "Baton Ceremony",
-    description:
-      "A Grand Start to Shiksha Mahakumbh 2.0: Baton Ceremony Successfully Concluded Kurukshetra, November 20, 2024",
-    image: proceeding2,
-    readLink: "/press/baton-ceremony-smk-4",
-  },
+const TABS: { id: PressLocaleFilter; label: string }[] = [
+  { id: "all", label: "All releases" },
+  { id: "en", label: "English" },
+  { id: "hi", label: "हिंदी" },
 ];
 
 type Props = {
-  articles?: CmsArticleCard[];
+  catalog: PressReleaseCard[];
 };
 
-export default function PressShowcase({ articles = [] }: Props) {
-  const cards =
-    articles.length > 0
-      ? articles.map((article) => ({
-          title: article.title,
-          description: article.excerpt ?? "",
-          image: article.heroImage ?? "/2024M/Press7.jpg",
-          readLink: article.href,
-        }))
-      : FALLBACK_CARDS.map((data) => ({
-          title: data.title,
-          description: data.description,
-          image: data.image,
-          readLink: data.readLink,
-        }));
+export default function PressShowcase({ catalog }: Props) {
+  const [filter, setFilter] = useState<PressLocaleFilter>("all");
+  const featured = useMemo(() => getFeaturedPressRelease(catalog), [catalog]);
+  const filtered = useMemo(() => filterPressCatalog(catalog, filter), [catalog, filter]);
+  const gridItems = useMemo(
+    () => filtered.filter((c) => c.slug !== featured?.slug),
+    [filtered, featured]
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
@@ -86,6 +43,51 @@ export default function PressShowcase({ articles = [] }: Props) {
         stats={PRESS_STATS}
       />
 
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {PRESS_QUICK_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
+          >
+            <span aria-hidden>{link.icon}</span>
+            {link.label}
+          </Link>
+        ))}
+      </div>
+
+      <div
+        className="mt-8 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        role="tablist"
+        aria-label="Press language filter"
+      >
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            aria-selected={filter === tab.id}
+            onClick={() => setFilter(tab.id)}
+            className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition min-h-[44px] ${
+              filter === tab.id
+                ? "bg-brand-navy text-white shadow-sm"
+                : "bg-white text-brand-navy ring-1 ring-slate-200 hover:ring-brand-saffron/50"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {featured && (filter === "all" || featured.locale === filter) && (
+        <section className="mt-10" aria-labelledby="featured-press">
+          <h2 id="featured-press" className="text-lg font-bold text-brand-navy md:text-xl">
+            Featured release
+          </h2>
+          <FeaturedPressCard release={featured} />
+        </section>
+      )}
+
       <section className="mt-10" aria-labelledby="press-releases-grid">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -93,7 +95,8 @@ export default function PressShowcase({ articles = [] }: Props) {
               Latest press notes
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Official releases from Shiksha Mahakumbh national editions.
+              {filtered.length} official release{filtered.length === 1 ? "" : "s"} — curated, no
+              duplicates.
             </p>
           </div>
           <Link
@@ -104,40 +107,103 @@ export default function PressShowcase({ articles = [] }: Props) {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {cards.map((data) => (
-            <article
-              key={data.readLink}
-              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-saffron/40 hover:shadow-lg"
-            >
-              <div className="h-1.5 bg-gradient-to-r from-brand-navy to-brand-saffron/80" aria-hidden />
-              <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
-                <Image
-                  alt=""
-                  src={data.image}
-                  fill
-                  className="object-cover transition group-hover:scale-[1.02]"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h3 className="line-clamp-3 text-base font-bold text-brand-navy group-hover:text-brand-blue">
-                  {data.title}
-                </h3>
-                <p className="mt-2 line-clamp-4 flex-1 text-sm leading-relaxed text-slate-600">
-                  {data.description}
-                </p>
-                <Link
-                  href={data.readLink}
-                  className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-navy-light"
-                >
-                  Read release
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
+        {gridItems.length === 0 ? (
+          <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-600">
+            No releases in this language filter.
+          </p>
+        ) : (
+          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {gridItems.map((release) => (
+              <li key={release.id}>
+                <PressReleaseCardItem release={release} />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </div>
+  );
+}
+
+function FeaturedPressCard({ release }: { release: PressReleaseCard }) {
+  return (
+    <article className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+      <div className="grid md:grid-cols-2">
+        <div className="relative aspect-video md:aspect-auto md:min-h-[260px]">
+          <Image
+            src={release.heroImage}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+          />
+          <div className={`absolute inset-0 bg-gradient-to-t ${release.accent} opacity-40`} />
+        </div>
+        <div className="flex flex-col p-5 md:p-8">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-brand-saffron/15 px-2.5 py-0.5 text-[10px] font-bold uppercase text-brand-saffron-dark">
+              {release.locale === "hi" ? "हिंदी" : "English"}
+            </span>
+            {release.edition && (
+              <span className="rounded-full bg-brand-navy/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-brand-navy">
+                Edition {release.edition}
+              </span>
+            )}
+          </div>
+          <h3 className="mt-3 text-xl font-bold text-brand-navy md:text-2xl">{release.title}</h3>
+          <p className="mt-3 line-clamp-4 flex-1 text-sm leading-relaxed text-slate-600">
+            {release.excerpt}
+          </p>
+          <Link
+            href={release.href}
+            className="mt-5 inline-flex min-h-[44px] w-fit items-center rounded-xl bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-navy-light"
+          >
+            Read full release
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function PressReleaseCardItem({ release }: { release: PressReleaseCard }) {
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-saffron/40 hover:shadow-lg">
+      <div className={`h-1.5 bg-gradient-to-r ${release.accent}`} aria-hidden />
+      <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
+        <Image
+          alt=""
+          src={release.heroImage}
+          fill
+          className="object-cover transition group-hover:scale-[1.02]"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+      </div>
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex flex-wrap gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-wide text-brand-saffron-dark">
+            {release.locale === "hi" ? "हिंदी" : "English"}
+          </span>
+          {release.edition && (
+            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
+              SMK {release.edition}
+            </span>
+          )}
+        </div>
+        <h3 className="mt-2 line-clamp-3 text-base font-bold text-brand-navy group-hover:text-brand-blue">
+          {release.title}
+        </h3>
+        <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600">
+          {release.excerpt}
+        </p>
+        <Link
+          href={release.href}
+          className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-navy-light"
+        >
+          Read release
+        </Link>
+      </div>
+    </article>
   );
 }

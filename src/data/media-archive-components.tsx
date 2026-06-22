@@ -16,6 +16,8 @@ const LOADERS: Record<MediaArchiveKey, () => Promise<{ default: ComponentType }>
     import("@/components/media/archive/ShikshaKumbh2024DigitalMedia"),
   "shiksha-mahakumbh/4.0/digital": () =>
     import("@/components/media/archive/ShikshaMahaKumbh2024DigitalMedia"),
+  "shiksha-mahakumbh/5.0/digital": () =>
+    import("@/components/media/archive/ShikshaMahaKumbh2025DigitalMedia"),
   "shiksha-mahakumbh/1.0/print": () =>
     import("@/components/media/archive/PrintMediaShikshaMahaKumbh2023"),
   "shiksha-mahakumbh/2.0/print": () =>
@@ -24,6 +26,8 @@ const LOADERS: Record<MediaArchiveKey, () => Promise<{ default: ComponentType }>
     import("@/components/media/archive/PrintMediaShikshaKumbh2024"),
   "shiksha-mahakumbh/4.0/print": () =>
     import("@/components/media/archive/PrintMediaShikshaMahaKumbh2024"),
+  "shiksha-mahakumbh/5.0/print": () =>
+    import("@/components/media/archive/PrintMediaShikshaMahaKumbh2025"),
 };
 
 export function getMediaArchiveComponent(key: MediaArchiveKey) {

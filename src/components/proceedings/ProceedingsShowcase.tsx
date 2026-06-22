@@ -85,7 +85,10 @@ export default function ProceedingsShowcase() {
                   </div>
                   <div className="flex flex-wrap gap-x-2">
                     <dt className="font-semibold text-brand-navy">Papers</dt>
-                    <dd>{volume.paperCount} listed online</dd>
+                    <dd>
+                      {volume.paperCount} listed online
+                      {volume.paperCountNote ? ` · ${volume.paperCountNote}` : ""}
+                    </dd>
                   </div>
                 </dl>
                 <div className="mt-5 flex flex-col gap-2">

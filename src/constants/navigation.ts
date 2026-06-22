@@ -1,4 +1,4 @@
-import type { Menu } from "@/components/layout/navbar/types";
+import type { Menu, MenuGroup } from "@/components/layout/navbar/types";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
@@ -12,12 +12,47 @@ export const POPULAR_LINKS = [
   { path: ROUTES.contact, title: "Contact" },
 ] as const;
 
+/** Flatten grouped or flat submenus for active-state checks and mobile lists. */
+export function flattenSubMenu(item: Menu): Menu[] | undefined {
+  if (item.subMenuGroups?.length) {
+    return item.subMenuGroups.flatMap((group) => group.items);
+  }
+  return item.subMenu;
+}
+
+/** About mega-menu — Overview, programme links (unlabeled), विभाग */
+export const ABOUT_NAV_GROUPS: MenuGroup[] = [
+  {
+    label: "Overview",
+    items: [
+      { path: ROUTES.introduction, title: "Introduction" },
+      { path: "/past-events", title: "Past Editions" },
+      { path: "/abhiyaninphotoframe", title: "Photo Frame" },
+    ],
+  },
+  {
+    items: [
+      { path: ROUTES.committees, title: "Committees" },
+      { path: ROUTES.speakers, title: "Speakers" },
+      { path: ROUTES.downloads, title: "Brochure" },
+      { path: ROUTES.bestWishes, title: "Best Wishes" },
+    ],
+  },
+  {
+    label: "विभाग",
+    items: [
+      { path: ROUTES.academicCouncil, title: "शैक्षिक विभाग" },
+      { path: "/departments/vitt", title: "वित्त विभाग" },
+      { path: "/departments/prachar", title: "प्रचार विभाग" },
+      { path: "/departments/sampark", title: "संपर्क विभाग" },
+      { path: "/departments/prabandhan", title: "प्रबंधन विभाग" },
+    ],
+  },
+];
+
 /** Top-level participate links — also merged into CMS header menus when missing. */
 export const PARTICIPATE_NAV_ITEMS: Menu[] = [
-  { path: ROUTES.downloads, title: "Brochures" },
-  { path: ROUTES.speakers, title: "Speakers" },
   { path: ROUTES.donation, title: "Donation" },
-  { path: ROUTES.bestWishes, title: "Best Wishes" },
 ];
 
 export const NAV_MENUS: Menu[] = [
@@ -26,34 +61,25 @@ export const NAV_MENUS: Menu[] = [
   {
     path: ROUTES.home,
     title: "About",
-    subMenu: [
-      { path: ROUTES.introduction, title: "Introduction" },
-      { path: "/past-events", title: "Past Editions" },
-      { path: "/abhiyaninphotoframe", title: "Photo Frames" },
-      { path: ROUTES.academicCouncil, title: "शैक्षिक विभाग" },
-      { path: "/departments/vitt", title: "वित्त विभाग" },
-      { path: "/departments/prachar", title: "प्रचार विभाग" },
-      { path: "/departments/sampark", title: "संपर्क विभाग" },
-      { path: "/departments/prabandhan", title: "प्रबंधन विभाग" },
-    ],
+    subMenuGroups: ABOUT_NAV_GROUPS,
+    subMenu: flattenSubMenu({ path: ROUTES.home, title: "About", subMenuGroups: ABOUT_NAV_GROUPS }),
   },
   {
     path: ROUTES.home,
     title: "Research",
     subMenu: [
-  { path: "https://pub.dhe.org.in", title: "Journal" },
+      { path: "https://pub.dhe.org.in", title: "Journal" },
       { path: CMT_SUBMISSION_URL, title: "Multi Track Conference" },
       { path: "/proceedings", title: "Proceedings" },
       { path: "/publications", title: "Publications" },
       { path: "/books", title: "Books" },
-      { path: "/2024M/Souvenir Abstracts_MTC.pdf", title: "Souvenir" },
+      { path: "/publications/souvenir-abstracts-mtc", title: "Souvenir" },
     ],
   },
   {
     path: ROUTES.home,
     title: "Events",
     subMenu: [
-      { path: "/past-events", title: "Past Editions" },
       { path: ROUTES.upcomingEvents, title: "शिक्षा महाकुंभ 6.0" },
     ],
   },
@@ -67,7 +93,6 @@ export const NAV_MENUS: Menu[] = [
     ],
   },
   ...PARTICIPATE_NAV_ITEMS,
-  { path: "/committees", title: "Committee" },
   { path: "/contact-us", title: "Contact" },
 ];
 
