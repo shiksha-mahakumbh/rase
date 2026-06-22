@@ -9,6 +9,7 @@ import { LEGACY_PUBLICATION_ROUTES } from "@/lib/knowledge-graph/publication-cat
 import { DHE_JOURNALS_URL } from "@/lib/knowledge-graph/site-cleanup";
 import { CONTENT_REGISTRY, getCategoryLabel } from "@/lib/content/registry";
 import { PROCEEDINGS_CATALOG } from "@/data/proceedings-hub";
+import { SOUVENIR_ABSTRACTS_PAGE_PATH, SOUVENIR_CATALOG } from "@/data/souvenir-abstracts-hub";
 
 export default function PublicationsShowcase() {
   return (
@@ -86,12 +87,86 @@ export default function PublicationsShowcase() {
         </p>
       </section>
 
+      <section className="mt-10" aria-labelledby="souvenir-booklets">
+        <h2 id="souvenir-booklets" className="text-lg font-bold text-brand-navy md:text-xl">
+          Souvenir abstract booklets
+        </h2>
+        <p className="mt-2 max-w-3xl text-sm text-slate-600">
+          Multi Track Conference abstract compendiums from Shiksha Mahakumbh 4.0 and 5.0 — preview
+          covers and download full PDF souvenirs.
+        </p>
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          {SOUVENIR_CATALOG.map((entry) => {
+            const pdfFilename = entry.pdfHref.substring(entry.pdfHref.lastIndexOf("/") + 1);
+            return (
+              <article
+                key={entry.id}
+                className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <div className={`h-1.5 bg-gradient-to-r ${entry.accent}`} aria-hidden />
+                <div className="relative aspect-[3/4] bg-gradient-to-br from-slate-50 to-brand-surface-warm/60 p-3 sm:aspect-[16/10]">
+                  <Image
+                    src={entry.coverSrc}
+                    alt={entry.coverAlt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-contain p-1"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col p-4">
+                  <div className="flex flex-wrap gap-2">
+                    <span className="rounded-full bg-brand-navy/10 px-2 py-0.5 text-[10px] font-bold uppercase text-brand-navy">
+                      Edition {entry.edition}
+                    </span>
+                    <span className="text-[10px] font-semibold uppercase text-slate-500">
+                      {entry.year}
+                    </span>
+                  </div>
+                  <h3 className="mt-2 line-clamp-2 text-sm font-bold text-brand-navy">{entry.theme}</h3>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {entry.venue} · {entry.dates}
+                    {entry.paperCountNote ? ` · ${entry.paperCountNote}` : ""}
+                  </p>
+                  <div className="mt-auto flex flex-wrap gap-2 pt-4">
+                    <Link
+                      href={`${SOUVENIR_ABSTRACTS_PAGE_PATH}#smk-${entry.edition}`}
+                      className="rounded-lg bg-brand-navy px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-navy-light"
+                    >
+                      View booklet
+                    </Link>
+                    <a
+                      href={entry.pdfHref}
+                      download={pdfFilename}
+                      className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy hover:border-brand-saffron/40"
+                    >
+                      PDF
+                    </a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        <p className="mt-4">
+          <Link
+            href={SOUVENIR_ABSTRACTS_PAGE_PATH}
+            className="text-sm font-semibold text-brand-blue hover:text-brand-saffron"
+          >
+            View all souvenir abstracts →
+          </Link>
+        </p>
+      </section>
+
       <section className="mt-10" aria-labelledby="pub-routes">
         <h2 id="pub-routes" className="text-lg font-bold text-brand-navy md:text-xl">
           Books &amp; journals
         </h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {LEGACY_PUBLICATION_ROUTES.filter((r) => !r.href.startsWith("/proceeding")).map((r) => (
+          {LEGACY_PUBLICATION_ROUTES.filter(
+            (r) =>
+              !r.href.startsWith("/proceeding") &&
+              r.href !== "/publications/souvenir-abstracts-mtc"
+          ).map((r) => (
             <li key={r.href}>
               <Link
                 href={r.href}

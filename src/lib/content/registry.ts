@@ -27,10 +27,11 @@ export const CONTENT_REGISTRY: ContentItem[] = [
   {
     slug: "souvenir-abstracts-mtc",
     title: "Souvenir Abstracts — MTC",
-    excerpt: "Compiled Multi Track Conference abstract compendium — open PDF download.",
+    excerpt:
+      "MTC abstract booklets for SMK 4.0 (Kurukshetra University, Dec 2024) and SMK 5.0 (NIPER Mohali, Oct–Nov 2025) — preview and download PDFs.",
     category: "research",
-    tags: ["souvenir", "MTC", "abstracts"],
-    publishedAt: "2024-11-01",
+    tags: ["souvenir", "MTC", "abstracts", "4.0", "5.0"],
+    publishedAt: "2025-11-02",
     href: "/publications/souvenir-abstracts-mtc",
     featured: true,
   },

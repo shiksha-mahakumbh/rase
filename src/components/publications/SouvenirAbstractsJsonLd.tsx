@@ -1,16 +1,16 @@
 import JsonLd from "@/components/seo/JsonLd";
 import {
-  SOUVENIR_ABSTRACTS_CANONICAL_URL,
+  SOUVENIR_ABSTRACTS_PAGE_PATH,
   SOUVENIR_CATALOG,
-  SOUVENIR_PAGE_HERO,
+  SOUVENIR_PAGE_SEO,
 } from "@/data/souvenir-abstracts-hub";
 import { SITE_URL } from "@/config/site";
 import { buildBreadcrumbSchema, buildCollectionPageSchema } from "@/lib/seo/schema";
 
 export default function SouvenirAbstractsJsonLd() {
   const collection = buildCollectionPageSchema({
-    name: SOUVENIR_PAGE_HERO.title,
-    description: SOUVENIR_PAGE_HERO.subtitle,
+    name: SOUVENIR_PAGE_SEO.title,
+    description: SOUVENIR_PAGE_SEO.description,
     path: "/publications/souvenir-abstracts-mtc",
   });
 
@@ -43,7 +43,7 @@ export default function SouvenirAbstractsJsonLd() {
     "@type": "DigitalDocument",
     name: entry.label,
     description: entry.theme,
-    url: SOUVENIR_ABSTRACTS_CANONICAL_URL,
+    url: `${SITE_URL}${SOUVENIR_ABSTRACTS_PAGE_PATH}#smk-${entry.edition}`,
     encodingFormat: "application/pdf",
     contentUrl: `${SITE_URL}${entry.pdfHref}`,
     inLanguage: ["en-IN", "hi-IN"],

@@ -70,6 +70,17 @@ export const SOUVENIR_PAGE_HERO = {
     "Compiled research abstracts from the Shiksha Mahakumbh Multi Track Conference — preview PDFs, download souvenir booklets, and explore abstracts from national and international delegates.",
 } as const;
 
+export const SOUVENIR_PAGE_SEO = {
+  title: "Souvenir Abstracts — MTC Editions 4.0 & 5.0",
+  description:
+    "Preview and download Multi Track Conference abstract souvenir booklets from Shiksha Mahakumbh 4.0 at Kurukshetra University (2024) and 5.0 at NIPER Mohali (2025) — open PDF access for delegates and researchers.",
+} as const;
+
+export const SOUVENIR_OG_IMAGES = SOUVENIR_CATALOG.map((entry) => ({
+  url: `${SITE_URL}${entry.coverSrc}`,
+  alt: entry.coverAlt,
+}));
+
 export const SOUVENIR_STATS = [
   { label: "Editions", value: "4.0 & 5.0", hint: "MTC abstract booklets" },
   { label: "Format", value: "PDF", hint: "Print-ready souvenir volumes" },

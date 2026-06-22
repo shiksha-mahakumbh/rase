@@ -24,13 +24,13 @@ function SouvenirEditionCard({ entry }: { entry: SouvenirEditionEntry }) {
       className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
     >
       <div className={`h-1.5 bg-gradient-to-r ${entry.accent}`} aria-hidden />
-      <div className="relative aspect-[3/4] w-full bg-slate-100 sm:aspect-[16/10]">
+      <div className="relative aspect-[3/4] w-full bg-gradient-to-br from-slate-50 to-brand-surface-warm/60 p-3 sm:aspect-[16/10]">
         <Image
           src={entry.coverSrc}
           alt={entry.coverAlt}
           fill
           sizes="(max-width: 640px) 100vw, 50vw"
-          className="object-cover"
+          className="object-contain p-1"
         />
       </div>
       <div className="flex flex-1 flex-col p-5">
