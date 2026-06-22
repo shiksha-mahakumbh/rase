@@ -4,19 +4,18 @@ import SouvenirAbstractsJsonLd from "@/components/publications/SouvenirAbstracts
 import { createPageMetadata } from "@/lib/seo/metadata";
 import {
   SOUVENIR_ABSTRACTS_PAGE_PATH,
-  SOUVENIR_CATALOG,
-  SOUVENIR_PAGE_HERO,
+  SOUVENIR_OG_IMAGES,
+  SOUVENIR_PAGE_SEO,
   SOUVENIR_SEO_KEYWORDS,
 } from "@/data/souvenir-abstracts-hub";
-import { SITE_URL } from "@/config/site";
 
 export const metadata = createPageMetadata({
-  title: "Souvenir Abstracts — Multi Track Conference | Shiksha Mahakumbh",
-  description: SOUVENIR_PAGE_HERO.subtitle,
+  title: SOUVENIR_PAGE_SEO.title,
+  description: SOUVENIR_PAGE_SEO.description,
   path: SOUVENIR_ABSTRACTS_PAGE_PATH,
   keywords: [...SOUVENIR_SEO_KEYWORDS],
   locale: "en_IN",
-  ogImageUrl: `${SITE_URL}/souvenir-mtc/smk-4.0-cover.jpg`,
+  ogImages: SOUVENIR_OG_IMAGES,
 });
 
 const BREADCRUMBS = [
