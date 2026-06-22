@@ -156,3 +156,15 @@ export function createNoIndexMetadata(opts: {
     alternates: { canonical: `${SITE_URL}${opts.path}` },
   };
 }
+
+/** Redirect-only shells — keep out of index but pass link equity (Phase 6) */
+export function createRedirectShellMetadata(opts: {
+  title: string;
+  path: string;
+}): Metadata {
+  return {
+    title: `${opts.title} | ${SITE_NAME}`,
+    robots: { index: false, follow: true },
+    alternates: { canonical: `${SITE_URL}${opts.path}` },
+  };
+}

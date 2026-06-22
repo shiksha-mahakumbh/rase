@@ -28,7 +28,7 @@ export default function CmsEventView({ event }: { event: CmsLoadedEvent }) {
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "Events", path: "/events" },
+          { name: "Conferences", path: "/conferences" },
           { name: event.title, path: `/events/${event.slug}` },
         ]}
       />
@@ -42,7 +42,7 @@ export default function CmsEventView({ event }: { event: CmsLoadedEvent }) {
           ),
           imageSrc: event.bannerUrl ?? undefined,
         }}
-        relatedPath="/events"
+        relatedPath="/conferences"
         showCta={false}
       >
         <article className="mx-auto max-w-3xl">

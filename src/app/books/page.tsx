@@ -1,17 +1,24 @@
+import BooksJsonLd from "@/components/books/BooksJsonLd";
+import BooksShowcase from "@/components/books/BooksShowcase";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import Books from "@/components/content/Books";
-import { brandPageHero } from "@/lib/page-heroes";
+
+const BREADCRUMBS = [
+  { name: "Home", path: "/" },
+  { name: "Publications", path: "/publications" },
+  { name: "Books", path: "/books" },
+];
 
 export default function BooksPage() {
   return (
     <PublicPageShell
-      hero={brandPageHero(
-        "Books",
-        "Published works from Shiksha Mahakumbh programmes and partners.",
-        "Publications"
-      )}
+      showHero={false}
+      showCta={false}
+      breadcrumbs={BREADCRUMBS}
+      relatedPath="/books"
+      skipContainer
     >
-      <Books />
+      <BooksJsonLd />
+      <BooksShowcase />
     </PublicPageShell>
   );
 }

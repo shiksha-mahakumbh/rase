@@ -5,7 +5,6 @@ import DownloadsJsonLd from "@/components/downloads/DownloadsJsonLd";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
-import { brandPageHero } from "@/lib/page-heroes";
 
 export const revalidate = 300;
 
@@ -47,14 +46,11 @@ export default async function DownloadsPage() {
 
   return (
     <PublicPageShell
-      hero={brandPageHero(
-        "Brochures & Downloads",
-        "Official edition brochures (1.0–6.0), reports, guidelines, and resources — free for national and international delegates.",
-        "Resources · Global Access"
-      )}
+      showHero={false}
       showCta={false}
       breadcrumbs={BREADCRUMBS}
-      containerClassName="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14"
+      relatedPath="/downloads"
+      skipContainer
     >
       <DownloadsJsonLd />
       <DownloadsShowcase initialDownloads={downloads} />

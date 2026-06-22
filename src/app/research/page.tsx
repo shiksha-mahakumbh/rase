@@ -1,5 +1,5 @@
-﻿import { createPillarMetadata, createPillarPage } from "@/lib/knowledge-graph/create-pillar-page";
+﻿import { redirect } from "next/navigation";
 
-export const metadata = createPillarMetadata("research");
-
-export default createPillarPage("research");
+export default function ResearchRedirectPage() {
+  redirect("/proceedings");
+}

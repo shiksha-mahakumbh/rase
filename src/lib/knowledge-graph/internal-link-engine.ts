@@ -4,55 +4,63 @@ import {
   EDUCATION_PILLAR_ENTITIES,
   type EducationPillarId,
 } from "./entities/education-pillars";
-import { getEntitiesByPillar } from "./entity-map";
 import { PILLAR_BY_ID, PILLAR_REGISTRY, type PillarSlug } from "./pillar-registry";
 import { getRelatedPillars } from "./relationships";
-import { getClustersForPillar } from "./topic-clusters";
 import { getAuthorityForPath, getPillarAuthorityWeight } from "./authority-map";
+import {
+  DEFAULT_RELATED_LINK_LIMIT,
+  getCuratedLinksForPath,
+  getCuratedLinksForPillar,
+  isBlockedRelatedLink,
+  type InternalLinkSuggestion,
+} from "./site-cleanup";
 
-export type InternalLinkSuggestion = {
-  href: string;
-  label: string;
-  reason: string;
-  weight?: number;
-};
+export type { InternalLinkSuggestion };
 
 function sortByWeight(links: InternalLinkSuggestion[]): InternalLinkSuggestion[] {
   return [...links].sort((a, b) => (b.weight ?? 0) - (a.weight ?? 0));
 }
 
+function dedupeLinks(links: InternalLinkSuggestion[]): InternalLinkSuggestion[] {
+  const seen = new Set<string>();
+  return links.filter((link) => {
+    if (seen.has(link.href)) return false;
+    seen.add(link.href);
+    return true;
+  });
+}
+
+function filterLinks(links: InternalLinkSuggestion[]): InternalLinkSuggestion[] {
+  return links.filter((link) => !isBlockedRelatedLink(link.href));
+}
+
 /**
- * Links for a pillar landing page: clusters, mapped content, related pillars.
+ * Links for a pillar landing page — curated first, then filtered legacy suggestions.
  */
 export function getRelatedLinksForPillar(
   pillarId: EducationPillarId,
-  limit = 8
+  limit = DEFAULT_RELATED_LINK_LIMIT
 ): InternalLinkSuggestion[] {
+  const curated = getCuratedLinksForPillar(pillarId, limit);
+  if (curated?.length) return curated;
+
   const pillar = EDUCATION_PILLAR_ENTITIES.find((p) => p.id === pillarId);
-  const pillarMeta = PILLAR_BY_ID[pillarId];
   const links: InternalLinkSuggestion[] = [];
 
-  if (pillarMeta) {
-    links.push({
-      href: "/education",
-      label: "Education Ecosystem",
-      reason: "hub",
-      weight: 90,
-    });
-  }
-
-  const content = getContentForPillar(pillarId);
-  for (const entry of content) {
-    links.push({
+  const content = filterLinks(
+    getContentForPillar(pillarId).map((entry) => ({
       href: entry.path,
       label: entry.title,
       reason: `content:${entry.clusterId}`,
       weight: entry.priority ? 80 + entry.priority : 70,
-    });
-  }
+    }))
+  );
+
+  links.push(...content);
 
   if (pillar) {
     for (const path of pillar.routes) {
+      if (isBlockedRelatedLink(path)) continue;
       if (!links.some((l) => l.href === path)) {
         links.push({
           href: path,
@@ -67,7 +75,7 @@ export function getRelatedLinksForPillar(
   const related = getRelatedPillars(pillarId);
   for (const relId of related) {
     const rel = PILLAR_BY_ID[relId];
-    if (rel) {
+    if (rel && !isBlockedRelatedLink(rel.path)) {
       links.push({
         href: rel.path,
         label: rel.label,
@@ -77,7 +85,7 @@ export function getRelatedLinksForPillar(
     }
   }
 
-  return sortByWeight(links).slice(0, limit);
+  return sortByWeight(dedupeLinks(links)).slice(0, limit);
 }
 
 export function getCrossPillarLinks(
@@ -92,33 +100,28 @@ export function getCrossPillarLinks(
   );
 }
 
-/** Auto-inherit links for any mapped route */
+/** Curated internal links for public pages — max 4 by default */
 export function getInternalLinksForPath(
   path: string,
-  limit = 8
+  limit = DEFAULT_RELATED_LINK_LIMIT
 ): InternalLinkSuggestion[] {
-  const entry = getContentByPath(path);
-  if (!entry) {
-    const auth = getAuthorityForPath(path);
-    if (auth) return getRelatedLinksForPillar(auth.pillarId, limit);
-    return [];
-  }
+  const normalized = path.startsWith("/") ? path : `/${path}`;
 
-  const links = getRelatedLinksForPillar(entry.pillarId, limit);
-  const pillarPage = PILLAR_BY_ID[entry.pillarId];
-  if (pillarPage && !links.some((l) => l.href === pillarPage.path)) {
-    links.unshift({
-      href: pillarPage.path,
-      label: pillarPage.label,
-      reason: "pillar-landing",
-      weight: getPillarAuthorityWeight(entry.pillarId),
-    });
-  }
-  return sortByWeight(links).slice(0, limit);
+  const pathCurated = getCuratedLinksForPath(normalized, limit);
+  if (pathCurated?.length) return pathCurated;
+
+  const entry = getContentByPath(normalized);
+  const pillarId = entry?.pillarId ?? getAuthorityForPath(normalized)?.pillarId;
+  if (!pillarId) return [];
+
+  const pillarCurated = getCuratedLinksForPillar(pillarId, limit);
+  if (pillarCurated?.length) return pillarCurated;
+
+  return getRelatedLinksForPillar(pillarId, limit);
 }
 
 export function getEducationHubLinks(): InternalLinkSuggestion[] {
-  return PILLAR_REGISTRY.map((p) => ({
+  return PILLAR_REGISTRY.filter((p) => !isBlockedRelatedLink(p.path)).map((p) => ({
     href: p.path,
     label: p.label,
     reason: `pillar:${p.id}`,
@@ -129,12 +132,7 @@ export function getEducationHubLinks(): InternalLinkSuggestion[] {
 export function getClusterLinksForPillar(
   pillarId: EducationPillarId
 ): InternalLinkSuggestion[] {
-  return getClustersForPillar(pillarId).map((c) => ({
-    href: PILLAR_BY_ID[pillarId]?.path ?? "/education",
-    label: c.label,
-    reason: `cluster:${c.id}`,
-    weight: 50,
-  }));
+  return getCuratedLinksForPillar(pillarId, DEFAULT_RELATED_LINK_LIMIT) ?? [];
 }
 
 export function resolvePillarSlug(path: string): PillarSlug | undefined {
@@ -144,7 +142,7 @@ export function resolvePillarSlug(path: string): PillarSlug | undefined {
 
 /** For JSON-LD ItemList on hub pages */
 export function getPillarItemListItems(): { name: string; url: string }[] {
-  return PILLAR_REGISTRY.map((p) => ({
+  return PILLAR_REGISTRY.filter((p) => !isBlockedRelatedLink(p.path)).map((p) => ({
     name: p.label,
     url: `${SITE_URL}${p.path}`,
   }));

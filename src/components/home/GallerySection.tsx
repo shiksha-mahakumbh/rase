@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import SlideShow from "@/components/home/sections/SlideShow";
 import { SectionHeader } from "@/components/ui";
 import { useCms } from "@/lib/cms/context";
@@ -32,6 +33,20 @@ export default function GallerySection() {
         />
         <div className="rounded-2xl border border-white/10 bg-white/5 p-2 md:p-4">
           <SlideShow slides={slides} />
+        </div>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/gallery"
+            className="rounded-full bg-brand-saffron px-6 py-2.5 text-sm font-bold text-brand-navy shadow-sm transition hover:bg-brand-saffron-dark hover:text-white"
+          >
+            View Full Gallery
+          </Link>
+          <Link
+            href="/gallery?tab=videos"
+            className="rounded-full border border-white/25 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20"
+          >
+            Watch on YouTube
+          </Link>
         </div>
       </div>
     </section>

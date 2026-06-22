@@ -52,11 +52,11 @@ export default function MediaCenter() {
 
   return (
     <>
-      <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
+      <div>
         <BreadcrumbNav
           items={[
             { label: "Home", href: "/" },
-            { label: "Education", href: "/education" },
+            { label: "Conferences", href: "/conferences" },
             { label: "Media & Press" },
           ]}
           className="mb-8"

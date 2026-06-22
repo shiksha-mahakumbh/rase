@@ -2,14 +2,16 @@ import EducationHubPage from "@/components/knowledge-graph/EducationHubPage";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = createPageMetadata({
-  title: "Education Ecosystem — Shiksha Mahakumbh Abhiyan",
+  title: "Programmes & Resources — Shiksha Mahakumbh Abhiyan",
   description:
-    "Explore the national education ecosystem: school and higher education, research, innovation, policy, olympiads, awards, conferences, publications, and media.",
+    "Registration, national editions, workshops, publications, gallery, and media — practical entry points for Shiksha Mahakumbh Abhiyan.",
   path: "/education",
   keywords: [
-    "education ecosystem India",
-    "Shiksha Mahakumbh pillars",
-    "NEP 2020 programmes",
+    "Shiksha Mahakumbh programmes",
+    "registration SMK 6.0",
+    "past editions",
+    "workshops",
+    "publications",
   ],
 });
 

@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
   UPCOMING_EVENTS,
-  UPCOMING_EVENTS_HERO,
+  UPCOMING_EVENTS_PAGE_HERO,
   UPCOMING_EVENTS_STATS,
 } from "@/data/upcoming-events-hub";
 
@@ -13,44 +14,18 @@ export default function UpcomingEventsShowcase() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
-      {/* Banner */}
-      <section
-        aria-labelledby="upcoming-events-banner"
-        className="relative overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-8"
-      >
-        <div
-          className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-brand-saffron/20 blur-3xl"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -bottom-12 left-0 h-40 w-40 rounded-full bg-white/10 blur-3xl"
-          aria-hidden
-        />
-        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
-          {UPCOMING_EVENTS_HERO.eyebrow}
-        </p>
-        <h2 id="upcoming-events-banner" className="mt-2 text-xl font-bold md:text-3xl">
-          {UPCOMING_EVENTS_HERO.title}
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
-          Register for <strong className="text-brand-saffron">Shiksha Mahakumbh 6.0</strong> at NIT
-          Hamirpur (9–11 October 2026). Edition 7.0 at IIT Jammu — dates to be announced.
-        </p>
-        <dl className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {UPCOMING_EVENTS_STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm"
-            >
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-                {stat.label}
-              </dt>
-              <dd className="mt-1 text-lg font-bold text-brand-saffron md:text-xl">{stat.value}</dd>
-              <dd className="text-[11px] text-white/75">{stat.hint}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <HubGradientBanner
+        id="upcoming-events-banner"
+        eyebrow={UPCOMING_EVENTS_PAGE_HERO.eyebrow}
+        title={UPCOMING_EVENTS_PAGE_HERO.title}
+        subtitle={
+          <>
+            Register for <strong className="text-brand-saffron">Shiksha Mahakumbh 6.0</strong> at NIT
+            Hamirpur (9–11 October 2026). Edition 7.0 at IIT Jammu — dates to be announced.
+          </>
+        }
+        stats={UPCOMING_EVENTS_STATS}
+      />
 
       {/* Event cards */}
       <section className="mt-10" aria-labelledby="upcoming-events-grid">

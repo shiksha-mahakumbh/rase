@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ConferenceHubPage from "@/components/conferences/ConferenceHubPage";
+import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import { WORKSHOP_ARCHIVE, WORKSHOPS_HUB } from "@/lib/knowledge-graph/conference-catalog";
+import { WORKSHOPS_PAGE_HERO, WORKSHOPS_STATS } from "@/data/workshops-hub";
 import { buildBreadcrumbSchema, buildCollectionPageSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
@@ -38,26 +40,33 @@ export default function WorkshopsHubPage() {
       hub={WORKSHOPS_HUB}
       schemas={schemas}
       breadcrumbParent={{ label: "Conferences", href: "/conferences" }}
+      showHero={false}
     >
-      <p className="mt-6 text-slate-600">
-        Explore archived workshops from the Shiksha Mahakumbh Abhiyan — teacher development,
-        language skills, and innovation programmes.
-      </p>
+      <HubGradientBanner
+        id="workshops-banner"
+        eyebrow={WORKSHOPS_PAGE_HERO.eyebrow}
+        title={WORKSHOPS_PAGE_HERO.title}
+        subtitle={WORKSHOPS_PAGE_HERO.subtitle}
+        stats={WORKSHOPS_STATS}
+      />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {WORKSHOP_ARCHIVE.map((r) => (
           <Link
             key={r.path}
             href={r.path}
-            className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-brand-saffron/40 hover:shadow-md"
+            className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-saffron/40 hover:shadow-lg"
           >
-            <h2 className="font-bold text-brand-navy group-hover:text-brand-blue">{r.label}</h2>
-            {WORKSHOP_HINTS[r.path] && (
-              <p className="mt-2 text-sm text-slate-600">{WORKSHOP_HINTS[r.path]}</p>
-            )}
-            <span className="mt-3 inline-block text-sm font-semibold text-brand-saffron">
-              View archive →
-            </span>
+            <div className="h-1.5 bg-gradient-to-r from-violet-600 to-indigo-800" aria-hidden />
+            <div className="p-5">
+              <h3 className="font-bold text-brand-navy group-hover:text-brand-blue">{r.label}</h3>
+              {WORKSHOP_HINTS[r.path] && (
+                <p className="mt-2 text-sm text-slate-600">{WORKSHOP_HINTS[r.path]}</p>
+              )}
+              <span className="mt-3 inline-block text-sm font-semibold text-brand-saffron">
+                View archive →
+              </span>
+            </div>
           </Link>
         ))}
       </div>

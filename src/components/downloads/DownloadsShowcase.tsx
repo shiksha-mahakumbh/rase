@@ -4,9 +4,11 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import BrochureDownloadLink from "@/components/analytics/BrochureDownloadLink";
+import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
   COMMITTEE_BROCHURES_FOLDER_URL,
   DOWNLOADS_HUB_STATS,
+  DOWNLOADS_PAGE_HERO,
   EDITION_BROCHURES,
 } from "@/data/downloads-hub";
 import type { CmsDownload } from "@/lib/cms/types";
@@ -96,43 +98,14 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
   };
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <section
-        aria-labelledby="downloads-hub-banner"
-        className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-8"
-      >
-        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
-          Official Resources · National & International Delegates
-        </p>
-        <h2 id="downloads-hub-banner" className="mt-2 text-xl font-bold md:text-3xl">
-          Edition Brochures & Download Centre
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
-          Download official Shiksha Mahakumbh Abhiyan brochures for editions 1.0 through 6.0 —
-          programmes, conclaves, registration details, and global participation information in
-          print-ready PDF format.
-        </p>
-        <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-              Editions
-            </dt>
-            <dd className="mt-1 text-sm font-bold md:text-base">1.0 — 6.0 PDF Brochures</dd>
-          </div>
-          <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-              Latest
-            </dt>
-            <dd className="mt-1 text-sm font-bold md:text-base">Edition 6.0 · NIT Hamirpur 2026</dd>
-          </div>
-          <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-              Global Reach
-            </dt>
-            <dd className="mt-1 text-sm font-bold md:text-base">Free for all delegates</dd>
-          </div>
-        </dl>
-        <p className="mt-4">
+    <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <HubGradientBanner
+        id="downloads-hub-banner"
+        eyebrow={DOWNLOADS_PAGE_HERO.eyebrow}
+        title={DOWNLOADS_PAGE_HERO.title}
+        subtitle={DOWNLOADS_PAGE_HERO.subtitle}
+        stats={DOWNLOADS_HUB_STATS}
+        footer={
           <BrochureDownloadLink
             href={COMMITTEE_BROCHURES_FOLDER_URL}
             plan="downloads-all-brochures-folder"
@@ -140,23 +113,8 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
           >
             Open All Brochures on Google Drive
           </BrochureDownloadLink>
-        </p>
-      </section>
-
-      <dl className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {DOWNLOADS_HUB_STATS.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-xl border border-slate-200/80 bg-white px-3 py-4 text-center shadow-sm"
-          >
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 sm:text-xs">
-              {stat.label}
-            </dt>
-            <dd className="mt-1 text-2xl font-bold text-brand-navy">{stat.value}</dd>
-            <p className="mt-1 text-[10px] text-slate-500 sm:text-xs">{stat.hint}</p>
-          </div>
-        ))}
-      </dl>
+        }
+      />
 
       <section aria-labelledby="edition-brochures" className="mt-10">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

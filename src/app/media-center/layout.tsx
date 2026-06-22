@@ -11,6 +11,8 @@ export const metadata = createPageMetadata({
     "Shiksha Mahakumbh media",
     "education press India",
     "Mahakumbh digital media archive",
+    "Indian education conference coverage",
+    "international education delegates media",
   ],
 });
 
@@ -19,10 +21,9 @@ const breadcrumb = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Education", item: `${SITE_URL}/education` },
     {
       "@type": "ListItem",
-      position: 3,
+      position: 2,
       name: "Media Centre",
       item: `${SITE_URL}${CANONICAL_ROUTES.mediaCenter}`,
     },

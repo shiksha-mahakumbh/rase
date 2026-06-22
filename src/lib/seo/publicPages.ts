@@ -1,4 +1,5 @@
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { PROCEEDINGS_PAGE_HERO, getProceedingVolumeByPath } from "@/data/proceedings-hub";
 import { PRESS_CANONICAL_PATHS } from "@/constants/canonical-routes";
 import {
   createArticleMetadata,
@@ -13,40 +14,48 @@ import { committeePathFromSlug } from "@/lib/committee/edition-slugs";
 /** Central registry for static public routes — extend as layouts are added */
 export const PUBLIC_PAGE_META = {
   proceedings: createPublicationMetadata({
-    title: "Proceedings",
-    description: "Research proceedings from Shiksha Mahakumbh editions.",
+    title: PROCEEDINGS_PAGE_HERO.title,
+    description: PROCEEDINGS_PAGE_HERO.subtitle,
     path: "/proceedings",
     publicationType: "Proceedings",
   }),
   proceeding1: createPublicationMetadata({
-    title: "Proceedings Volume I",
-    description: "Shiksha Mahakumbh research proceedings — volume 1.",
+    title: "Proceedings Volume I — Shiksha Mahakumbh 2.0",
+    description: `${getProceedingVolumeByPath("/proceeding1")!.theme}. ${getProceedingVolumeByPath("/proceeding1")!.paperCount} papers — read online or download PDF.`,
     path: "/proceeding1",
     publicationType: "Proceedings",
   }),
   proceeding2: createPublicationMetadata({
-    title: "Proceedings Volume II",
-    description: "Shiksha Mahakumbh research proceedings — volume 2.",
+    title: "Proceedings Volume II — Shiksha Mahakumbh 3.0",
+    description: `${getProceedingVolumeByPath("/proceeding2")!.theme}. ${getProceedingVolumeByPath("/proceeding2")!.paperCount} papers — read online or download PDF.`,
     path: "/proceeding2",
     publicationType: "Proceedings",
   }),
   proceeding3: createPublicationMetadata({
-    title: "Proceedings Volume III",
-    description: "Shiksha Mahakumbh research proceedings — volume 3.",
+    title: "Proceedings Volume III — Bhartiya Traditional & Modern Education",
+    description: `${getProceedingVolumeByPath("/proceeding3")!.theme}. ${getProceedingVolumeByPath("/proceeding3")!.paperCount} papers — read online or download PDF.`,
     path: "/proceeding3",
     publicationType: "Proceedings",
   }),
   journals: createPublicationMetadata({
-    title: "Journals",
-    description: "Publications and journals affiliated with Shiksha Mahakumbh Abhiyan.",
+    title: "DHE Journal",
+    description:
+      "Official journal platform for Shiksha Mahakumbh and Department of Holistic Education research publications.",
     path: "/journals",
-    publicationType: "Journal",
   }),
   books: createPublicationMetadata({
-    title: "Books",
-    description: "Books and publications from the Shiksha Mahakumbh knowledge platform.",
+    title: "Books — Recent Advances in School Education & SMK Publications",
+    description:
+      "Published books from Shiksha Mahakumbh Abhiyan including Recent Advances in School Education — the RASE 2023 compendium from Shiksha Mahakumbh 1.0 at NIT Jalandhar. Request copies via the Department of Holistic Education.",
     path: "/books",
     publicationType: "Book",
+    keywords: [
+      "Recent Advances in School Education",
+      "Shiksha Mahakumbh books",
+      "RASE 2023 book",
+      "Shiksha Mahakumbh 1.0 publication",
+      "Department of Holistic Education books",
+    ],
   }),
   upcomingevent: createEventMetadata({
     title: "Upcoming Events — Shiksha Mahakumbh 6.0 & 7.0",
@@ -73,9 +82,19 @@ export const PUBLIC_PAGE_META = {
     path: "/committees",
   }),
   gallery: createPageMetadata({
-    title: "Photo Gallery",
-    description: "Photos from Shiksha Mahakumbh national education summits.",
+    title: "Photo & Video Gallery — Shiksha Mahakumbh 1.0 to 6.0",
+    description:
+      "Edition-wise photo albums and YouTube documentaries from Shiksha Mahakumbh Abhiyan — national education summits at NITs and universities across India. Browse Google Drive galleries and watch coverage on @ShikshaMahakumbh.",
     path: "/gallery",
+    keywords: [
+      "Shiksha Mahakumbh gallery",
+      "Shiksha Mahakumbh photos",
+      "Shiksha Mahakumbh videos",
+      "Indian education conference gallery",
+      "National education summit photos",
+      "Department of Holistic Education media",
+      "NEP 2020 education event",
+    ],
   }),
   media: createPageMetadata({
     title: "Media Centre — Press, Archives & Coverage",
@@ -140,9 +159,11 @@ export const PUBLIC_PAGE_META = {
     keywords: ["SMK notices", "announcements", "registration deadlines"],
   }),
   videos: createPageMetadata({
-    title: "Videos",
-    description: "Video gallery from Shiksha Mahakumbh Abhiyan national editions.",
-    path: "/videos",
+    title: "Video Gallery",
+    description:
+      "Shiksha Mahakumbh documentaries and conference coverage on the official YouTube channel @ShikshaMahakumbh.",
+    path: "/gallery",
+    keywords: ["Shiksha Mahakumbh YouTube", "education conference videos", "RASE documentaries"],
   }),
   keynotespeakers: createPageMetadata({
     title: "Keynote Speakers",

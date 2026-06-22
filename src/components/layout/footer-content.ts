@@ -49,22 +49,20 @@ export const departmentLinks: FooterLink[] = [
 ];
 
 export const educationLinks: FooterLink[] = [
-  { name: "Education Hub", href: "/education" },
-  { name: "Research", href: "/research" },
   { name: "Publications", href: "/publications" },
-  { name: "Initiatives", href: "/initiatives" },
-  { name: "Knowledge Hub", href: "/knowledge" },
-  { name: "Journals", href: "/journals" },
   { name: "Proceedings", href: "/proceedings" },
+  { name: "Books", href: "/books" },
+  { name: "Journals", href: "https://pub.dhe.org.in" },
+  { name: "Conferences", href: "/conferences" },
+  { name: "Past Editions", href: "/past-events" },
 ];
 
 export const programLinks: FooterLink[] = [
   { name: "शिक्षा महाकुंभ 6.0", href: "/registration" },
+  { name: "Upcoming Events", href: "/upcoming-events" },
   { name: "Conclave", href: "/conclave" },
   { name: "Workshops", href: "/workshops" },
-  { name: "Summits", href: "/summits" },
-  { name: "Olympiads", href: "/olympiad" },
-  { name: "Innovation", href: "/innovation" },
+  { name: "Conferences", href: "/conferences" },
   { name: "Gallery", href: "/gallery" },
   { name: "Best Wishes", href: "/best-wishes" },
 ];

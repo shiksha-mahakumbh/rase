@@ -1,88 +1,82 @@
 import Link from "next/link";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import JsonLd from "@/components/seo/JsonLd";
+import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
   buildBreadcrumbSchema,
   buildCollectionPageSchema,
   buildItemListSchema,
 } from "@/lib/seo/schema";
-import { PILLAR_REGISTRY } from "@/lib/knowledge-graph/pillar-registry";
-import { ENTITY_DIRECTORIES } from "@/lib/knowledge-graph/entity-directories";
-import { getPillarItemListItems } from "@/lib/knowledge-graph/internal-link-engine";
-import { brandPageHero } from "@/lib/page-heroes";
+import { EDUCATION_HUB_PROGRAMME_LINKS } from "@/lib/knowledge-graph/site-cleanup";
+import { EDUCATION_PAGE_HERO, EDUCATION_STATS } from "@/data/education-hub";
+import { SITE_URL } from "@/config/site";
 
 export default function EducationHubPage() {
   const collection = buildCollectionPageSchema({
-    name: "Shiksha Mahakumbh Education Ecosystem",
+    name: "Shiksha Mahakumbh Programmes",
     description:
-      "Multi-dimensional education pillars — school, higher, vocational, research, policy, olympiads, awards, conferences, publications, and media.",
+      "Registration, editions, workshops, publications, media, and academic programmes under Shiksha Mahakumbh Abhiyan.",
     path: "/education",
   });
 
   const itemList = buildItemListSchema({
-    name: "Education pillars",
-    items: getPillarItemListItems(),
+    name: "Programmes & resources",
+    items: EDUCATION_HUB_PROGRAMME_LINKS.map((link) => ({
+      name: link.label,
+      url: link.href.startsWith("http") ? link.href : `${SITE_URL}${link.href}`,
+    })),
   });
 
   const breadcrumbs = buildBreadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Education", path: "/education" },
+    { name: "Programmes", path: "/education" },
   ]);
 
   return (
     <PublicPageShell
-      hero={brandPageHero(
-        "Education at Shiksha Mahakumbh",
-        "A multi-dimensional education movement spanning school and higher education, skills, research, innovation, policy, olympiads, awards, conferences, publications, and media.",
-        "National Education Ecosystem"
-      )}
+      showHero={false}
+      showCta={false}
+      skipContainer
       relatedPath="/education"
-      containerClassName="mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-16"
+      breadcrumbs={[
+        { name: "Home", path: "/" },
+        { name: "Programmes", path: "/education" },
+      ]}
     >
       <JsonLd data={collection} />
       <JsonLd data={itemList} />
       <JsonLd data={breadcrumbs} />
 
-      <ul className="grid gap-4 sm:grid-cols-2">
-        {PILLAR_REGISTRY.map((pillar) => (
-          <li key={pillar.slug}>
-            <Link
-              href={pillar.path}
-              className="block h-full rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-brand-saffron/40 hover:shadow-md"
-            >
-              <h2 className="text-lg font-bold text-brand-navy">{pillar.label}</h2>
-              <p className="mt-2 text-sm text-slate-600">{pillar.tagline}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+        <HubGradientBanner
+          id="education-banner"
+          eyebrow={EDUCATION_PAGE_HERO.eyebrow}
+          title={EDUCATION_PAGE_HERO.title}
+          subtitle={EDUCATION_PAGE_HERO.subtitle}
+          stats={EDUCATION_STATS}
+        />
 
-      <section className="mt-12" aria-labelledby="entity-directories">
-        <h2 id="entity-directories" className="text-xl font-bold text-brand-navy">
-          National directories
-        </h2>
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-          {ENTITY_DIRECTORIES.map((d) => (
-            <li key={d.id}>
-              <Link
-                href={d.path}
-                className="text-sm font-medium text-brand-navy hover:text-brand-saffron hover:underline"
-              >
-                {d.label}
-              </Link>
-            </li>
-          ))}
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2">
+          {EDUCATION_HUB_PROGRAMME_LINKS.map((link) => {
+            const external = link.href.startsWith("http");
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="group block h-full rounded-2xl border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:border-brand-saffron/40 hover:shadow-md"
+                >
+                  <h3 className="text-lg font-bold text-brand-navy group-hover:text-brand-blue">
+                    {link.label}
+                    {external && <span className="ml-1 text-xs font-normal text-slate-400">↗</span>}
+                  </h3>
+                  <p className="mt-2 text-sm text-slate-600">{link.description}</p>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
-      </section>
-
-      <p className="mt-10 text-center">
-        <Link
-          href="/knowledge"
-          className="text-sm font-semibold text-brand-saffron hover:underline"
-        >
-          Knowledge Hub →
-        </Link>
-      </p>
+      </div>
     </PublicPageShell>
   );
 }

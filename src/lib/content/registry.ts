@@ -31,7 +31,7 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     category: "research",
     tags: ["journal", "publication"],
     publishedAt: "2024-01-01",
-    href: "/journals",
+    href: "https://pub.dhe.org.in",
   },
   {
     slug: "multi-track-conference",

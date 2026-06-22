@@ -48,8 +48,8 @@ export const PAGE_HEROES = {
   ),
   gallery: registryHero(
     "Media Centre",
-    "Photo Gallery",
-    "Moments from Shiksha Mahakumbh editions, workshops, and national programmes — अभियान की झलकियाँ"
+    "Photo & Video Gallery",
+    "Edition-wise albums and documentaries from Shiksha Mahakumbh Abhiyan — photos, films, and national coverage."
   ),
   videos: registryHero(
     "Media Centre",
