@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import type { ProceedingsVolumeEntry } from "@/data/proceedings-hub";
 
 export interface ProceedingPaper {
@@ -38,15 +39,6 @@ function formatContact(contact: string | string[]): string {
   return typeof contact === "string" ? contact : contact.join(", ");
 }
 
-function downloadPdf(href: string) {
-  const link = document.createElement("a");
-  link.href = href;
-  link.download = href.substring(href.lastIndexOf("/") + 1);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
 export default function ProceedingVolumeShowcase({ volume, data }: Props) {
   const [openSections, setOpenSections] = useState<Set<number>>(() => new Set([0]));
   const [expandedPapers, setExpandedPapers] = useState<Set<string>>(() => new Set());
@@ -76,6 +68,16 @@ export default function ProceedingVolumeShowcase({ volume, data }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <BreadcrumbNav
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Publications", href: "/publications" },
+          { label: "Proceedings", href: "/proceedings" },
+          { label: `Volume ${volume.volume}` },
+        ]}
+        className="mb-6"
+      />
+
       <section
         aria-labelledby="volume-banner"
         className="relative overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-8"
@@ -96,9 +98,9 @@ export default function ProceedingVolumeShowcase({ volume, data }: Props) {
               Volume {volume.volume}
               {volume.edition ? ` · Edition ${volume.edition}` : ""}
             </p>
-            <h2 id="volume-banner" className="mt-2 text-xl font-bold md:text-2xl">
+            <h1 id="volume-banner" className="mt-2 text-xl font-bold md:text-2xl">
               {volume.theme}
-            </h2>
+            </h1>
             <p className="mt-2 text-sm text-white/80">
               {volume.venue} · {volume.dates} · {volume.year}
             </p>
@@ -117,13 +119,13 @@ export default function ProceedingVolumeShowcase({ volume, data }: Props) {
               </div>
             </dl>
             <div className="mt-5 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => downloadPdf(volume.pdfHref)}
+              <a
+                href={volume.pdfHref}
+                download={volume.pdfHref.substring(volume.pdfHref.lastIndexOf("/") + 1)}
                 className="rounded-lg bg-brand-saffron px-4 py-2 text-sm font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white"
               >
                 Download PDF
-              </button>
+              </a>
               <Link
                 href="/proceedings"
                 className="rounded-lg border border-white/30 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"

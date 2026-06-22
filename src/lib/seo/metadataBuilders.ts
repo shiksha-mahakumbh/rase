@@ -134,6 +134,7 @@ export function createPublicationMetadata(opts: {
   publicationType?: "Proceedings" | "Journal" | "Book" | "Paper";
   isbn?: string;
   keywords?: string[];
+  image?: string;
 }): Metadata {
   return buildMetadata(
     {
@@ -141,6 +142,7 @@ export function createPublicationMetadata(opts: {
       description: opts.description,
       path: opts.path,
       keywords: opts.keywords,
+      image: opts.image,
     },
     opts.publicationType === "Book" ? "website" : "article"
   );
