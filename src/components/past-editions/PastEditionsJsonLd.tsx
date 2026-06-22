@@ -8,7 +8,7 @@ export default function PastEditionsJsonLd() {
     name: "Shiksha Mahakumbh Abhiyan — Past Editions",
     description:
       "Archive of completed Shiksha Mahakumbh national education conference editions from 1.0 to 5.0.",
-    url: `${SITE_URL}/pastevent`,
+    url: `${SITE_URL}/past-events`,
     organizer: {
       "@type": "Organization",
       name: "Department of Holistic Education",
@@ -36,7 +36,7 @@ export default function PastEditionsJsonLd() {
         "@type": "ListItem",
         position: 2,
         name: "Past Editions",
-        item: `${SITE_URL}/pastevent`,
+        item: `${SITE_URL}/past-events`,
       },
     ],
   };

@@ -2,6 +2,13 @@ export type Menu = {
   path: string;
   title: string;
   subMenu?: Menu[];
+  subMenuGroups?: MenuGroup[];
+};
+
+export type MenuGroup = {
+  /** Omit or leave empty to render links without a section heading */
+  label?: string;
+  items: Menu[];
 };
 
 export type AnnouncementBadge =

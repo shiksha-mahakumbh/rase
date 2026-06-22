@@ -1,6 +1,7 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import PressShowcase from "@/components/press/PressShowcase";
 import PressJsonLd from "@/components/press/PressJsonLd";
+import { buildPressCatalog } from "@/data/press-hub";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { loadCmsArticles } from "@/lib/cms/server";
 
@@ -11,7 +12,9 @@ const BREADCRUMBS = [
 ];
 
 export default async function PressHubPage() {
-  const articles = await loadCmsArticles();
+  const cmsArticles = await loadCmsArticles(undefined, 50);
+  const catalog = buildPressCatalog(cmsArticles);
+
   return (
     <PublicPageShell
       showHero={false}
@@ -20,8 +23,8 @@ export default async function PressHubPage() {
       skipContainer
       breadcrumbs={BREADCRUMBS}
     >
-      <PressJsonLd />
-      <PressShowcase articles={articles} />
+      <PressJsonLd catalog={catalog} />
+      <PressShowcase catalog={catalog} />
     </PublicPageShell>
   );
 }

@@ -17,7 +17,7 @@ export default function PastEventsPage() {
           </>
         ),
         subtitle:
-          "Five completed national editions — from NIT Jalandhar (1.0) to NIPER Mohali (5.0) — advancing school education, academic entrepreneurship, and global Indian education dialogue.",
+          "Five national editions across NITs and universities in 14+ states — from school education (1.0) to health-oriented higher education (5.0), with delegates, researchers, and institutions from across Bharat and abroad.",
         accent: "brand",
         imageSrc: "/branding/shiksha-mahakumbh-brand-hero.png",
       }}

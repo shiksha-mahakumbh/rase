@@ -13,7 +13,7 @@ export const COMMITTEE_EDITION_2_0: CommitteeEditionData = {
   dates: "20 December 2023",
   theme: "Role of Academic-driven Startups in Economy",
   year: "2023",
-  eventHref: "/past_event/sk23",
+  eventHref: "/past_event/shiksha-mahakumbh-2.0",
   sections: [
     {
       title: "National Advisory Committee",

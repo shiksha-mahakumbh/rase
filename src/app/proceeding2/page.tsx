@@ -3,7 +3,7 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import ProceedingVolumeShowcase from "@/components/proceedings/ProceedingVolumeShowcase";
 import ProceedingVolumeJsonLd from "@/components/proceedings/ProceedingVolumeJsonLd";
-import { proceeding2Data } from "@/content/proceedings/proceeding2-data";
+import { proceeding3Data } from "@/content/proceedings/proceeding3-data";
 import { getProceedingVolumeByPath } from "@/data/proceedings-hub";
 
 const volume = getProceedingVolumeByPath("/proceeding2")!;
@@ -21,7 +21,7 @@ export default function Proceeding2Page() {
       ]}
     >
       <ProceedingVolumeJsonLd volume={volume} />
-      <ProceedingVolumeShowcase volume={volume} data={proceeding2Data} />
+      <ProceedingVolumeShowcase volume={volume} data={proceeding3Data} />
     </PublicPageShell>
   );
 }

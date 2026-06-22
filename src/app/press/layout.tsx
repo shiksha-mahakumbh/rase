@@ -1,13 +1,13 @@
-import { createArticleMetadata } from "@/lib/seo/metadataBuilders";
+import { createPageMetadata } from "@/lib/seo/metadata";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
-import { PRESS_SEO_KEYWORDS } from "@/data/press-hub";
+import { PRESS_PAGE_HERO, PRESS_SEO_KEYWORDS } from "@/data/press-hub";
 
-export const metadata = createArticleMetadata({
-  title: "Press Releases — Shiksha Mahakumbh Abhiyan",
-  description:
-    "Official press releases and national coverage from Shiksha Mahakumbh Abhiyan — English and Hindi announcements for media, institutions, and global education stakeholders.",
+export const metadata = createPageMetadata({
+  title: "Press Releases — Shiksha Mahakumbh Abhiyan | National & Global Coverage",
+  description: PRESS_PAGE_HERO.subtitle,
   path: CANONICAL_ROUTES.press,
   keywords: [...PRESS_SEO_KEYWORDS],
+  locale: "en_IN",
 });
 
 export default function PressLayout({ children }: { children: React.ReactNode }) {

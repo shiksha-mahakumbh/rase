@@ -13,7 +13,7 @@ export const COMMITTEE_EDITION_1_0: CommitteeEditionData = {
   dates: "9–11 June 2023",
   theme: "Recent Advances in School Education",
   year: "2023",
-  eventHref: "/past_event/sm23",
+  eventHref: "/past_event/shiksha-mahakumbh-1.0",
   sections: [
     {
       title: "National Advisory Committee",

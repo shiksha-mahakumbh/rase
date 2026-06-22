@@ -13,7 +13,7 @@ export const COMMITTEE_EDITION_4_0: CommitteeEditionData = {
   dates: "16–17 December 2024",
   theme: "Indian Education System for Global Development",
   year: "2024",
-  eventHref: "/past_event/sm24",
+  eventHref: "/past_event/shiksha-mahakumbh-4.0",
   sections: [
     {
       title: "Conference Patron",

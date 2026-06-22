@@ -49,6 +49,18 @@ const ARCHIVE_PAGES = {
       "Print media coverage from Shiksha Mahakumbh Abhiyan edition 2.0 at NIT Kurukshetra.",
     path: "/media/shiksha-mahakumbh/2.0/print",
   },
+  shikshamahakumbh2025digitalmedia: {
+    title: "शिक्षा महाकुंभ 5.0 — Digital Media Archive",
+    description:
+      "Digital media coverage from Shiksha Mahakumbh Abhiyan edition 5.0 at NIPER Mohali — national portals, Ladakh UT, YouTube, and social media.",
+    path: "/media/shiksha-mahakumbh/5.0/digital",
+  },
+  printmediashikshamahakumbh2025: {
+    title: "शिक्षा महाकुंभ 5.0 — Print Media Archive",
+    description:
+      "85 print media clippings from Shiksha Mahakumbh Abhiyan edition 5.0 at NIPER Mohali.",
+    path: "/media/shiksha-mahakumbh/5.0/print",
+  },
 } as const;
 
 export type MediaArchiveSlug = keyof typeof ARCHIVE_PAGES;
@@ -63,6 +75,8 @@ export function mediaArchiveMeta(slug: MediaArchiveSlug) {
       "Shiksha Mahakumbh Abhiyan media",
       "education press India",
       "Mahakumbh digital archive",
+      "NIPER Mohali Shiksha Mahakumbh",
+      "SMK 5.0 print media",
     ],
   });
 }

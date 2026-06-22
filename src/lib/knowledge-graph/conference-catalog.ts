@@ -18,7 +18,9 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     year: "2025",
     label: "Shiksha Mahakumbh 5.0",
     routes: [
-      { path: "/past_event/sm25", label: "SMK 5.0 — NIPER Mohali" },
+      { path: "/past_event/shiksha-mahakumbh-5.0", label: "SMK 5.0 — NIPER Mohali" },
+      { path: "/media/shiksha-mahakumbh/5.0/digital", label: "Digital Media 5.0" },
+      { path: "/media/shiksha-mahakumbh/5.0/print", label: "Print Media 5.0" },
       { path: "/past-events", label: "Past Editions Archive" },
     ],
   },
@@ -26,8 +28,8 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     year: "2024",
     label: "Shiksha Mahakumbh 3.0 & 4.0",
     routes: [
-      { path: "/past_event/sm24", label: "SMK 4.0 — Kurukshetra University" },
-      { path: "/past_event/sk24", label: "SMK 3.0 — NIT Srinagar" },
+      { path: "/past_event/shiksha-mahakumbh-4.0", label: "SMK 4.0 — Kurukshetra University" },
+      { path: "/past_event/shiksha-mahakumbh-3.0", label: "SMK 3.0 — NIT Srinagar" },
       { path: "/media/shiksha-mahakumbh/4.0/digital", label: "Digital Media 4.0" },
       { path: "/proceeding1", label: "Proceedings 2024" },
     ],
@@ -36,8 +38,8 @@ export const CONFERENCE_YEAR_ARCHIVE: ConferenceYearEdition[] = [
     year: "2023",
     label: "Shiksha Mahakumbh 1.0 & 2.0",
     routes: [
-      { path: "/past_event/sm23", label: "SMK 1.0 — NIT Jalandhar" },
-      { path: "/past_event/sk23", label: "SMK 2.0 — NIT Kurukshetra" },
+      { path: "/past_event/shiksha-mahakumbh-1.0", label: "SMK 1.0 — NIT Jalandhar" },
+      { path: "/past_event/shiksha-mahakumbh-2.0", label: "SMK 2.0 — NIT Kurukshetra" },
       { path: "/media/shiksha-mahakumbh/1.0/digital", label: "Digital Media 1.0" },
     ],
   },
@@ -67,8 +69,8 @@ export const SUMMIT_ROUTES = [
 export const EVENT_HUB_ROUTES = [
   { path: "/upcoming-events", label: "Upcoming Events — 6.0 & 7.0" },
   { path: "/past-events", label: "Past Editions" },
-  { path: "/past_event/sk24", label: "SMK 3.0 — NIT Srinagar" },
-  { path: "/past_event/sk23", label: "SMK 2.0 — NIT Kurukshetra" },
+  { path: "/past_event/shiksha-mahakumbh-3.0", label: "SMK 3.0 — NIT Srinagar" },
+  { path: "/past_event/shiksha-mahakumbh-2.0", label: "SMK 2.0 — NIT Kurukshetra" },
 ] as const;
 
 export const EVENTS_HUB = {

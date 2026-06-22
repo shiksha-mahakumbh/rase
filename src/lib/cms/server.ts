@@ -1,4 +1,5 @@
 import type { ContentLocale } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 import { getPublicHomepage } from "@/server/services/homepage.service";
 import { getSeoForEntity } from "@/server/services/seo.service";
 import { listPublicNotices } from "@/server/services/notice.service";
@@ -104,40 +105,46 @@ function mapMenu(menu: {
 }
 
 export async function loadCmsHomepage(locale: ContentLocale = "en"): Promise<CmsHomepage | null> {
-  try {
-    const result = await getPublicHomepage(locale);
-    if (!result) return null;
-    return {
-      page: {
-        id: result.page.id,
-        title: result.page.title,
-        slug: result.page.slug,
-        excerpt: result.page.excerpt,
-        content: result.page.content,
-      },
-      sections: result.page.sections.map((s) => ({
-        sectionKey: s.sectionKey,
-        sectionType: s.sectionType,
-        title: s.title,
-        content: (s.content as Record<string, unknown>) ?? {},
-        sortOrder: s.sortOrder,
-        isVisible: s.isVisible,
-      })),
-      seo: result.seo
-        ? {
-            seoTitle: result.seo.seoTitle,
-            metaDescription: result.seo.metaDescription,
-            ogTitle: result.seo.ogTitle,
-            ogDescription: result.seo.ogDescription,
-            ogImageUrl: result.seo.ogImageUrl,
-            canonicalUrl: result.seo.canonicalUrl,
-            schemaJsonLd: result.seo.schemaJsonLd,
-          }
-        : null,
-    };
-  } catch {
-    return null;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const result = await getPublicHomepage(locale);
+        if (!result) return null;
+        return {
+          page: {
+            id: result.page.id,
+            title: result.page.title,
+            slug: result.page.slug,
+            excerpt: result.page.excerpt,
+            content: result.page.content,
+          },
+          sections: result.page.sections.map((s) => ({
+            sectionKey: s.sectionKey,
+            sectionType: s.sectionType,
+            title: s.title,
+            content: (s.content as Record<string, unknown>) ?? {},
+            sortOrder: s.sortOrder,
+            isVisible: s.isVisible,
+          })),
+          seo: result.seo
+            ? {
+                seoTitle: result.seo.seoTitle,
+                metaDescription: result.seo.metaDescription,
+                ogTitle: result.seo.ogTitle,
+                ogDescription: result.seo.ogDescription,
+                ogImageUrl: result.seo.ogImageUrl,
+                canonicalUrl: result.seo.canonicalUrl,
+                schemaJsonLd: result.seo.schemaJsonLd,
+              }
+            : null,
+        };
+      } catch {
+        return null;
+      }
+    },
+    ["cms-homepage", locale],
+    { revalidate: 3600, tags: [`cms-homepage-${locale}`] }
+  )();
 }
 
 export async function loadCmsNotices(
@@ -256,7 +263,7 @@ export async function loadCmsFeaturedFaqs(
   }
 }
 
-export async function loadCmsPageData(locale: ContentLocale = "en"): Promise<CmsPageData> {
+async function loadCmsPageDataUncached(locale: ContentLocale = "en"): Promise<CmsPageData> {
   const [
     homepage,
     notices,
@@ -289,22 +296,36 @@ export async function loadCmsPageData(locale: ContentLocale = "en"): Promise<Cms
   };
 }
 
+/** Cached shell data — avoids hundreds of duplicate Prisma calls during `next build`. */
+export async function loadCmsPageData(locale: ContentLocale = "en"): Promise<CmsPageData> {
+  return unstable_cache(() => loadCmsPageDataUncached(locale), ["cms-page-data", locale], {
+    revalidate: 3600,
+    tags: [`cms-page-data-${locale}`],
+  })();
+}
+
 export async function loadRouteSeo(routeKey: string, locale: ContentLocale = "en") {
-  try {
-    const seo = await getSeoForEntity("route", routeKey, locale);
-    if (!seo) return null;
-    return {
-      seoTitle: seo.seoTitle,
-      metaDescription: seo.metaDescription,
-      ogTitle: seo.ogTitle,
-      ogDescription: seo.ogDescription,
-      ogImageUrl: seo.ogImageUrl,
-      canonicalUrl: seo.canonicalUrl,
-      robots: seo.robots,
-    };
-  } catch {
-    return null;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const seo = await getSeoForEntity("route", routeKey, locale);
+        if (!seo) return null;
+        return {
+          seoTitle: seo.seoTitle,
+          metaDescription: seo.metaDescription,
+          ogTitle: seo.ogTitle,
+          ogDescription: seo.ogDescription,
+          ogImageUrl: seo.ogImageUrl,
+          canonicalUrl: seo.canonicalUrl,
+          robots: seo.robots,
+        };
+      } catch {
+        return null;
+      }
+    },
+    ["cms-route-seo", routeKey, locale],
+    { revalidate: 3600, tags: [`cms-route-seo-${routeKey}-${locale}`] }
+  )();
 }
 
 export async function loadDefaultOgImage(locale: ContentLocale = "en"): Promise<string | null> {

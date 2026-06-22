@@ -12,12 +12,12 @@ function cmsItemsToMenus(menu: CmsMenu): Menu[] {
   }));
 }
 
-/** Ensure Brochures, Speakers, Donation, Best Wishes exist as top-level nav items. */
+/** Ensure Donation exists as a top-level nav item when CMS menus omit it. */
 function mergeTopLevelParticipateItems(menus: Menu[]): Menu[] {
   const withoutParticipateDropdown = menus.filter((item) => item.title !== "Participate");
 
   const topLevelPaths = new Set(
-    withoutParticipateDropdown.filter((item) => !item.subMenu).map((item) => item.path)
+    withoutParticipateDropdown.filter((item) => !item.subMenu && !item.subMenuGroups).map((item) => item.path)
   );
 
   const missing = PARTICIPATE_NAV_ITEMS.filter((item) => !topLevelPaths.has(item.path));

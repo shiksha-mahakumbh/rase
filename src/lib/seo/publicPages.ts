@@ -26,14 +26,14 @@ export const PUBLIC_PAGE_META = {
     publicationType: "Proceedings",
   }),
   proceeding2: createPublicationMetadata({
-    title: "Proceedings Volume II — Shiksha Mahakumbh 3.0",
-    description: `${getProceedingVolumeByPath("/proceeding2")!.theme}. ${getProceedingVolumeByPath("/proceeding2")!.paperCount} papers — read online or download PDF.`,
+    title: "Proceedings Volume II — Shiksha Mahakumbh 1.0",
+    description: `${getProceedingVolumeByPath("/proceeding2")!.theme}. ${getProceedingVolumeByPath("/proceeding2")!.paperCount} papers indexed online — read or download Proceeding2.pdf.`,
     path: "/proceeding2",
     publicationType: "Proceedings",
   }),
   proceeding3: createPublicationMetadata({
-    title: "Proceedings Volume III — Bhartiya Traditional & Modern Education",
-    description: `${getProceedingVolumeByPath("/proceeding3")!.theme}. ${getProceedingVolumeByPath("/proceeding3")!.paperCount} papers — read online or download PDF.`,
+    title: "Proceedings Volume III — Shiksha Mahakumbh 3.0",
+    description: `${getProceedingVolumeByPath("/proceeding3")!.theme}. ${getProceedingVolumeByPath("/proceeding3")!.paperCount}+ papers indexed online — read or download Proceeding3.pdf.`,
     path: "/proceeding3",
     publicationType: "Proceedings",
   }),
@@ -66,7 +66,7 @@ export const PUBLIC_PAGE_META = {
   pastEvents: createEventMetadata({
     title: "Past Editions — शिक्षा महाकुंभ 1.0 to 5.0",
     description:
-      "Official archive of five completed Shiksha Mahakumbh Abhiyan editions: NIT Jalandhar, NIT Kurukshetra, NIT Srinagar, Kurukshetra University, and NIPER Mohali. Themes, venues, impact, and galleries.",
+      "Official archive of five completed Shiksha Mahakumbh Abhiyan national editions: NIT Jalandhar (1.0), NIT Kurukshetra (2.0), NIT Srinagar (3.0), Kurukshetra University (4.0), and NIPER Mohali (5.0). Themes, impact stats, proceedings, galleries, and campaign reports.",
     path: "/past-events",
     keywords: [
       "Shiksha Mahakumbh past editions",
@@ -74,6 +74,8 @@ export const PUBLIC_PAGE_META = {
       "Education Conclave India",
       "Department of Holistic Education",
       "National Education Event",
+      "NEP 2020 conference",
+      "Shiksha Mahakumbh proceedings",
     ],
   }),
   committeepage: createCommitteeMetadata({
@@ -175,40 +177,47 @@ export const PUBLIC_PAGE_META = {
     description: "Multi Track Conference via Microsoft CMT for Shiksha Mahakumbh.",
     path: "/paper",
   }),
-  pastEventSm24: createEventMetadata({
-    title: "शिक्षा महाकुंभ 4.0 — Kurukshetra University (2024)",
-    description:
-      "Shiksha Mahakumbh 4.0 at Kurukshetra University, 16–17 December 2024. Theme: Indian Education System for Global Development.",
-    path: "/past_event/sm24",
-    keywords: ["SMK 4.0", "Kurukshetra University", "Indian Education Conference"],
-  }),
-  pastEventSm23: createEventMetadata({
-    title: "शिक्षा महाकुंभ 1.0 — NIT Jalandhar (2023)",
-    description:
-      "Shiksha Mahakumbh 1.0 at NIT Jalandhar, 9–11 June 2023. Theme: Recent Advances in School Education.",
-    path: "/past_event/sm23",
-    keywords: ["SMK 1.0", "NIT Jalandhar", "School Education Conference"],
-  }),
-  pastEventSm25: createEventMetadata({
-    title: "शिक्षा महाकुंभ 5.0 — NIPER Mohali (2025)",
-    description:
-      "Shiksha Mahakumbh 5.0 at NIPER Mohali, 31 October – 2 November 2025. Theme: Classroom to Society — Building a Healthier World through Education.",
-    path: "/past_event/sm25",
-    keywords: ["SMK 5.0", "NIPER Mohali", "Higher Education Summit"],
-  }),
-  pastEventSk24: createEventMetadata({
-    title: "शिक्षा महाकुंभ 3.0 — NIT Srinagar (2024)",
-    description:
-      "Shiksha Mahakumbh 3.0 at NIT Srinagar, 29–30 June 2024. Theme: Academic-driven Startups in Developing Economy of J & K.",
-    path: "/past_event/sk24",
-    keywords: ["SMK 3.0", "NIT Srinagar", "Academic Innovation Summit"],
-  }),
-  pastEventSk23: createEventMetadata({
+  pastEventSmk20: createEventMetadata({
     title: "शिक्षा महाकुंभ 2.0 — NIT Kurukshetra (2023)",
     description:
-      "Shiksha Mahakumbh 2.0 at NIT Kurukshetra, 20 December 2023. Theme: Role of Academic-driven Startups in Economy.",
-    path: "/past_event/sk23",
-    keywords: ["SMK 2.0", "NIT Kurukshetra", "Research Conference India"],
+      "Shiksha Mahakumbh 2.0 (Shiksha Kumbh) at NIT Kurukshetra, 20 December 2023. Theme: Role of Academic-driven Startups in Economy. Proceedings Volume I — 65 papers.",
+    path: "/past_event/shiksha-mahakumbh-2.0",
+    keywords: ["SMK 2.0", "NIT Kurukshetra", "Academic startups", "Proceeding1"],
+  }),
+  pastEventSmk30: createEventMetadata({
+    title: "शिक्षा महाकुंभ 3.0 — NIT Srinagar (2024)",
+    description:
+      "Shiksha Mahakumbh 3.0 at NIT Srinagar, 29–30 June 2024. RASE 2024 — 59 research papers, 1,800+ participants, J&K startup economy. Proceedings Volume III — 61 papers.",
+    path: "/past_event/shiksha-mahakumbh-3.0",
+    keywords: ["SMK 3.0", "NIT Srinagar", "Jammu Kashmir", "Proceeding3"],
+  }),
+  pastEventSmk40: createEventMetadata({
+    title: "शिक्षा महाकुंभ 4.0 — Kurukshetra University (2024)",
+    description:
+      "Shiksha Mahakumbh 4.0 at Kurukshetra University, 16–17 December 2024. Theme: Indian Education System for Global Development. 91 research papers, 21 conclaves, 2,400+ attendees.",
+    path: "/past_event/shiksha-mahakumbh-4.0",
+    keywords: ["SMK 4.0", "Kurukshetra University", "Indian Education Conference", "global education"],
+  }),
+  pastEventSmk50: createEventMetadata({
+    title: "शिक्षा महाकुंभ 5.0 — NIPER Mohali (2025)",
+    description:
+      "Shiksha Mahakumbh 5.0 at NIPER Mohali, 31 October – 2 November 2025. Theme: Classroom to Society — Building a Healthier World through Education. 284 research papers, 10 conclaves.",
+    path: "/past_event/shiksha-mahakumbh-5.0",
+    keywords: ["SMK 5.0", "NIPER Mohali", "DHE Olympiad", "Higher Education Summit"],
+  }),
+  pastEventSmk10: createEventMetadata({
+    title: "शिक्षा महाकुंभ 1.0 — NIT Jalandhar (2023)",
+    description:
+      "Shiksha Mahakumbh 1.0 at NIT Jalandhar, 9–11 June 2023. Theme: Recent Advances in School Education. 81 research papers, 5,000+ footfall, NEP 2020 implementation conference. Proceedings Volume II.",
+    path: "/past_event/shiksha-mahakumbh-1.0",
+    keywords: [
+      "SMK 1.0",
+      "NIT Jalandhar",
+      "School Education Conference",
+      "NEP 2020",
+      "Proceeding2",
+      "Sarvhitkari Educational Society",
+    ],
   }),
   workshopTdp: createEventMetadata({
     title: "Teacher Development Program",

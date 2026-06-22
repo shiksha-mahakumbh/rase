@@ -13,7 +13,7 @@ export const COMMITTEE_EDITION_5_0: CommitteeEditionData = {
   dates: "31 October – 2 November 2025",
   theme: "Classroom to Society: Building a Healthier World through Education",
   year: "2025",
-  eventHref: "/past_event/sm25",
+  eventHref: "/past_event/shiksha-mahakumbh-5.0",
   sections: [
     {
       title: "Conference Patron",

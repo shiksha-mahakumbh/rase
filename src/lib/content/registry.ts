@@ -25,6 +25,16 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     featured: true,
   },
   {
+    slug: "souvenir-abstracts-mtc",
+    title: "Souvenir Abstracts — MTC",
+    excerpt: "Compiled Multi Track Conference abstract compendium — open PDF download.",
+    category: "research",
+    tags: ["souvenir", "MTC", "abstracts"],
+    publishedAt: "2024-11-01",
+    href: "/publications/souvenir-abstracts-mtc",
+    featured: true,
+  },
+  {
     slug: "journals",
     title: "Journals & Publications",
     excerpt: "Viksit Bharat and affiliated journals.",
