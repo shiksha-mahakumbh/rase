@@ -57,7 +57,8 @@ export default function PublicationsShowcase() {
                 </div>
                 <h3 className="mt-2 line-clamp-2 text-sm font-bold text-brand-navy">{volume.theme}</h3>
                 <p className="mt-1 text-xs text-slate-500">
-                  {volume.paperCount} papers · {volume.year}
+                  {volume.paperCount} listed online
+                  {volume.paperCountNote ? ` · ${volume.paperCountNote}` : ""} · {volume.year}
                 </p>
                 <div className="mt-auto flex flex-wrap gap-2 pt-4">
                   <Link

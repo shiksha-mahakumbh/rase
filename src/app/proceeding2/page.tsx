@@ -16,6 +16,7 @@ export default function Proceeding2Page() {
       skipContainer
       breadcrumbs={[
         { name: "Home", path: "/" },
+        { name: "Publications", path: "/publications" },
         { name: "Proceedings", path: "/proceedings" },
         { name: `Volume ${volume.volume}`, path: volume.readHref },
       ]}

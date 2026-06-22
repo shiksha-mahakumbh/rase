@@ -19,15 +19,15 @@ export default function ProceedingVolumeJsonLd({ volume }: Props) {
     "@context": "https://schema.org",
     "@type": "Book",
     name: volume.label,
-    description: volume.theme,
+    description: `${volume.theme}. ${volume.paperCount} papers indexed online${volume.paperCountNote ? ` (${volume.paperCountNote})` : ""}.`,
     url: `${SITE_URL}${volume.readHref}`,
     datePublished: volume.year,
+    image: `${SITE_URL}${volume.coverSrc}`,
     publisher: {
       "@type": "Organization",
       name: "Department of Holistic Education",
       url: SITE_URL,
     },
-    numberOfPages: volume.paperCount,
     bookFormat: "https://schema.org/EBook",
     offers: {
       "@type": "Offer",

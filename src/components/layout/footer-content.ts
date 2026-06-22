@@ -32,7 +32,6 @@ export const quickLinks: FooterLink[] = [
   { name: "Introduction", href: "/introduction" },
   { name: "Registration", href: "/registration" },
   { name: "शिक्षा महाकुंभ 6.0", href: "/upcoming-events" },
-  { name: "Past Editions", href: "/past-events" },
   { name: "Committees", href: "/committees" },
   { name: "Media Centre", href: "/media-center" },
   { name: "Press Releases", href: "/press" },

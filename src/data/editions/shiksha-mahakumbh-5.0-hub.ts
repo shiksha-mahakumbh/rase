@@ -46,6 +46,10 @@ export const SMK_5_0_CONTENT: EditionDetailContent = {
   ],
   galleryUrl: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
   relatedLinks: [
+    {
+      label: "MTC Souvenir Abstracts (PDF)",
+      href: "/publications/souvenir-abstracts-mtc#smk-5.0",
+    },
     { label: "Digital media archive", href: "/media/shiksha-mahakumbh/5.0/digital" },
     { label: "Print media (85 clippings)", href: "/media/shiksha-mahakumbh/5.0/print" },
     {

@@ -1,5 +1,11 @@
 import { createPageMetadata } from "@/lib/seo/metadata";
-import { PROCEEDINGS_PAGE_HERO, getProceedingVolumeByPath } from "@/data/proceedings-hub";
+import {
+  PROCEEDINGS_PAGE_HERO,
+  PROCEEDINGS_SEO_KEYWORDS,
+  PROCEEDINGS_OG_IMAGE,
+  getProceedingOgImage,
+  getProceedingVolumeByPath,
+} from "@/data/proceedings-hub";
 import { PRESS_CANONICAL_PATHS } from "@/constants/canonical-routes";
 import {
   createArticleMetadata,
@@ -18,24 +24,29 @@ export const PUBLIC_PAGE_META = {
     description: PROCEEDINGS_PAGE_HERO.subtitle,
     path: "/proceedings",
     publicationType: "Proceedings",
+    keywords: [...PROCEEDINGS_SEO_KEYWORDS],
+    image: PROCEEDINGS_OG_IMAGE,
   }),
   proceeding1: createPublicationMetadata({
     title: "Proceedings Volume I — Shiksha Mahakumbh 2.0",
-    description: `${getProceedingVolumeByPath("/proceeding1")!.theme}. ${getProceedingVolumeByPath("/proceeding1")!.paperCount} papers — read online or download PDF.`,
+    description: `${getProceedingVolumeByPath("/proceeding1")!.theme}. ${getProceedingVolumeByPath("/proceeding1")!.paperCount} papers indexed online — read online or download PDF.`,
     path: "/proceeding1",
     publicationType: "Proceedings",
+    image: getProceedingOgImage("/proceeding1"),
   }),
   proceeding2: createPublicationMetadata({
     title: "Proceedings Volume II — Shiksha Mahakumbh 1.0",
-    description: `${getProceedingVolumeByPath("/proceeding2")!.theme}. ${getProceedingVolumeByPath("/proceeding2")!.paperCount} papers indexed online — read or download Proceeding2.pdf.`,
+    description: `${getProceedingVolumeByPath("/proceeding2")!.theme}. ${getProceedingVolumeByPath("/proceeding2")!.paperCount} representative papers indexed online — read or download Proceeding2.pdf.`,
     path: "/proceeding2",
     publicationType: "Proceedings",
+    image: getProceedingOgImage("/proceeding2"),
   }),
   proceeding3: createPublicationMetadata({
     title: "Proceedings Volume III — Shiksha Mahakumbh 3.0",
-    description: `${getProceedingVolumeByPath("/proceeding3")!.theme}. ${getProceedingVolumeByPath("/proceeding3")!.paperCount}+ papers indexed online — read or download Proceeding3.pdf.`,
+    description: `${getProceedingVolumeByPath("/proceeding3")!.theme}. ${getProceedingVolumeByPath("/proceeding3")!.paperCount} papers indexed online — read or download Proceeding3.pdf.`,
     path: "/proceeding3",
     publicationType: "Proceedings",
+    image: getProceedingOgImage("/proceeding3"),
   }),
   journals: createPublicationMetadata({
     title: "DHE Journal",

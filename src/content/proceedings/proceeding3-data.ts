@@ -10,7 +10,7 @@ export const proceeding3Data = {
               ]
             },
             {
-              title: "Integrat",
+              title: "Integration of Bhartiya Traditional and Modern Education System for sustainability",
               pageStart: 66,
               sessionChairs: [
                 "Dr. Ankit Kumar, Scientist (Veterinary Medicine), Lala Lajpat Rai University of Veterinary and Animal Sciences, Hisar, Haryana",

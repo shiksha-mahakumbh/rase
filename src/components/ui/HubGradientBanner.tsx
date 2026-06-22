@@ -13,9 +13,19 @@ type Props = {
   subtitle: ReactNode;
   stats: readonly HubStat[];
   footer?: ReactNode;
+  titleAs?: "h1" | "h2";
 };
 
-export default function HubGradientBanner({ id, eyebrow, title, subtitle, stats, footer }: Props) {
+export default function HubGradientBanner({
+  id,
+  eyebrow,
+  title,
+  subtitle,
+  stats,
+  footer,
+  titleAs = "h2",
+}: Props) {
+  const TitleTag = titleAs;
   return (
     <section
       aria-labelledby={id}
@@ -32,9 +42,9 @@ export default function HubGradientBanner({ id, eyebrow, title, subtitle, stats,
       <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
         {eyebrow}
       </p>
-      <h2 id={id} className="mt-2 text-xl font-bold md:text-3xl">
+      <TitleTag id={id} className="mt-2 text-xl font-bold md:text-3xl">
         {title}
-      </h2>
+      </TitleTag>
       <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
         {subtitle}
       </p>

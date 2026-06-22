@@ -40,5 +40,5 @@ export const LEGACY_PUBLICATION_ROUTES: LegacyPublicationRoute[] = [
   { href: "/proceeding3", label: "Proceedings Vol. III (SMK 3.0)", year: "2024" },
   { href: "https://pub.dhe.org.in", label: "DHE Journal", year: "ongoing", external: true },
   { href: "/books", label: "Books", year: "ongoing" },
-  { href: "/publications/souvenir-abstracts-mtc", label: "Souvenir Abstracts (MTC)", year: "2024" },
+  { href: "/publications/souvenir-abstracts-mtc", label: "Souvenir Abstracts (MTC)", year: "2024–2025" },
 ];

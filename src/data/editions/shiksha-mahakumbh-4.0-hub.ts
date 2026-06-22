@@ -60,6 +60,10 @@ export const SMK_4_0_CONTENT: EditionDetailContent = {
   campaignPdf: "/RASE_2024_4TH_EDITION_Campaign.pdf",
   relatedLinks: [
     { label: "Proceedings hub", href: "/proceedings" },
+    {
+      label: "MTC Souvenir Abstracts (PDF)",
+      href: "/publications/souvenir-abstracts-mtc#smk-4.0",
+    },
     { label: "Campaign report (PDF)", href: "/RASE_2024_4TH_EDITION_Campaign.pdf" },
     { label: "Gallery", href: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN", external: true },
     { label: "Best Wishes", href: "/best-wishes" },
