@@ -1,7 +1,9 @@
 import Link from "next/link";
-import EventImageSlider from "@/components/media/LazyEventImageSlider";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
+import EditionGallery from "@/components/past-editions/editions/EditionGallery";
+import EditionPrevNext from "@/components/past-editions/editions/EditionPrevNext";
 import type { EditionDetailContent } from "@/data/editions/types";
-import { editionTitle } from "@/data/past-editions";
+import { editionTitle, getAdjacentEditions } from "@/data/past-editions";
 
 const primaryBtn =
   "inline-flex min-h-[44px] items-center rounded-xl bg-brand-saffron px-5 py-2.5 text-sm font-bold text-brand-navy shadow-md transition hover:bg-brand-saffron-dark hover:text-white";
@@ -14,13 +16,23 @@ type Props = {
 
 export default function PastEditionDetailShowcase({ content }: Props) {
   const title = editionTitle(content.editionNumber);
+  const { prev, next } = getAdjacentEditions(content.editionNumber);
 
   return (
     <div className="mx-auto max-w-6xl space-y-10">
+      <BreadcrumbNav
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Past Editions", href: "/past-events" },
+          { label: title },
+        ]}
+        className="mb-2"
+      />
+
+      <EditionPrevNext prev={prev} next={next} />
+
       {content.galleryImages?.length ? (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-lg">
-          <EventImageSlider images={[...content.galleryImages]} eventTitle={title} />
-        </div>
+        <EditionGallery images={content.galleryImages} eventTitle={title} />
       ) : null}
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Edition quick facts">

@@ -214,6 +214,19 @@ export function getEditionByNumber(edition: string): PastEditionRecord | undefin
   return PAST_EDITIONS.find((e) => e.edition === edition);
 }
 
+/** Previous / next edition cards for detail page navigation */
+export function getAdjacentEditions(editionNumber: string): {
+  prev?: PastEditionRecord;
+  next?: PastEditionRecord;
+} {
+  const idx = PAST_EDITIONS.findIndex((e) => e.edition === editionNumber);
+  if (idx < 0) return {};
+  return {
+    prev: idx > 0 ? PAST_EDITIONS[idx - 1] : undefined,
+    next: idx < PAST_EDITIONS.length - 1 ? PAST_EDITIONS[idx + 1] : undefined,
+  };
+}
+
 /** Upcoming edition 6.0 — single source for hero/widgets */
 export const UPCOMING_EDITION = {
   edition: "6.0",

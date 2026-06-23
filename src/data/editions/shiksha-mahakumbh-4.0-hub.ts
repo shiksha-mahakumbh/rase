@@ -46,7 +46,7 @@ export const SMK_4_0_CONTENT: EditionDetailContent = {
     "Paper presentations in 6 seminar rooms at UIET across sustainable education, digital innovation, and inclusivity.",
     "Keynote addresses by Shri Sunil Deodhar (My Home India), Gyananand Ji Maharaj, Shri Satish Kumar (SJM), Shri Avnish Bhatnagar (Vidya Bharati), and others.",
     "Valedictory reflections by Shri Rakesh Sinha (Ex MP, Rajya Sabha), Shri K G Suresh (Ex DG, IIMC), and future roadmap by Dr. Thakur SKR (ISRO & Director, DHE).",
-    "Outstanding teachers, students, and startups felicitated; Shiksha Mahakumbh 2.0 Proceedings released.",
+    "Outstanding teachers, students, and startups felicitated; MTC souvenir abstracts and proceedings materials released for SMK 4.0.",
     "Chief guests included Prof. Rakesh Sinha, Shri K G Suresh, and Shri Sunil Deodhar.",
   ],
   galleryImages: [
@@ -65,6 +65,8 @@ export const SMK_4_0_CONTENT: EditionDetailContent = {
       href: "/publications/souvenir-abstracts-mtc#smk-4.0",
     },
     { label: "Campaign report (PDF)", href: "/RASE_2024_4TH_EDITION_Campaign.pdf" },
+    { label: "Digital media archive", href: "/media/shiksha-mahakumbh/4.0/digital" },
+    { label: "Print media", href: "/media/shiksha-mahakumbh/4.0/print" },
     { label: "Gallery", href: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN", external: true },
     { label: "Best Wishes", href: "/best-wishes" },
     { label: "All past editions", href: "/past-events" },
