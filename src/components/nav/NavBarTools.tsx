@@ -27,10 +27,22 @@ const NavIntlProvider = dynamic(
   { ssr: false }
 );
 
-export default function NavBarTools({ compact = false }: { compact?: boolean }) {
+type NavBarToolsProps = {
+  /** desktop: search + language (lg+); mobile: language only (<lg); always: both visible */
+  visibility?: "desktop" | "mobile" | "always";
+};
+
+export default function NavBarTools({ visibility = "desktop" }: NavBarToolsProps) {
+  const className =
+    visibility === "desktop"
+      ? "hidden lg:flex items-center gap-2"
+      : visibility === "mobile"
+        ? "flex lg:hidden items-center gap-2"
+        : "flex items-center gap-2";
+
   return (
-    <div className={`flex items-center gap-2 ${compact ? "" : "hidden lg:flex"}`}>
-      {!compact && <GlobalSearch />}
+    <div className={className}>
+      {visibility !== "mobile" && <GlobalSearch />}
       <NavIntlProvider>
         <LanguageSwitcher />
       </NavIntlProvider>
