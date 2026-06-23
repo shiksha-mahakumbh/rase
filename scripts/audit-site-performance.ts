@@ -122,6 +122,24 @@ if (!regPageSrc.includes("imagePriority: false")) {
   ok("Registration page: lazy hero image");
 }
 
+const heroSrc = read("src/components/home/HeroSection.tsx");
+if (heroSrc.includes('"use client"')) {
+  issues.push("HeroSection must be server-rendered for homepage LCP");
+} else if (!heroSrc.includes('fetchPriority="high"')) {
+  issues.push("HeroSection LCP image should use fetchPriority high");
+} else {
+  ok("Homepage hero: server-rendered LCP");
+}
+
+const homePageSrc = read("src/components/home/HomePage.tsx");
+if (!homePageSrc.includes("IdleMount")) {
+  issues.push("HomePage must defer Marquees via IdleMount");
+} else if (homePageSrc.includes("SectionShell")) {
+  issues.push("HomePage should avoid client SectionShell in above-fold blocks");
+} else {
+  ok("HomePage: idle Marquees + static programme section");
+}
+
 // ── Page inventory ──
 const publicPages = listPageFiles(APP);
 ok(`${publicPages.length} public page.tsx routes (excl. admin)`);
