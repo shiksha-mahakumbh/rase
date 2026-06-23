@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { DHE_ORGANIZATION } from "@/config/organization";
 import { impactStatistics } from "@/data/authority";
-import { normalizeStaticImageSrc } from "@/components/home/legacy/normalizeImageSrc";
+import { normalizeStaticImageSrc } from "@/lib/images/normalizeStaticImageSrc";
 import {
   footerLogos,
   quickLinks,
@@ -25,6 +25,7 @@ const FooterContactForm = dynamic(
 );
 import FooterNewsletterSlot from "@/components/footer/FooterNewsletterSlot";
 import ScrollToTopButton from "@/components/footer/ScrollToTopButton";
+import RecaptchaScript from "@/components/security/RecaptchaProvider";
 
 const FooterVisitorCounter = dynamic(
   () => import("@/components/footer/FooterVisitorCounter"),
@@ -131,6 +132,7 @@ const Footer: React.FC = () => {
 
   return (
     <>
+      <RecaptchaScript />
       <footer className="relative overflow-hidden border-t border-brand-saffron/20">
         {/* Impact statistics — warm strip */}
         <div className="relative bg-gradient-to-r from-brand-surface-warm via-white to-brand-surface-warm px-4 py-8 md:px-8">

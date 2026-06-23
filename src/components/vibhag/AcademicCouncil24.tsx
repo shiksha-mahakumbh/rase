@@ -2,6 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AcademicCouncilTabId } from "@/data/academic-council-content";
+import {
+  ACADEMIC_COUNCIL_PATH,
+  academicCouncilProgrammeUrl,
+  academicCouncilTabFromSlug,
+  academicCouncilTabSlug,
+} from "@/data/academic-council-hub";
 import OverviewPage from "./academic/AcademicCouncilOverview";
 import ConferencePage from "./academic/pages/ConferencePage";
 import ConclavePage from "./academic/pages/ConclavePage";
@@ -25,6 +31,12 @@ const pages: { id: AcademicCouncilTabId; label: string }[] = [
   { id: "PatrikaPage", label: "Bal Shodh Patrika" },
   { id: "CulturalPage", label: "Cultural Program" },
 ];
+
+function readTabFromLocation(): AcademicCouncilTabId {
+  if (typeof window === "undefined") return "OverviewPage";
+  const slug = window.location.hash.replace(/^#/, "");
+  return academicCouncilTabFromSlug(slug || null);
+}
 
 function renderPage(id: AcademicCouncilTabId, onNavigate: (tabId: AcademicCouncilTabId) => void) {
   switch (id) {
@@ -61,11 +73,25 @@ export default function AcademicCouncilDashboard() {
   const selectPage = useCallback((id: AcademicCouncilTabId) => {
     setActive(id);
     setMenuOpen(false);
+    const slug = academicCouncilTabSlug(id);
+    const nextUrl = slug === "overview" ? ACADEMIC_COUNCIL_PATH : `${ACADEMIC_COUNCIL_PATH}#${slug}`;
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", nextUrl);
+    }
+  }, []);
+
+  useEffect(() => {
+    setActive(readTabFromLocation());
+    const onHashChange = () => setActive(readTabFromLocation());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
   useEffect(() => {
     mainRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [active]);
+
+  const activeLabel = pages.find((p) => p.id === active)?.label ?? "Programme";
 
   return (
     <div className="flex min-h-screen flex-col bg-brand-surface lg:flex-row">
@@ -76,7 +102,6 @@ export default function AcademicCouncilDashboard() {
         Skip to programme content
       </a>
 
-      {/* Desktop sidebar */}
       <aside
         className="hidden w-72 flex-shrink-0 flex-col border-r border-brand-navy/10 bg-white p-5 shadow-lg lg:sticky lg:top-0 lg:flex lg:h-screen lg:overflow-y-auto"
         aria-label="Academic Council programmes"
@@ -85,32 +110,34 @@ export default function AcademicCouncilDashboard() {
           <p className="text-[10px] font-bold uppercase tracking-widest text-white/70">
             शैक्षिक विभाग
           </p>
-          <h2 className="text-xl font-bold">Academic Council</h2>
+          <p className="text-xl font-bold">Programme navigator</p>
           <p className="mt-1 text-xs text-white/80">Shiksha Mahakumbh 6.0</p>
         </div>
         <nav className="flex-1 space-y-1" role="tablist" aria-orientation="vertical">
           {pages.map((p) => (
-            <button
+            <a
               key={p.id}
-              type="button"
+              href={academicCouncilProgrammeUrl(p.id)}
               role="tab"
               id={`tab-${p.id}`}
               aria-selected={active === p.id}
               aria-controls="ac-main-panel"
-              onClick={() => selectPage(p.id)}
-              className={`w-full min-h-[44px] rounded-xl px-4 py-2.5 text-left text-sm font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron ${
+              onClick={(event) => {
+                event.preventDefault();
+                selectPage(p.id);
+              }}
+              className={`flex w-full min-h-[44px] items-center rounded-xl px-4 py-2.5 text-left text-sm font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron ${
                 active === p.id
                   ? "bg-brand-saffron text-brand-navy shadow-md"
                   : "text-slate-700 hover:bg-brand-navy/5"
               }`}
             >
               {p.label}
-            </button>
+            </a>
           ))}
         </nav>
       </aside>
 
-      {/* Mobile programme selector */}
       <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur-md lg:hidden">
         <button
           type="button"
@@ -119,7 +146,7 @@ export default function AcademicCouncilDashboard() {
           aria-expanded={menuOpen}
           aria-controls="ac-mobile-nav"
         >
-          {pages.find((p) => p.id === active)?.label ?? "Menu"}
+          {activeLabel}
           <span aria-hidden>{menuOpen ? "▲" : "▼"}</span>
         </button>
         {menuOpen && (
@@ -129,20 +156,21 @@ export default function AcademicCouncilDashboard() {
             role="tablist"
           >
             {pages.map((p) => (
-              <button
+              <a
                 key={p.id}
-                type="button"
+                href={academicCouncilProgrammeUrl(p.id)}
                 role="tab"
                 aria-selected={active === p.id}
-                onClick={() => selectPage(p.id)}
-                className={`min-h-[44px] rounded-lg px-2 py-2 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-saffron ${
-                  active === p.id
-                    ? "bg-brand-navy text-white"
-                    : "bg-slate-50 text-slate-700"
+                onClick={(event) => {
+                  event.preventDefault();
+                  selectPage(p.id);
+                }}
+                className={`flex min-h-[44px] items-center justify-center rounded-lg px-2 py-2 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-saffron ${
+                  active === p.id ? "bg-brand-navy text-white" : "bg-slate-50 text-slate-700"
                 }`}
               >
                 {p.label}
-              </button>
+              </a>
             ))}
           </nav>
         )}
@@ -153,6 +181,8 @@ export default function AcademicCouncilDashboard() {
         id="ac-main-panel"
         role="tabpanel"
         aria-labelledby={`tab-${active}`}
+        aria-live="polite"
+        aria-atomic="true"
         className="min-w-0 flex-1 p-3 pt-4 sm:p-4 lg:p-6 lg:pt-8"
       >
         <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-xl sm:rounded-3xl">

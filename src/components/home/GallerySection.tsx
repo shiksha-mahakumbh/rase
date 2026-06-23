@@ -5,7 +5,7 @@ import SlideShow from "@/components/home/sections/SlideShow";
 import { SectionHeader } from "@/components/ui";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionItems } from "@/lib/cms/utils";
-import { homeSlides, type HomeSlide } from "./slides-data";
+import { homeSlides, type HomeSlide } from "@/data/home-gallery";
 
 export default function GallerySection() {
   const cms = useCms();

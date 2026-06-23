@@ -1,22 +1,34 @@
 import Image from "next/image";
 import Link from "next/link";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
   BOOK_CATALOG,
   BOOKS_EDITION_NOTE,
   BOOKS_PAGE_HERO,
+  BOOKS_RELATED_PUBLICATIONS,
   BOOKS_STATS,
 } from "@/data/books-hub";
 
 export default function BooksShowcase() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <BreadcrumbNav
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Publications", href: "/publications" },
+          { label: "Books" },
+        ]}
+        className="mb-6"
+      />
+
       <HubGradientBanner
         id="books-banner"
         eyebrow={BOOKS_PAGE_HERO.eyebrow}
         title={BOOKS_PAGE_HERO.title}
         subtitle={BOOKS_PAGE_HERO.subtitle}
         stats={BOOKS_STATS}
+        titleAs="h1"
       />
 
       <section className="mt-10" aria-labelledby="books-catalog">
@@ -27,18 +39,19 @@ export default function BooksShowcase() {
           {BOOK_CATALOG.map((book) => (
             <article
               key={book.id}
-              className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+              id={book.id}
+              className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
             >
               <div className={`h-1.5 bg-gradient-to-r ${book.accent}`} aria-hidden />
               <div className="grid gap-6 p-5 md:grid-cols-[220px_1fr] md:p-8">
                 <div className="mx-auto w-full max-w-[220px]">
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-md">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-brand-surface-warm/60 p-2 shadow-md">
                     <Image
                       src={book.coverSrc}
                       alt={book.coverAlt}
                       fill
                       sizes="220px"
-                      className="object-cover"
+                      className="object-contain p-1"
                       priority
                     />
                     {!book.previewHref && (
@@ -110,6 +123,25 @@ export default function BooksShowcase() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="mt-10" aria-labelledby="books-related">
+        <h2 id="books-related" className="text-lg font-bold text-brand-navy md:text-xl">
+          Related publications
+        </h2>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          {BOOKS_RELATED_PUBLICATIONS.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-brand-saffron/40 hover:shadow-sm"
+              >
+                <span className="text-sm font-bold text-brand-navy">{link.label}</span>
+                <span className="mt-1 text-xs text-slate-600">{link.description}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <aside className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-4 text-sm text-slate-600 md:px-6 md:py-5">

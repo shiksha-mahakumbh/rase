@@ -1,22 +1,21 @@
+import UpcomingEventsQuickLinks from "@/components/upcoming-events/UpcomingEventsQuickLinks";
 import UpcomingEventsShowcase from "@/components/upcoming-events/UpcomingEventsShowcase";
-import UpcomingEventsJsonLd from "@/components/upcoming-events/UpcomingEventsJsonLd";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-
-const BREADCRUMBS = [
-  { name: "Home", path: "/" },
-  { name: "Upcoming Events", path: "/upcoming-events" },
-];
+import {
+  UPCOMING_EVENTS_BREADCRUMBS,
+  UPCOMING_EVENTS_PATH,
+} from "@/data/upcoming-events-hub";
 
 export default function UpcomingEventsPage() {
   return (
     <PublicPageShell
       showHero={false}
       showCta={false}
-      breadcrumbs={BREADCRUMBS}
-      relatedPath="/upcoming-events"
+      breadcrumbs={[...UPCOMING_EVENTS_BREADCRUMBS]}
+      relatedPath={UPCOMING_EVENTS_PATH}
       skipContainer
     >
-      <UpcomingEventsJsonLd />
+      <UpcomingEventsQuickLinks />
       <UpcomingEventsShowcase />
     </PublicPageShell>
   );

@@ -9,6 +9,7 @@ export type PressArticleRecord = {
   slug: string;
   pressNumber: number;
   locale: string;
+  datePublished?: string;
   title: string;
   excerpt: string;
   heroImage: string;

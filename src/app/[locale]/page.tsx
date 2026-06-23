@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import HomePage from "@/components/home/HomePage";
 import HomeJsonLd from "@/components/home/HomeJsonLd";
+import HomeEcosystemJsonLd from "@/components/home/HomeEcosystemJsonLd";
+import PartnersShowcaseJsonLd from "@/components/home/PartnersShowcaseJsonLd";
 import { CmsProvider } from "@/lib/cms/context";
 import { extractFaqsFromCmsData } from "@/lib/cms/faq";
+import { buildAffiliationShowcase } from "@/lib/cms/build-affiliation-showcase";
+import { getHomepagePartners } from "@/lib/cms/partners";
 import { loadCmsHomepage, loadCmsPageData } from "@/lib/cms/server";
+import { loadCmsSpeakers, loadCmsPartners } from "@/lib/cms/organizational";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
@@ -56,12 +61,23 @@ export default async function LocaleHomePage({
 }) {
   const { locale } = await params;
   const cmsLocale = (locale === "hi" ? "hi" : "en") as ContentLocale;
-  const cmsData = await loadCmsPageData(cmsLocale);
+  const [cmsData, featuredSpeakers, cmsPartners] = await Promise.all([
+    loadCmsPageData(cmsLocale),
+    loadCmsSpeakers(cmsLocale, true),
+    loadCmsPartners(cmsLocale),
+  ]);
   const faqs = extractFaqsFromCmsData(cmsData);
+  const affiliationShowcase = buildAffiliationShowcase({
+    cmsPartners,
+    cmsSpeakers: featuredSpeakers,
+    homepagePartners: getHomepagePartners(cmsData.homepage),
+  });
 
   return (
     <CmsProvider data={cmsData}>
       <HomeJsonLd faqs={faqs} />
+      <HomeEcosystemJsonLd />
+      <PartnersShowcaseJsonLd grouped={affiliationShowcase} />
       {cmsData.homepage?.seo?.schemaJsonLd && (
         <script
           type="application/ld+json"
@@ -70,7 +86,7 @@ export default async function LocaleHomePage({
           }}
         />
       )}
-      <HomePage />
+      <HomePage featuredSpeakers={featuredSpeakers} cmsPartners={cmsPartners} />
     </CmsProvider>
   );
 }

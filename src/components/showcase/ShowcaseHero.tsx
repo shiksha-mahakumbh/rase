@@ -9,6 +9,7 @@ interface ShowcaseHeroProps {
   subtitle?: ReactNode;
   accent?: "navy" | "saffron" | "emerald" | "brand";
   imageSrc?: string;
+  imageAlt?: string;
 }
 
 const darkAccents = {
@@ -23,6 +24,7 @@ export default function ShowcaseHero({
   subtitle,
   accent = "brand",
   imageSrc,
+  imageAlt,
 }: ShowcaseHeroProps) {
   const isBrand = accent === "brand";
 
@@ -64,7 +66,7 @@ export default function ShowcaseHero({
               <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-brand-saffron/25 to-brand-blue/15 blur-sm" aria-hidden />
               <Image
                 src={imageSrc}
-                alt=""
+                alt={imageAlt ?? ""}
                 width={560}
                 height={420}
                 className="relative rounded-xl border-2 border-white bg-white shadow-lg"

@@ -21,7 +21,7 @@ const PILLARS = [
     title: "Olympiads",
     subtitle: "Talent & Excellence",
     color: "from-brand-emerald to-emerald-600",
-    href: "/abhiyaninphotoframe",
+    href: ROUTES.registration,
   },
   {
     title: "Conclaves",
@@ -76,8 +76,8 @@ export default function BrandShowcaseSection() {
               aria-hidden
             />
             <Image
-              src="/branding/shiksha-mahakumbh-brand-hero.png"
-              alt="Shiksha Mahakumbh Abhiyan brand artwork"
+              src="/2024M/Press7.jpg"
+              alt="Inauguration of Shiksha Mahakumbh — national education summit"
               width={640}
               height={480}
               className="relative z-10 w-full rounded-2xl shadow-xl"

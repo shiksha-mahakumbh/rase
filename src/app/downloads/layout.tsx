@@ -1,35 +1,26 @@
+import DownloadsJsonLd from "@/components/downloads/DownloadsJsonLd";
 import { createPageMetadata } from "@/lib/seo/metadata";
-import { SITE_URL } from "@/config/site";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
+import {
+  DOWNLOADS_OG_IMAGE,
+  DOWNLOADS_PAGE_HERO,
+  DOWNLOADS_SEO_KEYWORDS,
+  downloadsMetaDescription,
+} from "@/data/downloads-hub";
 
 export const metadata = createPageMetadata({
-  title: "Brochures & Downloads",
-  description:
-    "Official Shiksha Mahakumbh Abhiyan edition brochures and downloadable resources for delegates worldwide.",
-  path: "/downloads",
-  keywords: ["brochures", "downloads", "Shiksha Mahakumbh", "PDF"],
+  title: `${DOWNLOADS_PAGE_HERO.title} — Shiksha Mahakumbh Editions 1.0–6.0`,
+  description: downloadsMetaDescription(),
+  path: CANONICAL_ROUTES.downloads,
+  keywords: [...DOWNLOADS_SEO_KEYWORDS],
+  locale: "en_IN",
+  ogImageUrl: DOWNLOADS_OG_IMAGE,
 });
-
-const breadcrumb = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Brochures & Downloads",
-      item: `${SITE_URL}/downloads`,
-    },
-  ],
-};
 
 export default function DownloadsLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
-      />
+      <DownloadsJsonLd />
       {children}
     </>
   );

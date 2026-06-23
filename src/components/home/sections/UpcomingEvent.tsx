@@ -1,16 +1,13 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { UPCOMING_EVENTS, UPCOMING_EVENTS_HERO } from "@/data/upcoming-events-hub";
 
-interface UpcomingEventProps {
-  /** @deprecated Page uses UpcomingEventsShowcase; home keeps this compact grid. */
-  events?: typeof UPCOMING_EVENTS;
-}
+const PREVIEW_EVENTS = UPCOMING_EVENTS.slice(0, 2);
 
-const UpcomingEvent: React.FC<UpcomingEventProps> = ({ events = UPCOMING_EVENTS }) => {
+export default function UpcomingEvent() {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -23,7 +20,7 @@ const UpcomingEvent: React.FC<UpcomingEventProps> = ({ events = UPCOMING_EVENTS 
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {events.map((event, index) => (
+        {PREVIEW_EVENTS.map((event, index) => (
           <motion.article
             key={event.id}
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
@@ -61,8 +58,15 @@ const UpcomingEvent: React.FC<UpcomingEventProps> = ({ events = UPCOMING_EVENTS 
           </motion.article>
         ))}
       </div>
+
+      <div className="mt-6 text-center">
+        <Link
+          href={CANONICAL_ROUTES.upcomingEvents}
+          className="inline-flex min-h-[44px] items-center rounded-xl border-2 border-primary/20 px-6 py-2.5 text-sm font-bold text-primary transition hover:bg-primary/5"
+        >
+          View all upcoming events →
+        </Link>
+      </div>
     </section>
   );
-};
-
-export default UpcomingEvent;
+}

@@ -5,6 +5,10 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
 import {
+  mapCategoryToShowcaseTab,
+  showcaseTabLabel,
+} from "@/lib/cms/partner-showcase";
+import {
   AdminPageHeader,
   AdminCard,
   AdminButton,
@@ -33,6 +37,7 @@ export default function PartnersAdminPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const [showcaseTab, setShowcaseTab] = useState("");
   const [offset, setOffset] = useState(0);
   const limit = 20;
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -58,6 +63,11 @@ export default function PartnersAdminPage() {
             p.partnerCategory.toLowerCase().includes(q)
         );
       }
+      if (showcaseTab) {
+        rows = rows.filter(
+          (p) => mapCategoryToShowcaseTab(p.partnerCategory) === showcaseTab
+        );
+      }
       setItems(rows);
       setTotal(data.total ?? rows.length);
     } catch (e) {
@@ -65,7 +75,7 @@ export default function PartnersAdminPage() {
     } finally {
       setLoading(false);
     }
-  }, [offset, status, search]);
+  }, [offset, status, search, showcaseTab]);
 
   useEffect(() => {
     void load();
@@ -106,7 +116,7 @@ export default function PartnersAdminPage() {
     <div>
       <AdminPageHeader
         title="Partners"
-        description="Manage sponsors, knowledge partners, and collaborators."
+        description="Manage partners shown on the homepage Partners & Sponsors tabs. Publish partners with a logo to appear live — industry/csr → Sponsors, media → Media, others → Academic."
         actions={
           <Link href="/admin/cms/partners/new">
             <AdminButton>Create partner</AdminButton>
@@ -115,7 +125,7 @@ export default function PartnersAdminPage() {
       />
 
       <AdminCard className="mb-4">
-        <div className="grid gap-3 md:grid-cols-4">
+        <div className="grid gap-3 md:grid-cols-5">
           <AdminInput
             label="Search"
             placeholder="Name or category…"
@@ -134,6 +144,20 @@ export default function PartnersAdminPage() {
               { value: "draft", label: "Draft" },
               { value: "published", label: "Published" },
               { value: "archived", label: "Archived" },
+            ]}
+          />
+          <AdminSelect
+            label="Homepage tab"
+            value={showcaseTab}
+            onChange={(e) => {
+              setOffset(0);
+              setShowcaseTab(e.target.value);
+            }}
+            options={[
+              { value: "", label: "All tabs" },
+              { value: "academic", label: "Academic & Knowledge" },
+              { value: "media", label: "Media Partners" },
+              { value: "sponsors", label: "Sponsors" },
             ]}
           />
           <div className="flex items-end gap-2 md:col-span-2">
@@ -171,6 +195,7 @@ export default function PartnersAdminPage() {
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3">Category</th>
+                <th className="px-4 py-3">Homepage tab</th>
                 <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
@@ -206,6 +231,9 @@ export default function PartnersAdminPage() {
                     <StatusBadge status={p.status} />
                   </td>
                   <td className="px-4 py-3 capitalize">{p.partnerCategory}</td>
+                  <td className="px-4 py-3 text-xs text-slate-600">
+                    {showcaseTabLabel(mapCategoryToShowcaseTab(p.partnerCategory))}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-2">
                       <Link href={`/admin/cms/partners/${p.id}`}>

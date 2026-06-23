@@ -273,7 +273,7 @@ export const ACADEMIC_COUNCIL_SEO = {
     "Shiksha Mahakumbh 6.0 conference",
     "NIT Hamirpur education summit 2026",
     "multi-track research conference India",
-    "NEP 2026 education conclave",
+    "NEP 2020 education conclave",
     "DHE Olympiad English Maths Technology",
     "Bal Shodh Patrika student research",
     "Department of Holistic Education",

@@ -1,124 +1,98 @@
+import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL } from "@/config/site";
+import { EVENT_SCHEMA } from "@/config/site";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import {
   SMK_6_EVENT_DATES,
   UPCOMING_EVENTS,
+  UPCOMING_EVENTS_CANONICAL_URL,
+  UPCOMING_EVENTS_FAQ,
+  UPCOMING_EVENTS_HERO_IMAGE,
   UPCOMING_EVENTS_PAGE_HERO,
+  UPCOMING_EVENTS_PATH,
+  upcomingEventsMetaDescription,
 } from "@/data/upcoming-events-hub";
+import {
+  buildCollectionPageSchema,
+  buildFaqSchema,
+  buildItemListSchema,
+  orgReference,
+} from "@/lib/seo/schema";
 
 export default function UpcomingEventsJsonLd() {
-  const pageUrl = `${SITE_URL}/upcoming-events`;
+  const description = upcomingEventsMetaDescription();
   const smk6 = UPCOMING_EVENTS.find((e) => e.edition === "6.0");
 
-  const collection = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
+  const collection = buildCollectionPageSchema({
     name: UPCOMING_EVENTS_PAGE_HERO.title,
-    description: UPCOMING_EVENTS_PAGE_HERO.subtitle,
-    url: pageUrl,
-    inLanguage: "en-IN",
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Shiksha Mahakumbh Abhiyan",
-      url: SITE_URL,
-    },
-  };
+    description,
+    path: UPCOMING_EVENTS_PATH,
+  });
 
-  const eventList = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+  const programmeList = buildItemListSchema({
     name: "Upcoming Shiksha Mahakumbh Programmes",
-    numberOfItems: UPCOMING_EVENTS.length,
-    itemListElement: UPCOMING_EVENTS.map((event, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "EducationEvent",
-        name: event.title,
-        description: event.description,
-        eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
-        eventStatus:
-          event.status === "registration_open"
-            ? "https://schema.org/EventScheduled"
-            : "https://schema.org/EventScheduled",
-        location: {
-          "@type": "Place",
-          name: event.venueFull,
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: event.venue,
-            addressCountry: "IN",
-          },
-        },
-        organizer: {
-          "@type": "Organization",
-          name: "Department of Holistic Education",
-          url: SITE_URL,
-        },
-        ...(event.edition === "6.0"
-          ? {
-              startDate: SMK_6_EVENT_DATES.startDate,
-              endDate: SMK_6_EVENT_DATES.endDate,
-              offers: {
-                "@type": "Offer",
-                url: `${SITE_URL}/registration`,
-                availability: "https://schema.org/InStock",
-              },
-            }
-          : {}),
-      },
+    items: UPCOMING_EVENTS.map((event) => ({
+      name: event.title,
+      url: `${UPCOMING_EVENTS_PATH}#${event.id}`,
     })),
-  };
+  });
 
-  const primaryEvent = smk6
+  const smk6Event = smk6
     ? {
         "@context": "https://schema.org",
         "@type": "EducationEvent",
         name: smk6.title,
         description: smk6.description,
+        url: `${UPCOMING_EVENTS_CANONICAL_URL}#smk-6-0`,
         startDate: SMK_6_EVENT_DATES.startDate,
         endDate: SMK_6_EVENT_DATES.endDate,
         eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
-        eventStatus: "https://schema.org/EventScheduled",
+        eventStatus: EVENT_SCHEMA.eventStatus,
         location: {
           "@type": "Place",
           name: smk6.venueFull,
           address: {
             "@type": "PostalAddress",
             addressLocality: smk6.venue,
+            addressRegion: "Himachal Pradesh",
             addressCountry: "IN",
           },
         },
-        organizer: {
-          "@type": "Organization",
-          name: "Department of Holistic Education",
-          url: SITE_URL,
-        },
+        organizer: orgReference(),
         offers: {
           "@type": "Offer",
-          url: `${SITE_URL}/registration`,
+          url: `${SITE_URL}${CANONICAL_ROUTES.registration}`,
           availability: "https://schema.org/InStock",
         },
-        url: pageUrl,
       }
     : null;
 
-  const breadcrumb = {
+  const webPage = {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Upcoming Events", item: pageUrl },
-    ],
+    "@type": "WebPage",
+    name: UPCOMING_EVENTS_PAGE_HERO.title,
+    description,
+    url: UPCOMING_EVENTS_CANONICAL_URL,
+    inLanguage: ["en-IN", "hi-IN"],
+    primaryImageOfPage: `${SITE_URL}${UPCOMING_EVENTS_HERO_IMAGE}`,
+    isPartOf: orgReference(),
+    about: {
+      "@type": "EducationalOrganization",
+      name: "Department of Holistic Education",
+      alternateName: "Shiksha Mahakumbh Abhiyan",
+    },
+    mainEntity: smk6Event ?? undefined,
   };
+
+  const faq = buildFaqSchema([...UPCOMING_EVENTS_FAQ]);
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collection) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventList) }} />
-      {primaryEvent && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(primaryEvent) }} />
-      )}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      <JsonLd data={collection} />
+      <JsonLd data={programmeList} />
+      {smk6Event && <JsonLd data={smk6Event} />}
+      <JsonLd data={webPage} />
+      <JsonLd data={faq} />
     </>
   );
 }

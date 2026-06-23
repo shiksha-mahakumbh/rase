@@ -5,6 +5,7 @@ import {
   updateRegistrationByPublicId,
   type BulkStatusField,
 } from "@/server/services/registration.service";
+import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
 import { ServiceError } from "@/server/lib/errors";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
 
@@ -85,5 +86,5 @@ export const PATCH = createApiHandler(
       body.value
     );
   },
-  { requireAdmin: true, rateLimitKey: "v2-admin-registration-patch", limit: 60 }
+  { requireAdmin: true, adminRoles: ADMIN_MANAGE_ROLES, rateLimitKey: "v2-admin-registration-patch", limit: 60 }
 );

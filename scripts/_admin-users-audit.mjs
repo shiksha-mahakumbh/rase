@@ -18,14 +18,14 @@ const users = await prisma.user.findMany({
 const roles = await prisma.role.findMany({ select: { id: true, name: true } });
 
 const bootstrapConfigured = Boolean(
-  (process.env.ADMIN_BOOTSTRAP_EMAILS ?? process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "").trim()
+  (process.env.ADMIN_BOOTSTRAP_EMAILS ?? "").trim()
 );
 
 console.log(
   JSON.stringify(
     {
       bootstrapEnvConfigured: bootstrapConfigured,
-      bootstrapEmailCount: (process.env.ADMIN_BOOTSTRAP_EMAILS ?? process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
+      bootstrapEmailCount: (process.env.ADMIN_BOOTSTRAP_EMAILS ?? "")
         .split(",")
         .map((e) => e.trim())
         .filter(Boolean).length,

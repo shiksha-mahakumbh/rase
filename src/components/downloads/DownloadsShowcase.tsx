@@ -1,15 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import BrochureDownloadLink from "@/components/analytics/BrochureDownloadLink";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
   COMMITTEE_BROCHURES_FOLDER_URL,
+  DOWNLOADS_BREADCRUMBS,
   DOWNLOADS_HUB_STATS,
   DOWNLOADS_PAGE_HERO,
+  DOWNLOADS_QUICK_LINKS,
+  DOWNLOADS_UPCOMING_CTA,
   EDITION_BROCHURES,
+  getUpcomingBrochure,
 } from "@/data/downloads-hub";
 import type { CmsDownload } from "@/lib/cms/types";
 
@@ -32,6 +38,8 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const upcomingBrochure = getUpcomingBrochure();
 
   const years = useMemo(
     () => Array.from(new Set(EDITION_BROCHURES.map((b) => b.year))).sort().reverse(),
@@ -99,22 +107,100 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
-      <HubGradientBanner
-        id="downloads-hub-banner"
-        eyebrow={DOWNLOADS_PAGE_HERO.eyebrow}
-        title={DOWNLOADS_PAGE_HERO.title}
-        subtitle={DOWNLOADS_PAGE_HERO.subtitle}
-        stats={DOWNLOADS_HUB_STATS}
-        footer={
-          <BrochureDownloadLink
-            href={COMMITTEE_BROCHURES_FOLDER_URL}
-            plan="downloads-all-brochures-folder"
-            className="inline-flex min-h-[44px] items-center rounded-xl border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
-          >
-            Open All Brochures on Google Drive
-          </BrochureDownloadLink>
-        }
+      <BreadcrumbNav
+        items={DOWNLOADS_BREADCRUMBS.map((item, index, arr) => ({
+          label: item.name,
+          href: index < arr.length - 1 ? item.path : undefined,
+        }))}
+        className="-mt-2 mb-6"
       />
+
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {DOWNLOADS_QUICK_LINKS.map((link) =>
+          link.external ? (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
+            >
+              <span aria-hidden>{link.icon}</span>
+              {link.label}
+            </a>
+          ) : (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
+            >
+              <span aria-hidden>{link.icon}</span>
+              {link.label}
+            </Link>
+          )
+        )}
+      </section>
+
+      <div className="mt-6">
+        <HubGradientBanner
+          id="downloads-hub-banner"
+          titleAs="h1"
+          eyebrow={DOWNLOADS_PAGE_HERO.eyebrow}
+          title={DOWNLOADS_PAGE_HERO.title}
+          subtitle={DOWNLOADS_PAGE_HERO.subtitle}
+          stats={DOWNLOADS_HUB_STATS}
+          footer={
+            <BrochureDownloadLink
+              href={COMMITTEE_BROCHURES_FOLDER_URL}
+              plan="downloads-all-brochures-folder"
+              className="inline-flex min-h-[44px] items-center rounded-xl border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
+            >
+              Open All Brochures on Google Drive
+            </BrochureDownloadLink>
+          }
+        />
+      </div>
+
+      <section
+        className="mt-8 overflow-hidden rounded-2xl border border-brand-blue/20 bg-gradient-to-br from-brand-blue/5 via-white to-brand-saffron/5 p-6 md:p-8"
+        aria-labelledby="downloads-upcoming-heading"
+      >
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-saffron">
+          Edition 6.0 brochure
+        </p>
+        <h2 id="downloads-upcoming-heading" className="mt-2 text-xl font-bold text-brand-navy md:text-2xl">
+          {DOWNLOADS_UPCOMING_CTA.title}
+        </h2>
+        <p className="mt-2 text-sm text-slate-600">
+          {DOWNLOADS_UPCOMING_CTA.venue} · {DOWNLOADS_UPCOMING_CTA.dates}
+        </p>
+        <p className="mt-1 text-sm font-medium text-brand-saffron-dark">
+          {DOWNLOADS_UPCOMING_CTA.theme}
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {upcomingBrochure ? (
+            <BrochureDownloadLink
+              href={upcomingBrochure.downloadUrl}
+              plan="downloads-upcoming-brochure-dl"
+              className="inline-flex min-h-[44px] items-center rounded-xl bg-brand-navy px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-navy-light"
+            >
+              Download SMK 6.0 brochure
+            </BrochureDownloadLink>
+          ) : null}
+          <Link
+            href={DOWNLOADS_UPCOMING_CTA.committeeHref}
+            className="inline-flex min-h-[44px] items-center rounded-xl border border-brand-navy/20 bg-white px-6 py-2.5 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40"
+          >
+            View organising committee
+          </Link>
+          <Link
+            href={DOWNLOADS_UPCOMING_CTA.registrationHref}
+            className="inline-flex min-h-[44px] items-center rounded-xl border border-brand-saffron bg-brand-saffron/10 px-6 py-2.5 text-sm font-semibold text-brand-navy transition hover:bg-brand-saffron/20"
+          >
+            Register for SMK 6.0
+          </Link>
+        </div>
+      </section>
 
       <section aria-labelledby="edition-brochures" className="mt-10">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -173,29 +259,35 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
               transition={{ delay: index * 0.04 }}
               className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition hover:border-brand-saffron/40 hover:shadow-lg"
             >
-              <div className="relative bg-gradient-to-r from-brand-navy to-brand-navy/90 px-5 py-4">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-brand-saffron/20 blur-2xl"
+              <div className="relative h-36 w-full overflow-hidden bg-brand-navy/10">
+                <Image
+                  src={brochure.imageSrc}
+                  alt={`Shiksha Mahakumbh ${brochure.edition} — ${brochure.venue}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="relative flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-brand-saffron px-3 py-1 text-xs font-bold text-brand-navy">
-                    Edition {brochure.edition}
-                  </span>
-                  <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">
-                    {brochure.year}
-                  </span>
-                  {brochure.status === "upcoming" && (
-                    <span className="rounded-full bg-emerald-400/90 px-3 py-1 text-xs font-bold text-brand-navy">
-                      Upcoming
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/40 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 px-5 py-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-brand-saffron px-3 py-1 text-xs font-bold text-brand-navy">
+                      Edition {brochure.edition}
                     </span>
-                  )}
-                  <span className="ml-auto rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/90">
-                    PDF · {brochure.fileSize}
-                  </span>
+                    <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                      {brochure.year}
+                    </span>
+                    {brochure.status === "upcoming" && (
+                      <span className="rounded-full bg-emerald-400/90 px-3 py-1 text-xs font-bold text-brand-navy">
+                        Upcoming
+                      </span>
+                    )}
+                    <span className="ml-auto rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur-sm">
+                      PDF · {brochure.fileSize}
+                    </span>
+                  </div>
+                  <h3 className="mt-2 text-lg font-bold text-white">{brochure.venue}</h3>
+                  <p className="text-sm text-white/80">{brochure.dates}</p>
                 </div>
-                <h3 className="relative mt-2 text-lg font-bold text-white">{brochure.venue}</h3>
-                <p className="relative mt-1 text-sm text-white/80">{brochure.dates}</p>
               </div>
 
               <div className="flex flex-1 flex-col p-5">
@@ -241,7 +333,9 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
         </div>
 
         {filteredBrochures.length === 0 && (
-          <p className="py-10 text-center text-slate-500">No brochures match your search.</p>
+          <p className="py-10 text-center text-slate-500" role="status" aria-live="polite">
+            No brochures match your search.
+          </p>
         )}
       </section>
 
@@ -334,7 +428,7 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
         )}
 
         {filteredOther.length === 0 ? (
-          <p className="py-8 text-center text-slate-500">
+          <p className="py-8 text-center text-slate-500" role="status">
             {otherDownloads.length === 0
               ? "No additional documents published yet. Edition brochures are available above."
               : "No documents match your filters."}
@@ -370,20 +464,6 @@ export default function DownloadsShowcase({ initialDownloads }: Props) {
           </ul>
         )}
       </section>
-
-      <p className="mt-10 text-center text-sm text-slate-500">
-        <Link href="/committees" className="font-semibold text-brand-blue hover:underline">
-          Organising committees
-        </Link>
-        {" · "}
-        <Link href="/past-events" className="font-semibold text-brand-blue hover:underline">
-          Past editions
-        </Link>
-        {" · "}
-        <Link href="/registration" className="font-semibold text-brand-blue hover:underline">
-          Register for SM 6.0
-        </Link>
-      </p>
     </div>
   );
 }

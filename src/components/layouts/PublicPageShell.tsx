@@ -14,6 +14,7 @@ export interface PublicPageHero {
   subtitle?: ReactNode;
   accent?: "navy" | "saffron" | "emerald" | "brand";
   imageSrc?: string;
+  imageAlt?: string;
 }
 
 export interface PublicPageShellProps {
@@ -54,6 +55,7 @@ export default function PublicPageShell({
           subtitle={hero.subtitle}
           accent={hero.accent ?? "brand"}
           imageSrc={hero.imageSrc}
+          imageAlt={hero.imageAlt}
         />
       )}
       <main id="main-content" className={mainClassName}>

@@ -68,4 +68,25 @@ export const BOOKS_SEO_KEYWORDS = [
 
 export const BOOKS_CANONICAL_URL = `${SITE_URL}/books`;
 
+export function bookPageAnchorId(bookId: string): string {
+  return bookId;
+}
+
+export function bookPageUrl(bookId: string): string {
+  return `${BOOKS_CANONICAL_URL}#${bookPageAnchorId(bookId)}`;
+}
+
+export const BOOKS_RELATED_PUBLICATIONS = [
+  {
+    label: "Proceedings Vol. II (SMK 1.0)",
+    href: "/proceeding2",
+    description: "Representative school-education papers indexed online",
+  },
+  {
+    label: "SMK 4.0 MTC Souvenir Abstracts",
+    href: "/publications/souvenir-abstracts-mtc#smk-4.0",
+    description: "Multi Track Conference abstract booklet PDF",
+  },
+] as const;
+
 export const BOOKS_EDITION_NOTE = `${editionTitle("2.0")} through ${editionTitle("6.0")} book listings will be added as publication details are confirmed.`;

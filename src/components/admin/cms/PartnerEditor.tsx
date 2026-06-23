@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
+import { adminCategoryShowcaseHint } from "@/lib/cms/partner-showcase";
 import {
   AdminPageHeader,
   AdminCard,
@@ -195,6 +196,10 @@ export default function PartnerEditor({ partnerId }: { partnerId?: string }) {
                 label: c.charAt(0).toUpperCase() + c.slice(1),
               }))}
             />
+            <p className="text-xs text-slate-500">
+              {adminCategoryShowcaseHint(form.partnerCategory)} · Published partners appear as{" "}
+              <strong>text names</strong> on the homepage (logo optional).
+            </p>
             <AdminSelect
               label="Locale"
               value={form.locale}

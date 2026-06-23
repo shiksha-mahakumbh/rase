@@ -1,19 +1,66 @@
 /** English UI & SEO copy for /speakers/directory — speaker names stay in data file */
 
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
+import { totalAbhiyanSpeakerCount } from "@/data/mahakumbh-abhiyan-speakers";
+import { UPCOMING_EDITION } from "@/data/past-editions";
+import { committeePathForEdition } from "@/lib/committee/edition-slugs";
+import { SITE_URL } from "@/config/site";
+
+export const SPEAKERS_DIRECTORY_PATH = CANONICAL_ROUTES.speakers;
+
+export const SPEAKERS_DIRECTORY_HERO_IMAGE = "/branding/shiksha-mahakumbh-brand-hero.png";
+
+export const SPEAKERS_DIRECTORY_HERO_IMAGE_ALT =
+  "Shiksha Mahakumbh Abhiyan speaker directory — dignitaries and experts across national education summits";
+
+export const SPEAKERS_DIRECTORY_OG_IMAGE = `${SITE_URL}${SPEAKERS_DIRECTORY_HERO_IMAGE}`;
+
+export const SPEAKERS_DIRECTORY_CANONICAL_URL = `${SITE_URL}${SPEAKERS_DIRECTORY_PATH}`;
+
 export const SPEAKERS_DIRECTORY_HERO = {
   eyebrow: "Shiksha Mahakumbh Abhiyan · Department of Holistic Education",
   title: "Speaker Directory",
+  titleEditionLine: "Editions 1.0 – 5.0",
   subtitle:
-    "Complete directory of dignitaries, leaders, and experts across Shiksha Mahakumbh editions 1.0 through 5.0.",
+    "Complete directory of dignitaries, leaders, and experts across Shiksha Mahakumbh editions 1.0 through 5.0 — sourced from the Abhiyan photo frame and edition archives.",
   titleHi: "वक्ता सूची",
 } as const;
 
 export const SPEAKERS_DIRECTORY_INTRO = {
-  heading: "Speakers & Distinguished Guests",
   headingHi: "वक्ता एवं गरिमामयी विभाग",
   description:
-    "Browse all speakers recorded in the Abhiyan photo frame and edition archives — vice-chancellors, directors, policymakers, innovators, and social leaders.",
+    "Vice-chancellors, directors, policymakers, innovators, and social leaders — searchable by name, role, or organization.",
 } as const;
+
+export const SPEAKERS_DIRECTORY_BREADCRUMBS = [
+  { name: "Home", path: "/" },
+  { name: "About", path: "/introduction" },
+  { name: "Speaker Directory", path: SPEAKERS_DIRECTORY_PATH },
+] as const;
+
+export const SPEAKERS_DIRECTORY_QUICK_LINKS = [
+  { label: "Abhiyan Photo Frame", href: "/abhiyaninphotoframe", icon: "📜" },
+  { label: "Organising Committees", href: "/committees", icon: "👥" },
+  { label: "Past Editions", href: "/past-events", icon: "🗓️" },
+  { label: "Proceedings", href: "/proceedings", icon: "📚" },
+  { label: "Media Centre", href: "/media-center", icon: "📺" },
+  { label: "Register for SMK 6.0", href: "/registration", icon: "✅" },
+] as const;
+
+export const SPEAKERS_DIRECTORY_UPCOMING_NOTE = {
+  title: UPCOMING_EDITION.title,
+  venue: UPCOMING_EDITION.venue,
+  dates: UPCOMING_EDITION.dates,
+  registrationHref: UPCOMING_EDITION.registrationHref,
+  committeeHref: committeePathForEdition("6.0"),
+  message:
+    "Edition 6.0 speaker listings will be published after the summit. Register now or explore the organising committee.",
+} as const;
+
+export function speakersDirectoryMetaDescription(): string {
+  const total = totalAbhiyanSpeakerCount();
+  return `Complete speaker directory for Shiksha Mahakumbh Abhiyan — ${total} dignitaries, vice-chancellors, directors, policymakers, and experts across editions 1.0 to 5.0.`;
+}
 
 export const EDITION_DIRECTORY_ACCENTS: Record<
   string,
@@ -56,4 +103,5 @@ export const SPEAKERS_DIRECTORY_KEYWORDS = [
   "Department of Holistic Education",
   "NIT Jalandhar Shiksha Mahakumbh",
   "speaker directory",
+  "Vidya Bharti education leaders",
 ] as const;

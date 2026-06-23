@@ -1,68 +1,83 @@
+import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL } from "@/config/site";
-import { DONATION_80G, DONATION_HERO, DONATION_TIERS } from "@/data/donation-hub";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
+import {
+  DONATION_80G,
+  DONATION_CANONICAL_URL,
+  DONATION_HERO_IMAGE,
+  DONATION_PAGE_HERO,
+  DONATION_PATH,
+  DONATION_TIERS,
+  donationMetaDescription,
+  DONATION_FAQ,
+} from "@/data/donation-hub";
+import {
+  buildCollectionPageSchema,
+  buildFaqSchema,
+  buildItemListSchema,
+  orgReference,
+} from "@/lib/seo/schema";
 
 export default function DonationJsonLd() {
-  const pageUrl = `${SITE_URL}/donation`;
+  const description = donationMetaDescription();
+
+  const collection = buildCollectionPageSchema({
+    name: DONATION_PAGE_HERO.title,
+    description,
+    path: DONATION_PATH,
+  });
+
+  const tierList = buildItemListSchema({
+    name: "Donation & Sponsorship Tiers",
+    items: DONATION_TIERS.map((tier) => ({
+      name: tier.name,
+      url: `${DONATION_PATH}#donate-form`,
+    })),
+  });
 
   const webPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: DONATION_HERO.title,
-    description: DONATION_HERO.subtitle,
-    url: pageUrl,
-    inLanguage: "en-IN",
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Shiksha Mahakumbh Abhiyan",
-      url: SITE_URL,
+    name: DONATION_PAGE_HERO.title,
+    description,
+    url: DONATION_CANONICAL_URL,
+    inLanguage: ["en-IN", "hi-IN"],
+    primaryImageOfPage: `${SITE_URL}${DONATION_HERO_IMAGE}`,
+    isPartOf: orgReference(),
+    about: {
+      "@type": "NGO",
+      name: DONATION_80G.orgLegalName,
+      taxID: DONATION_80G.orgPan,
+      description: DONATION_80G.note,
     },
   };
 
-  const nonprofit = {
+  const donateAction = {
     "@context": "https://schema.org",
-    "@type": "NGO",
-    name: DONATION_80G.orgLegalName,
-    url: SITE_URL,
-    taxID: DONATION_80G.orgPan,
-    description:
-      "Department of Holistic Education — organizer of Shiksha Mahakumbh national education summits. Donations eligible under Section 80G.",
-    areaServed: { "@type": "Country", name: "India" },
+    "@type": "DonateAction",
+    name: "Donate to Shiksha Mahakumbh Abhiyan",
+    description,
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE_URL}${CANONICAL_ROUTES.donation}#donate-form`,
+      actionPlatform: ["https://schema.org/DesktopWebPlatform", "https://schema.org/MobileWebPlatform"],
+    },
+    recipient: {
+      "@type": "NGO",
+      name: DONATION_80G.orgLegalName,
+      taxID: DONATION_80G.orgPan,
+    },
   };
 
-  const offers = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Donation & Sponsorship Tiers",
-    itemListElement: DONATION_TIERS.map((tier, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "Offer",
-        name: tier.name,
-        description: tier.description,
-        price: tier.amount,
-        priceCurrency: "INR",
-        url: `${pageUrl}#donate-form`,
-        eligibleRegion: { "@type": "Country", name: "IN" },
-      },
-    })),
-  };
-
-  const breadcrumb = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Donation & Sponsorship", item: pageUrl },
-    ],
-  };
+  const faq = buildFaqSchema([...DONATION_FAQ]);
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(nonprofit) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offers) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      <JsonLd data={collection} />
+      <JsonLd data={tierList} />
+      <JsonLd data={webPage} />
+      <JsonLd data={donateAction} />
+      <JsonLd data={faq} />
     </>
   );
 }

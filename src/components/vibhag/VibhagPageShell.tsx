@@ -7,28 +7,32 @@ interface VibhagPageShellProps {
   currentSlug: string;
   children: React.ReactNode;
   showRelatedNav?: boolean;
+  showBreadcrumb?: boolean;
 }
 
 export default function VibhagPageShell({
   currentSlug,
   children,
   showRelatedNav = true,
+  showBreadcrumb = true,
 }: VibhagPageShellProps) {
   const page = getVibhagBySlug(currentSlug);
 
   return (
     <>
-      <div className="border-b border-brand-navy/10 bg-white/90 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-4 py-3 md:px-6">
-          <BreadcrumbNav
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Departments", href: CANONICAL_ROUTES.departments.academicCouncil },
-              { label: page?.title ?? "Department" },
-            ]}
-          />
+      {showBreadcrumb ? (
+        <div className="border-b border-brand-navy/10 bg-white/90 backdrop-blur-sm">
+          <div className="mx-auto max-w-7xl px-4 py-3 md:px-6">
+            <BreadcrumbNav
+              items={[
+                { label: "Home", href: "/" },
+                { label: "About", href: CANONICAL_ROUTES.introduction },
+                { label: page?.title ?? "Department" },
+              ]}
+            />
+          </div>
         </div>
-      </div>
+      ) : null}
       {children}
       {showRelatedNav && <VibhagRelatedNav currentSlug={currentSlug} />}
     </>

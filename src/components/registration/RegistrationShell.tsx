@@ -2,14 +2,12 @@
 
 import React, { ReactNode } from "react";
 import { formClasses } from "@/components/forms/formClasses";
-import { GlobeEducationIcon, KnowledgeIcon } from "@/components/home/legacy/icons";
+import { GlobeEducationIcon, KnowledgeIcon } from "@/components/icons/home";
 
 interface RegistrationShellProps {
   children: ReactNode;
   title?: string;
   subtitle?: string;
-  step?: number;
-  totalSteps?: number;
   sidebar?: ReactNode;
 }
 
@@ -17,13 +15,8 @@ const RegistrationShell: React.FC<RegistrationShellProps> = ({
   children,
   title = "Event Registration",
   subtitle = "Secure registration for Shiksha Mahakumbh Abhiyan — national educational movement",
-  step,
-  totalSteps,
   sidebar,
 }) => {
-  const progress =
-    step && totalSteps ? Math.round((step / totalSteps) * 100) : null;
-
   return (
     <div className={formClasses.page}>
       <div className="mx-auto max-w-5xl px-4 py-10 md:py-14">
@@ -38,25 +31,8 @@ const RegistrationShell: React.FC<RegistrationShellProps> = ({
               Secure Submission
             </span>
           </div>
-          <h1 className={formClasses.title}>{title}</h1>
+          <h2 className={formClasses.title}>{title}</h2>
           <p className={formClasses.subtitle}>{subtitle}</p>
-
-          {progress !== null && (
-            <div className="mx-auto mt-6 max-w-md">
-              <div className="mb-2 flex justify-between text-xs font-semibold text-gray-500">
-                <span>
-                  Step {step} of {totalSteps}
-                </span>
-                <span>{progress}%</span>
-              </div>
-              <div className="h-2 overflow-hidden rounded-full bg-gray-200">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-brand-navy to-brand-saffron transition-all duration-500"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_280px]">

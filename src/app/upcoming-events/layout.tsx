@@ -1,17 +1,26 @@
-import type { Metadata } from "next";
+import UpcomingEventsJsonLd from "@/components/upcoming-events/UpcomingEventsJsonLd";
 import { createPageMetadata } from "@/lib/seo/metadata";
-import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
-import { UPCOMING_EVENTS_KEYWORDS } from "@/data/upcoming-events-hub";
+import {
+  UPCOMING_EVENTS_KEYWORDS,
+  UPCOMING_EVENTS_OG_IMAGE,
+  UPCOMING_EVENTS_PATH,
+  upcomingEventsMetaDescription,
+} from "@/data/upcoming-events-hub";
 
-export const metadata: Metadata = createPageMetadata({
-  title: "Upcoming Events — Shiksha Mahakumbh 6.0 & 7.0 | National Education Summit",
-  description:
-    "Register for Shiksha Mahakumbh 6.0 at NIT Hamirpur (9–11 October 2026). Shiksha Mahakumbh 7.0 at IIT Jammu — coming soon. National multidisciplinary education summit aligned with NEP 2020.",
-  path: CANONICAL_ROUTES.upcomingEvents,
+export const metadata = createPageMetadata({
+  title: `Upcoming Events — Shiksha Mahakumbh 6.0 & 7.0 | National Education Summit`,
+  description: upcomingEventsMetaDescription(),
+  path: UPCOMING_EVENTS_PATH,
   keywords: [...UPCOMING_EVENTS_KEYWORDS],
   locale: "en_IN",
+  ogImageUrl: UPCOMING_EVENTS_OG_IMAGE,
 });
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+export default function UpcomingEventsLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <UpcomingEventsJsonLd />
+      {children}
+    </>
+  );
 }

@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import SectionShell from "@/components/home/legacy/SectionShell";
-import GlassCard from "@/components/home/legacy/GlassCard";
-import { GlobeEducationIcon, InnovationIcon, KnowledgeIcon } from "@/components/home/legacy/icons";
+import SectionShell from "@/components/ui/SectionShell";
+import GlassCard from "@/components/ui/GlassCard";
+import { GlobeEducationIcon, InnovationIcon, KnowledgeIcon } from "@/components/icons/home";
 
 const CompanyInfo: React.FC = () => {
   return (

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { getCaptchaTokenForAction } from "@/lib/security/recaptcha-client";
 
 interface FooterContactFormProps {
   variant?: "light" | "dark";
@@ -12,22 +13,32 @@ export default function FooterContactForm({
 }: FooterContactFormProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const isDark = variant === "dark";
   const inputClass = isDark
     ? "w-full rounded-lg border border-white/20 bg-white/10 p-2.5 text-sm text-white placeholder:text-gray-500 focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron"
     : "w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-brand-saffron focus:outline-none focus:ring-1 focus:ring-brand-saffron";
   const buttonClass = isDark
-    ? "w-full rounded-lg bg-brand-saffron py-2.5 text-sm font-bold text-brand-navy transition-colors hover:bg-brand-saffron-dark"
-    : "w-full rounded-lg bg-brand-saffron py-2.5 text-sm font-bold text-brand-navy transition-colors hover:bg-brand-saffron-dark";
+    ? "w-full rounded-lg bg-brand-saffron py-2.5 text-sm font-bold text-brand-navy transition-colors hover:bg-brand-saffron-dark disabled:opacity-60"
+    : "w-full rounded-lg bg-brand-saffron py-2.5 text-sm font-bold text-brand-navy transition-colors hover:bg-brand-saffron-dark disabled:opacity-60";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSubmitting(true);
     try {
+      const captchaToken = await getCaptchaTokenForAction("contact");
+      if (!captchaToken) {
+        toast.error("Security verification failed. Please try again.");
+        return;
+      }
+
       const res = await fetch("/api/v2/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          captchaToken,
+          fullName: "Website visitor (footer)",
           email,
           message,
           subject: "Footer contact",
@@ -41,6 +52,8 @@ export default function FooterContactForm({
       toast.success("Message sent successfully!");
     } catch {
       toast.error("Failed to send message. Try again later.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -64,8 +77,8 @@ export default function FooterContactForm({
         required
         aria-label="Your message"
       />
-      <button type="submit" className={buttonClass}>
-        Send Message
+      <button type="submit" disabled={submitting} className={buttonClass}>
+        {submitting ? "Sending…" : "Send Message"}
       </button>
     </form>
   );

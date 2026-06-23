@@ -1,6 +1,10 @@
 import type { BestWishEntry } from "@/data/best-wishes";
 import { formatWishScope } from "@/data/best-wishes";
 
+function messageLang(message: string): "hi" | undefined {
+  return /[\u0900-\u097F]/.test(message) ? "hi" : undefined;
+}
+
 type Props = {
   wish: BestWishEntry;
   variant?: "default" | "featured";
@@ -8,10 +12,12 @@ type Props = {
 
 export default function WishCard({ wish, variant = "default" }: Props) {
   const isFeatured = variant === "featured";
+  const lang = messageLang(wish.message);
 
   return (
     <article
-      className={`group flex h-full flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg ${
+      id={wish.id}
+      className={`group flex h-full scroll-mt-24 flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg ${
         isFeatured
           ? "border-brand-saffron/40 ring-1 ring-brand-saffron/20"
           : "border-slate-200 hover:border-brand-saffron/30"
@@ -37,7 +43,10 @@ export default function WishCard({ wish, variant = "default" }: Props) {
         <p className="mt-1.5 text-sm font-medium leading-relaxed text-brand-saffron-dark">
           {wish.designation}
         </p>
-        <blockquote className="mt-4 flex-1 border-l-[3px] border-brand-saffron/50 pl-3 text-sm italic leading-relaxed text-slate-700">
+        <blockquote
+          className="mt-4 flex-1 border-l-[3px] border-brand-saffron/50 pl-3 text-sm italic leading-relaxed text-slate-700"
+          lang={lang}
+        >
           &ldquo;{wish.message}&rdquo;
         </blockquote>
         <footer className="mt-4 flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-slate-400">

@@ -9,7 +9,7 @@ export async function verifyAdminRequest(
   request: NextRequest
 ): Promise<AdminSessionPayload> {
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  if (cookie && cookie !== "1") {
+  if (cookie) {
     const session = verifyAdminSessionToken(cookie);
     if (session) {
       return {
@@ -30,7 +30,7 @@ export async function verifyAdminRequest(
 
 export function assertAdminSession(request: NextRequest): AdminSessionPayload {
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  if (!cookie || cookie === "1") {
+  if (!cookie) {
     throw new ServiceError("Unauthorized", 401, "UNAUTHORIZED");
   }
   const session = verifyAdminSessionToken(cookie);

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { EVENT_NAME } from "@/types/registration";
 import { event } from "@/design/tokens";
+import { REGISTRATION_SUCCESS_LINKS } from "@/data/registration-hub";
 import { ROUTES } from "@/constants/routes";
 import { CtaButton } from "@/components/ui";
 import RegistrationReceipt, {
@@ -112,9 +113,9 @@ function SuccessInner() {
           <p className="text-sm font-bold uppercase tracking-widest text-brand-saffron">
             Registration confirmed
           </p>
-          <h1 className="mt-2 text-2xl font-extrabold md:text-3xl">
+          <h2 className="mt-2 text-2xl font-extrabold md:text-3xl">
             You&apos;re registered for {EVENT_NAME}
-          </h1>
+          </h2>
           <p className="mt-2 text-sm text-white/85">
             9–11 October 2026 · {event.venue}
           </p>
@@ -186,6 +187,22 @@ function SuccessInner() {
                 Contact page →
               </Link>
             </div>
+          </section>
+
+          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+            <h2 className="font-bold text-brand-navy">Explore the programme</h2>
+            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+              {REGISTRATION_SUCCESS_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="block rounded-lg border border-slate-100 px-3 py-2 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:bg-brand-surface"
+                  >
+                    {link.label} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
 
           <div className="flex flex-wrap justify-center gap-3">

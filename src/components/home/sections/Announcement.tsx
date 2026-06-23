@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ConferenceIcon, GlobeEducationIcon } from "@/components/home/legacy/icons";
+import GlassCard from "@/components/ui/GlassCard";
+import { ConferenceIcon, GlobeEducationIcon } from "@/components/icons/home";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionItems } from "@/lib/cms/utils";
@@ -27,7 +28,7 @@ const DEFAULT_ITEMS = [
   },
 ];
 
-const Announcement = () => {
+export default function Announcement() {
   const cms = useCms();
   const section = getSection(cms?.homepage, "announcements");
   const cmsItems = sectionItems<{
@@ -52,8 +53,8 @@ const Announcement = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="w-full px-3 py-4 md:px-4 md:py-5">
-      <div className="mx-auto max-w-3xl space-y-2">
+    <GlassCard hover={false} className="h-full p-4 md:p-5">
+      <div className="space-y-2">
         {accordionItems.map((item) => {
           const isOpen = openId === item.id;
           const Icon = item.icon;
@@ -82,13 +83,9 @@ const Announcement = () => {
                   <Icon className="h-4 w-4" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-bold text-gray-900">
-                    {item.title}
-                  </span>
+                  <span className="block text-sm font-bold text-gray-900">{item.title}</span>
                   {!isOpen && (
-                    <span className="block truncate text-xs text-gray-500">
-                      {item.summary}
-                    </span>
+                    <span className="block truncate text-xs text-gray-500">{item.summary}</span>
                   )}
                 </span>
                 <span
@@ -127,8 +124,6 @@ const Announcement = () => {
           );
         })}
       </div>
-    </div>
+    </GlassCard>
   );
-};
-
-export default Announcement;
+}

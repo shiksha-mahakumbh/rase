@@ -1,6 +1,17 @@
+import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL } from "@/config/site";
+import {
+  DEPARTMENTS_HERO_IMAGE,
+  getVibhagHubConfig,
+  vibhagCoordinatorItemsForSchema,
+  vibhagHubMetaDescription,
+} from "@/data/departments-hub";
 import { getVibhagBySlug } from "@/data/vibhag-pages";
-import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
+import {
+  buildCollectionPageSchema,
+  buildItemListSchema,
+  orgReference,
+} from "@/lib/seo/schema";
 
 interface VibhagJsonLdProps {
   slug: string;
@@ -8,51 +19,47 @@ interface VibhagJsonLdProps {
 
 export default function VibhagJsonLd({ slug }: VibhagJsonLdProps) {
   const page = getVibhagBySlug(slug);
+  const hub = getVibhagHubConfig(slug);
   if (!page) return null;
 
-  const breadcrumb = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Departments",
-        item: `${SITE_URL}${CANONICAL_ROUTES.departments.academicCouncil}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: page.title,
-        item: `${SITE_URL}${page.path}`,
-      },
-    ],
-  };
+  const pageUrl = `${SITE_URL}${page.path}`;
+  const description = hub ? vibhagHubMetaDescription(slug) : page.description;
+
+  const collection = buildCollectionPageSchema({
+    name: `${page.title} — Shiksha Mahakumbh 6.0`,
+    description,
+    path: page.path,
+  });
+
+  const coordinatorsList =
+    hub && hub.coordinatorNames.length > 0
+      ? buildItemListSchema({
+          name: `${page.title} coordinators`,
+          items: vibhagCoordinatorItemsForSchema(slug),
+        })
+      : null;
 
   const webPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: `${page.title} — Shiksha Mahakumbh`,
-    description: page.description,
-    url: `${SITE_URL}${page.path}`,
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Shiksha Mahakumbh Abhiyan",
-      url: SITE_URL,
+    name: hub?.pageTitle ?? `${page.title} — Shiksha Mahakumbh`,
+    description,
+    url: pageUrl,
+    inLanguage: ["en-IN", "hi-IN"],
+    primaryImageOfPage: `${SITE_URL}${DEPARTMENTS_HERO_IMAGE}`,
+    isPartOf: orgReference(),
+    about: {
+      "@type": "Organization",
+      name: "Department of Holistic Education",
+      alternateName: "Shiksha Mahakumbh Abhiyan",
     },
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }}
-      />
+      <JsonLd data={collection} />
+      {coordinatorsList ? <JsonLd data={coordinatorsList} /> : null}
+      <JsonLd data={webPage} />
     </>
   );
 }

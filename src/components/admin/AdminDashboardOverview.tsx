@@ -1,23 +1,8 @@
 "use client";
 
-export type AdminDashboardStats = {
-  total: number;
-  delegate: number;
-  conclave: number;
-  olympiad: number;
-  awards: number;
-  bestPractices: number;
-  accommodation: number;
-  today: number;
-  pendingPayments: number;
-  submittedFree: number;
-  completedPayments: number;
-  approved: number;
-  verified: number;
-  pendingVerifications: number;
-  pendingAccommodation: number;
-  revenue: number;
-};
+import type { RegistrationAdminStats } from "@/types/admin-dashboard";
+
+export type AdminDashboardStats = RegistrationAdminStats;
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
@@ -91,7 +76,7 @@ export default function AdminDashboardOverview({
 
       {stats.revenue > 0 && (
         <p className="text-sm text-gray-600">
-          Revenue (loaded records, paid): ₹
+          Revenue (paid registrations): ₹
           {stats.revenue.toLocaleString("en-IN")}
         </p>
       )}

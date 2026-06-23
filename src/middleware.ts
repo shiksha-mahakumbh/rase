@@ -17,10 +17,18 @@ function isAdminPath(pathname: string): boolean {
   return pathname === "/admin" || pathname.startsWith("/admin/");
 }
 
+function isOpsPath(pathname: string): boolean {
+  return (
+    isAdminPath(pathname) ||
+    pathname === "/event/checkin" ||
+    pathname.startsWith("/event/checkin/")
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (isAdminPath(pathname)) {
+  if (isOpsPath(pathname)) {
     const response = NextResponse.next();
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
     return response;

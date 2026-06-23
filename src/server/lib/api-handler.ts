@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
 
+import type { AdminRole } from "@/types/registration";
+
 type HandlerOptions = {
   rateLimitKey?: string;
   limit?: number;
   windowMs?: number;
   requireAdmin?: boolean;
+  /** Requires x-admin-role header (set by admin gateway) to match one of these roles */
+  adminRoles?: readonly AdminRole[];
 };
 
 /** Default context for App Router route handlers (Next.js 15). */
@@ -36,6 +40,10 @@ export function createApiHandler<T, C extends AppRouteContext = AppRouteContext>
       if (options.requireAdmin) {
         const { requireAdminSecret } = await import("@/server/lib/admin-guard");
         requireAdminSecret(request);
+      }
+      if (options.adminRoles?.length) {
+        const { assertAdminRoles } = await import("@/server/lib/admin-rbac");
+        assertAdminRoles(request, options.adminRoles);
       }
       const result = await handler(request, context);
       return NextResponse.json(result);

@@ -152,7 +152,7 @@ export const CMS_NAV: AdminNavItem[] = [
   },
   {
     label: "Event Check-In",
-    href: "/event/checkin",
+    href: "/admin/cms/checkin",
     description: "Mobile QR check-in gate",
     group: "operations",
   },

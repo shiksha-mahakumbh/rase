@@ -3,6 +3,15 @@
  * Leadership names remain sourced from abhiyan-photo-frame.ts.
  */
 
+import { SITE_URL } from "@/config/site";
+
+export const INTRODUCTION_HERO_IMAGE = "/branding/shiksha-mahakumbh-brand-hero.png";
+
+export const INTRODUCTION_HERO_IMAGE_ALT =
+  "Shiksha Mahakumbh Abhiyan — Department of Holistic Education national education movement";
+
+export const INTRODUCTION_OG_IMAGE = `${SITE_URL}${INTRODUCTION_HERO_IMAGE}`;
+
 export const INTRODUCTION_HERO = {
   title: "Shiksha Mahakumbh Abhiyan",
   tagline: "A People's Movement for Global Educational Transformation",
@@ -74,16 +83,28 @@ export const INTRODUCTION_OBJECTIVES = [
 ] as const;
 
 export const INTRODUCTION_STATS = [
-  { label: "Editions Completed", value: "5.0" },
-  { label: "Institutions Engaged", value: "500+" },
-  { label: "Research Papers", value: "1200+" },
-  { label: "States Represented", value: "50+" },
+  { label: "Editions", value: "5", hint: "Completed through SMK 5.0" },
+  { label: "Institutions", value: "500+", hint: "Engaged nationwide" },
+  { label: "Research papers", value: "1200+", hint: "Presented across editions" },
+  { label: "States & UTs", value: "14+", hint: "Peak at SMK 1.0 (India has 28 states + 8 UTs)" },
+] as const;
+
+export const INTRODUCTION_QUICK_LINKS = [
+  { label: "Gallery", href: "/gallery", icon: "📷" },
+  { label: "Media Centre", href: "/media-center", icon: "📺" },
+  { label: "Proceedings", href: "/proceedings", icon: "📚" },
+  { label: "Publications", href: "/publications", icon: "📖" },
+  { label: "Press Releases", href: "/press", icon: "📰" },
+  { label: "Registration", href: "/registration", icon: "✅" },
 ] as const;
 
 export const INTRODUCTION_SECTION_NAV = [
   { id: "overview", label: "Overview" },
   { id: "objectives", label: "Objectives" },
   { id: "leadership", label: "Leadership" },
+  { id: "coordinators", label: "Coordinators" },
   { id: "editions", label: "Editions" },
   { id: "join", label: "Register" },
 ] as const;
+
+export const INTRODUCTION_CANONICAL_URL = `${SITE_URL}/introduction`;

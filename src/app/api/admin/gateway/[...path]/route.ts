@@ -8,7 +8,7 @@ type RouteContext = { params: Promise<{ path: string[] }> };
 
 function hasAdminCredentials(request: NextRequest): boolean {
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  if (cookie && cookie !== "1" && verifyAdminSessionToken(cookie)) {
+  if (cookie && verifyAdminSessionToken(cookie)) {
     return true;
   }
   const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "").trim();
@@ -23,11 +23,7 @@ function unauthorizedResponse() {
 }
 
 async function proxyToV2Admin(request: NextRequest, segments: string[]) {
-  if (!hasAdminCredentials(request)) {
-    throw new ServiceError("Unauthorized", 401, "UNAUTHORIZED");
-  }
-
-  await verifyAdminRequest(request);
+  const session = await verifyAdminRequest(request);
 
   const secret =
     process.env.ADMIN_OPS_SECRET ?? process.env.REGISTRATION_EMAIL_SECRET;
@@ -42,6 +38,9 @@ async function proxyToV2Admin(request: NextRequest, segments: string[]) {
 
   const headers = new Headers();
   headers.set("x-ops-secret", secret);
+  headers.set("x-admin-role", session.role);
+  headers.set("x-admin-email", session.email);
+  headers.set("x-admin-uid", session.uid);
   const contentType = request.headers.get("content-type");
   if (contentType) headers.set("content-type", contentType);
 

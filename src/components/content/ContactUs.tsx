@@ -1,7 +1,8 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { DHE_ORGANIZATION } from "@/config/organization";
-import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
+import { phoneToWhatsAppHref } from "@/data/contact-hub";
 
 const ContactUsForm = dynamic(() => import("@/components/contact/ContactUsForm"));
 const ContactMap = dynamic(() => import("@/components/contact/ContactMap"));
@@ -49,17 +50,28 @@ const contactCards = [
     icon: "📞",
     title: "Phone / WhatsApp",
     content: (
-      <ul className="space-y-1">
-        {DHE_ORGANIZATION.phones.map((phone) => (
-          <li key={phone}>
-            <a
-              href={`tel:${phone.replace(/\s/g, "")}`}
-              className="font-medium text-brand-navy hover:text-brand-saffron-dark hover:underline"
-            >
-              {phone}
-            </a>
-          </li>
-        ))}
+      <ul className="space-y-2">
+        {DHE_ORGANIZATION.phones.map((phone) => {
+          const tel = phone.replace(/\s/g, "");
+          return (
+            <li key={phone} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <a
+                href={`tel:${tel}`}
+                className="font-medium text-brand-navy hover:text-brand-saffron-dark hover:underline"
+              >
+                {phone}
+              </a>
+              <a
+                href={phoneToWhatsAppHref(phone)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold text-emerald-700 hover:underline"
+              >
+                WhatsApp →
+              </a>
+            </li>
+          );
+        })}
       </ul>
     ),
   },
@@ -89,17 +101,9 @@ const contactCards = [
 export default function ContactUs() {
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-6xl px-4 py-6 md:px-6 md:py-8">
-        <BreadcrumbNav
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Contact Us" },
-          ]}
-          className="mb-8"
-        />
-
+      <div className="mx-auto max-w-6xl px-4 py-6 md:px-8 md:py-10">
         <section aria-labelledby="contact-cards-heading" className="mb-12">
-          <h2 id="contact-cards-heading" className="sr-only">
+          <h2 id="contact-cards-heading" className="mb-5 text-lg font-bold text-brand-navy md:text-xl">
             Contact information
           </h2>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -127,8 +131,19 @@ export default function ContactUs() {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           For registration support, visit{" "}
-          <Link href="/registration" className="font-semibold text-brand-navy hover:text-brand-saffron-dark">
+          <Link
+            href={CANONICAL_ROUTES.registration}
+            className="font-semibold text-brand-navy hover:text-brand-saffron-dark"
+          >
             Registration
+          </Link>
+          {" · "}
+          Institutional liaison:{" "}
+          <Link
+            href={CANONICAL_ROUTES.departments.sampark}
+            className="font-semibold text-brand-navy hover:text-brand-saffron-dark"
+          >
+            Sampark Vibhag
           </Link>
           .
         </p>

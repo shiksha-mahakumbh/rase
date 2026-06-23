@@ -208,6 +208,44 @@ export function buildCollectionPageSchema(opts: {
   });
 }
 
+export function buildBookSchema(book: {
+  id: string;
+  name: string;
+  description: string;
+  pagePath: string;
+  image?: string;
+  datePublished?: string;
+  isbn?: string;
+  edition?: string;
+  purchasePath?: string;
+}): JsonLd {
+  const pageUrl = `${SITE_URL}${book.pagePath}#${book.id}`;
+  return withContext({
+    "@type": "Book",
+    "@id": pageUrl,
+    name: book.name,
+    description: book.description,
+    url: pageUrl,
+    mainEntityOfPage: pageUrl,
+    inLanguage: "en-IN",
+    image: book.image ? `${SITE_URL}${book.image}` : undefined,
+    datePublished: book.datePublished,
+    isbn: book.isbn,
+    about: book.edition
+      ? { "@type": "Event", name: `Shiksha Mahakumbh ${book.edition}` }
+      : undefined,
+    publisher: orgReference(),
+    offers: book.purchasePath
+      ? {
+          "@type": "Offer",
+          url: `${SITE_URL}${book.purchasePath}`,
+          availability: "https://schema.org/InStock",
+          description: "Contact Department of Holistic Education to request a copy.",
+        }
+      : undefined,
+  });
+}
+
 export function buildItemListSchema(opts: {
   name: string;
   items: { name: string; url: string }[];

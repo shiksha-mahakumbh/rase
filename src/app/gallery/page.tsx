@@ -1,14 +1,22 @@
-import { Suspense } from "react";
 import GalleryJsonLd from "@/components/gallery/GalleryJsonLd";
 import GalleryShowcase from "@/components/gallery/GalleryShowcase";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
+import type { GalleryTab } from "@/data/gallery-hub";
 
 const BREADCRUMBS = [
   { name: "Home", path: "/" },
+  { name: "Media Centre", path: "/media-center" },
   { name: "Gallery", path: "/gallery" },
 ];
 
-export default function GalleryRoutePage() {
+type Props = {
+  searchParams: Promise<{ tab?: string }>;
+};
+
+export default async function GalleryRoutePage({ searchParams }: Props) {
+  const params = await searchParams;
+  const activeTab: GalleryTab = params.tab === "videos" ? "videos" : "photos";
+
   return (
     <PublicPageShell
       showHero={false}
@@ -18,13 +26,7 @@ export default function GalleryRoutePage() {
       skipContainer
     >
       <GalleryJsonLd />
-      <Suspense
-        fallback={
-          <div className="py-16 text-center text-slate-600">Loading gallery…</div>
-        }
-      >
-        <GalleryShowcase />
-      </Suspense>
+      <GalleryShowcase activeTab={activeTab} />
     </PublicPageShell>
   );
 }

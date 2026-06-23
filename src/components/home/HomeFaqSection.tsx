@@ -1,53 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
-import Link from "next/link";
 import { useCms } from "@/lib/cms/context";
 import { extractFaqsFromCmsData } from "@/lib/cms/faq";
 import { getSection, sectionField } from "@/lib/cms/utils";
-
-const DEFAULT_FAQS = [
-  {
-    question: "What is Shiksha Mahakumbh Abhiyan?",
-    answer:
-      "A national–international multidisciplinary education movement hosted across editions at premier institutions, aligned with NEP 2020 and Bharat@2047.",
-  },
-  {
-    question: "How do I register for the 6th edition?",
-    answer:
-      "Use the unified registration portal for delegates, conclaves, olympiads, awards, exhibitions, and accommodation requests.",
-    registerLink: true,
-  },
-  {
-    question: "When and where is SMK 6.0?",
-    answer: "9–11 October 2026 at NIT Hamirpur, Himachal Pradesh, India.",
-  },
-  {
-    question: "How do I submit to the Multi Track Conference?",
-    answer:
-      "Use the official Microsoft CMT portal for paper and abstract submissions, deadlines, and peer review.",
-    mtcLink: true,
-  },
-  {
-    question: "Is accommodation available?",
-    answer: "Yes — select accommodation during registration; the organising team confirms availability.",
-  },
-] as const;
+import { HOME_DEFAULT_FAQS } from "@/data/home-faqs";
 
 export default function HomeFaqSection() {
   const cms = useCms();
   const section = getSection(cms?.homepage, "stats");
   const cmsFaqs = extractFaqsFromCmsData(cms);
-  const faqs =
-    cmsFaqs.length > 0
-      ? cmsFaqs
-      : DEFAULT_FAQS.map((f) => ({
-          question: f.question,
-          answer: f.answer,
-        }));
+  const faqs = cmsFaqs.length > 0 ? cmsFaqs : HOME_DEFAULT_FAQS;
 
   const [open, setOpen] = useState<number | null>(0);
 
@@ -96,7 +63,7 @@ export default function HomeFaqSection() {
                   className="border-t border-slate-100 px-4 pb-4 text-sm leading-relaxed text-slate-600 md:px-5"
                 >
                   {faq.answer}
-                  {faq.question.includes("register") && (
+                  {faq.question.toLowerCase().includes("register") && (
                     <>
                       {" "}
                       <Link

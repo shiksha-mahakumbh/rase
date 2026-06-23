@@ -87,3 +87,15 @@ export async function executeRecaptcha(action: string): Promise<string | null> {
   await new Promise((r) => setTimeout(r, 400));
   return run();
 }
+
+/** reCAPTCHA v3 token for public forms (contact, footer, etc.) */
+export async function getCaptchaTokenForAction(action: string): Promise<string | null> {
+  if (!SITE_KEY) {
+    return process.env.NODE_ENV !== "production" ? "dev-bypass" : null;
+  }
+
+  const ready = await waitForRecaptcha();
+  if (!ready) return null;
+
+  return executeRecaptcha(action);
+}

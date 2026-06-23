@@ -128,7 +128,7 @@ export const PUBLIC_PAGE_META = {
   donation: createPageMetadata({
     title: "Donate & Sponsor — 80G Tax Benefit | Shiksha Mahakumbh",
     description:
-      "Support Shiksha Mahakumbh with secure Razorpay payments. Instant 80G receipt by email — download or print. PAN mandatory.",
+      "Support Shiksha Mahakumbh with secure Razorpay payments. Donations to Vidya Bharti Institute of Training and Research Trust are eligible under Section 80G (Reg. AAETV1652KF20241). Instant receipt by email — PAN mandatory.",
     path: "/donation",
     keywords: [
       "Shiksha Mahakumbh donation",
