@@ -1,5 +1,11 @@
-import RegistrationHub from "@/app/registration/RegistrationHub";
+import RegistrationPageView from "@/app/registration/RegistrationPageView";
+import RegistrationJsonLd from "@/components/seo/RegistrationJsonLd";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import {
+  REGISTRATION_OG_IMAGE,
+  REGISTRATION_PATH,
+  registrationMetaDescription,
+} from "@/data/registration-hub";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({
@@ -12,12 +18,18 @@ export async function generateMetadata({
 
   return createPageMetadata({
     title: t("title"),
-    description:
-      "Official registration for Shiksha Mahakumbh 6.0 — delegates, conclaves, olympiads, awards, and more.",
-    path: locale === "en" ? "/registration" : `/${locale}/registration`,
+    description: registrationMetaDescription(),
+    path: locale === "en" ? REGISTRATION_PATH : `/${locale}${REGISTRATION_PATH}`,
+    locale: "en_IN",
+    ogImageUrl: REGISTRATION_OG_IMAGE,
   });
 }
 
 export default function LocaleRegistrationPage() {
-  return <RegistrationHub />;
+  return (
+    <>
+      <RegistrationJsonLd />
+      <RegistrationPageView />
+    </>
+  );
 }

@@ -3,7 +3,7 @@
 import React, { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import PremiumModal from "@/components/ui/PremiumModal";
-import { GlobeEducationIcon } from "@/components/home/legacy/icons";
+import { GlobeEducationIcon } from "@/components/icons/home";
 
 interface ModalProps {
   isOpen: boolean;

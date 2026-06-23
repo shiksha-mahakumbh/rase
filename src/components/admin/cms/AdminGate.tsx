@@ -1,8 +1,8 @@
 "use client";
 
 import { ReactNode, useState } from "react";
+import toast from "react-hot-toast";
 import { useAdmin } from "@/lib/adminAuth";
-import AdminShell from "./AdminShell";
 
 export default function AdminGate({ children }: { children: ReactNode }) {
   const { user, role, loading, login, isAdmin } = useAdmin();
@@ -22,7 +22,7 @@ export default function AdminGate({ children }: { children: ReactNode }) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4">
         <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h1 className="text-center text-xl font-bold text-brand-navy">CMS Admin</h1>
+          <h1 className="text-center text-xl font-bold text-brand-navy">Admin Sign In</h1>
           <p className="mt-2 text-center text-sm text-slate-600">
             Sign in with your admin email and password.
           </p>
@@ -33,8 +33,10 @@ export default function AdminGate({ children }: { children: ReactNode }) {
               setSubmitting(true);
               try {
                 await login(email, password);
-              } catch {
-                // login errors surfaced via admin page patterns; keep gate minimal
+              } catch (error) {
+                toast.error(
+                  error instanceof Error ? error.message : "Login failed"
+                );
               } finally {
                 setSubmitting(false);
               }
@@ -74,5 +76,5 @@ export default function AdminGate({ children }: { children: ReactNode }) {
     );
   }
 
-  return <AdminShell>{children}</AdminShell>;
+  return <>{children}</>;
 }

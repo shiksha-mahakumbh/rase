@@ -1,46 +1,31 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import DepartmentPageShell from "@/components/departments/DepartmentPageShell";
-import DepartmentMemberTable, {
-  DepartmentMember,
-} from "@/components/departments/DepartmentMemberTable";
+import DepartmentMemberTable from "@/components/departments/DepartmentMemberTable";
+import { SAMPARK_MEMBERS } from "@/data/departments/sampark-members";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 
 const SamparkVibhag: React.FC = () => {
-  const members: DepartmentMember[] = [
-    {
-      name: "Dr. Manjo Teotia",
-      position: "Assistant Professor, ICSSR-CRRID Chandigarh",
-      contact: "8283825534",
-    },
-    {
-      name: "Dr. Nitya Sharma",
-      position: "PTU Jalandhar",
-      contact: "9814733309",
-    },
-    {
-      name: "Dr. Neelam Sharma",
-      position: "LPU Jalandhar",
-      contact: "6239612140",
-    },
-    {
-      name: "Dr. Gaurav Kumar",
-      position: "IIT Delhi",
-      contact: "9023925400",
-    },
-    {
-      name: "Dr. Rajneesh Talwar",
-      position: "Chitkara University, DHE",
-      contact: "9815779477",
-    },
-  ];
-
   return (
     <DepartmentPageShell
       departmentTitle="Sampark Vibhag"
       departmentTitleHindi="संपर्क विभाग"
+      hideTitleCard
     >
-      <DepartmentMemberTable members={members} />
+      <div id="coordinators" className="scroll-mt-24">
+        <DepartmentMemberTable members={SAMPARK_MEMBERS} />
+      </div>
+      <p className="mt-8 text-center text-sm text-slate-600">
+        <Link href={CANONICAL_ROUTES.committees} className="font-semibold text-brand-blue hover:underline">
+          View organising committees
+        </Link>
+        {" · "}
+        <Link href={CANONICAL_ROUTES.contact} className="font-semibold text-brand-blue hover:underline">
+          Contact DHE
+        </Link>
+      </p>
     </DepartmentPageShell>
   );
 };

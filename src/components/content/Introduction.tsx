@@ -1,14 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import { ABIYAN_PHOTO_FRAME } from "@/data/abhiyan-photo-frame";
 import {
   INTRODUCTION_CLOSING,
+  INTRODUCTION_HERO,
+  INTRODUCTION_HERO_IMAGE,
   INTRODUCTION_MEETING_TAGLINE,
   INTRODUCTION_OBJECTIVES,
   INTRODUCTION_PARAGRAPHS,
+  INTRODUCTION_QUICK_LINKS,
   INTRODUCTION_SECTION_NAV,
   INTRODUCTION_STATS,
 } from "@/data/introduction-content";
-import { PAST_EDITIONS } from "@/data/past-editions";
+import { PAST_EDITIONS, UPCOMING_EDITION } from "@/data/past-editions";
 
 function initials(name: string) {
   const trimmed = name.replace(/^[\s\d./]+/, "");
@@ -17,16 +22,20 @@ function initials(name: string) {
 
 function SectionHeading({
   id,
+  headingId,
   title,
   description,
 }: {
   id: string;
+  headingId: string;
   title: string;
   description?: string;
 }) {
   return (
     <div id={id} className="scroll-mt-24">
-      <h2 className="text-xl font-bold text-brand-navy md:text-2xl">{title}</h2>
+      <h2 id={headingId} className="text-xl font-bold text-brand-navy md:text-2xl">
+        {title}
+      </h2>
       {description ? (
         <p className="mt-2 max-w-3xl text-sm text-slate-600 md:text-base">{description}</p>
       ) : null}
@@ -35,33 +44,61 @@ function SectionHeading({
 }
 
 export default function Introduction() {
-  const { patron, advisors, dedication } = ABIYAN_PHOTO_FRAME;
+  const { patron, advisors, coordinators, dedication, introParagraphs, taglineHindi } =
+    ABIYAN_PHOTO_FRAME;
 
   const editions = [
     ...PAST_EDITIONS.map((e) => ({
       edition: e.edition,
+      title: e.title,
       venue: e.venue,
       dates: e.dates,
       theme: e.theme,
       coreFocus: e.coreEssence,
       href: e.href,
+      imageSrc: e.imageSrc ?? INTRODUCTION_HERO_IMAGE,
+      imageAlt: `${e.title} — ${e.venue} ${e.year}`,
       upcoming: false,
     })),
     {
-      edition: "6.0",
-      venue: "NIT Hamirpur",
-      dates: "9–11 October 2026",
-      theme: "Current Edition — Registration Open",
-      coreFocus: "Delegates, researchers, and institutions welcome",
-      href: "/upcoming-events",
+      edition: UPCOMING_EDITION.edition,
+      title: UPCOMING_EDITION.title,
+      venue: UPCOMING_EDITION.venue,
+      dates: UPCOMING_EDITION.dates,
+      theme: UPCOMING_EDITION.theme,
+      coreFocus: UPCOMING_EDITION.coreEssence,
+      href: UPCOMING_EDITION.registrationHref,
+      imageSrc: INTRODUCTION_HERO_IMAGE,
+      imageAlt: `${UPCOMING_EDITION.title} — ${UPCOMING_EDITION.venue} 2026`,
       upcoming: true,
     },
   ];
 
   return (
     <div className="space-y-12 md:space-y-16">
-      {/* Overview hero card */}
-      <section id="overview" className="scroll-mt-24">
+      <BreadcrumbNav
+        items={[
+          { label: "Home", href: "/" },
+          { label: "About", href: "/introduction" },
+          { label: "Introduction" },
+        ]}
+        className="-mt-2 mb-2"
+      />
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {INTRODUCTION_QUICK_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
+          >
+            <span aria-hidden>{link.icon}</span>
+            {link.label}
+          </Link>
+        ))}
+      </div>
+
+      <section id="overview" className="scroll-mt-24" aria-labelledby="overview-heading">
         <div className="relative overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-surface-warm via-white to-brand-blue/5 p-6 shadow-sm md:p-8">
           <div
             className="brand-grid-pattern pointer-events-none absolute inset-0 opacity-20"
@@ -69,9 +106,32 @@ export default function Introduction() {
           />
           <div className="relative">
             <p className="text-center text-sm italic text-slate-500">{dedication}</p>
-            <h2 className="mt-4 text-center text-2xl font-bold leading-tight text-brand-navy md:text-3xl">
-              A People&apos;s Movement for Global Educational Transformation
+            <h2
+              id="overview-heading"
+              className="mt-4 text-center text-2xl font-bold leading-tight text-brand-navy md:text-3xl"
+            >
+              {INTRODUCTION_HERO.tagline}
             </h2>
+
+            <aside
+              className="mt-6 rounded-xl border border-brand-saffron/25 bg-brand-saffron/5 p-4 md:p-5"
+              lang="hi"
+              aria-label="Hindi introduction"
+            >
+              <p className="text-xs font-bold uppercase tracking-wide text-brand-saffron-dark">
+                हिंदी में — परिचय
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-700 md:text-base">
+                {taglineHindi}
+              </p>
+              <div className="mt-3 space-y-2">
+                {introParagraphs.map((p) => (
+                  <p key={p.slice(0, 32)} className="text-sm leading-relaxed text-slate-600">
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </aside>
 
             <div className="mt-8 space-y-5">
               {INTRODUCTION_PARAGRAPHS.map((p, i) => (
@@ -96,6 +156,7 @@ export default function Introduction() {
                     {stat.label}
                   </dt>
                   <dd className="mt-1 text-xl font-bold text-brand-navy sm:text-2xl">{stat.value}</dd>
+                  <dd className="mt-0.5 text-[10px] text-slate-500 sm:text-xs">{stat.hint}</dd>
                 </div>
               ))}
             </dl>
@@ -108,7 +169,7 @@ export default function Introduction() {
                 Register for SMK 6.0
               </Link>
               <Link
-                href="/abhiyaninphotoframe"
+                href={ABIYAN_PHOTO_FRAME.pagePath}
                 className="inline-flex min-h-[44px] items-center rounded-xl border border-brand-navy/30 bg-white px-5 py-2.5 text-sm font-semibold text-brand-navy transition hover:bg-brand-navy/5"
               >
                 Abhiyan Photo Frame
@@ -124,7 +185,6 @@ export default function Introduction() {
         </div>
       </section>
 
-      {/* Section nav */}
       <nav
         aria-label="Page sections"
         className="sticky top-[4.5rem] z-20 -mx-1 overflow-x-auto rounded-xl border border-slate-200/80 bg-white/95 px-2 py-2 shadow-sm backdrop-blur-md md:top-20"
@@ -133,7 +193,7 @@ export default function Introduction() {
           {INTRODUCTION_SECTION_NAV.map((item) => (
             <li key={item.id}>
               <a
-                href={`#${item.id}`}
+                href={item.id === "join" ? "/registration" : `#${item.id}`}
                 className="inline-flex min-h-[36px] items-center whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-semibold text-brand-navy transition hover:bg-brand-saffron/15 sm:text-sm"
               >
                 {item.label}
@@ -143,23 +203,22 @@ export default function Introduction() {
         </ul>
       </nav>
 
-      {/* Our Objectives — हमारे उद्देश्य */}
       <section aria-labelledby="objectives-heading">
         <div className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy/5 via-white to-brand-saffron/5 p-6 md:p-8">
-          <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron">
-              {INTRODUCTION_MEETING_TAGLINE.titleHi} · {INTRODUCTION_MEETING_TAGLINE.subtitle}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-brand-blue">
-              {INTRODUCTION_MEETING_TAGLINE.titleEn} — {INTRODUCTION_MEETING_TAGLINE.subtitle}
-            </p>
-          </div>
+          <p className="text-center text-sm font-semibold text-brand-navy">
+            <span lang="hi">{INTRODUCTION_MEETING_TAGLINE.titleHi}</span>
+            {" · "}
+            {INTRODUCTION_MEETING_TAGLINE.titleEn} — {INTRODUCTION_MEETING_TAGLINE.subtitle}
+          </p>
 
-          <SectionHeading
-            id="objectives"
-            title="Our Objectives"
-            description="हमारे उद्देश्य — Eight guiding aims that shape every Shiksha Mahakumbh edition and programme."
-          />
+          <div className="mt-6">
+            <SectionHeading
+              id="objectives"
+              headingId="objectives-heading"
+              title="Our Objectives"
+              description="हमारे उद्देश्य — Eight guiding aims that shape every Shiksha Mahakumbh edition and programme."
+            />
+          </div>
 
           <ol className="mt-6 grid gap-4 sm:grid-cols-2">
             {INTRODUCTION_OBJECTIVES.map((item) => (
@@ -183,10 +242,10 @@ export default function Introduction() {
         </div>
       </section>
 
-      {/* Leadership */}
       <section aria-labelledby="leadership-heading">
         <SectionHeading
           id="leadership"
+          headingId="leadership-heading"
           title="Leadership"
           description="Patron and advisory council guiding the Abhiyan across editions and programmes."
         />
@@ -195,7 +254,10 @@ export default function Introduction() {
           <article className="lg:col-span-2 overflow-hidden rounded-2xl border border-brand-saffron/30 bg-gradient-to-br from-brand-saffron/10 to-white p-6 shadow-sm">
             <p className="text-xs font-bold uppercase tracking-wider text-brand-saffron-dark">Patron</p>
             <div className="mt-4 flex items-start gap-4">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-brand-saffron/40 bg-white text-xl font-bold text-brand-navy shadow">
+              <div
+                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-brand-saffron/40 bg-white text-xl font-bold text-brand-navy shadow"
+                aria-hidden
+              >
                 {initials(patron.name)}
               </div>
               <div>
@@ -216,7 +278,10 @@ export default function Introduction() {
                   key={a.name}
                   className="flex gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-3 transition hover:border-brand-saffron/30 hover:bg-white"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-sm font-bold text-brand-blue">
+                  <div
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-sm font-bold text-brand-blue"
+                    aria-hidden
+                  >
                     {initials(a.name)}
                   </div>
                   <div className="min-w-0">
@@ -230,7 +295,7 @@ export default function Introduction() {
             </ul>
             <p className="mt-4">
               <Link
-                href="/abhiyaninphotoframe"
+                href={ABIYAN_PHOTO_FRAME.pagePath}
                 className="text-sm font-semibold text-brand-blue hover:underline"
               >
                 View full Abhiyan Photo Frame (PDF) →
@@ -240,10 +305,32 @@ export default function Introduction() {
         </div>
       </section>
 
-      {/* Editions */}
+      <section id="coordinators" className="scroll-mt-24" aria-labelledby="coordinators-heading">
+        <SectionHeading
+          id="coordinators-inner"
+          headingId="coordinators-heading"
+          title="Core coordinators"
+          description="Programme leads across conclaves, olympiad, exhibitions, and national outreach — from the Abhiyan Photo Frame."
+        />
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {coordinators.map((c) => (
+            <li
+              key={c.name}
+              className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-saffron/30"
+            >
+              <p className="font-semibold text-brand-navy">{c.name}</p>
+              <p className="mt-1 text-xs text-slate-600">
+                {[c.role, c.organization].filter(Boolean).join(" · ")}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="editions-heading">
         <SectionHeading
           id="editions"
+          headingId="editions-heading"
           title="Major Editions"
           description="Five completed national editions and the upcoming Shiksha Mahakumbh 6.0 — each building on the last."
         />
@@ -257,30 +344,34 @@ export default function Introduction() {
                   : "border-slate-200 hover:border-brand-saffron/35"
               }`}
             >
-              <div
-                className={`px-4 py-3 ${e.upcoming ? "bg-gradient-to-r from-brand-saffron to-brand-saffron/85" : "bg-gradient-to-r from-brand-navy to-brand-navy/85"}`}
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${e.upcoming ? "bg-brand-navy text-white" : "bg-brand-saffron text-brand-navy"}`}
-                  >
-                    Edition {e.edition}
-                  </span>
-                  {e.upcoming ? (
+              <div className="relative h-36 bg-slate-100">
+                <Image
+                  src={e.imageSrc}
+                  alt={e.imageAlt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 50vw, 33vw"
+                />
+                <div
+                  className={`absolute inset-0 ${e.upcoming ? "bg-brand-saffron/40" : "bg-brand-navy/50"}`}
+                />
+                <div className="absolute bottom-3 left-3 right-3 text-white">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase text-brand-navy">
-                      Upcoming
+                      Edition {e.edition}
                     </span>
-                  ) : null}
+                    {e.upcoming ? (
+                      <span className="rounded-full bg-brand-navy px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+                        Upcoming
+                      </span>
+                    ) : null}
+                  </div>
+                  <p className="mt-1 text-sm font-bold line-clamp-1">{e.venue}</p>
                 </div>
-                <h3 className={`mt-2 font-semibold ${e.upcoming ? "text-brand-navy" : "text-white"}`}>
-                  Shiksha Mahakumbh {e.edition}
-                </h3>
-                <p className={`text-sm ${e.upcoming ? "text-brand-navy/80" : "text-white/85"}`}>
-                  {e.venue}
-                </p>
               </div>
               <div className="flex flex-1 flex-col p-4">
-                <p className="text-sm text-slate-500">{e.dates}</p>
+                <h3 className="text-sm font-bold text-brand-navy">{e.title}</h3>
+                <p className="mt-1 text-sm text-slate-500">{e.dates}</p>
                 <p className="mt-2 text-sm font-medium text-brand-navy">
                   <span className="text-brand-saffron-dark">Theme:</span> {e.theme}
                 </p>
@@ -302,11 +393,14 @@ export default function Introduction() {
         </p>
       </section>
 
-      {/* Closing CTA */}
       <section
         id="join"
         className="scroll-mt-24 overflow-hidden rounded-2xl border border-brand-blue/20 bg-gradient-to-br from-brand-blue/10 via-white to-brand-saffron/10 p-6 text-center md:p-10"
+        aria-labelledby="join-heading"
       >
+        <h2 id="join-heading" className="sr-only">
+          Register for Shiksha Mahakumbh 6.0
+        </h2>
         <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
           {INTRODUCTION_CLOSING}
         </p>

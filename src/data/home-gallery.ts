@@ -9,7 +9,7 @@ export const homeSlides: HomeSlide[] = [
     src: "/2024M/Vyakhanmala.jpg",
     alt: "Vyakhanmala lecture series on Panchakosha",
     legend:
-      'Vyakhanmala: Lecture Series on Panchakosha & Bharatiya Jnana Parampara',
+      "Vyakhanmala: Lecture Series on Panchakosha & Bharatiya Jnana Parampara",
   },
   {
     src: "/2024M/Press8.jpg",
@@ -31,8 +31,7 @@ export const homeSlides: HomeSlide[] = [
   {
     src: "/2023M/anurag_singh_thakur.JPG",
     alt: "Shri Anurag Singh Thakur addressing the conference",
-    legend:
-      "Hon'ble Cabinet Minister addressing the national gathering",
+    legend: "Hon'ble Cabinet Minister addressing the national gathering",
   },
   {
     src: "/2024K/k12.png",

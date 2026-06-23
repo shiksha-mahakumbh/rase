@@ -1,41 +1,32 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import DepartmentPageShell from "@/components/departments/DepartmentPageShell";
-import DepartmentMemberTable, {
-  DepartmentMember,
-} from "@/components/departments/DepartmentMemberTable";
+import DepartmentMemberTable from "@/components/departments/DepartmentMemberTable";
+import { PRACHAR_MEMBERS } from "@/data/departments/prachar-members";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 
 const PracharVibhag: React.FC = () => {
-  const members: DepartmentMember[] = [
-    {
-      name: "Shri Varinder Garg",
-      position: "Joint Treasurer (Ex), BJP Haryana",
-      contact: "9815697777",
-    },
-    {
-      name: "Dr. Amit Kansal",
-      position: "Independent Director (Ex), NHPC",
-      contact: "9501898500",
-    },
-    {
-      name: "Er. Anshul Bansal",
-      position: "Founder, Technocrat Anshul",
-      contact: "9058000045",
-    },
-    {
-      name: "Shri Rupesh Kesari",
-      position: "Founder, English Connection",
-      contact: "8287977954",
-    },
-  ];
-
   return (
     <DepartmentPageShell
       departmentTitle="Prachar Vibhag"
       departmentTitleHindi="प्रचार विभाग"
+      hideTitleCard
     >
-      <DepartmentMemberTable members={members} />
+      <div id="coordinators" className="scroll-mt-24">
+        <DepartmentMemberTable members={PRACHAR_MEMBERS} />
+      </div>
+      <p className="mt-8 text-center text-sm text-slate-600">
+        Media coverage:{" "}
+        <Link href={CANONICAL_ROUTES.press} className="font-semibold text-brand-blue hover:underline">
+          Press releases
+        </Link>
+        {" · "}
+        <Link href={CANONICAL_ROUTES.mediaCenter} className="font-semibold text-brand-blue hover:underline">
+          Media Centre
+        </Link>
+      </p>
     </DepartmentPageShell>
   );
 };

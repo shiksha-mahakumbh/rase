@@ -4,7 +4,9 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
+  SMK_6_RESOURCE_LINKS,
   UPCOMING_EVENTS,
+  UPCOMING_EVENTS_CTA,
   UPCOMING_EVENTS_PAGE_HERO,
   UPCOMING_EVENTS_STATS,
 } from "@/data/upcoming-events-hub";
@@ -16,20 +18,15 @@ export default function UpcomingEventsShowcase() {
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
       <HubGradientBanner
         id="upcoming-events-banner"
+        titleAs="h1"
         eyebrow={UPCOMING_EVENTS_PAGE_HERO.eyebrow}
         title={UPCOMING_EVENTS_PAGE_HERO.title}
-        subtitle={
-          <>
-            Register for <strong className="text-brand-saffron">Shiksha Mahakumbh 6.0</strong> at NIT
-            Hamirpur (9–11 October 2026). Edition 7.0 at IIT Jammu — dates to be announced.
-          </>
-        }
+        subtitle={UPCOMING_EVENTS_PAGE_HERO.subtitle}
         stats={UPCOMING_EVENTS_STATS}
       />
 
-      {/* Event cards */}
       <section className="mt-10" aria-labelledby="upcoming-events-grid">
-        <h2 id="upcoming-events-grid" className="sr-only">
+        <h2 id="upcoming-events-grid" className="mb-5 text-lg font-bold text-brand-navy md:text-xl">
           Upcoming programme cards
         </h2>
         <div className="grid gap-5 sm:grid-cols-2">
@@ -38,11 +35,12 @@ export default function UpcomingEventsShowcase() {
             return (
               <motion.article
                 key={event.id}
+                id={event.id}
                 initial={reduceMotion ? false : { opacity: 0, y: 16 }}
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: reduceMotion ? 0 : index * 0.08 }}
-                className={`group flex h-full flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg ${
+                className={`group flex h-full scroll-mt-24 flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg ${
                   isOpen
                     ? "border-brand-saffron/40 ring-1 ring-brand-saffron/20"
                     : "border-slate-200 hover:border-brand-navy/20"
@@ -91,6 +89,24 @@ export default function UpcomingEventsShowcase() {
                       </div>
                     )}
                   </dl>
+
+                  {isOpen && (
+                    <nav
+                      aria-label={`${event.title} resources`}
+                      className="mt-4 flex flex-wrap gap-2"
+                    >
+                      {SMK_6_RESOURCE_LINKS.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:bg-brand-surface"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </nav>
+                  )}
+
                   <Link
                     href={event.registrationHref}
                     className={`mt-5 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold shadow-md transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
@@ -108,7 +124,6 @@ export default function UpcomingEventsShowcase() {
         </div>
       </section>
 
-      {/* Global reach CTA */}
       <section
         className="mt-10 rounded-2xl border border-brand-navy/10 bg-gradient-to-r from-slate-50 to-amber-50/50 p-6 md:p-8"
         aria-labelledby="global-reach-cta"
@@ -123,16 +138,16 @@ export default function UpcomingEventsShowcase() {
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
-            href="/registration"
+            href={UPCOMING_EVENTS_CTA.registerHref}
             className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-brand-saffron px-6 py-3 text-sm font-bold text-brand-navy shadow-md transition hover:bg-brand-saffron-dark hover:text-white"
           >
-            Register for 6.0
+            {UPCOMING_EVENTS_CTA.registerLabel}
           </Link>
           <Link
-            href="/past-events"
+            href={UPCOMING_EVENTS_CTA.pastEditionsHref}
             className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-brand-navy/20 bg-white px-6 py-3 text-sm font-bold text-brand-navy transition hover:border-brand-saffron"
           >
-            View Past Editions
+            {UPCOMING_EVENTS_CTA.pastEditionsLabel}
           </Link>
         </div>
       </section>

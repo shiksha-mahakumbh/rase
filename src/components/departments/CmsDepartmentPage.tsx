@@ -1,5 +1,6 @@
 import DepartmentPage from "@/components/departments/DepartmentPage";
 import type { CmsLoadedPage } from "@/lib/cms/types";
+import { cmsSlugToVibhagSlug } from "@/data/departments-hub";
 
 export default function CmsDepartmentPage({
   cms,
@@ -7,8 +8,9 @@ export default function CmsDepartmentPage({
   cms: CmsLoadedPage;
 }) {
   const path = `/departments/${cms.page.slug}`;
+  const vibhagSlug = cmsSlugToVibhagSlug(cms.page.slug);
   return (
-    <DepartmentPage slug={cms.page.slug} canonicalPath={path} showRelatedNav={false}>
+    <DepartmentPage slug={vibhagSlug} canonicalPath={path} showRelatedNav={false}>
       {cms.page.content ? (
         <div
           className="prose prose-slate max-w-none"

@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import PremiumModal from "@/components/ui/PremiumModal";
-import { normalizeStaticImageSrc } from "@/components/home/legacy/normalizeImageSrc";
+import { normalizeStaticImageSrc } from "@/lib/images/normalizeStaticImageSrc";
 
 export interface ImageLightboxProps {
   isOpen: boolean;

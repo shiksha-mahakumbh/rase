@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { KnowledgeIcon } from "@/components/home/legacy/icons";
+import { KnowledgeIcon } from "@/components/icons/home";
 
 interface DepartmentPageShellProps {
   children: ReactNode;
@@ -11,6 +11,8 @@ interface DepartmentPageShellProps {
   icon?: ReactNode;
   /** When true, renders a compact brand hero. Default false — outer PublicPageShell already provides the page hero. */
   showHero?: boolean;
+  /** When true, hides the inner title card (hub intro already provides h1). */
+  hideTitleCard?: boolean;
 }
 
 const DepartmentPageShell: React.FC<DepartmentPageShellProps> = ({
@@ -19,6 +21,7 @@ const DepartmentPageShell: React.FC<DepartmentPageShellProps> = ({
   departmentTitleHindi,
   icon,
   showHero = false,
+  hideTitleCard = false,
 }) => {
   return (
     <div className="min-h-full bg-gradient-to-b from-brand-surface via-white to-brand-surface-warm">
@@ -64,7 +67,7 @@ const DepartmentPageShell: React.FC<DepartmentPageShellProps> = ({
       )}
 
       <div className="mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-12">
-        {!showHero && (
+        {!showHero && !hideTitleCard && (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}

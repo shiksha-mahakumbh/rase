@@ -138,7 +138,6 @@ function RegistrationHubInner() {
   const metaLoadedRef = useRef(false);
 
   const showPaymentStep = usesMultiStepPaymentFlow(registrationType, currentFee);
-  const totalSteps = showPaymentStep ? 3 : 2;
 
   useEffect(() => {
     if (!flow) return;
@@ -208,8 +207,6 @@ function RegistrationHubInner() {
       <RegistrationShell
         title={EVENT_NAME}
         subtitle="Official registration — national education movement & global summit"
-        step={step}
-        totalSteps={totalSteps}
         sidebar={
           step >= 2 && !isExternalRedirectType(registrationType) ? (
             <CategoryInstructionsPanel registrationType={registrationType} />
@@ -249,7 +246,7 @@ function RegistrationHubInner() {
         )}
 
         {step >= 2 && !isExternalRedirectType(registrationType) && (
-          <div className="space-y-4">
+          <div className="space-y-4" aria-live="polite">
             <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
               <span>
                 <strong className="text-brand-navy">{registrationType}</strong>

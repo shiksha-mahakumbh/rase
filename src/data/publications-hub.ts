@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/config/site";
+import { SOUVENIR_CATALOG } from "@/data/souvenir-abstracts-hub";
 
 export const PUBLICATIONS_PAGE_HERO = {
   eyebrow: "Publications · Global Access",
@@ -8,10 +9,14 @@ export const PUBLICATIONS_PAGE_HERO = {
 } as const;
 
 export const PUBLICATIONS_STATS = [
-  { label: "Proceedings", value: "3 volumes", hint: "93+ peer-reviewed papers" },
+  { label: "Proceedings", value: "3 volumes", hint: "93+ indexed online" },
+  {
+    label: "Souvenirs",
+    value: `${SOUVENIR_CATALOG.length} editions`,
+    hint: "MTC abstract booklets 4.0 & 5.0",
+  },
   { label: "Books", value: "1 title", hint: "SMK 1.0 compendium" },
   { label: "Journals", value: "DHE platform", hint: "pub.dhe.org.in" },
-  { label: "Access", value: "Open web", hint: "Read, preview & download" },
 ] as const;
 
 export const PUBLICATIONS_SEO_KEYWORDS = [

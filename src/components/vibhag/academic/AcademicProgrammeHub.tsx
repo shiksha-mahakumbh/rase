@@ -39,20 +39,18 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
       aria-labelledby="ac-hub-heading"
     >
       <div className="mx-auto max-w-5xl">
-        <div className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-8">
+        <section
+          aria-labelledby="ac-hub-heading"
+          className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-6"
+        >
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
             Global Academic Platform · Viksit Bharat 2047
           </p>
-          <h2 id="ac-hub-heading" className="mt-2 text-xl font-bold md:text-3xl">
-            Academic Programmes at a Glance
+          <h2 id="ac-hub-heading" className="sr-only">
+            Programme summary
           </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
             {ACADEMIC_COUNCIL_HERO.tagline}
-          </p>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/70 md:text-base">
-            Explore conclaves, research tracks, olympiads, awards, exhibitions, cultural programmes,
-            Bal Shodh Patrika, best practices, and student innovation — unified under the Academic
-            Council.
           </p>
           <dl className="mt-5 grid gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
@@ -76,7 +74,7 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
               </dd>
             </div>
           </dl>
-        </div>
+        </section>
 
         <dl className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {ACADEMIC_COUNCIL_STATS.map((stat) => (

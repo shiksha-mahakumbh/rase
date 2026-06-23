@@ -6,7 +6,7 @@ import { ServiceError, toErrorResponse } from "@/server/lib/errors";
 
 function hasAdminCredentials(request: NextRequest): boolean {
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  if (cookie && cookie !== "1" && verifyAdminSessionToken(cookie)) {
+  if (cookie && verifyAdminSessionToken(cookie)) {
     return true;
   }
   const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "").trim();

@@ -1,24 +1,31 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import WishCard from "@/components/best-wishes/WishCard";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
+import HubGradientBanner from "@/components/ui/HubGradientBanner";
+import {
+  BEST_WISHES_BREADCRUMBS,
+  BEST_WISHES_HUB_STATS,
+  BEST_WISHES_PAGE_HERO,
+  BEST_WISHES_QUICK_LINKS,
+  BEST_WISHES_UPCOMING_CTA,
+} from "@/data/best-wishes-hub";
 import {
   BEST_WISHES_ENTRIES,
-  BEST_WISHES_STATS,
-  WISH_EDITION_FILTERS,
-  bestWishesCount,
-  type WishEditionFilter,
+  buildWishEditionFilters,
+  isInternationalWish,
+  type BestWishEntry,
 } from "@/data/best-wishes";
 
 type CategoryFilter = "all" | "featured" | "international" | "government" | "academic";
 
-function matchesCategory(wish: (typeof BEST_WISHES_ENTRIES)[number], cat: CategoryFilter) {
+function matchesCategory(wish: BestWishEntry, cat: CategoryFilter) {
   if (cat === "all") return true;
   if (cat === "featured") return Boolean(wish.featured);
+  if (cat === "international") return isInternationalWish(wish);
   const d = wish.designation.toLowerCase();
-  if (cat === "international") {
-    return /oxford|boston|international|south asian university/i.test(d);
-  }
   if (cat === "government") {
     return /governor|president|minister|lieutenant|chief minister|ugc|chairman/i.test(d);
   }
@@ -38,11 +45,17 @@ const CATEGORY_OPTIONS: { id: CategoryFilter; label: string }[] = [
   { id: "international", label: "International" },
 ];
 
+function editionFilterLabel(opt: string): string {
+  if (opt === "all") return "All editions";
+  if (opt === "Abhiyan") return "Abhiyan-wide";
+  return `Edition ${opt}`;
+}
+
 export default function BestWishesShowcase() {
+  const editionFilters = useMemo(() => buildWishEditionFilters(), []);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("all");
-  const [edition, setEdition] = useState<WishEditionFilter>("all");
-  const total = bestWishesCount();
+  const [edition, setEdition] = useState<string>("all");
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -63,52 +76,75 @@ export default function BestWishesShowcase() {
   const rest = filtered.filter((w) => !featuredIds.has(w.id));
 
   return (
-    <div className="mx-auto max-w-6xl">
-      {/* Hero banner */}
-      <section
-        aria-labelledby="best-wishes-banner"
-        className="relative overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-8"
-      >
-        <div
-          className="pointer-events-none absolute -right-12 top-0 h-48 w-48 rounded-full bg-brand-saffron/20 blur-3xl"
-          aria-hidden
-        />
-        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
-          Institutional Support · Global Education Movement
-        </p>
-        <h2 id="best-wishes-banner" className="mt-2 text-xl font-bold md:text-3xl">
-          {total} Dignitary Messages
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
-          Best wishes from national leaders, governors, ministers, IIT/IIM/CSIR directors, and
-          international institutions — name, designation, and message for the Shiksha Mahakumbh
-          Abhiyan (editions 1.0–6.0).
-        </p>
-        <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-              Total messages
-            </dt>
-            <dd className="mt-1 text-sm font-bold md:text-base">{total}</dd>
-          </div>
-          <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-              Featured
-            </dt>
-            <dd className="mt-1 text-sm font-bold md:text-base">{BEST_WISHES_STATS.featured}</dd>
-          </div>
-          <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-              International
-            </dt>
-            <dd className="mt-1 text-sm font-bold md:text-base">
-              {BEST_WISHES_STATS.international}+ leaders
-            </dd>
-          </div>
-        </dl>
+    <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <BreadcrumbNav
+        items={BEST_WISHES_BREADCRUMBS.map((item, index, arr) => ({
+          label: item.name,
+          href: index < arr.length - 1 ? item.path : undefined,
+        }))}
+        className="-mt-2 mb-6"
+      />
+
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {BEST_WISHES_QUICK_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
+          >
+            <span aria-hidden>{link.icon}</span>
+            {link.label}
+          </Link>
+        ))}
       </section>
 
-      {/* Filters */}
+      <div className="mt-6">
+        <HubGradientBanner
+          id="best-wishes-hub-banner"
+          titleAs="h1"
+          eyebrow={BEST_WISHES_PAGE_HERO.eyebrow}
+          title={BEST_WISHES_PAGE_HERO.title}
+          subtitle={BEST_WISHES_PAGE_HERO.subtitle}
+          stats={BEST_WISHES_HUB_STATS}
+        />
+      </div>
+
+      <section
+        className="mt-8 overflow-hidden rounded-2xl border border-brand-blue/20 bg-gradient-to-br from-brand-blue/5 via-white to-brand-saffron/5 p-6 md:p-8"
+        aria-labelledby="best-wishes-upcoming-heading"
+      >
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-saffron">
+          Edition 6.0
+        </p>
+        <h2 id="best-wishes-upcoming-heading" className="mt-2 text-xl font-bold text-brand-navy md:text-2xl">
+          {BEST_WISHES_UPCOMING_CTA.title}
+        </h2>
+        <p className="mt-2 text-sm text-slate-600">
+          {BEST_WISHES_UPCOMING_CTA.venue} · {BEST_WISHES_UPCOMING_CTA.dates}
+        </p>
+        <p className="mt-3 max-w-2xl text-sm text-slate-600">{BEST_WISHES_UPCOMING_CTA.message}</p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href={BEST_WISHES_UPCOMING_CTA.registrationHref}
+            className="inline-flex min-h-[44px] items-center rounded-xl bg-brand-navy px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-navy-light"
+          >
+            Register for SMK 6.0
+          </Link>
+          <Link
+            href={BEST_WISHES_UPCOMING_CTA.committeeHref}
+            className="inline-flex min-h-[44px] items-center rounded-xl border border-brand-navy/20 bg-white px-6 py-2.5 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40"
+          >
+            Organising committee
+          </Link>
+          <Link
+            href={BEST_WISHES_UPCOMING_CTA.learnMoreHref}
+            className="inline-flex min-h-[44px] items-center rounded-xl border border-brand-saffron bg-brand-saffron/10 px-6 py-2.5 text-sm font-semibold text-brand-navy transition hover:bg-brand-saffron/20"
+          >
+            Upcoming events
+          </Link>
+        </div>
+      </section>
+
       <div className="mt-8 space-y-4">
         <label htmlFor="wishes-search" className="sr-only">
           Search dignitaries
@@ -138,7 +174,7 @@ export default function BestWishesShowcase() {
           ))}
         </div>
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by edition">
-          {WISH_EDITION_FILTERS.map((opt) => (
+          {editionFilters.map((opt) => (
             <button
               key={opt}
               type="button"
@@ -149,13 +185,12 @@ export default function BestWishesShowcase() {
                   : "border border-slate-200 bg-white text-slate-600 hover:border-brand-saffron"
               }`}
             >
-              {opt === "all" ? "All editions" : opt === "Abhiyan" ? "Abhiyan-wide" : `Edition ${opt}`}
+              {editionFilterLabel(opt)}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Featured */}
       {featured.length > 0 && category !== "featured" && (
         <section className="mt-10" aria-labelledby="featured-wishes">
           <h2 id="featured-wishes" className="mb-5 text-lg font-bold text-brand-navy md:text-xl">
@@ -171,7 +206,6 @@ export default function BestWishesShowcase() {
         </section>
       )}
 
-      {/* All messages grid */}
       <section className="mt-10" aria-labelledby="all-wishes">
         <h2 id="all-wishes" className="mb-5 text-lg font-bold text-brand-navy md:text-xl">
           {category === "featured" ? "Featured Messages" : "All Messages"} ({filtered.length})
@@ -184,7 +218,11 @@ export default function BestWishesShowcase() {
           ))}
         </ul>
         {filtered.length === 0 && (
-          <p className="rounded-2xl border border-dashed border-slate-200 py-16 text-center text-slate-500">
+          <p
+            className="rounded-2xl border border-dashed border-slate-200 py-16 text-center text-slate-500"
+            role="status"
+            aria-live="polite"
+          >
             No messages match your search. Try a different keyword or filter.
           </p>
         )}

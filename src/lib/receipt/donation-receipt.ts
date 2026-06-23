@@ -17,6 +17,7 @@ export type DonationReceiptData = {
   paymentMode: string;
   transactionDate: string;
   orgLegalName: string;
+  programmeName: string;
   section80G: string;
   act80G: string;
   registration80G: string;
@@ -66,6 +67,7 @@ export function buildDonationReceiptData(input: {
     section80G: DONATION_80G.section,
     act80G: DONATION_80G.act,
     registration80G: DONATION_80G.registrationNumber,
+    programmeName: DONATION_80G.programmeName,
   };
 }
 
@@ -108,7 +110,7 @@ ${[
 <div class="cert">
 <strong>80G Tax Exemption</strong> — Section ${data.section80G} of ${data.act80G}<br/>
 Registration No.: ${data.registration80G}<br/><br/>
-This certifies receipt of ₹${data.amount.toLocaleString("en-IN")} from ${data.fullName} (PAN: ${data.panNumber}) as ${data.donationKind.toLowerCase()} towards ${data.orgLegalName}.
+This certifies receipt of ₹${data.amount.toLocaleString("en-IN")} from ${data.fullName} (PAN: ${data.panNumber}) as ${data.donationKind.toLowerCase()} towards ${data.orgLegalName} in support of ${data.programmeName}. Unique Registration No. under Section 80G: ${data.registration80G}.
 </div>
 <p style="font-size:11px;color:#888;margin-top:16px">Computer-generated receipt — no signature required.</p>
 </div></body></html>`;

@@ -6,10 +6,7 @@ import type { AdminRole } from "@/types/registration";
 const ADMIN_ROLE_NAMES: AdminRole[] = ["Super Admin", "Admin", "Data Entry"];
 
 function getBootstrapEmails(): string[] {
-  const raw =
-    process.env.ADMIN_BOOTSTRAP_EMAILS ??
-    process.env.NEXT_PUBLIC_ADMIN_EMAILS ??
-    "";
+  const raw = process.env.ADMIN_BOOTSTRAP_EMAILS ?? "";
   return raw
     .split(",")
     .map((e) => e.trim().toLowerCase())

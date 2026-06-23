@@ -1,3 +1,4 @@
+import type { RegistrationAdminStats } from "@/types/admin-dashboard";
 import type { RegistrationRow } from "@/lib/exportRegistrations";
 
 export type { RegistrationRow };
@@ -116,4 +117,22 @@ export async function fetchRegistrationByPublicId(
   }
   const body = await res.json();
   return (body.registration ?? body) as Record<string, unknown>;
+}
+
+export async function fetchRegistrationAdminStats(): Promise<RegistrationAdminStats> {
+  const res = await fetch("/api/admin/gateway/registrations/stats", {
+    credentials: "include",
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `HTTP ${res.status}`;
+    try {
+      const errBody = await res.json();
+      if (typeof errBody.error === "string") detail = errBody.error;
+    } catch {
+      /* ignore */
+    }
+    throw new Error(`Failed to load registration stats: ${detail}`);
+  }
+  return res.json() as Promise<RegistrationAdminStats>;
 }

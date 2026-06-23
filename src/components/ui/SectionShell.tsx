@@ -1,14 +1,20 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import type { ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import type { SectionShellProps } from "./types";
 
-const backgroundStyles: Record<
-  NonNullable<SectionShellProps["background"]>,
-  string
-> = {
+export type SectionBackground = "default" | "gradient" | "warm" | "cool" | "dark";
+
+export interface SectionShellProps {
+  children: ReactNode;
+  id?: string;
+  className?: string;
+  background?: SectionBackground;
+  ariaLabel?: string;
+}
+
+const backgroundStyles: Record<SectionBackground, string> = {
   default: "bg-white",
   gradient:
     "bg-gradient-to-br from-slate-50 via-white to-amber-50/40 relative overflow-hidden",
@@ -17,23 +23,26 @@ const backgroundStyles: Record<
   dark: "bg-gradient-to-br from-[#1a1210] via-[#2a1818] to-[#1f1414] text-white relative overflow-hidden",
 };
 
-const SectionShell: React.FC<SectionShellProps> = ({
+export default function SectionShell({
   children,
   id,
   className = "",
   background = "default",
   ariaLabel,
-}) => {
+}: SectionShellProps) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.08 });
+  const reduceMotion = useReducedMotion();
 
   return (
     <motion.section
       ref={ref}
       id={id}
       aria-label={ariaLabel}
-      initial={{ opacity: 0, y: 28 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
-      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+      animate={
+        reduceMotion || inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }
+      }
+      transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
       className={`${backgroundStyles[background]} ${className}`}
     >
       {background !== "default" && background !== "dark" && (
@@ -51,6 +60,4 @@ const SectionShell: React.FC<SectionShellProps> = ({
       <div className="relative z-10">{children}</div>
     </motion.section>
   );
-};
-
-export default SectionShell;
+}

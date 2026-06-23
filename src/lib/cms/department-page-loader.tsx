@@ -7,7 +7,14 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 export async function generateDepartmentPageMetadata(
   slug: string,
-  fallback: { title: string; description: string; path: string }
+  fallback: {
+    title: string;
+    description: string;
+    path: string;
+    keywords?: string[];
+    locale?: "en_IN" | "hi_IN";
+    ogImageUrl?: string;
+  }
 ): Promise<Metadata> {
   const cms = await loadCmsPageBySlug(slug);
   if (cms?.page.pageType === "department") {
@@ -15,6 +22,7 @@ export async function generateDepartmentPageMetadata(
       title: cms.page.title,
       description: cms.page.excerpt ?? fallback.description,
       path: fallback.path,
+      ogImageUrl: fallback.ogImageUrl,
     });
   }
   return createPageMetadata(fallback);

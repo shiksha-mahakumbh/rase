@@ -2,6 +2,7 @@
 
 import { impactStatistics } from "@/data/authority";
 import { event } from "@/design/tokens";
+import { REGISTRATION_DEADLINE } from "@/data/registration-hub";
 
 const DISPLAY_COUNT =
   process.env.NEXT_PUBLIC_DISPLAY_REGISTRATION_COUNT ?? "10,000+";
@@ -12,7 +13,6 @@ const DISPLAY_COUNT =
 export default function RegistrationTrustBar() {
   const institutions =
     impactStatistics.find((s) => s.label.includes("Institutions"))?.value ?? 500;
-  const deadline = "31 August 2026";
 
   return (
     <div
@@ -32,7 +32,7 @@ export default function RegistrationTrustBar() {
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
           Registration deadline
         </p>
-        <p className="font-semibold text-brand-saffron">{deadline}</p>
+        <p className="font-semibold text-brand-saffron">{REGISTRATION_DEADLINE}</p>
       </div>
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">

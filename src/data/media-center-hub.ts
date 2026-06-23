@@ -15,7 +15,7 @@ export const MEDIA_CENTER_PAGE_HERO = {
 
 export const MEDIA_CENTER_STATS = [
   { label: "Editions", value: "1.0 – 5.0", hint: "Digital & print archives" },
-  { label: "Press", value: "9+ releases", hint: "English & Hindi coverage" },
+  { label: "Press", value: "9 releases", hint: "English & Hindi coverage" },
   { label: "Gallery", value: "Photos & video", hint: "Edition-wise albums" },
   { label: "Access", value: "Open web", hint: "National & international" },
 ] as const;
@@ -50,14 +50,6 @@ export type MediaEditionCard = {
   eventHref: string;
 };
 
-const EDITION_IMAGES: Record<string, string> = {
-  "5.0": "/sm25printmedia/1.jpg",
-  "4.0": "/images/smk4.jpg",
-  "3.0": "/images/smk3.jpg",
-  "2.0": "/branding/shiksha-mahakumbh-brand-hero.png",
-  "1.0": "/branding/shiksha-mahakumbh-brand-hero.png",
-};
-
 const EDITION_ACCENTS: Record<string, string> = {
   "5.0": "from-violet-600 to-indigo-800",
   "4.0": "from-blue-600 to-indigo-800",
@@ -66,7 +58,9 @@ const EDITION_ACCENTS: Record<string, string> = {
   "1.0": "from-brand-navy to-slate-800",
 };
 
-/** All completed editions — newest first */
+const DEFAULT_EDITION_IMAGE = "/branding/shiksha-mahakumbh-brand-hero.png";
+
+/** All completed editions — newest first; images from past-editions single source of truth */
 export const MEDIA_EDITION_CARDS: MediaEditionCard[] = [...PAST_EDITIONS]
   .reverse()
   .map((e) => ({
@@ -77,7 +71,7 @@ export const MEDIA_EDITION_CARDS: MediaEditionCard[] = [...PAST_EDITIONS]
     venue: e.venue,
     theme: e.theme,
     accent: EDITION_ACCENTS[e.edition] ?? "from-brand-navy to-slate-800",
-    imageSrc: EDITION_IMAGES[e.edition] ?? "/branding/shiksha-mahakumbh-brand-hero.png",
+    imageSrc: e.imageSrc ?? DEFAULT_EDITION_IMAGE,
     digitalHref: mediaArchivePath(e.edition, "digital"),
     printHref: mediaArchivePath(e.edition, "print"),
     galleryHref: e.galleryUrl,
@@ -85,6 +79,14 @@ export const MEDIA_EDITION_CARDS: MediaEditionCard[] = [...PAST_EDITIONS]
   }));
 
 export const MEDIA_FEATURED_EDITION = MEDIA_EDITION_CARDS[0]!;
+
+export const MEDIA_CENTER_OG_IMAGE = `${SITE_URL}${MEDIA_FEATURED_EDITION.imageSrc}`;
+
+export function mediaEditionImageAlt(
+  edition: Pick<MediaEditionCard, "title" | "venue" | "year" | "edition">
+): string {
+  return `${edition.title} — ${edition.venue} ${edition.year} (Edition ${edition.edition})`;
+}
 
 export const MEDIA_QUICK_LINKS = [
   {
@@ -120,6 +122,12 @@ export const MEDIA_QUICK_LINKS = [
 
 export const MEDIA_RESOURCE_LINKS = [
   { label: "Proceedings", href: "/proceedings", icon: "📚" },
+  {
+    label: "Souvenir Abstracts",
+    href: "/publications/souvenir-abstracts-mtc",
+    icon: "📖",
+  },
+  { label: "Books", href: "/books", icon: "📕" },
   { label: "DHE Journal", href: "https://pub.dhe.org.in", icon: "📘", external: true },
   { label: "Best Wishes", href: "/best-wishes", icon: "🙏" },
   { label: "Past Editions", href: "/past-events", icon: "🗓️" },

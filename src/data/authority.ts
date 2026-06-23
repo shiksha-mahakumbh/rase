@@ -16,7 +16,7 @@ export const impactStatistics: AuthorityStat[] = [
   { value: 5, label: "Completed SMK Editions", suffix: "" },
   { value: 500, label: "Institutions Engaged", suffix: "+" },
   { value: 1200, label: "Research Papers Presented", suffix: "+" },
-  { value: 50, label: "States Represented", suffix: "+" },
+  { value: 14, label: "States & UTs Reached", suffix: "+" },
   { value: 10000, label: "Student Participants", suffix: "+" },
   { value: 200, label: "Partner Organizations", suffix: "+" },
 ];

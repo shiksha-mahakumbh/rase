@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
   PRESS_PAGE_HERO,
@@ -10,6 +11,7 @@ import {
   PRESS_STATS,
   filterPressCatalog,
   getFeaturedPressRelease,
+  pressImageAlt,
   type PressLocaleFilter,
   type PressReleaseCard,
 } from "@/data/press-hub";
@@ -35,15 +37,25 @@ export default function PressShowcase({ catalog }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <BreadcrumbNav
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Media Centre", href: "/media-center" },
+          { label: "Press Releases" },
+        ]}
+        className="mb-6"
+      />
+
       <HubGradientBanner
         id="press-banner"
         eyebrow={PRESS_PAGE_HERO.eyebrow}
         title={PRESS_PAGE_HERO.title}
         subtitle={PRESS_PAGE_HERO.subtitle}
         stats={PRESS_STATS}
+        titleAs="h1"
       />
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {PRESS_QUICK_LINKS.map((link) => (
           <Link
             key={link.href}
@@ -126,13 +138,14 @@ export default function PressShowcase({ catalog }: Props) {
 }
 
 function FeaturedPressCard({ release }: { release: PressReleaseCard }) {
+  const imageAlt = pressImageAlt(release);
   return (
     <article className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
       <div className="grid md:grid-cols-2">
         <div className="relative aspect-video md:aspect-auto md:min-h-[260px]">
           <Image
             src={release.heroImage}
-            alt=""
+            alt={imageAlt}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -168,12 +181,13 @@ function FeaturedPressCard({ release }: { release: PressReleaseCard }) {
 }
 
 function PressReleaseCardItem({ release }: { release: PressReleaseCard }) {
+  const imageAlt = pressImageAlt(release);
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-saffron/40 hover:shadow-lg">
       <div className={`h-1.5 bg-gradient-to-r ${release.accent}`} aria-hidden />
       <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
         <Image
-          alt=""
+          alt={imageAlt}
           src={release.heroImage}
           fill
           className="object-cover transition group-hover:scale-[1.02]"

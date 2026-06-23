@@ -1,15 +1,14 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import GlassCard from "@/components/home/legacy/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";
 import { PAST_EDITIONS } from "@/data/past-editions";
 
 const highlightEditions = PAST_EDITIONS.slice(0, 3);
 
-export const CustomCard: React.FC = () => {
+export default function EditionHighlightsSection() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {highlightEditions.map((edition, index) => (
@@ -35,11 +34,11 @@ export const CustomCard: React.FC = () => {
               </div>
             ) : null}
             <div className="flex flex-1 flex-col p-5">
-              <h2 className="mb-2 text-xl font-bold text-brand-navy">{edition.title}</h2>
-              <p className="text-sm font-medium text-primary">{edition.venue} · {edition.dates}</p>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-[#555]">
-                {edition.theme}
+              <h3 className="mb-2 text-xl font-bold text-brand-navy">{edition.title}</h3>
+              <p className="text-sm font-medium text-primary">
+                {edition.venue} · {edition.dates}
               </p>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-[#555]">{edition.theme}</p>
               <Link
                 href={edition.href}
                 className="mt-4 text-sm font-semibold text-brand-saffron hover:underline"
@@ -52,4 +51,4 @@ export const CustomCard: React.FC = () => {
       ))}
     </div>
   );
-};
+}

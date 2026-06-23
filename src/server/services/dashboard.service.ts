@@ -1,4 +1,97 @@
 import { prisma } from "@/server/db/prisma";
+import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import type { RegistrationAdminStats } from "@/types/admin-dashboard";
+
+export async function getRegistrationAdminStats(): Promise<RegistrationAdminStats> {
+  const baseWhere = { deletedAt: null as null };
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const [
+    total,
+    byType,
+    today,
+    pendingPayments,
+    submittedFree,
+    completedPayments,
+    pendingVerifications,
+    approved,
+    verified,
+    pendingAccommodation,
+    accommodation,
+    revenueAgg,
+  ] = await Promise.all([
+    prisma.registration.count({ where: baseWhere }),
+    prisma.registration.groupBy({
+      by: ["registrationType"],
+      where: baseWhere,
+      _count: { id: true },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, createdAt: { gte: startOfToday } },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, paymentStatus: "Pending_Payment" },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, paymentStatus: "Submitted" },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, paymentStatus: "Paid" },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, registrationStatus: "Pending" },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, registrationStatus: "Approved" },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, registrationStatus: "Verified" },
+    }),
+    prisma.registration.count({
+      where: { ...baseWhere, accommodationStatus: "Requested" },
+    }),
+    prisma.registration.count({
+      where: {
+        ...baseWhere,
+        OR: [
+          { accommodationRequired: "Yes" },
+          { accommodationStatus: "Requested" },
+        ],
+      },
+    }),
+    prisma.registration.aggregate({
+      where: { ...baseWhere, paymentStatus: "Paid" },
+      _sum: { registrationFee: true },
+    }),
+  ]);
+
+  const countByLabel = (label: string) =>
+    byType
+      .filter(
+        (row) => displayRegistrationType(String(row.registrationType)) === label
+      )
+      .reduce((sum, row) => sum + row._count.id, 0);
+
+  return {
+    total,
+    delegate: countByLabel("Delegate Registration"),
+    conclave: countByLabel("Conclave"),
+    olympiad: countByLabel("Olympiad"),
+    awards: countByLabel("Awards"),
+    bestPractices: countByLabel("Best Practices"),
+    accommodation,
+    today,
+    pendingPayments,
+    submittedFree,
+    completedPayments,
+    pendingVerifications,
+    approved,
+    verified,
+    pendingAccommodation,
+    revenue: Number(revenueAgg._sum.registrationFee ?? 0),
+  };
+}
 
 export async function getDashboardStats() {
   const [

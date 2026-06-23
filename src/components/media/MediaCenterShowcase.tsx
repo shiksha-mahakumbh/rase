@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import { socialLinks } from "@/components/layout/footer-content";
 import {
@@ -14,6 +15,7 @@ import {
   MEDIA_RESOURCE_LINKS,
   PRESS_HIGHLIGHT_LINKS,
   mediaCategoryLabel,
+  mediaEditionImageAlt,
   partitionMediaItems,
   type MediaCenterTab,
 } from "@/data/media-center-hub";
@@ -35,12 +37,21 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
   const { press, highlights } = useMemo(() => partitionMediaItems(cmsItems), [cmsItems]);
 
   const showEditions = tab === "all" || tab === "editions";
+  const showEditionArchives = tab === "all" || tab === "editions" || tab === "gallery";
   const showPress = tab === "all" || tab === "press";
   const showGallery = tab === "all" || tab === "gallery";
   const showLatest = tab === "all" && highlights.length > 0;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <BreadcrumbNav
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Media Centre" },
+        ]}
+        className="mb-6"
+      />
+
       <HubGradientBanner
         id="media-center-banner"
         eyebrow={MEDIA_CENTER_PAGE_HERO.eyebrow}
@@ -54,6 +65,7 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
         }
         subtitle={MEDIA_CENTER_PAGE_HERO.subtitle}
         stats={MEDIA_CENTER_STATS}
+        titleAs="h1"
       />
 
       <div
@@ -112,7 +124,7 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
         </section>
       )}
 
-      {showEditions && tab === "all" && (
+      {showEditions && (
         <section className="mt-10" aria-labelledby="featured-edition">
           <h2 id="featured-edition" className="text-lg font-bold text-brand-navy md:text-xl">
             Featured edition coverage
@@ -139,7 +151,7 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
         </section>
       )}
 
-      {showEditions && (
+      {showEditionArchives && (
         <section className="mt-10" aria-labelledby="edition-archives">
           <h2 id="edition-archives" className="text-lg font-bold text-brand-navy md:text-xl">
             Edition archives
@@ -149,8 +161,33 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
           </h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {MEDIA_EDITION_CARDS.map((edition) => (
-              <EditionArchiveCard key={edition.id} edition={edition} compact={tab !== "editions"} />
+              <EditionArchiveCard key={edition.id} edition={edition} />
             ))}
+          </div>
+        </section>
+      )}
+
+      {showGallery && (
+        <section className="mt-10" aria-labelledby="gallery-resources">
+          <h2 id="gallery-resources" className="text-lg font-bold text-brand-navy md:text-xl">
+            Publications &amp; programme resources
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {MEDIA_RESOURCE_LINKS.map((link) => {
+              const external = "external" in link && link.external;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="flex min-h-[44px] items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-md"
+                >
+                  <span aria-hidden>{link.icon}</span>
+                  {link.label}
+                  {external && <span className="ml-auto text-xs text-slate-400">↗</span>}
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
@@ -191,30 +228,6 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
         </section>
       )}
 
-      {showGallery && tab !== "all" && (
-        <section className="mt-10" aria-labelledby="gallery-resources">
-          <h2 id="gallery-resources" className="text-lg font-bold text-brand-navy md:text-xl">
-            Photos, video &amp; publications
-          </h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {MEDIA_RESOURCE_LINKS.map((link) => {
-              const external = "external" in link && link.external;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="flex min-h-[44px] items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-md"
-                >
-                  <span aria-hidden>{link.icon}</span>
-                  {link.label}
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
       <section
         className="mt-10 rounded-2xl border border-brand-navy/10 bg-gradient-to-br from-brand-navy/5 to-brand-surface-warm p-5 md:p-8"
         aria-labelledby="social-media"
@@ -248,12 +261,13 @@ function FeaturedEditionCard({
 }: {
   edition: (typeof MEDIA_EDITION_CARDS)[number];
 }) {
+  const imageAlt = mediaEditionImageAlt(edition);
   return (
     <article className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
       <div className="relative h-52 md:h-64">
         <Image
           src={edition.imageSrc}
-          alt={`${edition.title} — media coverage`}
+          alt={imageAlt}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 1152px"
@@ -282,43 +296,36 @@ function FeaturedEditionCard({
 
 function EditionArchiveCard({
   edition,
-  compact,
 }: {
   edition: (typeof MEDIA_EDITION_CARDS)[number];
-  compact?: boolean;
 }) {
+  const imageAlt = mediaEditionImageAlt(edition);
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
       <div className={`h-1.5 bg-gradient-to-r ${edition.accent}`} aria-hidden />
-      {!compact && (
-        <div className="relative h-36 w-full bg-slate-100">
-          <Image
-            src={edition.imageSrc}
-            alt=""
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 50vw, 33vw"
-          />
-          <div className={`absolute inset-0 bg-gradient-to-t ${edition.accent} opacity-70`} />
-          <div className="absolute bottom-2 left-3 right-3 text-white">
-            <p className="text-xs font-semibold uppercase tracking-wide text-white/80">
-              Edition {edition.edition}
-            </p>
-            <p className="text-sm font-bold line-clamp-1">{edition.venue}</p>
-          </div>
+      <div className="relative h-36 w-full bg-slate-100">
+        <Image
+          src={edition.imageSrc}
+          alt={imageAlt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 50vw, 33vw"
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t ${edition.accent} opacity-70`} />
+        <div className="absolute bottom-2 left-3 right-3 text-white">
+          <p className="text-xs font-semibold uppercase tracking-wide text-white/80">
+            Edition {edition.edition}
+          </p>
+          <p className="text-sm font-bold line-clamp-1">{edition.venue}</p>
         </div>
-      )}
+      </div>
       <div className="flex flex-1 flex-col p-4">
-        {compact && (
-          <>
-            <span className="text-[10px] font-bold uppercase tracking-wide text-brand-saffron-dark">
-              Edition {edition.edition} · {edition.year}
-            </span>
-            <h3 className="mt-1 text-sm font-bold text-brand-navy">{edition.title}</h3>
-            <p className="mt-1 line-clamp-2 text-xs text-slate-600">{edition.theme}</p>
-          </>
-        )}
-        <div className={`flex flex-col gap-2 ${compact ? "mt-3" : "mt-2"}`}>
+        <span className="text-[10px] font-bold uppercase tracking-wide text-brand-saffron-dark">
+          Edition {edition.edition} · {edition.year}
+        </span>
+        <h3 className="mt-1 text-sm font-bold text-brand-navy">{edition.title}</h3>
+        <p className="mt-1 line-clamp-2 text-xs text-slate-600">{edition.theme}</p>
+        <div className="mt-3 flex flex-col gap-2">
           <MediaAction href={edition.digitalHref} label="Digital" small />
           <MediaAction href={edition.printHref} label="Print" small />
           {edition.galleryHref && (
@@ -349,7 +356,7 @@ function CmsMediaCard({ item }: { item: CmsMediaCenterItem }) {
         <div className="relative aspect-video bg-slate-100">
           <Image
             src={item.imageUrl}
-            alt=""
+            alt={item.title}
             fill
             className="object-cover transition group-hover:scale-[1.02]"
             sizes="(max-width: 768px) 100vw, 33vw"

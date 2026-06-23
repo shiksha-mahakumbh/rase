@@ -1,3 +1,7 @@
+export { default as GlassCard } from "./GlassCard";
+export { default as SectionShell } from "./SectionShell";
+export type { SectionBackground, SectionShellProps } from "./SectionShell";
+export type { GlassCardProps } from "./GlassCard";
 export { default as SectionHeader } from "./SectionHeader";
 export { default as CtaButton } from "./CtaButton";
 export { default as StatCard } from "./StatCard";

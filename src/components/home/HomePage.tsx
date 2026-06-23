@@ -1,21 +1,13 @@
 import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
-
-const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
-  loading: () => (
-    <div className="h-16 w-full border-b border-slate-200 bg-white/90" aria-hidden />
-  ),
-});
 import TrustStrip from "./TrustStrip";
 import BrandShowcaseSection from "./BrandShowcaseSection";
-import SectionShell from "@/components/home/legacy/SectionShell";
+import SectionShell from "@/components/ui/SectionShell";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import DiscoverStrip from "./DiscoverStrip";
 import WhyAttendSection from "./WhyAttendSection";
-import MovementTimelineSection from "./MovementTimelineSection";
-import WhoShouldAttendSection from "./WhoShouldAttendSection";
 import EventTracksSection from "./EventTracksSection";
 import SpeakerHighlightsSection from "./SpeakerHighlightsSection";
 import type { CmsPartnerCard, CmsSpeakerCard } from "@/lib/cms/types";
@@ -23,24 +15,23 @@ import VenueTravelSection from "./VenueTravelSection";
 import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
+import HomePageChrome from "./HomePageChrome";
 
+const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
+  loading: () => (
+    <div className="h-16 w-full border-b border-slate-200 bg-white/90" aria-hidden />
+  ),
+});
 const Marquees = dynamic(() => import("@/components/layout/Marquees"));
 const Footer = dynamic(() => import("@/components/layout/Footer"));
-const Announcement = dynamic(() => import("@/components/home/sections/Annoucement"));
+const Announcement = dynamic(() => import("@/components/home/sections/Announcement"));
 const NoticeBoard = dynamic(() => import("@/components/home/sections/NoticeBoard"));
-const GlassCard = dynamic(() => import("@/components/home/legacy/GlassCard"));
+const GlassCard = dynamic(() => import("@/components/ui/GlassCard"));
 const UpcomingEvent = dynamic(() => import("@/components/home/sections/UpcomingEvent"));
-const TestimonialsSection = dynamic(() => import("./TestimonialsSection"));
 const GallerySection = dynamic(() => import("./GallerySection"));
 const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
-const CustomCard = dynamic(() =>
-  import("@/components/home/sections/card").then((m) => ({ default: m.CustomCard }))
-);
-const ConferenceSupport = dynamic(() => import("@/components/home/sections/Conference_Support"));
-const MediaPartners = dynamic(() => import("@/components/home/sections/Media_Partners"));
-const Organiger = dynamic(() => import("@/components/home/sections/organiger"));
+const PartnersShowcase = dynamic(() => import("@/components/home/sections/PartnersShowcase"));
 const HomeEditionCta = dynamic(() => import("./HomeEditionCta"));
-import HomePageChrome from "./HomePageChrome";
 
 export default function HomePage({
   featuredSpeakers = [],
@@ -110,19 +101,17 @@ export default function HomePage({
         <LazySection fallback={<SectionSkeleton lines={4} />}>
           <WhyAttendSection />
         </LazySection>
-        <LazySection fallback={<SectionSkeleton lines={5} />}>
-          <MovementTimelineSection />
-        </LazySection>
-        <LazySection fallback={<SectionSkeleton />}>
-          <WhoShouldAttendSection />
-        </LazySection>
         <LazySection fallback={<SectionSkeleton />}>
           <EventTracksSection />
         </LazySection>
 
         <LazySection
           minHeight="16rem"
-          fallback={<div className="mx-auto max-w-7xl"><SectionSkeleton lines={4} /></div>}
+          fallback={
+            <div className="mx-auto max-w-7xl">
+              <SectionSkeleton lines={4} />
+            </div>
+          }
         >
           <SectionShell
             background="default"
@@ -140,28 +129,8 @@ export default function HomePage({
         <LazySection fallback={<SectionSkeleton />}>
           <SpeakerHighlightsSection speakers={featuredSpeakers} />
         </LazySection>
-        <LazySection fallback={<SectionSkeleton />}>
-          <TestimonialsSection />
-        </LazySection>
         <LazySection fallback={<SectionSkeleton lines={4} />}>
           <GallerySection />
-        </LazySection>
-
-        <LazySection fallback={<SectionSkeleton lines={4} />}>
-          <SectionShell
-            background="default"
-            className="px-4 py-10 md:px-8 md:py-14"
-            ariaLabel="Edition highlights"
-          >
-            <div className="mx-auto max-w-7xl">
-              <SectionHeader
-                eyebrow="Research & Publications"
-                title="Edition Highlights"
-                description="Proceedings and outcomes from past Mahakumbh editions."
-              />
-              <CustomCard />
-            </div>
-          </SectionShell>
         </LazySection>
 
         <LazySection fallback={<SectionSkeleton />}>
@@ -178,9 +147,7 @@ export default function HomePage({
         </LazySection>
 
         <LazySection minHeight="8rem">
-          <ConferenceSupport />
-          <MediaPartners cmsPartners={cmsPartners} />
-          <Organiger />
+          <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
         </LazySection>
       </main>
 

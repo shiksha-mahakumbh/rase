@@ -4,6 +4,7 @@ import {
   updateRegistrationsBulk,
   type BulkStatusField,
 } from "@/server/services/registration.service";
+import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
 import { ServiceError } from "@/server/lib/errors";
 
 const ALLOWED_FIELDS: BulkStatusField[] = [
@@ -36,5 +37,5 @@ export const POST = createApiHandler(
       body.value
     );
   },
-  { requireAdmin: true, rateLimitKey: "v2-admin-registrations-bulk", limit: 30 }
+  { requireAdmin: true, adminRoles: ADMIN_MANAGE_ROLES, rateLimitKey: "v2-admin-registrations-bulk", limit: 30 }
 );

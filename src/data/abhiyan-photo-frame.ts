@@ -124,7 +124,7 @@ export const EDITION_CHIEF_GUESTS: Record<string, EditionDignitary[]> = {
   "5.0": [
     { name: "श्री कविंदर गुप्ता", role: "माननीय उपराज्यपाल", organization: "लद्दाख" },
     { name: "श्री गुलाबचंद कटारिया", role: "माननीय राज्यपाल", organization: "पंजाब" },
-    { name: "Prof Ryan O'Meara", role: "पूर्व उपकुलपति", organization: "USA" },
+    { name: "Prof. Ryan Altman", role: "Professor", organization: "Purdue University, USA" },
   ],
 };
 

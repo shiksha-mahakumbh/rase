@@ -4,14 +4,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
-  AdminProvider,
   useAdmin,
   canManageStatus,
 } from "@/lib/adminAuth";
 import { fetchRegistrationByPublicId } from "@/lib/admin/registrations-client";
 import { formatRegistrationDate } from "@/lib/format-date";
 import { downloadAcknowledgementPdf } from "@/lib/generateAcknowledgementPdf";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import {
   RegistrationStatus,
   PaymentStatus,
@@ -27,12 +26,9 @@ import {
 function DetailContent() {
   const params = useParams();
   const id = params.id as string;
-  const { user, role, loading, login, isAdmin } = useAdmin();
+  const { role } = useAdmin();
   const [record, setRecord] = useState<Record<string, unknown> | null>(null);
   const [fetching, setFetching] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginLoading, setLoginLoading] = useState(false);
 
   const load = useCallback(async () => {
     setFetching(true);
@@ -57,8 +53,8 @@ function DetailContent() {
   }, [id]);
 
   useEffect(() => {
-    if (isAdmin && id) void load();
-  }, [isAdmin, id, load]);
+    if (id) void load();
+  }, [id, load]);
 
   const updateStatus = async (
     field: "registrationStatus" | "paymentStatus" | "accommodationStatus",
@@ -87,55 +83,10 @@ function DetailContent() {
     }
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginLoading(true);
-    try {
-      await login(email, password);
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Login failed");
-    } finally {
-      setLoginLoading(false);
-    }
-  };
-
-  if (loading || fetching) {
+  if (fetching) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         Loading...
-      </div>
-    );
-  }
-
-  if (!user || !isAdmin) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center px-4">
-        <p className="mb-4 text-gray-600">Admin login required</p>
-        <form onSubmit={handleLogin} className="w-full max-w-sm space-y-3">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-            className="w-full rounded-xl border px-4 py-3"
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-            className="w-full rounded-xl border px-4 py-3"
-          />
-          <button
-            type="submit"
-            disabled={loginLoading}
-            className="w-full rounded-xl bg-primary px-6 py-3 font-semibold text-white disabled:opacity-60"
-          >
-            {loginLoading ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
       </div>
     );
   }
@@ -156,7 +107,6 @@ function DetailContent() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Toaster position="top-center" />
       <header className="border-b bg-white px-6 py-4">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <div>
@@ -441,9 +391,5 @@ function collectFiles(record: Record<string, unknown>) {
 }
 
 export default function RegistrationDetailPage() {
-  return (
-    <AdminProvider>
-      <DetailContent />
-    </AdminProvider>
-  );
+  return <DetailContent />;
 }

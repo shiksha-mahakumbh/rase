@@ -5,15 +5,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import RazorpayCheckout, { type RazorpayPaymentResult } from "@/components/payments/RazorpayCheckout";
 import {
   DONATION_80G,
+  DONATION_HERO_IMAGE,
+  DONATION_HERO_IMAGE_ALT,
   DONATION_HUB_STATS,
   DONATION_IMPACT_AREAS,
   DONATION_MIN_AMOUNT,
+  DONATION_PAGE_HERO,
+  DONATION_SUCCESS_LINKS,
   DONATION_TIERS,
+  donation80GAddressLine,
   type DonationTierId,
 } from "@/data/donation-hub";
+import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { normalizePan } from "@/lib/schemas/donationSchema";
 import { isValidPan } from "@/lib/registration/validation";
 
@@ -52,6 +59,11 @@ export default function DonationShowcase() {
     const tier = DONATION_TIERS.find((t) => t.id === selectedTier);
     return tier?.amount ?? DONATION_MIN_AMOUNT;
   }, [selectedTier, customAmount]);
+
+  const selectedTierData = useMemo(
+    () => DONATION_TIERS.find((t) => t.id === selectedTier),
+    [selectedTier]
+  );
 
   const formValid = useMemo(() => {
     const panOk = isValidPan(normalizePan(panNumber));
@@ -135,82 +147,78 @@ export default function DonationShowcase() {
 
   if (success) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-2xl rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-8 text-center shadow-xl md:p-10"
-      >
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl">
-          ✓
-        </div>
-        <h2 className="mt-4 text-2xl font-bold text-brand-navy">Thank You, {success.fullName}!</h2>
-        <p className="mt-2 text-slate-600">
-          Your {donationKind === "sponsorship" ? "sponsorship" : "donation"} of{" "}
-          <strong>₹{success.amount.toLocaleString("en-IN")}</strong> is confirmed.
-        </p>
-        <p className="mt-1 text-sm text-slate-500">
-          Donation ID: <strong>{success.donationId}</strong>
-        </p>
-        <p className="mt-4 text-sm text-slate-600">
-          An 80G-eligible receipt has been emailed to <strong>{success.email}</strong>.
-        </p>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <a
-            href={receiptDownloadUrl}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-saffron px-6 py-3 text-sm font-bold text-brand-navy shadow-md transition hover:bg-brand-saffron-dark hover:text-white"
-          >
-            Download Receipt (PDF)
-          </a>
-          <a
-            href={receiptPrintUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-brand-blue/30 bg-white px-6 py-3 text-sm font-bold text-brand-blue shadow-sm transition hover:bg-brand-blue/5"
-          >
-            Print Receipt
-          </a>
-        </div>
-        <p className="mt-6 text-xs text-slate-500">
-          Section {DONATION_80G.section} — {DONATION_80G.registrationNumber}
-        </p>
-      </motion.div>
+      <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-auto max-w-2xl rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-8 text-center shadow-xl md:p-10"
+        >
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl">
+            ✓
+          </div>
+          <h2 className="mt-4 text-2xl font-bold text-brand-navy">Thank You, {success.fullName}!</h2>
+          <p className="mt-2 text-slate-600">
+            Your {donationKind === "sponsorship" ? "sponsorship" : "donation"} of{" "}
+            <strong>₹{success.amount.toLocaleString("en-IN")}</strong> is confirmed.
+          </p>
+          <p className="mt-1 text-sm text-slate-500">
+            Donation ID: <strong>{success.donationId}</strong>
+          </p>
+          <p className="mt-4 text-sm text-slate-600">
+            An 80G-eligible receipt has been emailed to <strong>{success.email}</strong>.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <a
+              href={receiptDownloadUrl}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-saffron px-6 py-3 text-sm font-bold text-brand-navy shadow-md transition hover:bg-brand-saffron-dark hover:text-white"
+            >
+              Download Receipt (PDF)
+            </a>
+            <a
+              href={receiptPrintUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-brand-blue/30 bg-white px-6 py-3 text-sm font-bold text-brand-blue shadow-sm transition hover:bg-brand-blue/5"
+            >
+              Print Receipt
+            </a>
+          </div>
+          <p className="mt-6 text-xs text-slate-500">
+            Section {DONATION_80G.section} — Reg. {DONATION_80G.registrationNumber} (
+            {DONATION_80G.orgLegalName})
+          </p>
+        </motion.div>
+
+        <section className="mx-auto mt-8 max-w-2xl rounded-2xl border border-slate-200 bg-white p-5">
+          <h3 className="font-bold text-brand-navy">Explore the programme</h3>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {DONATION_SUCCESS_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="block rounded-lg border border-slate-100 px-3 py-2 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:bg-brand-surface"
+                >
+                  {link.label} →
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 md:space-y-14">
-      {/* Hero banner */}
-      <section
-        aria-labelledby="donation-hub-banner"
-        className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-8"
-      >
-        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
-          80G Tax Benefit · Secure Razorpay · Global Supporters Welcome
-        </p>
-        <h2 id="donation-hub-banner" className="mt-2 text-xl font-bold md:text-3xl">
-          Fuel the National Education Movement
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
-          Contribute online in minutes — no bank transfers needed. Every donation
-          receives an instant 80G receipt by email with download and print options.
-        </p>
-        <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-          {DONATION_HUB_STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm"
-            >
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-                {stat.label}
-              </dt>
-              <dd className="mt-1 text-sm font-bold md:text-base">{stat.value}</dd>
-              <dd className="mt-0.5 text-[11px] text-white/75">{stat.detail}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+    <div className="mx-auto max-w-6xl space-y-10 px-4 py-10 md:space-y-14 md:px-8 md:py-14">
+      <HubGradientBanner
+        id="donation-hub-banner"
+        titleAs="h1"
+        eyebrow={DONATION_PAGE_HERO.eyebrow}
+        title={DONATION_PAGE_HERO.title}
+        subtitle={DONATION_PAGE_HERO.subtitle}
+        stats={DONATION_HUB_STATS}
+      />
 
-      {/* Impact cards */}
       <section aria-labelledby="donation-impact">
         <h2 id="donation-impact" className="text-lg font-bold text-brand-navy md:text-xl">
           Where Your Support Goes
@@ -231,7 +239,6 @@ export default function DonationShowcase() {
         </ul>
       </section>
 
-      {/* 80G tax benefit */}
       <section className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
         <div className="relative overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-6 text-white shadow-xl md:p-8">
           <div
@@ -239,8 +246,8 @@ export default function DonationShowcase() {
             aria-hidden
           />
           <Image
-            src="/branding/shiksha-mahakumbh-brand-hero.png"
-            alt="Shiksha Mahakumbh Abhiyan"
+            src={DONATION_HERO_IMAGE}
+            alt={DONATION_HERO_IMAGE_ALT}
             width={200}
             height={200}
             className="relative mx-auto h-auto w-40 md:w-48"
@@ -269,30 +276,56 @@ export default function DonationShowcase() {
         </div>
         <div className="rounded-2xl border border-brand-blue/15 bg-brand-surface-warm p-6 md:p-8">
           <p className="text-xs font-bold uppercase tracking-widest text-brand-saffron">
-            Section {DONATION_80G.section} Certified
+            Section {DONATION_80G.section} — Form 10AC Provisional Approval
           </p>
           <h2 className="mt-2 text-xl font-bold text-brand-navy md:text-2xl">
             Tax-Deductible Donations
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-slate-600">{DONATION_80G.note}</p>
-          <ul className="mt-4 space-y-2 text-sm text-slate-700">
-            <li>
-              <strong>Organization:</strong> {DONATION_80G.orgLegalName}
-            </li>
-            <li>
-              <strong>PAN:</strong> {DONATION_80G.orgPan}
-            </li>
-            <li>
-              <strong>80G Reg. No.:</strong> {DONATION_80G.registrationNumber}
-            </li>
-          </ul>
+          <dl className="mt-4 space-y-2 text-sm text-slate-700">
+            <div>
+              <dt className="font-semibold text-brand-navy">Registered trust</dt>
+              <dd>{DONATION_80G.orgLegalName}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-brand-navy">Programme supported</dt>
+              <dd>{DONATION_80G.programmeName}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-brand-navy">PAN</dt>
+              <dd>{DONATION_80G.orgPan}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-brand-navy">80G unique registration no.</dt>
+              <dd>{DONATION_80G.registrationNumber}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-brand-navy">Document ID</dt>
+              <dd>{DONATION_80G.documentId}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-brand-navy">Approval date</dt>
+              <dd>{DONATION_80G.approvalDate}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-brand-navy">Valid for</dt>
+              <dd>{DONATION_80G.approvalPeriod}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-brand-navy">Registered address</dt>
+              <dd>{donation80GAddressLine()}</dd>
+            </div>
+          </dl>
           <p className="mt-4 text-xs text-slate-500">
-            PAN is mandatory on the donation form for issuing a valid 80G receipt.
+            PAN is mandatory on the donation form for issuing a valid 80G receipt. See our{" "}
+            <Link href="/refund-policy" className="font-semibold text-brand-blue hover:underline">
+              refund policy
+            </Link>
+            .
           </p>
         </div>
       </section>
 
-      {/* Donation form */}
       <section
         id="donate-form"
         aria-labelledby="donate-form-title"
@@ -305,12 +338,13 @@ export default function DonationShowcase() {
           Secure payment via Razorpay · Instant 80G receipt to your email
         </p>
 
-        {/* Kind toggle */}
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label="Donation type">
           {(["donation", "sponsorship"] as const).map((kind) => (
             <button
               key={kind}
               type="button"
+              role="tab"
+              aria-selected={donationKind === kind}
               onClick={() => setDonationKind(kind)}
               className={`min-h-[44px] rounded-full px-5 py-2 text-sm font-semibold capitalize transition ${
                 donationKind === kind
@@ -323,12 +357,12 @@ export default function DonationShowcase() {
           ))}
         </div>
 
-        {/* Tier cards */}
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {DONATION_TIERS.map((tier) => (
             <button
               key={tier.id}
               type="button"
+              aria-pressed={selectedTier === tier.id}
               onClick={() => setSelectedTier(tier.id)}
               className={`rounded-2xl border p-4 text-left transition ${
                 selectedTier === tier.id
@@ -348,6 +382,7 @@ export default function DonationShowcase() {
           ))}
           <button
             type="button"
+            aria-pressed={selectedTier === "custom"}
             onClick={() => setSelectedTier("custom")}
             className={`rounded-2xl border p-4 text-left transition ${
               selectedTier === "custom"
@@ -362,6 +397,19 @@ export default function DonationShowcase() {
             <p className="text-xs text-slate-500">Min ₹{DONATION_MIN_AMOUNT}</p>
           </button>
         </div>
+
+        {selectedTierData && selectedTier !== "custom" && (
+          <ul className="mt-4 flex flex-wrap gap-2" aria-label={`${selectedTierData.name} tier benefits`}>
+            {selectedTierData.highlights.map((item) => (
+              <li
+                key={item}
+                className="rounded-full border border-brand-saffron/30 bg-brand-saffron/10 px-3 py-1 text-xs font-semibold text-brand-navy"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
 
         {selectedTier === "custom" && (
           <label className="mt-4 block max-w-xs">
@@ -414,7 +462,8 @@ export default function DonationShowcase() {
           </label>
           <label className="block md:col-span-2">
             <span className="text-sm font-semibold text-brand-navy">
-              PAN Number * <span className="font-normal text-slate-500">(mandatory for 80G receipt)</span>
+              PAN Number *{" "}
+              <span className="font-normal text-slate-500">(mandatory for 80G receipt)</span>
             </span>
             <input
               type="text"
@@ -492,20 +541,25 @@ export default function DonationShowcase() {
 
         <p className="mt-6 text-center text-xs text-slate-500">
           By donating you agree to receive a tax receipt at the email provided.{" "}
-          <Link href="/contact-us" className="font-semibold text-brand-blue hover:underline">
+          <Link href={CANONICAL_ROUTES.contact} className="font-semibold text-brand-blue hover:underline">
             Contact us
           </Link>{" "}
-          for institutional partnerships.
+          for institutional partnerships ·{" "}
+          <Link href="/refund-policy" className="font-semibold text-brand-blue hover:underline">
+            Refund policy
+          </Link>
         </p>
       </section>
 
-      {/* Quote */}
       <blockquote className="rounded-2xl border border-brand-blue/10 bg-brand-blue/5 px-6 py-8 text-center">
         <p className="text-lg font-semibold italic text-brand-navy md:text-xl">
           &ldquo;Let&apos;s make Education a Sacred Movement — a Mahakumbh of Knowledge.&rdquo;
         </p>
         <footer className="mt-3 text-sm text-slate-500">
-          <Link href="/introduction" className="font-semibold text-brand-blue hover:underline">
+          <Link
+            href={CANONICAL_ROUTES.introduction}
+            className="font-semibold text-brand-blue hover:underline"
+          >
             Learn about Shiksha Mahakumbh →
           </Link>
         </footer>

@@ -58,6 +58,8 @@ export default function PressJsonLd({ catalog }: Props) {
       headline: item.title,
       description: item.excerpt,
       url: `${SITE_URL}${item.href}`,
+      image: `${SITE_URL}${item.heroImage}`,
+      datePublished: item.datePublished,
       inLanguage: item.locale === "hi" ? "hi-IN" : "en-IN",
       publisher: {
         "@type": "Organization",

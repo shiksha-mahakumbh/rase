@@ -25,7 +25,8 @@ const SECTION_HINTS: Record<string, string> = {
   featured_events: '{"items":[{"title":"","date":"","venue":"","url":""}]}',
   featured_programs: '{"items":[{"title":"","description":"","url":"","badge":""}]}',
   testimonials: '{"items":[{"name":"","role":"","quote":""}]}',
-  partners: '{"items":[{"name":"","logoUrl":"","website":"","type":"academic|media|sponsor"}]}',
+  partners:
+    '{"items":[{"name":"","logoUrl":"","website":"","type":"academic|media|sponsor"}]} — prefer /admin/cms/partners (published DB partners override this JSON)',
   announcements: '{"items":[{"title":"","body":"","url":"","cta":""}]}',
   gallery: '{"items":[{"src":"","alt":"","legend":""}]}',
   cta: '{"editionLabel":"","headline":"","body":"","buttonLabel":"","buttonUrl":"","travel":[]}',

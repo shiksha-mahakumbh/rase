@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { jsPDF } from "jspdf";
+import { DONATION_80G } from "@/data/donation-hub";
 import type { DonationReceiptData } from "@/lib/receipt/donation-receipt";
 
 /** Literal paths only — avoids Next/Vercel tracing the entire `public/` folder (~600MB). */
@@ -99,7 +100,7 @@ function renderDonationReceiptPdf(doc: jsPDF, data: DonationReceiptData) {
   y += 12;
   doc.setFont("helvetica", "normal");
   doc.setTextColor(60, 60, 60);
-  const certText = `This is to certify that a sum of ₹${data.amount.toLocaleString("en-IN")} has been received from ${data.fullName} (PAN: ${data.panNumber}) as ${data.donationKind.toLowerCase()} towards ${data.orgLegalName}. Registration No. under Section 80G: ${data.registration80G}. This receipt is valid for income tax deduction purposes subject to applicable laws.`;
+  const certText = `This is to certify that a sum of ₹${data.amount.toLocaleString("en-IN")} has been received from ${data.fullName} (PAN: ${data.panNumber}) as ${data.donationKind.toLowerCase()} towards ${data.orgLegalName} in support of ${data.programmeName}. Unique Registration No. under Section 80G: ${data.registration80G}. Valid for ${DONATION_80G.approvalPeriod}. This receipt is valid for income tax deduction purposes subject to applicable laws.`;
   const certLines = doc.splitTextToSize(certText, right - left);
   doc.text(certLines, left, y);
   y += certLines.length * 11 + 16;

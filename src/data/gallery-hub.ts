@@ -1,5 +1,6 @@
 import {
   getEditionByNumber,
+  mediaArchivePath,
   PAST_EDITIONS,
   UPCOMING_EDITION,
   editionTitle,
@@ -7,6 +8,17 @@ import {
 import { SITE_URL } from "@/config/site";
 
 export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@ShikshaMahakumbh";
+
+const DEFAULT_GALLERY_IMAGE = "/branding/shiksha-mahakumbh-brand-hero.png";
+
+/** Featured YouTube coverage per edition — falls back to channel when unset */
+export const EDITION_YOUTUBE_URLS: Record<string, string> = {
+  "1.0": "https://youtu.be/uzQgxD5Bojk",
+  "2.0": "https://youtu.be/9c9RHrsVU5A",
+  "3.0": "https://www.youtube.com/watch?v=FFfdSd8_XOw",
+  "4.0": "https://www.youtube.com/live/gUWl_xMBU2o",
+  "5.0": "https://www.youtube.com/live/VsVFo0GGdkk",
+};
 
 export type GalleryTab = "photos" | "videos";
 
@@ -27,7 +39,10 @@ export type GalleryEdition = {
   status: "available" | "coming_soon";
   pastEventHref?: string;
   accent: string;
+  imageSrc: string;
+  imageAlt: string;
   photoLinks: GalleryPhotoLink[];
+  youtubeUrl?: string;
   videoTitle: string;
   videoDescription: string;
 };
@@ -62,10 +77,22 @@ export const GALLERY_STATS = [
   },
 ] as const;
 
-function editionFromPast(num: string): Pick<
-  GalleryEdition,
-  "title" | "year" | "venue" | "dates" | "theme" | "pastEventHref"
-> {
+export const GALLERY_QUICK_LINKS = [
+  { label: "Media Centre", href: "/media-center", icon: "📺" },
+  { label: "Press Releases", href: "/press", icon: "📰" },
+  { label: "Proceedings", href: "/proceedings", icon: "📚" },
+  { label: "Souvenir Abstracts", href: "/publications/souvenir-abstracts-mtc", icon: "📖" },
+  { label: "Past Editions", href: "/past-events", icon: "🗓️" },
+  { label: "Brochures", href: "/downloads", icon: "📥" },
+] as const;
+
+function galleryEditionImageAlt(
+  edition: Pick<GalleryEdition, "title" | "venue" | "year" | "edition">
+): string {
+  return `${edition.title} — ${edition.venue} ${edition.year} (Edition ${edition.edition})`;
+}
+
+function editionCore(num: string) {
   const e = getEditionByNumber(num)!;
   return {
     title: e.title,
@@ -74,24 +101,50 @@ function editionFromPast(num: string): Pick<
     dates: e.dates,
     theme: e.theme,
     pastEventHref: e.href,
+    imageSrc: e.imageSrc ?? DEFAULT_GALLERY_IMAGE,
+    imageAlt: galleryEditionImageAlt({
+      title: e.title,
+      venue: e.venue,
+      year: e.year,
+      edition: e.edition,
+    }),
   };
 }
 
-/** Edition-wise photo albums — sourced from legacy gallery grid + past-editions */
+function standardPhotoLinks(
+  edition: string,
+  extras: GalleryPhotoLink[] = []
+): GalleryPhotoLink[] {
+  const e = getEditionByNumber(edition)!;
+  return [
+    ...(e.galleryUrl
+      ? [{ label: "Mahakumbh Photos", href: e.galleryUrl, external: true as const }]
+      : []),
+    { label: `Digital Media ${edition}`, href: mediaArchivePath(edition, "digital") },
+    { label: `Print Media ${edition}`, href: mediaArchivePath(edition, "print") },
+    ...extras,
+    ...(e.campaignPdf
+      ? [{ label: "Campaign Details", href: e.campaignPdf, external: true as const }]
+      : []),
+    { label: "Edition Page", href: e.href },
+  ];
+}
+
+/** Edition-wise photo albums — sourced from past-editions + media archives */
 export const GALLERY_EDITIONS: GalleryEdition[] = [
   {
     id: "smk-6",
     edition: "6.0",
-    ...{
-      title: editionTitle("6.0"),
-      year: "2026",
-      venue: UPCOMING_EDITION.venue,
-      dates: UPCOMING_EDITION.dates,
-      theme: UPCOMING_EDITION.theme,
-      pastEventHref: UPCOMING_EDITION.href,
-    },
+    title: editionTitle("6.0"),
+    year: "2026",
+    venue: UPCOMING_EDITION.venue,
+    dates: UPCOMING_EDITION.dates,
+    theme: UPCOMING_EDITION.theme,
+    pastEventHref: UPCOMING_EDITION.href,
     status: "coming_soon",
     accent: "from-brand-navy via-brand-navy-light to-slate-700",
+    imageSrc: DEFAULT_GALLERY_IMAGE,
+    imageAlt: `${editionTitle("6.0")} — ${UPCOMING_EDITION.venue} 2026`,
     photoLinks: [],
     videoTitle: "Edition 6.0 coverage",
     videoDescription: "Photos and documentaries will be published after the event.",
@@ -99,133 +152,84 @@ export const GALLERY_EDITIONS: GalleryEdition[] = [
   {
     id: "smk-5",
     edition: "5.0",
-    ...editionFromPast("5.0"),
+    ...editionCore("5.0"),
     status: "available",
     accent: "from-violet-600 to-indigo-800",
-    photoLinks: [
-      {
-        label: "Mahakumbh Photos",
-        href: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
-        external: true,
-      },
-      { label: "Digital Media 5.0", href: "/media/shiksha-mahakumbh/5.0/digital" },
-      { label: "Print Media 5.0", href: "/media/shiksha-mahakumbh/5.0/print" },
+    photoLinks: standardPhotoLinks("5.0", [
       {
         label: "UT Ladakh coverage",
         href: "https://ladakh.gov.in/shiksha-mahakumbh-abhiyan-2025/",
         external: true,
       },
-      { label: "Edition Page", href: "/past_event/shiksha-mahakumbh-5.0" },
-    ],
+    ]),
+    youtubeUrl: EDITION_YOUTUBE_URLS["5.0"],
     videoTitle: "Edition 5.0 documentaries",
-    videoDescription: "Highlights and sessions on the official YouTube channel.",
+    videoDescription: "NIPER Mohali summit highlights and sessions on YouTube.",
   },
   {
     id: "smk-4",
     edition: "4.0",
-    ...editionFromPast("4.0"),
+    ...editionCore("4.0"),
     status: "available",
     accent: "from-blue-600 to-indigo-800",
-    photoLinks: [
-      {
-        label: "Mahakumbh Photos",
-        href: "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
-        external: true,
-      },
+    photoLinks: standardPhotoLinks("4.0", [
       { label: "Baton Ceremony", href: "/BatonCeremony" },
       { label: "Residential Camp", href: "/ResidentialCamp" },
-      {
-        label: "Campaign Details",
-        href: "/RASE_2024_4TH_EDITION_Campaign.pdf",
-        external: true,
-      },
-      { label: "Edition Page", href: "/past_event/shiksha-mahakumbh-4.0" },
-    ],
+    ]),
+    youtubeUrl: EDITION_YOUTUBE_URLS["4.0"],
     videoTitle: "Edition 4.0 documentaries",
-    videoDescription: "Conclave coverage and national summit highlights.",
+    videoDescription: "Kurukshetra University conclave coverage and national summit highlights.",
   },
   {
     id: "smk-3",
     edition: "3.0",
-    ...editionFromPast("3.0"),
+    ...editionCore("3.0"),
     status: "available",
     accent: "from-orange-500 to-red-600",
-    photoLinks: [
-      {
-        label: "Day 1 Photos",
-        href: "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
-        external: true,
-      },
-      {
-        label: "Day 2 Photos",
-        href: "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk",
-        external: true,
-      },
-      {
-        label: "Campaign Details",
-        href: "/RASE_2024_3RD_EDITION_Campaign.pdf",
-        external: true,
-      },
-      { label: "Edition Page", href: "/past_event/shiksha-mahakumbh-3.0" },
-    ],
+    photoLinks: standardPhotoLinks("3.0"),
+    youtubeUrl: EDITION_YOUTUBE_URLS["3.0"],
     videoTitle: "Edition 3.0 documentaries",
-    videoDescription: "Jammu & Kashmir edition coverage on YouTube.",
+    videoDescription: "NIT Srinagar edition coverage on YouTube.",
   },
   {
     id: "smk-2",
     edition: "2.0",
-    ...editionFromPast("2.0"),
+    ...editionCore("2.0"),
     status: "available",
     accent: "from-amber-500 to-orange-700",
-    photoLinks: [
-      {
-        label: "Mahakumbh Photos",
-        href: "https://drive.google.com/drive/folders/1T5HOcgbHQs6MNouIiWb0i4DGkrRd23vY",
-        external: true,
-      },
+    photoLinks: standardPhotoLinks("2.0", [
       {
         label: "Day 1 Photos",
         href: "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
         external: true,
       },
-      {
-        label: "Campaign Details",
-        href: "/RASE_2023_2ND_EDITION_Campaign.pdf",
-        external: true,
-      },
-      { label: "Edition Page", href: "/past_event/shiksha-mahakumbh-2.0" },
-    ],
+    ]),
+    youtubeUrl: EDITION_YOUTUBE_URLS["2.0"],
     videoTitle: "Edition 2.0 documentaries",
     videoDescription: "RASE conference documentaries — watch on YouTube.",
   },
   {
     id: "smk-1",
     edition: "1.0",
-    ...editionFromPast("1.0"),
+    ...editionCore("1.0"),
     status: "available",
     accent: "from-emerald-600 to-teal-800",
-    photoLinks: [
-      {
-        label: "Mahakumbh Photos",
-        href: "https://drive.google.com/drive/folders/1u_rgXNeYBuwnLae7irG4NiHgEil69j16?usp=sharing",
-        external: true,
-      },
+    photoLinks: standardPhotoLinks("1.0", [
       {
         label: "Day 1 Photos",
         href: "https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq",
         external: true,
       },
-      {
-        label: "Campaign Details",
-        href: "/RASE_2023_1ST_EDITION_Campaign.pdf",
-        external: true,
-      },
-      { label: "Edition Page", href: "/past_event/shiksha-mahakumbh-1.0" },
-    ],
+    ]),
+    youtubeUrl: EDITION_YOUTUBE_URLS["1.0"],
     videoTitle: "Edition 1.0 documentaries",
-    videoDescription: "Founding edition films on the official channel.",
+    videoDescription: "Founding RASE 2023 edition films on the official channel.",
   },
 ];
+
+export const GALLERY_OG_IMAGE = `${SITE_URL}${getEditionByNumber("5.0")!.imageSrc ?? DEFAULT_GALLERY_IMAGE}`;
+
+export { galleryEditionImageAlt };
 
 export const GALLERY_SEO_KEYWORDS = [
   "Shiksha Mahakumbh gallery",

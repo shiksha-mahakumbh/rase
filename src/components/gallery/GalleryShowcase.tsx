@@ -1,62 +1,75 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
+import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
   GALLERY_EDITIONS,
   GALLERY_PAGE_HERO,
+  GALLERY_QUICK_LINKS,
   GALLERY_STATS,
   YOUTUBE_CHANNEL_URL,
+  type GalleryEdition,
   type GalleryTab,
 } from "@/data/gallery-hub";
 
-const TABS: { id: GalleryTab; label: string; description: string }[] = [
+const TABS: { id: GalleryTab; label: string; description: string; href: string }[] = [
   {
     id: "photos",
     label: "Photos",
     description: "Google Drive albums & on-site galleries by edition",
+    href: "/gallery",
   },
   {
     id: "videos",
     label: "Videos",
     description: "Documentaries & coverage on our YouTube channel",
+    href: "/gallery?tab=videos",
   },
 ];
 
-function tabFromParam(value: string | null): GalleryTab {
-  return value === "videos" ? "videos" : "photos";
-}
+type Props = {
+  activeTab: GalleryTab;
+};
 
-export default function GalleryShowcase() {
+export default function GalleryShowcase({ activeTab }: Props) {
   const reduceMotion = useReducedMotion();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const activeTab = tabFromParam(searchParams.get("tab"));
-
-  const setTab = (tab: GalleryTab) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (tab === "photos") {
-      params.delete("tab");
-    } else {
-      params.set("tab", tab);
-    }
-    const query = params.toString();
-    router.replace(query ? `/gallery?${query}` : "/gallery", { scroll: false });
-  };
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <BreadcrumbNav
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Media Centre", href: "/media-center" },
+          { label: "Gallery" },
+        ]}
+        className="mb-6"
+      />
+
       <HubGradientBanner
         id="gallery-banner"
         eyebrow={GALLERY_PAGE_HERO.eyebrow}
         title={GALLERY_PAGE_HERO.title}
         subtitle={GALLERY_PAGE_HERO.subtitle}
         stats={GALLERY_STATS}
+        titleAs="h1"
       />
 
-      {/* Tabs */}
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {GALLERY_QUICK_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
+          >
+            <span aria-hidden>{link.icon}</span>
+            {link.label}
+          </Link>
+        ))}
+      </div>
+
       <div
         role="tablist"
         aria-label="Gallery sections"
@@ -65,14 +78,14 @@ export default function GalleryShowcase() {
         {TABS.map((tab) => {
           const selected = activeTab === tab.id;
           return (
-            <button
+            <Link
               key={tab.id}
-              type="button"
+              href={tab.href}
+              scroll={false}
               role="tab"
               id={`gallery-tab-${tab.id}`}
               aria-selected={selected}
               aria-controls={`gallery-panel-${tab.id}`}
-              onClick={() => setTab(tab.id)}
               className={`flex flex-1 flex-col rounded-2xl border px-4 py-3 text-left transition md:px-5 md:py-4 ${
                 selected
                   ? "border-brand-saffron bg-brand-saffron/10 shadow-sm ring-1 ring-brand-saffron/30"
@@ -87,12 +100,11 @@ export default function GalleryShowcase() {
                 {tab.label}
               </span>
               <span className="mt-1 text-xs text-slate-500 md:text-sm">{tab.description}</span>
-            </button>
+            </Link>
           );
         })}
       </div>
 
-      {/* Photos panel */}
       <section
         role="tabpanel"
         id="gallery-panel-photos"
@@ -100,7 +112,7 @@ export default function GalleryShowcase() {
         hidden={activeTab !== "photos"}
         className="mt-8"
       >
-        <h3 className="sr-only">Photo albums by edition</h3>
+        <h2 className="sr-only">Photo albums by edition</h2>
         <div className="grid gap-5 md:grid-cols-2">
           {GALLERY_EDITIONS.map((edition, index) => (
             <EditionPhotoCard
@@ -113,7 +125,6 @@ export default function GalleryShowcase() {
         </div>
       </section>
 
-      {/* Videos panel */}
       <section
         role="tabpanel"
         id="gallery-panel-videos"
@@ -124,7 +135,7 @@ export default function GalleryShowcase() {
         <div className="mb-6 rounded-2xl border border-red-200 bg-gradient-to-r from-red-50 to-white p-5 md:p-6">
           <p className="text-sm font-semibold text-brand-navy">Official YouTube Channel</p>
           <p className="mt-1 text-sm text-slate-600">
-            Tap any edition below to open{" "}
+            Tap any edition below for featured coverage on{" "}
             <strong>@ShikshaMahakumbh</strong> — documentaries, conclave sessions, and national
             coverage.
           </p>
@@ -138,7 +149,7 @@ export default function GalleryShowcase() {
             <span aria-hidden>↗</span>
           </a>
         </div>
-        <h3 className="sr-only">Videos by edition</h3>
+        <h2 className="sr-only">Videos by edition</h2>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {GALLERY_EDITIONS.map((edition, index) => (
             <EditionVideoCard
@@ -155,7 +166,7 @@ export default function GalleryShowcase() {
 }
 
 type EditionCardProps = {
-  edition: (typeof GALLERY_EDITIONS)[number];
+  edition: GalleryEdition;
   index: number;
   reduceMotion: boolean | null;
 };
@@ -170,10 +181,28 @@ function EditionPhotoCard({ edition, index, reduceMotion }: EditionCardProps) {
       viewport={{ once: true }}
       transition={{ delay: reduceMotion ? 0 : index * 0.06 }}
       className={`flex h-full flex-col overflow-hidden rounded-2xl border bg-white shadow-sm ${
-        comingSoon ? "border-slate-200 opacity-95" : "border-slate-200 hover:border-brand-saffron/30 hover:shadow-md"
+        comingSoon
+          ? "border-slate-200 opacity-95"
+          : "border-slate-200 hover:border-brand-saffron/30 hover:shadow-md"
       }`}
     >
       <div className={`h-2 bg-gradient-to-r ${edition.accent}`} aria-hidden />
+      <div className="relative h-40 w-full bg-slate-100">
+        <Image
+          src={edition.imageSrc}
+          alt={edition.imageAlt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t ${edition.accent} opacity-50`} />
+        <div className="absolute bottom-3 left-3 right-3 text-white">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-white/90">
+            Edition {edition.edition}
+          </p>
+          <p className="text-sm font-bold line-clamp-1">{edition.venue}</p>
+        </div>
+      </div>
       <div className="flex flex-1 flex-col p-5 md:p-6">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-brand-navy/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-navy">
@@ -185,7 +214,7 @@ function EditionPhotoCard({ edition, index, reduceMotion }: EditionCardProps) {
             </span>
           )}
         </div>
-        <h4 className="text-lg font-bold text-brand-navy">{edition.title}</h4>
+        <h3 className="text-lg font-bold text-brand-navy">{edition.title}</h3>
         <p className="mt-1 text-sm text-slate-600">{edition.theme}</p>
         <dl className="mt-3 space-y-1 text-xs text-slate-500 md:text-sm">
           <div className="flex gap-2">
@@ -236,15 +265,33 @@ function EditionPhotoCard({ edition, index, reduceMotion }: EditionCardProps) {
 
 function EditionVideoCard({ edition, index, reduceMotion }: EditionCardProps) {
   const comingSoon = edition.status === "coming_soon";
+  const videoHref = edition.youtubeUrl ?? YOUTUBE_CHANNEL_URL;
 
   const inner = (
     <>
+      {!comingSoon && (
+        <div className="relative h-28 w-full bg-slate-900">
+          <Image
+            src={edition.imageSrc}
+            alt=""
+            fill
+            className="object-cover opacity-80"
+            sizes="(max-width: 1024px) 50vw, 33vw"
+            aria-hidden
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+            <span className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white">
+              ▶ YouTube
+            </span>
+          </div>
+        </div>
+      )}
       <div className={`h-2 bg-gradient-to-r ${edition.accent}`} aria-hidden />
       <div className="flex flex-1 flex-col p-5">
         <span className="text-[10px] font-bold uppercase tracking-wide text-brand-saffron-dark">
           Edition {edition.edition}
         </span>
-        <h4 className="mt-1 text-base font-bold text-brand-navy">{edition.videoTitle}</h4>
+        <h3 className="mt-1 text-base font-bold text-brand-navy">{edition.videoTitle}</h3>
         <p className="mt-2 flex-1 text-sm text-slate-600">{edition.videoDescription}</p>
         {!comingSoon && (
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-red-600">
@@ -275,7 +322,7 @@ function EditionVideoCard({ edition, index, reduceMotion }: EditionCardProps) {
 
   return (
     <motion.a
-      href={YOUTUBE_CHANNEL_URL}
+      href={videoHref}
       target="_blank"
       rel="noopener noreferrer"
       initial={reduceMotion ? false : { opacity: 0, y: 12 }}
@@ -283,7 +330,7 @@ function EditionVideoCard({ edition, index, reduceMotion }: EditionCardProps) {
       viewport={{ once: true }}
       transition={{ delay: reduceMotion ? 0 : index * 0.05 }}
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-lg"
-      aria-label={`${edition.videoTitle} — open Shiksha Mahakumbh YouTube channel`}
+      aria-label={`${edition.videoTitle} — watch on YouTube`}
     >
       {inner}
     </motion.a>

@@ -1,10 +1,5 @@
-import { AdminProvider } from "@/lib/adminAuth";
-import CheckInClient from "./CheckInClient";
+import { redirect } from "next/navigation";
 
 export default function EventCheckInPage() {
-  return (
-    <AdminProvider>
-      <CheckInClient />
-    </AdminProvider>
-  );
+  redirect("/admin/cms/checkin");
 }

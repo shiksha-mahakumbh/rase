@@ -1,7 +1,10 @@
-import NavBar from "@/components/layout/NavBar";
-import Footer from "@/components/layout/Footer";
-import ContactUs from "@/components/content/ContactUs";
+import ContactPageView from "@/app/contact-us/ContactPageView";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import {
+  CONTACT_OG_IMAGE,
+  CONTACT_PATH,
+  contactMetaDescription,
+} from "@/data/contact-hub";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({
@@ -14,17 +17,13 @@ export async function generateMetadata({
 
   return createPageMetadata({
     title: t("contactTitle"),
-    description: t("contactDescription"),
-    path: locale === "en" ? "/contact-us" : `/${locale}/ContactUs`,
+    description: contactMetaDescription(),
+    path: locale === "en" ? CONTACT_PATH : `/${locale}/ContactUs`,
+    locale: "en_IN",
+    ogImageUrl: CONTACT_OG_IMAGE,
   });
 }
 
 export default function LocaleContactPage() {
-  return (
-    <div className="min-h-screen bg-brand-surface">
-      <NavBar />
-      <ContactUs />
-      <Footer />
-    </div>
-  );
+  return <ContactPageView />;
 }

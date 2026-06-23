@@ -14,6 +14,7 @@ export {
   buildResearchProjectSchema,
   buildEducationalOccupationalProgramSchema,
   buildCollectionPageSchema,
+  buildBookSchema,
   buildItemListSchema,
   buildWebPageSchema,
   buildProfilePageSchema,

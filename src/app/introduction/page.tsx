@@ -1,5 +1,8 @@
 import { createPageMetadata } from "@/lib/seo/metadata";
-import { INTRODUCTION_HERO } from "@/data/introduction-content";
+import {
+  INTRODUCTION_HERO,
+  INTRODUCTION_OG_IMAGE,
+} from "@/data/introduction-content";
 
 export const metadata = createPageMetadata({
   title: `${INTRODUCTION_HERO.title} — Introduction`,
@@ -18,6 +21,7 @@ export const metadata = createPageMetadata({
     "education policy India",
   ],
   locale: "en_IN",
+  ogImageUrl: INTRODUCTION_OG_IMAGE,
 });
 
 export { default } from "./IntroductionContent";
