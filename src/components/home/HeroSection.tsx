@@ -1,61 +1,50 @@
-"use client";
-
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { CtaButton, StatCard } from "@/components/ui";
-import { event, impactStats } from "@/design/tokens";
+import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
-import { useCms } from "@/lib/cms/context";
-import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
+import type { HeroContent } from "@/lib/home/build-hero-content";
 
 const CountdownBanner = dynamic(() => import("./CountdownBanner"), { ssr: false });
 
-const BRAND_HERO = "/branding/shiksha-mahakumbh-brand-hero.png";
+function HeroStats({ stats }: { stats: HeroContent["stats"] }) {
+  return (
+    <div className="mt-6 grid grid-cols-2 gap-3">
+      {stats.map((s) => (
+        <div
+          key={s.label}
+          className="rounded-2xl border border-brand-saffron/20 bg-white p-4 shadow-md shadow-brand-saffron/5 md:p-5"
+        >
+          <p className="text-2xl font-extrabold text-brand-navy md:text-3xl">
+            {s.value.toLocaleString("en-IN")}
+            {s.suffix}
+          </p>
+          <p className="mt-1 text-xs font-medium uppercase tracking-wide text-slate-500 md:text-sm">
+            {s.label}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-export default function HeroSection() {
-  const cms = useCms();
-  const hero = getSection(cms?.homepage, "hero");
-  const counters = getSection(cms?.homepage, "counters");
-
-  const headline = sectionField(hero, "headline", "शिक्षा महाकुंभ अभियान");
-  const subheadline = sectionField(
-    hero,
-    "subheadline",
-    "वैश्विक विमर्श निर्माण को समर्पित"
-  );
-  const description = sectionField(
-    hero,
-    "description",
-    "Department of Holistic Education · A national movement aligning NEP 2020, research, innovation, and Bharatiya knowledge traditions on one vibrant global platform."
-  );
-  const badge = sectionField(hero, "badge", `${event.name} · Registration Open`);
-  const dates = sectionField(hero, "dates", "📅 9–11 October 2026");
-  const venue = sectionField(hero, "venue", `📍 ${event.venue}, HP`);
-  const heroImage = sectionField(hero, "imageUrl", BRAND_HERO);
-  const stats = sectionItems<{ label: string; value: string | number; suffix?: string }>(
-    counters
-  );
-  const displayStats = stats.length
-    ? stats.map((s) => {
-        const numeric =
-          typeof s.value === "number" ? s.value : parseInt(String(s.value), 10);
-        return {
-          label: s.label,
-          value: Number.isFinite(numeric) ? numeric : 0,
-          suffix:
-            s.suffix ??
-            (typeof s.value === "string" && Number.isNaN(Number(s.value)) ? s.value : ""),
-        };
-      })
-    : impactStats;
+export default function HeroSection({ content }: { content: HeroContent }) {
+  const {
+    headline,
+    subheadline,
+    description,
+    badge,
+    dates,
+    venue,
+    heroImage,
+    stats,
+  } = content;
 
   return (
     <section
       aria-label="Shiksha Mahakumbh hero"
       className="brand-hero-bg relative overflow-hidden"
     >
-      {/* Decorative graphics */}
       <div
         className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-brand-saffron/15 blur-3xl"
         aria-hidden
@@ -138,22 +127,13 @@ export default function HeroSection() {
                   height={600}
                   className="h-auto w-full rounded-xl object-contain"
                   priority
+                  fetchPriority="high"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              {displayStats.map((s) => (
-                <StatCard
-                  key={s.label}
-                  value={s.value}
-                  label={s.label}
-                  suffix={s.suffix}
-                  variant="light"
-                />
-              ))}
-            </div>
+            <HeroStats stats={stats} />
           </div>
         </div>
       </div>

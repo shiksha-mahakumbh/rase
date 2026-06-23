@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
-import SectionShell from "@/components/ui/SectionShell";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
@@ -13,13 +12,15 @@ import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
 import HomePageChrome from "./HomePageChrome";
+import IdleMount from "@/components/performance/IdleMount";
+import type { HeroContent } from "@/lib/home/build-hero-content";
 
 const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
   loading: () => (
     <div className="h-16 w-full border-b border-slate-200 bg-white/90" aria-hidden />
   ),
 });
-const Marquees = dynamic(() => import("@/components/layout/Marquees"));
+const Marquees = dynamic(() => import("@/components/layout/Marquees"), { ssr: false });
 const Footer = dynamic(() => import("@/components/layout/Footer"));
 const TrustStrip = dynamic(() => import("./TrustStrip"));
 const BrandShowcaseSection = dynamic(() => import("./BrandShowcaseSection"));
@@ -36,35 +37,46 @@ const HomeEditionCta = dynamic(() => import("./HomeEditionCta"));
 export default function HomePage({
   featuredSpeakers = [],
   cmsPartners = [],
+  heroContent,
 }: {
   featuredSpeakers?: CmsSpeakerCard[];
   cmsPartners?: CmsPartnerCard[];
+  heroContent: HeroContent;
 }) {
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
-      <Marquees />
+      <IdleMount fallbackHeight="4.5rem">
+        <Marquees />
+      </IdleMount>
 
       <main id="main-content">
-        <HeroSection />
-        <LazySection minHeight="3rem" fallback={<SectionSkeleton lines={1} />}>
+        <HeroSection content={heroContent} />
+        <LazySection minHeight="3rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={1} />}>
           <TrustStrip />
         </LazySection>
 
-        <LazySection minHeight="12rem" fallback={<SectionSkeleton lines={6} />}>
+        <LazySection minHeight="12rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={6} />}>
           <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
         </LazySection>
 
-        <LazySection minHeight="8rem" fallback={<SectionSkeleton lines={3} />}>
+        <LazySection minHeight="8rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={3} />}>
           <BrandShowcaseSection />
         </LazySection>
 
-        <SectionShell
-          background="warm"
-          className="px-4 py-8 md:px-8 md:py-10"
-          ariaLabel="Programmes and notices"
+        <section
+          aria-label="Programmes and notices"
+          className="relative overflow-hidden bg-gradient-to-br from-[#fff9f5] via-white to-[#fef3e8] px-4 py-8 md:px-8 md:py-10 [content-visibility:auto] [contain-intrinsic-size:auto_28rem]"
         >
-          <div className="mx-auto max-w-7xl">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/5 blur-3xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl"
+          />
+          <div className="relative z-10 mx-auto max-w-7xl">
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <SectionHeader
                 align="left"
@@ -79,6 +91,7 @@ export default function HomePage({
             </div>
             <LazySection
               minHeight="20rem"
+              rootMargin="80px 0px"
               fallback={
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
                   <SectionSkeleton />
@@ -100,66 +113,68 @@ export default function HomePage({
               </div>
             </LazySection>
           </div>
-        </SectionShell>
+        </section>
 
-        <LazySection minHeight="6rem" fallback={<SectionSkeleton lines={2} />}>
+        <LazySection minHeight="6rem" rootMargin="80px 0px" fallback={<SectionSkeleton lines={2} />}>
           <DiscoverStrip />
         </LazySection>
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-mid" />
         </div>
 
-        <LazySection fallback={<SectionSkeleton lines={4} />}>
+        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton lines={4} />}>
           <WhyAttendSection />
         </LazySection>
-        <LazySection fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
           <EventTracksSection />
         </LazySection>
 
         <LazySection
           minHeight="16rem"
+          rootMargin="80px 0px"
           fallback={
             <div className="mx-auto max-w-7xl">
               <SectionSkeleton lines={4} />
             </div>
           }
         >
-          <SectionShell
-            background="default"
-            className="px-4 py-10 md:px-8 md:py-14"
-            ariaLabel="Upcoming events"
+          <section
+            aria-label="Upcoming events"
+            className="bg-white px-4 py-10 md:px-8 md:py-14 [content-visibility:auto] [contain-intrinsic-size:auto_20rem]"
           >
             <div className="mx-auto max-w-7xl">
               <GlassCard className="overflow-hidden p-6 md:p-8">
                 <UpcomingEvent />
               </GlassCard>
             </div>
-          </SectionShell>
+          </section>
         </LazySection>
 
-        <LazySection fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
           <SpeakerHighlightsSection speakers={featuredSpeakers} />
         </LazySection>
-        <LazySection fallback={<SectionSkeleton lines={4} />}>
+        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton lines={4} />}>
           <GallerySection />
         </LazySection>
 
-        <LazySection fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
           <VenueTravelSection />
         </LazySection>
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-footer" />
         </div>
-        <LazySection fallback={<SectionSkeleton lines={4} />}>
+        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton lines={4} />}>
           <HomeFaqSection />
         </LazySection>
-        <LazySection fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
           <HomeEducationEcosystemNav />
         </LazySection>
       </main>
 
       <Footer />
-      <HomePageChrome />
+      <IdleMount fallbackHeight="0">
+        <HomePageChrome />
+      </IdleMount>
     </div>
   );
 }

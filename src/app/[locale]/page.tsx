@@ -12,6 +12,7 @@ import { loadCmsSpeakers, loadCmsPartners } from "@/lib/cms/organizational";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
+import { buildHeroContent } from "@/lib/home/build-hero-content";
 import { getTranslations } from "next-intl/server";
 import type { ContentLocale } from "@prisma/client";
 
@@ -72,6 +73,7 @@ export default async function LocaleHomePage({
     cmsSpeakers: featuredSpeakers,
     homepagePartners: getHomepagePartners(cmsData.homepage),
   });
+  const heroContent = buildHeroContent(cmsData.homepage);
 
   return (
     <CmsProvider data={cmsData}>
@@ -86,7 +88,11 @@ export default async function LocaleHomePage({
           }}
         />
       )}
-      <HomePage featuredSpeakers={featuredSpeakers} cmsPartners={cmsPartners} />
+      <HomePage
+        featuredSpeakers={featuredSpeakers}
+        cmsPartners={cmsPartners}
+        heroContent={heroContent}
+      />
     </CmsProvider>
   );
 }
