@@ -38,11 +38,11 @@ export const SMK_5_0_CONTENT: EditionDetailContent = {
     "Notable guests included Prof. Ryan Altman (Purdue University, USA) and Prof. R. P. Tiwari (VC, CUP Punjab).",
   ],
   galleryImages: [
-    "/sm25printmedia/1.jpg",
-    "/sm25printmedia/12.jpg",
-    "/sm25printmedia/24.jpg",
-    "/sm25printmedia/36.jpg",
-    "/sm25printmedia/48.jpg",
+    "/sm25printmedia/1-lcp.webp",
+    "/sm25printmedia/12-opt.webp",
+    "/sm25printmedia/24-opt.webp",
+    "/sm25printmedia/36-opt.webp",
+    "/sm25printmedia/48-opt.webp",
   ],
   galleryUrl: "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
   relatedLinks: [

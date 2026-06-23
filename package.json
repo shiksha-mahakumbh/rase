@@ -27,6 +27,10 @@
     "gcp:shutdown": "node scripts/gcp-shutdown-project.mjs",
     "audit:go-live": "node scripts/launch-go-live-audit.mjs",
     "audit:production": "node scripts/production-registration-audit.mjs",
+    "audit:past-editions": "tsx scripts/audit-past-editions.ts",
+    "audit:past-editions-performance": "tsx scripts/audit-past-editions-performance.ts",
+    "audit:site-performance": "tsx scripts/audit-site-performance.ts",
+    "compress:edition-gallery": "node scripts/compress-edition-gallery-images.mjs",
     "browserslist:update": "npx browserslist@latest --update-db",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
@@ -107,6 +111,7 @@
     "playwright": "^1.60.0",
     "postcss": "^8.4.47",
     "prisma": "^6.19.3",
+    "sharp": "^0.35.2",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.7.2"
   }

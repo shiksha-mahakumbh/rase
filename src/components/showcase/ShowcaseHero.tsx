@@ -1,6 +1,4 @@
-"use client";
-
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import Image from "next/image";
 
 interface ShowcaseHeroProps {
@@ -10,6 +8,7 @@ interface ShowcaseHeroProps {
   accent?: "navy" | "saffron" | "emerald" | "brand";
   imageSrc?: string;
   imageAlt?: string;
+  imagePriority?: boolean;
 }
 
 const darkAccents = {
@@ -25,6 +24,7 @@ export default function ShowcaseHero({
   accent = "brand",
   imageSrc,
   imageAlt,
+  imagePriority = true,
 }: ShowcaseHeroProps) {
   const isBrand = accent === "brand";
 
@@ -44,33 +44,38 @@ export default function ShowcaseHero({
         />
         <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-2">
           <div className="text-center lg:text-left">
-            {eyebrow && (
+            {eyebrow ? (
               <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron-dark">
                 {eyebrow}
               </p>
-            )}
+            ) : null}
             <h1
               id="showcase-hero-title"
               className="text-3xl font-extrabold leading-tight text-brand-navy md:text-4xl lg:text-5xl"
             >
               {title}
             </h1>
-            {subtitle && (
+            {subtitle ? (
               <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 md:text-lg lg:mx-0">
                 {subtitle}
               </p>
-            )}
+            ) : null}
           </div>
           {imageSrc ? (
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-              <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-brand-saffron/25 to-brand-blue/15 blur-sm" aria-hidden />
+              <div
+                className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-brand-saffron/25 to-brand-blue/15 blur-sm"
+                aria-hidden
+              />
               <Image
                 src={imageSrc}
                 alt={imageAlt ?? ""}
                 width={560}
                 height={420}
+                sizes="(max-width: 1024px) 100vw, 560px"
+                priority={imagePriority}
+                loading={imagePriority ? undefined : "lazy"}
                 className="relative rounded-xl border-2 border-white bg-white shadow-lg"
-                priority
               />
             </div>
           ) : null}
@@ -89,11 +94,11 @@ export default function ShowcaseHero({
         className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-white/10 blur-3xl"
       />
       <div className="relative z-10 mx-auto max-w-4xl text-center">
-        {eyebrow && (
+        {eyebrow ? (
           <p className="mb-3 animate-fade-in text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron/90">
             {eyebrow}
           </p>
-        )}
+        ) : null}
         <h1
           id="showcase-hero-title"
           className="animate-fade-in text-3xl font-extrabold leading-tight md:text-5xl"
@@ -101,14 +106,14 @@ export default function ShowcaseHero({
         >
           {title}
         </h1>
-        {subtitle && (
+        {subtitle ? (
           <div
             className="animate-fade-in mx-auto mt-5 max-w-3xl text-base leading-relaxed opacity-90 md:text-lg"
             style={{ animationDelay: "100ms" }}
           >
             {subtitle}
           </div>
-        )}
+        ) : null}
       </div>
     </section>
   );

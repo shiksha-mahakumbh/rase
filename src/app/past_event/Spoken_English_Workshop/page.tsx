@@ -1,4 +1,3 @@
-"use client";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import EventPage from "@/components/past-editions/editions/Spoken_English_Workshop/Spoken_English_Workshop";
 import { brandWorkshopHero } from "@/lib/page-heroes";

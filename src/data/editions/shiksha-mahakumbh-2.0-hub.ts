@@ -46,7 +46,7 @@ export const SMK_2_0_CONTENT: EditionDetailContent = {
       { name: "Dr. Thakur SKR", role: "Director, DHE" },
     ],
   },
-  galleryImages: ["/2023K/k1.jpg", "/2023K/k2.JPG", "/2023K/b1.JPG", "/2023K/bandaru_dattareya.JPG"],
+  galleryImages: ["/2023K/k1.jpg", "/2023K/k2.webp", "/2023K/b1.webp"],
   galleryUrl: "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ",
   campaignPdf: "/RASE_2023_2ND_EDITION_Campaign.pdf",
   proceedingHref: "/proceeding1",

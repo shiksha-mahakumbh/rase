@@ -1,15 +1,9 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import RegistrationShell from "@/components/registration/RegistrationShell";
 import { EVENT_NAME, RegistrationType } from "@/types/registration";
-import DelegateForm from "@/components/forms/DelegateForm";
-import ConclaveForm from "@/components/forms/ConclaveForm";
-import BestPracticeForm from "@/components/forms/BestPracticeForm";
-import OlympiadForm from "@/components/forms/OlympiadForm";
-import AwardsForm from "@/components/forms/AwardsForm";
-import GenericRegistrationForm from "@/components/forms/GenericRegistrationForm";
 import RegistrationProgress from "@/components/registration/RegistrationProgress";
 import CategoryStep from "@/components/registration/CategoryStep";
 import CategoryInstructionsPanel from "@/components/registration/CategoryInstructionsPanel";
@@ -25,12 +19,14 @@ import {
 import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
 import { loadRazorpayCheckoutScript } from "@/lib/razorpay/load-checkout-script";
 
-const MemoDelegateForm = memo(DelegateForm);
-const MemoConclaveForm = memo(ConclaveForm);
-const MemoBestPracticeForm = memo(BestPracticeForm);
-const MemoOlympiadForm = memo(OlympiadForm);
-const MemoAwardsForm = memo(AwardsForm);
-const MemoGenericForm = memo(GenericRegistrationForm);
+const DelegateForm = dynamic(() => import("@/components/forms/DelegateForm"));
+const ConclaveForm = dynamic(() => import("@/components/forms/ConclaveForm"));
+const BestPracticeForm = dynamic(() => import("@/components/forms/BestPracticeForm"));
+const OlympiadForm = dynamic(() => import("@/components/forms/OlympiadForm"));
+const AwardsForm = dynamic(() => import("@/components/forms/AwardsForm"));
+const GenericRegistrationForm = dynamic(
+  () => import("@/components/forms/GenericRegistrationForm")
+);
 
 function RegistrationFormRouter({
   type,
@@ -54,25 +50,25 @@ function RegistrationFormRouter({
   const form = useMemo(() => {
     switch (type) {
       case "Delegate Registration":
-        return <MemoDelegateForm />;
+        return <DelegateForm />;
       case "Conclave":
-        return <MemoConclaveForm />;
+        return <ConclaveForm />;
       case "Best Practices":
-        return <MemoBestPracticeForm />;
+        return <BestPracticeForm />;
       case "Olympiad":
-        return <MemoOlympiadForm />;
+        return <OlympiadForm />;
       case "Awards":
-        return <MemoAwardsForm />;
+        return <AwardsForm />;
       case "Exhibition":
         return (
-          <MemoGenericForm
+          <GenericRegistrationForm
             registrationType="Exhibition"
             sectionTitle="Exhibition Registration"
           />
         );
       case "Projects":
         return (
-          <MemoGenericForm
+          <GenericRegistrationForm
             registrationType="Projects"
             sectionTitle="Projects Registration"
             requiresPayment
@@ -80,21 +76,21 @@ function RegistrationFormRouter({
         );
       case "Bal Shodh Patrika":
         return (
-          <MemoGenericForm
+          <GenericRegistrationForm
             registrationType="Bal Shodh Patrika"
             sectionTitle="Bal Shodh Patrika Registration"
           />
         );
       case "Cultural Program":
         return (
-          <MemoGenericForm
+          <GenericRegistrationForm
             registrationType="Cultural Program"
             sectionTitle="Cultural Program Registration"
           />
         );
       case "Accommodation":
         return (
-          <MemoGenericForm
+          <GenericRegistrationForm
             registrationType="Accommodation"
             sectionTitle="Accommodation Registration"
             requiresPayment
@@ -184,14 +180,14 @@ function RegistrationHubInner() {
   }, [showPaymentStep, step]);
 
   useEffect(() => {
-    if (!showPaymentStep) return;
+    if (!showPaymentStep || step !== 3) return;
     void loadRazorpayCheckoutScript().catch((err) => {
       console.error("RAZORPAY_SCRIPT_LOAD_FAILED", {
-        phase: "hub_preload",
+        phase: "hub_payment_step",
         error: err instanceof Error ? err.message : String(err),
       });
     });
-  }, [showPaymentStep]);
+  }, [showPaymentStep, step]);
 
   const goToPayment = useCallback(async () => {
     const ok = (await flow?.requestPaymentStep()) ?? true;
@@ -202,8 +198,7 @@ function RegistrationHubInner() {
 
   return (
     <>
-      <RecaptchaScript />
-      <Toaster position="top-center" />
+      {step >= 2 && <RecaptchaScript />}
       <RegistrationShell
         title={EVENT_NAME}
         subtitle="Official registration — national education movement & global summit"

@@ -1,4 +1,4 @@
-import type { PublicPageHero } from "@/components/layouts/PublicPageShell";
+import type { PublicPageHero } from "@/components/layouts/public-page-shell.types";
 
 export const BRAND_HERO_IMAGE = "/branding/shiksha-mahakumbh-brand-hero.png";
 
@@ -13,6 +13,7 @@ export function brandPageHero(
     subtitle,
     accent: "brand",
     imageSrc: BRAND_HERO_IMAGE,
+    imagePriority: false,
   };
 }
 
@@ -32,6 +33,7 @@ function registryHero(
     subtitle,
     accent: "brand",
     imageSrc: BRAND_HERO_IMAGE,
+    imagePriority: false,
   };
 }
 
