@@ -16,7 +16,8 @@ export async function generateMetadata() {
 export default async function DisclaimerPage() {
   return renderLegalPage(
     "disclaimer",
-    <LegalPageShell title="Disclaimer">
+    <LegalPageShell title="Disclaimer" path="/disclaimer">
+      <p>Last updated: May 2026</p>
       <p>
         Information on this website is published by the Shiksha Mahakumbh organizing
         team in good faith. Schedules, venues, and programmes may change; official
