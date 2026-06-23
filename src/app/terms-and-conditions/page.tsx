@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LegalPageShell from "@/components/layouts/LegalPageShell";
 import {
   generateLegalPageMetadata,
@@ -16,7 +17,7 @@ export async function generateMetadata() {
 export default async function TermsPage() {
   return renderLegalPage(
     "terms-and-conditions",
-    <LegalPageShell title="Terms and Conditions">
+    <LegalPageShell title="Terms and Conditions" path="/terms-and-conditions">
       <p>Last updated: May 2026</p>
       <h2>Acceptance</h2>
       <p>
@@ -26,7 +27,7 @@ export default async function TermsPage() {
       <h2>Registrations</h2>
       <p>
         Registration fees, where applicable, are non-refundable unless stated
-        otherwise in the refund policy. The organizing committee may verify
+        otherwise in the <Link href="/refund-policy">refund policy</Link>. The organizing committee may verify
         documents and reject incomplete or fraudulent submissions.
       </p>
       <h2>Intellectual property</h2>

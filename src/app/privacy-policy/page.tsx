@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LegalPageShell from "@/components/layouts/LegalPageShell";
 import {
   generateLegalPageMetadata,
@@ -16,7 +17,7 @@ export async function generateMetadata() {
 export default async function PrivacyPolicyPage() {
   return renderLegalPage(
     "privacy-policy",
-    <LegalPageShell title="Privacy Policy">
+    <LegalPageShell title="Privacy Policy" path="/privacy-policy">
       <p>Last updated: May 2026</p>
       <h2>Information we collect</h2>
       <p>
@@ -44,7 +45,8 @@ export default async function PrivacyPolicyPage() {
       <h2>Cookies</h2>
       <p>
         We use essential cookies for site functionality and analytics cookies only
-        with your consent.
+        with your consent. See our{" "}
+        <Link href="/cookie-policy">Cookie Policy</Link> for details.
       </p>
     </LegalPageShell>
   );

@@ -16,7 +16,8 @@ export async function generateMetadata() {
 export default async function CookiePolicyPage() {
   return renderLegalPage(
     "cookie-policy",
-    <LegalPageShell title="Cookie Policy">
+    <LegalPageShell title="Cookie Policy" path="/cookie-policy">
+      <p>Last updated: May 2026</p>
       <section>
         <h2>What are cookies?</h2>
         <p>

@@ -15,7 +15,8 @@ export async function generateMetadata() {
 export default async function RefundPolicyPage() {
   return renderLegalPage(
     "refund-policy",
-    <LegalPageShell title="Refund Policy">
+    <LegalPageShell title="Refund Policy" path="/refund-policy">
+      <p>Last updated: May 2026</p>
       <h2>Registration fees</h2>
       <p>
         Paid registrations are generally non-refundable once confirmed, except
