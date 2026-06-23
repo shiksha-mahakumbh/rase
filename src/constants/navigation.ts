@@ -7,6 +7,7 @@ export const POPULAR_LINKS = [
   { path: CMT_SUBMISSION_URL, title: "Multi Track Conference" },
   { path: ROUTES.academicCouncil, title: "Academic Programme" },
   { path: ROUTES.upcomingEvents, title: "Upcoming Events" },
+  { path: "/noticeboard", title: "Notice Board" },
   { path: ROUTES.downloads, title: "Brochures" },
   { path: ROUTES.speakers, title: "Speakers" },
   { path: ROUTES.contact, title: "Contact" },
@@ -80,7 +81,11 @@ export const NAV_MENUS: Menu[] = [
     path: ROUTES.home,
     title: "Events",
     subMenu: [
-      { path: ROUTES.upcomingEvents, title: "शिक्षा महाकुंभ 6.0" },
+      { path: ROUTES.upcomingEvents, title: "Shiksha Mahakumbh 6.0" },
+      { path: ROUTES.registration, title: "Register for SMK 6.0" },
+      { path: "/noticeboard", title: "Notice Board" },
+      { path: "/conclave", title: "Conclaves" },
+      { path: "/workshops", title: "Workshops" },
     ],
   },
   {
@@ -97,4 +102,3 @@ export const NAV_MENUS: Menu[] = [
 ];
 
 export const CTA_PATH = ROUTES.registration;
-export const MEGA_MENU_INDEX = 2;

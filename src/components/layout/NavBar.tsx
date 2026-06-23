@@ -2,24 +2,20 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import type { Menu } from "./navbar/types";
 import { getMenuIcon, NavChevronIcon } from "./navbar/NavMenuIcons";
 import {
   NAV_MENUS,
   POPULAR_LINKS,
   CTA_PATH,
-  MEGA_MENU_INDEX,
   flattenSubMenu,
 } from "@/constants/navigation";
 import NavBrandBlock from "@/components/layout/navbar/NavBrandBlock";
 import NavBarTools from "@/components/nav/NavBarTools";
 import { useCms } from "@/lib/cms/context";
-import { cmsMenuToNav } from "@/lib/cms/nav-adapter";
-
-function isExternalPath(path: string): boolean {
-  return path.startsWith("http://") || path.startsWith("https://");
-}
+import { cmsMenuToNav, isMegaMenuItem } from "@/lib/cms/nav-adapter";
+import { resolveNavHref } from "@/lib/security/safe-nav-url";
 
 interface NavLinkProps {
   href: string;
@@ -34,10 +30,12 @@ const NavLink: React.FC<NavLinkProps> = ({
   children,
   onClick,
 }) => {
-  if (isExternalPath(href)) {
+  const nav = resolveNavHref(href, "/");
+
+  if (nav.external) {
     return (
       <a
-        href={href}
+        href={nav.href}
         target="_blank"
         rel="noopener noreferrer"
         className={className}
@@ -47,8 +45,9 @@ const NavLink: React.FC<NavLinkProps> = ({
       </a>
     );
   }
+
   return (
-    <Link href={href} className={className} onClick={onClick}>
+    <Link href={nav.href} className={className} onClick={onClick}>
       {children}
     </Link>
   );
@@ -93,7 +92,7 @@ function DesktopDropdown({
               )}
               <ul className="space-y-0.5">
                 {group.items.map((subItem) => (
-                  <li key={subItem.path}>
+                  <li key={`${group.label ?? "g"}-${subItem.path}`}>
                     <NavLink
                       href={subItem.path}
                       onClick={onClose}
@@ -183,6 +182,8 @@ function DesktopDropdown({
 
 const NavBar: React.FC = () => {
   const pathname = usePathname();
+  const params = useParams();
+  const locale = typeof params?.locale === "string" ? params.locale : "en";
   const cms = useCms();
   const [fetchedMenu, setFetchedMenu] = useState<Menu[] | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -194,15 +195,19 @@ const NavBar: React.FC = () => {
     ? cmsMenuToNav(cms.headerMenu)
     : fetchedMenu ?? NAV_MENUS;
 
+  const mobileMenus = menus.filter(
+    (item) => !(item.path === CTA_PATH && !flattenSubMenu(item)?.length)
+  );
+
   useEffect(() => {
     if (cms?.headerMenu) return;
-    fetch("/api/v2/menus?type=header")
+    fetch(`/api/v2/menus?type=header&locale=${locale}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d?.menu) setFetchedMenu(cmsMenuToNav(d.menu));
       })
       .catch(() => undefined);
-  }, [cms?.headerMenu]);
+  }, [cms?.headerMenu, locale]);
 
   const handleSubMenuToggle = (index: number) => {
     setOpenSubMenuIndex(openSubMenuIndex === index ? null : index);
@@ -218,6 +223,17 @@ const NavBar: React.FC = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [handleClickOutside]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenSubMenuIndex(null);
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -237,13 +253,14 @@ const NavBar: React.FC = () => {
     if (path !== "/" && pathname === path) return true;
     if (pathname === "/" && path === "/") return true;
     if (subMenu) {
-      return subMenu.some(
-        (sub) =>
-          pathname === sub.path ||
-          (sub.path !== "/" &&
-            !isExternalPath(sub.path) &&
-            pathname.startsWith(sub.path))
-      );
+      return subMenu.some((sub) => {
+        const nav = resolveNavHref(sub.path);
+        if (nav.external) return false;
+        return (
+          pathname === nav.href ||
+          (nav.href !== "/" && pathname.startsWith(nav.href))
+        );
+      });
     }
     return false;
   };
@@ -271,17 +288,18 @@ const NavBar: React.FC = () => {
           className="hidden min-w-0 flex-1 flex-wrap items-center justify-end gap-x-0.5 gap-y-1 lg:flex xl:gap-x-1.5"
           aria-label="Main navigation"
         >
-          {menus.map((item, idx) => {
+          {menus.map((item) => {
             const subItems = flattenSubMenu(item);
             const active = isActive(item.path, subItems);
             const icon = getMenuIcon(item.title);
             const isCta = item.path === CTA_PATH && !subItems?.length;
-            const isMega = idx === MEGA_MENU_INDEX && (!!subItems?.length || !!item.subMenuGroups?.length);
+            const isMega = isMegaMenuItem(item);
+            const menuKey = item.title;
 
             if (isCta) {
               return (
                 <NavLink
-                  key={idx}
+                  key={menuKey}
                   href={item.path}
                   className="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-brand-saffron px-3 py-2 text-xs font-bold text-brand-navy shadow-lg shadow-brand-saffron/25 transition-all hover:-translate-y-0.5 hover:bg-brand-saffron-dark hover:text-white xl:px-4 xl:text-sm"
                 >
@@ -292,8 +310,9 @@ const NavBar: React.FC = () => {
             }
 
             if (subItems?.length) {
+              const idx = menus.indexOf(item);
               return (
-                <div key={idx} className="relative">
+                <div key={menuKey} className="relative">
                   <button
                     type="button"
                     onClick={() => handleSubMenuToggle(idx)}
@@ -325,7 +344,7 @@ const NavBar: React.FC = () => {
 
             return (
               <NavLink
-                key={idx}
+                key={menuKey}
                 href={item.path}
                 className={`flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold transition-all duration-200 xl:px-3 xl:py-2 xl:text-sm ${
                   active
@@ -340,12 +359,10 @@ const NavBar: React.FC = () => {
           })}
         </nav>
 
-        <NavBarTools />
+        <NavBarTools visibility="desktop" />
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
-          <div className="hidden min-[380px]:block sm:block">
-            <NavBarTools />
-          </div>
+          <NavBarTools visibility="mobile" />
           <NavLink
             href={CTA_PATH}
             className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
@@ -392,11 +409,13 @@ const NavBar: React.FC = () => {
             onClick={closeMobile}
             aria-label="Close menu overlay"
           />
-          <div className="fixed right-0 top-[60px] z-50 flex h-[calc(100vh-60px)] w-[min(100%,320px)] flex-col overflow-y-auto border-l border-gray-200 bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden">
+          <div
+            className="fixed right-0 top-[60px] z-50 flex h-[calc(100vh-60px)] w-[min(100%,320px)] flex-col overflow-y-auto border-l border-gray-200 bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
+          >
             <div className="space-y-3 border-b border-gray-100 p-4">
-              <div className="flex justify-center">
-                <NavBarTools />
-              </div>
               <NavLink
                 href={CTA_PATH}
                 onClick={closeMobile}
@@ -406,8 +425,8 @@ const NavBar: React.FC = () => {
               </NavLink>
             </div>
             <ul className="flex flex-col p-4 font-medium">
-              {menus.map((item, idx) => (
-                <li key={idx} className="border-b border-gray-50 last:border-0">
+              {mobileMenus.map((item) => (
+                <li key={item.title} className="border-b border-gray-50 last:border-0">
                   {flattenSubMenu(item) ? (
                     <details className="group py-2">
                       <summary className="flex cursor-pointer list-none items-center justify-between py-2 text-brand-navy [&::-webkit-details-marker]:hidden">
@@ -458,15 +477,6 @@ const NavBar: React.FC = () => {
                         </ul>
                       )}
                     </details>
-                  ) : item.path === CTA_PATH ? (
-                    <NavLink
-                      href={item.path}
-                      onClick={closeMobile}
-                      className="flex items-center gap-2 py-3 font-semibold text-brand-saffron-dark"
-                    >
-                      {getMenuIcon(item.title)}
-                      {item.title}
-                    </NavLink>
                   ) : (
                     <NavLink
                       href={item.path}
