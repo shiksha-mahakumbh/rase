@@ -132,8 +132,8 @@ if (heroSrc.includes('"use client"')) {
 }
 
 const homePageSrc = read("src/components/home/HomePage.tsx");
-if (!homePageSrc.includes("IdleMount")) {
-  issues.push("HomePage must defer Marquees via IdleMount");
+if (!homePageSrc.includes("MarqueesDeferred")) {
+  issues.push("HomePage must defer Marquees via MarqueesDeferred client wrapper");
 } else if (homePageSrc.includes("SectionShell")) {
   issues.push("HomePage should avoid client SectionShell in above-fold blocks");
 } else {
