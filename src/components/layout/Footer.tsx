@@ -109,10 +109,10 @@ const Footer: React.FC = () => {
 
   const settings = cms?.settings ?? fetched?.settings ?? null;
   const footerMenu = cms?.footerMenu ?? fetched?.footerMenu ?? null;
-  const { address, emails, phones, websites, intro, mission, abhiyan } = DHE_ORGANIZATION;
+  const { address, emails, phones, websites, mission, abhiyan, unitOf } = DHE_ORGANIZATION;
 
   const orgName = resolveFooterOrgName(settings);
-  const tagline = resolveFooterTagline(settings);
+  const tagline = resolveFooterTagline(settings) ?? unitOf;
   const copyrightLine = resolveCopyrightLine(settings, new Date().getFullYear());
 
   const cmsPhones = Array.isArray(settings?.phoneNumbers)
@@ -174,7 +174,7 @@ const Footer: React.FC = () => {
               if (!safeHref) {
                 return (
                   <div
-                    key={logo.src}
+                    key={`${logo.href}-${logo.src}`}
                     className="rounded-lg border border-slate-200 bg-brand-surface-warm p-2"
                   >
                     {image}
@@ -184,7 +184,7 @@ const Footer: React.FC = () => {
 
               return (
                 <a
-                  key={logo.src}
+                  key={`${logo.href}-${logo.src}`}
                   href={safeHref}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -203,27 +203,24 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="bg-brand-surface-warm px-4 py-10 md:px-8 md:py-12">
-          <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-8">
-            <div className="sm:col-span-2 xl:col-span-2">
-              <div className="mb-4 flex items-center gap-3">
+          <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-8">
+            <div className="sm:col-span-2 lg:col-span-3 xl:col-span-2">
+              <div className="mb-4 flex items-start gap-3">
                 <Image
-                  src="/branding/shiksha-mahakumbh-brand-hero.png"
-                  alt="Shiksha Mahakumbh Abhiyan"
+                  src="/logo.png"
+                  alt="Department of Holistic Education"
                   width={56}
                   height={56}
-                  className="h-14 w-14 rounded-xl border border-brand-saffron/30 object-cover object-left-top shadow-sm"
+                  className="h-14 w-14 shrink-0 rounded-xl border border-brand-saffron/30 bg-white object-contain p-1 shadow-sm"
                 />
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-brand-saffron-dark">
                     {abhiyan}
                   </p>
                   <p className="text-base font-bold leading-tight text-brand-navy">{orgName}</p>
-                  {tagline ? (
-                    <p className="mt-0.5 text-xs text-slate-500">{tagline}</p>
-                  ) : null}
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500">{tagline}</p>
                 </div>
               </div>
-              <p className="mb-3 text-sm leading-relaxed text-slate-600">{intro}</p>
               <p className="text-sm leading-relaxed text-slate-500">
                 <span className="font-semibold text-brand-blue">Mission: </span>
                 {mission}
@@ -251,23 +248,23 @@ const Footer: React.FC = () => {
             <FooterLinkList title="Departments" links={departmentLinks} />
             <FooterLinkList title="Education & Research" links={educationLinks} />
             <FooterLinkList title="Programs" links={programLinks} />
+          </div>
 
-            <div className="sm:col-span-2 xl:col-span-1">
-              <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron-dark">
-                Contact
-              </h3>
-              <address className="space-y-3 not-italic text-sm leading-relaxed text-slate-600">
-                <p>
-                  <span className="mb-1 block font-semibold text-brand-navy">{orgName}</span>
+          <div className="mx-auto mt-8 max-w-7xl border-t border-slate-200 pt-8">
+            <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-saffron-dark">
+              Contact
+            </h3>
+            <address className="not-italic">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="text-sm leading-relaxed text-slate-600">
+                  <span className="mb-1 block font-semibold text-brand-navy">Address</span>
                   {address.line1}
                   <br />
-                  {address.line2},
-                  <br />
-                  {address.line3},
+                  {address.line2}, {address.line3}
                   <br />
                   {address.state} {address.pincode}
-                </p>
-                <div>
+                </div>
+                <div className="text-sm text-slate-600">
                   <span className="font-semibold text-brand-navy">Email</span>
                   <ul className="mt-1 space-y-0.5">
                     {displayEmails.slice(0, 2).map((email) => (
@@ -282,7 +279,7 @@ const Footer: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-                <div>
+                <div className="text-sm text-slate-600">
                   <span className="font-semibold text-brand-navy">Phone</span>
                   <ul className="mt-1 space-y-0.5">
                     {displayPhones.map((phone) => (
@@ -298,7 +295,7 @@ const Footer: React.FC = () => {
                   </ul>
                 </div>
                 {displayWebsites.length > 0 && (
-                  <div>
+                  <div className="text-sm text-slate-600">
                     <span className="font-semibold text-brand-navy">Websites</span>
                     <ul className="mt-1 space-y-0.5">
                       {displayWebsites.map((site) => (
@@ -316,8 +313,8 @@ const Footer: React.FC = () => {
                     </ul>
                   </div>
                 )}
-              </address>
-            </div>
+              </div>
+            </address>
           </div>
 
           <div className="mx-auto mt-8 grid max-w-7xl gap-6 lg:grid-cols-2">

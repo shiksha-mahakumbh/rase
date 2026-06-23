@@ -24,8 +24,22 @@ export {
   socialLinks,
 };
 
-/** Primary organizing logos — full ecosystem listed on homepage partners section. */
-export const CORE_FOOTER_LOGOS: FooterLogo[] = footerLogos.slice(0, 6);
+/** Primary organizing logos — compact strip (full list on homepage partners). */
+export const CORE_FOOTER_LOGOS: FooterLogo[] = footerLogos;
+
+/** Never show in Quick Links — legal bar, programs column, or retired routes. */
+export const FOOTER_QUICK_LINK_EXCLUDED = new Set([
+  "/privacy-policy",
+  "/terms-and-conditions",
+  "/disclaimer",
+  "/refund-policy",
+  "/cookie-policy",
+  "/speakers/directory",
+  "/conclave",
+  "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
+]);
+
+const PROGRAM_HREFS = new Set(programLinks.map((l) => l.href));
 
 export const SOCIAL_ARIA_LABELS: Record<string, string> = {
   youtube: "Shiksha Mahakumbh on YouTube",
@@ -97,7 +111,11 @@ export function mergeFooterQuickLinks(
 
 export function resolveFooterQuickLinks(footerMenu: CmsMenu | null | undefined): FooterLink[] {
   const cmsItems = footerMenu?.items?.map((i) => ({ label: i.label, url: i.url }));
-  return mergeFooterQuickLinks(quickLinks, cmsItems);
+  const merged = mergeFooterQuickLinks(quickLinks, cmsItems);
+  return merged.filter(
+    (link) =>
+      !PROGRAM_HREFS.has(link.href) && !FOOTER_QUICK_LINK_EXCLUDED.has(link.href)
+  );
 }
 
 export function resolveFooterSocialLinks(
@@ -139,7 +157,7 @@ export function resolveCopyrightLine(
 }
 
 export function resolveFooterOrgName(settings: CmsSiteSettings | null | undefined): string {
-  return settings?.organizationName?.trim() || "Department of Holistic Education";
+  return settings?.organizationName?.trim() || "Department of Holistic Education (DHE)";
 }
 
 export function resolveFooterTagline(settings: CmsSiteSettings | null | undefined): string | null {

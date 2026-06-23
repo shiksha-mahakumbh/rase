@@ -180,6 +180,13 @@ const LEGACY_REDIRECTS = [
   { source: "/TalkShow", destination: "/media-center", permanent: true },
   { source: "/keynotespeakers", destination: "/speakers/directory", permanent: true },
   { source: "/glimpses", destination: "/gallery", permanent: true },
+  // Retired programme pages
+  { source: "/conclave", destination: "/departments/academic-council", permanent: true },
+  {
+    source: "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
+    destination: "/workshops",
+    permanent: true,
+  },
 ];
 
 module.exports = { LEGACY_REDIRECTS };

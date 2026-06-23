@@ -14,6 +14,15 @@ const ORGANIZING_LOGOS = [
   { src: "/sLogo.png", alt: "RASE", href: "https://www.rase.co.in/" },
 ] as const;
 
+function dedupeLogos<T extends { src: string }>(logos: T[]): T[] {
+  const seen = new Set<string>();
+  return logos.filter((logo) => {
+    if (seen.has(logo.src)) return false;
+    seen.add(logo.src);
+    return true;
+  });
+}
+
 function LogoTile({ logo }: { logo: { src: string; alt: string; href: string } }) {
   const safeHref = sanitizeExternalUrl(logo.href);
   const image = (
@@ -57,14 +66,15 @@ export default function TrustStrip() {
     website?: string;
   }>(stats, "logos");
 
-  const logos =
+  const logos = dedupeLogos(
     cmsLogos.length > 0
       ? cmsLogos.slice(0, 4).map((l) => ({
           src: l.src ?? l.logoUrl ?? "/logo.png",
           alt: l.alt ?? l.name ?? "Partner",
           href: sanitizeExternalUrl(l.href ?? l.website) ?? "",
         }))
-      : ORGANIZING_LOGOS.map((l) => ({ ...l }));
+      : ORGANIZING_LOGOS.map((l) => ({ ...l }))
+  );
 
   const tagline = sectionField(
     stats,
@@ -83,7 +93,7 @@ export default function TrustStrip() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
           {logos.map((logo) => (
-            <LogoTile key={logo.alt} logo={logo} />
+            <LogoTile key={`${logo.src}-${logo.alt}`} logo={logo} />
           ))}
         </div>
         <p className="mt-4 text-center text-xs text-slate-500">

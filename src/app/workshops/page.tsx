@@ -17,8 +17,6 @@ const WORKSHOP_HINTS: Record<string, string> = {
     "Faculty development in collaboration with NITTTR — March 2024",
   "/past_event/Spoken_English_Workshop":
     "Professional spoken English programme for educators — January 2024",
-  "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop":
-    "Innovation & entrepreneurship for students, teachers, and ATL coordinators — May 2024",
 };
 
 export default function WorkshopsHubPage() {

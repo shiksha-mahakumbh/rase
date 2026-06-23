@@ -10,6 +10,7 @@ export default function MerchandisePage() {
         "Official Shiksha Mahakumbh merchandise and programme materials.",
         "Official Store"
       )}
+      showCta={false}
       skipContainer
     >
       <Merchandise />

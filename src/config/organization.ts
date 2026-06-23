@@ -5,6 +5,7 @@ export const DHE_ORGANIZATION = {
   name: "Department of Holistic Education",
   shortName: "DHE",
   abhiyan: "Shiksha Mahakumbh Abhiyan",
+  unitOf: "A unit of Vidya Bharti Institute of Training and Research Trust",
   address: {
     line1: "E7, Orchid Towers",
     line2: "Sector-125",

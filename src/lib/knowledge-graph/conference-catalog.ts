@@ -54,10 +54,6 @@ export const WORKSHOP_ARCHIVE = [
     path: "/past_event/Spoken_English_Workshop",
     label: "Spoken English Workshop",
   },
-  {
-    path: "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
-    label: "Innovation & Entrepreneurship Workshop",
-  },
 ] as const;
 
 export const SUMMIT_ROUTES = [

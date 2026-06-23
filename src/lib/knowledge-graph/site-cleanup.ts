@@ -70,6 +70,8 @@ export const SITEMAP_EXCLUDED_PATHS = new Set([
   "glimpses",
   "TalkShow",
   "Topics",
+  "conclave",
+  "past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
   ...PILLAR_REGISTRY.filter((p) => THIN_PILLAR_PATHS.has(p.path)).map((p) =>
     p.path.replace(/^\//, "")
   ),
@@ -98,6 +100,8 @@ export const REDIRECT_SHELL_PATHS = new Set([
   "TalkShow",
   "keynotespeakers",
   "glimpses",
+  "conclave",
+  "past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
   ...Array.from(THIN_PILLAR_PATHS).map((p) => p.replace(/^\//, "")),
 ]);
 
@@ -124,12 +128,10 @@ export const SITEMAP_CORE_PATHS: readonly string[] = [
   "past_event/shiksha-mahakumbh-5.0",
   "past_event/Teacher_Development_Program",
   "past_event/Spoken_English_Workshop",
-  "past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",
   "best-wishes",
   "merchandise",
   "committees",
   "downloads",
-  "conclave",
   "books",
   "publications/souvenir-abstracts-mtc",
   "proceedings",
@@ -275,7 +277,7 @@ const CURATED_BY_PATH: Record<string, InternalLinkSuggestion[]> = {
     { href: "/downloads", label: "Edition Brochures", reason: "curated", weight: 90 },
     { href: "/committees", label: "Organising Committee", reason: "curated", weight: 88 },
     { href: CMT_SUBMISSION_URL, label: "Multi Track Conference", reason: "curated", weight: 86 },
-    { href: "/conclave", label: "Conclave Hub", reason: "curated", weight: 84 },
+    { href: "/workshops", label: "Workshops", reason: "curated", weight: 84 },
     { href: "/proceedings", label: "Proceedings", reason: "curated", weight: 82 },
   ],
   "/departments/prabandhan": [

@@ -9,27 +9,20 @@ export interface FooterLink {
   href: string;
 }
 
-/** Core organizing + ecosystem logos (compact footer strip). */
+/** Core organizing logos — full partner lists live on homepage partners section. */
 export const footerLogos: FooterLogo[] = [
   { href: "https://www.dhe.org.in/", src: "/logo.png", alt: "Department of Holistic Education" },
-  { href: "https://www.shikshamahakumbh.com/", src: "/shiksha.png", alt: "Shiksha Mahakumbh" },
   { href: "https://www.vidyabharati.org/", src: "/vidyabharti.png", alt: "Vidya Bharati" },
+  { href: "https://www.shikshamahakumbh.com/", src: "/shiksha.png", alt: "Shiksha Mahakumbh" },
   { href: "https://www.rase.co.in/", src: "/sLogo.png", alt: "RASE" },
-  { href: "https://www.sarvatr.co.in/", src: "/sarvatra.png", alt: "Sarvatr" },
-  { href: "https://www.swadeshibazaar.co.in/", src: "/sb.png", alt: "Swadeshi Bazaar" },
 ];
 
 export const quickLinks: FooterLink[] = [
   { name: "Home", href: "/" },
-  { name: "Registration", href: "/registration" },
-  { name: "Shiksha Mahakumbh 6.0", href: "/upcoming-events" },
   { name: "Notice Board", href: "/noticeboard" },
-  { name: "Downloads", href: "/downloads" },
   { name: "Past Editions", href: "/past-events" },
   { name: "Introduction", href: "/introduction" },
   { name: "Committees", href: "/committees" },
-  { name: "Speakers", href: "/speakers/directory" },
-  { name: "Media Centre", href: "/media-center" },
   { name: "Press Releases", href: "/press" },
   { name: "Merchandise", href: "/merchandise" },
   { name: "Contact Us", href: "/contact-us" },
@@ -53,8 +46,9 @@ export const educationLinks: FooterLink[] = [
 
 export const programLinks: FooterLink[] = [
   { name: "Register for SMK 6.0", href: "/registration" },
-  { name: "Upcoming Events", href: "/upcoming-events" },
-  { name: "Conclaves", href: "/conclave" },
+  { name: "Shiksha Mahakumbh 6.0", href: "/upcoming-events" },
+  { name: "Downloads", href: "/downloads" },
+  { name: "Media Centre", href: "/media-center" },
   { name: "Workshops", href: "/workshops" },
   { name: "Gallery", href: "/gallery" },
   { name: "Best Wishes", href: "/best-wishes" },
