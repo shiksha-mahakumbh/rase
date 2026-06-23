@@ -1,12 +1,9 @@
-"use client";
-
-import React from "react";
+import { Suspense } from "react";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import {
   getMediaArchiveComponent,
   type MediaArchiveKey,
 } from "@/data/media-archive-components";
-
 import { getEditionByNumber } from "@/data/past-editions";
 import { brandPageHero } from "@/lib/page-heroes";
 
@@ -30,9 +27,9 @@ export default function MediaArchiveView({ archiveKey }: { archiveKey: MediaArch
       relatedPath="/media-center"
       skipContainer
     >
-      <React.Suspense fallback={<div className="p-8 text-center text-slate-600">Loading archive…</div>}>
+      <Suspense fallback={<div className="p-8 text-center text-slate-600">Loading archive…</div>}>
         <Archive />
-      </React.Suspense>
+      </Suspense>
     </PublicPageShell>
   );
 }

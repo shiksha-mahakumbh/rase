@@ -32,8 +32,11 @@ const FooterContactForm = dynamic(
   { ssr: false, loading: () => <p className="text-sm text-slate-400">Loading form…</p> }
 );
 import FooterNewsletterSlot from "@/components/footer/FooterNewsletterSlot";
-import ScrollToTopButton from "@/components/footer/ScrollToTopButton";
-import RecaptchaScript from "@/components/security/RecaptchaProvider";
+
+const ScrollToTopButton = dynamic(
+  () => import("@/components/footer/ScrollToTopButton"),
+  { ssr: false }
+);
 
 const FooterVisitorCounter = dynamic(
   () => import("@/components/footer/FooterVisitorCounter"),
@@ -131,7 +134,6 @@ const Footer: React.FC = () => {
 
   return (
     <>
-      <RecaptchaScript />
       <footer className="relative overflow-hidden border-t border-brand-saffron/20">
         <div className="relative bg-gradient-to-r from-brand-surface-warm via-white to-brand-surface-warm px-4 py-6 md:px-8 md:py-8">
           <div className="brand-grid-pattern pointer-events-none absolute inset-0 opacity-30" aria-hidden />

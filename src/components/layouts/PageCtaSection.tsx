@@ -1,5 +1,3 @@
-"use client";
-
 import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 

@@ -67,10 +67,10 @@ if (!pageSrc.includes("showCta={false}")) {
 } else {
   console.log("✓ Mid-page CTA disabled on edition pages");
 }
-if (!pageSrc.includes("relatedPath={path}")) {
-  issues.push("PastEditionPage must pass edition path to related links");
+if (!pageSrc.includes("editionPath={path}")) {
+  issues.push("PastEditionPage must pass edition path for server related links");
 } else {
-  console.log("✓ Edition-specific related links path");
+  console.log("✓ Edition path passed for server related links");
 }
 
 const jsonLdSrc = fs.readFileSync(
@@ -132,11 +132,44 @@ for (const { path: editionPath, content } of EDITIONS) {
 console.log("✓ All five routes have layouts, content hubs, and curated links");
 console.log("✓ Edition prev/next navigation data wired");
 
+if (pageSrc.includes("relatedPath={path}")) {
+  issues.push("PastEditionPage should not use client relatedPath in PublicPageShell");
+} else {
+  console.log("✓ Edition page avoids client-side related links shell");
+}
+
+const layoutSrc = fs.readFileSync(
+  path.join(ROOT, "src/components/layouts/PublicPageLayout.tsx"),
+  "utf8"
+);
+if (layoutSrc.includes('"use client"')) {
+  issues.push("PublicPageLayout should be a server component");
+} else {
+  console.log("✓ PublicPageLayout is server-rendered");
+}
+
+const gallerySrc = fs.readFileSync(
+  path.join(ROOT, "src/components/past-editions/editions/EditionGallery.tsx"),
+  "utf8"
+);
+if (gallerySrc.includes('"use client"')) {
+  issues.push("EditionGallery should be server-rendered for LCP");
+} else {
+  console.log("✓ EditionGallery is server-rendered");
+}
+
+const perfAudit = path.join(ROOT, "scripts/audit-past-editions-performance.ts");
+if (!fs.existsSync(perfAudit)) {
+  issues.push("Missing scripts/audit-past-editions-performance.ts");
+} else {
+  console.log("✓ Mobile performance audit script present");
+}
+
 const showcaseSrc = fs.readFileSync(
   path.join(ROOT, "src/components/past-editions/editions/PastEditionDetailShowcase.tsx"),
   "utf8"
 );
-for (const name of ["BreadcrumbNav", "EditionPrevNext", "EditionGallery"]) {
+for (const name of ["BreadcrumbNav", "EditionPrevNext", "EditionGallery", "RelatedContentSection"]) {
   if (!showcaseSrc.includes(name)) issues.push(`PastEditionDetailShowcase missing ${name}`);
 }
 if (!issues.some((i) => i.includes("PastEditionDetailShowcase"))) {

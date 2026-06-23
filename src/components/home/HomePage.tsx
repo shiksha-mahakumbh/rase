@@ -1,12 +1,9 @@
 import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
-import TrustStrip from "./TrustStrip";
-import BrandShowcaseSection from "./BrandShowcaseSection";
 import SectionShell from "@/components/ui/SectionShell";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
-import DiscoverStrip from "./DiscoverStrip";
 import WhyAttendSection from "./WhyAttendSection";
 import EventTracksSection from "./EventTracksSection";
 import SpeakerHighlightsSection from "./SpeakerHighlightsSection";
@@ -24,6 +21,9 @@ const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
 });
 const Marquees = dynamic(() => import("@/components/layout/Marquees"));
 const Footer = dynamic(() => import("@/components/layout/Footer"));
+const TrustStrip = dynamic(() => import("./TrustStrip"));
+const BrandShowcaseSection = dynamic(() => import("./BrandShowcaseSection"));
+const DiscoverStrip = dynamic(() => import("./DiscoverStrip"));
 const Announcement = dynamic(() => import("@/components/home/sections/Announcement"));
 const NoticeBoard = dynamic(() => import("@/components/home/sections/NoticeBoard"));
 const GlassCard = dynamic(() => import("@/components/ui/GlassCard"));
@@ -47,13 +47,17 @@ export default function HomePage({
 
       <main id="main-content">
         <HeroSection />
-        <TrustStrip />
+        <LazySection minHeight="3rem" fallback={<SectionSkeleton lines={1} />}>
+          <TrustStrip />
+        </LazySection>
 
         <LazySection minHeight="12rem" fallback={<SectionSkeleton lines={6} />}>
           <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
         </LazySection>
 
-        <BrandShowcaseSection />
+        <LazySection minHeight="8rem" fallback={<SectionSkeleton lines={3} />}>
+          <BrandShowcaseSection />
+        </LazySection>
 
         <SectionShell
           background="warm"
@@ -98,7 +102,9 @@ export default function HomePage({
           </div>
         </SectionShell>
 
-        <DiscoverStrip />
+        <LazySection minHeight="6rem" fallback={<SectionSkeleton lines={2} />}>
+          <DiscoverStrip />
+        </LazySection>
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-mid" />
         </div>

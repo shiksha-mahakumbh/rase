@@ -1,12 +1,11 @@
-"use client";
-
 import type { ReactNode } from "react";
-import NavBar from "@/components/layout/NavBar";
-import Footer from "@/components/layout/Footer";
+import { DynamicFooter, DynamicNavBar } from "@/components/layout/SiteDynamicChrome";
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import PageCtaSection from "@/components/layouts/PageCtaSection";
 import PressShareButtons from "./PressShareButtons";
-import RelatedContentSectionClient from "@/components/knowledge-graph/RelatedContentSectionClient";
+import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
+import { CmsProvider } from "@/lib/cms/context";
+import { loadPublicChromeCms } from "@/lib/cms/server";
 
 interface PressArticleShellProps {
   title: string;
@@ -18,7 +17,7 @@ interface PressArticleShellProps {
   children: ReactNode;
 }
 
-export default function PressArticleShell({
+export default async function PressArticleShell({
   title,
   subtitle,
   canonicalPath,
@@ -27,31 +26,35 @@ export default function PressArticleShell({
   shareImage,
   children,
 }: PressArticleShellProps) {
+  const cms = await loadPublicChromeCms("en");
+
   return (
-    <div className="min-h-screen bg-brand-surface">
-      <NavBar />
-      <ShowcaseHero
-        eyebrow="Press Release"
-        title={title}
-        subtitle={subtitle}
-        accent="navy"
-      />
-      <main id="main-content" className="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16">
-        <article className="prose prose-slate max-w-none prose-headings:text-brand-navy prose-a:text-brand-saffron">
-          {children}
-        </article>
-        <PressShareButtons
-          shareUrl={shareUrl}
-          shareText={shareText}
-          shareImage={shareImage}
+    <CmsProvider data={cms}>
+      <div className="min-h-screen bg-brand-surface">
+        <DynamicNavBar />
+        <ShowcaseHero
+          eyebrow="Press Release"
+          title={title}
+          subtitle={subtitle}
+          accent="navy"
         />
-      </main>
-      <RelatedContentSectionClient
-        path={canonicalPath}
-        title="Related programmes & resources"
-      />
-      <PageCtaSection />
-      <Footer />
-    </div>
+        <main id="main-content" className="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16">
+          <article className="prose prose-slate max-w-none prose-headings:text-brand-navy prose-a:text-brand-saffron">
+            {children}
+          </article>
+          <PressShareButtons
+            shareUrl={shareUrl}
+            shareText={shareText}
+            shareImage={shareImage}
+          />
+        </main>
+        <RelatedContentSection
+          path={canonicalPath}
+          title="Related programmes & resources"
+        />
+        <PageCtaSection />
+        <DynamicFooter />
+      </div>
+    </CmsProvider>
   );
 }

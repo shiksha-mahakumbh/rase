@@ -55,12 +55,21 @@ export default function VisitorPageTracker() {
       ...utmParams(),
     };
 
-    fetch("/api/v2/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      keepalive: true,
-    }).catch(() => undefined);
+    const send = () => {
+      fetch("/api/v2/analytics/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      }).catch(() => undefined);
+    };
+
+    if (typeof requestIdleCallback !== "undefined") {
+      const id = requestIdleCallback(send, { timeout: 4000 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(send, 1500);
+    return () => window.clearTimeout(t);
   }, [pathname]);
 
   return null;

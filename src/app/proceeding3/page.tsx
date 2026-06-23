@@ -1,5 +1,3 @@
-"use client";
-
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import ProceedingVolumeShowcase from "@/components/proceedings/ProceedingVolumeShowcase";
 import ProceedingVolumeJsonLd from "@/components/proceedings/ProceedingVolumeJsonLd";

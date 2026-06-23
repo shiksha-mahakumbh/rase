@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
+import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
 import EditionGallery from "@/components/past-editions/editions/EditionGallery";
 import EditionPrevNext from "@/components/past-editions/editions/EditionPrevNext";
 import type { EditionDetailContent } from "@/data/editions/types";
@@ -10,11 +11,16 @@ const primaryBtn =
 const secondaryBtn =
   "inline-flex min-h-[44px] items-center rounded-xl border border-brand-blue/25 bg-white px-5 py-2.5 text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/5";
 
+/** Defer layout/paint for below-fold sections on long edition pages. */
+const belowFold =
+  "[content-visibility:auto] [contain-intrinsic-size:auto_480px]";
+
 type Props = {
   content: EditionDetailContent;
+  editionPath: string;
 };
 
-export default function PastEditionDetailShowcase({ content }: Props) {
+export default function PastEditionDetailShowcase({ content, editionPath }: Props) {
   const title = editionTitle(content.editionNumber);
   const { prev, next } = getAdjacentEditions(content.editionNumber);
 
@@ -29,11 +35,11 @@ export default function PastEditionDetailShowcase({ content }: Props) {
         className="mb-2"
       />
 
-      <EditionPrevNext prev={prev} next={next} />
-
       {content.galleryImages?.length ? (
         <EditionGallery images={content.galleryImages} eventTitle={title} />
       ) : null}
+
+      <EditionPrevNext prev={prev} next={next} />
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Edition quick facts">
         {[
@@ -55,7 +61,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       </section>
 
       {(content.introduction || content.objective) && (
-        <section className="rounded-2xl border border-brand-saffron/20 bg-white p-6 shadow-sm md:p-8">
+        <section className={`rounded-2xl border border-brand-saffron/20 bg-white p-6 shadow-sm md:p-8 ${belowFold}`}>
           <p className="text-[10px] font-bold uppercase tracking-widest text-brand-saffron-dark">
             Report · {content.year}
           </p>
@@ -107,7 +113,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       )}
 
       {content.campaignStats?.length ? (
-        <section aria-labelledby="campaign-glance">
+        <section aria-labelledby="campaign-glance" className={belowFold}>
           <h2 id="campaign-glance" className="text-lg font-bold text-brand-navy md:text-xl">
             Campaign &amp; outreach
           </h2>
@@ -126,7 +132,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       ) : null}
 
       {content.turnaroundStats?.length ? (
-        <section aria-labelledby="turnaround">
+        <section aria-labelledby="turnaround" className={belowFold}>
           <h2 id="turnaround" className="text-lg font-bold text-brand-navy md:text-xl">
             Key highlights
           </h2>
@@ -148,7 +154,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       ) : null}
 
       {content.venueAbout ? (
-        <section className="rounded-2xl border border-brand-blue/15 bg-white p-6 shadow-sm md:p-8">
+        <section className={`rounded-2xl border border-brand-blue/15 bg-white p-6 shadow-sm md:p-8 ${belowFold}`}>
           <h2 className="text-xl font-bold text-brand-navy">{content.venueShort}</h2>
           <p className="mt-3 leading-relaxed text-slate-700">{content.venueAbout}</p>
           <p className="mt-3 text-slate-700">
@@ -158,7 +164,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       ) : null}
 
       {content.highlights?.length ? (
-        <section aria-labelledby="outcomes">
+        <section aria-labelledby="outcomes" className={belowFold}>
           <h2 id="outcomes" className="text-lg font-bold text-brand-navy md:text-xl">
             Outcomes &amp; impact
           </h2>
@@ -177,7 +183,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       ) : null}
 
       {content.declarations?.length ? (
-        <section className="rounded-2xl border border-brand-blue/20 bg-brand-surface-warm p-6 md:p-8">
+        <section className={`rounded-2xl border border-brand-blue/20 bg-brand-surface-warm p-6 md:p-8 ${belowFold}`}>
           <h2 className="text-lg font-bold text-brand-navy md:text-xl">Declaration &amp; resolutions</h2>
           <ul className="mt-4 space-y-3">
             {content.declarations.map((item) => (
@@ -190,7 +196,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       ) : null}
 
       {content.leadership ? (
-        <section className="rounded-2xl border border-brand-saffron/20 bg-gradient-to-br from-brand-surface-warm to-white p-6 md:p-8">
+        <section className={`rounded-2xl border border-brand-saffron/20 bg-gradient-to-br from-brand-surface-warm to-white p-6 md:p-8 ${belowFold}`}>
           <h2 className="text-lg font-bold text-brand-navy md:text-xl">The story behind</h2>
           {content.leadership.story ? (
             <p className="mt-3 leading-relaxed text-slate-700">{content.leadership.story}</p>
@@ -211,7 +217,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       ) : null}
 
       {content.proceedingHref ? (
-        <section className="rounded-2xl border border-brand-blue/20 bg-gradient-to-r from-brand-blue/5 to-brand-saffron/5 p-5 sm:p-6">
+        <section className={`rounded-2xl border border-brand-blue/20 bg-gradient-to-r from-brand-blue/5 to-brand-saffron/5 p-5 sm:p-6 ${belowFold}`}>
           <p className="text-[10px] font-bold uppercase tracking-widest text-brand-blue">Proceedings</p>
           <p className="mt-2 text-sm text-slate-700">
             Peer-reviewed papers from this edition are published in the Shiksha Mahakumbh proceedings series.
@@ -223,7 +229,7 @@ export default function PastEditionDetailShowcase({ content }: Props) {
       ) : null}
 
       {content.relatedLinks?.length ? (
-        <section aria-labelledby="edition-related">
+        <section aria-labelledby="edition-related" className={belowFold}>
           <h2 id="edition-related" className="text-lg font-bold text-brand-navy md:text-xl">
             Related resources
           </h2>
@@ -264,6 +270,11 @@ export default function PastEditionDetailShowcase({ content }: Props) {
           All past editions
         </Link>
       </div>
+
+      <RelatedContentSection
+        path={editionPath}
+        className="border-t border-slate-100 pt-8"
+      />
     </div>
   );
 }

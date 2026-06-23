@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 export type SectionBackground = "default" | "gradient" | "warm" | "cool" | "dark";
@@ -23,6 +22,7 @@ const backgroundStyles: Record<SectionBackground, string> = {
   dark: "bg-gradient-to-br from-[#1a1210] via-[#2a1818] to-[#1f1414] text-white relative overflow-hidden",
 };
 
+/** Lightweight section wrapper — CSS reveal (no framer-motion). */
 export default function SectionShell({
   children,
   id,
@@ -31,25 +31,21 @@ export default function SectionShell({
   ariaLabel,
 }: SectionShellProps) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.08 });
-  const reduceMotion = useReducedMotion();
 
   return (
-    <motion.section
+    <section
       ref={ref}
       id={id}
       aria-label={ariaLabel}
-      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-      animate={
-        reduceMotion || inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }
-      }
-      transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
-      className={`${backgroundStyles[background]} ${className}`}
+      className={`${backgroundStyles[background]} transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${
+        inView ? "translate-y-0 opacity-100" : "translate-y-7 opacity-0"
+      } ${className}`}
     >
       {background !== "default" && background !== "dark" && (
         <>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/5 blur-3xl"
+            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/5 blur-3xl"
           />
           <div
             aria-hidden="true"
@@ -58,6 +54,6 @@ export default function SectionShell({
         </>
       )}
       <div className="relative z-10">{children}</div>
-    </motion.section>
+    </section>
   );
 }

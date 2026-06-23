@@ -60,7 +60,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1Xu4WfCeWLQp037EJn5Q0ULmREtnLplwq",
     campaignPdf: "/RASE_2023_1ST_EDITION_Campaign.pdf",
-    imageSrc: "/2023M/k3.jpeg",
+    imageSrc: "/2023M/k5.jpeg",
     proceedingHref: "/proceeding2",
     featuredStats: [
       { label: "Research papers", value: "81" },
@@ -137,7 +137,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     galleryUrl:
       "https://drive.google.com/drive/folders/1XnauGu1-dQ2KCpTzvIMHhUwlBF-6GDEN",
     campaignPdf: "/RASE_2024_4TH_EDITION_Campaign.pdf",
-    imageSrc: "/sm24printmedia/1.jpg",
+    imageSrc: "/sm24printmedia/1-lcp.webp",
     featuredStats: [
       { label: "Research papers", value: "91" },
       { label: "Attendees", value: "2,400+" },
@@ -161,7 +161,7 @@ export const PAST_EDITIONS: PastEditionRecord[] = [
     href: SMK_5_0_PATH,
     galleryUrl:
       "https://drive.google.com/drive/folders/1c2CKx2Z9IaN-dsoW-Ymw6Npx1EOTFcsA?usp=sharing",
-    imageSrc: "/sm25printmedia/1.jpg",
+    imageSrc: "/sm25printmedia/1-lcp.webp",
     featuredStats: [
       { label: "Research papers", value: "284" },
       { label: "Olympiad students", value: "10,400" },
@@ -187,10 +187,11 @@ export type EditionPageHero = {
   title: string;
   subtitle: string;
   accent: "brand";
+  /** Omitted on detail pages — gallery is the single LCP image. */
   imageSrc?: string;
 };
 
-/** Shared brand hero config for `/past_event/*` detail pages */
+/** Shared brand hero config for `/past_event/*` detail pages (text-only; no hero image). */
 export function editionPageHero(href: string): EditionPageHero {
   const edition = getEditionByHref(href);
   if (!edition) {
@@ -201,7 +202,6 @@ export function editionPageHero(href: string): EditionPageHero {
     title: edition.title,
     subtitle: `${edition.venue} · ${edition.dates} · ${edition.theme}`,
     accent: "brand",
-    imageSrc: edition.imageSrc,
   };
 }
 

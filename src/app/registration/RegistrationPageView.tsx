@@ -26,6 +26,7 @@ export default function RegistrationPageView() {
         accent: "brand",
         imageSrc: REGISTRATION_HERO_IMAGE,
         imageAlt: REGISTRATION_HERO_IMAGE_ALT,
+        imagePriority: false,
       }}
       breadcrumbs={[...REGISTRATION_BREADCRUMBS]}
       relatedPath={REGISTRATION_PATH}

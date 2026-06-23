@@ -19,7 +19,6 @@ export default function PastEditionPage({ path, content }: Props) {
       <PublicPageShell
         hero={hero}
         showCta={false}
-        relatedPath={path}
         breadcrumbs={[
           { name: "Home", path: "/" },
           { name: "Past Editions", path: "/past-events" },
@@ -27,7 +26,7 @@ export default function PastEditionPage({ path, content }: Props) {
         ]}
         containerClassName="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12"
       >
-        <PastEditionDetailShowcase content={content} />
+        <PastEditionDetailShowcase content={content} editionPath={path} />
       </PublicPageShell>
     </>
   );

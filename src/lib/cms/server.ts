@@ -310,6 +310,31 @@ export async function loadCmsPageData(locale: ContentLocale = "en"): Promise<Cms
   })();
 }
 
+/** Nav + footer + settings only — for inner public pages (no homepage/notices fetch). */
+export async function loadPublicChromeCms(locale: ContentLocale = "en"): Promise<CmsPageData> {
+  return unstable_cache(
+    async () => {
+      const [settings, headerMenu, footerMenu] = await Promise.all([
+        loadCmsSettings(locale),
+        loadCmsHeaderMenu(locale),
+        loadCmsFooterMenu(locale),
+      ]);
+      return {
+        homepage: null,
+        notices: [],
+        widgetNotices: [],
+        settings,
+        headerMenu,
+        footerMenu,
+        announcementBars: [],
+        featuredFaqs: [],
+      };
+    },
+    ["cms-chrome-data", locale],
+    { revalidate: 3600, tags: [`cms-chrome-data-${locale}`] }
+  )();
+}
+
 export async function loadRouteSeo(routeKey: string, locale: ContentLocale = "en") {
   return unstable_cache(
     async () => {

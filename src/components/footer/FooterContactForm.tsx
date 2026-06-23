@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 import { getCaptchaTokenForAction } from "@/lib/security/recaptcha-client";
+
+const RecaptchaScript = dynamic(
+  () => import("@/components/security/RecaptchaProvider"),
+  { ssr: false }
+);
 
 interface FooterContactFormProps {
   variant?: "light" | "dark";
@@ -58,28 +64,31 @@ export default function FooterContactForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <input
-        type="email"
-        placeholder="Your Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className={inputClass}
-        required
-        aria-label="Your email"
-      />
-      <textarea
-        rows={2}
-        placeholder="Message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        className={inputClass}
-        required
-        aria-label="Your message"
-      />
-      <button type="submit" disabled={submitting} className={buttonClass}>
-        {submitting ? "Sending…" : "Send Message"}
-      </button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <input
+          type="email"
+          placeholder="Your Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={inputClass}
+          required
+          aria-label="Your email"
+        />
+        <textarea
+          rows={2}
+          placeholder="Message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className={inputClass}
+          required
+          aria-label="Your message"
+        />
+        <button type="submit" disabled={submitting} className={buttonClass}>
+          {submitting ? "Sending…" : "Send Message"}
+        </button>
+      </form>
+      <RecaptchaScript />
+    </>
   );
 }

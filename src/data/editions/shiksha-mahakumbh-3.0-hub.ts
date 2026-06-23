@@ -54,8 +54,8 @@ export const SMK_3_0_CONTENT: EditionDetailContent = {
   ],
   galleryImages: [
     "/sk24printmedia/1.jpg",
-    "/sk24printmedia/10.jpg",
-    "/sk24printmedia/18.jpg",
+    "/sk24printmedia/10-opt.webp",
+    "/sk24printmedia/18-opt.webp",
     "/sk24printmedia/22.jpg",
     "/sk24printmedia/31.jpg",
   ],

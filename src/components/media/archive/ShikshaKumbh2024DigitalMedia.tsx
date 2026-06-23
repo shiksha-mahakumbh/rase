@@ -1,26 +1,8 @@
-'use client'; // Ensure this component is rendered on the client side
+"use client";
 
-import React, { useState } from 'react';
-import { Card, Button, Dropdown, Menu } from 'antd';
-import { MoreOutlined } from '@ant-design/icons'; // Import Ant Design icons
-import { motion } from 'framer-motion'; // Import Framer Motion
-import 'antd/dist/reset.css'; // Import Ant Design styles
+import DigitalMediaArchiveGrid from "./DigitalMediaArchiveGrid";
 
-const { Meta } = Card;
-
-// Define a type for media items
-interface MediaItem {
-  name: string;
-  url: string;
-  description: string;
-}
-interface MediaItem1 {
-  name: string;
-  url: string;
-  description: string;
-}
-
-const media: MediaItem[] = [
+const media = [
   { name: 'KNS Kashmir', url: 'https://www.knskashmir.com/lgmanoj-sinha-addresses-national-conference-on--role-of-academic-driven-startups-indeveloping-economy-of-jandk-(rase-2024)--187410', description: 'LG Manoj Sinha addresses National Conference on Role of Academic-driven Startups in Developing Economy of J&K (RASE-2024)' },
   { name: 'Kashmir Reader', url: 'https://kashmirreader.com/2024/06/30/addresses-national-rase-2024-focuson-problem-first-not-product-first-lg-to-startups-entrepreneurs/', description: 'Focus on Problem First, Not Product First, LG to Startups, Entrepreneurs' },
   { name: 'Daily Excelsior', url: 'https://www.dailyexcelsior.com/jk-has-got-over-rs-1-10-lakh-cr-industrial-proposalslg/', description: 'J&K has got over Rs 1.10 lakh Cr industrial proposals: LG' },
@@ -50,8 +32,7 @@ const media: MediaItem[] = [
   { name: 'MENAFN', url: 'https://menafn.com/1108388760/Immense-Possibilities-For-Startups-Across-Sectors-InJ-K-LG', description: 'Immense Possibilities for Startups Across Sectors in J&K: LG' },
 ];
 
-
-const media2: MediaItem1[] = [
+const media2 = [
   
     { name: 'The Statesman', url: 'http://dhunt.in/VmpJo', description: 'StartUp Movement has Picked Up in India in a Big Way: Dr. Jitendra Singh' },
     { name: 'Rising Kashmir', url: 'https://risingkashmir.com/change-of-mindset-key-to-startups-in-jk-dr-jitendrasingh/', description: 'Change of Mindset Key to Startups in J&K: Dr. Jitendra Singh' },
@@ -72,145 +53,14 @@ const media2: MediaItem1[] = [
     { name: 'The Print', url: 'https://www.google.com/amp/s/theprint.in/india/change-of-mindset-key-for-success-of-start-ups-in-jk-union-minister-jitendra-singh/2154416/%3famp', description: 'Change of Mindset Key for Success of Start-Ups in J&K: Union Minister Jitendra Singh' },
     { name: 'Greater Kashmir', url: 'https://m.greaterkashmir.com/article/dr-jitendra-singh-attends-national-conference-on-skill-startup-entrepreneurship-in-education-at-nit-srinagar/310043/amp', description: 'Dr. Jitendra Singh Attends National Conference on Skill, Startup, Entrepreneurship in Education at NIT Srinagar' },
   ];
-  
 
-  const ShikshaKumbh2024DigitalMedia: React.FC = () => {
-    const [showAllDay1, setShowAllDay1] = useState(false);
-    const [showAllDay2, setShowAllDay2] = useState(false);
-  
-    const handleClick = (url: string) => {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    };
-  
-    const menu = (url: string) => (
-      <Menu>
-        <Menu.Item key="1">
-          <a href={url} target="_blank" rel="noopener noreferrer">Visit Site</a>
-        </Menu.Item>
-      </Menu>
-    );
-  
-    // Show only 8 items initially
-    const displayedMedia = showAllDay1 ? media : media.slice(0, 8);
-    const displayedMedia2 = showAllDay2 ? media2 : media2.slice(0, 8);
-  
-    return (
-      <div className="bg-[url('/pattern1.png')] bg-repeat justify-center p-8">
-        <h1 className="text-2xl text-primary font-bold text-shadow-lg mb-12">
-          RASE 2024 3<sup>rd</sup> Edition Digital Media Day - 1
-        </h1>
-        <div className="mb-4 grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-5 gap-8">
-          {displayedMedia.map((item: MediaItem, index: number) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -10 }}
-            >
-              <Card
-                className="relative transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer"
-                hoverable
-                cover={
-                  <div className="relative h-40 bg-black rounded-lg overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <h2 className="text-white text-2xl font-bold p-4">{item.name}</h2>
-                      </div>
-                    </div>
-                  </div>
-                }
-              >
-                <div className="flex justify-between items-center mt-4">
-                  <p className='text-black'>{item.description}</p>
-                  <Button
-                    type="primary"
-                    className="font-semibold text-white bg-primary hover:bg-white hover:border-primary text-lg p-4 flex justify-center text-center items-center"
-                    onClick={() => handleClick(item.url)}
-                  >
-                    Visit
-                  </Button>
-                  <Dropdown overlay={menu(item.url)} trigger={['click']}>
-                    <Button
-                      type="text"
-                      icon={<MoreOutlined />}
-                      className="text-black font-bold"
-                    />
-                  </Dropdown>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
-  
-          {!showAllDay1 && (
-            <Button
-              type="default"
-              onClick={() => setShowAllDay1(true)}
-              className="mt-8 text-white bg-primary border-primary"
-            >
-              Show More
-            </Button>
-          )}
-        </div>
-  
-        <h1 className="text-2xl text-primary font-bold text-shadow-lg mb-12">
-          RASE 2024 3<sup>rd</sup> Edition Digital Media Day - 2
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-5 gap-8">
-          {displayedMedia2.map((item: MediaItem, index: number) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -10 }}
-            >
-              <Card
-                className="relative transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer"
-                hoverable
-                cover={
-                  <div className="relative h-40 bg-black rounded-lg overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <h2 className="text-white text-2xl font-bold p-4">{item.name}</h2>
-                      </div>
-                    </div>
-                  </div>
-                }
-              >
-                <div className="flex justify-between items-center mt-4">
-                  <p className='text-black'>{item.description}</p>
-                  <Button
-                    type="primary"
-                    className="font-semibold text-white bg-primary hover:bg-white hover:border-primary text-lg p-4 flex justify-center text-center items-center"
-                    onClick={() => handleClick(item.url)}
-                  >
-                    Visit
-                  </Button>
-                  <Dropdown overlay={menu(item.url)} trigger={['click']}>
-                    <Button
-                      type="text"
-                      icon={<MoreOutlined />}
-                      className="text-black font-bold"
-                    />
-                  </Dropdown>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
-  
-          {!showAllDay2 && (
-            <Button
-              type="default"
-              onClick={() => setShowAllDay2(true)}
-              className="mt-8 text-white bg-primary border-primary"
-            >
-              Show More
-            </Button>
-          )}
-        </div>
-      </div>
-    );
-  };
-  
-  export default ShikshaKumbh2024DigitalMedia;
+export default function ShikshaKumbh2024DigitalMedia() {
+  return (
+    <DigitalMediaArchiveGrid
+      sections={[
+        { title: "RASE 2024 — Digital Media Day 1", items: media },
+        { title: "RASE 2024 — Digital Media Day 2", items: media2 },
+      ]}
+    />
+  );
+}

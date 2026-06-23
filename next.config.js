@@ -28,6 +28,14 @@ const nextConfig = {
   },
   experimental: {
     webpackMemoryOptimizations: true,
+    optimizePackageImports: [
+      "framer-motion",
+      "antd",
+      "recharts",
+      "react-icons",
+      "@heroicons/react",
+      "@fortawesome/react-fontawesome",
+    ],
   },
   /** Prevent ~600MB `public/` from being traced into donation API routes. */
   outputFileTracingExcludes: {
@@ -55,6 +63,7 @@ const nextConfig = {
     return config;
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",

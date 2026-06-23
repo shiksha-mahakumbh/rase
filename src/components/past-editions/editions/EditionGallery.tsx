@@ -1,16 +1,8 @@
-"use client";
-
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { normalizeStaticImageSrc } from "@/lib/images/normalizeStaticImageSrc";
+import EditionGalleryStrip from "./EditionGalleryStrip";
 
-const EventImageSlider = dynamic(() => import("@/components/media/EventImageSlider"), {
-  ssr: false,
-  loading: () => (
-    <div className="min-h-[320px] animate-pulse rounded-lg bg-slate-100" aria-hidden />
-  ),
-});
-
+/** Server-rendered edition gallery — single priority LCP image + lazy scroll strip. */
 export default function EditionGallery({
   images,
   eventTitle,
@@ -21,6 +13,7 @@ export default function EditionGallery({
   if (!images.length) return null;
 
   const primary = normalizeStaticImageSrc(images[0]);
+  const rest = images.slice(1);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-lg">
@@ -34,10 +27,8 @@ export default function EditionGallery({
           className="object-contain p-2"
         />
       </div>
-      {images.length > 1 ? (
-        <div className="border-t border-slate-100 p-2">
-          <EventImageSlider images={[...images.slice(1)]} eventTitle={eventTitle} />
-        </div>
+      {rest.length > 0 ? (
+        <EditionGalleryStrip images={rest} eventTitle={eventTitle} />
       ) : null}
     </div>
   );

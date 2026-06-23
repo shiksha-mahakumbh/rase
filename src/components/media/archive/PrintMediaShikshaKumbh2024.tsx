@@ -1,13 +1,8 @@
-import Image from "next/image";
-import { useState } from "react";
-import ImageLightbox from "@/components/ui/ImageLightbox";
+"use client";
 
-interface ImageData {
-  src: string;
-  column: number;
-}
+import PrintMediaArchiveGrid from "./PrintMediaArchiveGrid";
 
-const images: ImageData[] = [
+const images = [
     { src: "/sk24printmedia/2.jpg", column: 1 },
   { src: "/sk24printmedia/6.jpg", column: 1 },
   { src: "/sk24printmedia/3.jpg", column: 1 },
@@ -99,65 +94,13 @@ const images: ImageData[] = [
   { src: "/sk24printmedia/81.jpg", column: 4 },
 ];
 
-export default function PrintMediaShikshaKumbh2023() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  // Define the type for the groupedImages object
-  const groupedImages: { [key: number]: ImageData[] } = images.reduce(
-    (acc, image) => {
-      acc[image.column] = [...(acc[image.column] || []), image];
-      return acc;
-    },
-    {} as { [key: number]: ImageData[] }
-  );
-
-  const handleImageClick = (src: string) => {
-    setSelectedImage(src);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedImage(null);
-  };
-
+export default function PrintMediaShikshaKumbh2024() {
   return (
-    <div className="min-h-screen p-4 bg-gray-100">
-      <h1 className="text-4xl font-bold text-center mb-8">
-        Shiksha Mahakumbh 3.0 — Print Media
-      </h1>
-      <div className="flex flex-wrap -mx-2">
-        {Object.keys(groupedImages).map((columnKey) => (
-          <div
-            key={columnKey}
-            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2"
-          >
-            {groupedImages[parseInt(columnKey)].map((image, imgIndex) => (
-              <div
-                key={imgIndex}
-                className="mb-4 cursor-pointer"
-                onClick={() => handleImageClick(image.src)}
-              >
-                <Image
-                  src={image.src}
-                  alt={`Print Media ${imgIndex + 1}`}
-                  className="rounded-lg border-solid border-red-950 border-2"
-                  layout="responsive"
-                  width={300}
-                  height={200}
-                  objectFit="cover"
-                />
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-
-      <ImageLightbox
-        isOpen={!!selectedImage}
-        imageSrc={selectedImage ?? ""}
-        onClose={handleCloseModal}
-        alt="Selected Image"
-        downloadUrl={selectedImage ?? undefined}
-      />
-    </div>
+    <PrintMediaArchiveGrid
+      title="Shiksha Kumbh 3.0 — Print Media"
+      description="Print media from Shiksha Kumbh 3.0 at NIT Srinagar, June 2024."
+      images={images.map((img) => ({ src: img.src, alt: img.src.split("/").pop() }))}
+      initialCount={16}
+    />
   );
 }
