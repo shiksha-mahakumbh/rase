@@ -3,71 +3,11 @@
 import Link from "next/link";
 import GlassCard from "@/components/ui/GlassCard";
 import { ConferenceIcon } from "@/components/icons/home";
-import type { CmsNotice } from "@/lib/cms/types";
 import { useCms } from "@/lib/cms/context";
-
-const FALLBACK_NOTICES: CmsNotice[] = [
-  {
-    id: "1",
-    title: "Registration Open for Shiksha Mahakumbh 6.0",
-    slug: "registration-open",
-    description: "",
-    priority: 0,
-    isPinned: false,
-    publishAt: null,
-    expireAt: null,
-    category: null,
-    attachments: [],
-  },
-  {
-    id: "2",
-    title: "Workshops & Volunteer Orientation – Starting Soon",
-    slug: "workshops",
-    description: "",
-    priority: 0,
-    isPinned: false,
-    publishAt: null,
-    expireAt: null,
-    category: null,
-    attachments: [],
-  },
-  {
-    id: "3",
-    title: "Sponsorship Window Now Open",
-    slug: "sponsorship",
-    description: "",
-    priority: 0,
-    isPinned: false,
-    publishAt: null,
-    expireAt: null,
-    category: null,
-    attachments: [],
-  },
-  {
-    id: "4",
-    title: "Project Display Registration Begins",
-    slug: "project-display",
-    description: "",
-    priority: 0,
-    isPinned: false,
-    publishAt: null,
-    expireAt: null,
-    category: null,
-    attachments: [],
-  },
-  {
-    id: "5",
-    title: "Accommodation Details Will Be Released Soon",
-    slug: "accommodation",
-    description: "",
-    priority: 0,
-    isPinned: false,
-    publishAt: null,
-    expireAt: null,
-    category: null,
-    attachments: [],
-  },
-];
+import {
+  formatNoticeDate,
+  resolveWidgetNotices,
+} from "@/data/default-notices";
 
 function CategoryBadge({ name }: { name: string }) {
   return (
@@ -79,7 +19,7 @@ function CategoryBadge({ name }: { name: string }) {
 
 export default function NoticeBoard() {
   const cms = useCms();
-  const notices = cms?.widgetNotices?.length ? cms.widgetNotices : FALLBACK_NOTICES;
+  const notices = resolveWidgetNotices(cms?.widgetNotices, cms?.notices, "en", 5);
 
   return (
     <GlassCard hover={false} className="h-full px-4 py-5 md:px-5 md:py-6">
@@ -94,36 +34,57 @@ export default function NoticeBoard() {
         <p className="text-center text-sm text-slate-500">No notices at this time.</p>
       ) : (
         <div className="flex flex-col gap-3">
-          {notices.slice(0, 5).map((notice) => (
-            <Link key={notice.id} href={`/noticeboard#${notice.slug}`} className="block">
-              <div className="home-card-hover group cursor-pointer rounded-xl border border-gray-100 bg-white/80 p-4">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
-                    <ConferenceIcon className="h-5 w-5" aria-hidden />
-                  </div>
-                  <div className="min-w-0 flex-grow">
-                    <div className="mb-1 flex flex-wrap items-center gap-2">
-                      {notice.isPinned && (
-                        <span className="text-[10px] font-bold uppercase text-amber-600">
-                          Pinned
-                        </span>
-                      )}
-                      {notice.category && <CategoryBadge name={notice.category.name} />}
+          {notices.map((notice) => {
+            const published = formatNoticeDate(notice.publishAt);
+            const excerpt =
+              notice.description.length > 120
+                ? `${notice.description.slice(0, 117).trim()}…`
+                : notice.description;
+
+            return (
+              <Link key={notice.id} href={`/noticeboard#${notice.slug}`} className="block">
+                <div className="home-card-hover group cursor-pointer rounded-xl border border-gray-100 bg-white/80 p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                      <ConferenceIcon className="h-5 w-5" aria-hidden />
                     </div>
-                    <h4 className="text-base font-semibold leading-snug text-gray-800 transition-colors group-hover:text-primary md:text-lg">
-                      {notice.title}
-                    </h4>
-                    {notice.attachments.length > 0 && (
-                      <p className="mt-1 text-xs text-slate-500">
-                        {notice.attachments.length} attachment
-                        {notice.attachments.length > 1 ? "s" : ""}
-                      </p>
-                    )}
+                    <div className="min-w-0 flex-grow">
+                      <div className="mb-1 flex flex-wrap items-center gap-2">
+                        {notice.isPinned && (
+                          <span className="text-[10px] font-bold uppercase text-amber-600">
+                            Pinned
+                          </span>
+                        )}
+                        {notice.category && <CategoryBadge name={notice.category.name} />}
+                        {published && (
+                          <time
+                            dateTime={notice.publishAt ?? undefined}
+                            className="text-[10px] font-medium text-slate-400"
+                          >
+                            {published}
+                          </time>
+                        )}
+                      </div>
+                      <h4 className="text-base font-semibold leading-snug text-gray-800 transition-colors group-hover:text-primary md:text-lg">
+                        {notice.title}
+                      </h4>
+                      {excerpt ? (
+                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-600">
+                          {excerpt}
+                        </p>
+                      ) : null}
+                      {notice.attachments.length > 0 && (
+                        <p className="mt-1 text-xs text-slate-500">
+                          {notice.attachments.length} attachment
+                          {notice.attachments.length > 1 ? "s" : ""}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
 

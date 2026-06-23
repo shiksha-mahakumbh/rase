@@ -4,32 +4,12 @@ import React, { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import Link from "next/link";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import { useCms } from "@/lib/cms/context";
+import { resolveTickerItems } from "@/data/default-announcements";
 
 const REGISTRATION_PATH = ROUTES.registration;
-import { useCms } from "@/lib/cms/context";
-import type { CmsAnnouncementBar } from "@/lib/cms/types";
-
-const FALLBACK_TICKER = [
-  {
-    text: "Shiksha Mahakumbh 6.0 — 9–11 Oct 2026 at NIT Hamirpur. Registration open.",
-    link: REGISTRATION_PATH,
-    external: false,
-  },
-  {
-    text: "Programmes @ Shiksha Mahakumbh 6.0 — explore the academic council schedule.",
-    link: "/departments/academic-council",
-    external: false,
-  },
-];
-
-function barsToTicker(bars: CmsAnnouncementBar[]) {
-  return bars.map((b) => ({
-    text: b.message,
-    link: b.ctaUrl ?? REGISTRATION_PATH,
-    external: b.ctaUrl?.startsWith("http") ?? false,
-  }));
-}
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -47,35 +27,39 @@ function usePrefersReducedMotion() {
 
 const Marquees: React.FC = () => {
   const cms = useCms();
+  const params = useParams();
+  const locale = typeof params?.locale === "string" ? params.locale : "en";
   const reducedMotion = usePrefersReducedMotion();
-  const [bars, setBars] = useState<CmsAnnouncementBar[]>(cms?.announcementBars ?? []);
+  const [tickerItems, setTickerItems] = useState(() =>
+    resolveTickerItems(cms?.announcementBars, locale)
+  );
 
   useEffect(() => {
     if (cms?.announcementBars?.length) {
-      setBars(cms.announcementBars);
+      setTickerItems(resolveTickerItems(cms.announcementBars, locale));
       return;
     }
-    fetch("/api/v2/announcement-bars")
+    fetch(`/api/v2/announcement-bars?locale=${locale}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
-        if (d?.items?.length) setBars(d.items);
+        setTickerItems(resolveTickerItems(d?.items, locale));
       })
-      .catch(() => undefined);
-  }, [cms?.announcementBars]);
-
-  const tickerItems = bars.length ? barsToTicker(bars) : FALLBACK_TICKER;
+      .catch(() => {
+        setTickerItems(resolveTickerItems([], locale));
+      });
+  }, [cms?.announcementBars, locale]);
 
   return (
     <section
-      className="border-y border-primary/10 bg-gradient-to-r from-[#faf8f6] via-white to-amber-50/40"
+      className="border-y border-primary/10 bg-gradient-to-r from-brand-surface-warm via-white to-brand-surface-warm"
       aria-label="Announcements"
     >
       <div className="mx-auto max-w-7xl px-4 py-4 md:py-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F59E0B] opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#F59E0B]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-saffron opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-saffron" />
             </span>
             <h2 className="text-sm font-bold uppercase tracking-wider text-primary md:text-base">
               Announcements
@@ -89,7 +73,7 @@ const Marquees: React.FC = () => {
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-[#F59E0B]/20 bg-white/90 shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-brand-saffron/20 bg-white/90 shadow-sm">
           <Marquee
             pauseOnHover
             pauseOnClick
@@ -118,7 +102,7 @@ const Marquees: React.FC = () => {
                 return item.external ? (
                   <a
                     key={index}
-                    href={item.link}
+                    href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mx-1"
@@ -126,7 +110,7 @@ const Marquees: React.FC = () => {
                     {content}
                   </a>
                 ) : (
-                  <Link key={index} href={item.link} className="mx-1">
+                  <Link key={index} href={item.href} className="mx-1">
                     {content}
                   </Link>
                 );

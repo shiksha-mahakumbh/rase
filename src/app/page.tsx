@@ -11,6 +11,7 @@ import { loadCmsHomepage, loadCmsPageData } from "@/lib/cms/server";
 import { loadCmsSpeakers, loadCmsPartners } from "@/lib/cms/organizational";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
+import { withHreflang } from "@/lib/seo/hreflang";
 
 const FALLBACK_META = {
   title: "Shiksha Mahakumbh 6.0 — National Education Summit",
@@ -34,9 +35,9 @@ const FALLBACK_META = {
 export async function generateMetadata(): Promise<Metadata> {
   const homepage = await loadCmsHomepage();
   if (homepage?.seo) {
-    return metadataFromCmsSeo(homepage.seo, FALLBACK_META);
+    return withHreflang(metadataFromCmsSeo(homepage.seo, FALLBACK_META), "/");
   }
-  return createPageMetadata(FALLBACK_META);
+  return withHreflang(createPageMetadata(FALLBACK_META), "/");
 }
 
 export default async function Page() {

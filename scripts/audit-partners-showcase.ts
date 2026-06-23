@@ -4,6 +4,7 @@
  */
 import { buildAffiliationShowcase } from "../src/lib/cms/build-affiliation-showcase";
 import { groupAffiliationsByTier } from "../src/lib/cms/affiliation-tier";
+import { canonicalizeAffiliationName } from "../src/lib/cms/affiliation-canonical";
 import { getAffiliationShowcaseStats } from "../src/lib/cms/affiliation-showcase-stats";
 import { normalizeAffiliationKey } from "../src/lib/cms/partner-showcase";
 import { resolveAffiliationWebsite } from "../src/lib/cms/affiliation-websites";
@@ -82,9 +83,11 @@ for (const ed of MAHAKUMBH_ABHIYAN_SPEAKER_EDITIONS) {
     if (s.organization?.trim()) speakerOrgs.add(s.organization.trim());
   }
 }
-const allNames = new Set(allEntries.map((e) => normalizeAffiliationKey(e.name)));
+const allNames = new Set(
+  allEntries.map((e) => canonicalizeAffiliationName(e.name).dedupeKey)
+);
 const missingSpeakerOrgs = [...speakerOrgs].filter(
-  (o) => !allNames.has(normalizeAffiliationKey(o))
+  (o) => !allNames.has(canonicalizeAffiliationName(o).dedupeKey)
 );
 console.log(`## SPEAKER ORGS NOT IN SHOWCASE: ${missingSpeakerOrgs.length}`);
 missingSpeakerOrgs.slice(0, 15).forEach((o) => console.log(`    - ${o}`));
@@ -92,8 +95,8 @@ if (missingSpeakerOrgs.length > 15) console.log(`    ... +${missingSpeakerOrgs.l
 console.log();
 
 // Edition 6.0
-const has6 = MAHAKUMBH_ABHIYAN_SPEAKER_EDITIONS.some((e) => e.edition === "6.0");
-console.log(`## EDITION 6.0 DATA: ${has6 ? "present" : "MISSING in mahakumbh-abhiyan-speakers.ts"}`);
+const has6Speakers = MAHAKUMBH_ABHIYAN_SPEAKER_EDITIONS.some((e) => e.edition === "6.0");
+console.log(`## EDITION 6.0 SPEAKER FILE: ${has6Speakers ? "present" : "via committee + authority-speakers"}`);
 console.log();
 
 // Items in wrong tier samples for academic

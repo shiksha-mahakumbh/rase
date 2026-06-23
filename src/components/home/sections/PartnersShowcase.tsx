@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import SectionShell from "@/components/ui/SectionShell";
 import GlassCard from "@/components/ui/GlassCard";
 import { groupAffiliationsByTier } from "@/lib/cms/affiliation-tier";
@@ -17,8 +17,6 @@ import type { CmsPartnerCard, CmsSpeakerCard } from "@/lib/cms/types";
 import { GlobalReachBanner, TierSection } from "./partners/AffiliationCard";
 import ShowcaseTabNav from "./partners/ShowcaseTabNav";
 
-const INITIAL_TIERS = 4;
-
 type Props = {
   cmsPartners?: CmsPartnerCard[];
   cmsSpeakers?: CmsSpeakerCard[];
@@ -30,7 +28,6 @@ export default function PartnersShowcase({
 }: Props) {
   const cms = useCms();
   const [tab, setTab] = useState<PartnerShowcaseTab>("academic");
-  const [expanded, setExpanded] = useState(false);
 
   const grouped = useMemo(
     () =>
@@ -49,17 +46,11 @@ export default function PartnersShowcase({
     [tab, grouped]
   );
   const accent = PARTNER_TAB_ACCENT_STYLES[activeTabMeta.accent];
-
-  const visibleGroups = expanded ? tierGroups : tierGroups.slice(0, INITIAL_TIERS);
-  const hiddenTierCount = tierGroups.length - visibleGroups.length;
   const totalInTab = grouped[tab].length;
-
-  useEffect(() => {
-    setExpanded(false);
-  }, [tab]);
 
   return (
     <SectionShell
+      id="conference-support"
       background="gradient"
       className="relative overflow-hidden px-4 py-10 md:px-8 md:py-12"
       ariaLabel="Academic, media, and sponsor partners"
@@ -76,7 +67,7 @@ export default function PartnersShowcase({
           </p>
           <h2 className="home-section-title">Academic · Media · Sponsors</h2>
           <p className="mx-auto mt-2 max-w-2xl text-sm text-gray-600 md:text-base">
-            Editions 1.0–5.0 — institutions sequenced from organizing bodies to schools,
+            Editions 1.0–6.0 — institutions sequenced from organizing bodies to schools,
             media, and industry.
           </p>
         </header>
@@ -110,36 +101,9 @@ export default function PartnersShowcase({
                 No affiliations listed in this category yet.
               </p>
             ) : (
-              <>
-                {visibleGroups.map((group) => (
-                  <TierSection key={group.id} group={group} tab={activeTabMeta} />
-                ))}
-
-                {hiddenTierCount > 0 && (
-                  <div className="mt-4 text-center">
-                    <button
-                      type="button"
-                      onClick={() => setExpanded(true)}
-                      className="min-h-[40px] rounded-full border border-slate-200 bg-white px-5 py-2 text-xs font-semibold text-brand-navy shadow-sm transition hover:border-primary/40 hover:bg-primary/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:text-sm"
-                    >
-                      Show {hiddenTierCount} more categor
-                      {hiddenTierCount === 1 ? "y" : "ies"} ({totalInTab} names)
-                    </button>
-                  </div>
-                )}
-
-                {expanded && tierGroups.length > INITIAL_TIERS && (
-                  <div className="mt-4 text-center">
-                    <button
-                      type="button"
-                      onClick={() => setExpanded(false)}
-                      className="text-xs font-semibold text-primary hover:underline"
-                    >
-                      Collapse categories
-                    </button>
-                  </div>
-                )}
-              </>
+              tierGroups.map((group) => (
+                <TierSection key={group.id} group={group} tab={activeTabMeta} />
+              ))
             )}
           </div>
         </GlassCard>

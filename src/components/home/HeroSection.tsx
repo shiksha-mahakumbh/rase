@@ -76,11 +76,17 @@ export default function HeroSection() {
             </span>
 
             <h1 className="mt-5 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
-              <span className="text-brand-blue">शिक्षा </span>
-              <span className="text-brand-saffron">महाकुंभ</span>
-              <span className="mt-1 block text-brand-navy">
-                {headline.includes("अभियान") ? "अभियान" : headline}
-              </span>
+              {headline.includes("महाकुंभ") ? (
+                <span className="text-brand-navy">{headline}</span>
+              ) : (
+                <>
+                  <span className="text-brand-blue">शिक्षा </span>
+                  <span className="text-brand-saffron">महाकुंभ</span>
+                  {headline ? (
+                    <span className="mt-1 block text-brand-navy">{headline}</span>
+                  ) : null}
+                </>
+              )}
               <span className="mt-2 block text-xl font-bold text-brand-blue/80 sm:text-2xl">
                 {subheadline}
               </span>

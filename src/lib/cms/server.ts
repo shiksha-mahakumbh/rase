@@ -22,6 +22,8 @@ import type {
   CmsPageData,
   CmsSiteSettings,
 } from "./types";
+import { resolvePublicNotices, resolveWidgetNotices } from "@/data/default-notices";
+import { resolveAnnouncementBars } from "@/data/default-announcements";
 
 function mapNotice(n: {
   id: string;
@@ -153,9 +155,9 @@ export async function loadCmsNotices(
 ): Promise<CmsNotice[]> {
   try {
     const { items } = await listPublicNotices({ limit, locale });
-    return items.map(mapNotice);
+    return resolvePublicNotices(items.map(mapNotice), locale).slice(0, limit);
   } catch {
-    return [];
+    return resolvePublicNotices([], locale).slice(0, limit);
   }
 }
 
@@ -164,9 +166,12 @@ export async function loadCmsWidgetNotices(
 ): Promise<CmsNotice[]> {
   try {
     const { items } = await listPublicNotices({ widget: true, limit: 5, locale });
-    return items.map(mapNotice);
+    const mapped = items.map(mapNotice);
+    if (mapped.length > 0) return mapped;
+    const { items: all } = await listPublicNotices({ limit: 5, locale });
+    return resolveWidgetNotices([], all.map(mapNotice), locale, 5);
   } catch {
-    return [];
+    return resolveWidgetNotices([], [], locale, 5);
   }
 }
 
@@ -211,7 +216,7 @@ export async function loadCmsAnnouncementBars(
 ): Promise<CmsAnnouncementBar[]> {
   try {
     const bars = await listActiveAnnouncementBars(locale);
-    return bars.map((b) => ({
+    const mapped = bars.map((b) => ({
       id: b.id,
       title: b.title,
       message: b.message,
@@ -221,8 +226,9 @@ export async function loadCmsAnnouncementBars(
       ctaUrl: b.ctaUrl,
       isDismissible: b.isDismissible,
     }));
+    return resolveAnnouncementBars(mapped, locale);
   } catch {
-    return [];
+    return resolveAnnouncementBars([], locale);
   }
 }
 

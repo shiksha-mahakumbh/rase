@@ -22,7 +22,7 @@ const FALLBACK: VisitorCounts = {
 function CounterSkeleton() {
   return (
     <span
-      className="inline-block h-6 w-12 animate-pulse rounded bg-gray-300"
+      className="inline-block h-6 w-12 animate-pulse rounded bg-white/20"
       aria-hidden
     />
   );
@@ -82,39 +82,39 @@ export default function FooterVisitorCounter() {
 
   return (
     <div
-      className="mt-4 rounded-xl bg-gray-100 p-4 text-black"
+      className="mt-4 w-full max-w-md rounded-xl border border-white/15 bg-white/10 p-4 text-white"
       aria-live="polite"
       aria-label="Visitor statistics"
     >
       {degraded && !loading && (
-        <p className="mb-2 text-center text-xs text-amber-700" role="status">
+        <p className="mb-2 text-center text-xs text-amber-200/90" role="status">
           Live counts temporarily unavailable
         </p>
       )}
-      <div className="flex items-center justify-around">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
+      <div className="flex items-center justify-around gap-2">
+        <div className="text-center">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">
             Daily Visitors
           </p>
-          <p className="text-xl font-extrabold text-primary">
+          <p className="text-lg font-extrabold text-brand-saffron md:text-xl">
             {loading ? <CounterSkeleton /> : dailyVisitors}
           </p>
         </div>
-        <div className="h-10 w-px bg-gray-300" aria-hidden />
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
+        <div className="h-8 w-px bg-white/20" aria-hidden />
+        <div className="text-center">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">
             Total Visitors
           </p>
-          <p className="text-xl font-extrabold text-primary">
+          <p className="text-lg font-extrabold text-brand-saffron md:text-xl">
             {loading ? <CounterSkeleton /> : displayTotal?.toLocaleString()}
           </p>
         </div>
-        <div className="h-10 w-px bg-gray-300" aria-hidden />
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
+        <div className="h-8 w-px bg-white/20" aria-hidden />
+        <div className="text-center">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">
             Active Now
           </p>
-          <p className="text-xl font-extrabold text-primary">
+          <p className="text-lg font-extrabold text-brand-saffron md:text-xl">
             {loading ? <CounterSkeleton /> : activeUsers}
           </p>
         </div>

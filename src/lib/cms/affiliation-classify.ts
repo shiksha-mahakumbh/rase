@@ -1,4 +1,5 @@
 import type { PartnerShowcaseEntry, PartnerShowcaseTab } from "@/lib/cms/partner-showcase";
+import { canonicalizeAffiliationName } from "@/lib/cms/affiliation-canonical";
 import { resolveAffiliationWebsite } from "@/lib/cms/affiliation-websites";
 import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
@@ -25,10 +26,13 @@ const SKIP_ORG_PATTERN =
   /^(academic partner|official channel|एक माँ ब्लॉगर)$/i;
 
 const MEDIA_ORG_PATTERN =
-  /media|newspaper|hindu|dainik|pioneer|business world|epaper|press|journal|samachar|akhbar|संवाद|पत्र|हिंदू|पायनियर|uttam|savera|businessworld/i;
+  /media|newspaper|hindu|dainik|pioneer|business world|epaper|press|journal|samachar|akhbar|संवाद|संवाददाता|पत्र|हिंदू|पायनियर|uttam|savera|businessworld|correspondent/i;
 
 const SPONSOR_ORG_PATTERN =
-  /drdo|nhpc|nfil|private limited|pvt\.?\s*ltd|startup|industry|csr|sponsor|english connection|youngovator|यंगो|patel|bank|bharat petroleum|reliance|tata |adani|wipro|infosys/i;
+  /drdo|डीआरडीओ|nhpc|एनएचपीसी|nfil|एनएफआईएल|tvrl|private limited|प्राइवेट लिमिटेड|pvt\.?\s*ltd|startup|industry|csr|sponsor|english connection|इंग्लिश कनेक्शन|youngov|यंगो|यंगोवेटर|यंगोनोवेतर|patel|bank|bharat petroleum|reliance|tata |adani|wipro|infosys|requil|रिक्विल|savantx|timie/i;
+
+const YOUTUBE_ACADEMIC_PATTERN =
+  /youtube|यूट्यूब|ऑफिशियल|official|अभिनय|ankit madan|अंकित मदान|अध्ययन मंत्रा|fox path|फॉक्स पाथ|techrocrat|टेक्रोक्रेट|pathshala|पाठशाला|आरती की/i;
 
 const GOVERNMENT_PERSON_PATTERN =
   /^(hon'?ble|shri|smt\.|dr\.|prof\.|lt\.|major|admiral|governor|president|minister|chief minister|lieutenant governor|ias|ips|hcs|dgp|cabinet)/i;
@@ -39,8 +43,12 @@ export function classifyAffiliationTab(name: string): PartnerShowcaseTab | null 
     return null;
   }
 
+  const canonical = canonicalizeAffiliationName(trimmed);
+  if (canonical.forcedTab) return canonical.forcedTab;
+
   if (MEDIA_ORG_PATTERN.test(trimmed)) return "media";
   if (SPONSOR_ORG_PATTERN.test(trimmed)) return "sponsors";
+  if (YOUTUBE_ACADEMIC_PATTERN.test(trimmed)) return "academic";
 
   if (GOVERNMENT_PERSON_PATTERN.test(trimmed)) return null;
 
@@ -90,17 +98,18 @@ export function toAffiliationEntry(
   const trimmed = name.trim();
   if (!trimmed || trimmed.length < 2) return null;
 
-  const tab = forcedTab ?? classifyAffiliationTab(trimmed);
+  const canonical = canonicalizeAffiliationName(trimmed);
+  const tab = forcedTab ?? canonical.forcedTab ?? classifyAffiliationTab(trimmed);
   if (!tab) return null;
 
   const resolvedWebsite = sanitizeExternalUrl(
-    website?.trim() || resolveAffiliationWebsite(trimmed)
+    website?.trim() || canonical.website || resolveAffiliationWebsite(canonical.displayName) || resolveAffiliationWebsite(trimmed)
   );
 
   return {
     tab,
     entry: {
-      name: trimmed,
+      name: canonical.displayName,
       ...(resolvedWebsite ? { website: resolvedWebsite } : {}),
     },
   };

@@ -48,6 +48,11 @@ export default function HomePage({
       <main id="main-content">
         <HeroSection />
         <TrustStrip />
+
+        <LazySection minHeight="12rem" fallback={<SectionSkeleton lines={6} />}>
+          <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
+        </LazySection>
+
         <BrandShowcaseSection />
 
         <SectionShell
@@ -144,10 +149,6 @@ export default function HomePage({
         </LazySection>
         <LazySection fallback={<SectionSkeleton />}>
           <HomeEducationEcosystemNav />
-        </LazySection>
-
-        <LazySection minHeight="8rem">
-          <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
         </LazySection>
       </main>
 

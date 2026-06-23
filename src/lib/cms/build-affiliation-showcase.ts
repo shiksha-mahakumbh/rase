@@ -1,11 +1,15 @@
 import { MAHAKUMBH_ABHIYAN_SPEAKER_EDITIONS } from "@/data/mahakumbh-abhiyan-speakers";
 import { BEST_WISHES_ENTRIES } from "@/data/best-wishes";
+import { COMMITTEE_EDITION_6_0 } from "@/data/committee-members/edition-6-0";
+import { featuredSpeakers as SMK_6_FEATURED_SPEAKERS } from "@/data/authority-speakers";
 import {
   CURATED_MEDIA_AFFILIATIONS,
   CURATED_SPONSOR_AFFILIATIONS,
   extractInstitutionFromDesignation,
   toAffiliationEntry,
 } from "@/lib/cms/affiliation-classify";
+import { canonicalizeAffiliationName } from "@/lib/cms/affiliation-canonical";
+import { extractCommitteeAffiliations } from "@/lib/cms/committee-affiliations";
 import { PROCEEDINGS_AFFILIATIONS } from "@/lib/cms/proceedings-affiliations";
 import { sortAffiliationsByTier } from "@/lib/cms/affiliation-tier";
 import { resolveAffiliationWebsite } from "@/lib/cms/affiliation-websites";
@@ -13,7 +17,6 @@ import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 import type { PartnerItem } from "@/lib/cms/partners";
 import {
   mapCategoryToShowcaseTab,
-  normalizeAffiliationKey,
   type PartnerShowcaseEntry,
   type PartnerShowcaseTab,
 } from "@/lib/cms/partner-showcase";
@@ -28,15 +31,24 @@ function mergeInto(
   tab: PartnerShowcaseTab,
   entry: PartnerShowcaseEntry
 ) {
-  const key = normalizeAffiliationKey(entry.name);
+  const canonical = canonicalizeAffiliationName(entry.name);
+  const merged: PartnerShowcaseEntry = {
+    name: canonical.displayName,
+    ...(entry.website || canonical.website
+      ? { website: entry.website ?? canonical.website }
+      : {}),
+  };
+  const key = canonical.dedupeKey;
   const list = target[tab];
-  const idx = list.findIndex((e) => normalizeAffiliationKey(e.name) === key);
+  const idx = list.findIndex(
+    (e) => canonicalizeAffiliationName(e.name).dedupeKey === key
+  );
   if (idx === -1) {
-    list.push(entry);
+    list.push(merged);
     return;
   }
-  if (!list[idx].website && entry.website) {
-    list[idx] = { ...list[idx], website: entry.website };
+  if (!list[idx].website && merged.website) {
+    list[idx] = { ...list[idx], website: merged.website };
   }
 }
 
@@ -117,6 +129,16 @@ export function buildAffiliationShowcase(input: {
 
   for (const affiliation of PROCEEDINGS_AFFILIATIONS) {
     addRaw(grouped, affiliation);
+  }
+
+  for (const org of extractCommitteeAffiliations(COMMITTEE_EDITION_6_0)) {
+    addRaw(grouped, org);
+  }
+
+  for (const speaker of SMK_6_FEATURED_SPEAKERS) {
+    if (speaker.organization?.trim()) {
+      addRaw(grouped, speaker.organization.trim());
+    }
   }
 
   for (const speaker of input.cmsSpeakers ?? []) {
