@@ -11,8 +11,8 @@ import VenueTravelSection from "./VenueTravelSection";
 import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
-import HomePageChrome from "./HomePageChrome";
-import IdleMount from "@/components/performance/IdleMount";
+import MarqueesDeferred from "./MarqueesDeferred";
+import HomePageChromeDeferred from "./HomePageChromeDeferred";
 import type { HeroContent } from "@/lib/home/build-hero-content";
 
 const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
@@ -20,7 +20,6 @@ const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
     <div className="h-16 w-full border-b border-slate-200 bg-white/90" aria-hidden />
   ),
 });
-const Marquees = dynamic(() => import("@/components/layout/Marquees"), { ssr: false });
 const Footer = dynamic(() => import("@/components/layout/Footer"));
 const TrustStrip = dynamic(() => import("./TrustStrip"));
 const BrandShowcaseSection = dynamic(() => import("./BrandShowcaseSection"));
@@ -46,9 +45,7 @@ export default function HomePage({
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
-      <IdleMount fallbackHeight="4.5rem">
-        <Marquees />
-      </IdleMount>
+      <MarqueesDeferred />
 
       <main id="main-content">
         <HeroSection content={heroContent} />
@@ -172,9 +169,7 @@ export default function HomePage({
       </main>
 
       <Footer />
-      <IdleMount fallbackHeight="0">
-        <HomePageChrome />
-      </IdleMount>
+      <HomePageChromeDeferred />
     </div>
   );
 }
