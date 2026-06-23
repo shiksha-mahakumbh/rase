@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Link from "next/link";
 import type { CmsNotice } from "@/lib/cms/types";
+import { formatNoticeDate, resolvePublicNotices } from "@/data/default-notices";
+import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
 type Props = {
   initialNotices: CmsNotice[];
@@ -19,7 +20,7 @@ function CategoryBadge({ name }: { name: string }) {
 }
 
 export default function NoticeboardClient({ initialNotices }: Props) {
-  const [notices, setNotices] = useState(initialNotices);
+  const [notices, setNotices] = useState(() => resolvePublicNotices(initialNotices));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>("all");
@@ -50,7 +51,7 @@ export default function NoticeboardClient({ initialNotices }: Props) {
       const res = await fetch("/api/v2/notices?limit=50", { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to load notices");
       const data = (await res.json()) as { items: CmsNotice[] };
-      setNotices(data.items ?? []);
+      setNotices(resolvePublicNotices(data.items ?? []));
     } catch {
       setError("Unable to refresh notices. Showing cached list.");
     } finally {
@@ -137,7 +138,15 @@ export default function NoticeboardClient({ initialNotices }: Props) {
                 >
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <h3 className="text-base font-bold text-brand-navy md:text-lg">{notice.title}</h3>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {notice.publishAt && (
+                        <time
+                          dateTime={notice.publishAt}
+                          className="text-xs text-slate-500"
+                        >
+                          {formatNoticeDate(notice.publishAt)}
+                        </time>
+                      )}
                       {notice.isPinned && (
                         <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-800">
                           Pinned
@@ -151,18 +160,22 @@ export default function NoticeboardClient({ initialNotices }: Props) {
                   </p>
                   {notice.attachments.length > 0 && (
                     <ul className="mt-3 space-y-1" aria-label="Attachments">
-                      {notice.attachments.map((att) => (
-                        <li key={att.id}>
-                          <a
-                            href={att.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-brand-navy underline hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
-                          >
-                            📎 {att.fileName}
-                          </a>
-                        </li>
-                      ))}
+                      {notice.attachments.map((att) => {
+                        const safeUrl = sanitizeExternalUrl(att.fileUrl);
+                        if (!safeUrl) return null;
+                        return (
+                          <li key={att.id}>
+                            <a
+                              href={safeUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-brand-navy underline hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
+                            >
+                              📎 {att.fileName}
+                            </a>
+                          </li>
+                        );
+                      })}
                     </ul>
                   )}
                 </li>

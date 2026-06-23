@@ -1,9 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
+import { useCms } from "@/lib/cms/context";
+import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
+import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
-const insights = [
+type InsightItem = {
+  title: string;
+  date: string;
+  author: string;
+  href: string;
+  tag: string;
+  accent: string;
+  tagBg: string;
+  external: boolean;
+};
+
+const DEFAULT_INSIGHTS: InsightItem[] = [
   {
     title: "NEP 2020 Implementation Frameworks",
     date: "2026",
@@ -46,11 +62,14 @@ const insights = [
   },
 ];
 
-function InsightCard({
-  item,
-}: {
-  item: (typeof insights)[number];
-}) {
+const ACCENT_PRESETS = [
+  { accent: "from-brand-blue/20 to-brand-blue/5", tagBg: "bg-brand-blue" },
+  { accent: "from-brand-saffron/25 to-brand-saffron/5", tagBg: "bg-brand-saffron" },
+  { accent: "from-brand-emerald/20 to-brand-emerald/5", tagBg: "bg-brand-emerald" },
+  { accent: "from-violet-200/80 to-violet-50", tagBg: "bg-violet-600" },
+];
+
+function InsightCard({ item }: { item: InsightItem }) {
   const inner = (
     <>
       <div
@@ -75,9 +94,13 @@ function InsightCard({
     "group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:border-brand-saffron/40 hover:shadow-lg";
 
   if (item.external) {
+    const safeHref = sanitizeExternalUrl(item.href);
+    if (!safeHref) {
+      return <div className={className}>{inner}</div>;
+    }
     return (
       <a
-        href={item.href}
+        href={safeHref}
         target="_blank"
         rel="noopener noreferrer"
         className={className}
@@ -95,14 +118,50 @@ function InsightCard({
 }
 
 export default function DiscoverStrip() {
+  const cms = useCms();
+  const discover = getSection(cms?.homepage, "discover");
+  const cmsItems = sectionItems<{
+    title?: string;
+    date?: string;
+    author?: string;
+    href?: string;
+    url?: string;
+    tag?: string;
+    external?: boolean;
+  }>(discover, "items");
+
+  const insights: InsightItem[] =
+    cmsItems.length > 0
+      ? cmsItems.map((item, index) => {
+          const preset = ACCENT_PRESETS[index % ACCENT_PRESETS.length];
+          const href = item.href ?? item.url ?? "/";
+          const external =
+            item.external ?? (href.startsWith("http://") || href.startsWith("https://"));
+          return {
+            title: item.title ?? "Update",
+            date: item.date ?? "2026",
+            author: item.author ?? "SMK",
+            href,
+            tag: item.tag ?? "News",
+            accent: preset.accent,
+            tagBg: preset.tagBg,
+            external,
+          };
+        })
+      : DEFAULT_INSIGHTS;
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-brand-surface-warm to-white py-12 md:py-16">
       <div className="brand-grid-pattern pointer-events-none absolute inset-0 opacity-30" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Insights & Updates"
-          title="Research Highlights & Announcements"
-          description="Policy, research, and conclave updates from Shiksha Mahakumbh Abhiyan."
+          eyebrow={sectionField(discover, "eyebrow", "Insights & Updates")}
+          title={sectionField(discover, "title", "Research Highlights & Announcements")}
+          description={sectionField(
+            discover,
+            "description",
+            "Policy, research, and conclave updates from Shiksha Mahakumbh Abhiyan."
+          )}
         />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {insights.map((item) => (

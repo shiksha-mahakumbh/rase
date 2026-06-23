@@ -7,6 +7,7 @@ import {
   type PartnerShowcaseEntry,
   type PartnerShowcaseTabMeta,
 } from "@/lib/cms/partner-showcase";
+import { canonicalizeAffiliationName } from "@/lib/cms/affiliation-canonical";
 import type { TierGroup } from "@/lib/cms/affiliation-tier";
 
 type ChipProps = {
@@ -69,7 +70,11 @@ export function TierSection({
       </div>
       <div className="flex flex-wrap gap-1.5 sm:gap-2">
         {group.entries.map((entry) => (
-          <AffiliationChip key={entry.name} entry={entry} tab={tab} />
+          <AffiliationChip
+            key={canonicalizeAffiliationName(entry.name).dedupeKey}
+            entry={entry}
+            tab={tab}
+          />
         ))}
       </div>
     </section>
@@ -82,7 +87,7 @@ export function GlobalReachBanner({ total, linked }: { total: number; linked: nu
       <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-saffron/25 bg-white/90 px-3 py-1.5 text-xs font-medium text-brand-navy shadow-sm">
         <GlobeEducationIcon className="h-4 w-4 text-brand-saffron" />
         <span>
-          <strong>{total}+</strong> affiliations · SMK 1.0–5.0
+          <strong>{total}+</strong> affiliations · SMK 1.0–6.0
         </span>
       </div>
       <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/80 px-3 py-1.5 text-[11px] text-slate-600">

@@ -25,7 +25,7 @@ const PILLARS = [
   },
   {
     title: "Conclaves",
-    subtitle: "8 Multi-track Forums",
+    subtitle: "7 Thematic Forums",
     color: "from-violet-600 to-violet-500",
     href: "/committees",
   },

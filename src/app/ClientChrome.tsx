@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import ErrorBoundary from "@/components/errors/ErrorBoundary";
-import type { CmsAnnouncementBar } from "@/lib/cms/types";
+import { NavCtaLink } from "@/components/ui/NavCtaLink";
+import { useCms } from "@/lib/cms/context";
+import {
+  FALLBACK_WELCOME_MODAL,
+  pickWelcomeModalBar,
+  resolveAnnouncementBars,
+} from "@/data/default-announcements";
 
 const Modal = dynamic(() => import("@/components/layout/Modal"), { ssr: false });
 
@@ -28,31 +34,26 @@ const VisitorPageTracker = dynamic(
 
 const MODAL_SEEN_KEY = "smk_announcement_seen";
 
-const FALLBACK_MODAL = {
-  title: "शिक्षा महाकुंभ अभियान",
-  subtitle: "6th Edition",
-  message:
-    "Join the national educational movement at NIT Hamirpur from 9th October to 11th October 2026.",
-  ctaUrl: "/departments/academic-council",
-  ctaLabel: "click here",
-};
-
 /** Global client chrome — does not wrap page children (server-first layout). */
 export default function ClientChrome() {
+  const cms = useCms();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bar, setBar] = useState<CmsAnnouncementBar | null>(null);
+  const [bars, setBars] = useState(() => resolveAnnouncementBars(cms?.announcementBars, "en"));
 
   useEffect(() => {
+    if (cms?.announcementBars?.length) {
+      setBars(resolveAnnouncementBars(cms.announcementBars, "en"));
+      return;
+    }
     fetch("/api/v2/announcement-bars")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
-        const global = (d?.items as CmsAnnouncementBar[] | undefined)?.find(
-          (b) => b.barType === "global" || b.barType === "registration_alert"
-        );
-        if (global) setBar(global);
+        setBars(resolveAnnouncementBars(d?.items, "en"));
       })
-      .catch(() => undefined);
-  }, []);
+      .catch(() => {
+        setBars(resolveAnnouncementBars([], "en"));
+      });
+  }, [cms?.announcementBars]);
 
   useEffect(() => {
     const onChunkError = (event: PromiseRejectionEvent) => {
@@ -86,34 +87,30 @@ export default function ClientChrome() {
     setIsModalOpen(false);
   };
 
-  const modal = bar ?? null;
-  const title = modal?.title ?? FALLBACK_MODAL.title;
-  const subtitle = modal ? "Announcement" : FALLBACK_MODAL.subtitle;
-  const message = modal?.message ?? FALLBACK_MODAL.message;
-  const ctaUrl = modal?.ctaUrl ?? FALLBACK_MODAL.ctaUrl;
-  const ctaLabel = modal?.ctaLabel ?? FALLBACK_MODAL.ctaLabel;
+  const modalBar = pickWelcomeModalBar(bars);
+  const title = modalBar?.title ?? FALLBACK_WELCOME_MODAL.title;
+  const subtitle = modalBar ? "Announcement" : FALLBACK_WELCOME_MODAL.subtitle;
+  const message = modalBar?.message ?? FALLBACK_WELCOME_MODAL.message;
+  const ctaUrl = modalBar?.ctaUrl ?? FALLBACK_WELCOME_MODAL.ctaUrl;
+  const ctaLabel = modalBar?.ctaLabel ?? FALLBACK_WELCOME_MODAL.ctaLabel;
 
   return (
     <ErrorBoundary>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="flex flex-col items-center justify-center rounded-xl bg-primary p-4 text-center text-white md:p-6">
-          <h1 className="text-2xl font-extrabold leading-tight text-white md:text-4xl">
-            {title}
-          </h1>
-          <h2 className="mt-2 text-xl font-bold text-amber-200 md:text-3xl">{subtitle}</h2>
-          <p className="mt-4 max-w-3xl text-base font-medium leading-relaxed text-white md:text-xl">
+          <p className="text-2xl font-extrabold leading-tight text-white md:text-3xl">{title}</p>
+          <p className="mt-2 text-lg font-bold text-amber-200 md:text-2xl">{subtitle}</p>
+          <p className="mt-4 max-w-3xl text-base font-medium leading-relaxed text-white md:text-lg">
             {message}
           </p>
           {ctaUrl && (
-            <div className="mt-5 max-w-4xl rounded-lg border border-white/20 bg-white/10 p-4 text-sm leading-relaxed text-white md:text-lg">
-              <a
+            <div className="mt-5">
+              <NavCtaLink
                 href={ctaUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-white underline underline-offset-2 transition hover:text-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200"
+                className="inline-flex min-h-[44px] items-center rounded-lg border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white underline decoration-white/50 underline-offset-2 transition hover:bg-white/20 hover:text-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200 md:text-base"
               >
                 {ctaLabel}
-              </a>
+              </NavCtaLink>
             </div>
           )}
         </div>

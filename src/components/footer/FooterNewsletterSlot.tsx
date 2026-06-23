@@ -23,12 +23,12 @@ export default function FooterNewsletterSlot() {
         Stay Informed
       </h3>
       <p className="mb-4 text-xs leading-relaxed text-slate-500">
-        Subscribe for updates on Shiksha Mahakumbh programmes, registrations,
-        and academic announcements.
+        Get programme and registration updates by email. List integration is coming soon — this form
+        records your interest locally for now.
       </p>
       {status === "submitted" ? (
         <p className="text-sm text-brand-emerald" role="status">
-          Thank you. Newsletter integration coming soon — your interest is noted.
+          Thank you — we&apos;ve noted your interest. Full newsletter signup will be enabled soon.
         </p>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row">

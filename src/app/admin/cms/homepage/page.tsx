@@ -27,7 +27,7 @@ const SECTION_HINTS: Record<string, string> = {
   testimonials: '{"items":[{"name":"","role":"","quote":""}]}',
   partners:
     '{"items":[{"name":"","logoUrl":"","website":"","type":"academic|media|sponsor"}]} — prefer /admin/cms/partners (published DB partners override this JSON)',
-  announcements: '{"items":[{"title":"","body":"","url":"","cta":""}]}',
+  announcements: '{"items":[{"title":"","body":"","detail":"","url":"","cta":""}]}',
   gallery: '{"items":[{"src":"","alt":"","legend":""}]}',
   cta: '{"editionLabel":"","headline":"","body":"","buttonLabel":"","buttonUrl":"","travel":[]}',
 };

@@ -40,6 +40,38 @@ const HOMEPAGE_SECTIONS = {
       },
     ],
   },
+  announcements: {
+    items: [
+      {
+        title: "शिक्षा महाकुंभ 6.0 — कार्यक्रम",
+        body: "अधिवेशन, ओलंपियाड, प्रदर्शनी एवं पुरस्कार",
+        detail: "शैक्षणिक परिषद के अंतर्गत सभी सत्रों की जानकारी देखें।",
+        url: "/departments/academic-council",
+        cta: "कार्यक्रम देखें",
+      },
+      {
+        title: "पंजीकरण खुला — SMK 6.0",
+        body: "9–11 अक्टूबर 2026 · एनआईटी हमीरपुर",
+        detail: "सभी श्रेणियों के लिए एकीकृत पंजीकरण प्रारंभ।",
+        url: "/registration",
+        cta: "पंजीकरण करें",
+      },
+      {
+        title: "बहु-ट्रैक सम्मेलन — सार-पत्र",
+        body: "Microsoft CMT के माध्यम से जमा करें",
+        detail: "शोध सार-पत्र और पत्र CMT पोर्टल पर जमा करें।",
+        url: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+        cta: "CMT पोर्टल",
+      },
+      {
+        title: "आधिकारिक सूचनाएँ",
+        body: "परिसर सूचनाएँ और समयसीमा",
+        detail: "पंजीकरण, आवास और कार्यक्रम अपडेट नोटिस बोर्ड पर।",
+        url: "/noticeboard",
+        cta: "नोटिस बोर्ड",
+      },
+    ],
+  },
 };
 
 const HINDI_NOTICES = [

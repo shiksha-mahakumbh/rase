@@ -11,7 +11,7 @@ export default function UpcomingEvent() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-8 md:py-10">
+    <div className="mx-auto max-w-5xl">
       <div className="mb-6 text-center">
         <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary/70">
           {UPCOMING_EVENTS_HERO.eyebrow}
@@ -67,6 +67,6 @@ export default function UpcomingEvent() {
           View all upcoming events →
         </Link>
       </div>
-    </section>
+    </div>
   );
 }

@@ -44,8 +44,8 @@ if (stats.byTab.media < 4) {
   console.error("\nFAIL: Expected at least 4 media partners");
   process.exit(1);
 }
-if (stats.byTab.sponsors < 3) {
-  console.error("\nFAIL: Expected at least 3 sponsors");
+if (stats.byTab.sponsors < 6) {
+  console.error("\nFAIL: Expected at least 6 sponsors");
   process.exit(1);
 }
 if (stats.byTab.academic < 20) {

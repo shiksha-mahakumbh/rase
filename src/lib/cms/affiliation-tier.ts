@@ -1,5 +1,5 @@
 import type { PartnerShowcaseEntry, PartnerShowcaseTab } from "@/lib/cms/partner-showcase";
-import { normalizeAffiliationKey } from "@/lib/cms/partner-showcase";
+import { canonicalizeAffiliationName } from "@/lib/cms/affiliation-canonical";
 
 export type TierGroup = {
   id: string;
@@ -9,13 +9,13 @@ export type TierGroup = {
 };
 
 const ORGANIZING_PATTERN =
-  /holistic education|शिक्षा महाकुंभ|shiksha mahakumbh|rase\.co|विद्या भारती|vidya bharat|भारतीय शिक्षण|swadeshi jagran|स्वदेशी जागरण|think india|थिंक इंडिया|abvp|एबीवीपी|virasa|विरसा|arogya bharat|आरोग्य भारत|department of holistic|dhe\b/i;
+  /holistic education|शिक्षा महाकुंभ|shiksha mahakumbh|rase\.co|विद्या भारती|vidya bharat|भारतीय शिक्षण|swadeshi jagran|स्वदेशी जागरण|think india|थिंक इंडिया|abvp|एबीवीपी|virasa|विरसा|arogya bharat|आरोग्य भारत|department of holistic|dhe\b|jaipur dialogue|जयपुर डायलॉग|geio|जी\.ई\.आई\.ओ/i;
 
 const GOVERNMENT_PATTERN =
-  /drdo|डीआरडीओ|nhpc|एनएचपीसी|nfil|एनएफआईएल|isro|csir|ugc|icar|barc|iiser|dst\b|tdb|ministry|मंत्रालय|government|सरकार|ayog|आयोग|board|बोर्ड|council|परिषद|commission|आयोग|army|सेना|ias\b|ips\b|hcs\b|patent|trademark|pollution control|प्रदूषण|niscpr|nicpr|higher education council|उच्च शिक्षा परिषद|education board|शिक्षा बोर्ड|des haryana|skill development|कौशल विकास/i;
+  /drdo|डीआरडीओ|nhpc|एनएचपीसी|nfil|एनएफआईएल|isro|csir|ugc|icar|barc|iiser|dst\b|tdb|ministry|मंत्रालय|government|सरकार|ayog|आयोग|board|बोर्ड|council|परिषद|commission|army|सेना|navy|नौसेना|air force|वायु सेना|ias\b|ips\b|hcs\b|patent|trademark|pollution control|प्रदूषण|niscpr|nicpr|higher education council|उच्च शिक्षा परिषद|education board|शिक्षा बोर्ड|des haryana|skill development|कौशल विकास|ncert|pgimer|supreme court|सर्वोच्च न्यायालय|high court|उच्च न्यायालय|district court|जिला न्यायालय|niti aayog|नीति आयोग|rbi\b|भारतीय रिज़र्व|reserve bank|public service commission|लोक सेवा आयोग|municipal|नगर निगम|nagar nigam|collectorate|जिलाधिकारी|police|पुलिस|forest department|वन विभाग|health department|स्वास्थ्य विभाग|education department|शिक्षा विभाग|directorate|निदेशालय|secretariat|सचिवालय|parliament|संसद|lok sabha|राज्य सभा|rajya sabha|embassy|दूतावास|consulate|राजधानी|chief minister|मुख्यमंत्री|governor|राज्यपाल|bharatiya sena|भारतीय सेना|defence|रक्षा/i;
 
 const NATIONAL_INSTITUTE_PATTERN =
-  /\biit\b|आईआईटी|\bnit\b|एनआईटी|\biim\b|आईआईएम|\biiit\b|\biiser\b|आईआईएसईआर|\bnip[ae]r\b|नाइपर|\bmit\b|एमआईटी|\baiims\b|inste?|आईएनएस|nitte|nittt|nittr|iisc|barc|national institute|राष्ट्रीय संस्थान|national law|nl[uū]/i;
+  /\biit[\s-]|आईआईटी|\bnit[\s-]|एनआईटी|\biim[\s-]|आईआईएम|\biiit\b|\biiser\b|आईआईएसईआर|\bnip[ae]r\b|नाइपर|\bmit[\s-]|एमआईटी|\baiims\b|\binstitute of national importance\b|national institute|राष्ट्रीय संस्थान|national law|nl[uū]|nittr|nittt|iisc\b|barc\b/i;
 
 const CENTRAL_UNIVERSITY_PATTERN =
   /central university|केंद्रीय विश्वविद्यालय|cu jammu|cu haryana|cu punjab|cu kashmir|cu himachal/i;
@@ -27,16 +27,22 @@ const COLLEGE_PATTERN =
   /college|महाविद्यालय|pgcollege|p\.?g\.?\s*college|institute of engineering|polytechnic|पॉलिटेक्निक/i;
 
 const PRIVATE_INSTITUTE_PATTERN =
-  /private|deemed|pvt\.?\s*ltd|limited|university.*private|शोभित|chitkara|lovely|amity|manipal|sharda|galgotias|gehu|arni university/i;
+  /private|deemed|pvt\.?\s*ltd|limited|university.*private|शोभित|chitkara|lovely|amity|manipal|sharda|galgotias|gehu|arni university|plaksha|नीदोनॉमिक्स|neodonomics/i;
+
+const ASSOCIATION_PATTERN =
+  /association|एसोसिएशन|federation|फेडरेशन|sangh|संघ|mandal|मंडल(?!.*शिक्षण)/i;
+
+const ACADEMY_PATTERN =
+  /academy|अकादमी|sahitya|साहित्य|sanskrit|संस्कृत/i;
 
 const SCHOOL_PATTERN =
-  /school|vidyalaya|विद्यालय|gurukul|गुरुकुल|smart school|स्कूल|pathshala|पाठशाला|hostel.*school|residential school/i;
+  /school|vidyalaya|विद्यालय|gurukul|गुरुकुल|smart school|स्कूल|pathshala|पाठशाला|hostel.*school|residential school|niketan|निकेतन|saveri|संस्थान.*विद्यालय/i;
 
 const YOUTUBE_PATTERN =
-  /youtube|यूट्यूब|official|ऑफिशियल|english connection|english lover|अभिनय|ankit madan|अंकित मदान|youngov|यंगो|pathshala|पाठशाला|blogger|ब्लॉग|influencer|इन्फ्लुएंसर|techrocrat|fox path|study mantra|अध्ययन मंत्रा/i;
+  /youtube|यूट्यूब|official|ऑफिशियल|english lover|इंग्लिश लवर|अभिनय|ankit madan|अंकित मदान|youngov|यंगो|fox path|फॉक्स पाथ|study mantra|अध्ययन मंत्रा|techrocrat|टेक्रोक्रेट|आरती की पाठशाला|madan official/i;
 
 const NGO_PATTERN =
-  /ngo|foundation|trust|society|संस्था|समिति|sangathan|mission|मिशन|iskcon|इस्कॉन|sarvhitkari|geio|गीता/i;
+  /ngo|foundation|trust|society|संस्था|समिति|sangathan|mission|मिशन|iskcon|इस्कॉन|sarvhitkari|सर्वहितकारी|patanjali|पतंजलि|historical research|ऐतिहासिक अनुसंधान/i;
 
 const LAB_PATTERN =
   /laborator|lab\b|प्रयोगशाल|research centre|research center|अनुसंधान/i;
@@ -63,7 +69,8 @@ function academicTierOrder(name: string): number {
   if (PRIVATE_INSTITUTE_PATTERN.test(name)) return 7;
   if (SCHOOL_PATTERN.test(name)) return 8;
   if (YOUTUBE_PATTERN.test(name)) return 9;
-  if (NGO_PATTERN.test(name) || LAB_PATTERN.test(name)) return 10;
+  if (NGO_PATTERN.test(name) || LAB_PATTERN.test(name) || ACADEMY_PATTERN.test(name)) return 10;
+  if (ASSOCIATION_PATTERN.test(name)) return 10;
   return 11;
 }
 
@@ -148,8 +155,8 @@ export function groupAffiliationsByTier(
     const meta = tierMetaForTab(tab, order);
     const existing = map.get(meta.id);
     if (existing) {
-      const key = normalizeAffiliationKey(entry.name);
-      if (!existing.entries.some((e) => normalizeAffiliationKey(e.name) === key)) {
+      const key = canonicalizeAffiliationName(entry.name).dedupeKey;
+      if (!existing.entries.some((e) => canonicalizeAffiliationName(e.name).dedupeKey === key)) {
         existing.entries.push(entry);
       }
     } else {

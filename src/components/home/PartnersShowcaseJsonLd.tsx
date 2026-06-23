@@ -1,4 +1,5 @@
 import JsonLd from "@/components/seo/JsonLd";
+import { SITE_URL } from "@/config/site";
 import { buildItemListSchema } from "@/lib/seo/schema";
 import {
   PARTNER_SHOWCASE_TABS,
@@ -6,7 +7,7 @@ import {
   type PartnerShowcaseTab,
 } from "@/lib/cms/partner-showcase";
 
-const MAX_JSONLD_ITEMS_PER_TAB = 40;
+const MAX_JSONLD_ITEMS_PER_TAB = 80;
 
 function tabItemList(
   tab: PartnerShowcaseTab,
@@ -15,15 +16,12 @@ function tabItemList(
 ) {
   const items = entries.slice(0, MAX_JSONLD_ITEMS_PER_TAB).map((entry) => ({
     name: entry.name,
-    url: entry.website ?? `#${tab}-partner`,
+    url: entry.website ?? `${SITE_URL}/#partners-panel-${tab}`,
   }));
 
   if (items.length === 0) return null;
 
-  const linkedItems = items.filter((item) => item.url.startsWith("http"));
-  if (linkedItems.length === 0) return null;
-
-  return buildItemListSchema({ name: listName, items: linkedItems });
+  return buildItemListSchema({ name: listName, items });
 }
 
 type Props = {

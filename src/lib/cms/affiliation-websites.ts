@@ -77,6 +77,16 @@ const WEBSITE_PATTERNS: { pattern: RegExp; url: string }[] = [
   { pattern: /haryana yoga|हरियाणा योग/i, url: "https://ayush.gov.in/" },
   { pattern: /patanjali.*research|पतंजलि अनुसंधान/i, url: "https://www.patanjaliayurved.org/" },
   { pattern: /iskcon|इस्कॉन/i, url: "https://www.iskcon.org/" },
+  { pattern: /iit\s*mandi/i, url: "https://www.iitmandi.ac.in/" },
+  { pattern: /iit\s*delhi/i, url: "https://home.iitd.ac.in/" },
+  { pattern: /ncert/i, url: "https://ncert.nic.in/" },
+  { pattern: /pgimer/i, url: "https://pgimer.edu.in/" },
+  { pattern: /plaksha/i, url: "https://plaksha.org/" },
+  { pattern: /sliet|एसएलआईईडी/i, url: "https://www.sliet.ac.in/" },
+  { pattern: /nittr|nittt/i, url: "https://www.nitttrchd.ac.in/" },
+  { pattern: /UIET|uiet/i, url: "https://uietkuk.ac.in/" },
+  { pattern: /savantx/i, url: "https://savantx.com/" },
+  { pattern: /requil|रिक्विल/i, url: "https://www.requil.com/" },
 ];
 
 export function resolveAffiliationWebsite(name: string): string | undefined {
