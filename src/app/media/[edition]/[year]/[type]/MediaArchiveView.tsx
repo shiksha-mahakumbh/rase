@@ -1,11 +1,9 @@
 import { Suspense } from "react";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import {
-  getMediaArchiveComponent,
-  type MediaArchiveKey,
-} from "@/data/media-archive-components";
+import type { MediaArchiveKey } from "@/data/media-archive-components";
 import { getEditionByNumber } from "@/data/past-editions";
 import { brandPageHero } from "@/lib/page-heroes";
+import MediaArchiveClient from "./MediaArchiveClient";
 
 function archiveHero(key: MediaArchiveKey) {
   const [, edition, type] = key.split("/");
@@ -19,8 +17,6 @@ function archiveHero(key: MediaArchiveKey) {
 }
 
 export default function MediaArchiveView({ archiveKey }: { archiveKey: MediaArchiveKey }) {
-  const Archive = getMediaArchiveComponent(archiveKey);
-
   return (
     <PublicPageShell
       hero={archiveHero(archiveKey)}
@@ -28,7 +24,7 @@ export default function MediaArchiveView({ archiveKey }: { archiveKey: MediaArch
       skipContainer
     >
       <Suspense fallback={<div className="p-8 text-center text-slate-600">Loading archive…</div>}>
-        <Archive />
+        <MediaArchiveClient archiveKey={archiveKey} />
       </Suspense>
     </PublicPageShell>
   );
