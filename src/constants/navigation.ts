@@ -84,7 +84,6 @@ export const NAV_MENUS: Menu[] = [
       { path: ROUTES.upcomingEvents, title: "Shiksha Mahakumbh 6.0" },
       { path: ROUTES.registration, title: "Register for SMK 6.0" },
       { path: "/noticeboard", title: "Notice Board" },
-      { path: "/conclave", title: "Conclaves" },
       { path: "/workshops", title: "Workshops" },
     ],
   },

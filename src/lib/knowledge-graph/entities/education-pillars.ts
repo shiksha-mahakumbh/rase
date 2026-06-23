@@ -42,7 +42,7 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
     id: "higher-education",
     label: "Higher Education",
     description: "HEI participation, VC conclaves, and academic council.",
-    routes: ["/conclave", "/departments/academic-council"],
+    routes: ["/departments/academic-council"],
     schemaTypes: ["EducationEvent", "EducationalOrganization"],
   },
   {
@@ -70,7 +70,7 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
     id: "innovation",
     label: "Innovation",
     description: "Innovation workshops and exhibition tracks.",
-    routes: ["/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop"],
+    routes: ["/workshops"],
     schemaTypes: ["Event"],
   },
   {
@@ -84,7 +84,7 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
     id: "policy",
     label: "Policy",
     description: "Policy conclaves and NEP-aligned discourse.",
-    routes: ["/conclave", "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"],
+    routes: ["/departments/academic-council", "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"],
     schemaTypes: ["Article"],
   },
   {

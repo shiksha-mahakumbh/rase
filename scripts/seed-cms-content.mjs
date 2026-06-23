@@ -405,13 +405,9 @@ async function seedMenus() {
           ]
         : [
             { label: "Home", url: "/", sortOrder: 0 },
-            { label: "Registration", url: "/registration", sortOrder: 1 },
-            { label: "Shiksha Mahakumbh 6.0", url: "/upcoming-events", sortOrder: 2 },
-            { label: "Notice Board", url: "/noticeboard", sortOrder: 3 },
-            { label: "Downloads", url: "/downloads", sortOrder: 4 },
-            { label: "Introduction", url: "/introduction", sortOrder: 5 },
-            { label: "Contact", url: "/contact-us", sortOrder: 6 },
-            { label: "Privacy Policy", url: "/privacy-policy", sortOrder: 7 },
+            { label: "Notice Board", url: "/noticeboard", sortOrder: 1 },
+            { label: "Introduction", url: "/introduction", sortOrder: 2 },
+            { label: "Contact", url: "/contact-us", sortOrder: 3 },
           ];
 
     for (const item of items) {

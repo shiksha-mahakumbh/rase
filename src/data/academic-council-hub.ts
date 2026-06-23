@@ -50,7 +50,7 @@ export const ACADEMIC_COUNCIL_QUICK_LINKS: ReadonlyArray<{
   { label: "Edition 6.0 Brochure", href: CANONICAL_ROUTES.downloads, icon: "📄" },
   { label: "Organising Committee", href: committeePathForEdition("6.0"), icon: "👥" },
   { label: "Proceedings", href: "/proceedings", icon: "📚" },
-  { label: "Conclave Hub", href: "/conclave", icon: "🎓" },
+  { label: "Workshops", href: "/workshops", icon: "🛠️" },
 ];
 
 export const ACADEMIC_COUNCIL_TAB_SLUGS: Record<AcademicCouncilTabId, string> = {

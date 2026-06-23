@@ -103,7 +103,7 @@ const caseStudies: EcosystemItem[] = [
     tags: ["conclave", "case-study"],
     category: "policy",
     publishedAt: "2024-12-01",
-    href: "/conclave",
+    href: "/departments/academic-council",
   },
 ];
 

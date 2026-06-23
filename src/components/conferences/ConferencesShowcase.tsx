@@ -77,14 +77,6 @@ export default function ConferencesShowcase({ cmsEvents = [] }: Props) {
               </Link>
             </li>
           ))}
-          <li>
-            <Link
-              href="/conclave"
-              className="block rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium text-brand-navy transition hover:border-brand-saffron/30 hover:bg-white"
-            >
-              Academic Conclave
-            </Link>
-          </li>
         </ul>
       </section>
 

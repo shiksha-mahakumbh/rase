@@ -10,7 +10,7 @@ export const CONFERENCES_PAGE_HERO = {
 export const CONFERENCES_STATS = [
   { label: "Upcoming", value: "SMK 6.0 & 7.0", hint: "NIT Hamirpur · IIT Jammu" },
   { label: "Completed", value: "5 editions", hint: "1.0 through 5.0" },
-  { label: "Workshops", value: "3 archives", hint: "Teacher & innovation" },
+  { label: "Workshops", value: "2 archives", hint: "Teacher development" },
   { label: "Registration", value: "Open", hint: "Join SMK 6.0 now" },
 ] as const;
 
