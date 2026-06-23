@@ -54,6 +54,8 @@ export const SMK_2_0_CONTENT: EditionDetailContent = {
     { label: "Proceedings Volume I (PDF)", href: "/Proceeding1.pdf" },
     { label: "Read proceedings online", href: "/proceeding1" },
     { label: "Campaign report (PDF)", href: "/RASE_2023_2ND_EDITION_Campaign.pdf" },
+    { label: "Digital media archive", href: "/media/shiksha-mahakumbh/2.0/digital" },
+    { label: "Print media", href: "/media/shiksha-mahakumbh/2.0/print" },
     { label: "Gallery", href: "https://drive.google.com/drive/folders/1tKbSQtOUq7ji2s0-5hueAqTQlal9ScpJ", external: true },
     { label: "All past editions", href: "/past-events" },
   ],

@@ -44,7 +44,7 @@ export const SMK_3_0_CONTENT: EditionDetailContent = {
     "All startup presenters were felicitated; 6 sessions including inaugural, panel discussions, solo presentations, and valedictory.",
     "Hon'ble Lieutenant Governor graced the inaugural day; Hon'ble MoS (IC) Science & Technology graced the valedictory as Chief Guest.",
     "Special presentation by Voluntary Medicare Society Srinagar on startups and products by special children.",
-    "Proceedings Volume III documents 61 papers across Startup Conceptualization, Marketing & Funding, and related themes.",
+    "Proceedings Volume III documents 61 peer-reviewed papers across Startup Conceptualization, Marketing & Funding, and related themes (59 presented at the summit).",
   ],
   declarations: [
     "Special focus on livelihood of special children through collaboration between INIs and rehabilitation centres — promoting dedicated startups for such children.",
@@ -66,6 +66,8 @@ export const SMK_3_0_CONTENT: EditionDetailContent = {
     { label: "Proceedings Volume III (PDF)", href: "/Proceeding3.pdf" },
     { label: "Read proceedings online", href: "/proceeding3" },
     { label: "Campaign report (PDF)", href: "/RASE_2024_3RD_EDITION_Campaign.pdf" },
+    { label: "Digital media archive", href: "/media/shiksha-mahakumbh/3.0/digital" },
+    { label: "Print media", href: "/media/shiksha-mahakumbh/3.0/print" },
     { label: "Gallery", href: "https://drive.google.com/drive/folders/1SgwPcXC3xRR7V3hAtKJSzeggBB9Xpwnk", external: true },
     { label: "All past editions", href: "/past-events" },
   ],

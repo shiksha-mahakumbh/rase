@@ -23,7 +23,6 @@ export default function PastEditionJsonLd({ edition }: Props) {
     description: `${edition.theme}. ${edition.coreEssence}`,
     startDate: edition.dateStart,
     endDate: edition.dateEnd ?? edition.dateStart,
-    eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",

@@ -6,7 +6,7 @@ export const SMK_5_0_LEGACY_PATH = "/past_event/sm25";
 
 export const SMK_5_0_CONTENT: EditionDetailContent = {
   editionNumber: "5.0",
-  theme: "Classroom to Society — Building a Healthier World through Education",
+  theme: "Classroom to Society: Building a Healthier World through Education",
   dates: "31 October – 2 November 2025",
   year: "2025",
   venueShort: "NIPER Mohali",

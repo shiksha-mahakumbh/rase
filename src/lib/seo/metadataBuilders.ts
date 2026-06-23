@@ -47,6 +47,7 @@ export function createEventMetadata(opts: {
   location?: string;
   keywords?: string[];
   noIndex?: boolean;
+  image?: string;
 }): Metadata {
   return buildMetadata(
     {
@@ -55,6 +56,7 @@ export function createEventMetadata(opts: {
       path: opts.path,
       keywords: opts.keywords,
       noIndex: opts.noIndex,
+      image: opts.image,
     },
     "website"
   );
