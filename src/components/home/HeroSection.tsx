@@ -1,11 +1,9 @@
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 import type { HeroContent } from "@/lib/home/build-hero-content";
-
-const CountdownBanner = dynamic(() => import("./CountdownBanner"), { ssr: false });
+import HeroCountdown from "./HeroCountdown";
 
 function HeroStats({ stats }: { stats: HeroContent["stats"] }) {
   return (
@@ -109,7 +107,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
             </div>
 
             <div className="mt-8">
-              <CountdownBanner theme="light" />
+              <HeroCountdown />
             </div>
           </div>
 
