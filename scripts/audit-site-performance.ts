@@ -137,7 +137,14 @@ if (!homePageSrc.includes("MarqueesDeferred")) {
 } else if (homePageSrc.includes("SectionShell")) {
   issues.push("HomePage should avoid client SectionShell in above-fold blocks");
 } else {
-  ok("HomePage: idle Marquees + static programme section");
+  ok("HomePage: deferred Marquees + static programme section");
+}
+
+const marqueesSk = read("src/components/home/MarqueesSkeleton.tsx");
+if (!marqueesSk.includes("Announcements")) {
+  issues.push("MarqueesSkeleton must mirror Marquees layout for CLS");
+} else {
+  ok("MarqueesSkeleton: CLS-safe placeholder");
 }
 
 // ── Page inventory ──
