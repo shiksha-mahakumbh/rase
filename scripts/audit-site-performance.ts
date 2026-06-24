@@ -132,19 +132,23 @@ if (heroSrc.includes('"use client"')) {
 }
 
 const homePageSrc = read("src/components/home/HomePage.tsx");
-if (!homePageSrc.includes("MarqueesDeferred")) {
-  issues.push("HomePage must defer Marquees via MarqueesDeferred client wrapper");
+if (!homePageSrc.includes("AnnouncementsMarquee")) {
+  issues.push("HomePage must SSR announcements via AnnouncementsMarquee");
+} else if (homePageSrc.includes("MarqueesDeferred")) {
+  issues.push("HomePage must not use deferred client-only Marquees");
 } else if (homePageSrc.includes("SectionShell")) {
   issues.push("HomePage should avoid client SectionShell in above-fold blocks");
 } else {
-  ok("HomePage: deferred Marquees + static programme section");
+  ok("HomePage: SSR announcements ticker + static programme section");
 }
 
-const marqueesSk = read("src/components/home/MarqueesSkeleton.tsx");
-if (!marqueesSk.includes("Announcements")) {
-  issues.push("MarqueesSkeleton must mirror Marquees layout for CLS");
+const marqueeSrc = read("src/components/layout/AnnouncementsMarquee.tsx");
+if (marqueeSrc.includes('"use client"')) {
+  issues.push("AnnouncementsMarquee must be a server component");
+} else if (!marqueeSrc.includes("MarqueeTrack")) {
+  issues.push("AnnouncementsMarquee must render MarqueeTrack with server items");
 } else {
-  ok("MarqueesSkeleton: CLS-safe placeholder");
+  ok("AnnouncementsMarquee: server shell + client CSS scroll");
 }
 
 // ── Page inventory ──

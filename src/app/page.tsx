@@ -13,6 +13,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { buildHeroContent } from "@/lib/home/build-hero-content";
+import { resolveTickerItems } from "@/data/default-announcements";
 
 const FALLBACK_META = {
   title: "Shiksha Mahakumbh 6.0 — National Education Summit",
@@ -54,6 +55,7 @@ export default async function Page() {
     homepagePartners: getHomepagePartners(cmsData.homepage),
   });
   const heroContent = buildHeroContent(cmsData.homepage);
+  const tickerItems = resolveTickerItems(cmsData.announcementBars, "en");
 
   return (
     <CmsProvider data={cmsData}>
@@ -72,6 +74,7 @@ export default async function Page() {
         featuredSpeakers={featuredSpeakers}
         cmsPartners={cmsPartners}
         heroContent={heroContent}
+        tickerItems={tickerItems}
       />
     </CmsProvider>
   );

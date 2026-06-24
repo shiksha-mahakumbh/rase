@@ -13,6 +13,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { buildHeroContent } from "@/lib/home/build-hero-content";
+import { resolveTickerItems } from "@/data/default-announcements";
 import { getTranslations } from "next-intl/server";
 import type { ContentLocale } from "@prisma/client";
 
@@ -74,6 +75,7 @@ export default async function LocaleHomePage({
     homepagePartners: getHomepagePartners(cmsData.homepage),
   });
   const heroContent = buildHeroContent(cmsData.homepage);
+  const tickerItems = resolveTickerItems(cmsData.announcementBars, locale);
 
   return (
     <CmsProvider data={cmsData}>
@@ -92,6 +94,7 @@ export default async function LocaleHomePage({
         featuredSpeakers={featuredSpeakers}
         cmsPartners={cmsPartners}
         heroContent={heroContent}
+        tickerItems={tickerItems}
       />
     </CmsProvider>
   );
