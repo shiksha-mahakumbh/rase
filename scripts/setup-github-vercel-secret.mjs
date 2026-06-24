@@ -30,7 +30,11 @@ function loadVercelToken() {
 }
 
 function run(cmd, args) {
-  const r = spawnSync(cmd, args, { encoding: "utf8", shell: true });
+  const r = spawnSync(cmd, args, {
+    encoding: "utf8",
+    shell: true,
+    env: { ...process.env, npm_config_devdir: undefined },
+  });
   return { ok: r.status === 0, out: (r.stdout || "") + (r.stderr || "") };
 }
 
@@ -41,12 +45,35 @@ function gh(args) {
 function vercel(args) {
   const token = loadVercelToken();
   const full = token ? [...args, "--token", token] : args;
-  return run("npx", ["vercel", ...full]);
+  return run("npx", ["--yes", "vercel", ...full]);
 }
 
-function parseHookUrl(listOutput) {
-  const match = listOutput.match(/"url"\s*:\s*"(https:\/\/api\.vercel\.com\/v1\/integrations\/deploy\/[^"]+)"/);
-  return match?.[1] ?? null;
+function extractJson(output) {
+  const start = output.indexOf("{");
+  const end = output.lastIndexOf("}");
+  if (start === -1 || end <= start) return null;
+  try {
+    return JSON.parse(output.slice(start, end + 1));
+  } catch {
+    return null;
+  }
+}
+
+function resolveHookUrl(output) {
+  const data = extractJson(output);
+  if (!data) return null;
+
+  if (data.hook?.url) return data.hook.url;
+
+  const hooks = Array.isArray(data.hooks) ? data.hooks : [];
+  const matches = hooks.filter((h) => h.name === HOOK_NAME && h.ref === "main" && h.url);
+  if (matches.length) {
+    matches.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0));
+    return matches[0].url;
+  }
+
+  const fallback = hooks.find((h) => h.ref === "main" && h.url && h.name !== "_branch_probe");
+  return fallback?.url ?? null;
 }
 
 const vercelToken = loadVercelToken();
@@ -61,8 +88,8 @@ if (!gh(["auth", "status"]).ok) {
 }
 
 console.log("Ensuring deploy hook exists…");
-let list = vercel(["deploy-hook", "list"]);
-let hookUrl = parseHookUrl(list.out);
+const list = vercel(["deploy-hook", "list"]);
+let hookUrl = resolveHookUrl(list.out);
 
 if (!hookUrl) {
   const created = vercel(["deploy-hook", "create", HOOK_NAME, "--ref", "main"]);
@@ -70,11 +97,12 @@ if (!hookUrl) {
     console.error("Failed to create deploy hook:", created.out);
     process.exit(1);
   }
-  hookUrl = parseHookUrl(created.out);
+  hookUrl = resolveHookUrl(created.out);
 }
 
 if (!hookUrl) {
   console.error("Could not resolve deploy hook URL from Vercel CLI output.");
+  console.error("Raw output (last 800 chars):", list.out.slice(-800));
   process.exit(1);
 }
 
