@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
@@ -64,7 +65,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               {badge}
             </span>
 
-            <h1 className="mt-5 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
+            <h1 className="mt-5 font-devanagari text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
               {headline.includes("महाकुंभ") ? (
                 <span className="text-brand-navy">{headline}</span>
               ) : (
@@ -94,16 +95,19 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               </span>
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:justify-start">
               <CtaButton href={ROUTES.registration} variant="primary">
                 Register Now
               </CtaButton>
               <CtaButton href={CMT_SUBMISSION_URL} variant="secondary">
                 Multi Track Conference
               </CtaButton>
-              <CtaButton href="/abhiyaninphotoframe" variant="ghost">
-                Abhiyan Photo Frame
-              </CtaButton>
+              <Link
+                href="/abhiyaninphotoframe"
+                className="text-center text-sm font-semibold text-brand-navy underline decoration-brand-saffron/40 underline-offset-2 transition hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron sm:text-left"
+              >
+                Abhiyan Photo Frame →
+              </Link>
             </div>
 
             <div className="mt-8">

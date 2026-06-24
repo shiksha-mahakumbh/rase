@@ -36,11 +36,10 @@ export default function SpeakerHighlightsSection({
   const cards = cmsCards.length >= 4 ? cmsCards.slice(0, 8) : staticCards.slice(0, 8);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-brand-surface-warm py-12 md:py-16">
-      <div
-        className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-brand-saffron/10 blur-3xl"
-        aria-hidden
-      />
+    <section
+      id="speakers"
+      className="bg-gradient-to-b from-white to-brand-surface-warm py-12 md:py-16"
+    >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Leadership"

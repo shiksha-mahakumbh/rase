@@ -24,6 +24,8 @@ const config: Config = {
           saffron: "#FF9933",
           "saffron-dark": "#E67E00",
           emerald: "#059669",
+          violet: "#7C3AED",
+          "violet-light": "#A78BFA",
           surface: "#F8FAFC",
           "surface-warm": "#FFFBF5",
         },
@@ -33,6 +35,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        devanagari: ["var(--font-devanagari)", "var(--font-inter)", "system-ui", "sans-serif"],
       },
     },
   },

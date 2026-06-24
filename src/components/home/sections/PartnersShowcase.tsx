@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import SectionShell from "@/components/ui/SectionShell";
 import GlassCard from "@/components/ui/GlassCard";
+import { SectionHeader } from "@/components/ui";
 import { groupAffiliationsByTier } from "@/lib/cms/affiliation-tier";
 import { getAffiliationShowcaseStats } from "@/lib/cms/affiliation-showcase-stats";
 import { getHomepagePartners } from "@/lib/cms/partners";
@@ -61,16 +62,11 @@ export default function PartnersShowcase({
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <header className="mb-4 text-center">
-          <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-primary/70 sm:text-sm">
-            Conference Support
-          </p>
-          <h2 className="home-section-title">Academic · Media · Sponsors</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-gray-600 md:text-base">
-            Editions 1.0–6.0 — institutions sequenced from organizing bodies to schools,
-            media, and industry.
-          </p>
-        </header>
+        <SectionHeader
+          eyebrow="Conference Support"
+          title="Academic · Media · Sponsors"
+          description="Editions 1.0–6.0 — institutions sequenced from organizing bodies to schools, media, and industry."
+        />
 
         <GlobalReachBanner total={stats.total} linked={stats.linked} />
 

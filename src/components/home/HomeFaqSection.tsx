@@ -19,7 +19,7 @@ export default function HomeFaqSection() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="bg-brand-surface py-12 md:py-16" aria-label="Frequently asked questions">
+    <section id="faq" className="bg-brand-surface py-12 md:py-16" aria-label="Frequently asked questions">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="FAQ"

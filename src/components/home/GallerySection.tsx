@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import SlideShow from "@/components/home/sections/SlideShow";
-import { SectionHeader } from "@/components/ui";
+import { CtaButton, SectionHeader } from "@/components/ui";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionItems } from "@/lib/cms/utils";
 import { homeSlides, type HomeSlide } from "@/data/home-gallery";
@@ -35,18 +34,12 @@ export default function GallerySection() {
           <SlideShow slides={slides} />
         </div>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/gallery"
-            className="rounded-full bg-brand-saffron px-6 py-2.5 text-sm font-bold text-brand-navy shadow-sm transition hover:bg-brand-saffron-dark hover:text-white"
-          >
+          <CtaButton href="/gallery" variant="primary">
             View Full Gallery
-          </Link>
-          <Link
-            href="/gallery?tab=videos"
-            className="rounded-full border border-white/25 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20"
-          >
+          </CtaButton>
+          <CtaButton href="/gallery?tab=videos" variant="outline">
             Watch on YouTube
-          </Link>
+          </CtaButton>
         </div>
       </div>
     </section>

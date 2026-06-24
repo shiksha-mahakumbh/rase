@@ -26,20 +26,26 @@ export default function ReservedAdSlot({
   className = "",
   size = "banner",
 }: ReservedAdSlotProps) {
+  const preview = process.env.NEXT_PUBLIC_ADS_SLOTS_PREVIEW === "true";
+
   return (
     <aside
       role="complementary"
-      aria-label={`Sponsored content area (${slotId})`}
+      aria-label={preview ? `Sponsored content area (${slotId})` : undefined}
+      aria-hidden={preview ? undefined : true}
       data-ad-slot={slotId}
       data-adsense-ready="reserved"
-      className={`my-6 flex w-full max-w-full items-center justify-center overflow-hidden rounded-xl border border-dashed border-slate-200 bg-slate-50/80 ${HEIGHT[size]} ${className}`}
+      className={`my-6 flex w-full max-w-full items-center justify-center overflow-hidden ${
+        preview
+          ? `rounded-xl border border-dashed border-slate-200 bg-slate-50/80 ${HEIGHT[size]}`
+          : `${HEIGHT[size]} border-0 bg-transparent`
+      } ${className}`}
     >
-      <span className="px-4 text-center text-xs text-slate-400">
-        {/* Visible in staging; empty in production until AdSense approved */}
-        {process.env.NEXT_PUBLIC_ADS_SLOTS_PREVIEW === "true"
-          ? `Ad placement reserved · ${slotId}`
-          : "\u00A0"}
-      </span>
+      {preview ? (
+        <span className="px-4 text-center text-xs text-slate-400">
+          {`Ad placement reserved · ${slotId}`}
+        </span>
+      ) : null}
     </aside>
   );
 }

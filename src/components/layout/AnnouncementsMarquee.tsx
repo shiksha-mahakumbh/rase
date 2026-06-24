@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import type { TickerItem } from "@/data/default-announcements";
 import MarqueeTrack from "./MarqueeTrack";
@@ -21,16 +21,13 @@ export default function AnnouncementsMarquee({ items }: Props) {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-saffron opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-saffron" />
             </span>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-primary md:text-base">
+            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-brand-navy md:text-base">
               Announcements
             </h2>
           </div>
-          <Link
-            href={ROUTES.registration}
-            className="min-h-[44px] rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
+          <CtaButton href={ROUTES.registration} variant="primary" className="min-h-[44px] px-3 py-2 text-xs md:text-sm">
             Register Now
-          </Link>
+          </CtaButton>
         </div>
 
         <MarqueeTrack items={items} />

@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
+import HomeSectionNav from "./HomeSectionNav";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
@@ -52,12 +53,14 @@ export default function HomePage({
 
       <main id="main-content">
         <HeroSection content={heroContent} />
+        <HomeSectionNav />
+
         <LazySection minHeight="3rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={1} />}>
           <TrustStrip />
         </LazySection>
 
-        <LazySection minHeight="12rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={6} />}>
-          <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
+        <LazySection rootMargin="120px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
+          <WhyAttendSection />
         </LazySection>
 
         <LazySection minHeight="8rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={3} />}>
@@ -65,17 +68,10 @@ export default function HomePage({
         </LazySection>
 
         <section
+          id="programmes"
           aria-label="Programmes and notices"
-          className="relative overflow-hidden bg-gradient-to-br from-[#fff9f5] via-white to-[#fef3e8] px-4 py-8 md:px-8 md:py-10 [content-visibility:auto] [contain-intrinsic-size:auto_28rem]"
+          className="relative overflow-hidden home-section-warm px-4 py-8 md:px-8 md:py-10 [content-visibility:auto] [contain-intrinsic-size:auto_28rem]"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/5 blur-3xl"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl"
-          />
           <div className="relative z-10 mx-auto max-w-7xl">
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <SectionHeader
@@ -118,15 +114,17 @@ export default function HomePage({
         <LazySection minHeight="6rem" rootMargin="0px 0px 80px 0px" idleFirst fallback={<SectionSkeleton lines={2} />}>
           <DiscoverStrip />
         </LazySection>
+
+        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
+          <EventTracksSection />
+        </LazySection>
+
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-mid" />
         </div>
 
-        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
-          <WhyAttendSection />
-        </LazySection>
-        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
-          <EventTracksSection />
+        <LazySection minHeight="12rem" rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={6} />}>
+          <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
         </LazySection>
 
         <LazySection
