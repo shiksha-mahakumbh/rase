@@ -9,12 +9,14 @@ Backup deploy when Vercel Git integration is disconnected or webhooks miss pushe
 1. Create a token: [vercel.com/account/tokens](https://vercel.com/account/tokens) (scope: **DHE Projects** / `rase-co-in`).
 2. GitHub → **shiksha-mahakumbh/rase** → Settings → Secrets → Actions → **`VERCEL_TOKEN`**
 
-Or from a machine with Vercel CLI logged in:
+Or from a machine with Vercel CLI + GitHub CLI:
 
 ```bash
 gh auth login
 npx tsx scripts/setup-github-vercel-secret.mjs
 ```
+
+This creates/uses deploy hook `github-actions-fallback`, sets `VERCEL_DEPLOY_HOOK` (+ `VERCEL_TOKEN`), and triggers a test workflow run.
 
 `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` are in the workflow file.
 
