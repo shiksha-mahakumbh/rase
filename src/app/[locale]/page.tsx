@@ -14,6 +14,7 @@ import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { buildHeroContent } from "@/lib/home/build-hero-content";
 import { resolveTickerItems } from "@/data/default-announcements";
+import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 import { getTranslations } from "next-intl/server";
 import type { ContentLocale } from "@prisma/client";
 
@@ -76,6 +77,7 @@ export default async function LocaleHomePage({
   });
   const heroContent = buildHeroContent(cmsData.homepage);
   const tickerItems = resolveTickerItems(cmsData.announcementBars, locale);
+  const navMenus = navMenusFromCms(cmsData.headerMenu);
 
   return (
     <CmsProvider data={cmsData}>
@@ -95,6 +97,7 @@ export default async function LocaleHomePage({
         cmsPartners={cmsPartners}
         heroContent={heroContent}
         tickerItems={tickerItems}
+        navMenus={navMenus}
       />
     </CmsProvider>
   );

@@ -1,5 +1,6 @@
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
-import { DynamicFooter, DynamicNavBar } from "@/components/layout/SiteDynamicChrome";
+import NavBarShell, { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
+import { DynamicFooter } from "@/components/layout/SiteDynamicChrome";
 import PageCtaSection from "./PageCtaSection";
 import RelatedContentSection from "@/components/knowledge-graph/RelatedContentSection";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
@@ -31,7 +32,7 @@ export default async function PublicPageLayout({
         {breadcrumbs && breadcrumbs.length > 0 ? (
           <BreadcrumbJsonLd items={breadcrumbs} />
         ) : null}
-        <DynamicNavBar />
+        <NavBarShell menus={navMenusFromCms(cms.headerMenu)} />
         {showHero && hero ? (
           <ShowcaseHero
             eyebrow={hero.eyebrow}

@@ -58,10 +58,12 @@ if (footerSrc.includes("RecaptchaScript")) {
 const clientChromeSrc = read("src/app/ClientChrome.tsx");
 if (clientChromeSrc.includes('import { Toaster } from "react-hot-toast"')) {
   issues.push("ClientChrome must lazy-load react-hot-toast");
-} else if (!clientChromeSrc.includes("isHomePath")) {
-  issues.push("ClientChrome must gate home-only modal/fetch");
+} else if (clientChromeSrc.includes("pickWelcomeModalBar") || clientChromeSrc.includes("isHomePath")) {
+  issues.push("ClientChrome must not mount home welcome modal (use HomeWelcomeModal)");
+} else if (!clientChromeSrc.includes("requestIdleCallback")) {
+  issues.push("ClientChrome should defer non-critical widgets until idle");
 } else {
-  ok("ClientChrome: lazy toast + home-only modal");
+  ok("ClientChrome: deferred global widgets, no home modal");
 }
 
 const sectionShellSrc = read("src/components/ui/SectionShell.tsx");
@@ -131,15 +133,26 @@ if (heroSrc.includes('"use client"')) {
   ok("Homepage hero: server-rendered LCP");
 }
 
+const navShellSrc = read("src/components/layout/navbar/NavBarShell.tsx");
+if (navShellSrc.includes('"use client"')) {
+  issues.push("NavBarShell must be server-rendered");
+} else if (!navShellSrc.includes("NavBarScrollEnhance")) {
+  issues.push("NavBarShell should defer scroll styling to small client enhance");
+} else {
+  ok("NavBar: server shell + deferred tools/scroll");
+}
+
 const homePageSrc = read("src/components/home/HomePage.tsx");
 if (!homePageSrc.includes("AnnouncementsMarquee")) {
   issues.push("HomePage must SSR announcements via AnnouncementsMarquee");
-} else if (homePageSrc.includes("MarqueesDeferred")) {
-  issues.push("HomePage must not use deferred client-only Marquees");
+} else if (!homePageSrc.includes("NavBarShell")) {
+  issues.push("HomePage must use server NavBarShell");
+} else if (!homePageSrc.includes("HomeWelcomeModal")) {
+  issues.push("HomePage must defer welcome modal via HomeWelcomeModal");
 } else if (homePageSrc.includes("SectionShell")) {
   issues.push("HomePage should avoid client SectionShell in above-fold blocks");
 } else {
-  ok("HomePage: SSR announcements ticker + static programme section");
+  ok("HomePage: SSR nav/ticker + deferred welcome modal");
 }
 
 const marqueeSrc = read("src/components/layout/AnnouncementsMarquee.tsx");

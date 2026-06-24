@@ -1,4 +1,5 @@
-import NavBar from "@/components/layout/NavBar";
+import NavBarShell from "@/components/layout/navbar/NavBarShell";
+import { NAV_MENUS } from "@/constants/navigation";
 import Footer from "@/components/layout/Footer";
 import SuccessExperience from "@/components/registration/SuccessExperience";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -15,7 +16,7 @@ export const metadata = createPageMetadata({
 export default function RegistrationSuccessPage() {
   return (
     <div className="min-h-screen bg-white">
-      <NavBar />
+      <NavBarShell menus={NAV_MENUS} />
       <ShowcaseHero
         eyebrow="Shiksha Mahakumbh 6.0"
         title="Registration Confirmed"
