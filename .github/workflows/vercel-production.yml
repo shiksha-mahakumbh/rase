@@ -1,5 +1,5 @@
-# Fallback production deploy when the Vercel GitHub App webhook misses a push.
-# Set repo secret: VERCEL_TOKEN (https://vercel.com/account/tokens)
+# Production deploy on every main push (backup when Vercel GitHub App webhook misses).
+# Requires VERCEL_DEPLOY_HOOK or VERCEL_TOKEN — see .github/DEPLOY_SECRETS.md
 name: Vercel Production Deploy
 
 on:
@@ -21,24 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'shiksha-mahakumbh/rase'
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-
-      - name: Pull Vercel environment
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          set -euo pipefail
+          if [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
+            echo "Deploying via hook…"
+            curl -fsS -X POST "$VERCEL_DEPLOY_HOOK"
+            exit 0
+          fi
+          if [ -n "${VERCEL_TOKEN:-}" ]; then
+            echo "Deploying via token…"
+            npm install --global vercel@latest
+            vercel deploy --prod --token="$VERCEL_TOKEN" --yes
+            exit 0
+          fi
+          echo "::error::Set VERCEL_DEPLOY_HOOK or VERCEL_TOKEN in repo Actions secrets. See .github/DEPLOY_SECRETS.md"
+          exit 1

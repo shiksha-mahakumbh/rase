@@ -1,17 +1,43 @@
-# GitHub Actions → Vercel deploy secrets
+# GitHub Actions → Vercel production deploy
 
-The workflow `.github/workflows/vercel-production.yml` deploys `main` to production when pushes land on GitHub (backup if the Vercel Git integration webhook misses an event).
+Backup deploy path when Vercel Git integration is disconnected or webhooks miss pushes.
 
-## One-time setup
+## Required: `VERCEL_TOKEN`
 
-1. Create a Vercel token: [vercel.com/account/tokens](https://vercel.com/account/tokens) (scope: deploy for **DHE Projects** / `rase-co-in`).
-2. In GitHub → **shiksha-mahakumbh/rase** → Settings → Secrets and variables → Actions → **New repository secret**:
-   - `VERCEL_TOKEN` — the token from step 1
+1. Create a token: [vercel.com/account/tokens](https://vercel.com/account/tokens) (scope: **DHE Projects** / `rase-co-in`).
+2. GitHub → **shiksha-mahakumbh/rase** → Settings → Secrets and variables → Actions → **New repository secret**:
+   - Name: `VERCEL_TOKEN`
+   - Value: your token
 
-`VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` are already set in the workflow file (not sensitive).
+`VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` are already in the workflow file.
 
-## Verify
+## Fix Vercel Git auto-deploy (root cause)
 
-After adding `VERCEL_TOKEN`, push to `main` or run **Actions → Vercel Production Deploy → Run workflow**. A new production deployment should appear on [vercel.com/dhe-projects/rase-co-in](https://vercel.com/dhe-projects/rase-co-in) within ~3 minutes.
+Symptoms: pushes to `main` create no Vercel deployment; `vercel deploy-hook create --ref main` returns **Branch "main" not found** or **not connected to a Git repository**.
 
-If both the Vercel Git hook and this workflow fire on the same push, you may get two builds for one commit. That is harmless but wasteful; once webhooks are reliable again, you can disable either the Git integration auto-deploy or this workflow.
+The CLI `vercel git connect` may fail without GitHub org admin. Use the dashboard:
+
+1. Open [Vercel → rase-co-in → Settings → Git](https://vercel.com/dhe-projects/rase-co-in/settings/git).
+2. **Connect** → GitHub → authorize **shiksha-mahakumbh/rase**.
+3. Set **Production Branch** to `main`.
+4. On GitHub: **Settings → Applications → Vercel** → ensure `shiksha-mahakumbh/rase` has access.
+
+Verify locally:
+
+```bash
+npx tsx scripts/verify-vercel-git.mjs
+```
+
+Then push to `main` — a deployment should appear within ~2 minutes.
+
+## Optional: deploy hook (after Git is reconnected)
+
+```bash
+npx vercel deploy-hook create github-actions-fallback --ref main
+```
+
+Add the hook URL as GitHub secret `VERCEL_DEPLOY_HOOK` (workflow prefers hook over token when both are set).
+
+## Re-run failed workflow
+
+[Actions → Vercel Production Deploy](https://github.com/shiksha-mahakumbh/rase/actions/workflows/vercel-production.yml) → **Run workflow** (after adding `VERCEL_TOKEN`).

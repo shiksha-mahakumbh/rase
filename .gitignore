@@ -3,6 +3,7 @@ node_modules
 .env
 .env*.local
 lighthouse-*.json
+lh-*.json
 tsconfig.tsbuildinfo
 docs/lighthouse/
 docs/launch-audit-results.json
