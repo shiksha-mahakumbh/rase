@@ -59,7 +59,7 @@ function extractJson(output) {
   }
 }
 
-function resolveHookUrl(output) {
+function resolveHookUrlFromJson(output) {
   const data = extractJson(output);
   if (!data) return null;
 
@@ -74,6 +74,21 @@ function resolveHookUrl(output) {
 
   const fallback = hooks.find((h) => h.ref === "main" && h.url && h.name !== "_branch_probe");
   return fallback?.url ?? null;
+}
+
+/** Vercel CLI sometimes prints deploy-hook list as a table instead of JSON. */
+function resolveHookUrlFromTable(output) {
+  const urls = [];
+  for (const line of output.split("\n")) {
+    if (!line.includes(HOOK_NAME)) continue;
+    const match = line.match(/https:\/\/api\.vercel\.com\/v1\/integrations\/deploy\/\S+/);
+    if (match) urls.push(match[0]);
+  }
+  return urls.at(-1) ?? null;
+}
+
+function resolveHookUrl(output) {
+  return resolveHookUrlFromJson(output) ?? resolveHookUrlFromTable(output);
 }
 
 const vercelToken = loadVercelToken();
