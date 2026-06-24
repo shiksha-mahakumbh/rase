@@ -51,7 +51,7 @@ export default function HomeFaqSection() {
                 }}
               >
                 {faq.question}
-                <span className="text-brand-saffron" aria-hidden>
+                <span className="text-brand-saffron-dark" aria-hidden>
                   {open === i ? "−" : "+"}
                 </span>
               </button>

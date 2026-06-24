@@ -26,7 +26,7 @@ export default function HomeEditionCta() {
 
   return (
     <GlassCard className="flex h-full flex-col justify-center p-6">
-      <p className="text-sm font-semibold text-brand-saffron">{edition}</p>
+      <p className="text-sm font-semibold text-brand-saffron-dark">{edition}</p>
       <p className="mt-2 text-lg font-bold text-brand-navy">{headline}</p>
       <p className="mt-2 text-sm text-slate-600">{body}</p>
       <div className="mt-4">

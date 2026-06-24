@@ -61,6 +61,12 @@ export default async function Page() {
 
   return (
     <CmsProvider data={cmsData}>
+      <link
+        rel="preload"
+        as="image"
+        href={heroContent.heroImage}
+        fetchPriority="high"
+      />
       <HomeJsonLd faqs={faqs} />
       <HomeEcosystemJsonLd />
       <PartnersShowcaseJsonLd grouped={affiliationShowcase} />

@@ -234,11 +234,11 @@ const Footer: React.FC = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={social.label}
+                    aria-label={social.shortLabel}
                     title={social.label}
                     className="flex h-11 w-11 items-center justify-center rounded-full border border-brand-saffron/30 bg-white text-brand-navy transition-all hover:border-brand-saffron hover:bg-brand-saffron/10 hover:text-brand-saffron-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
                   >
-                    <span className="text-xs font-bold" aria-hidden>
+                    <span className="text-xs font-bold">
                       {social.shortLabel}
                     </span>
                   </a>
@@ -273,7 +273,7 @@ const Footer: React.FC = () => {
                       <li key={email}>
                         <a
                           href={`mailto:${email}`}
-                          className="break-all text-brand-blue hover:underline"
+                          className="inline-flex min-h-11 items-center break-all py-1 text-brand-blue hover:underline"
                         >
                           {email}
                         </a>
@@ -288,7 +288,7 @@ const Footer: React.FC = () => {
                       <li key={phone}>
                         <a
                           href={`tel:${phone.replace(/\s/g, "")}`}
-                          className="text-brand-blue hover:underline"
+                          className="inline-flex min-h-11 items-center py-1 text-brand-blue hover:underline"
                         >
                           {phone}
                         </a>
@@ -306,7 +306,7 @@ const Footer: React.FC = () => {
                             href={site.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-brand-blue hover:underline"
+                            className="inline-flex min-h-11 items-center py-1 text-brand-blue hover:underline"
                           >
                             {site.label}
                           </a>

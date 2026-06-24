@@ -24,7 +24,7 @@ export default function SectionHeader({
       className={`mb-8 md:mb-10 max-w-3xl ${alignClass} ${className}`}
     >
       {eyebrow && (
-        <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-saffron">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-saffron-dark">
           {eyebrow}
         </p>
       )}

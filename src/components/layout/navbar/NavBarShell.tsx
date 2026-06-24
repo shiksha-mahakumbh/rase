@@ -26,7 +26,6 @@ function DesktopDropdownPanel({ item, isMega }: { item: Menu; isMega: boolean })
             ? "w-[min(90vw,520px)] p-4"
             : "w-56 py-2"
       }`}
-      role="menu"
     >
       {isMega && groups?.length ? (
         <div className="grid gap-4 sm:grid-cols-3">
@@ -155,7 +154,7 @@ export default function NavBarShell({ menus }: Props) {
                 <NavShellLink
                   key={menuKey}
                   href={item.path}
-                  className="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-brand-saffron px-3 py-2 text-xs font-bold text-brand-navy shadow-lg shadow-brand-saffron/25 transition-all hover:-translate-y-0.5 hover:bg-brand-saffron-dark hover:text-white xl:px-4 xl:text-sm"
+                  className="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-brand-saffron px-3 py-2 text-xs font-bold text-brand-navy shadow-lg shadow-brand-saffron/25 transition-colors hover:bg-brand-saffron-dark hover:text-white xl:px-4 xl:text-sm"
                 >
                   {icon}
                   {item.title}

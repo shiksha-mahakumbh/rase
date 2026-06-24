@@ -1,6 +1,9 @@
 import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
 import HomeSectionNav from "./HomeSectionNav";
+import TrustStrip from "./TrustStrip";
+import WhyAttendSection from "./WhyAttendSection";
+import BrandShowcaseSection from "./BrandShowcaseSection";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
@@ -16,8 +19,6 @@ import type { TickerItem } from "@/data/default-announcements";
 import type { Menu } from "@/components/layout/navbar/types";
 
 const Footer = dynamic(() => import("@/components/layout/Footer"));
-const TrustStrip = dynamic(() => import("./TrustStrip"));
-const BrandShowcaseSection = dynamic(() => import("./BrandShowcaseSection"));
 const DiscoverStrip = dynamic(() => import("./DiscoverStrip"));
 const Announcement = dynamic(() => import("@/components/home/sections/Announcement"));
 const NoticeBoard = dynamic(() => import("@/components/home/sections/NoticeBoard"));
@@ -27,7 +28,6 @@ const GallerySection = dynamic(() => import("./GallerySection"));
 const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
 const PartnersShowcase = dynamic(() => import("@/components/home/sections/PartnersShowcase"));
 const HomeEditionCta = dynamic(() => import("./HomeEditionCta"));
-const WhyAttendSection = dynamic(() => import("./WhyAttendSection"));
 const EventTracksSection = dynamic(() => import("./EventTracksSection"));
 const SpeakerHighlightsSection = dynamic(() => import("./SpeakerHighlightsSection"));
 const VenueTravelSection = dynamic(() => import("./VenueTravelSection"));
@@ -54,23 +54,14 @@ export default function HomePage({
       <main id="main-content">
         <HeroSection content={heroContent} />
         <HomeSectionNav />
-
-        <LazySection minHeight="3rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={1} />}>
-          <TrustStrip />
-        </LazySection>
-
-        <LazySection rootMargin="120px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
-          <WhyAttendSection />
-        </LazySection>
-
-        <LazySection minHeight="8rem" rootMargin="120px 0px" fallback={<SectionSkeleton lines={3} />}>
-          <BrandShowcaseSection />
-        </LazySection>
+        <TrustStrip />
+        <WhyAttendSection />
+        <BrandShowcaseSection />
 
         <section
           id="programmes"
           aria-label="Programmes and notices"
-          className="relative overflow-hidden home-section-warm px-4 py-8 md:px-8 md:py-10 [content-visibility:auto] [contain-intrinsic-size:auto_28rem]"
+          className="relative overflow-hidden home-section-warm px-4 py-8 md:px-8 md:py-10 [content-visibility:auto] [contain-intrinsic-size:auto_32rem]"
         >
           <div className="relative z-10 mx-auto max-w-7xl">
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -86,13 +77,13 @@ export default function HomePage({
               </CtaButton>
             </div>
             <LazySection
-              minHeight="20rem"
+              minHeight="28rem"
               rootMargin="80px 0px"
               fallback={
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-                  <SectionSkeleton />
-                  <SectionSkeleton />
-                  <SectionSkeleton />
+                  <SectionSkeleton lines={5} />
+                  <SectionSkeleton lines={5} />
+                  <SectionSkeleton lines={4} />
                 </div>
               }
             >
@@ -111,11 +102,21 @@ export default function HomePage({
           </div>
         </section>
 
-        <LazySection minHeight="6rem" rootMargin="0px 0px 80px 0px" idleFirst fallback={<SectionSkeleton lines={2} />}>
+        <LazySection
+          minHeight="22rem"
+          rootMargin="0px 0px 120px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={3} />}
+        >
           <DiscoverStrip />
         </LazySection>
 
-        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
+        <LazySection
+          minHeight="24rem"
+          rootMargin="0px 0px 100px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={4} />}
+        >
           <EventTracksSection />
         </LazySection>
 
@@ -123,13 +124,18 @@ export default function HomePage({
           <ReservedAdSlot slotId="home-mid" />
         </div>
 
-        <LazySection minHeight="12rem" rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={6} />}>
+        <LazySection
+          minHeight="36rem"
+          rootMargin="0px 0px 80px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={8} tall />}
+        >
           <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
         </LazySection>
 
         <LazySection
-          minHeight="16rem"
-          rootMargin="0px 0px 60px 0px"
+          minHeight="18rem"
+          rootMargin="0px 0px 80px 0px"
           idleFirst
           fallback={
             <div className="mx-auto max-w-7xl">
@@ -149,23 +155,43 @@ export default function HomePage({
           </section>
         </LazySection>
 
-        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
+        <LazySection
+          minHeight="20rem"
+          rootMargin="0px 0px 80px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={3} />}
+        >
           <SpeakerHighlightsSection speakers={featuredSpeakers} />
         </LazySection>
-        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
+        <LazySection
+          minHeight="22rem"
+          rootMargin="0px 0px 80px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={4} />}
+        >
           <GallerySection />
         </LazySection>
 
-        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
+        <LazySection
+          minHeight="24rem"
+          rootMargin="0px 0px 80px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={4} />}
+        >
           <VenueTravelSection />
         </LazySection>
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-footer" />
         </div>
-        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
+        <LazySection
+          minHeight="20rem"
+          rootMargin="0px 0px 60px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={4} />}
+        >
           <HomeFaqSection />
         </LazySection>
-        <LazySection rootMargin="0px 0px 40px 0px" idleFirst fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="0px 0px 40px 0px" idleFirst fallback={<SectionSkeleton lines={1} />}>
           <HomeEducationEcosystemNav />
         </LazySection>
       </main>
