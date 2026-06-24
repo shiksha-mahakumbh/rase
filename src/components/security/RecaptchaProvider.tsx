@@ -38,7 +38,7 @@ export default function RecaptchaScript() {
   return (
     <Script
       src={`https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`}
-      strategy="afterInteractive"
+      strategy="lazyOnload"
       onLoad={() => markRecaptchaScriptLoaded()}
       onError={() => markRecaptchaScriptFailed()}
     />

@@ -122,16 +122,18 @@ export default function HeroSection({ content }: { content: HeroContent }) {
                 aria-hidden
               />
               <div className="relative overflow-hidden rounded-2xl border-2 border-white bg-white p-2 shadow-[0_20px_60px_rgba(255,153,51,0.18)]">
-                <Image
-                  src={heroImage}
-                  alt="Shiksha Mahakumbh Abhiyan — Department of Holistic Education"
-                  width={800}
-                  height={600}
-                  className="h-auto w-full rounded-xl object-contain"
-                  priority
-                  fetchPriority="high"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
+                <div className="relative aspect-[4/3] w-full">
+                  <Image
+                    src={heroImage}
+                    alt="Shiksha Mahakumbh Abhiyan — Department of Holistic Education"
+                    fill
+                    className="rounded-xl object-contain"
+                    priority
+                    fetchPriority="high"
+                    unoptimized
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
               </div>
             </div>
 

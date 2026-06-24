@@ -10,7 +10,7 @@ export function TickerChip({ item }: { item: TickerItem }) {
         alt=""
         width={16}
         height={16}
-        className="shrink-0"
+        className="h-4 w-4 shrink-0"
         unoptimized
       />
       {item.text}

@@ -29,10 +29,11 @@ function LogoTile({ logo }: { logo: { src: string; alt: string; href: string } }
     <Image
       src={logo.src}
       alt={logo.alt}
-      width={100}
-      height={48}
+      width={80}
+      height={40}
+      sizes="80px"
       loading="lazy"
-      className="h-10 w-auto object-contain md:h-12"
+      className="h-10 w-20 object-contain md:h-12 md:w-24"
     />
   );
 

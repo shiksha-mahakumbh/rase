@@ -36,9 +36,9 @@ export default function HomeWelcomeModal() {
       if (sessionStorage.getItem(MODAL_SEEN_KEY)) return;
       const show = () => setEnabled(true);
       if (typeof requestIdleCallback !== "undefined") {
-        requestIdleCallback(show, { timeout: 8000 });
+        requestIdleCallback(show, { timeout: 15000 });
       } else {
-        window.setTimeout(show, 5000);
+        window.setTimeout(show, 12000);
       }
     };
 

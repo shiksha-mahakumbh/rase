@@ -194,10 +194,12 @@ export default function NavBarShell({ menus }: Props) {
         <NavBarToolsDeferred visibility="desktop" />
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
-          <NavBarToolsDeferred visibility="mobile" />
+          <div className="flex h-11 min-w-[5.5rem] shrink-0 items-center">
+            <NavBarToolsDeferred visibility="mobile" />
+          </div>
           <NavShellLink
             href={CTA_PATH}
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
+            className="inline-flex h-11 min-w-[5.5rem] shrink-0 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
           >
             Register
           </NavShellLink>
