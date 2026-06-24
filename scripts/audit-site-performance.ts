@@ -42,8 +42,8 @@ if (layoutSrc.includes('"use client"')) {
   issues.push("PublicPageLayout must be a server component");
 } else if (!layoutSrc.includes("loadPublicChromeCms")) {
   issues.push("PublicPageLayout must server-load CMS chrome data");
-} else if (!layoutSrc.includes("DynamicNavBar")) {
-  issues.push("PublicPageLayout must defer NavBar via dynamic import");
+} else if (!layoutSrc.includes("NavBarShell")) {
+  issues.push("PublicPageLayout must use server NavBarShell");
 } else {
   ok("PublicPageLayout: server CMS + deferred Nav/Footer");
 }
@@ -129,8 +129,12 @@ if (heroSrc.includes('"use client"')) {
   issues.push("HeroSection must be server-rendered for homepage LCP");
 } else if (!heroSrc.includes('fetchPriority="high"')) {
   issues.push("HeroSection LCP image should use fetchPriority high");
+} else if (heroSrc.includes("HeroCountdown") || /from\s+["'].\/CountdownBanner["']/.test(heroSrc)) {
+  issues.push("HeroSection must use server CountdownBannerView (no client countdown hydration)");
+} else if (!heroSrc.includes("CountdownBannerView")) {
+  issues.push("HeroSection should render CountdownBannerView for zero-JS hero countdown");
 } else {
-  ok("Homepage hero: server-rendered LCP");
+  ok("Homepage hero: server-rendered LCP + countdown");
 }
 
 const navShellSrc = read("src/components/layout/navbar/NavBarShell.tsx");
@@ -151,8 +155,12 @@ if (!homePageSrc.includes("AnnouncementsMarquee")) {
   issues.push("HomePage must defer welcome modal via HomeWelcomeModal");
 } else if (homePageSrc.includes("SectionShell")) {
   issues.push("HomePage should avoid client SectionShell in above-fold blocks");
+} else if (/import\s+WhyAttendSection\s+from/.test(homePageSrc)) {
+  issues.push("HomePage must dynamic-import below-fold client sections (WhyAttendSection, etc.)");
+} else if (!homePageSrc.includes("idleFirst")) {
+  issues.push("HomePage below-fold LazySections should use idleFirst");
 } else {
-  ok("HomePage: SSR nav/ticker + deferred welcome modal");
+  ok("HomePage: SSR nav/ticker + deferred sections");
 }
 
 const marqueeSrc = read("src/components/layout/AnnouncementsMarquee.tsx");

@@ -3,7 +3,7 @@ import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 import type { HeroContent } from "@/lib/home/build-hero-content";
-import HeroCountdown from "./HeroCountdown";
+import CountdownBannerView from "./CountdownBannerView";
 
 function HeroStats({ stats }: { stats: HeroContent["stats"] }) {
   return (
@@ -107,7 +107,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
             </div>
 
             <div className="mt-8">
-              <HeroCountdown />
+              <CountdownBannerView theme="light" />
             </div>
           </div>
 
