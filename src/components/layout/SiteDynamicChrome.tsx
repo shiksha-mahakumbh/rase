@@ -1,15 +1,8 @@
 import dynamic from "next/dynamic";
+import NavBarShell from "@/components/layout/navbar/NavBarShell";
+import { NAV_MENUS } from "@/constants/navigation";
 
-/** Deferred site chrome — matches HomePage pattern to keep Nav/Footer off the critical path. */
-export const DynamicNavBar = dynamic(() => import("@/components/layout/NavBar"), {
-  loading: () => (
-    <div
-      className="h-16 w-full border-b border-slate-200 bg-white/95"
-      aria-hidden
-    />
-  ),
-});
-
+/** Deferred site chrome — footer only; NavBar is server-rendered via NavBarShell. */
 export const DynamicFooter = dynamic(() => import("@/components/layout/Footer"), {
   loading: () => (
     <div
@@ -18,3 +11,7 @@ export const DynamicFooter = dynamic(() => import("@/components/layout/Footer"),
     />
   ),
 });
+
+export function DefaultNavBarShell() {
+  return <NavBarShell menus={NAV_MENUS} />;
+}

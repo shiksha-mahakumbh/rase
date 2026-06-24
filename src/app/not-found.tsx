@@ -1,11 +1,12 @@
 import Link from "next/link";
-import NavBar from "@/components/layout/NavBar";
+import NavBarShell from "@/components/layout/navbar/NavBarShell";
+import { NAV_MENUS } from "@/constants/navigation";
 import Footer from "@/components/layout/Footer";
 
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-brand-surface">
-      <NavBar />
+      <NavBarShell menus={NAV_MENUS} />
       <main
         id="main-content"
         className="flex min-h-[50vh] flex-col items-center justify-center px-4 py-16 text-center"

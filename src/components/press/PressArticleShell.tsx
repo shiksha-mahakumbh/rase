@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { DynamicFooter, DynamicNavBar } from "@/components/layout/SiteDynamicChrome";
+import NavBarShell, { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
+import { DynamicFooter } from "@/components/layout/SiteDynamicChrome";
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
 import PageCtaSection from "@/components/layouts/PageCtaSection";
 import PressShareButtons from "./PressShareButtons";
@@ -31,7 +32,7 @@ export default async function PressArticleShell({
   return (
     <CmsProvider data={cms}>
       <div className="min-h-screen bg-brand-surface">
-        <DynamicNavBar />
+        <NavBarShell menus={navMenusFromCms(cms.headerMenu)} />
         <ShowcaseHero
           eyebrow="Press Release"
           title={title}

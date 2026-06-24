@@ -12,15 +12,13 @@ import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
 import AnnouncementsMarquee from "@/components/layout/AnnouncementsMarquee";
+import NavBarShell from "@/components/layout/navbar/NavBarShell";
 import HomePageChromeDeferred from "./HomePageChromeDeferred";
+import HomeWelcomeModal from "./HomeWelcomeModal";
 import type { HeroContent } from "@/lib/home/build-hero-content";
 import type { TickerItem } from "@/data/default-announcements";
+import type { Menu } from "@/components/layout/navbar/types";
 
-const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
-  loading: () => (
-    <div className="h-16 w-full border-b border-slate-200 bg-white/90" aria-hidden />
-  ),
-});
 const Footer = dynamic(() => import("@/components/layout/Footer"));
 const TrustStrip = dynamic(() => import("./TrustStrip"));
 const BrandShowcaseSection = dynamic(() => import("./BrandShowcaseSection"));
@@ -39,15 +37,17 @@ export default function HomePage({
   cmsPartners = [],
   heroContent,
   tickerItems,
+  navMenus,
 }: {
   featuredSpeakers?: CmsSpeakerCard[];
   cmsPartners?: CmsPartnerCard[];
   heroContent: HeroContent;
   tickerItems: readonly TickerItem[];
+  navMenus: Menu[];
 }) {
   return (
     <div className="min-h-screen bg-white">
-      <NavBar />
+      <NavBarShell menus={navMenus} />
       <AnnouncementsMarquee items={tickerItems} />
 
       <main id="main-content">
@@ -173,6 +173,7 @@ export default function HomePage({
 
       <Footer />
       <HomePageChromeDeferred />
+      <HomeWelcomeModal />
     </div>
   );
 }
