@@ -7,8 +7,9 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 const inter = Inter({
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   variable: "--font-inter",
+  adjustFontFallback: true,
 });
 
 const notoDevanagari = Noto_Sans_Devanagari({

@@ -20,6 +20,11 @@ export default function FooterContactForm({
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [captchaArmed, setCaptchaArmed] = useState(false);
+
+  const armCaptcha = () => {
+    if (!captchaArmed) setCaptchaArmed(true);
+  };
 
   const isDark = variant === "dark";
   const inputClass = isDark
@@ -31,6 +36,7 @@ export default function FooterContactForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    armCaptcha();
     setSubmitting(true);
     try {
       const captchaToken = await getCaptchaTokenForAction("contact");
@@ -65,7 +71,7 @@ export default function FooterContactForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-3" onFocus={armCaptcha}>
         <input
           type="email"
           placeholder="Your Email"
@@ -88,7 +94,7 @@ export default function FooterContactForm({
           {submitting ? "Sending…" : "Send Message"}
         </button>
       </form>
-      <RecaptchaScript />
+      {captchaArmed ? <RecaptchaScript /> : null}
     </>
   );
 }

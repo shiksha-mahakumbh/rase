@@ -6,7 +6,7 @@ const GlobalSearch = dynamic(() => import("@/components/search/GlobalSearch"), {
   ssr: false,
   loading: () => (
     <div
-      className="h-10 w-32 animate-pulse rounded-lg bg-slate-100 xl:w-44"
+      className="hidden h-10 w-32 shrink-0 rounded-lg bg-slate-100 xl:block xl:w-44"
       aria-hidden="true"
     />
   ),
@@ -17,7 +17,7 @@ const LanguageSwitcher = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-9 w-16 animate-pulse rounded-lg bg-slate-100" aria-hidden="true" />
+      <div className="h-11 w-[5.5rem] shrink-0 rounded-lg bg-slate-100" aria-hidden="true" />
     ),
   }
 );

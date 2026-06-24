@@ -4,6 +4,12 @@ import HomeSectionNav from "./HomeSectionNav";
 import TrustStrip from "./TrustStrip";
 import WhyAttendSection from "./WhyAttendSection";
 import BrandShowcaseSection from "./BrandShowcaseSection";
+import DiscoverStrip from "./DiscoverStrip";
+import EventTracksSection from "./EventTracksSection";
+import PartnersShowcase from "./sections/PartnersShowcase";
+import Announcement from "./sections/Announcement";
+import NoticeBoard from "./sections/NoticeBoard";
+import HomeEditionCta from "./HomeEditionCta";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
@@ -19,16 +25,10 @@ import type { TickerItem } from "@/data/default-announcements";
 import type { Menu } from "@/components/layout/navbar/types";
 
 const Footer = dynamic(() => import("@/components/layout/Footer"));
-const DiscoverStrip = dynamic(() => import("./DiscoverStrip"));
-const Announcement = dynamic(() => import("@/components/home/sections/Announcement"));
-const NoticeBoard = dynamic(() => import("@/components/home/sections/NoticeBoard"));
 const GlassCard = dynamic(() => import("@/components/ui/GlassCard"));
 const UpcomingEvent = dynamic(() => import("@/components/home/sections/UpcomingEvent"));
 const GallerySection = dynamic(() => import("./GallerySection"));
 const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
-const PartnersShowcase = dynamic(() => import("@/components/home/sections/PartnersShowcase"));
-const HomeEditionCta = dynamic(() => import("./HomeEditionCta"));
-const EventTracksSection = dynamic(() => import("./EventTracksSection"));
 const SpeakerHighlightsSection = dynamic(() => import("./SpeakerHighlightsSection"));
 const VenueTravelSection = dynamic(() => import("./VenueTravelSection"));
 const HomeEducationEcosystemNav = dynamic(() => import("./HomeEducationEcosystemNav"));
@@ -61,7 +61,7 @@ export default function HomePage({
         <section
           id="programmes"
           aria-label="Programmes and notices"
-          className="relative overflow-hidden home-section-warm px-4 py-8 md:px-8 md:py-10 [content-visibility:auto] [contain-intrinsic-size:auto_32rem]"
+          className="relative overflow-hidden home-section-warm px-4 py-8 md:px-8 md:py-10"
         >
           <div className="relative z-10 mx-auto max-w-7xl">
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -76,76 +76,42 @@ export default function HomePage({
                 All registration types
               </CtaButton>
             </div>
-            <LazySection
-              minHeight="28rem"
-              rootMargin="80px 0px"
-              fallback={
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-                  <SectionSkeleton lines={5} />
-                  <SectionSkeleton lines={5} />
-                  <SectionSkeleton lines={4} />
-                </div>
-              }
-            >
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
-                <div className="lg:col-span-4">
-                  <Announcement />
-                </div>
-                <div className="lg:col-span-4">
-                  <NoticeBoard />
-                </div>
-                <div className="lg:col-span-4">
-                  <HomeEditionCta />
-                </div>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
+              <div className="lg:col-span-4">
+                <Announcement />
               </div>
-            </LazySection>
+              <div className="lg:col-span-4">
+                <NoticeBoard />
+              </div>
+              <div className="lg:col-span-4">
+                <HomeEditionCta />
+              </div>
+            </div>
           </div>
         </section>
 
-        <LazySection
-          minHeight="22rem"
-          rootMargin="0px 0px 120px 0px"
-          idleFirst
-          fallback={<SectionSkeleton lines={3} />}
-        >
-          <DiscoverStrip />
-        </LazySection>
-
-        <LazySection
-          minHeight="24rem"
-          rootMargin="0px 0px 100px 0px"
-          idleFirst
-          fallback={<SectionSkeleton lines={4} />}
-        >
-          <EventTracksSection />
-        </LazySection>
+        <DiscoverStrip />
+        <EventTracksSection />
 
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-mid" />
         </div>
 
-        <LazySection
-          minHeight="36rem"
-          rootMargin="0px 0px 80px 0px"
-          idleFirst
-          fallback={<SectionSkeleton lines={8} tall />}
-        >
-          <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
-        </LazySection>
+        <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
 
         <LazySection
           minHeight="18rem"
-          rootMargin="0px 0px 80px 0px"
+          rootMargin="0px 0px 200px 0px"
           idleFirst
           fallback={
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-7xl px-4 md:px-8">
               <SectionSkeleton lines={4} />
             </div>
           }
         >
           <section
             aria-label="Upcoming events"
-            className="bg-white px-4 py-10 md:px-8 md:py-14 [content-visibility:auto] [contain-intrinsic-size:auto_20rem]"
+            className="bg-white px-4 py-10 md:px-8 md:py-14"
           >
             <div className="mx-auto max-w-7xl">
               <GlassCard className="overflow-hidden p-6 md:p-8">
@@ -157,7 +123,7 @@ export default function HomePage({
 
         <LazySection
           minHeight="20rem"
-          rootMargin="0px 0px 80px 0px"
+          rootMargin="0px 0px 200px 0px"
           idleFirst
           fallback={<SectionSkeleton lines={3} />}
         >
@@ -165,7 +131,7 @@ export default function HomePage({
         </LazySection>
         <LazySection
           minHeight="22rem"
-          rootMargin="0px 0px 80px 0px"
+          rootMargin="0px 0px 200px 0px"
           idleFirst
           fallback={<SectionSkeleton lines={4} />}
         >
@@ -174,7 +140,7 @@ export default function HomePage({
 
         <LazySection
           minHeight="24rem"
-          rootMargin="0px 0px 80px 0px"
+          rootMargin="0px 0px 200px 0px"
           idleFirst
           fallback={<SectionSkeleton lines={4} />}
         >
@@ -185,15 +151,13 @@ export default function HomePage({
         </div>
         <LazySection
           minHeight="20rem"
-          rootMargin="0px 0px 60px 0px"
+          rootMargin="0px 0px 120px 0px"
           idleFirst
           fallback={<SectionSkeleton lines={4} />}
         >
           <HomeFaqSection />
         </LazySection>
-        <LazySection rootMargin="0px 0px 40px 0px" idleFirst fallback={<SectionSkeleton lines={1} />}>
-          <HomeEducationEcosystemNav />
-        </LazySection>
+        <HomeEducationEcosystemNav />
       </main>
 
       <Footer />

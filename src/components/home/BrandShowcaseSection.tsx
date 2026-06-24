@@ -70,7 +70,8 @@ export default function BrandShowcaseSection() {
               width={640}
               height={480}
               className="relative z-10 w-full rounded-2xl shadow-xl"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 1024px) 100vw, 588px"
+              loading="lazy"
             />
           </div>
         </div>
