@@ -11,9 +11,10 @@ import VenueTravelSection from "./VenueTravelSection";
 import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
-import MarqueesDeferred from "./MarqueesDeferred";
+import AnnouncementsMarquee from "@/components/layout/AnnouncementsMarquee";
 import HomePageChromeDeferred from "./HomePageChromeDeferred";
 import type { HeroContent } from "@/lib/home/build-hero-content";
+import type { TickerItem } from "@/data/default-announcements";
 
 const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
   loading: () => (
@@ -37,15 +38,17 @@ export default function HomePage({
   featuredSpeakers = [],
   cmsPartners = [],
   heroContent,
+  tickerItems,
 }: {
   featuredSpeakers?: CmsSpeakerCard[];
   cmsPartners?: CmsPartnerCard[];
   heroContent: HeroContent;
+  tickerItems: readonly TickerItem[];
 }) {
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
-      <MarqueesDeferred />
+      <AnnouncementsMarquee items={tickerItems} />
 
       <main id="main-content">
         <HeroSection content={heroContent} />
