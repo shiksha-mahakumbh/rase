@@ -1,16 +1,6 @@
 import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
 import HomeSectionNav from "./HomeSectionNav";
-import TrustStrip from "./TrustStrip";
-import WhyAttendSection from "./WhyAttendSection";
-import BrandShowcaseSection from "./BrandShowcaseSection";
-import DiscoverStrip from "./DiscoverStrip";
-import EventTracksSection from "./EventTracksSection";
-import Announcement from "./sections/Announcement";
-import NoticeBoard from "./sections/NoticeBoard";
-import HomeEditionCta from "./HomeEditionCta";
-import { CtaButton, SectionHeader } from "@/components/ui";
-import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import type { CmsPartnerCard, CmsSpeakerCard } from "@/lib/cms/types";
 import LazySection from "@/components/performance/LazySection";
@@ -20,6 +10,7 @@ import NavBarShell from "@/components/layout/navbar/NavBarShell";
 import HomePageChromeDeferred from "./HomePageChromeDeferred";
 import HomeWelcomeModal from "./HomeWelcomeModal";
 import type { HeroContent } from "@/lib/home/build-hero-content";
+import type { HomeSectionsContent } from "@/lib/home/build-home-sections";
 import type { TickerItem } from "@/data/default-announcements";
 import type { Menu } from "@/components/layout/navbar/types";
 
@@ -32,17 +23,25 @@ const SpeakerHighlightsSection = dynamic(() => import("./SpeakerHighlightsSectio
 const VenueTravelSection = dynamic(() => import("./VenueTravelSection"));
 const HomeEducationEcosystemNav = dynamic(() => import("./HomeEducationEcosystemNav"));
 const PartnersShowcase = dynamic(() => import("./sections/PartnersShowcase"));
+const TrustStrip = dynamic(() => import("./TrustStrip"));
+const WhyAttendSection = dynamic(() => import("./WhyAttendSection"));
+const BrandShowcaseSection = dynamic(() => import("./BrandShowcaseSection"));
+const DiscoverStrip = dynamic(() => import("./DiscoverStrip"));
+const EventTracksSection = dynamic(() => import("./EventTracksSection"));
+const ProgrammesNoticesSection = dynamic(() => import("./ProgrammesNoticesSection"));
 
 export default function HomePage({
   featuredSpeakers = [],
   cmsPartners = [],
   heroContent,
+  homeSections,
   tickerItems,
   navMenus,
 }: {
   featuredSpeakers?: CmsSpeakerCard[];
   cmsPartners?: CmsPartnerCard[];
   heroContent: HeroContent;
+  homeSections: HomeSectionsContent;
   tickerItems: readonly TickerItem[];
   navMenus: Menu[];
 }) {
@@ -54,44 +53,30 @@ export default function HomePage({
       <main id="main-content">
         <HeroSection content={heroContent} />
         <HomeSectionNav />
-        <TrustStrip />
-        <WhyAttendSection />
-        <BrandShowcaseSection />
 
-        <section
-          id="programmes"
-          aria-label="Programmes and notices"
-          className="relative overflow-hidden home-section-warm px-4 py-8 md:px-8 md:py-10"
-        >
-          <div className="relative z-10 mx-auto max-w-7xl">
-            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <SectionHeader
-                align="left"
-                eyebrow="Live Updates"
-                title="Programmes & Announcements"
-                description="Registration tracks, deadlines, and campus notices."
-                className="mb-0"
-              />
-              <CtaButton href={ROUTES.registration} variant="ghost" className="shrink-0">
-                All registration types
-              </CtaButton>
-            </div>
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
-              <div className="lg:col-span-4">
-                <Announcement />
-              </div>
-              <div className="lg:col-span-4">
-                <NoticeBoard />
-              </div>
-              <div className="lg:col-span-4">
-                <HomeEditionCta />
-              </div>
-            </div>
-          </div>
-        </section>
+        <LazySection minHeight="7rem" rootMargin="0px 0px 300px 0px" idleFirst fallback={<SectionSkeleton lines={1} />}>
+          <TrustStrip content={homeSections.trustStrip} />
+        </LazySection>
 
-        <DiscoverStrip />
-        <EventTracksSection />
+        <LazySection minHeight="24rem" rootMargin="0px 0px 250px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
+          <WhyAttendSection content={homeSections.whyAttend} />
+        </LazySection>
+
+        <LazySection minHeight="22rem" rootMargin="0px 0px 250px 0px" idleFirst fallback={<SectionSkeleton lines={3} />}>
+          <BrandShowcaseSection />
+        </LazySection>
+
+        <LazySection minHeight="20rem" rootMargin="0px 0px 200px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
+          <ProgrammesNoticesSection />
+        </LazySection>
+
+        <LazySection minHeight="22rem" rootMargin="0px 0px 200px 0px" idleFirst fallback={<SectionSkeleton lines={3} />}>
+          <DiscoverStrip content={homeSections.discover} />
+        </LazySection>
+
+        <LazySection minHeight="24rem" rootMargin="0px 0px 200px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
+          <EventTracksSection content={homeSections.eventTracks} />
+        </LazySection>
 
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-mid" />

@@ -51,6 +51,12 @@
   "prisma": {
     "seed": "node scripts/supabase/seed-rbac.mjs"
   },
+  "browserslist": [
+    "chrome >= 92",
+    "edge >= 92",
+    "firefox >= 90",
+    "safari >= 15.4"
+  ],
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",

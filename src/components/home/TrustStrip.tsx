@@ -1,29 +1,9 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useCms } from "@/lib/cms/context";
-import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
+import type { TrustStripContent } from "@/lib/home/build-home-sections";
 
-/** Core organizing logos — full partner lists live in Conference Support (#conference-support). */
-const ORGANIZING_LOGOS = [
-  { src: "/logo.png", alt: "Department of Holistic Education", href: "https://www.dhe.org.in/" },
-  { src: "/vidyabharti.png", alt: "Vidya Bharati", href: "https://www.vidyabharati.org/" },
-  { src: "/shiksha.png", alt: "Shiksha Mahakumbh", href: "https://www.shikshamahakumbh.com/" },
-  { src: "/sLogo.png", alt: "RASE", href: "https://www.rase.co.in/" },
-] as const;
-
-function dedupeLogos<T extends { src: string }>(logos: T[]): T[] {
-  const seen = new Set<string>();
-  return logos.filter((logo) => {
-    if (seen.has(logo.src)) return false;
-    seen.add(logo.src);
-    return true;
-  });
-}
-
-function LogoTile({ logo }: { logo: { src: string; alt: string; href: string } }) {
+function LogoTile({ logo }: { logo: TrustStripContent["logos"][number] }) {
   const safeHref = sanitizeExternalUrl(logo.href);
   const image = (
     <Image
@@ -55,34 +35,8 @@ function LogoTile({ logo }: { logo: { src: string; alt: string; href: string } }
   );
 }
 
-export default function TrustStrip() {
-  const cms = useCms();
-  const stats = getSection(cms?.homepage, "stats");
-
-  const cmsLogos = sectionItems<{
-    src?: string;
-    logoUrl?: string;
-    alt?: string;
-    name?: string;
-    href?: string;
-    website?: string;
-  }>(stats, "logos");
-
-  const logos = dedupeLogos(
-    cmsLogos.length > 0
-      ? cmsLogos.slice(0, 4).map((l) => ({
-          src: l.src ?? l.logoUrl ?? "/logo.png",
-          alt: l.alt ?? l.name ?? "Partner",
-          href: sanitizeExternalUrl(l.href ?? l.website) ?? "",
-        }))
-      : ORGANIZING_LOGOS.map((l) => ({ ...l }))
-  );
-
-  const tagline = sectionField(
-    stats,
-    "tagline",
-    "An initiative of DHE · In collaboration with INIs & national partners"
-  );
+export default function TrustStrip({ content }: { content: TrustStripContent }) {
+  const { tagline, logos } = content;
 
   return (
     <section
