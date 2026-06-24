@@ -1,0 +1,44 @@
+# Fallback production deploy when the Vercel GitHub App webhook misses a push.
+# Set repo secret: VERCEL_TOKEN (https://vercel.com/account/tokens)
+name: Vercel Production Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-production-${{ github.sha }}
+  cancel-in-progress: true
+
+env:
+  VERCEL_ORG_ID: team_0PYXWQMwAV9fPWOTuxk54H9K
+  VERCEL_PROJECT_ID: prj_k6YZpm35GqkuZcYOohnXVTM0Uy9f
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.repository == 'shiksha-mahakumbh/rase'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
