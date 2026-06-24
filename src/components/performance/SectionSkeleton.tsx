@@ -1,7 +1,13 @@
-export default function SectionSkeleton({ lines = 3 }: { lines?: number }) {
+type SectionSkeletonProps = {
+  lines?: number;
+  /** Taller placeholder for large lazy sections (e.g. partners). */
+  tall?: boolean;
+};
+
+export default function SectionSkeleton({ lines = 3, tall = false }: SectionSkeletonProps) {
   return (
     <div
-      className="animate-pulse rounded-2xl border border-slate-100 bg-white/60 p-6"
+      className={`animate-pulse rounded-2xl border border-slate-100 bg-white/60 p-6 ${tall ? "min-h-[32rem]" : ""}`}
       aria-hidden="true"
     >
       <div className="mb-4 h-4 w-32 rounded bg-slate-200" />
@@ -13,6 +19,10 @@ export default function SectionSkeleton({ lines = 3 }: { lines?: number }) {
           style={{ width: `${85 - i * 12}%` }}
         />
       ))}
+      {tall &&
+        Array.from({ length: 4 }).map((_, i) => (
+          <div key={`t-${i}`} className="mb-3 mt-4 h-16 rounded-xl bg-slate-100" />
+        ))}
     </div>
   );
 }

@@ -55,7 +55,7 @@ export default function VenueTravelSection() {
                 key={block.title}
                 className="rounded-2xl border border-slate-200 bg-brand-surface p-5"
               >
-                <h3 className="text-sm font-bold uppercase tracking-wider text-brand-saffron">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-brand-saffron-dark">
                   {block.title}
                 </h3>
                 <ul className="mt-3 space-y-2">

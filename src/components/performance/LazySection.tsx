@@ -45,7 +45,7 @@ export default function LazySection({
     <div
       ref={ref}
       className={className}
-      style={!inView && minHeight ? { minHeight } : undefined}
+      style={minHeight ? { minHeight } : undefined}
     >
       {inView ? children : fallback}
     </div>

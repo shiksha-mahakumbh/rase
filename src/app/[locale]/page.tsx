@@ -81,6 +81,12 @@ export default async function LocaleHomePage({
 
   return (
     <CmsProvider data={cmsData}>
+      <link
+        rel="preload"
+        as="image"
+        href={heroContent.heroImage}
+        fetchPriority="high"
+      />
       <HomeJsonLd faqs={faqs} />
       <HomeEcosystemJsonLd />
       <PartnersShowcaseJsonLd grouped={affiliationShowcase} />

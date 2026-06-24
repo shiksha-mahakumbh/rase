@@ -11,7 +11,6 @@ export default function NavBrandBlock({ compact = false }: NavBrandBlockProps) {
     <Link
       href="/"
       className="group flex min-w-0 shrink items-center gap-2 sm:gap-2.5"
-      aria-label={`${BRAND_ORG_NAME_HI} — Home`}
     >
       <div
         className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-brand-saffron/35 bg-white p-1 shadow-sm transition-all duration-300 group-hover:border-brand-saffron/65 group-hover:shadow-md ${
@@ -20,6 +19,7 @@ export default function NavBrandBlock({ compact = false }: NavBrandBlockProps) {
       >
         <BrandLogoMark className="h-full w-full" />
       </div>
+      <span className="sr-only sm:hidden">{BRAND_ORG_NAME_HI}</span>
       <div className="hidden min-w-0 sm:block">
         <p
           className={`font-medium leading-tight text-brand-blue/85 ${
