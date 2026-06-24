@@ -33,6 +33,7 @@ function LogoTile({ logo }: { logo: { src: string; alt: string; href: string } }
       height={40}
       sizes="80px"
       loading="lazy"
+      unoptimized
       className="h-10 w-20 object-contain md:h-12 md:w-24"
     />
   );

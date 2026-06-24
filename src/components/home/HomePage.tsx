@@ -6,7 +6,6 @@ import WhyAttendSection from "./WhyAttendSection";
 import BrandShowcaseSection from "./BrandShowcaseSection";
 import DiscoverStrip from "./DiscoverStrip";
 import EventTracksSection from "./EventTracksSection";
-import PartnersShowcase from "./sections/PartnersShowcase";
 import Announcement from "./sections/Announcement";
 import NoticeBoard from "./sections/NoticeBoard";
 import HomeEditionCta from "./HomeEditionCta";
@@ -32,6 +31,7 @@ const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
 const SpeakerHighlightsSection = dynamic(() => import("./SpeakerHighlightsSection"));
 const VenueTravelSection = dynamic(() => import("./VenueTravelSection"));
 const HomeEducationEcosystemNav = dynamic(() => import("./HomeEducationEcosystemNav"));
+const PartnersShowcase = dynamic(() => import("./sections/PartnersShowcase"));
 
 export default function HomePage({
   featuredSpeakers = [],
@@ -97,7 +97,18 @@ export default function HomePage({
           <ReservedAdSlot slotId="home-mid" />
         </div>
 
-        <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
+        <LazySection
+          minHeight="28rem"
+          rootMargin="0px 0px 200px 0px"
+          idleFirst
+          fallback={
+            <div className="mx-auto max-w-7xl px-4 md:px-8">
+              <SectionSkeleton lines={5} />
+            </div>
+          }
+        >
+          <PartnersShowcase cmsPartners={cmsPartners} cmsSpeakers={featuredSpeakers} />
+        </LazySection>
 
         <LazySection
           minHeight="18rem"

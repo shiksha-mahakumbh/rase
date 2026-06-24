@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 import type { HeroContent } from "@/lib/home/build-hero-content";
 import CountdownBannerView from "./CountdownBannerView";
+import HeroLcpImage from "./HeroLcpImage";
 
 function HeroStats({ stats }: { stats: HeroContent["stats"] }) {
   return (
@@ -42,7 +42,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
   return (
     <section
       aria-label="Shiksha Mahakumbh hero"
-      className="brand-hero-bg relative overflow-hidden"
+      className="brand-hero-bg relative min-h-[28rem] overflow-hidden sm:min-h-[30rem] lg:min-h-[32rem]"
     >
       <div
         className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-brand-saffron/15 blur-3xl"
@@ -71,7 +71,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               ) : (
                 <>
                   <span className="text-brand-blue">शिक्षा </span>
-                  <span className="text-brand-saffron">महाकुंभ</span>
+                  <span className="text-orange-800">महाकुंभ</span>
                   {headline ? (
                     <span className="mt-1 block text-brand-navy">{headline}</span>
                   ) : null}
@@ -123,15 +123,10 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               />
               <div className="relative overflow-hidden rounded-2xl border-2 border-white bg-white p-2 shadow-[0_20px_60px_rgba(255,153,51,0.18)]">
                 <div className="relative aspect-[4/3] w-full">
-                  <Image
+                  <HeroLcpImage
                     src={heroImage}
                     alt="Shiksha Mahakumbh Abhiyan — Department of Holistic Education"
-                    fill
-                    className="rounded-xl object-contain"
-                    priority
-                    fetchPriority="high"
-                    unoptimized
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="absolute inset-0 h-full w-full rounded-xl object-contain"
                   />
                 </div>
               </div>
