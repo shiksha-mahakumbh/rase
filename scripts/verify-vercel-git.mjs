@@ -36,11 +36,9 @@ if (probe.includes("not connected to a Git repository")) {
 }
 
 if (exitCode) {
-  console.log("\nFix (dashboard — CLI reconnect often needs org admin):");
-  console.log("  1. https://vercel.com/dhe-projects/rase-co-in/settings/git");
-  console.log("  2. Connect → GitHub → shiksha-mahakumbh/rase");
+  console.log("  1. Install GitHub App: https://github.com/apps/vercel (grant shiksha-mahakumbh/rase)");
+  console.log("  2. https://vercel.com/dhe-projects/rase-co-in/settings/git → Connect repo");
   console.log("  3. Production Branch = main");
-  console.log("  4. GitHub → Settings → Applications → Vercel → grant repo access");
 } else {
   console.log("\nOptional: npx vercel deploy-hook create github-actions-fallback --ref main");
 }
