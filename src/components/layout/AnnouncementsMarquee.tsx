@@ -1,13 +1,13 @@
 import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import type { TickerItem } from "@/data/default-announcements";
-import MarqueeTrack from "./MarqueeTrack";
+import MarqueeTrackDeferred from "./MarqueeTrackDeferred";
 
 type Props = {
   items: readonly TickerItem[];
 };
 
-/** Homepage announcements ticker — server-resolved items, client animation only. */
+/** Homepage announcements ticker — server-resolved items, client animation deferred. */
 export default function AnnouncementsMarquee({ items }: Props) {
   return (
     <section
@@ -30,7 +30,7 @@ export default function AnnouncementsMarquee({ items }: Props) {
           </CtaButton>
         </div>
 
-        <MarqueeTrack items={items} />
+        <MarqueeTrackDeferred items={items} />
       </div>
     </section>
   );

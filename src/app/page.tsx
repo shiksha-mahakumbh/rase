@@ -13,6 +13,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { buildHeroContent } from "@/lib/home/build-hero-content";
+import { buildHomeSectionsContent } from "@/lib/home/build-home-sections";
 import { HERO_LCP_PRELOAD } from "@/components/home/HeroLcpImage";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
@@ -57,6 +58,7 @@ export default async function Page() {
     homepagePartners: getHomepagePartners(cmsData.homepage),
   });
   const heroContent = buildHeroContent(cmsData.homepage);
+  const homeSections = buildHomeSectionsContent(cmsData.homepage);
   const tickerItems = resolveTickerItems(cmsData.announcementBars, "en");
   const navMenus = navMenusFromCms(cmsData.headerMenu);
 
@@ -84,6 +86,7 @@ export default async function Page() {
         featuredSpeakers={featuredSpeakers}
         cmsPartners={cmsPartners}
         heroContent={heroContent}
+        homeSections={homeSections}
         tickerItems={tickerItems}
         navMenus={navMenus}
       />

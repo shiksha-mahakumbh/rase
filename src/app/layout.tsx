@@ -16,7 +16,7 @@ const notoDevanagari = Noto_Sans_Devanagari({
   subsets: ["devanagari"],
   display: "optional",
   variable: "--font-devanagari",
-  weight: ["700", "800"],
+  weight: ["800"],
   adjustFontFallback: true,
 });
 
