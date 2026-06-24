@@ -56,12 +56,22 @@ export default function VisitorPageTracker() {
     };
 
     const send = () => {
+      const body = JSON.stringify(payload);
+      if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+        const blob = new Blob([body], { type: "application/json" });
+        if (navigator.sendBeacon("/api/v2/analytics/track", blob)) return;
+      }
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 2500);
       fetch("/api/v2/analytics/track", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body,
         keepalive: true,
-      }).catch(() => undefined);
+        signal: controller.signal,
+      })
+        .catch(() => undefined)
+        .finally(() => window.clearTimeout(timeout));
     };
 
     if (typeof requestIdleCallback !== "undefined") {

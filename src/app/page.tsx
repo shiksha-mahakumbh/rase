@@ -13,6 +13,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { buildHeroContent } from "@/lib/home/build-hero-content";
+import { HERO_LCP_PRELOAD } from "@/components/home/HeroLcpImage";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 
@@ -64,7 +65,8 @@ export default async function Page() {
       <link
         rel="preload"
         as="image"
-        href={heroContent.heroImage}
+        href={HERO_LCP_PRELOAD}
+        type="image/webp"
         fetchPriority="high"
       />
       <HomeJsonLd faqs={faqs} />

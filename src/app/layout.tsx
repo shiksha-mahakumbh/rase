@@ -14,9 +14,10 @@ const inter = Inter({
 
 const notoDevanagari = Noto_Sans_Devanagari({
   subsets: ["devanagari"],
-  display: "swap",
+  display: "optional",
   variable: "--font-devanagari",
   weight: ["700", "800"],
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {

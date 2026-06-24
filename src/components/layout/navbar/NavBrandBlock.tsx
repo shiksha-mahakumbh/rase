@@ -34,7 +34,7 @@ export default function NavBrandBlock({ compact = false }: NavBrandBlockProps) {
           }`}
         >
           <span className="text-brand-blue">शिक्षा </span>
-          <span className="text-brand-saffron">महाकुंभ </span>
+          <span className="text-orange-800">महाकुंभ </span>
           <span className="text-brand-navy">अभियान</span>
         </p>
       </div>

@@ -37,12 +37,12 @@ export default function EventCard({
       )}
       <div className="flex flex-1 flex-col p-5 md:p-6">
         {badge && (
-          <span className="mb-2 w-fit rounded-full bg-brand-saffron/15 px-2.5 py-0.5 text-xs font-bold text-brand-saffron">
+          <span className="mb-2 w-fit rounded-full bg-brand-saffron/15 px-2.5 py-0.5 text-xs font-bold text-amber-900">
             {badge}
           </span>
         )}
         <h3 className="text-lg font-bold text-brand-navy">{title}</h3>
-        <p className="mt-1 text-sm font-semibold text-brand-emerald">{date}</p>
+        <p className="mt-1 text-sm font-semibold text-emerald-800">{date}</p>
         <p className="text-sm text-slate-500">{venue}</p>
         <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
           {description}

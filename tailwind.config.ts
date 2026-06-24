@@ -22,7 +22,7 @@ const config: Config = {
           blue: "#1A56DB",
           "blue-light": "#3B82F6",
           saffron: "#FF9933",
-          "saffron-dark": "#E67E00",
+          "saffron-dark": "#B45309",
           emerald: "#059669",
           violet: "#7C3AED",
           "violet-light": "#A78BFA",

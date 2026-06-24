@@ -24,7 +24,7 @@ export default function FeatureCard({
           {icon}
         </div>
         {badge && (
-          <span className="rounded-full bg-brand-emerald/10 px-2.5 py-0.5 text-xs font-bold text-brand-emerald">
+          <span className="rounded-full bg-brand-emerald/10 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
             {badge}
           </span>
         )}
