@@ -3,12 +3,7 @@ import HeroSection from "./HeroSection";
 import { CtaButton, SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
-import WhyAttendSection from "./WhyAttendSection";
-import EventTracksSection from "./EventTracksSection";
-import SpeakerHighlightsSection from "./SpeakerHighlightsSection";
 import type { CmsPartnerCard, CmsSpeakerCard } from "@/lib/cms/types";
-import VenueTravelSection from "./VenueTravelSection";
-import HomeEducationEcosystemNav from "./HomeEducationEcosystemNav";
 import LazySection from "@/components/performance/LazySection";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
 import AnnouncementsMarquee from "@/components/layout/AnnouncementsMarquee";
@@ -31,6 +26,11 @@ const GallerySection = dynamic(() => import("./GallerySection"));
 const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
 const PartnersShowcase = dynamic(() => import("@/components/home/sections/PartnersShowcase"));
 const HomeEditionCta = dynamic(() => import("./HomeEditionCta"));
+const WhyAttendSection = dynamic(() => import("./WhyAttendSection"));
+const EventTracksSection = dynamic(() => import("./EventTracksSection"));
+const SpeakerHighlightsSection = dynamic(() => import("./SpeakerHighlightsSection"));
+const VenueTravelSection = dynamic(() => import("./VenueTravelSection"));
+const HomeEducationEcosystemNav = dynamic(() => import("./HomeEducationEcosystemNav"));
 
 export default function HomePage({
   featuredSpeakers = [],
@@ -115,23 +115,24 @@ export default function HomePage({
           </div>
         </section>
 
-        <LazySection minHeight="6rem" rootMargin="80px 0px" fallback={<SectionSkeleton lines={2} />}>
+        <LazySection minHeight="6rem" rootMargin="0px 0px 80px 0px" idleFirst fallback={<SectionSkeleton lines={2} />}>
           <DiscoverStrip />
         </LazySection>
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-mid" />
         </div>
 
-        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton lines={4} />}>
+        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
           <WhyAttendSection />
         </LazySection>
-        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
           <EventTracksSection />
         </LazySection>
 
         <LazySection
           minHeight="16rem"
-          rootMargin="80px 0px"
+          rootMargin="0px 0px 60px 0px"
+          idleFirst
           fallback={
             <div className="mx-auto max-w-7xl">
               <SectionSkeleton lines={4} />
@@ -150,23 +151,23 @@ export default function HomePage({
           </section>
         </LazySection>
 
-        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
           <SpeakerHighlightsSection speakers={featuredSpeakers} />
         </LazySection>
-        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton lines={4} />}>
+        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
           <GallerySection />
         </LazySection>
 
-        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton />}>
           <VenueTravelSection />
         </LazySection>
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-footer" />
         </div>
-        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton lines={4} />}>
+        <LazySection rootMargin="0px 0px 60px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
           <HomeFaqSection />
         </LazySection>
-        <LazySection rootMargin="80px 0px" fallback={<SectionSkeleton />}>
+        <LazySection rootMargin="0px 0px 40px 0px" idleFirst fallback={<SectionSkeleton />}>
           <HomeEducationEcosystemNav />
         </LazySection>
       </main>

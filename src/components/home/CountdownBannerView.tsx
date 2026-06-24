@@ -1,40 +1,16 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
 import { event } from "@/design/tokens";
+import { getCountdownSnapshot } from "@/lib/home/countdown";
 
-function getTimeLeft(target: Date) {
-  const diff = target.getTime() - Date.now();
-  if (diff <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0, ended: true };
-  }
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-  return { days, hours, minutes, seconds, ended: false };
-}
+const UNITS = [
+  { label: "Days", key: "days" as const },
+  { label: "Hours", key: "hours" as const },
+  { label: "Min", key: "minutes" as const },
+  { label: "Sec", key: "seconds" as const },
+];
 
-export default function CountdownBanner({ theme = "dark" }: { theme?: "dark" | "light" }) {
-  const target = useMemo(
-    () => new Date(`${event.startDate}T09:00:00`),
-    []
-  );
-  const [left, setLeft] = useState(() => getTimeLeft(target));
-
-  useEffect(() => {
-    const id = setInterval(() => setLeft(getTimeLeft(target)), 1000);
-    return () => clearInterval(id);
-  }, [target]);
-
+export default function CountdownBannerView({ theme = "dark" }: { theme?: "dark" | "light" }) {
+  const left = getCountdownSnapshot();
   if (left.ended) return null;
-
-  const units = [
-    { label: "Days", value: left.days },
-    { label: "Hours", value: left.hours },
-    { label: "Min", value: left.minutes },
-    { label: "Sec", value: left.seconds },
-  ];
 
   const isLight = theme === "light";
 
@@ -46,7 +22,6 @@ export default function CountdownBanner({ theme = "dark" }: { theme?: "dark" | "
           : "flex flex-wrap items-center justify-center gap-3 rounded-xl border border-white/20 bg-black/20 px-4 py-3"
       }
       role="timer"
-      aria-live="polite"
       aria-label={`Countdown to ${event.name}`}
     >
       <span
@@ -59,7 +34,7 @@ export default function CountdownBanner({ theme = "dark" }: { theme?: "dark" | "
         Event begins in
       </span>
       <div className="flex gap-2">
-        {units.map((u) => (
+        {UNITS.map((u) => (
           <div
             key={u.label}
             className={
@@ -75,7 +50,7 @@ export default function CountdownBanner({ theme = "dark" }: { theme?: "dark" | "
                   : "block text-lg font-extrabold text-white tabular-nums"
               }
             >
-              {String(u.value).padStart(2, "0")}
+              {String(left[u.key]).padStart(2, "0")}
             </span>
             <span
               className={
