@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
@@ -16,6 +17,8 @@ type InsightItem = {
   tag: string;
   accent: string;
   tagBg: string;
+  imageSrc: string;
+  imageAlt: string;
   external: boolean;
 };
 
@@ -26,8 +29,10 @@ const DEFAULT_INSIGHTS: InsightItem[] = [
     author: "Academic Council",
     href: "/departments/academic-council",
     tag: "Policy",
-    accent: "from-brand-blue/20 to-brand-blue/5",
+    accent: "from-brand-blue/60 to-brand-blue/20",
     tagBg: "bg-brand-blue",
+    imageSrc: "/2024M/Press8.jpg",
+    imageAlt: "NEP 2020 policy session at Shiksha Mahakumbh",
     external: false,
   },
   {
@@ -36,8 +41,10 @@ const DEFAULT_INSIGHTS: InsightItem[] = [
     author: "SMK Proceedings",
     href: "/publications/souvenir-abstracts-mtc",
     tag: "Research",
-    accent: "from-brand-saffron/25 to-brand-saffron/5",
+    accent: "from-brand-saffron/50 to-brand-saffron/15",
     tagBg: "bg-brand-saffron",
+    imageSrc: "/2024M/Vyakhanmala.jpg",
+    imageAlt: "Research proceedings release at Shiksha Mahakumbh",
     external: false,
   },
   {
@@ -46,8 +53,10 @@ const DEFAULT_INSIGHTS: InsightItem[] = [
     author: "Research Track",
     href: CMT_SUBMISSION_URL,
     tag: "Submit",
-    accent: "from-brand-emerald/20 to-brand-emerald/5",
+    accent: "from-brand-emerald/50 to-brand-emerald/15",
     tagBg: "bg-brand-emerald",
+    imageSrc: "/2024M/Press7.jpg",
+    imageAlt: "Multi Track Conference inauguration",
     external: true,
   },
   {
@@ -56,26 +65,56 @@ const DEFAULT_INSIGHTS: InsightItem[] = [
     author: "SMK History",
     href: "/past-events",
     tag: "Editions",
-    accent: "from-violet-200/80 to-violet-50",
-    tagBg: "bg-violet-600",
+    accent: "from-brand-violet/50 to-brand-violet/15",
+    tagBg: "bg-brand-violet",
+    imageSrc: "/2024K/k6.jpg",
+    imageAlt: "Past Shiksha Mahakumbh edition ceremony",
     external: false,
   },
 ];
 
 const ACCENT_PRESETS = [
-  { accent: "from-brand-blue/20 to-brand-blue/5", tagBg: "bg-brand-blue" },
-  { accent: "from-brand-saffron/25 to-brand-saffron/5", tagBg: "bg-brand-saffron" },
-  { accent: "from-brand-emerald/20 to-brand-emerald/5", tagBg: "bg-brand-emerald" },
-  { accent: "from-violet-200/80 to-violet-50", tagBg: "bg-violet-600" },
+  {
+    accent: "from-brand-blue/60 to-brand-blue/20",
+    tagBg: "bg-brand-blue",
+    imageSrc: "/2024M/Press8.jpg",
+    imageAlt: "Shiksha Mahakumbh highlight",
+  },
+  {
+    accent: "from-brand-saffron/50 to-brand-saffron/15",
+    tagBg: "bg-brand-saffron",
+    imageSrc: "/2024M/Vyakhanmala.jpg",
+    imageAlt: "Shiksha Mahakumbh highlight",
+  },
+  {
+    accent: "from-brand-emerald/50 to-brand-emerald/15",
+    tagBg: "bg-brand-emerald",
+    imageSrc: "/2024M/Press7.jpg",
+    imageAlt: "Shiksha Mahakumbh highlight",
+  },
+  {
+    accent: "from-brand-violet/50 to-brand-violet/15",
+    tagBg: "bg-brand-violet",
+    imageSrc: "/2024K/k6.jpg",
+    imageAlt: "Shiksha Mahakumbh highlight",
+  },
 ];
 
 function InsightCard({ item }: { item: InsightItem }) {
   const inner = (
     <>
-      <div
-        className={`relative flex aspect-[16/10] items-end bg-gradient-to-br p-5 ${item.accent}`}
-      >
-        <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold text-white ${item.tagBg}`}>
+      <div className={`relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${item.accent}`}>
+        <Image
+          src={item.imageSrc}
+          alt={item.imageAlt}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover transition duration-300 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/50 via-transparent to-transparent" />
+        <span
+          className={`absolute bottom-4 left-4 rounded-full px-2.5 py-0.5 text-xs font-bold text-white ${item.tagBg}`}
+        >
           {item.tag}
         </span>
       </div>
@@ -99,12 +138,7 @@ function InsightCard({ item }: { item: InsightItem }) {
       return <div className={className}>{inner}</div>;
     }
     return (
-      <a
-        href={safeHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}
-      >
+      <a href={safeHref} target="_blank" rel="noopener noreferrer" className={className}>
         {inner}
       </a>
     );
@@ -127,6 +161,8 @@ export default function DiscoverStrip() {
     href?: string;
     url?: string;
     tag?: string;
+    imageSrc?: string;
+    imageAlt?: string;
     external?: boolean;
   }>(discover, "items");
 
@@ -145,15 +181,19 @@ export default function DiscoverStrip() {
             tag: item.tag ?? "News",
             accent: preset.accent,
             tagBg: preset.tagBg,
+            imageSrc: item.imageSrc ?? preset.imageSrc,
+            imageAlt: item.imageAlt ?? item.title ?? "Shiksha Mahakumbh update",
             external,
           };
         })
       : DEFAULT_INSIGHTS;
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-brand-surface-warm to-white py-12 md:py-16">
-      <div className="brand-grid-pattern pointer-events-none absolute inset-0 opacity-30" aria-hidden />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section
+      id="discover"
+      className="bg-gradient-to-b from-brand-surface-warm to-white py-12 md:py-16"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow={sectionField(discover, "eyebrow", "Insights & Updates")}
           title={sectionField(discover, "title", "Research Highlights & Announcements")}

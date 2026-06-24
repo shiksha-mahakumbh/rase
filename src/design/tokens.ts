@@ -9,6 +9,8 @@ export const colors = {
   saffron: "#FF9933",
   saffronDark: "#E67E00",
   emerald: "#059669",
+  violet: "#7C3AED",
+  violetLight: "#A78BFA",
   surface: "#F8FAFC",
   surfaceWarm: "#FFFBF5",
   white: "#FFFFFF",

@@ -58,7 +58,11 @@
   }
 
   .home-glass {
-    @apply rounded-2xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(80,42,42,0.08)];
+    @apply rounded-2xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(11,31,59,0.08)];
+  }
+
+  .home-section-warm {
+    @apply bg-gradient-to-br from-brand-surface-warm via-white to-brand-surface-warm;
   }
 
   .home-section-title {

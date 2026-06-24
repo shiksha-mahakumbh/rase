@@ -27,7 +27,7 @@ export default function NoticeBoard() {
         <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary/60">
           Stay Updated
         </p>
-        <h3 className="text-xl font-bold text-brand-navy md:text-2xl">Latest Notices</h3>
+        <h3 className="text-lg font-bold text-brand-navy md:text-xl">Latest Notices</h3>
       </div>
 
       {notices.length === 0 ? (

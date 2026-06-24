@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 
 const PILLARS = [
@@ -26,7 +27,7 @@ const PILLARS = [
   {
     title: "Conclaves",
     subtitle: "7 Thematic Forums",
-    color: "from-violet-600 to-violet-500",
+    color: "from-brand-violet to-brand-violet-light",
     href: "/committees",
   },
 ];
@@ -35,14 +36,12 @@ export default function BrandShowcaseSection() {
   return (
     <section
       aria-label="Shiksha Mahakumbh brand vision"
-      className="relative overflow-hidden border-y border-brand-saffron/20 bg-gradient-to-b from-white via-brand-surface-warm to-white py-12 md:py-16"
+      className="border-y border-brand-saffron/20 bg-white py-12 md:py-16"
     >
-      <div className="brand-grid-pattern pointer-events-none absolute inset-0 opacity-40" aria-hidden />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-saffron-dark">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-saffron-dark">
               Department of Holistic Education
             </p>
             <h2 className="mt-2 text-2xl font-extrabold text-brand-navy md:text-3xl">
@@ -55,26 +54,16 @@ export default function BrandShowcaseSection() {
               reflects energy, tradition, and forward-looking innovation.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href={ROUTES.registration}
-                className="inline-flex min-h-[44px] items-center rounded-xl bg-brand-saffron px-5 py-2.5 text-sm font-bold text-brand-navy shadow-lg shadow-brand-saffron/25 transition hover:bg-brand-saffron-dark hover:text-white"
-              >
+              <CtaButton href={ROUTES.registration} variant="primary">
                 Join the movement
-              </Link>
-              <Link
-                href="/past-events"
-                className="inline-flex min-h-[44px] items-center rounded-xl border-2 border-brand-blue/30 px-5 py-2.5 text-sm font-bold text-brand-blue transition hover:bg-brand-blue/5"
-              >
+              </CtaButton>
+              <CtaButton href="/past-events" variant="ghost">
                 Explore past editions
-              </Link>
+              </CtaButton>
             </div>
           </div>
 
           <div className="relative">
-            <div
-              className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-brand-saffron/20 blur-2xl"
-              aria-hidden
-            />
             <Image
               src="/2024M/Press7.jpg"
               alt="Inauguration of Shiksha Mahakumbh — national education summit"
