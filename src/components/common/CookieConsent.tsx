@@ -2,16 +2,44 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  isHomePath,
+  WELCOME_MODAL_CLOSED_EVENT,
+  WELCOME_MODAL_SEEN_KEY,
+} from "@/lib/home/is-home-path";
 
 const STORAGE_KEY = "smk_cookie_consent";
+const COOKIE_DEFER_MS = 18_000;
 
 export default function CookieConsent() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) setVisible(true);
-  }, []);
+    if (localStorage.getItem(STORAGE_KEY)) return;
+
+    const show = () => setVisible(true);
+
+    if (!isHomePath(pathname ?? "")) {
+      show();
+      return;
+    }
+
+    if (sessionStorage.getItem(WELCOME_MODAL_SEEN_KEY)) {
+      show();
+      return;
+    }
+
+    const onModalClosed = () => show();
+    window.addEventListener(WELCOME_MODAL_CLOSED_EVENT, onModalClosed);
+    const fallback = window.setTimeout(show, COOKIE_DEFER_MS);
+
+    return () => {
+      window.removeEventListener(WELCOME_MODAL_CLOSED_EVENT, onModalClosed);
+      window.clearTimeout(fallback);
+    };
+  }, [pathname]);
 
   const accept = () => {
     localStorage.setItem(STORAGE_KEY, "accepted");

@@ -35,7 +35,7 @@ export default function AnnouncementBarsPage() {
   const [form, setForm] = useState({
     title: "",
     message: "",
-    barType: "ticker",
+    barType: "global",
     colorTheme: "navy",
     ctaLabel: "",
     ctaUrl: "",
@@ -74,7 +74,7 @@ export default function AnnouncementBarsPage() {
         }),
       });
       toast.success("Announcement bar created");
-      setForm({ title: "", message: "", barType: "ticker", colorTheme: "navy", ctaLabel: "", ctaUrl: "", isDismissible: true, startsAt: "", endsAt: "" });
+      setForm({ title: "", message: "", barType: "global", colorTheme: "navy", ctaLabel: "", ctaUrl: "", isDismissible: true, startsAt: "", endsAt: "" });
       void load();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Create failed");
@@ -118,9 +118,10 @@ export default function AnnouncementBarsPage() {
             value={form.barType}
             onChange={(e) => setForm({ ...form, barType: e.target.value })}
             options={[
-              { value: "ticker", label: "Ticker" },
-              { value: "global", label: "Global modal" },
-              { value: "registration_alert", label: "Registration alert" },
+              { value: "global", label: "Global (welcome modal)" },
+              { value: "registration_alert", label: "Registration alert (modal + ticker)" },
+              { value: "deadline_reminder", label: "Deadline reminder (ticker)" },
+              { value: "emergency", label: "Emergency (modal priority)" },
             ]}
           />
         </div>

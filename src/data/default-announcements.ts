@@ -248,18 +248,32 @@ export function announcementBarsToTicker(bars: CmsAnnouncementBar[]): TickerItem
   });
 }
 
-export function resolveTickerItems(
-  bars: CmsAnnouncementBar[] | null | undefined,
-  locale: string = "en"
-): TickerItem[] {
-  return announcementBarsToTicker(resolveAnnouncementBars(bars, locale));
-}
-
 export function pickWelcomeModalBar(
   bars: CmsAnnouncementBar[] | null | undefined
 ): CmsAnnouncementBar | null {
   const list = bars ?? [];
   return (
-    list.find((b) => b.barType === "global" || b.barType === "registration_alert") ?? list[0] ?? null
+    list.find((b) => b.barType === "registration_alert") ??
+    list.find((b) => b.barType === "emergency") ??
+    list.find((b) => b.barType === "global") ??
+    list.find((b) => b.barType === "deadline_reminder") ??
+    null
   );
+}
+
+export function barsForTicker(
+  bars: CmsAnnouncementBar[] | null | undefined,
+  locale: string = "en"
+): CmsAnnouncementBar[] {
+  const list = resolveAnnouncementBars(bars, locale);
+  const modalBar = pickWelcomeModalBar(list);
+  if (!modalBar) return list;
+  return list.filter((b) => b.id !== modalBar.id);
+}
+
+export function resolveTickerItems(
+  bars: CmsAnnouncementBar[] | null | undefined,
+  locale: string = "en"
+): TickerItem[] {
+  return announcementBarsToTicker(barsForTicker(bars, locale));
 }

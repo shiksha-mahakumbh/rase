@@ -8,9 +8,10 @@ type Props = {
   href: string;
   className?: string;
   children: ReactNode;
+  onClick?: () => void;
 };
 
-export function NavCtaLink({ href, className, children }: Props) {
+export function NavCtaLink({ href, className, children, onClick }: Props) {
   const nav = resolveNavHref(href);
 
   if (nav.external) {
@@ -20,6 +21,7 @@ export function NavCtaLink({ href, className, children }: Props) {
         target="_blank"
         rel="noopener noreferrer"
         className={className}
+        onClick={onClick}
       >
         {children}
       </a>
@@ -27,7 +29,7 @@ export function NavCtaLink({ href, className, children }: Props) {
   }
 
   return (
-    <Link href={nav.href} className={className}>
+    <Link href={nav.href} className={className} onClick={onClick}>
       {children}
     </Link>
   );

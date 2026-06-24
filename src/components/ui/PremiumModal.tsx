@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useCallback, useRef, ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { createPortal } from "react-dom";
 
 export type ModalVariant = "default" | "success" | "error" | "info";
@@ -11,6 +11,7 @@ export interface PremiumModalProps {
   onClose: () => void;
   children?: ReactNode;
   title?: string;
+  titleId?: string;
   variant?: ModalVariant;
   showCloseButton?: boolean;
   closeOnBackdrop?: boolean;
@@ -38,6 +39,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
   onClose,
   children,
   title,
+  titleId,
   variant = "default",
   showCloseButton = true,
   closeOnBackdrop = true,
@@ -45,6 +47,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
   ariaLabel = "Dialog",
 }) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
 
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
@@ -88,20 +91,30 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
 
   if (typeof document === "undefined") return null;
 
+  const panelMotion = reduceMotion
+    ? { initial: false as const, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: { duration: 0 } }
+    : {
+        initial: { opacity: 0, scale: 0.94, y: 20 },
+        animate: { opacity: 1, scale: 1, y: 0 },
+        exit: { opacity: 0, scale: 0.94, y: 20 },
+        transition: { type: "spring" as const, damping: 28, stiffness: 320 },
+      };
+
   return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[110] flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
-          aria-label={ariaLabel}
+          aria-label={titleId ? undefined : ariaLabel}
+          aria-labelledby={titleId}
         >
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: reduceMotion ? 0 : 0.2 }}
             className="absolute inset-0 bg-black/50 backdrop-blur-md"
             onClick={closeOnBackdrop ? onClose : undefined}
             aria-hidden="true"
@@ -109,10 +122,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
 
           <motion.div
             ref={panelRef}
-            initial={{ opacity: 0, scale: 0.94, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: 20 }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            {...panelMotion}
             className={`relative w-full ${maxWidthClass[maxWidth]} max-h-[90vh] overflow-y-auto rounded-3xl border border-white/40 bg-white/90 shadow-[0_24px_80px_rgba(80,42,42,0.25)] backdrop-blur-xl`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -146,7 +156,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
             )}
 
             <div className="relative p-6 md:p-8">
-              {title && (
+              {title && !titleId && (
                 <h2 className="mb-4 pr-10 text-center text-xl font-bold text-primary md:text-2xl">
                   {title}
                 </h2>
