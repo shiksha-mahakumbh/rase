@@ -123,11 +123,21 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
         <div className="mt-8 rounded-2xl border border-brand-navy/10 bg-brand-surface-warm px-5 py-4 text-center md:px-8">
           <p className="text-sm font-semibold text-brand-navy">Academic enquiries</p>
           <p className="mt-2 text-sm text-slate-600">
+            Papers, Olympiads, awards &amp; submissions:{" "}
             <a
               href={`mailto:${ACADEMIC_COUNCIL_EVENT.contactEmail}`}
               className="font-medium text-brand-navy underline-offset-2 hover:underline"
             >
               {ACADEMIC_COUNCIL_EVENT.contactEmail}
+            </a>
+          </p>
+          <p className="mt-1 text-sm text-slate-600">
+            General summit enquiries:{" "}
+            <a
+              href="mailto:info@shikshamahakumbh.com"
+              className="font-medium text-brand-navy underline-offset-2 hover:underline"
+            >
+              info@shikshamahakumbh.com
             </a>
             {" · "}
             <a

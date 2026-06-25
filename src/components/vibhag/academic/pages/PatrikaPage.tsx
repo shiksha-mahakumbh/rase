@@ -40,7 +40,7 @@ const TIMELINE = [
   "Call for Submissions: To be announced",
   "Last Date for Submission: To be announced",
   "Review & Selection: To be announced",
-  "Publication & Release: During Shiksha Mahakumbh 2026",
+  "Publication & Release: During Shiksha Mahakumbh 6.0",
 ];
 
 const SCHOOL_SUPPORT = [
