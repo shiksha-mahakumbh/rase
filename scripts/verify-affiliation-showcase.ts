@@ -4,7 +4,7 @@
  */
 import { buildAffiliationShowcase } from "../src/lib/cms/build-affiliation-showcase";
 import { getAffiliationShowcaseStats } from "../src/lib/cms/affiliation-showcase-stats";
-import { CURATED_MEDIA_AFFILIATIONS, CURATED_SPONSOR_AFFILIATIONS } from "../src/lib/cms/affiliation-classify";
+import { CONFERENCE_SUPPORT_MASTER } from "../src/data/conference-support-master";
 
 const grouped = buildAffiliationShowcase({});
 const stats = getAffiliationShowcaseStats(grouped);
@@ -25,14 +25,14 @@ console.log("Sample linked:", sampleLinked.join(", ") || "none");
 const mediaNames = grouped.media.map((e) => e.name);
 const sponsorNames = grouped.sponsors.map((e) => e.name);
 
-const curatedMedia = CURATED_MEDIA_AFFILIATIONS.map((e) => e.name);
-const curatedSponsor = CURATED_SPONSOR_AFFILIATIONS.map((e) => e.name);
+const masterMedia = CONFERENCE_SUPPORT_MASTER.filter((e) => e.section === "L").map((e) => e.name);
+const masterSponsor = CONFERENCE_SUPPORT_MASTER.filter((e) => e.section === "K").map((e) => e.name);
 
-const missingMedia = curatedMedia.filter((n) => !mediaNames.some((m) => m.toLowerCase().includes(n.toLowerCase().split(" ")[0]!)));
-const missingSponsor = curatedSponsor.filter((n) => !sponsorNames.some((s) => s.toLowerCase().includes(n.toLowerCase())));
+const missingMedia = masterMedia.filter((n) => !mediaNames.some((m) => m.toLowerCase().includes(n.toLowerCase().split(" ")[0]!)));
+const missingSponsor = masterSponsor.filter((n) => !sponsorNames.some((s) => s.toLowerCase().includes(n.toLowerCase().split(" ")[0]!)));
 
-console.log("\nCurated media present:", missingMedia.length === 0 ? "YES" : `MISSING: ${missingMedia.join(", ")}`);
-console.log("Curated sponsors present:", missingSponsor.length === 0 ? "YES" : `MISSING: ${missingSponsor.join(", ")}`);
+console.log("\nMaster media present:", missingMedia.length === 0 ? "YES" : `MISSING: ${missingMedia.join(", ")}`);
+console.log("Master sponsors present:", missingSponsor.length === 0 ? "YES" : `MISSING: ${missingSponsor.join(", ")}`);
 
 const badUrls = [...grouped.academic, ...grouped.media, ...grouped.sponsors]
   .filter((e) => e.website && !e.website.startsWith("https://") && !e.website.startsWith("http://"))
@@ -48,8 +48,8 @@ if (stats.byTab.sponsors < 6) {
   console.error("\nFAIL: Expected at least 6 sponsors");
   process.exit(1);
 }
-if (stats.byTab.academic < 20) {
-  console.error("\nFAIL: Expected substantial academic list");
+if (stats.byTab.academic < 100) {
+  console.error("\nFAIL: Expected substantial academic list (master has 150+)");
   process.exit(1);
 }
 

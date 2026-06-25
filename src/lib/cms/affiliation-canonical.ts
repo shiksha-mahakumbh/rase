@@ -155,6 +155,90 @@ const CANONICAL_RULES: CanonicalRule[] = [
     website: "https://savantx.com/",
   },
   {
+    displayName: "IISER Mohali",
+    dedupeKey: "iiser mohali",
+    patterns: [/iiser\s*mohali|आईआईएसईआर\s*मोहाली|आईसएर\s*मोहाली|आईसएर\s*मोहली/i],
+    website: "https://www.iisermohali.ac.in/",
+  },
+  {
+    displayName: "NIPER Mohali",
+    dedupeKey: "niper mohali",
+    patterns: [/niper\s*mohali|नाइपर\s*मोहाली|नाइपर\s*मोहली/i],
+    website: "https://www.niper.gov.in/",
+  },
+  {
+    displayName: "Central University of Punjab",
+    dedupeKey: "central university of punjab",
+    patterns: [/central university of punjab|cu punjab|पंजाब\s*केंद्रीय\s*विश्वविद्यालय/i],
+  },
+  {
+    displayName: "Central University of Haryana",
+    dedupeKey: "central university of haryana",
+    patterns: [/central university of haryana|cu haryana|हरियाणा\s*केंद्रीय\s*विश्वविद्यालय/i],
+  },
+  {
+    displayName: "Central University of Himachal Pradesh",
+    dedupeKey: "central university of himachal pradesh",
+    patterns: [/central university of himachal|cu himachal|हिमाचल\s*प्रदेश\s*केंद्रीय/i],
+  },
+  {
+    displayName: "Kurukshetra University",
+    dedupeKey: "kurukshetra university",
+    patterns: [/kurukshetra university|कुरुक्षेत्र\s*विश्वविद्यालय/i],
+    website: "https://kuk.ac.in/",
+  },
+  {
+    displayName: "Chaudhary Bansi Lal University",
+    dedupeKey: "chaudhary bansi lal university",
+    patterns: [/chaudhary bansi lal|cblu|चौधरी\s*बंसी\s*लाल/i],
+  },
+  {
+    displayName: "Indira Gandhi University",
+    dedupeKey: "indira gandhi university",
+    patterns: [/\bigu\b|indira gandhi university/i],
+  },
+  {
+    displayName: "Guru Jambheshwar University of Science & Technology",
+    dedupeKey: "guru jambheshwar university",
+    patterns: [/gjust|guru jambheshwar|गुरु\s*जंभेश्वर/i],
+  },
+  {
+    displayName: "CCS Haryana Agricultural University",
+    dedupeKey: "ccs haryana agricultural university",
+    patterns: [/ccshau|ccs haryana agricultural|चौ\.?\s*चरण\s*सिंह\s*हरियाणा\s*कृषि/i],
+  },
+  {
+    displayName: "Dada Lakhmi Chand State University of Performing & Visual Arts",
+    dedupeKey: "dada lakhmi chand state university",
+    patterns: [/dada lakhmi|dlcuva|दादा\s*लख्मी\s*चंद/i],
+  },
+  {
+    displayName: "NITTTR Chandigarh",
+    dedupeKey: "nitttr chandigarh",
+    patterns: [/nitttr|nittt?r\s*chandigarh/i],
+  },
+  {
+    displayName: "SLIET Longowal",
+    dedupeKey: "sliet longowal",
+    patterns: [/sliet\s*longowal|एसएलआईईडी\s*लोंगोवाल/i],
+    website: "https://www.sliet.ac.in/",
+  },
+  {
+    displayName: "Haryana Yog Aayog",
+    dedupeKey: "haryana yog aayog",
+    patterns: [/haryana yog aayog|हरियाणा\s*योग\s*आयोग/i],
+  },
+  {
+    displayName: "National Council for Vocational Education and Training (NCVET)",
+    dedupeKey: "ncvet",
+    patterns: [/ncvet|vocational education and training/i],
+  },
+  {
+    displayName: "National Commission for Indian System of Medicine (NCISM)",
+    dedupeKey: "ncism",
+    patterns: [/ncism|indian system of medicine/i],
+  },
+  {
     displayName: "Requil India",
     dedupeKey: "requil india",
     patterns: [/requil|रिक्विल/i],
