@@ -23,8 +23,7 @@ async function proxyPaymentRecovery(request: NextRequest) {
 
   await verifyAdminRequest(request);
 
-  const secret =
-    process.env.ADMIN_OPS_SECRET ?? process.env.REGISTRATION_EMAIL_SECRET;
+  const secret = process.env.ADMIN_OPS_SECRET;
   if (!secret) {
     return NextResponse.json(
       { error: "Admin authentication not configured", code: "ADMIN_NOT_CONFIGURED" },

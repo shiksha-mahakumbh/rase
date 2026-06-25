@@ -8,7 +8,9 @@ async function guard(request: NextRequest) {
   const limited = rateLimit({ key: `admin-cert:${ip}`, limit: 30, windowMs: 60_000 });
   if (!limited.ok) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   const { requireAdminSecret } = await import("@/server/lib/admin-guard");
+  const { assertAdminRoles, ADMIN_EXPORT_ROLES } = await import("@/server/lib/admin-rbac");
   requireAdminSecret(request);
+  assertAdminRoles(request, ADMIN_EXPORT_ROLES);
   return null;
 }
 

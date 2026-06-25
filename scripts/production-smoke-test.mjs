@@ -10,7 +10,20 @@ const base = (process.argv[2] || process.env.NEXT_PUBLIC_SITE_URL || "https://ww
 
 const tests = [
   {
-    name: "health-json",
+    name: "health-v2",
+    path: "/api/v2/health",
+    assert: async (res, text) => {
+      if (!res.ok) return `HTTP ${res.status}`;
+      try {
+        const j = JSON.parse(text);
+        return j.status === "ok" || j.ok === true ? null : `unexpected payload`;
+      } catch {
+        return "not JSON";
+      }
+    },
+  },
+  {
+    name: "health-legacy",
     path: "/api/health",
     assert: async (res, text) => {
       if (!res.ok) return `HTTP ${res.status}`;
@@ -52,10 +65,15 @@ const tests = [
     assert: async (res) => (res.ok ? null : `HTTP ${res.status}`),
   },
   {
-    name: "knowledge-hub",
-    path: "/knowledge",
+    name: "publications-hub",
+    path: "/publications",
+    assert: async (res) => (res.ok ? null : `HTTP ${res.status}`),
+  },
+  {
+    name: "academic-council",
+    path: "/departments/academic-council",
     assert: async (res, text) =>
-      res.ok && /knowledge|Knowledge/i.test(text) ? null : "knowledge hub missing",
+      res.ok && /Academic Council|Conference/i.test(text) ? null : "AC page missing",
   },
   {
     name: "introduction",
@@ -69,17 +87,32 @@ const tests = [
       res.ok && text.length > 500 ? null : `HTTP ${res.status} or empty`,
   },
   {
-    name: "admin-page",
+    name: "locale-hi-contact",
+    path: "/hi/contact-us",
+    assert: async (res) => (res.ok ? null : `HTTP ${res.status}`),
+  },
+  {
+    name: "newsletter-api",
+    path: "/api/v2/newsletter/subscribe",
+    method: "OPTIONS",
+    assert: async (res) =>
+      res.status === 204 || res.status === 405 || res.ok ? null : `HTTP ${res.status}`,
+  },
+  {
+    name: "admin-entry",
     path: "/admin",
     assert: async (res, text) =>
-      res.ok && /admin|sign|google/i.test(text) ? null : "admin entry missing",
+      res.ok && /admin|sign|password|email/i.test(text) ? null : "admin entry missing",
   },
 ];
 
 async function runOne(test) {
   const url = `${base}${test.path}`;
   try {
-    const res = await fetch(url, { redirect: "follow" });
+    const res = await fetch(url, {
+      method: test.method ?? "GET",
+      redirect: "follow",
+    });
     const text = await res.text();
     const err = await test.assert(res, text);
     const ok = !err;

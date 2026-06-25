@@ -42,7 +42,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
   return (
     <section
       aria-label="Shiksha Mahakumbh hero"
-      className="brand-hero-bg relative min-h-[28rem] overflow-hidden sm:min-h-[30rem] lg:min-h-[32rem]"
+      className="brand-hero-bg relative min-h-[24rem] overflow-hidden sm:min-h-[26rem] lg:min-h-[30rem]"
     >
       <div
         className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-brand-saffron/15 blur-3xl"

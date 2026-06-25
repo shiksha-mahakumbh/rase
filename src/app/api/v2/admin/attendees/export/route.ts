@@ -12,7 +12,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const { requireAdminSecret } = await import("@/server/lib/admin-guard");
+    const { assertAdminRoles, ADMIN_EXPORT_ROLES } = await import("@/server/lib/admin-rbac");
     requireAdminSecret(request);
+    assertAdminRoles(request, ADMIN_EXPORT_ROLES);
     const { searchParams } = new URL(request.url);
     const csv = await exportAttendeesCsv({
       search: searchParams.get("search") ?? undefined,

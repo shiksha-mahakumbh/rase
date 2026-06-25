@@ -6,7 +6,11 @@ import { globalSearch } from "@/lib/ecosystem/search";
 import { kindLabel } from "@/lib/ecosystem/types";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
 
-export default function GlobalSearch() {
+type GlobalSearchProps = {
+  compact?: boolean;
+};
+
+export default function GlobalSearch({ compact = false }: GlobalSearchProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const ref = useRef<HTMLDivElement>(null);
@@ -41,7 +45,7 @@ export default function GlobalSearch() {
         onKeyDown={(e) => {
           if (e.key === "Escape") setOpen(false);
         }}
-        className="min-h-[40px] w-32 rounded-lg border border-slate-200 px-3 text-sm xl:w-44"
+        className={`min-h-[40px] rounded-lg border border-slate-200 px-3 text-sm ${compact ? "w-28" : "w-32 xl:w-44"}`}
         aria-controls={open ? "global-search-results" : undefined}
       />
 
@@ -76,11 +80,11 @@ export default function GlobalSearch() {
           )}
           <li className="border-t px-4 py-2">
             <Link
-              href={`/knowledge?q=${encodeURIComponent(q)}`}
+              href={`/publications?q=${encodeURIComponent(q)}`}
               className="text-sm font-semibold text-primary hover:underline"
               onClick={() => setOpen(false)}
             >
-              View all in Knowledge Hub →
+              View all in Publications →
             </Link>
           </li>
         </ul>

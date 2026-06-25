@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useAdmin, canPerformCheckIn } from "@/lib/adminAuth";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
 
 type AttendeeLookup = {
@@ -17,9 +18,15 @@ type AttendeeLookup = {
   sessions: Array<{ name: string; attendedAt: string }>;
 };
 
+const CHECKIN_LOCATIONS = ["Main Gate", "Registration Desk", "Conclave Hall", "Exhibition"] as const;
+
 export default function CheckInClient() {
+  const { role } = useAdmin();
+  const canPerformActions = canPerformCheckIn(role);
+
   const [scanInput, setScanInput] = useState("");
   const [sessionName, setSessionName] = useState("");
+  const [location, setLocation] = useState<(typeof CHECKIN_LOCATIONS)[number]>("Main Gate");
   const [attendee, setAttendee] = useState<AttendeeLookup | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -41,7 +48,7 @@ export default function CheckInClient() {
   };
 
   const act = async (action: "check_in" | "kit" | "certificate_eligible" | "session") => {
-    if (!attendee) return;
+    if (!attendee || !canPerformActions) return;
     setBusy(true);
     try {
       const res = await adminCmsFetch<{ message?: string; duplicate?: boolean; attendee?: AttendeeLookup }>(
@@ -53,7 +60,7 @@ export default function CheckInClient() {
             registrationId: attendee.registrationId,
             action,
             sessionName: action === "session" ? sessionName : undefined,
-            location: "Main Gate",
+            location,
           }),
         }
       );
@@ -76,7 +83,20 @@ export default function CheckInClient() {
 
       <div className="mx-auto max-w-lg space-y-4">
         <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <label className="block text-sm font-semibold text-slate-700">Enter Registration ID</label>
+          <label className="block text-sm font-semibold text-slate-700">Check-in location</label>
+          <select
+            className="mt-2 w-full rounded-xl border border-slate-300 px-3 py-3 text-sm"
+            value={location}
+            onChange={(e) => setLocation(e.target.value as (typeof CHECKIN_LOCATIONS)[number])}
+          >
+            {CHECKIN_LOCATIONS.map((loc) => (
+              <option key={loc} value={loc}>
+                {loc}
+              </option>
+            ))}
+          </select>
+
+          <label className="mt-4 block text-sm font-semibold text-slate-700">Enter Registration ID</label>
           <input
             className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-4 text-lg font-mono"
             value={scanInput}
@@ -117,49 +137,58 @@ export default function CheckInClient() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                disabled={busy}
-                className="min-h-[52px] rounded-xl bg-emerald-600 font-bold text-white"
-                onClick={() => void act("check_in")}
-              >
-                Mark Check-In
-              </button>
-              <button
-                type="button"
-                disabled={busy || attendee.kitDistributed}
-                className="min-h-[52px] rounded-xl bg-brand-saffron font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white disabled:opacity-50"
-                onClick={() => void act("kit")}
-              >
-                Kit Distributed
-              </button>
-              <button
-                type="button"
-                disabled={busy || attendee.certificateEligible}
-                className="min-h-[52px] rounded-xl bg-violet-600 font-bold text-white disabled:opacity-50"
-                onClick={() => void act("certificate_eligible")}
-              >
-                Certificate Eligible
-              </button>
-            </div>
+            {!canPerformActions ? (
+              <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                Lookup only — your account cannot mark check-in. Contact an Admin or Super Admin for
+                gate actions.
+              </p>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    disabled={busy}
+                    className="min-h-[52px] rounded-xl bg-emerald-600 font-bold text-white"
+                    onClick={() => void act("check_in")}
+                  >
+                    Mark Check-In
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy || attendee.kitDistributed}
+                    className="min-h-[52px] rounded-xl bg-brand-saffron font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white disabled:opacity-50"
+                    onClick={() => void act("kit")}
+                  >
+                    Kit Distributed
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy || attendee.certificateEligible}
+                    className="min-h-[52px] rounded-xl bg-violet-600 font-bold text-white disabled:opacity-50"
+                    onClick={() => void act("certificate_eligible")}
+                  >
+                    Certificate Eligible
+                  </button>
+                </div>
 
-            <div className="flex gap-2">
-              <input
-                className="flex-1 rounded-lg border px-3 py-3"
-                placeholder="Session name"
-                value={sessionName}
-                onChange={(e) => setSessionName(e.target.value)}
-              />
-              <button
-                type="button"
-                disabled={busy || !sessionName.trim()}
-                className="rounded-xl bg-slate-800 px-4 font-bold text-white disabled:opacity-50"
-                onClick={() => void act("session")}
-              >
-                Session
-              </button>
-            </div>
+                <div className="flex gap-2">
+                  <input
+                    className="flex-1 rounded-lg border px-3 py-3"
+                    placeholder="Session name"
+                    value={sessionName}
+                    onChange={(e) => setSessionName(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    disabled={busy || !sessionName.trim()}
+                    className="rounded-xl bg-slate-800 px-4 font-bold text-white disabled:opacity-50"
+                    onClick={() => void act("session")}
+                  >
+                    Session
+                  </button>
+                </div>
+              </>
+            )}
 
             {attendee.sessions.length > 0 && (
               <div className="text-sm text-slate-600">

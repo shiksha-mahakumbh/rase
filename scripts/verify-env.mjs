@@ -25,16 +25,30 @@ const env = {
   ...process.env,
 };
 
+function hasBrevoSmtp() {
+  return Boolean(
+    env.BREVO_SMTP_HOST && env.BREVO_SMTP_USER && env.BREVO_SMTP_PASS
+  );
+}
+
+function hasGenericSmtp() {
+  return Boolean(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS);
+}
+
 const groups = {
-  site: [
-    { key: "NEXT_PUBLIC_SITE_URL", required: true, staging: true },
-  ],
+  site: [{ key: "NEXT_PUBLIC_SITE_URL", required: true, staging: true }],
   supabase: [
     { key: "DATABASE_URL", required: true, production: true },
     { key: "DIRECT_URL", required: true, production: true },
     { key: "NEXT_PUBLIC_SUPABASE_URL", required: true, production: true },
     { key: "NEXT_PUBLIC_SUPABASE_ANON_KEY", required: true, production: true },
     { key: "SUPABASE_SERVICE_ROLE_KEY", required: true, production: true },
+  ],
+  admin: [
+    { key: "ADMIN_OPS_SECRET", required: true, production: true },
+    { key: "ADMIN_SESSION_SECRET", required: true, production: true },
+    { key: "REGISTRATION_LOOKUP_SECRET", required: true, production: true },
+    { key: "ADMIN_BOOTSTRAP_EMAILS", required: false },
   ],
   registration: [
     {
@@ -43,25 +57,26 @@ const groups = {
       validate: (raw) => !raw || raw === "supabase",
       note: "expected: supabase (or unset; runtime is Supabase-only)",
     },
-    {
-      key: "NEXT_PUBLIC_RECAPTCHA_SITE_KEY",
-      required: true,
-      production: true,
-    },
+    { key: "NEXT_PUBLIC_RECAPTCHA_SITE_KEY", required: true, production: true },
     { key: "RECAPTCHA_SECRET_KEY", required: true, production: true },
-    {
-      key: "NEXT_PUBLIC_RAZORPAY_KEY_ID",
-      required: true,
-      production: true,
-    },
+    { key: "NEXT_PUBLIC_RAZORPAY_KEY_ID", required: true, production: true },
     { key: "RAZORPAY_KEY_ID", required: true, production: true },
     { key: "RAZORPAY_KEY_SECRET", required: true, production: true },
     { key: "RAZORPAY_WEBHOOK_SECRET", required: true, production: true },
   ],
   email: [
-    { key: "SMTP_HOST", required: true, staging: true, production: true },
-    { key: "SMTP_USER", required: true, staging: true, production: true },
-    { key: "SMTP_PASS", required: true, staging: true, production: true },
+    {
+      key: "EMAIL_TRANSPORT",
+      required: true,
+      validate: () => hasBrevoSmtp() || hasGenericSmtp(),
+      note: "Set BREVO_SMTP_HOST+USER+PASS or SMTP_HOST+USER+PASS",
+    },
+    { key: "BREVO_SMTP_HOST", required: false },
+    { key: "BREVO_SMTP_USER", required: false },
+    { key: "BREVO_SMTP_PASS", required: false },
+    { key: "SMTP_HOST", required: false },
+    { key: "SMTP_USER", required: false },
+    { key: "SMTP_PASS", required: false },
     { key: "SMTP_FROM", required: false },
     { key: "SMTP_PORT", required: false },
     { key: "REGISTRATION_EMAIL_SECRET", required: false },
@@ -77,9 +92,7 @@ const groups = {
     { key: "NEXT_PUBLIC_ADSENSE_ENABLED", required: false },
     { key: "NEXT_PUBLIC_ADS_SLOTS_PREVIEW", required: false },
   ],
-  monitoring: [
-    { key: "NEXT_PUBLIC_SENTRY_DSN", required: false },
-  ],
+  monitoring: [{ key: "NEXT_PUBLIC_SENTRY_DSN", required: false }],
 };
 
 const results = [];
