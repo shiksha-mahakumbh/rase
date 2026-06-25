@@ -5,6 +5,7 @@ import type { CmsMenu } from "@/lib/cms/types";
 import NavBrandBlock from "@/components/layout/navbar/NavBrandBlock";
 import { NavShellLink } from "@/components/layout/navbar/NavShellLink";
 import { getMenuIcon, NavChevronIcon } from "@/components/layout/navbar/NavMenuIcons";
+import NavBarMobileMenu from "@/components/layout/navbar/NavBarMobileMenu";
 import NavBarToolsDeferred from "@/components/nav/NavBarToolsDeferred";
 import NavBarScrollEnhance from "@/components/layout/navbar/NavBarScrollEnhance";
 
@@ -194,62 +195,16 @@ export default function NavBarShell({ menus }: Props) {
         <NavBarToolsDeferred visibility="desktop" />
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
-          <div className="flex h-11 min-w-[5.5rem] shrink-0 items-center">
-            <NavBarToolsDeferred visibility="mobile" />
-          </div>
+          <NavBarToolsDeferred visibility="mobile" />
           <NavShellLink
             href={CTA_PATH}
-            className="inline-flex h-11 min-w-[5.5rem] shrink-0 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
+            className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
           >
             Register
           </NavShellLink>
+          <NavBarMobileMenu menus={mobileMenus} />
         </div>
       </div>
-
-      <nav
-        className="border-t border-gray-100 bg-white/95 lg:hidden"
-        aria-label="Mobile navigation"
-      >
-        <ul className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-3 py-2 text-sm sm:px-4">
-          {mobileMenus.slice(0, 6).map((item) => {
-            const subItems = flattenSubMenu(item);
-            if (subItems?.length) {
-              return (
-                <li key={item.title} className="relative shrink-0">
-                  <details className="group">
-                    <summary className="flex cursor-pointer list-none items-center gap-1 rounded-lg px-2 py-1.5 font-semibold text-brand-navy [&::-webkit-details-marker]:hidden">
-                      {item.title}
-                      <NavChevronIcon className="h-3.5 w-3.5 transition group-open:rotate-180" />
-                    </summary>
-                    <ul className="absolute z-40 mt-1 min-w-[12rem] rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
-                      {subItems.map((subItem) => (
-                        <li key={subItem.path}>
-                          <NavShellLink
-                            href={subItem.path}
-                            className="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-brand-blue/10"
-                          >
-                            {subItem.title}
-                          </NavShellLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                </li>
-              );
-            }
-            return (
-              <li key={item.title} className="shrink-0">
-                <NavShellLink
-                  href={item.path}
-                  className="block rounded-lg px-2 py-1.5 font-semibold text-gray-700 hover:text-brand-blue"
-                >
-                  {item.title}
-                </NavShellLink>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
     </header>
   );
 }
