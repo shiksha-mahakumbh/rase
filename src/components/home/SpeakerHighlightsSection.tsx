@@ -62,8 +62,11 @@ export default function SpeakerHighlightsSection({
             href="/speakers/directory"
             className="text-sm font-semibold text-brand-navy hover:text-brand-saffron hover:underline"
           >
-            शिक्षा महाकुंभ 1.0–5.0 — पूर्ण वक्ता सूची →
+            View speaker directory (editions 1.0–5.0)
           </Link>
+          <span className="mt-1 block text-xs text-slate-500">
+            पूर्ण वक्ता सूची — संस्करण 1.0–5.0
+          </span>
         </p>
       </div>
     </section>

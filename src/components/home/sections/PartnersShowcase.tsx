@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { editionSeries } from "@/design/tokens";
 import SectionShell from "@/components/ui/SectionShell";
 import GlassCard from "@/components/ui/GlassCard";
 import { SectionHeader } from "@/components/ui";
@@ -65,7 +66,7 @@ export default function PartnersShowcase({
         <SectionHeader
           eyebrow="Conference Support"
           title="Academic · Media · Sponsors"
-          description="Editions 1.0–6.0 — institutions sequenced from organizing bodies to schools, media, and industry."
+          description={`${editionSeries.completed} · Current ${editionSeries.currentName} · Affiliations across ${editionSeries.programmeRange}.`}
         />
 
         <GlobalReachBanner total={stats.total} linked={stats.linked} />

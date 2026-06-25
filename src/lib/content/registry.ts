@@ -1,4 +1,5 @@
 import type { ContentCategory, ContentItem, ContentHubFilters } from "./types";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
 /**
  * Static registry — migrate to CMS without changing public types.
@@ -51,7 +52,7 @@ export const CONTENT_REGISTRY: ContentItem[] = [
     category: "research",
     tags: ["CMT", "conference"],
     publishedAt: "2025-01-01",
-    href: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+    href: CMT_SUBMISSION_URL,
   },
   {
     slug: "nep-policy",

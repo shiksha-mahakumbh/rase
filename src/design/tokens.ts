@@ -28,8 +28,18 @@ export const event = {
 } as const;
 
 /** Homepage hero stats — aligned with authority.ts impactStatistics */
+/** Edition messaging — keep copy aligned site-wide. */
+export const editionSeries = {
+  completed: "5 completed editions (1.0–5.0)",
+  current: "6.0",
+  currentName: "Shiksha Mahakumbh 6.0",
+  programmeRange: "1.0–6.0",
+  speakerArchive: "1.0–5.0",
+  next: "7.0 at IIT Jammu (TBA)",
+} as const;
+
 export const impactStats = [
-  { value: 5, label: "Major Editions", suffix: "" },
+  { value: 5, label: "Completed Editions", suffix: "" },
   { value: 6, label: "Current Edition", suffix: ".0" },
   { value: 500, label: "Institutions Engaged", suffix: "+" },
   { value: 2047, label: "Bharat@2047 Vision", suffix: "" },

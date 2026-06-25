@@ -1,8 +1,20 @@
 import { PaymentStatus, RegistrationType } from "@/types/registration";
 import { requiresPaymentForFee } from "@/lib/registration/fees";
 
-export const CMT_SUBMISSION_URL =
+/** Official Microsoft CMT portal for Shiksha Mahakumbh 6.0 multi-track conference. */
+export const CMT_SUBMISSION_URL = "https://cmt3.research.microsoft.com/SMK2026/";
+
+/** Legacy SMK 5.0 portal — kept for redirects only. */
+export const CMT_LEGACY_SUBMISSION_URL =
   "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/";
+
+/** CMT opens 30 June 2026 (IST). */
+export const CMT_SUBMISSION_OPENS_ISO = "2026-06-30";
+
+export function cmtSubmissionDateLabel(now = new Date()): string {
+  const opens = new Date(`${CMT_SUBMISSION_OPENS_ISO}T00:00:00+05:30`);
+  return now >= opens ? "Submissions open" : "Opens 30 June 2026";
+}
 
 /** Microsoft CMT — immediate redirect, no on-site form */
 export const EXTERNAL_REDIRECT_TYPES = [

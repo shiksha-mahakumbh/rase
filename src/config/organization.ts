@@ -40,7 +40,7 @@ export const DHE_ORGANIZATION = {
     patron: "Dr. Thakur S.K. Raunija (Dr. Thakur SKR)",
     patronRole: "Senior Scientist, ISRO & Director, DHE",
     coordinator: "Maj. Dr. Shamshere Singh",
-    secretary: "Dr. Jitender Garg",
+    secretary: "Dr. Jatinder Garg",
     photoFramePath: "/abhiyaninphotoframe",
   },
 } as const;

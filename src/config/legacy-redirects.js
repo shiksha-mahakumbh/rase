@@ -86,17 +86,17 @@ const LEGACY_REDIRECTS = [
   // Research submission → external CMT
   {
     source: "/abstract",
-    destination: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+    destination: "https://cmt3.research.microsoft.com/SMK2026/",
     permanent: false,
   },
   {
     source: "/paper",
-    destination: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+    destination: "https://cmt3.research.microsoft.com/SMK2026/",
     permanent: false,
   },
   {
     source: "/fulllengthpaper",
-    destination: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+    destination: "https://cmt3.research.microsoft.com/SMK2026/",
     permanent: false,
   },
   // Retired legacy PII export pages → admin dashboard
@@ -130,7 +130,7 @@ const LEGACY_REDIRECTS = [
   { source: "/Proceeding1", destination: "/proceeding1", permanent: true },
   { source: "/Proceeding2", destination: "/proceeding2", permanent: true },
   { source: "/Proceeding3", destination: "/proceeding3", permanent: true },
-  { source: "/topics", destination: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", permanent: false },
+  { source: "/topics", destination: "https://cmt3.research.microsoft.com/SMK2026/", permanent: false },
   { source: "/talkshow", destination: "/media-center", permanent: true },
   { source: "/batonceremony", destination: "/BatonCeremony", permanent: true },
   { source: "/residentialcamp", destination: "/ResidentialCamp", permanent: true },
@@ -176,7 +176,7 @@ const LEGACY_REDIRECTS = [
   { source: "/events", destination: "/conferences", permanent: true },
   { source: "/knowledge", destination: "/publications", permanent: true },
   // Phase 5 — orphan / legacy page consolidation
-  { source: "/Topics", destination: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", permanent: false },
+  { source: "/Topics", destination: "https://cmt3.research.microsoft.com/SMK2026/", permanent: false },
   { source: "/TalkShow", destination: "/media-center", permanent: true },
   { source: "/keynotespeakers", destination: "/speakers/directory", permanent: true },
   { source: "/glimpses", destination: "/gallery", permanent: true },

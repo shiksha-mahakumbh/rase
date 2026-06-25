@@ -10,6 +10,7 @@ import {
   ACFooterStatement,
   REG_LINKS,
 } from "../AcademicCouncilUI";
+import { CMT_SUBMISSION_URL, cmtSubmissionDateLabel } from "@/lib/registration/config";
 import { tracks } from "../tracks-data";
 
 export default function ConferencePage() {
@@ -70,7 +71,7 @@ export default function ConferencePage() {
         <p className="mt-4 text-sm text-brand-navy">
           All abstracts and full-length papers are submitted through the{" "}
           <a
-            href="https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+            href={CMT_SUBMISSION_URL}
             className="font-semibold underline underline-offset-2"
             target="_blank"
             rel="noopener noreferrer"
@@ -83,7 +84,7 @@ export default function ConferencePage() {
 
       <ACSection title="Important Dates">
         <div className="grid gap-3 md:grid-cols-2">
-          <ACCard>CMT submission opens: 30 June 2026</ACCard>
+          <ACCard>CMT submissions: {cmtSubmissionDateLabel()}</ACCard>
           <ACCard>Acceptance Notification: 31 July 2026</ACCard>
           <ACCard>Final manuscript deadline: 31 August 2026</ACCard>
           <ACCard>Registration Deadline: 31 August 2026</ACCard>

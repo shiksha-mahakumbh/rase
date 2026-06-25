@@ -34,7 +34,7 @@ export const ACADEMIC_COUNCIL_EVENT = {
   venue: "NIT Hamirpur",
   location: "Hamirpur, Himachal Pradesh, India",
   contactEmail: "academics@shikshamahakumbh.com",
-  contactPhone: "+91-7903431900",
+  contactPhone: "+91 79034 31900",
 } as const;
 
 export interface ProgrammeHubItem {
