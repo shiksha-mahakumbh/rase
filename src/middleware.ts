@@ -12,6 +12,10 @@ const intlMiddleware = createIntlMiddleware(routing);
 const NON_DEFAULT_LOCALE_PREFIX = /^\/(hi|fr|es|ar)(\/|$)/;
 
 function shouldRunIntlMiddleware(pathname: string): boolean {
+  // Static /hi/contact-us is served outside the [locale] segment.
+  if (pathname === "/hi/contact-us" || pathname.startsWith("/hi/contact-us/")) {
+    return false;
+  }
   return NON_DEFAULT_LOCALE_PREFIX.test(pathname);
 }
 
