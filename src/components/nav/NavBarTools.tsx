@@ -43,6 +43,7 @@ export default function NavBarTools({ visibility = "desktop" }: NavBarToolsProps
   return (
     <div className={className}>
       {visibility !== "mobile" && <GlobalSearch />}
+      {visibility === "mobile" && <GlobalSearch compact />}
       <NavIntlProvider>
         <LanguageSwitcher />
       </NavIntlProvider>

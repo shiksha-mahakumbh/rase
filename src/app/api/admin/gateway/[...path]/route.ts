@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ADMIN_SESSION_COOKIE } from "@/constants/auth";
 import { verifyAdminSessionToken } from "@/lib/security/admin-session";
+import { signAdminGatewayContext } from "@/server/lib/admin-gateway-context";
 import { verifyAdminRequest } from "@/server/lib/admin-request-auth";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
 
@@ -25,8 +26,7 @@ function unauthorizedResponse() {
 async function proxyToV2Admin(request: NextRequest, segments: string[]) {
   const session = await verifyAdminRequest(request);
 
-  const secret =
-    process.env.ADMIN_OPS_SECRET ?? process.env.REGISTRATION_EMAIL_SECRET;
+  const secret = process.env.ADMIN_OPS_SECRET;
   if (!secret) {
     throw new ServiceError("Admin authentication not configured", 503, "ADMIN_NOT_CONFIGURED");
   }
@@ -41,6 +41,10 @@ async function proxyToV2Admin(request: NextRequest, segments: string[]) {
   headers.set("x-admin-role", session.role);
   headers.set("x-admin-email", session.email);
   headers.set("x-admin-uid", session.uid);
+  headers.set(
+    "x-admin-context-sig",
+    signAdminGatewayContext(session.email, session.role, session.uid)
+  );
   const contentType = request.headers.get("content-type");
   if (contentType) headers.set("content-type", contentType);
 

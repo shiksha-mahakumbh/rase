@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
+import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
 
 import type { AdminRole } from "@/types/registration";
 
@@ -9,8 +10,10 @@ type HandlerOptions = {
   limit?: number;
   windowMs?: number;
   requireAdmin?: boolean;
-  /** Requires x-admin-role header (set by admin gateway) to match one of these roles */
+  /** Requires signed gateway role header to match one of these roles */
   adminRoles?: readonly AdminRole[];
+  /** When true, skip default mutation RBAC (Super Admin / Admin only) */
+  skipMutationRoleCheck?: boolean;
 };
 
 /** Default context for App Router route handlers (Next.js 15). */
@@ -40,10 +43,15 @@ export function createApiHandler<T, C extends AppRouteContext = AppRouteContext>
       if (options.requireAdmin) {
         const { requireAdminSecret } = await import("@/server/lib/admin-guard");
         requireAdminSecret(request);
-      }
-      if (options.adminRoles?.length) {
-        const { assertAdminRoles } = await import("@/server/lib/admin-rbac");
-        assertAdminRoles(request, options.adminRoles);
+        const method = request.method.toUpperCase();
+        const isMutation = !["GET", "HEAD"].includes(method);
+        if (options.adminRoles?.length) {
+          const { assertAdminRoles } = await import("@/server/lib/admin-rbac");
+          assertAdminRoles(request, options.adminRoles);
+        } else if (isMutation && !options.skipMutationRoleCheck) {
+          const { assertAdminRoles } = await import("@/server/lib/admin-rbac");
+          assertAdminRoles(request, ADMIN_MANAGE_ROLES);
+        }
       }
       const result = await handler(request, context);
       return NextResponse.json(result);

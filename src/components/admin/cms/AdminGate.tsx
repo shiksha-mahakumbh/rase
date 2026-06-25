@@ -1,11 +1,13 @@
 "use client";
 
 import { ReactNode, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAdmin } from "@/lib/adminAuth";
 
 export default function AdminGate({ children }: { children: ReactNode }) {
   const { user, role, loading, login, isAdmin } = useAdmin();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -33,6 +35,10 @@ export default function AdminGate({ children }: { children: ReactNode }) {
               setSubmitting(true);
               try {
                 await login(email, password);
+                const next = searchParams.get("next");
+                if (next && next.startsWith("/admin")) {
+                  window.location.assign(next);
+                }
               } catch (error) {
                 toast.error(
                   error instanceof Error ? error.message : "Login failed"

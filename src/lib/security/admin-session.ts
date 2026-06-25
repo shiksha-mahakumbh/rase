@@ -13,9 +13,9 @@ export type AdminSessionPayload = {
 };
 
 function sessionSecret(): string {
-  const secret = process.env.ADMIN_SESSION_SECRET ?? process.env.ADMIN_OPS_SECRET;
+  const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) {
-    throw new Error("ADMIN_SESSION_SECRET (or ADMIN_OPS_SECRET) is not configured");
+    throw new Error("ADMIN_SESSION_SECRET is not configured");
   }
   return secret;
 }

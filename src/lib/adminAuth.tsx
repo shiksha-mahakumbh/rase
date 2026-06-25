@@ -123,3 +123,7 @@ export function canManageStatus(role: AdminRole | null): boolean {
 export function canExport(role: AdminRole | null): boolean {
   return role === "Super Admin" || role === "Admin" || role === "Data Entry";
 }
+
+export function canPerformCheckIn(role: AdminRole | null): boolean {
+  return canExport(role);
+}

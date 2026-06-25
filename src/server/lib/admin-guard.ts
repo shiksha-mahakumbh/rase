@@ -2,8 +2,7 @@ import type { NextRequest } from "next/server";
 import { ServiceError } from "@/server/lib/errors";
 
 export function requireAdminSecret(request: NextRequest): void {
-  const secret =
-    process.env.ADMIN_OPS_SECRET ?? process.env.REGISTRATION_EMAIL_SECRET;
+  const secret = process.env.ADMIN_OPS_SECRET;
   if (!secret) {
     throw new ServiceError("Admin authentication not configured", 503, "ADMIN_NOT_CONFIGURED");
   }

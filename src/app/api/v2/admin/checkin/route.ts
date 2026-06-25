@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
-import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
+import { ADMIN_CHECKIN_ROLES } from "@/server/lib/admin-rbac";
 import {
   lookupAttendeeForCheckIn,
   performCheckInAction,
@@ -35,5 +35,5 @@ export const POST = createApiHandler(
       location: body.location,
     });
   },
-  { requireAdmin: true, adminRoles: ADMIN_MANAGE_ROLES, rateLimitKey: "admin-checkin-action", limit: 120 }
+  { requireAdmin: true, adminRoles: ADMIN_CHECKIN_ROLES, rateLimitKey: "admin-checkin-action", limit: 120 }
 );

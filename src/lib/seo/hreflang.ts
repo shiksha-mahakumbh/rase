@@ -6,7 +6,7 @@ export const HREFLANG_PAIRS: Record<string, { en: string; hi: string }> = {
   "/": { en: "/", hi: "/hi" },
   "/introduction": { en: "/introduction", hi: "/hi/introduction" },
   "/registration": { en: "/registration", hi: "/hi/registration" },
-  "/contact-us": { en: "/contact-us", hi: "/hi/ContactUs" },
+  "/contact-us": { en: "/contact-us", hi: "/hi/contact-us" },
 };
 
 export function buildHreflangLanguages(paths: { en: string; hi?: string }): Record<string, string> {

@@ -15,7 +15,9 @@ export async function GET(
 
   try {
     const { requireAdminSecret } = await import("@/server/lib/admin-guard");
+    const { assertAdminRoles, ADMIN_MANAGE_ROLES } = await import("@/server/lib/admin-rbac");
     requireAdminSecret(request);
+    assertAdminRoles(request, ADMIN_MANAGE_ROLES);
 
     const { id } = await context.params;
     const doc = await prisma.generatedDocument.findUnique({ where: { id } });

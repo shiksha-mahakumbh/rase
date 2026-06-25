@@ -7,6 +7,7 @@ const LEGACY_REDIRECTS = [
   { source: "/abhiyan", destination: "/past-events", permanent: true },
   { source: "/upcomingevent", destination: "/upcoming-events", permanent: true },
   { source: "/ContactUs", destination: "/contact-us", permanent: true },
+  { source: "/hi/ContactUs", destination: "/hi/contact-us", permanent: true },
   { source: "/Best_Wishes", destination: "/best-wishes", permanent: true },
   { source: "/Wishes_Received", destination: "/best-wishes", permanent: true },
   { source: "/wishes-received", destination: "/best-wishes", permanent: true },

@@ -20,10 +20,13 @@ const PRESS_ARTICLE_PATHS = Object.values(PRESS_CANONICAL_PATHS).map((p) =>
   p.replace(/^\//, "")
 );
 
-/** Core routes + edition committees + media archives + press articles */
+const HI_SITEMAP_PATHS = ["hi", "hi/introduction", "hi/registration", "hi/contact-us"] as const;
+
+/** Core routes + Hindi locale + edition committees + media archives + press articles */
 const SITEMAP_PATHS = Array.from(
   new Set([
     ...SITEMAP_CORE_PATHS,
+    ...HI_SITEMAP_PATHS,
     ...COMMITTEE_PATHS,
     ...MEDIA_ARCHIVE_PATHS,
     ...PRESS_ARTICLE_PATHS,
