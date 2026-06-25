@@ -1,5 +1,6 @@
 import type { CmsNotice } from "@/lib/cms/types";
 import { event } from "@/design/tokens";
+import { ACADEMIC_PUBLICATION_NOTE } from "@/data/academic-council-tracks";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
 /** Published fallback notices when CMS / database has none (English). */
@@ -9,7 +10,7 @@ export const DEFAULT_NOTICES_EN: CmsNotice[] = [
     title: `Registration Open — ${event.name}`,
     slug: "registration-open-smk-6",
     description:
-      `Unified registration is open for delegates, academic conclaves, DHE Olympiads, exhibitions, project displays, and accommodation requests. The summit runs ${event.startDate === "2026-10-09" ? "9–11 October 2026" : `${event.startDate} – ${event.endDate}`} at ${event.venue}, ${event.location}. Complete your profile at the registration hub.`,
+      `Unified registration is open for delegates, academic conclaves, exhibitions, project displays, and accommodation requests. DHE Olympiad exam dates are to be announced — apply via the registration hub when open. The summit runs 9–11 October 2026 at ${event.venue}, ${event.location}.`,
     priority: 10,
     isPinned: true,
     publishAt: "2026-05-01T00:00:00.000Z",
@@ -35,7 +36,7 @@ export const DEFAULT_NOTICES_EN: CmsNotice[] = [
     title: "Multi-Track Conference — Paper & Abstract Submission",
     slug: "mtc-abstract-submission-2026",
     description:
-      `Authors may submit research papers and abstracts for the Multi-Track International Conference through the official CMT portal (${CMT_SUBMISSION_URL}). Review timelines, formatting guidelines, and track listings are on the Academic Council conference page. SCI/Scopus/WoS publication pathway applies to selected proceedings.`,
+      `Authors may submit research papers and abstracts for the Multi-Track International Conference through the official CMT portal (${CMT_SUBMISSION_URL}). Review timelines, formatting guidelines, and track listings are on the Academic Council conference page. ${ACADEMIC_PUBLICATION_NOTE}`,
     priority: 7,
     isPinned: false,
     publishAt: "2026-05-15T00:00:00.000Z",
@@ -45,10 +46,10 @@ export const DEFAULT_NOTICES_EN: CmsNotice[] = [
   },
   {
     id: "default-olympiads",
-    title: "DHE Olympiads & Talent Programmes — Enrolment Open",
+    title: "DHE Olympiads & Talent Programmes — Dates TBA",
     slug: "dhe-olympiads-2026",
     description:
-      "School and higher-education olympiad tracks, talent conclave (90%+ achievers), and Bal Shodh Patrika participation are open for enrolment via the registration hub. Institutions should nominate coordinators early to secure slots.",
+      "DHE Olympiads (Classes 3–10), talent conclave (90%+ achievers), and Bal Shodh Patrika participation will open via the registration hub. Registration and exam dates to be announced; top achievers felicitated at Shiksha Mahakumbh 6.0.",
     priority: 6,
     isPinned: false,
     publishAt: "2026-05-20T00:00:00.000Z",
@@ -179,10 +180,10 @@ export const DEFAULT_NOTICES_HI: CmsNotice[] = [
   },
   {
     id: "default-olympiads-hi",
-    title: "डीएचई ओलंपियाड एवं प्रतिभा कार्यक्रम",
+    title: "डीएचई ओलंपियाड एवं प्रतिभा कार्यक्रम — तिथि घोषित होगी",
     slug: "dhe-olympiads-hi",
     description:
-      "विद्यालय और उच्च शिक्षा ओलंपियाड, प्रतिभा अधिवेशन और बाल शोध पत्रिका के लिए पंजीकरण हब पर नामांकन करें।",
+      "कक्षा 3–10 के लिए DHE ओलंपियाड, प्रतिभा अधिवेशन और बाल शोध पत्रिका — पंजीकरण व परीक्षा तिथियाँ घोषित की जाएंगी। पंजीकरण हब के माध्यम से आवेदन करें।",
     priority: 6,
     isPinned: false,
     publishAt: "2026-05-20T00:00:00.000Z",

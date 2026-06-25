@@ -62,7 +62,7 @@ export const UPCOMING_EVENTS: UpcomingEventCard[] = [
 ];
 
 export const SMK_6_RESOURCE_LINKS = [
-  { label: "Edition 6.0 brochure", href: CANONICAL_ROUTES.downloads },
+  { label: "Edition 6.0 brochure", href: `${CANONICAL_ROUTES.downloads}#edition-brochures` },
   { label: "Organising committee", href: committeePathForEdition("6.0") },
   { label: "Academic Council", href: CANONICAL_ROUTES.departments.academicCouncil },
 ] as const;
@@ -95,7 +95,7 @@ export const UPCOMING_EVENTS_BREADCRUMBS = [
 
 export const UPCOMING_EVENTS_QUICK_LINKS = [
   { label: "Register for 6.0", href: CANONICAL_ROUTES.registration, icon: "✅" },
-  { label: "Edition Brochures", href: CANONICAL_ROUTES.downloads, icon: "📄" },
+  { label: "Edition Brochures", href: `${CANONICAL_ROUTES.downloads}#edition-brochures`, icon: "📄" },
   { label: "Organising Committee", href: committeePathForEdition("6.0"), icon: "👥" },
   { label: "Academic Council", href: CANONICAL_ROUTES.departments.academicCouncil, icon: "🎓" },
   { label: "Past Editions", href: CANONICAL_ROUTES.pastEvents, icon: "📚" },
@@ -132,7 +132,7 @@ export const UPCOMING_EVENTS_FAQ = [
   },
   {
     question: "Where can I download the edition 6.0 brochure?",
-    answer: `Official PDF brochures are available at ${SITE_URL}${CANONICAL_ROUTES.downloads}.`,
+    answer: `Official PDF brochures are available at ${SITE_URL}${CANONICAL_ROUTES.downloads}#edition-brochures.`,
   },
   {
     question: "How do I submit a research paper?",
