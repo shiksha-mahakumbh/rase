@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import {
   sendRegistrationCompleteEmail,
   mapDeliveryStatus,
@@ -16,7 +16,7 @@ const REG_ID_RE = /^SMK2026-\d{6}$/;
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `email:${ip}`,
     limit: 10,
     windowMs: 60_000,

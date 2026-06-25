@@ -85,7 +85,7 @@ function DetailContent() {
 
   if (fetching) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         Loading...
       </div>
     );
@@ -93,7 +93,7 @@ function DetailContent() {
 
   if (!record) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center py-24">
         <p>Registration not found</p>
         <Link href="/admin" className="mt-4 text-primary underline">
           Back to dashboard
@@ -106,41 +106,37 @@ function DetailContent() {
   const files = collectFiles(record);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <div>
-            <Link href="/admin" className="text-sm text-primary hover:underline">
-              ← Back to Dashboard
-            </Link>
-            <h1 className="mt-1 font-mono text-xl font-bold">
-              {String(record.registrationId)}
-            </h1>
-          </div>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                downloadAcknowledgementPdf({
-                  registrationId: String(record.registrationId),
-                  registrationType: String(record.registrationType),
-                  fullName: String(record.fullName),
-                  institution: String(record.institution),
-                  email: String(record.email),
-                  contactNumber: String(record.contactNumber),
-                  paymentStatus: String(record.paymentStatus),
-                  submissionDate: formatRegistrationDate(record.createdAt),
-                })
-              }
-              className="rounded-lg border px-4 py-2 text-sm font-semibold"
-            >
-              Print / PDF
-            </button>
-          </div>
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <Link href="/admin" className="text-sm text-primary hover:underline">
+            ← Back to Dashboard
+          </Link>
+          <h1 className="mt-1 font-mono text-xl font-bold">
+            {String(record.registrationId)}
+          </h1>
         </div>
-      </header>
+        <button
+          type="button"
+          onClick={() =>
+            downloadAcknowledgementPdf({
+              registrationId: String(record.registrationId),
+              registrationType: String(record.registrationType),
+              fullName: String(record.fullName),
+              institution: String(record.institution),
+              email: String(record.email),
+              contactNumber: String(record.contactNumber),
+              paymentStatus: String(record.paymentStatus),
+              submissionDate: formatRegistrationDate(record.createdAt),
+            })
+          }
+          className="rounded-lg border px-4 py-2 text-sm font-semibold"
+        >
+          Print / PDF
+        </button>
+      </div>
 
-      <main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
+      <div className="space-y-6">
         {canManageStatus(role) && (
           <section className="rounded-2xl border bg-white p-5">
             <h2 className="mb-4 font-bold text-primary">Status Management</h2>
@@ -294,7 +290,7 @@ function DetailContent() {
           Submitted: {formatRegistrationDate(record.createdAt)} · Updated:{" "}
           {formatRegistrationDate(record.updatedAt)}
         </p>
-      </main>
+      </div>
     </div>
   );
 }

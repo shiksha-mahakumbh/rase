@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { shouldTrackAnalytics } from "@/lib/analytics/track-path";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { trackVisit } from "@/server/services/visitor-analytics.service";
 import { toErrorResponse } from "@/server/lib/errors";
 
@@ -15,7 +15,7 @@ function geoFromHeaders(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `v2-analytics-track:${ip}`,
     limit: 120,
     windowMs: 60_000,

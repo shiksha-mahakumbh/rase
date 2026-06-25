@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
 import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
 
@@ -26,7 +26,7 @@ export function createApiHandler<T, C extends AppRouteContext = AppRouteContext>
   return async (request: NextRequest, context: C) => {
     const ip = getClientIp(request);
     if (options.rateLimitKey) {
-      const limited = rateLimit({
+      const limited = await rateLimitAsync({
         key: `${options.rateLimitKey}:${ip}`,
         limit: options.limit ?? 30,
         windowMs: options.windowMs ?? 60_000,

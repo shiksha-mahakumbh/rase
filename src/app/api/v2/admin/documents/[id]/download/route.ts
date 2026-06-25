@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { prisma } from "@/server/db/prisma";
 import type { DocumentLetterType } from "@prisma/client";
 import { generateDocument } from "@/server/services/ops/document-generation.service";
@@ -10,7 +10,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   const ip = getClientIp(request);
-  const limited = rateLimit({ key: `admin-doc-dl:${ip}`, limit: 60, windowMs: 60_000 });
+  const limited = await rateLimitAsync({ key: `admin-doc-dl:${ip}`, limit: 60, windowMs: 60_000 });
   if (!limited.ok) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
   try {

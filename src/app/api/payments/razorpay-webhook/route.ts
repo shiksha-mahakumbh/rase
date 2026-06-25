@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { processRazorpayWebhookEvent } from "@/server/services/payment.service";
 
 /**
@@ -9,7 +9,7 @@ import { processRazorpayWebhookEvent } from "@/server/services/payment.service";
  */
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `razorpay:${ip}`,
     limit: 100,
     windowMs: 60_000,

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { generateBadgePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import type { BadgeTemplate } from "@prisma/client";
 import { toErrorResponse } from "@/server/lib/errors";
 
 async function guard(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({ key: `admin-badge:${ip}`, limit: 60, windowMs: 60_000 });
+  const limited = await rateLimitAsync({ key: `admin-badge:${ip}`, limit: 60, windowMs: 60_000 });
   if (!limited.ok) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   const { requireAdminSecret } = await import("@/server/lib/admin-guard");
   const { assertAdminRoles, ADMIN_EXPORT_ROLES } = await import("@/server/lib/admin-rbac");

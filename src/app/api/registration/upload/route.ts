@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import type { UploadedFileMeta } from "@/types/registration";
 import { isSupportedType } from "@/server/lib/registration-types";
 import { uploadFile, type UploadBucket } from "@/server/services/storage.service";
@@ -26,7 +26,7 @@ function resolveBucket(registrationType: string): UploadBucket {
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `registration-upload:${ip}`,
     limit: 30,
     windowMs: 60_000,

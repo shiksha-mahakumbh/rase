@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { saveRegistration } from "@/server/services/registration.service";
 import { isSupportedType } from "@/server/lib/registration-types";
 import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { getRequestContext } from "@/server/lib/request";
 import {
   sendRegistrationCompleteEmail,
@@ -55,7 +55,7 @@ async function updateEmailStatus(
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `registration-submit:${ip}`,
     limit: 15,
     windowMs: 60_000,

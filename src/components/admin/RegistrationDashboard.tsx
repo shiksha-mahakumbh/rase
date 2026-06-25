@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   fetchRegistrationsPage,
@@ -51,7 +50,7 @@ const EMPTY_STATS: RegistrationAdminStats = {
 };
 
 export default function RegistrationDashboard() {
-  const { user, role, logout } = useAdmin();
+  const { role } = useAdmin();
   const [registrations, setRegistrations] = useState<RegistrationRow[]>([]);
   const [stats, setStats] = useState<RegistrationAdminStats>(EMPTY_STATS);
   const [fetching, setFetching] = useState(false);
@@ -152,46 +151,26 @@ export default function RegistrationDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold text-primary">Registration Admin</h1>
-            <p className="text-sm text-gray-500">
-              {user?.email} · {role}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href="/admin/cms"
-              className="rounded-lg border border-brand-navy/20 bg-brand-navy/5 px-4 py-2 text-sm font-semibold text-brand-navy hover:bg-brand-navy/10"
-            >
-              CMS Admin
-            </Link>
-            <button
-              type="button"
-              onClick={() => {
-                void loadRegistrations(0, false);
-                void loadStats();
-              }}
-              disabled={fetching}
-              className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
-            >
-              {fetching ? "Refreshing..." : "Refresh"}
-            </button>
-            <button
-              type="button"
-              onClick={() => void logout()}
-              className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white"
-            >
-              Logout
-            </button>
-          </div>
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold text-primary">Registration Admin</h1>
+          <p className="text-sm text-gray-500">Browse, verify, and export registrations</p>
         </div>
-      </header>
+        <button
+          type="button"
+          onClick={() => {
+            void loadRegistrations(0, false);
+            void loadStats();
+          }}
+          disabled={fetching}
+          className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+        >
+          {fetching ? "Refreshing..." : "Refresh"}
+        </button>
+      </div>
 
-      <main className="mx-auto max-w-7xl space-y-8 px-6 py-8">
-        <AdminSystemHealth />
+      <AdminSystemHealth />
 
         <AdminGrowthDashboard rows={registrations} />
 
@@ -305,7 +284,6 @@ export default function RegistrationDashboard() {
             }
           }}
         />
-      </main>
     </div>
   );
 }

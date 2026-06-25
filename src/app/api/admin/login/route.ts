@@ -4,14 +4,14 @@ import {
   adminSessionCookieOptions,
   createAdminSessionToken,
 } from "@/lib/security/admin-session";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError } from "@/server/lib/errors";
 import { signInWithEmailPassword } from "@/server/services/auth.service";
 
 /** Email/password admin login → signed HttpOnly session cookie. */
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `admin-login:${ip}`,
     limit: 10,
     windowMs: 60_000,
