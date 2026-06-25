@@ -12,9 +12,8 @@ export const HOME_DEFAULT_FAQS: FaqItem[] = [
     answer: "9–11 October 2026 at NIT Hamirpur, Himachal Pradesh, India.",
   },
   {
-    question: "How do I register for the 6th edition?",
-    answer:
-      "Use the unified registration portal for delegates, conclaves, olympiads, awards, exhibitions, and accommodation requests.",
+    question: "How do I register for Shiksha Mahakumbh 6.0?",
+    answer: `Use the unified registration portal at ${SITE_URL}/registration for delegates, conclaves, olympiads, awards, exhibitions, and accommodation requests.`,
   },
   {
     question: "How do I submit to the Multi Track Conference?",
@@ -25,9 +24,5 @@ export const HOME_DEFAULT_FAQS: FaqItem[] = [
     question: "Is accommodation available?",
     answer:
       "Yes — select accommodation during registration; the organising team confirms availability.",
-  },
-  {
-    question: "How do I register?",
-    answer: `Register online at ${SITE_URL}/registration`,
   },
 ];

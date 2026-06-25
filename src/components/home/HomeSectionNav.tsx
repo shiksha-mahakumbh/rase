@@ -4,6 +4,7 @@ import { ROUTES } from "@/constants/routes";
 const LINKS = [
   { href: "#why-attend", label: "Why Attend" },
   { href: "#programmes", label: "Programme" },
+  { href: "#tracks", label: "Tracks" },
   { href: "#conference-support", label: "Partners" },
   { href: "#speakers", label: "Speakers" },
   { href: "#gallery", label: "Gallery" },

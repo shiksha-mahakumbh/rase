@@ -18,7 +18,7 @@ const HOMEPAGE_SECTIONS = {
     badge: "शिक्षा महाकुंभ 6.0 · पंजीकरण खुला",
     dates: "📅 9–11 अक्टूबर 2026",
     venue: "📍 एनआईटी हमीरपुर, हिमाचल प्रदेश",
-    imageUrl: "/shiksha.png",
+    imageUrl: "/branding/shiksha-mahakumbh-brand-hero.png",
   },
   stats: {
     tagline: "DHE की पहल · राष्ट्रीय संस्थानों के सहयोग से",

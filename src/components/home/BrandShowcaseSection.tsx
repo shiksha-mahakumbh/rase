@@ -26,7 +26,7 @@ const PILLARS = [
     title: "Conclaves",
     subtitle: "7 Thematic Forums",
     color: "from-brand-violet to-brand-violet-light",
-    href: "/committees",
+    href: "/departments/academic-council#conclave",
   },
 ];
 

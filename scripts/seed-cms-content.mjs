@@ -25,11 +25,11 @@ const HOMEPAGE_SECTIONS = {
     badge: "Shiksha Mahakumbh 6.0 · Registration Open",
     dates: "📅 9–11 October 2026",
     venue: "📍 NIT Hamirpur, HP",
-    imageUrl: "/shiksha.png",
+    imageUrl: "/branding/shiksha-mahakumbh-brand-hero.png",
   },
   counters: {
     items: [
-      { label: "Major Editions", value: "5" },
+      { label: "Completed Editions", value: "5" },
       { label: "Current Edition", value: "6", suffix: ".0" },
       { label: "Institutions Engaged", value: "500", suffix: "+" },
       { label: "Bharat@2047 Vision", value: "2047" },
@@ -40,25 +40,31 @@ const HOMEPAGE_SECTIONS = {
     features: [
       { title: "Policy & NEP 2020", description: "Engage with national education policy and institutional roadmaps.", badge: "Impact" },
       { title: "Research & Publications", description: "Present abstracts and proceedings aligned with global education research.", badge: "Academic" },
+      { title: "Innovation & Startups", description: "Showcase projects, exhibitions, and entrepreneurial ideas from schools and higher education.", badge: "Innovation" },
       { title: "Olympiads & Talent", description: "Compete in olympiads and cultural programmes celebrating student excellence." },
+      { title: "Conclaves & Workshops", description: "Multi-track conclaves on holistic education, best practices, and Bharatiya knowledge systems." },
+      { title: "Global Networking", description: "Connect educators, NGOs, industry, and youth on one credible international platform." },
     ],
     faqs: [
       { question: "What is Shiksha Mahakumbh Abhiyan?", answer: "A national–international multidisciplinary education movement aligned with NEP 2020 and Bharat@2047." },
-      { question: "When and where is SMK 6.0?", answer: "9–11 October 2026 at NIT Hamirpur, Himachal Pradesh, India." },
-      { question: "How do I register?", answer: "Use the unified registration portal at rase.co.in/registration." },
+      { question: "When is Shiksha Mahakumbh 6.0?", answer: "9–11 October 2026 at NIT Hamirpur, Himachal Pradesh, India." },
+      { question: "How do I register for Shiksha Mahakumbh 6.0?", answer: "Use the unified registration portal at /registration for delegates, conclaves, olympiads, awards, exhibitions, and accommodation." },
     ],
   },
   featured_events: {
     items: [
-      { title: "Shiksha Mahakumbh 2026", date: "09–11 October 2026", venue: "NIT Hamirpur", url: "/registration" },
-      { title: "Shiksha Mahakumbh 2027", date: "To Be Announced", venue: "IIT Jammu", url: "/upcoming-events" },
+      { title: "Shiksha Mahakumbh 6.0", date: "09–11 October 2026", venue: "NIT Hamirpur", url: "/registration" },
+      { title: "Shiksha Mahakumbh 7.0", date: "To Be Announced", venue: "IIT Jammu", url: "/upcoming-events" },
     ],
   },
   featured_programs: {
     items: [
-      { title: "Multi-Track Conclaves", description: "Holistic education, policy, and Bharatiya knowledge systems.", url: "/departments/academic-council", badge: "Conclave" },
-      { title: "Multi Track Conference", description: "Submit papers and abstracts via Microsoft CMT.", url: "https://cmt3.research.microsoft.com/SMK2026/", badge: "Research" },
-      { title: "Olympiads & Awards", description: "Student olympiads, best practices, and recognition awards.", url: "/registration", badge: "Students" },
+      { title: "Multi-Track Conclaves", description: "Holistic education, policy, and Bharatiya knowledge systems.", url: "/departments/academic-council#conclave", badge: "Conclave", date: "During SMK 6.0", venue: "NIT Hamirpur" },
+      { title: "Multi Track Conference", description: "Submit papers and abstracts via Microsoft CMT (SMK2026).", url: "https://cmt3.research.microsoft.com/SMK2026/", badge: "Research", date: "Opens 30 June 2026", venue: "Microsoft CMT" },
+      { title: "Olympiads & Awards", description: "Student olympiads, best practices, and recognition awards — exam dates TBA.", url: "/registration", badge: "Students", date: "Classes 3–10 · TBA", venue: "National participation" },
+      { title: "Exhibitions & Projects", description: "School and HEI project displays, startups, and exhibitions.", url: "/registration", badge: "Innovation", date: "Showcase", venue: "Innovation pavilion" },
+      { title: "Workshops", description: "Capacity building sessions for educators and coordinators.", url: "/workshops", badge: "Workshop", date: "Hands-on", venue: "On campus" },
+      { title: "Accommodation", description: "Request accommodation during registration for approved delegates.", url: "/registration", badge: "Travel", date: "On request", venue: "Hamirpur region" },
     ],
   },
   testimonials: {

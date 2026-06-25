@@ -118,8 +118,8 @@ const DEFAULT_DISCOVER: DiscoverInsight[] = [
   },
   {
     title: "Research Proceedings & Souvenir",
-    date: "2025",
-    author: "SMK Proceedings",
+    date: "SMK 5.0 archive",
+    author: "Past editions",
     href: "/publications/souvenir-abstracts-mtc",
     tag: "Research",
     accent: "from-brand-saffron/50 to-brand-saffron/15",
@@ -200,9 +200,9 @@ const DEFAULT_TRACKS: EventTrack[] = [
   },
   {
     title: "Olympiads & Awards",
-    date: "Competitive tracks",
+    date: "Classes 3–10 · dates TBA",
     venue: "National participation",
-    description: "Student olympiads, best practices, and recognition awards.",
+    description: "Student olympiads, best practices, and recognition awards — register via the hub; exam dates to be announced.",
     href: ROUTES.registration,
     badge: "Students",
   },
@@ -219,7 +219,7 @@ const DEFAULT_TRACKS: EventTrack[] = [
     date: "Hands-on",
     venue: "On campus",
     description: "Capacity building sessions for educators and coordinators.",
-    href: ROUTES.academicCouncil,
+    href: "/workshops",
     badge: "Workshop",
   },
   {

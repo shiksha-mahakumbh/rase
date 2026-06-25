@@ -24,6 +24,7 @@ const FALLBACK_META = {
     "Join Shiksha Mahakumbh 6.0 at NIT Hamirpur, 9–11 October 2026. India's premier multidisciplinary education summit — research, conclaves, olympiads, innovation, and NEP 2020 alignment.",
   path: "/",
   keywords: [
+    "Shiksha Mahakumbh 6.0",
     "Shiksha Mahakumbh 2026",
     "शिक्षा महाकुंभ",
     "NIT Hamirpur conference",
