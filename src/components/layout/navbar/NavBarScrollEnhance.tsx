@@ -18,6 +18,10 @@ export default function NavBarScrollEnhance() {
       header.classList.toggle("bg-white/90", !scrolled);
       header.classList.toggle("shadow-sm", !scrolled);
       header.classList.toggle("backdrop-blur-md", !scrolled);
+
+      const height = `${header.getBoundingClientRect().height}px`;
+      document.documentElement.style.setProperty("--nav-offset", height);
+      document.documentElement.style.setProperty("--site-header-height", height);
     };
 
     onScroll();
