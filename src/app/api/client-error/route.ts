@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `client-error:${ip}`,
     limit: 30,
     windowMs: 60_000,

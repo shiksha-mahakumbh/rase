@@ -6,12 +6,9 @@ export const REG_ID_RE = new RegExp(`^${REGISTRATION_ID_PREFIX}-\\d{6}$`);
 const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days — post-registration confirmation window
 
 function lookupSecret(): string {
-  const secret =
-    process.env.REGISTRATION_LOOKUP_SECRET ??
-    process.env.REGISTRATION_EMAIL_SECRET ??
-    process.env.ADMIN_OPS_SECRET;
+  const secret = process.env.REGISTRATION_LOOKUP_SECRET;
   if (!secret) {
-    throw new Error("REGISTRATION_LOOKUP_SECRET (or fallback) is not configured");
+    throw new Error("REGISTRATION_LOOKUP_SECRET is not configured");
   }
   return secret;
 }

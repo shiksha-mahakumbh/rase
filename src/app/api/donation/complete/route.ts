@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { completeDonation } from "@/server/services/donation.service";
 import { donationFormSchema } from "@/lib/schemas/donationSchema";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError } from "@/server/lib/errors";
 
 export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `donation-complete:${ip}`,
     limit: 20,
     windowMs: 60_000,

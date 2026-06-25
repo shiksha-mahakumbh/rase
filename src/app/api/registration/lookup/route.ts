@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
 import { getPublicRegistrationSummary } from "@/server/services/registration.service";
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `registration-lookup-post:${ip}`,
     limit: 10,
     windowMs: 60_000,

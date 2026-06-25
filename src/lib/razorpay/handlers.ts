@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRazorpayClient } from "@/lib/razorpay/client.server";
 import { getRazorpayKeyId, isRazorpayConfigured } from "@/lib/razorpay/config";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { recordVerifiedPayment } from "@/server/services/razorpay-verified.service";
 import { SITE_URL } from "@/config/site";
 import { writeAuditLog } from "@/server/services/audit.service";
@@ -59,7 +59,7 @@ function expectedAmountPaiseFromOrderNotes(
 
 export async function handleCreateOrder(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `razorpay-create-order:${ip}`,
     limit: 30,
     windowMs: 60_000,
@@ -164,7 +164,7 @@ export async function handleCreateOrder(request: NextRequest) {
 
 export async function handleVerifyPayment(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `razorpay-verify:${ip}`,
     limit: 60,
     windowMs: 60_000,

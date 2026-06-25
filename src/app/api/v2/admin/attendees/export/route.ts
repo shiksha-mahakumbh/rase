@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { exportAttendeesCsv } from "@/server/services/lifecycle/attendee.service";
 import { toErrorResponse } from "@/server/lib/errors";
 
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({ key: `admin-attendees-export:${ip}`, limit: 20, windowMs: 60_000 });
+  const limited = await rateLimitAsync({ key: `admin-attendees-export:${ip}`, limit: 20, windowMs: 60_000 });
   if (!limited.ok) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }

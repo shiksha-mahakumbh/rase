@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
+import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
 import { regenerateReceipt, regenerateQr } from "@/server/services/admin/receipt-admin.service";
 
-async function adminGuard(request: NextRequest) {
+async function adminGuard(request: NextRequest, mutation = false) {
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `admin-receipt:${ip}`,
     limit: 60,
     windowMs: 60_000,
@@ -17,7 +18,11 @@ async function adminGuard(request: NextRequest) {
     );
   }
   const { requireAdminSecret } = await import("@/server/lib/admin-guard");
+  const { assertAdminRoles } = await import("@/server/lib/admin-rbac");
   requireAdminSecret(request);
+  if (mutation) {
+    assertAdminRoles(request, ADMIN_MANAGE_ROLES);
+  }
   return null;
 }
 
@@ -60,7 +65,7 @@ export async function POST(
   request: NextRequest,
   context: { params: Promise<{ registrationId: string }> }
 ) {
-  const blocked = await adminGuard(request);
+  const blocked = await adminGuard(request, true);
   if (blocked) return blocked;
 
   try {

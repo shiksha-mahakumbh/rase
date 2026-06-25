@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
 import {
   getParticipantDashboard,
@@ -9,7 +9,7 @@ import { toErrorResponse } from "@/server/lib/errors";
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({ key: `participant-dashboard:${ip}`, limit: 20, windowMs: 60_000 });
+  const limited = await rateLimitAsync({ key: `participant-dashboard:${ip}`, limit: 20, windowMs: 60_000 });
   if (!limited.ok) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = rateLimit({ key: `participant-profile:${ip}`, limit: 10, windowMs: 60_000 });
+  const limited = await rateLimitAsync({ key: `participant-profile:${ip}`, limit: 10, windowMs: 60_000 });
   if (!limited.ok) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }

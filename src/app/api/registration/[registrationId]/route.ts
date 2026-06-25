@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimit } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import {
   REG_ID_RE,
   verifyRegistrationLookupToken,
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
   const { registrationId } = await context.params;
 
   const ip = getClientIp(request);
-  const limited = rateLimit({
+  const limited = await rateLimitAsync({
     key: `registration-lookup:${ip}`,
     limit: 10,
     windowMs: 60_000,
