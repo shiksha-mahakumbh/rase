@@ -57,7 +57,7 @@ const HOMEPAGE_SECTIONS = {
   featured_programs: {
     items: [
       { title: "Multi-Track Conclaves", description: "Holistic education, policy, and Bharatiya knowledge systems.", url: "/departments/academic-council", badge: "Conclave" },
-      { title: "Multi Track Conference", description: "Submit papers and abstracts via Microsoft CMT.", url: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", badge: "Research" },
+      { title: "Multi Track Conference", description: "Submit papers and abstracts via Microsoft CMT.", url: "https://cmt3.research.microsoft.com/SMK2026/", badge: "Research" },
       { title: "Olympiads & Awards", description: "Student olympiads, best practices, and recognition awards.", url: "/registration", badge: "Students" },
     ],
   },
@@ -96,7 +96,7 @@ const HOMEPAGE_SECTIONS = {
         body: "Paper & abstract submission via Microsoft CMT",
         detail:
           "Authors may submit to the Multi-Track International Conference. Formatting guidelines and track details are on the abstract portal.",
-        url: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+        url: "https://cmt3.research.microsoft.com/SMK2026/",
         cta: "Open CMT Portal",
       },
       {

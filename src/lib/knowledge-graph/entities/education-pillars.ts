@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/config/site";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 import { PILLAR_BY_ID } from "../pillar-registry";
 
 /** Education pillar identifiers for knowledge graph clustering */
@@ -56,14 +57,14 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
     id: "skill-development",
     label: "Skill Development",
     description: "Employability, startups, and skill tracks at SMK.",
-    routes: ["/registration", "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"],
+    routes: ["/registration", CMT_SUBMISSION_URL],
     schemaTypes: ["Event"],
   },
   {
     id: "research",
     label: "Research",
     description: "Multi Track Conference submissions and proceedings.",
-    routes: ["https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", "/proceedings"],
+    routes: [CMT_SUBMISSION_URL, "/proceedings"],
     schemaTypes: ["ScholarlyArticle", "PublicationVolume"],
   },
   {
@@ -84,7 +85,7 @@ export const EDUCATION_PILLAR_ENTITIES: EducationEntityDefinition[] = [
     id: "policy",
     label: "Policy",
     description: "Policy conclaves and NEP-aligned discourse.",
-    routes: ["/departments/academic-council", "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"],
+    routes: ["/departments/academic-council", CMT_SUBMISSION_URL],
     schemaTypes: ["Article"],
   },
   {

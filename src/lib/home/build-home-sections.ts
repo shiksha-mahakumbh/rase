@@ -1,7 +1,7 @@
 import type { CmsHomepage } from "@/lib/cms/types";
 import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 import { ROUTES } from "@/constants/routes";
-import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
+import { CMT_SUBMISSION_URL, cmtSubmissionDateLabel } from "@/lib/registration/config";
 import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
 export type TrustStripLogo = { src: string; alt: string; href: string };
@@ -130,7 +130,7 @@ const DEFAULT_DISCOVER: DiscoverInsight[] = [
   },
   {
     title: "Multi Track Conference",
-    date: "Open",
+    date: cmtSubmissionDateLabel(),
     author: "Research Track",
     href: CMT_SUBMISSION_URL,
     tag: "Submit",
@@ -192,7 +192,7 @@ const DEFAULT_TRACKS: EventTrack[] = [
   },
   {
     title: "Multi Track Conference",
-    date: "Submissions open",
+    date: cmtSubmissionDateLabel(),
     venue: "Microsoft CMT",
     description: "Submit papers and abstracts via the official CMT portal.",
     href: CMT_SUBMISSION_URL,

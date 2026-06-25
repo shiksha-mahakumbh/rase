@@ -1,5 +1,6 @@
 import type { CmsNotice } from "@/lib/cms/types";
 import { event } from "@/design/tokens";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
 /** Published fallback notices when CMS / database has none (English). */
 export const DEFAULT_NOTICES_EN: CmsNotice[] = [
@@ -34,7 +35,7 @@ export const DEFAULT_NOTICES_EN: CmsNotice[] = [
     title: "Multi-Track Conference — Paper & Abstract Submission",
     slug: "mtc-abstract-submission-2026",
     description:
-      "Authors may submit research papers and abstracts for the Multi-Track International Conference through the official CMT portal. Review timelines, formatting guidelines, and track listings are on the abstract submission page. SCI/Scopus/WoS publication pathway applies to selected proceedings.",
+      `Authors may submit research papers and abstracts for the Multi-Track International Conference through the official CMT portal (${CMT_SUBMISSION_URL}). Review timelines, formatting guidelines, and track listings are on the Academic Council conference page. SCI/Scopus/WoS publication pathway applies to selected proceedings.`,
     priority: 7,
     isPinned: false,
     publishAt: "2026-05-15T00:00:00.000Z",
@@ -142,7 +143,7 @@ export const DEFAULT_NOTICES_HI: CmsNotice[] = [
     title: "बहु-ट्रैक सम्मेलन एवं शोध सत्र",
     slug: "academic-programme-hi",
     description:
-      "सार-पत्र और शोध पत्र CMT पोर्टल के माध्यम से जमा करें। दिशानिर्देश अमूर्त पृष्ठ पर उपलब्ध हैं।",
+      "शोध पत्र और सार-पत्र आधिकारिक CMT पोर्टल (SMK2026) के माध्यम से जमा करें। दिशानिर्देश शैक्षिक परिषद पृष्ठ पर उपलब्ध हैं।",
     priority: 7,
     isPinned: false,
     publishAt: "2026-05-15T00:00:00.000Z",
@@ -174,6 +175,58 @@ export const DEFAULT_NOTICES_HI: CmsNotice[] = [
     publishAt: "2026-05-20T00:00:00.000Z",
     expireAt: null,
     category: { name: "कार्यक्रम", slug: "programmes" },
+    attachments: [],
+  },
+  {
+    id: "default-olympiads-hi",
+    title: "डीएचई ओलंपियाड एवं प्रतिभा कार्यक्रम",
+    slug: "dhe-olympiads-hi",
+    description:
+      "विद्यालय और उच्च शिक्षा ओलंपियाड, प्रतिभा अधिवेशन और बाल शोध पत्रिका के लिए पंजीकरण हब पर नामांकन करें।",
+    priority: 6,
+    isPinned: false,
+    publishAt: "2026-05-20T00:00:00.000Z",
+    expireAt: null,
+    category: { name: "कार्यक्रम", slug: "programmes" },
+    attachments: [],
+  },
+  {
+    id: "default-sponsorship-hi",
+    title: "प्रायोजन एवं संस्थागत साझेदारी",
+    slug: "sponsorship-hi",
+    description:
+      "शिक्षा महाकुंभ 6.0 के लिए सीएसआर, उद्योग और मीडिया साझेदारी के लिए संपर्क करें।",
+    priority: 4,
+    isPinned: false,
+    publishAt: "2026-06-01T00:00:00.000Z",
+    expireAt: null,
+    category: { name: "सामान्य", slug: "general" },
+    attachments: [],
+  },
+  {
+    id: "default-project-display-hi",
+    title: "परियोजना प्रदर्शन एवं प्रदर्शनी पंजीकरण",
+    slug: "project-display-hi",
+    description:
+      "उच्च शिक्षा संस्थान और छात्र नवाचारकर्ता परियोजना प्रदर्शन के लिए पंजीकरण हब से नामांकन कर सकते हैं।",
+    priority: 3,
+    isPinned: false,
+    publishAt: "2026-06-10T00:00:00.000Z",
+    expireAt: null,
+    category: { name: "कार्यक्रम", slug: "programmes" },
+    attachments: [],
+  },
+  {
+    id: "default-volunteer-hi",
+    title: "स्वयंसेवक अभिविन्यास",
+    slug: "volunteer-hi",
+    description:
+      "पंजीकरण डेस्क, अधिवेशन और प्रदर्शनी सहायता के लिए स्वयंसेवक अभिविन्यास की तिथियाँ इस बोर्ड पर साझा की जाएंगी।",
+    priority: 2,
+    isPinned: false,
+    publishAt: "2026-06-15T00:00:00.000Z",
+    expireAt: null,
+    category: { name: "सामान्य", slug: "general" },
     attachments: [],
   },
 ];

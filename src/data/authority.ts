@@ -4,6 +4,7 @@
  */
 
 import { buildAuthorityPastEditions } from "@/data/past-editions";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
 export type AuthorityStat = {
   value: number;
@@ -61,7 +62,7 @@ export const researchOutput: ResearchOutputItem[] = [
     title: "Multi Track Conference",
     type: "Policy Brief",
     description: "Submit via the official Microsoft CMT portal.",
-    href: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+    href: CMT_SUBMISSION_URL,
   },
 ];
 

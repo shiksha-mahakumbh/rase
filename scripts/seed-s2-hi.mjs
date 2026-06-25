@@ -60,7 +60,7 @@ const HOMEPAGE_SECTIONS = {
         title: "बहु-ट्रैक सम्मेलन — सार-पत्र",
         body: "Microsoft CMT के माध्यम से जमा करें",
         detail: "शोध सार-पत्र और पत्र CMT पोर्टल पर जमा करें।",
-        url: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/",
+        url: "https://cmt3.research.microsoft.com/SMK2026/",
         cta: "CMT पोर्टल",
       },
       {

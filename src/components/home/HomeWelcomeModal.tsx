@@ -15,7 +15,7 @@ import {
   WELCOME_MODAL_SEEN_KEY,
 } from "@/lib/home/is-home-path";
 import {
-  FALLBACK_WELCOME_MODAL,
+  getFallbackWelcomeModal,
   pickWelcomeModalBar,
   resolveAnnouncementBars,
 } from "@/data/default-announcements";
@@ -40,17 +40,18 @@ export default function HomeWelcomeModal() {
   const modalBar = pickWelcomeModalBar(bars);
   const colorTheme = modalBar?.colorTheme ?? "primary";
 
-  const title = modalBar?.title ?? FALLBACK_WELCOME_MODAL.title;
+  const fallback = getFallbackWelcomeModal(locale);
+  const title = modalBar?.title ?? fallback.title;
   const subtitle = modalBar
     ? modalBar.barType === "registration_alert"
       ? "Registration alert"
       : modalBar.barType === "emergency"
         ? "Important notice"
         : "Announcement"
-    : FALLBACK_WELCOME_MODAL.subtitle;
-  const message = modalBar?.message ?? FALLBACK_WELCOME_MODAL.message;
-  const ctaUrl = modalBar?.ctaUrl ?? FALLBACK_WELCOME_MODAL.ctaUrl;
-  const ctaLabel = modalBar?.ctaLabel ?? FALLBACK_WELCOME_MODAL.ctaLabel;
+    : fallback.subtitle;
+  const message = modalBar?.message ?? fallback.message;
+  const ctaUrl = modalBar?.ctaUrl ?? fallback.ctaUrl;
+  const ctaLabel = modalBar?.ctaLabel ?? fallback.ctaLabel;
 
   const dismiss = () => {
     sessionStorage.setItem(WELCOME_MODAL_SEEN_KEY, "1");

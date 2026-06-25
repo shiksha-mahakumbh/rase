@@ -48,9 +48,9 @@ const DEFAULT_EN: Omit<ResolvedAnnouncementItem, "id">[] = [
   },
   {
     title: "Multi-Track Conference — Submit Research",
-    summary: "Paper & abstract submission via Microsoft CMT",
+    summary: "Paper & abstract submission via Microsoft CMT (SMK2026)",
     detail:
-      "Authors may submit to the Multi-Track International Conference. Formatting guidelines and track details are on the abstract portal.",
+      "Authors may submit to the Multi-Track International Conference on the official CMT portal for Shiksha Mahakumbh 6.0. Formatting guidelines and track details are on the Academic Council conference page.",
     href: CMT_SUBMISSION_URL,
     external: true,
     cta: "Open CMT Portal",
@@ -167,9 +167,23 @@ export const FALLBACK_WELCOME_MODAL = {
   title: "शिक्षा महाकुंभ अभियान",
   subtitle: `${event.edition} Edition · ${event.venue}`,
   message: `Join the national educational movement at ${event.venue} from 9–11 October 2026.`,
+  messageHi:
+    "9–11 अक्टूबर 2026 को एनआईटी हमीरपुर में राष्ट्रीय शैक्षिक आंदोलन से जुड़ें।",
   ctaUrl: CANONICAL_ROUTES.registration,
   ctaLabel: "Register now",
+  ctaLabelHi: "पंजीकरण करें",
 } as const;
+
+export function getFallbackWelcomeModal(locale: string) {
+  const isHi = locale === "hi";
+  return {
+    title: FALLBACK_WELCOME_MODAL.title,
+    subtitle: FALLBACK_WELCOME_MODAL.subtitle,
+    message: isHi ? FALLBACK_WELCOME_MODAL.messageHi : FALLBACK_WELCOME_MODAL.message,
+    ctaUrl: FALLBACK_WELCOME_MODAL.ctaUrl,
+    ctaLabel: isHi ? FALLBACK_WELCOME_MODAL.ctaLabelHi : FALLBACK_WELCOME_MODAL.ctaLabel,
+  };
+}
 
 export function filterCmsAnnouncementItems(
   items: CmsAnnouncementItemInput[]

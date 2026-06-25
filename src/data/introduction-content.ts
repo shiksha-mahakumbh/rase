@@ -83,7 +83,7 @@ export const INTRODUCTION_OBJECTIVES = [
 ] as const;
 
 export const INTRODUCTION_STATS = [
-  { label: "Editions", value: "5", hint: "Completed through SMK 5.0" },
+  { label: "Editions", value: "5+1", hint: "5 completed (1.0–5.0) · SMK 6.0 upcoming" },
   { label: "Institutions", value: "500+", hint: "Engaged nationwide" },
   { label: "Research papers", value: "1200+", hint: "Presented across editions" },
   { label: "States & UTs", value: "14+", hint: "Peak at SMK 1.0 (India has 28 states + 8 UTs)" },

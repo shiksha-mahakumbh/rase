@@ -98,7 +98,7 @@ export const ACADEMIC_COUNCIL_FAQ = [
   },
   {
     question: "How do I submit a research paper?",
-    answer: `Authors submit via the official Microsoft CMT portal (${CMT_SUBMISSION_URL}). Papers may be published in SCI / Scopus / Web of Science indexed journals after peer review.`,
+    answer: `Authors submit via the official Microsoft CMT portal for Shiksha Mahakumbh 6.0 (${CMT_SUBMISSION_URL}). Papers may be published in SCI / Scopus / Web of Science indexed journals after peer review.`,
   },
   {
     question: "Who can I contact for academic enquiries?",

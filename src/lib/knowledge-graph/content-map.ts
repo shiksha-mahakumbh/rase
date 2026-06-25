@@ -1,5 +1,6 @@
 import type { EducationPillarId } from "./entities/education-pillars";
 import type { TopicClusterId } from "./topic-clusters";
+import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
 export type ContentMapEntry = {
   path: string;
@@ -17,7 +18,7 @@ export const CONTENT_MAP: ContentMapEntry[] = [
   { path: "/", title: "Home", pillarId: "conferences", clusterId: "conf-mahakumbh", priority: 1 },
   { path: "/introduction", title: "Introduction", pillarId: "leadership", clusterId: "leadership-intro" },
   { path: "/registration", title: "Registration", pillarId: "conferences", clusterId: "conf-mahakumbh", priority: 1 },
-  { path: "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/", title: "Multi Track Conference", pillarId: "research", clusterId: "research-submit" },
+  { path: CMT_SUBMISSION_URL, title: "Multi Track Conference", pillarId: "research", clusterId: "research-submit" },
   { path: "/proceedings", title: "Proceedings", pillarId: "publications", clusterId: "pub-proceedings", priority: 2 },
   { path: "/proceeding1", title: "Proceedings Vol. I", pillarId: "publications", clusterId: "pub-proceedings" },
   { path: "/proceeding2", title: "Proceedings Vol. II", pillarId: "publications", clusterId: "pub-proceedings" },
