@@ -12,10 +12,6 @@ const intlMiddleware = createIntlMiddleware(routing);
 const NON_DEFAULT_LOCALE_PREFIX = /^\/(hi|fr|es|ar)(\/|$)/;
 
 function shouldRunIntlMiddleware(pathname: string): boolean {
-  // Static /hi/contact-us is served outside the [locale] segment.
-  if (pathname === "/hi/contact-us" || pathname.startsWith("/hi/contact-us/")) {
-    return false;
-  }
   return NON_DEFAULT_LOCALE_PREFIX.test(pathname);
 }
 
@@ -68,6 +64,12 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
     response.headers.set("X-Robots-Tag", "noindex, follow");
     return response;
+  }
+
+  if (pathname === "/hi/contact-us" || pathname.startsWith("/hi/contact-us/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/contact-us";
+    return NextResponse.rewrite(url);
   }
 
   if (!shouldRunIntlMiddleware(pathname)) {
