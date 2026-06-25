@@ -178,3 +178,32 @@
     break-inside: avoid;
   }
 }
+
+.gallery-carousel .control-arrow {
+  background: rgba(11, 31, 59, 0.82) !important;
+  border-radius: 9999px;
+  height: 2.5rem;
+  margin: 0 0.5rem;
+  opacity: 1 !important;
+  top: calc(50% - 1.25rem);
+  width: 2.5rem;
+}
+
+.gallery-carousel .control-arrow:hover {
+  background: rgba(30, 58, 95, 0.95) !important;
+}
+
+.gallery-carousel .control-arrow::before {
+  border-color: #fff !important;
+  border-width: 0 3px 3px 0 !important;
+  margin: 0 auto;
+  padding: 5px;
+}
+
+.gallery-carousel .control-prev.control-arrow {
+  left: 0.5rem;
+}
+
+.gallery-carousel .control-next.control-arrow {
+  right: 0.5rem;
+}
