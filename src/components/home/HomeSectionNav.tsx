@@ -6,6 +6,7 @@ const LINKS = [
   { href: "#programmes", label: "Programme" },
   { href: "#conference-support", label: "Partners" },
   { href: "#speakers", label: "Speakers" },
+  { href: "#gallery", label: "Gallery" },
   { href: "#venue", label: "Venue" },
   { href: "#faq", label: "FAQ" },
 ] as const;
