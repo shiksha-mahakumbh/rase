@@ -21,11 +21,13 @@ interface OverviewPageProps {
 const FUNCTIONAL_DOMAINS: { label: string; tabId: AcademicCouncilTabId }[] = [
   { label: "Multi-Track Research Conference", tabId: "ConferencePage" },
   { label: "National & Thematic Conclaves", tabId: "ConclavePage" },
+  { label: "Excellence Awards", tabId: "AwardsPage" },
   { label: "Olympiads (School Outreach Programs)", tabId: "OlympiadPage" },
   { label: "Student Projects (School & Higher Education)", tabId: "ProjectsPage" },
   { label: "Best Practices (Grassroots to Global Models)", tabId: "BestPracticesPage" },
   { label: "Exhibitions & Knowledge Showcases", tabId: "ExhibitionPage" },
   { label: "Publications & Compendiums (Research, Reports, Journals)", tabId: "PatrikaPage" },
+  { label: "Cultural Programmes", tabId: "CulturalPage" },
 ];
 
 function OverviewPage({ onNavigate }: OverviewPageProps) {
@@ -87,7 +89,7 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
               >
                 <ACCard className="text-sm transition group-hover:border-brand-saffron/40 md:text-base">
                   <span className="font-medium text-brand-navy">{label}</span>
-                  <span className="mt-1 block text-xs font-semibold text-brand-saffron-dark opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                  <span className="mt-1 block text-xs font-semibold text-brand-saffron-dark">
                     View programme →
                   </span>
                 </ACCard>
@@ -153,10 +155,7 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
         />
       </ACPage>
 
-      <AuthoritySections
-        sections={["impact", "research", "institutions", "government"]}
-        impactVariant="compact"
-      />
+      <AuthoritySections sections={["research", "institutions", "government"]} />
     </>
   );
 }

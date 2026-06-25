@@ -2,8 +2,6 @@
 
 import {
   ACADEMIC_COUNCIL_EVENT,
-  ACADEMIC_COUNCIL_HERO,
-  ACADEMIC_COUNCIL_STATS,
   ACADEMIC_PROGRAMME_HUB,
   type AcademicCouncilTabId,
   type ProgrammeHubSection,
@@ -39,59 +37,17 @@ export default function AcademicProgrammeHub({ onNavigate }: AcademicProgrammeHu
       aria-labelledby="ac-hub-heading"
     >
       <div className="mx-auto max-w-5xl">
-        <section
-          aria-labelledby="ac-hub-heading"
-          className="overflow-hidden rounded-2xl border border-brand-saffron/25 bg-gradient-to-br from-brand-navy via-brand-navy-light to-brand-navy p-5 text-white shadow-xl md:rounded-3xl md:p-6"
-        >
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-saffron md:text-xs">
-            Global Academic Platform · Viksit Bharat 2047
-          </p>
-          <h2 id="ac-hub-heading" className="sr-only">
-            Programme summary
+        <div className="mb-8">
+          <h2 id="ac-hub-heading" className="text-xl font-bold text-brand-navy md:text-2xl">
+            Programme pillars
           </h2>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
-            {ACADEMIC_COUNCIL_HERO.tagline}
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 md:text-base">
+            Ten integrated academic programmes — select a pillar to view tracks, eligibility, and
+            submission details.
           </p>
-          <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-                Dates
-              </dt>
-              <dd className="mt-1 text-sm font-bold md:text-base">9–11 October 2026</dd>
-            </div>
-            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-                Venue
-              </dt>
-              <dd className="mt-1 text-sm font-bold md:text-base">{ACADEMIC_COUNCIL_EVENT.venue}</dd>
-            </div>
-            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
-                Reach
-              </dt>
-              <dd className="mt-1 text-sm font-bold md:text-base">
-                National &amp; International Delegates
-              </dd>
-            </div>
-          </dl>
-        </section>
+        </div>
 
-        <dl className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {ACADEMIC_COUNCIL_STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-slate-200/80 bg-white px-3 py-4 text-center shadow-sm"
-            >
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 sm:text-xs">
-                {stat.label}
-              </dt>
-              <dd className="mt-1 text-2xl font-bold text-brand-navy">{stat.value}</dd>
-              <p className="mt-1 text-[10px] text-slate-500 sm:text-xs">{stat.hint}</p>
-            </div>
-          ))}
-        </dl>
-
-        <div className="mt-8 space-y-5">
+        <div className="space-y-5">
           {ACADEMIC_PROGRAMME_HUB.map((section) => {
             const styles = accentStyles[section.accent];
             const hasManyItems = section.items.length > 4;
