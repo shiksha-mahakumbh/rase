@@ -10,6 +10,7 @@ import {
   ACFooterStatement,
   REG_LINKS,
 } from "../AcademicCouncilUI";
+import { ACADEMIC_PUBLICATION_NOTE } from "@/data/academic-council-tracks";
 import { CMT_SUBMISSION_URL, cmtSubmissionDateLabel } from "@/lib/registration/config";
 import { tracks } from "../tracks-data";
 
@@ -21,7 +22,7 @@ export default function ConferencePage() {
       <ACSection title="Overview">
         <ACGlassPanel>
           <p className="text-base leading-relaxed text-gray-700 md:text-lg md:leading-8">
-            Shiksha Mahakumbh 2026 (6th Edition) will host a Hybrid Multi-Track International
+            Shiksha Mahakumbh 6.0 (6th Edition) will host a Hybrid Multi-Track International
             Conference, bringing together researchers, academicians, industry experts, and scholars
             to present original research, participate in plenary talks, workshops, and engage in
             cross-disciplinary dialogue aligned with Viksit Bharat 2047.
@@ -29,8 +30,12 @@ export default function ConferencePage() {
         </ACGlassPanel>
       </ACSection>
 
-      <ACSection title="Conference Leadership">
+      <ACSection title="Overall Conference Coordination">
         <ACGlassPanel>
+          <p className="mb-4 text-sm leading-relaxed text-gray-600 md:text-base">
+            The leadership below coordinates the conference as a whole. Each of the 15 tracks has
+            its own chair, co-chair, and convenor — listed in the Conference Tracks section.
+          </p>
           <div className="space-y-6 text-sm text-gray-700 md:text-base">
             <div>
               <h3 className="mb-2 text-lg font-bold text-brand-navy md:text-xl">Chair</h3>
@@ -134,12 +139,8 @@ export default function ConferencePage() {
       <ACSection title="Publication & Review">
         <ACGlassPanel className="border-brand-navy/10 bg-gradient-to-br from-brand-navy/5 to-white">
           <div className="space-y-3 text-base text-gray-700 md:text-lg">
-            <p>
-              Papers submitted will be published in SCI / Scopus / Web of Science indexed journals
-              after peer review.
-            </p>
-            <p>Peer-reviewed Open Access Journal (ISSN)</p>
-            <p>Selected papers recommended for Scopus / Web of Science indexing</p>
+            <p>{ACADEMIC_PUBLICATION_NOTE}</p>
+            <p>Peer-reviewed Open Access Journal (ISSN) options may apply for selected tracks.</p>
           </div>
         </ACGlassPanel>
       </ACSection>

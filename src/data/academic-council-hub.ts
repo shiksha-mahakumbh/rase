@@ -2,6 +2,7 @@ import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { SITE_URL } from "@/config/site";
 import { committeePathForEdition } from "@/lib/committee/edition-slugs";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
+import { ACADEMIC_PUBLICATION_NOTE } from "@/data/academic-council-tracks";
 import {
   ACADEMIC_COUNCIL_EVENT,
   ACADEMIC_COUNCIL_HERO,
@@ -46,7 +47,7 @@ export const ACADEMIC_COUNCIL_QUICK_LINKS: ReadonlyArray<{
 }> = [
   { label: "Register for SMK 6.0", href: CANONICAL_ROUTES.registration },
   { label: "Submit Paper (CMT)", href: CMT_SUBMISSION_URL, external: true },
-  { label: "Edition 6.0 Brochure", href: CANONICAL_ROUTES.downloads },
+  { label: "Edition 6.0 Brochure", href: `${CANONICAL_ROUTES.downloads}#edition-brochures` },
   { label: "Organising Committee", href: committeePathForEdition("6.0") },
   { label: "Proceedings", href: "/proceedings" },
   { label: "Workshops", href: "/workshops" },
@@ -97,11 +98,21 @@ export const ACADEMIC_COUNCIL_FAQ = [
     answer: `The Academic Council programmes run 9–11 October 2026 at ${ACADEMIC_COUNCIL_EVENT.venue}, ${ACADEMIC_COUNCIL_EVENT.location}.`,
   },
   {
+    question: "How many conference tracks are there?",
+    answer:
+      "The multi-track international conference spans 15 thematic tracks — from fundamental sciences and engineering to education, health, culture, and Indian Knowledge Systems. Each track has dedicated chair, co-chair, and convenor leadership listed on the Conference tab.",
+  },
+  {
     question: "How do I submit a research paper?",
-    answer: `Authors submit via the official Microsoft CMT portal for Shiksha Mahakumbh 6.0 (${CMT_SUBMISSION_URL}). Papers may be published in SCI / Scopus / Web of Science indexed journals after peer review.`,
+    answer: `Authors submit via the official Microsoft CMT portal for Shiksha Mahakumbh 6.0 (${CMT_SUBMISSION_URL}). ${ACADEMIC_PUBLICATION_NOTE}`,
+  },
+  {
+    question: "When do DHE Olympiad registrations open?",
+    answer:
+      "Olympiad registration and exam dates for Classes 3–10 are to be announced. Top achievers will be felicitated at Shiksha Mahakumbh 6.0 (9–11 Oct 2026, NIT Hamirpur). Apply via the registration hub when open.",
   },
   {
     question: "Who can I contact for academic enquiries?",
-    answer: `Email ${ACADEMIC_COUNCIL_EVENT.contactEmail} or WhatsApp ${ACADEMIC_COUNCIL_EVENT.contactPhone}.`,
+    answer: `For papers, Olympiads, awards, and programme submissions: ${ACADEMIC_COUNCIL_EVENT.contactEmail}. For general summit enquiries: info@shikshamahakumbh.com. WhatsApp: ${ACADEMIC_COUNCIL_EVENT.contactPhone}.`,
   },
 ] as const;

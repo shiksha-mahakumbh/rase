@@ -1,5 +1,10 @@
 /** Academic Council page — hero, stats, and programme hub index (Shiksha Mahakumbh 6.0). */
 
+import {
+  ACADEMIC_PUBLICATION_NOTE,
+  conferenceTracksForHub,
+} from "@/data/academic-council-tracks";
+
 export type AcademicCouncilTabId =
   | "OverviewPage"
   | "ConferencePage"
@@ -84,75 +89,8 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     description:
       "Hybrid international research conference with peer-reviewed publication pathways across sciences, engineering, education, health, culture, and Indian Knowledge Systems.",
     accent: "saffron",
-    footerNote:
-      "Papers submitted will be published in SCI / Scopus / Web of Science indexed journals after peer review.",
-    items: [
-      {
-        titleEn: "Fundamental & Applied Sciences",
-        titleHi: "मौलिक एवं अनुप्रयुक्त विज्ञान",
-        topics: ["Physics", "Chemistry", "Mathematics", "Botany", "Zoology", "Data Sciences", "Earth and Space Sciences"],
-      },
-      {
-        titleEn: "Engineering & Technology",
-        titleHi: "अभियंत्रण एवं प्रौद्योगिकी",
-        topics: ["All engineering branches", "AI", "Drone and Robotics", "Data Engineering", "Quantum Technology"],
-      },
-      {
-        titleEn: "Management & Entrepreneurship",
-        titleHi: "प्रबंधन एवं उद्यमिता",
-        topics: ["Entrepreneurship", "Startups", "Innovation", "Family and small scale business"],
-      },
-      {
-        titleEn: "Education Systems & Pedagogy",
-        titleHi: "शिक्षा प्रणाली एवं शिक्षण पद्धति",
-        topics: ["Gurukul system", "School and Higher education", "Inclusive education"],
-      },
-      {
-        titleEn: "EdTech & Digital Education",
-        titleHi: "एडटेक एवं डिजिटल शिक्षा",
-        topics: ["Online and digital education", "AI in education"],
-      },
-      {
-        titleEn: "Health Sciences & Traditional Medicine",
-        titleHi: "स्वास्थ्य विज्ञान एवं पारंपरिक चिकित्सा",
-        topics: ["AYUSH", "Public Health", "Preventive care", "Modern Education"],
-      },
-      {
-        titleEn: "Sports & Well-being",
-        titleHi: "खेल एवं कल्याण",
-        topics: ["Mental and physical health", "Yoga", "Life style", "Sports sciences"],
-      },
-      {
-        titleEn: "Agriculture & Veterinary Sciences",
-        titleHi: "कृषि एवं पशु चिकित्सा विज्ञान",
-        topics: ["Sustainable agriculture", "Agri-Tech", "Animal Husbandry"],
-      },
-      {
-        titleEn: "Environment, Sustainability & Water Resources",
-        titleHi: "पर्यावरण एवं सतत विकास",
-        topics: ["Climate change", "Water management", "Solid waste management", "Environmental pollution"],
-      },
-      {
-        titleEn: "Culture, Arts & Heritage",
-        titleHi: "संस्कृति, कला एवं विरासत",
-        topics: ["Bharatiya and Tribal culture", "Traditions and folks", "Performing art"],
-      },
-      {
-        titleEn: "Languages & Linguistics",
-        titleHi: "भाषाएँ एवं भाषाविज्ञान",
-        topics: ["Bharatiya languages", "Translation Technology"],
-      },
-      {
-        titleEn: "Vocational & Skill-Based Education",
-        titleHi: "व्यावसायिक एवं कौशल आधारित शिक्षा",
-        topics: ["Vocational skill", "Skill inculcation", "Crafts"],
-      },
-      {
-        titleEn: "Bharatiya Knowledge System (BKS)",
-        titleHi: "भारतीय ज्ञान प्रणाली",
-        topics: ["Bharatiya Philosophy", "Gurukul education", "Vedic literature — Shri Madbhagwat Gita, Ramayana, Vedas"],
-      },
-    ],
+    footerNote: ACADEMIC_PUBLICATION_NOTE,
+    items: conferenceTracksForHub(),
   },
   {
     id: "olympiad",
@@ -161,14 +99,15 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
     titleEn: "DHE Olympiads",
     titleHi: "डीएचई ओलंपियाड",
     description:
-      "Nationwide school outreach in English, Mathematics, and Technology for Classes 3–10. Top achievers honoured at Shiksha Mahakumbh 2026.",
+      "Nationwide school outreach in English, Mathematics, and Technology for Classes 3–10. Top achievers honoured at Shiksha Mahakumbh 6.0.",
     accent: "navy",
     items: [
       { titleEn: "DHE English Olympiad", titleHi: "अंग्रेज़ी" },
       { titleEn: "DHE Maths Olympiad", titleHi: "गणित" },
       { titleEn: "DHE Tech Olympiad", titleHi: "प्रौद्योगिकी" },
     ],
-    footerNote: "Classes 3–10: Elementary and secondary level. Top achievers felicitated at Shiksha Mahakumbh 2026.",
+    footerNote:
+      "Classes 3–10. Registration and exam dates to be announced. Felicitation at Shiksha Mahakumbh 6.0 (9–11 Oct 2026, NIT Hamirpur). Apply via the registration hub.",
   },
   {
     id: "awards",
@@ -180,10 +119,12 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
       "Faculty and student excellence across research publications, books, patents, startups, and funded projects.",
     accent: "saffron",
     items: [
-      { titleEn: "Faculty Excellence Award", titleHi: "संकाय एवं छात्र उत्कृष्टता पुरस्कार" },
+      { titleEn: "Faculty Excellence Award", titleHi: "संकाय उत्कृष्टता पुरस्कार" },
       { titleEn: "School Level Recognition", titleHi: "विद्यालय स्तर" },
       { titleEn: "College / University Level Recognition", titleHi: "महाविद्यालय / विश्वविद्यालय स्तर" },
     ],
+    footerNote:
+      "Nominations and applications via the registration hub. Timeline to be announced; awards presented at Shiksha Mahakumbh 6.0.",
   },
   {
     id: "exhibition",
@@ -228,9 +169,11 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
       "National student research journal nurturing inquiry and innovation among school learners in Classes 9–12.",
     accent: "navy",
     items: [
-      { titleEn: "Section 1 — Classes 9–10: Basic research & project documentation" },
-      { titleEn: "Section 2 — Classes 11–12: Advanced research & analytical studies" },
+      { titleEn: "Section 1 — Classes 9–10: Basic research & project documentation", titleHi: "खंड 1 — कक्षा 9–10" },
+      { titleEn: "Section 2 — Classes 11–12: Advanced research & analytical studies", titleHi: "खंड 2 — कक्षा 11–12" },
     ],
+    footerNote:
+      "Submission timelines to be announced. School entries via the registration hub under relevant student research categories.",
   },
   {
     id: "best-practices",
@@ -242,11 +185,12 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
       "Identify, showcase, and scale replicable education, governance, and community engagement models aligned with Viksit Bharat 2047.",
     accent: "saffron",
     items: [
-      { titleEn: "Academic Innovations & EdTech Integration" },
-      { titleEn: "Community & Social Impact Initiatives" },
-      { titleEn: "Institutional Excellence & Sustainability" },
-      { titleEn: "Indian Knowledge System (IKS) Practices" },
+      { titleEn: "Academic Innovations & EdTech Integration", titleHi: "शैक्षिक नवाचार एवं एडटेक" },
+      { titleEn: "Community & Social Impact Initiatives", titleHi: "सामुदायिक प्रभाव पहल" },
+      { titleEn: "Institutional Excellence & Sustainability", titleHi: "संस्थागत उत्कृष्टता" },
+      { titleEn: "Indian Knowledge System (IKS) Practices", titleHi: "भारतीय ज्ञान प्रणाली प्रथाएँ" },
     ],
+    footerNote: "Submit models via the registration hub. Shortlisted entries may present at Shiksha Mahakumbh 6.0.",
   },
   {
     id: "projects",
@@ -258,16 +202,17 @@ export const ACADEMIC_PROGRAMME_HUB: ProgrammeHubSection[] = [
       "National platform for school (Classes 6–10) and higher-education students to present innovation-driven working models.",
     accent: "saffron",
     items: [
-      { titleEn: "School Level — Classes 6–10: Models & problem-solving ideas" },
-      { titleEn: "College Level — UG/PG: Research-based solutions & prototypes" },
+      { titleEn: "School Level — Classes 6–10: Models & problem-solving ideas", titleHi: "विद्यालय स्तर — कक्षा 6–10" },
+      { titleEn: "College Level — UG/PG: Research-based solutions & prototypes", titleHi: "महाविद्यालय स्तर — स्नातक/स्नातकोत्तर" },
     ],
+    footerNote: "Project display registration opens via the unified registration hub.",
   },
 ];
 
 export const ACADEMIC_COUNCIL_SEO = {
   title: "Academic Council — Conference, Conclaves & Olympiads",
   description:
-    "Shiksha Mahakumbh 6.0 Academic Council at NIT Hamirpur (9–11 Oct 2026): 15-track international conference, 7 conclaves, DHE Olympiads, exhibitions, Bal Shodh Patrika, best practices, student projects, and excellence awards. SCI/Scopus/WoS publication pathway.",
+    "Shiksha Mahakumbh 6.0 Academic Council at NIT Hamirpur (9–11 Oct 2026): 15-track international conference, 7 conclaves, DHE Olympiads, exhibitions, Bal Shodh Patrika, best practices, student projects, and excellence awards. Peer-reviewed publication pathway.",
   keywords: [
     "Academic Council Shiksha Mahakumbh",
     "Shiksha Mahakumbh 6.0 conference",

@@ -41,7 +41,7 @@ const RECOGNITION_BENEFITS = [
 const TIMELINE = [
   "Call for Applications: To be announced",
   "Last Date: To be announced",
-  "Result Declaration: During Shiksha Mahakumbh 2026",
+  "Result Declaration: During Shiksha Mahakumbh 6.0",
 ];
 
 export default function AwardsPage() {

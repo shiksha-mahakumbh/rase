@@ -11,7 +11,6 @@ import {
   REG_LINKS,
 } from "./AcademicCouncilUI";
 import AcademicProgrammeHub from "./AcademicProgrammeHub";
-import { AuthoritySections } from "@/components/authority";
 import type { AcademicCouncilTabId } from "@/data/academic-council-content";
 
 interface OverviewPageProps {
@@ -154,8 +153,6 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
           href={REG_LINKS.general}
         />
       </ACPage>
-
-      <AuthoritySections sections={["research", "institutions", "government"]} />
     </>
   );
 }

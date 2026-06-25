@@ -32,7 +32,7 @@ const TIMELINE = [
   "Registration Start: To be announced",
   "Exam Dates: To be announced",
   "Result Declaration: To be announced",
-  "Felicitation: During Shiksha Mahakumbh 2026 (NIT Hamirpur)",
+  "Felicitation: During Shiksha Mahakumbh 6.0 (NIT Hamirpur)",
 ];
 
 export default function OlympiadPage() {
