@@ -8,6 +8,7 @@ import {
   academicCouncilTabFromSlug,
   academicCouncilTabSlug,
 } from "@/data/academic-council-hub";
+import { NavChevronIcon } from "@/components/layout/navbar/NavMenuIcons";
 import OverviewPage from "./academic/AcademicCouncilOverview";
 import ConferencePage from "./academic/pages/ConferencePage";
 import ConclavePage from "./academic/pages/ConclavePage";
@@ -88,7 +89,10 @@ export default function AcademicCouncilDashboard() {
   }, []);
 
   useEffect(() => {
-    mainRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    const panel = mainRef.current;
+    if (!panel) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    panel.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
   }, [active]);
 
   const activeLabel = pages.find((p) => p.id === active)?.label ?? "Programme";
@@ -97,13 +101,13 @@ export default function AcademicCouncilDashboard() {
     <div className="flex min-h-screen flex-col bg-brand-surface lg:flex-row">
       <a
         href="#ac-main-panel"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-20 focus:z-50 focus:rounded-lg focus:bg-brand-navy focus:px-4 focus:py-2 focus:text-white"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-[calc(var(--nav-offset,3.5rem)+0.5rem)] focus:z-50 focus:rounded-lg focus:bg-brand-navy focus:px-4 focus:py-2 focus:text-white"
       >
         Skip to programme content
       </a>
 
       <aside
-        className="hidden w-72 flex-shrink-0 flex-col border-r border-brand-navy/10 bg-white p-5 shadow-lg lg:sticky lg:top-0 lg:flex lg:h-screen lg:overflow-y-auto"
+        className="hidden w-72 flex-shrink-0 flex-col border-r border-brand-navy/10 bg-white p-5 shadow-lg lg:sticky lg:top-[var(--nav-offset,3.5rem)] lg:z-20 lg:flex lg:max-h-[calc(100dvh-var(--nav-offset,3.5rem))] lg:overflow-y-auto"
         aria-label="Academic Council programmes"
       >
         <div className="mb-6 rounded-2xl bg-gradient-to-br from-brand-navy to-brand-navy-light p-4 text-white">
@@ -138,21 +142,24 @@ export default function AcademicCouncilDashboard() {
         </nav>
       </aside>
 
-      <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur-md lg:hidden">
+      <div className="sticky top-[var(--nav-offset,3.5rem)] z-40 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur-md lg:hidden">
         <button
           type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex w-full min-h-[44px] items-center justify-between rounded-xl border border-brand-navy/20 bg-brand-navy/5 px-4 py-2 text-sm font-semibold text-brand-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-saffron"
+          className="flex w-full min-h-[44px] items-center justify-between rounded-xl border border-brand-navy/20 bg-brand-navy/5 px-4 py-2 text-sm font-semibold text-brand-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
           aria-expanded={menuOpen}
           aria-controls="ac-mobile-nav"
         >
-          {activeLabel}
-          <span aria-hidden>{menuOpen ? "▲" : "▼"}</span>
+          <span className="truncate pr-2">{activeLabel}</span>
+          <NavChevronIcon
+            className={`h-4 w-4 shrink-0 transition ${menuOpen ? "rotate-180" : ""}`}
+            aria-hidden
+          />
         </button>
-        {menuOpen && (
+        {menuOpen ? (
           <nav
             id="ac-mobile-nav"
-            className="mt-2 grid max-h-[min(60vh,320px)] grid-cols-2 gap-1.5 overflow-y-auto rounded-xl border border-slate-100 bg-white p-2 shadow-lg"
+            className="mt-2 max-h-[min(60vh,360px)] space-y-1 overflow-y-auto rounded-xl border border-slate-100 bg-white p-2 shadow-lg"
             role="tablist"
           >
             {pages.map((p) => (
@@ -160,12 +167,14 @@ export default function AcademicCouncilDashboard() {
                 key={p.id}
                 href={academicCouncilProgrammeUrl(p.id)}
                 role="tab"
+                id={`tab-mobile-${p.id}`}
                 aria-selected={active === p.id}
+                aria-controls="ac-main-panel"
                 onClick={(event) => {
                   event.preventDefault();
                   selectPage(p.id);
                 }}
-                className={`flex min-h-[44px] items-center justify-center rounded-lg px-2 py-2 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-saffron ${
+                className={`flex min-h-[44px] items-center rounded-lg px-3 py-2.5 text-left text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron ${
                   active === p.id ? "bg-brand-navy text-white" : "bg-slate-50 text-slate-700"
                 }`}
               >
@@ -173,7 +182,7 @@ export default function AcademicCouncilDashboard() {
               </a>
             ))}
           </nav>
-        )}
+        ) : null}
       </div>
 
       <main
@@ -183,7 +192,7 @@ export default function AcademicCouncilDashboard() {
         aria-labelledby={`tab-${active}`}
         aria-live="polite"
         aria-atomic="true"
-        className="min-w-0 flex-1 p-3 pt-4 sm:p-4 lg:p-6 lg:pt-8"
+        className="min-w-0 flex-1 scroll-mt-[calc(var(--nav-offset,3.5rem)+4.5rem)] p-3 pt-4 sm:p-4 lg:scroll-mt-[var(--nav-offset,3.5rem)] lg:p-6 lg:pt-8"
       >
         <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-xl sm:rounded-3xl">
           {renderPage(active, selectPage)}

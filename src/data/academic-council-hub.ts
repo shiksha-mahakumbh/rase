@@ -42,15 +42,14 @@ export const ACADEMIC_COUNCIL_BREADCRUMBS = [
 export const ACADEMIC_COUNCIL_QUICK_LINKS: ReadonlyArray<{
   label: string;
   href: string;
-  icon: string;
   external?: boolean;
 }> = [
-  { label: "Register for SMK 6.0", href: CANONICAL_ROUTES.registration, icon: "✅" },
-  { label: "Submit Paper (CMT)", href: CMT_SUBMISSION_URL, icon: "📝", external: true },
-  { label: "Edition 6.0 Brochure", href: CANONICAL_ROUTES.downloads, icon: "📄" },
-  { label: "Organising Committee", href: committeePathForEdition("6.0"), icon: "👥" },
-  { label: "Proceedings", href: "/proceedings", icon: "📚" },
-  { label: "Workshops", href: "/workshops", icon: "🛠️" },
+  { label: "Register for SMK 6.0", href: CANONICAL_ROUTES.registration },
+  { label: "Submit Paper (CMT)", href: CMT_SUBMISSION_URL, external: true },
+  { label: "Edition 6.0 Brochure", href: CANONICAL_ROUTES.downloads },
+  { label: "Organising Committee", href: committeePathForEdition("6.0") },
+  { label: "Proceedings", href: "/proceedings" },
+  { label: "Workshops", href: "/workshops" },
 ];
 
 export const ACADEMIC_COUNCIL_TAB_SLUGS: Record<AcademicCouncilTabId, string> = {

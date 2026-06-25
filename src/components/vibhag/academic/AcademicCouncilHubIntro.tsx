@@ -8,6 +8,9 @@ import {
   ACADEMIC_COUNCIL_QUICK_LINKS,
 } from "@/data/academic-council-hub";
 
+const quickLinkClassName =
+  "flex min-h-[44px] items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:bg-brand-surface-warm hover:shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron";
+
 export default function AcademicCouncilHubIntro() {
   return (
     <div className="border-b border-brand-navy/10 bg-white">
@@ -20,7 +23,24 @@ export default function AcademicCouncilHubIntro() {
           className="mb-6"
         />
 
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <HubGradientBanner
+          id="academic-council-hub-banner"
+          titleAs="h1"
+          eyebrow={ACADEMIC_COUNCIL_PAGE_HERO.eyebrow}
+          title={ACADEMIC_COUNCIL_PAGE_HERO.title}
+          subtitle={ACADEMIC_COUNCIL_PAGE_HERO.subtitle}
+          stats={ACADEMIC_COUNCIL_HUB_STATS}
+          footer={
+            <p className="max-w-3xl text-sm leading-relaxed text-white/85 md:text-base">
+              {ACADEMIC_COUNCIL_PAGE_HERO.tagline}
+            </p>
+          }
+        />
+
+        <section
+          aria-label="Quick actions"
+          className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {ACADEMIC_COUNCIL_QUICK_LINKS.map((link) =>
             link.external ? (
               <a
@@ -28,34 +48,23 @@ export default function AcademicCouncilHubIntro() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
+                className={quickLinkClassName}
               >
-                <span aria-hidden>{link.icon}</span>
                 {link.label}
+                <span aria-hidden className="text-brand-saffron-dark">
+                  ↗
+                </span>
               </a>
             ) : (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-saffron/40 hover:shadow-sm"
-              >
-                <span aria-hidden>{link.icon}</span>
+              <Link key={link.href} href={link.href} className={quickLinkClassName}>
                 {link.label}
+                <span aria-hidden className="text-brand-saffron-dark">
+                  →
+                </span>
               </Link>
             )
           )}
         </section>
-
-        <div className="mt-6">
-          <HubGradientBanner
-            id="academic-council-hub-banner"
-            titleAs="h1"
-            eyebrow={ACADEMIC_COUNCIL_PAGE_HERO.eyebrow}
-            title={ACADEMIC_COUNCIL_PAGE_HERO.title}
-            subtitle={ACADEMIC_COUNCIL_PAGE_HERO.subtitle}
-            stats={ACADEMIC_COUNCIL_HUB_STATS}
-          />
-        </div>
       </div>
     </div>
   );
