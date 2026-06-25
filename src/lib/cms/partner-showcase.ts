@@ -3,6 +3,8 @@ export type PartnerShowcaseTab = "academic" | "media" | "sponsors";
 export type PartnerShowcaseEntry = {
   name: string;
   website?: string;
+  /** Explicit A–M section from conference-support master list */
+  sectionId?: string;
 };
 
 export type PartnerShowcaseTabMeta = {

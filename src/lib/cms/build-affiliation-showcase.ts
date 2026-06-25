@@ -1,25 +1,19 @@
-import { MAHAKUMBH_ABHIYAN_SPEAKER_EDITIONS } from "@/data/mahakumbh-abhiyan-speakers";
-import { BEST_WISHES_ENTRIES } from "@/data/best-wishes";
-import { COMMITTEE_EDITION_6_0 } from "@/data/committee-members/edition-6-0";
-import { featuredSpeakers as SMK_6_FEATURED_SPEAKERS } from "@/data/authority-speakers";
 import {
-  CURATED_MEDIA_AFFILIATIONS,
-  CURATED_SPONSOR_AFFILIATIONS,
-  extractInstitutionFromDesignation,
-  toAffiliationEntry,
-} from "@/lib/cms/affiliation-classify";
+  CONFERENCE_SUPPORT_MASTER,
+  isExcludedAffiliation,
+} from "@/data/conference-support-master";
+import { sectionMeta } from "@/lib/cms/conference-support-sections";
 import { canonicalizeAffiliationName } from "@/lib/cms/affiliation-canonical";
-import { extractCommitteeAffiliations } from "@/lib/cms/committee-affiliations";
-import { PROCEEDINGS_AFFILIATIONS } from "@/lib/cms/proceedings-affiliations";
 import { sortAffiliationsByTier } from "@/lib/cms/affiliation-tier";
 import { resolveAffiliationWebsite } from "@/lib/cms/affiliation-websites";
-import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 import type { PartnerItem } from "@/lib/cms/partners";
 import {
   mapCategoryToShowcaseTab,
   type PartnerShowcaseEntry,
   type PartnerShowcaseTab,
 } from "@/lib/cms/partner-showcase";
+import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
+import { toAffiliationEntry } from "@/lib/cms/affiliation-classify";
 import type { CmsPartnerCard, CmsSpeakerCard } from "@/lib/cms/types";
 
 function emptyGrouped(): Record<PartnerShowcaseTab, PartnerShowcaseEntry[]> {
@@ -34,6 +28,7 @@ function mergeInto(
   const canonical = canonicalizeAffiliationName(entry.name);
   const merged: PartnerShowcaseEntry = {
     name: canonical.displayName,
+    ...(entry.sectionId ? { sectionId: entry.sectionId } : {}),
     ...(entry.website || canonical.website
       ? { website: entry.website ?? canonical.website }
       : {}),
@@ -47,9 +42,12 @@ function mergeInto(
     list.push(merged);
     return;
   }
-  if (!list[idx].website && merged.website) {
-    list[idx] = { ...list[idx], website: merged.website };
-  }
+  const existing = list[idx]!;
+  list[idx] = {
+    ...existing,
+    ...(existing.sectionId ? {} : entry.sectionId ? { sectionId: entry.sectionId } : {}),
+    ...(!existing.website && merged.website ? { website: merged.website } : {}),
+  };
 }
 
 function enrichEntryWebsite(entry: PartnerShowcaseEntry): PartnerShowcaseEntry {
@@ -63,10 +61,7 @@ function finalizeTab(
   tab: PartnerShowcaseTab,
   entries: PartnerShowcaseEntry[]
 ): PartnerShowcaseEntry[] {
-  return sortAffiliationsByTier(
-    tab,
-    entries.map(enrichEntryWebsite)
-  );
+  return sortAffiliationsByTier(tab, entries.map(enrichEntryWebsite));
 }
 
 function addRaw(
@@ -75,11 +70,30 @@ function addRaw(
   website?: string,
   forcedTab?: PartnerShowcaseTab
 ) {
+  if (isExcludedAffiliation(name)) return;
   const parsed = toAffiliationEntry(name, website, forcedTab);
   if (!parsed) return;
   mergeInto(grouped, parsed.tab, parsed.entry);
 }
 
+function isKnownFromMaster(
+  grouped: Record<PartnerShowcaseTab, PartnerShowcaseEntry[]>,
+  name: string
+): boolean {
+  const key = canonicalizeAffiliationName(name).dedupeKey;
+  for (const tab of ["academic", "media", "sponsors"] as PartnerShowcaseTab[]) {
+    if (
+      grouped[tab].some(
+        (e) => canonicalizeAffiliationName(e.name).dedupeKey === key
+      )
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/** Build homepage #conference-support lists from curated master data + published CMS partners. */
 export function buildAffiliationShowcase(input: {
   cmsPartners?: CmsPartnerCard[];
   homepagePartners?: PartnerItem[];
@@ -87,9 +101,19 @@ export function buildAffiliationShowcase(input: {
 }): Record<PartnerShowcaseTab, PartnerShowcaseEntry[]> {
   const grouped = emptyGrouped();
 
+  for (const item of CONFERENCE_SUPPORT_MASTER) {
+    if (isExcludedAffiliation(item.name)) continue;
+    const tab = sectionMeta(item.section).tab;
+    mergeInto(grouped, tab, {
+      name: item.name,
+      website: item.website,
+      sectionId: item.section,
+    });
+  }
+
   for (const partner of input.cmsPartners ?? []) {
     const name = partner.name?.trim();
-    if (!name) continue;
+    if (!name || isExcludedAffiliation(name) || isKnownFromMaster(grouped, name)) continue;
     addRaw(
       grouped,
       name,
@@ -100,54 +124,9 @@ export function buildAffiliationShowcase(input: {
 
   for (const item of input.homepagePartners ?? []) {
     const name = (item.name || item.text || "").trim();
-    if (!name) continue;
+    if (!name || isExcludedAffiliation(name) || isKnownFromMaster(grouped, name)) continue;
     const tab = mapCategoryToShowcaseTab(item.type ?? item.partnerType ?? "academic");
     addRaw(grouped, name, item.website ?? item.link, tab);
-  }
-
-  for (const entry of CURATED_MEDIA_AFFILIATIONS) {
-    addRaw(grouped, entry.name, entry.website, "media");
-  }
-  for (const entry of CURATED_SPONSOR_AFFILIATIONS) {
-    addRaw(grouped, entry.name, entry.website, "sponsors");
-  }
-
-  for (const edition of MAHAKUMBH_ABHIYAN_SPEAKER_EDITIONS) {
-    for (const speaker of edition.speakers) {
-      if (speaker.organization?.trim()) {
-        addRaw(grouped, speaker.organization.trim());
-      }
-    }
-  }
-
-  for (const wish of BEST_WISHES_ENTRIES) {
-    const fromDesignation = extractInstitutionFromDesignation(wish.designation);
-    if (fromDesignation) {
-      addRaw(grouped, fromDesignation);
-    }
-  }
-
-  for (const affiliation of PROCEEDINGS_AFFILIATIONS) {
-    addRaw(grouped, affiliation);
-  }
-
-  for (const org of extractCommitteeAffiliations(COMMITTEE_EDITION_6_0)) {
-    addRaw(grouped, org);
-  }
-
-  for (const speaker of SMK_6_FEATURED_SPEAKERS) {
-    if (speaker.organization?.trim()) {
-      addRaw(grouped, speaker.organization.trim());
-    }
-  }
-
-  for (const speaker of input.cmsSpeakers ?? []) {
-    if (speaker.institution?.trim()) {
-      addRaw(grouped, speaker.institution.trim());
-    } else if (speaker.designation?.trim()) {
-      const inst = extractInstitutionFromDesignation(speaker.designation);
-      if (inst) addRaw(grouped, inst);
-    }
   }
 
   return {
