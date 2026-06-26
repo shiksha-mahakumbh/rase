@@ -1,11 +1,19 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAdmin } from "@/lib/adminAuth";
 
-export default function AdminGate({ children }: { children: ReactNode }) {
+function AdminGateFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <p className="text-sm text-slate-600">Loading admin session…</p>
+    </div>
+  );
+}
+
+function AdminGateContent({ children }: { children: ReactNode }) {
   const { user, role, loading, login, isAdmin } = useAdmin();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
@@ -13,11 +21,7 @@ export default function AdminGate({ children }: { children: ReactNode }) {
   const [submitting, setSubmitting] = useState(false);
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <p className="text-sm text-slate-600">Loading admin session…</p>
-      </div>
-    );
+    return <AdminGateFallback />;
   }
 
   if (!isAdmin) {
@@ -83,4 +87,12 @@ export default function AdminGate({ children }: { children: ReactNode }) {
   }
 
   return <>{children}</>;
+}
+
+export default function AdminGate({ children }: { children: ReactNode }) {
+  return (
+    <Suspense fallback={<AdminGateFallback />}>
+      <AdminGateContent>{children}</AdminGateContent>
+    </Suspense>
+  );
 }
