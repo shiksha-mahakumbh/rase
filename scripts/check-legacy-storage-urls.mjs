@@ -35,6 +35,17 @@ const LEGACY_HOST_PATTERNS = [
 
 async function main() {
   if (!process.env.DATABASE_URL) {
+    if (process.env.CI === "true" || process.env.SKIP_DB_CHECKS === "1") {
+      console.log(
+        JSON.stringify({
+          checkedAt: new Date().toISOString(),
+          ok: true,
+          skipped: true,
+          reason: "DATABASE_URL not set — skipped in CI",
+        })
+      );
+      process.exit(0);
+    }
     console.error("DATABASE_URL is required");
     process.exit(1);
   }

@@ -67,21 +67,19 @@ export default function ClientChrome() {
           <TrafficSourceCapture />
           <VisitorPageTracker />
           <AnalyticsLoader />
-        </>
-      ) : null}
-
-      <ConsentGatedAdSense />
-
-      {process.env.NEXT_PUBLIC_BOTPRESS_ENABLED === "true" ? (
-        <>
-          <Script
-            src="https://cdn.botpress.cloud/webchat/v1/inject.js"
-            strategy="lazyOnload"
-          />
-          <Script
-            src="https://mediafiles.botpress.cloud/e2ba40e6-3b23-4f8d-a2f7-e2fbd8700925/webchat/config.js"
-            strategy="lazyOnload"
-          />
+          <ConsentGatedAdSense />
+          {process.env.NEXT_PUBLIC_BOTPRESS_ENABLED === "true" ? (
+            <>
+              <Script
+                src="https://cdn.botpress.cloud/webchat/v1/inject.js"
+                strategy="lazyOnload"
+              />
+              <Script
+                src="https://mediafiles.botpress.cloud/e2ba40e6-3b23-4f8d-a2f7-e2fbd8700925/webchat/config.js"
+                strategy="lazyOnload"
+              />
+            </>
+          ) : null}
         </>
       ) : null}
     </ErrorBoundary>

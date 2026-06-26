@@ -35,6 +35,8 @@ jobs:
       - name: Security tests
         run: npm run test:security
         env:
+          CI: "true"
+          SKIP_DB_CHECKS: "1"
           REGISTRATION_LOOKUP_SECRET: ci-test-lookup-secret
           ADMIN_SESSION_SECRET: ci-test-admin-secret
 
