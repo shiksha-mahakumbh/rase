@@ -28,11 +28,12 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
-          set -euo pipefail
           if [ -n "${VERCEL_TOKEN:-}" ]; then
             echo "Deploying via token (uploads checked-out source; build runs on Vercel)…"
-            npx vercel@54.15.1 deploy --prod --token="$VERCEL_TOKEN" --yes
-            exit 0
+            if npx vercel@54.15.1 deploy --prod --token="$VERCEL_TOKEN" --yes; then
+              exit 0
+            fi
+            echo "::warning::Token deploy failed; falling back to deploy hook if set"
           fi
           if [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
             echo "Deploying via hook (requires Vercel Git linked to main)…"
