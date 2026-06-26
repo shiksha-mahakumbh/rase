@@ -79,7 +79,7 @@ const groups = {
     { key: "SMTP_PASS", required: false },
     { key: "SMTP_FROM", required: false },
     { key: "SMTP_PORT", required: false },
-    { key: "REGISTRATION_EMAIL_SECRET", required: false },
+    { key: "REGISTRATION_EMAIL_SECRET", required: true, production: true },
     { key: "REGISTRATION_EMAIL_REQUIRE_SECRET", required: false },
   ],
   analytics: [

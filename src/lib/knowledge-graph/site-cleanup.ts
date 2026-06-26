@@ -141,6 +141,7 @@ export const SITEMAP_CORE_PATHS: readonly string[] = [
   "noticeboard",
   "donation",
   "feedback",
+  "faq",
   "press",
   "departments/academic-council",
   "departments/prabandhan",

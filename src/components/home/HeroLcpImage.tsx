@@ -20,7 +20,7 @@ export default function HeroLcpImage({
 
   if (isBrandHero) {
     return (
-      <picture>
+      <picture className={`block aspect-[1024/534] ${className}`}>
         <source
           type="image/webp"
           srcSet={`${BRAND_HERO_WEBP_640} 640w, ${BRAND_HERO_WEBP_768} 768w`}
@@ -33,7 +33,7 @@ export default function HeroLcpImage({
           height={534}
           decoding="async"
           fetchPriority="high"
-          className={className}
+          className="h-full w-full object-cover"
         />
       </picture>
     );

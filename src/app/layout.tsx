@@ -4,7 +4,6 @@ import "./globals.css";
 import ClientChrome from "./ClientChrome";
 import DocumentLangSync from "@/components/common/DocumentLangSync";
 import SiteJsonLd from "@/components/seo/SiteJsonLd";
-import { createPageMetadata } from "@/lib/seo/metadata";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,21 +21,15 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const metadata: Metadata = {
-  ...createPageMetadata({
-    title: "Shiksha Mahakumbh Abhiyan — National Education Summit",
-    description:
-      "Department of Holistic Education (DHE) initiative — Shiksha Mahakumbh national education movement aligned with NEP 2020 and Bharat@2047.",
-    path: "/",
-    keywords: [
-      "Shiksha Mahakumbh",
-      "शिक्षा महाकुंभ",
-      "NEP 2020",
-      "education conference India",
-    ],
-  }),
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.shikshamahakumbh.com"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.rase.co.in"
   ),
+  title: {
+    template: "%s | Shiksha Mahakumbh",
+    default: "Shiksha Mahakumbh 6.0 — National Education Summit",
+  },
+  description:
+    "Shiksha Mahakumbh 6.0 at NIT Hamirpur — India's premier multidisciplinary education summit aligned with NEP 2020.",
   icons: {
     icon: "/sLogo.png",
     apple: "/sLogo.png",
