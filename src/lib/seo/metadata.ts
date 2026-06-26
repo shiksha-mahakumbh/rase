@@ -27,7 +27,7 @@ export function createPageMetadata(options: {
   const twitterImages = openGraphImages.map((img) => img.url);
 
   return {
-    title: `${options.title} | ${SITE_NAME}`,
+    title: options.title,
     description: options.description,
     keywords: options.keywords,
     alternates: {

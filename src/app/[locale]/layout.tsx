@@ -1,11 +1,26 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { isRtl, type Locale } from "@/i18n/config";
 
+const UNPUBLISHED_LOCALES = new Set(["fr", "es", "ar"]);
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (UNPUBLISHED_LOCALES.has(locale)) {
+    return { robots: { index: false, follow: false } };
+  }
+  return {};
 }
 
 export default async function LocaleLayout({

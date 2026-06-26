@@ -43,7 +43,7 @@ jobs:
       - name: Production build
         run: npm run build
         env:
-          SKIP_NEXT_STATIC_CHECKS: "1"
+          NODE_OPTIONS: --max-old-space-size=6144
           DATABASE_URL: postgresql://ci:ci@127.0.0.1:5432/ci
           DIRECT_URL: postgresql://ci:ci@127.0.0.1:5432/ci
           NEXT_PUBLIC_SITE_URL: https://www.rase.co.in

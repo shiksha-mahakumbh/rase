@@ -29,16 +29,25 @@ export async function POST(request: NextRequest) {
   }
 
   const emailSecret = process.env.REGISTRATION_EMAIL_SECRET;
-  if (emailSecret) {
+  const requireSecret =
+    process.env.REGISTRATION_EMAIL_REQUIRE_SECRET === "true" ||
+    (process.env.NODE_ENV === "production" && Boolean(emailSecret));
+
+  if (requireSecret) {
+    if (!emailSecret) {
+      return NextResponse.json({ error: "Email endpoint not configured" }, { status: 503 });
+    }
     const provided =
       request.headers.get("x-registration-secret") ??
       request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-    const requireSecret =
-      process.env.REGISTRATION_EMAIL_REQUIRE_SECRET === "true";
-    if (provided && provided !== emailSecret) {
+    if (!provided || provided !== emailSecret) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    if (requireSecret && provided !== emailSecret) {
+  } else if (emailSecret) {
+    const provided =
+      request.headers.get("x-registration-secret") ??
+      request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+    if (provided && provided !== emailSecret) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }

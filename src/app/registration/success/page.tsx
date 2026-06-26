@@ -1,6 +1,6 @@
 import NavBarShell from "@/components/layout/navbar/NavBarShell";
 import { NAV_MENUS } from "@/constants/navigation";
-import Footer from "@/components/layout/Footer";
+import { ServerFooterWithCms } from "@/components/layout/ServerFooterWithCms";
 import SuccessExperience from "@/components/registration/SuccessExperience";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import ShowcaseHero from "@/components/showcase/ShowcaseHero";
@@ -27,7 +27,7 @@ export default function RegistrationSuccessPage() {
       <main id="main-content">
         <SuccessExperience />
       </main>
-      <Footer />
+      <ServerFooterWithCms />
     </div>
   );
 }

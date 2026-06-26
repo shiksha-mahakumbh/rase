@@ -104,29 +104,82 @@ const FeedbackForm: React.FC = () => {
 
       <h2 className=" text-center text-2xl font-medium mb-4">Feedback Form</h2>
       <form onSubmit={handleSubmit} onFocus={armCaptcha}>
-        {['name', 'email', 'mobile', 'affiliation'].map((field, index) => (
-          <motion.div
-            key={field}
-            className="mb-4 moving-border"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 * (index + 1) }}
-          >
-            <label htmlFor={field} className="block text-gray-700 font-medium mb-2">
-              {field.charAt(0).toUpperCase() + field.slice(1)}
-              <span className="text-red-500">*</span>
-            </label>
-            <input
-              type={field === 'email' ? 'email' : 'text'}
-              id={field}
-              name={field}
-              value={eval(field)}
-              onChange={(e) => eval(`set${field.charAt(0).toUpperCase() + field.slice(1)}(e.target.value)`)}
-              className="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-              required
-            />
-          </motion.div>
-        ))}
+        <motion.div
+          className="mb-4 moving-border"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
+            Name<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+            required
+          />
+        </motion.div>
+        <motion.div
+          className="mb-4 moving-border"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+            Email<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+            required
+          />
+        </motion.div>
+        <motion.div
+          className="mb-4 moving-border"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+        >
+          <label htmlFor="mobile" className="block text-gray-700 font-medium mb-2">
+            Mobile<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="mobile"
+            name="mobile"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            className="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+            required
+          />
+        </motion.div>
+        <motion.div
+          className="mb-4 moving-border"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
+        >
+          <label htmlFor="affiliation" className="block text-gray-700 font-medium mb-2">
+            Affiliation<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="affiliation"
+            name="affiliation"
+            value={affiliation}
+            onChange={(e) => setAffiliation(e.target.value)}
+            className="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+            required
+          />
+        </motion.div>
         <motion.div
           className="mb-4 moving-border"
           initial={{ opacity: 0, x: -20 }}
