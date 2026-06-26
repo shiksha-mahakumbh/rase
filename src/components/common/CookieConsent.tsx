@@ -9,7 +9,13 @@ import {
   WELCOME_MODAL_SEEN_KEY,
 } from "@/lib/home/is-home-path";
 
-const STORAGE_KEY = "smk_cookie_consent";
+import {
+  COOKIE_ACCEPTED_EVENT,
+  COOKIE_CONSENT_ACCEPTED,
+  COOKIE_CONSENT_ESSENTIAL,
+  COOKIE_CONSENT_KEY,
+} from "@/lib/cookie-consent";
+
 const COOKIE_DEFER_MS = 18_000;
 
 export default function CookieConsent() {
@@ -17,7 +23,7 @@ export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem(STORAGE_KEY)) return;
+    if (localStorage.getItem(COOKIE_CONSENT_KEY)) return;
 
     const show = () => setVisible(true);
 
@@ -42,13 +48,13 @@ export default function CookieConsent() {
   }, [pathname]);
 
   const accept = () => {
-    localStorage.setItem(STORAGE_KEY, "accepted");
+    localStorage.setItem(COOKIE_CONSENT_KEY, COOKIE_CONSENT_ACCEPTED);
     setVisible(false);
-    window.dispatchEvent(new Event("smk-cookie-accepted"));
+    window.dispatchEvent(new Event(COOKIE_ACCEPTED_EVENT));
   };
 
   const decline = () => {
-    localStorage.setItem(STORAGE_KEY, "essential");
+    localStorage.setItem(COOKIE_CONSENT_KEY, COOKIE_CONSENT_ESSENTIAL);
     setVisible(false);
   };
 

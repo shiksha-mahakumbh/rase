@@ -7,6 +7,7 @@ import type { CmsLoadedSpeaker } from "@/lib/cms/types";
 import { buildPersonJsonLd } from "@/lib/seo/schemas";
 import { ROUTES } from "@/constants/routes";
 import { BRAND_HERO_IMAGE } from "@/lib/page-heroes";
+import SafeHtml from "@/components/common/SafeHtml";
 
 export default function CmsSpeakerView({ speaker }: { speaker: CmsLoadedSpeaker }) {
   const role =
@@ -57,9 +58,9 @@ export default function CmsSpeakerView({ speaker }: { speaker: CmsLoadedSpeaker 
             </div>
           )}
           {speaker.bio && (
-            <div
+            <SafeHtml
+              html={speaker.bio}
               className="prose prose-slate max-w-none rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-              dangerouslySetInnerHTML={{ __html: speaker.bio }}
             />
           )}
           {speaker.topics.length > 0 && (

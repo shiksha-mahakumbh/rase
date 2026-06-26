@@ -73,10 +73,10 @@ const gatewayRoute = fs.readFileSync(
   path.resolve("src/app/api/admin/gateway/[...path]/route.ts"),
   "utf8"
 );
-if (/unauthorizedResponse\(\)/.test(gatewayRoute) && /hasAdminCredentials/.test(gatewayRoute)) {
-  pass("admin_gateway_early_401", "Admin gateway returns early 401 without credentials");
+if (/verifyAdminRequest/.test(gatewayRoute) && /status.*401|401/.test(gatewayRoute)) {
+  pass("admin_gateway_early_401", "Admin gateway returns 401 without valid session");
 } else {
-  fail("admin_gateway_early_401", "Admin gateway missing early unauthorized guard");
+  fail("admin_gateway_early_401", "Admin gateway missing unauthorized guard");
 }
 
 const failed = results.filter((r) => r.status === "FAIL");

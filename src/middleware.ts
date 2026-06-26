@@ -11,6 +11,18 @@ const intlMiddleware = createIntlMiddleware(routing);
 /** Only non-default locales use the [locale] segment (see src/app/[locale]/*). */
 const NON_DEFAULT_LOCALE_PREFIX = /^\/(hi|fr|es|ar)(\/|$)/;
 
+function documentLangForPath(pathname: string): string {
+  if (pathname === "/hi" || pathname.startsWith("/hi/")) return "hi-IN";
+  const match = pathname.match(/^\/(fr|es|ar)(\/|$)/);
+  if (match) return `${match[1]}-IN`;
+  return "en-IN";
+}
+
+function withDocumentLang(response: NextResponse, pathname: string): NextResponse {
+  response.headers.set("x-document-lang", documentLangForPath(pathname));
+  return response;
+}
+
 function shouldRunIntlMiddleware(pathname: string): boolean {
   // Let App Router serve app/[locale]/contact-us directly (intl middleware 404s this path).
   if (/^\/(hi|fr|es|ar)\/contact-us(\/|$)/.test(pathname)) {
@@ -39,13 +51,14 @@ async function hasValidAdminSession(request: NextRequest): Promise<boolean> {
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!cookie || !secret) return false;
+  if (cookie === "1") return false;
   const session = await verifyAdminSessionTokenEdge(cookie, secret);
   return Boolean(session);
 }
 
-function withNoIndex(response: NextResponse): NextResponse {
+function withNoIndex(response: NextResponse, pathname: string): NextResponse {
   response.headers.set("X-Robots-Tag", "noindex, nofollow");
-  return response;
+  return withDocumentLang(response, pathname);
 }
 
 export async function middleware(request: NextRequest) {
@@ -58,23 +71,23 @@ export async function middleware(request: NextRequest) {
         const url = request.nextUrl.clone();
         url.pathname = "/admin";
         url.searchParams.set("next", pathname);
-        return withNoIndex(NextResponse.redirect(url));
+        return withNoIndex(NextResponse.redirect(url), pathname);
       }
     }
-    return withNoIndex(NextResponse.next());
+    return withNoIndex(NextResponse.next(), pathname);
   }
 
   if (isRedirectShellPath(pathname)) {
     const response = NextResponse.next();
     response.headers.set("X-Robots-Tag", "noindex, follow");
-    return response;
+    return withDocumentLang(response, pathname);
   }
 
   if (!shouldRunIntlMiddleware(pathname)) {
-    return NextResponse.next();
+    return withDocumentLang(NextResponse.next(), pathname);
   }
 
-  return intlMiddleware(request);
+  return withDocumentLang(intlMiddleware(request), pathname);
 }
 
 export const config = {

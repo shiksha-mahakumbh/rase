@@ -9,6 +9,7 @@ import type { CmsLoadedEvent } from "@/lib/cms/types";
 import { formatEventDateRange } from "@/lib/cms/organizational";
 import { buildEventSchema } from "@/server/services/seo.service";
 import { brandPageHero } from "@/lib/page-heroes";
+import SafeHtml from "@/components/common/SafeHtml";
 
 export default function CmsEventView({ event }: { event: CmsLoadedEvent }) {
   const dateLabel = formatEventDateRange(event.startDate, event.endDate);
@@ -59,9 +60,9 @@ export default function CmsEventView({ event }: { event: CmsLoadedEvent }) {
             </div>
           )}
           {event.description && (
-            <div
+            <SafeHtml
+              html={event.description}
               className="prose prose-slate max-w-none"
-              dangerouslySetInnerHTML={{ __html: event.description }}
             />
           )}
           {Array.isArray(event.highlights) && event.highlights.length > 0 && (

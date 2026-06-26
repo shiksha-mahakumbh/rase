@@ -1,6 +1,7 @@
 import PressArticleJsonLd from "@/components/seo/PressArticleJsonLd";
 import PressArticleShell from "@/components/press/PressArticleShell";
 import PressArticleBody from "@/components/press/PressArticleBody";
+import SafeHtml from "@/components/common/SafeHtml";
 import type { CmsLoadedPage } from "@/lib/cms/types";
 import { SITE_URL } from "@/config/site";
 
@@ -48,9 +49,9 @@ export default function CmsPressArticleView({
         shareImage={heroImage ?? cms.seo?.ogImageUrl ?? undefined}
       >
         {cms.page.content ? (
-          <div
+          <SafeHtml
+            html={cms.page.content}
             className="prose prose-slate mb-8 max-w-none"
-            dangerouslySetInnerHTML={{ __html: cms.page.content }}
           />
         ) : null}
         <PressArticleBody

@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import Script from "next/script";
 
-const CONSENT_KEY = "smk_cookie_consent";
-
-function hasAnalyticsConsent(): boolean {
-  if (typeof window === "undefined") return false;
-  return localStorage.getItem(CONSENT_KEY) === "accepted";
-}
+import {
+  COOKIE_ACCEPTED_EVENT,
+  hasAnalyticsConsent,
+} from "@/lib/cookie-consent";
 
 export default function AnalyticsLoader() {
   const [enabled, setEnabled] = useState(false);
@@ -17,8 +15,8 @@ export default function AnalyticsLoader() {
     setEnabled(hasAnalyticsConsent());
 
     const onAccept = () => setEnabled(true);
-    window.addEventListener("smk-cookie-accepted", onAccept);
-    return () => window.removeEventListener("smk-cookie-accepted", onAccept);
+    window.addEventListener(COOKIE_ACCEPTED_EVENT, onAccept);
+    return () => window.removeEventListener(COOKIE_ACCEPTED_EVENT, onAccept);
   }, []);
 
   if (!enabled) return null;

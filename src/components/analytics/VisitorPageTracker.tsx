@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { shouldTrackAnalytics } from "@/lib/analytics/track-path";
 import { getSessionId, getVisitorId } from "@/lib/analytics/visitor-ids";
+import {
+  COOKIE_ACCEPTED_EVENT,
+  hasAnalyticsConsent,
+} from "@/lib/cookie-consent";
 
 const VISIT_COUNTED_KEY = "smk_analytics_visit_counted";
 
@@ -31,8 +35,17 @@ export default function VisitorPageTracker() {
   const pathname = usePathname();
   const lastPath = useRef<string | null>(null);
   const enteredAt = useRef<number>(Date.now());
+  const [consent, setConsent] = useState(false);
 
   useEffect(() => {
+    setConsent(hasAnalyticsConsent());
+    const onAccept = () => setConsent(true);
+    window.addEventListener(COOKIE_ACCEPTED_EVENT, onAccept);
+    return () => window.removeEventListener(COOKIE_ACCEPTED_EVENT, onAccept);
+  }, []);
+
+  useEffect(() => {
+    if (!consent) return;
     if (!pathname || pathname === lastPath.current) return;
     if (!shouldTrackAnalytics(pathname)) return;
 
@@ -80,7 +93,7 @@ export default function VisitorPageTracker() {
     }
     const t = window.setTimeout(send, 1500);
     return () => window.clearTimeout(t);
-  }, [pathname]);
+  }, [pathname, consent]);
 
   return null;
 }

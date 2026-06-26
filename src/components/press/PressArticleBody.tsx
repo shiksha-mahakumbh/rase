@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { PressArticleSection } from "@/lib/press/articles";
+import SafeHtml from "@/components/common/SafeHtml";
 
 export default function PressArticleBody({
   title,
@@ -30,9 +31,9 @@ export default function PressArticleBody({
             <h3 className="mb-4 text-2xl font-semibold text-brand-navy">{section.title}</h3>
           ) : null}
           {section.body ? (
-            <div
+            <SafeHtml
+              html={section.body}
               className="prose prose-slate max-w-none text-gray-700 prose-a:text-brand-saffron"
-              dangerouslySetInnerHTML={{ __html: section.body }}
             />
           ) : null}
         </section>

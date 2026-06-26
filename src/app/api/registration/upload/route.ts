@@ -2,27 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import type { UploadedFileMeta } from "@/types/registration";
 import { isSupportedType } from "@/server/lib/registration-types";
-import { uploadFile, type UploadBucket } from "@/server/services/storage.service";
+import { uploadFile } from "@/server/services/storage.service";
+import { resolveRegistrationUploadBucket } from "@/server/lib/registration-upload-bucket";
 import { ServiceError } from "@/server/lib/errors";
-
-const TYPE_BUCKET_MAP: Record<string, UploadBucket> = {
-  Volunteer: "resumes",
-  Talent: "resumes",
-  NGO: "registrations",
-  "Paper Submission": "papers",
-  "Abstract Submission": "papers",
-  "Best Practices": "registrations",
-  Projects: "registrations",
-  Olympiad: "registrations",
-  Awards: "registrations",
-  Accommodation: "registrations",
-  "Delegate Registration": "registrations",
-  "School Program": "registrations",
-};
-
-function resolveBucket(registrationType: string): UploadBucket {
-  return TYPE_BUCKET_MAP[registrationType] ?? "registrations";
-}
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
@@ -72,7 +54,7 @@ export async function POST(request: NextRequest) {
     });
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const bucket = resolveBucket(registrationType);
+    const bucket = resolveRegistrationUploadBucket(registrationType);
 
     const result = await uploadFile({
       bucket,
