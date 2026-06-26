@@ -91,14 +91,6 @@ const nextConfig = {
   async redirects() {
     return LEGACY_REDIRECTS;
   },
-  async rewrites() {
-    return {
-      beforeFiles: [
-        // Hindi contact — next-intl [locale] segment does not resolve this path reliably in prod.
-        { source: "/hi/contact-us", destination: "/contact-us" },
-      ],
-    };
-  },
 };
 
 module.exports = withNextIntl(nextConfig);
