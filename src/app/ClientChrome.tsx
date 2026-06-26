@@ -25,6 +25,10 @@ const VisitorPageTracker = dynamic(
   () => import("@/components/analytics/VisitorPageTracker"),
   { ssr: false }
 );
+const ConsentGatedAdSense = dynamic(
+  () => import("@/components/analytics/ConsentGatedAdSense"),
+  { ssr: false }
+);
 
 /** Global client chrome — does not wrap page children (server-first layout). */
 export default function ClientChrome() {
@@ -66,14 +70,7 @@ export default function ClientChrome() {
         </>
       ) : null}
 
-      {process.env.NEXT_PUBLIC_ADSENSE_ENABLED === "true" ? (
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4330032354977759"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
-      ) : null}
+      <ConsentGatedAdSense />
 
       {process.env.NEXT_PUBLIC_BOTPRESS_ENABLED === "true" ? (
         <>

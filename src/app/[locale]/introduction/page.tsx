@@ -1,5 +1,7 @@
 import IntroductionContent from "@/app/introduction/IntroductionContent";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { withHreflang } from "@/lib/seo/hreflang";
+import { openGraphLocale } from "@/lib/cookie-consent";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({
@@ -10,11 +12,15 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
 
-  return createPageMetadata({
-    title: t("aboutTitle"),
-    description: t("aboutDescription"),
-    path: locale === "en" ? "/introduction" : `/${locale}/introduction`,
-  });
+  return withHreflang(
+    createPageMetadata({
+      title: t("aboutTitle"),
+      description: t("aboutDescription"),
+      path: locale === "en" ? "/introduction" : `/${locale}/introduction`,
+      locale: openGraphLocale(locale),
+    }),
+    "/introduction"
+  );
 }
 
 export default function LocaleIntroductionPage() {

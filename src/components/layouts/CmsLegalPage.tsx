@@ -1,4 +1,5 @@
 import LegalPageShell from "@/components/layouts/LegalPageShell";
+import SafeHtml from "@/components/common/SafeHtml";
 import type { CmsLoadedPage } from "@/lib/cms/types";
 
 export default function CmsLegalPage({ cms }: { cms: CmsLoadedPage }) {
@@ -6,7 +7,7 @@ export default function CmsLegalPage({ cms }: { cms: CmsLoadedPage }) {
   return (
     <LegalPageShell title={cms.page.title} path={path}>
       {cms.page.content ? (
-        <div dangerouslySetInnerHTML={{ __html: cms.page.content }} />
+        <SafeHtml html={cms.page.content} />
       ) : (
         <p>Content not available.</p>
       )}

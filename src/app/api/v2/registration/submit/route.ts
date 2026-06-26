@@ -4,6 +4,9 @@ import { createApiHandler, assertBody } from "@/server/lib/api-handler";
 import { getRequestContext } from "@/server/lib/request";
 import { getRegistrationService } from "@/server/backend";
 import { isSupportedType } from "@/server/lib/registration-types";
+import { guardRegistrationSubmit } from "@/server/lib/registration-submit-guard";
+import { markVerifiedPaymentConsumed } from "@/server/services/razorpay-verified.service";
+import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 
 export const POST = createApiHandler(
@@ -23,24 +26,61 @@ export const POST = createApiHandler(
     const captcha = await verifyRecaptchaToken(body.captchaToken, "registration");
     if (!captcha.ok) throw new ServiceError("Security verification failed", 403, "CAPTCHA_FAILED");
 
+    const guarded = await guardRegistrationSubmit({
+      registrationType: body.registrationType,
+      data: body.data,
+      paymentStatus: body.paymentStatus as import("@/types/registration").PaymentStatus | undefined,
+    });
+
+    if (guarded.duplicate) {
+      return {
+        success: true,
+        duplicate: true,
+        registrationId: guarded.duplicate.registrationId,
+        masterDocId: guarded.duplicate.registrationUuid,
+        lookupToken: guarded.duplicate.lookupToken,
+      };
+    }
+
     const ctx = getRequestContext(request);
     const service = getRegistrationService();
     const result = await service.saveRegistration({
-      registrationType: body.registrationType,
-      data: body.data,
-      paymentStatus: body.paymentStatus,
+      registrationType: guarded.type,
+      data: guarded.data,
+      paymentStatus: guarded.paymentStatus,
       submittedIp: ctx.ip,
       userAgent: ctx.userAgent,
     });
 
-    const email =
-      typeof body.data.email === "string" ? body.data.email : "";
+    if (guarded.razorpayPaymentId) {
+      await markVerifiedPaymentConsumed(
+        guarded.razorpayPaymentId,
+        result.id,
+        result.registrationId
+      );
+    }
+
+    await writeAuditLog({
+      action: "registration_saved",
+      registrationId: result.id,
+      ipAddress: ctx.ip,
+      userAgent: ctx.userAgent,
+      payload: {
+        registration_id: result.registrationId,
+        registration_type: guarded.type,
+        payment_id: guarded.razorpayPaymentId || null,
+        order_id: guarded.data.razorpayOrderId ?? null,
+        user_email: guarded.email,
+        source: "v2",
+      },
+    });
+
     const { createRegistrationLookupToken } = await import(
       "@/lib/security/registration-lookup"
     );
     const lookupToken =
-      email && result.registrationId
-        ? createRegistrationLookupToken(result.registrationId, email)
+      guarded.email && result.registrationId
+        ? createRegistrationLookupToken(result.registrationId, guarded.email)
         : undefined;
 
     return {

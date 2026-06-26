@@ -110,10 +110,22 @@ if (fileContains("app/api/registration/[registrationId]/route.ts", /Email or con
   fail("registration_get_requires_auth", "GET registration still open");
 }
 
-if (fileContains("middleware.ts", /raw === "1"\) return false/)) {
+if (fileContains("middleware.ts", /cookie === "1"\) return false/)) {
   pass("middleware_rejects_legacy_cookie", "Middleware rejects legacy =1 cookie");
 } else {
   fail("middleware_rejects_legacy_cookie", "Legacy cookie not rejected");
+}
+
+if (fileContains("middleware.ts", /x-document-lang/)) {
+  pass("middleware_document_lang", "Middleware sets x-document-lang header");
+} else {
+  fail("middleware_document_lang", "Document language header missing");
+}
+
+if (fileContains("components/analytics/VisitorPageTracker.tsx", /hasAnalyticsConsent/)) {
+  pass("visitor_tracker_consent", "Visitor tracker gated by cookie consent");
+} else {
+  fail("visitor_tracker_consent", "Visitor tracker not consent-gated");
 }
 
 if (!fileContains("server/backend/index.ts", /return "supabase"/)) {

@@ -1,3 +1,8 @@
+import {
+  COOKIE_CONSENT_ACCEPTED,
+  COOKIE_CONSENT_KEY,
+} from "@/lib/cookie-consent";
+
 export const ANALYTICS_EVENTS = {
   registrationStarted: "registration_started",
   registrationCompleted: "registration_completed",
@@ -46,7 +51,8 @@ export function trackEvent(
 ) {
   if (typeof window === "undefined") return;
 
-  const consent = localStorage.getItem("smk_cookie_consent") === "accepted";
+  const consent =
+    localStorage.getItem(COOKIE_CONSENT_KEY) === COOKIE_CONSENT_ACCEPTED;
   const enriched = {
     event: name,
     ...payload,
@@ -54,11 +60,11 @@ export function trackEvent(
     timestamp: new Date().toISOString(),
   };
 
-  const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
-  w.dataLayer = w.dataLayer ?? [];
-  w.dataLayer.push(enriched);
-
   if (consent) {
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+    w.dataLayer = w.dataLayer ?? [];
+    w.dataLayer.push(enriched);
+
     const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void })
       .gtag;
     if (gtag) {

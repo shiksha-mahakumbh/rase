@@ -1,5 +1,6 @@
 import RegistrationJsonLd from "@/components/seo/RegistrationJsonLd";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { withHreflang } from "@/lib/seo/hreflang";
 import {
   REGISTRATION_OG_IMAGE,
   REGISTRATION_PATH,
@@ -7,14 +8,17 @@ import {
   registrationMetaDescription,
 } from "@/data/registration-hub";
 
-export const metadata = createPageMetadata({
+export const metadata = withHreflang(
+  createPageMetadata({
   title: "Register — Shiksha Mahakumbh 6.0",
   description: registrationMetaDescription(),
   path: REGISTRATION_PATH,
   keywords: [...REGISTRATION_SEO_KEYWORDS],
   locale: "en_IN",
   ogImageUrl: REGISTRATION_OG_IMAGE,
-});
+  }),
+  REGISTRATION_PATH
+);
 
 export default function RegistrationLayout({ children }: { children: React.ReactNode }) {
   return (
