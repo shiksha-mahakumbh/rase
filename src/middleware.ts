@@ -12,6 +12,10 @@ const intlMiddleware = createIntlMiddleware(routing);
 const NON_DEFAULT_LOCALE_PREFIX = /^\/(hi|fr|es|ar)(\/|$)/;
 
 function shouldRunIntlMiddleware(pathname: string): boolean {
+  // Let App Router serve app/[locale]/contact-us directly (intl middleware 404s this path).
+  if (/^\/(hi|fr|es|ar)\/contact-us(\/|$)/.test(pathname)) {
+    return false;
+  }
   return NON_DEFAULT_LOCALE_PREFIX.test(pathname);
 }
 
