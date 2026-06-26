@@ -1,16 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "redirects": [
-    {
-      "source": "/hi/contact-us",
-      "destination": "/contact-us",
-      "permanent": true
-    },
-    {
-      "source": "/hi/ContactUs",
-      "destination": "/contact-us",
-      "permanent": true
-    }
-  ]
+  "framework": "nextjs"
 }

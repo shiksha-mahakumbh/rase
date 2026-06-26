@@ -67,7 +67,9 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathname === "/hi/contact-us" || pathname.startsWith("/hi/contact-us/")) {
-    return NextResponse.redirect(new URL("/contact-us", request.url), 308);
+    const url = request.nextUrl.clone();
+    url.pathname = "/contact-us";
+    return NextResponse.rewrite(url);
   }
 
   if (!shouldRunIntlMiddleware(pathname)) {
