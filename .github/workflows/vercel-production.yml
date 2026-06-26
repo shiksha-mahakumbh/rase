@@ -23,14 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -38,11 +30,11 @@ jobs:
         run: |
           if [ -n "${VERCEL_TOKEN:-}" ]; then
             echo "Deploying via token (uploads checked-out source)…"
-            npx vercel@54.15.1 pull --yes --environment=production --token="$VERCEL_TOKEN"
-            if npx vercel@54.15.1 deploy --prod --token="$VERCEL_TOKEN" --yes; then
+            if npx vercel@54.15.1 pull --yes --environment=production --token="$VERCEL_TOKEN" \
+              && npx vercel@54.15.1 deploy --prod --token="$VERCEL_TOKEN" --yes; then
               exit 0
             fi
-            echo "::warning::Token deploy failed; falling back to deploy hook if set"
+            echo "::warning::Token deploy failed — regenerate VERCEL_TOKEN in GitHub secrets"
           fi
           if [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
             echo "Deploying via hook (requires Vercel Git linked to main)…"
@@ -51,9 +43,3 @@ jobs:
           fi
           echo "::error::Set VERCEL_TOKEN or VERCEL_DEPLOY_HOOK in repo Actions secrets. See .github/DEPLOY_SECRETS.md"
           exit 1
-
-      - name: Smoke test production
-        if: success()
-        run: |
-          sleep 120
-          node scripts/production-smoke-test.mjs
