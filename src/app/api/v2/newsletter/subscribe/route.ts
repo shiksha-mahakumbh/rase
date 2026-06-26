@@ -5,12 +5,15 @@ import { subscribeNewsletter } from "@/server/services/newsletter.service";
 
 export const POST = createApiHandler(
   async (request: NextRequest) => {
-    const body = assertBody<{ email?: string; fullName?: string }>(await request.json());
+    const body = assertBody<{ email?: string; fullName?: string; marketingConsent?: boolean }>(
+      await request.json()
+    );
     const ctx = getRequestContext(request);
     const row = await subscribeNewsletter({
       email: body.email ?? "",
       fullName: body.fullName,
       subscribedIp: ctx.ip,
+      marketingConsent: body.marketingConsent === true,
     });
     return { success: true, id: row.id };
   },

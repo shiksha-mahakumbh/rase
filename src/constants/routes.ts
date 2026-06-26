@@ -20,6 +20,8 @@ export const ROUTES = {
   speakers: CANONICAL_ROUTES.speakers,
   donation: CANONICAL_ROUTES.donation,
   privacy: "/privacy-policy",
+  faq: "/faq",
+  newsletterUnsubscribe: "/newsletter/unsubscribe",
   terms: "/terms-and-conditions",
   disclaimer: "/disclaimer",
   refund: "/refund-policy",

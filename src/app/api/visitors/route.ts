@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { shouldTrackAnalytics } from "@/lib/analytics/track-path";
-import { getClientIp } from "@/lib/security/rateLimit";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import {
   getPublicVisitorStats,
   recordVisitorHit,
@@ -54,6 +54,16 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = getClientIp(request);
+    const limited = await rateLimitAsync({
+      key: `visitors-post:${ip}`,
+      limit: 120,
+      windowMs: 60_000,
+    });
+    if (!limited.ok) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const body = await parseBody(request);
     const sessionId = body.sessionId ?? `anon-${getClientIp(request)}`;
     const visitorId = body.visitorId ?? sessionId;

@@ -93,6 +93,11 @@ const groups = {
     { key: "NEXT_PUBLIC_ADS_SLOTS_PREVIEW", required: false },
   ],
   monitoring: [{ key: "NEXT_PUBLIC_SENTRY_DSN", required: false }],
+  redis: [
+    { key: "UPSTASH_REDIS_REST_URL", required: false, productionRecommended: true },
+    { key: "UPSTASH_REDIS_REST_TOKEN", required: false, productionRecommended: true },
+  ],
+  cron: [{ key: "CRON_SECRET", required: false, productionRecommended: true }],
 };
 
 const results = [];

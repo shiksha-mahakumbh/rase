@@ -10,10 +10,8 @@ import {
 } from "@/lib/home/is-home-path";
 
 import {
-  COOKIE_ACCEPTED_EVENT,
-  COOKIE_CONSENT_ACCEPTED,
-  COOKIE_CONSENT_ESSENTIAL,
   COOKIE_CONSENT_KEY,
+  setAnalyticsConsent,
 } from "@/lib/cookie-consent";
 
 const COOKIE_DEFER_MS = 18_000;
@@ -48,13 +46,12 @@ export default function CookieConsent() {
   }, [pathname]);
 
   const accept = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, COOKIE_CONSENT_ACCEPTED);
+    setAnalyticsConsent(true);
     setVisible(false);
-    window.dispatchEvent(new Event(COOKIE_ACCEPTED_EVENT));
   };
 
   const decline = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, COOKIE_CONSENT_ESSENTIAL);
+    setAnalyticsConsent(false);
     setVisible(false);
   };
 

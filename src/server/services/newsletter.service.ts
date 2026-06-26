@@ -7,10 +7,14 @@ export async function subscribeNewsletter(input: {
   fullName?: string;
   source?: string;
   subscribedIp?: string | null;
+  marketingConsent?: boolean;
 }) {
   const email = input.email.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw new ServiceError("Valid email is required", 400);
+  }
+  if (!input.marketingConsent) {
+    throw new ServiceError("Marketing consent is required", 400);
   }
 
   const row = await prisma.newsletterSubscription.upsert({
@@ -42,10 +46,29 @@ export async function subscribeNewsletter(input: {
 
 export async function unsubscribeNewsletter(email: string) {
   const normalized = email.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+    throw new ServiceError("Valid email is required", 400);
+  }
+
+  const existing = await prisma.newsletterSubscription.findUnique({
+    where: { email: normalized },
+  });
+  if (!existing || existing.status === "unsubscribed") {
+    return { id: existing?.id ?? null, alreadyUnsubscribed: true as const };
+  }
+
   const row = await prisma.newsletterSubscription.update({
     where: { email: normalized },
     data: { status: "unsubscribed", unsubscribedAt: new Date() },
   });
+
+  await writeAuditLog({
+    action: "system_event",
+    entityType: "newsletter_subscriptions",
+    entityId: row.id,
+    payload: { event: "newsletter_unsubscribed", email: normalized },
+  });
+
   return row;
 }
 

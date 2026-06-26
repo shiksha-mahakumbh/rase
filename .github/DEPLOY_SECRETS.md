@@ -52,3 +52,29 @@ GitHub App on your account ≠ project linked in Vercel.
 ## Re-run failed workflow
 
 [Actions → Vercel Production Deploy](https://github.com/shiksha-mahakumbh/rase/actions/workflows/vercel-production.yml) → **Run workflow**
+
+## Production env (audit P1)
+
+Set in Vercel → **rase-co-in** → Settings → Environment Variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `UPSTASH_REDIS_REST_URL` | Distributed rate limits (P1-10) |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash REST auth |
+| `NEXT_PUBLIC_SENTRY_DSN` | Error monitoring (P1-12) |
+| `CRON_SECRET` | Protects `/api/cron/analytics-retention` (Vercel sends `Authorization: Bearer`) |
+
+See `docs/security/ADMIN_OPS_SECRET_ROTATION.md` for ops secret rotation.
+
+## Production env (audit P1)
+
+Set in Vercel → **rase-co-in** → Settings → Environment Variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `UPSTASH_REDIS_REST_URL` | Distributed rate limits (P1-10) |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash REST auth |
+| `NEXT_PUBLIC_SENTRY_DSN` | Error monitoring (P1-12) |
+| `CRON_SECRET` | Bearer for `/api/cron/analytics-retention` |
+
+Rotate `ADMIN_OPS_SECRET` per `docs/security/ADMIN_OPS_SECRET_ROTATION.md`.
