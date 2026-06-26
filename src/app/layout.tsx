@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { headers } from "next/headers";
 import { Inter, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import ClientChrome from "./ClientChrome";
+import DocumentLangSync from "@/components/common/DocumentLangSync";
 import SiteJsonLd from "@/components/seo/SiteJsonLd";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
@@ -51,17 +51,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-  const documentLang = headersList.get("x-document-lang") ?? "en-IN";
-
   return (
-    <html lang={documentLang} className={`${inter.variable} ${notoDevanagari.variable}`}>
+    <html lang="en-IN" className={`${inter.variable} ${notoDevanagari.variable}`}>
       <body className={`${inter.className} overflow-x-hidden antialiased`}>
+        <DocumentLangSync />
         <SiteJsonLd />
         <a
           href="#main-content"

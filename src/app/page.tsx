@@ -18,6 +18,8 @@ import { HERO_LCP_PRELOAD } from "@/components/home/HeroLcpImage";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 
+export const revalidate = 3600;
+
 const FALLBACK_META = {
   title: "Shiksha Mahakumbh 6.0 — National Education Summit",
   description:

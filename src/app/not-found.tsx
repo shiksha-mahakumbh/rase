@@ -1,7 +1,7 @@
 import Link from "next/link";
 import NavBarShell from "@/components/layout/navbar/NavBarShell";
 import { NAV_MENUS } from "@/constants/navigation";
-import Footer from "@/components/layout/Footer";
+import { DynamicFooter } from "@/components/layout/SiteDynamicChrome";
 
 export default function NotFound() {
   return (
@@ -30,7 +30,7 @@ export default function NotFound() {
           </Link>
         </div>
       </main>
-      <Footer />
+      <DynamicFooter />
     </div>
   );
 }
