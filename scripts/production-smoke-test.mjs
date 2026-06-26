@@ -89,7 +89,10 @@ const tests = [
   {
     name: "locale-hi-contact",
     path: "/hi/contact-us",
-    assert: async (res) => (res.ok ? null : `HTTP ${res.status}`),
+    assert: async (res, text) =>
+      res.ok && /contact|संपर्क|Get in Touch/i.test(text)
+        ? null
+        : `HTTP ${res.status}`,
   },
   {
     name: "newsletter-api",

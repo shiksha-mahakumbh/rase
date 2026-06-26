@@ -29,14 +29,15 @@ jobs:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
           set -euo pipefail
-          if [ -z "${VERCEL_TOKEN:-}" ] && [ -z "${VERCEL_DEPLOY_HOOK:-}" ]; then
-            echo "::error::Set VERCEL_TOKEN or VERCEL_DEPLOY_HOOK in repo Actions secrets. See .github/DEPLOY_SECRETS.md"
-            exit 1
+          if [ -n "${VERCEL_TOKEN:-}" ]; then
+            echo "Deploying via token (uploads checked-out source; build runs on Vercel)…"
+            npx vercel@54.15.1 deploy --prod --token="$VERCEL_TOKEN" --yes
+            exit 0
           fi
           if [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
-            echo "Deploying via hook (build runs on Vercel)…"
+            echo "Deploying via hook (requires Vercel Git linked to main)…"
             curl -fsS -X POST "$VERCEL_DEPLOY_HOOK"
             exit 0
           fi
-          echo "Deploying via token (build runs on Vercel; npm/prisma warnings in logs are normal)…"
-          npx vercel@54.15.1 deploy --prod --token="$VERCEL_TOKEN" --yes
+          echo "::error::Set VERCEL_TOKEN or VERCEL_DEPLOY_HOOK in repo Actions secrets. See .github/DEPLOY_SECRETS.md"
+          exit 1
