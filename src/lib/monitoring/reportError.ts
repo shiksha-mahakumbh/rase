@@ -1,5 +1,5 @@
 /**
- * Central error reporting. Set NEXT_PUBLIC_SENTRY_DSN and install @sentry/nextjs to enable Sentry.
+ * Central error reporting. Requires @sentry/nextjs and NEXT_PUBLIC_SENTRY_DSN.
  */
 export function reportError(
   error: unknown,
@@ -12,15 +12,21 @@ export function reportError(
   }
 
   if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_SENTRY_DSN) {
-    void fetch("/api/client-error", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: err.message,
-        stack: err.stack,
-        context,
-        url: window.location.href,
-      }),
-    }).catch(() => undefined);
+    void import("@sentry/nextjs")
+      .then((Sentry) => {
+        Sentry.captureException(err, { extra: context });
+      })
+      .catch(() => {
+        void fetch("/api/client-error", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: err.message,
+            stack: err.stack,
+            context,
+            url: window.location.href,
+          }),
+        }).catch(() => undefined);
+      });
   }
 }

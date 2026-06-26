@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
 import { getRequestContext } from "@/server/lib/request";
 import { submitFeedback } from "@/server/services/feedback.service";
 import { ServiceError } from "@/server/lib/errors";
@@ -12,9 +13,13 @@ export const POST = createApiHandler(
       rating?: number;
       category?: string;
       message?: string;
+      captchaToken?: string;
     }>(await request.json());
 
     if (!body.message?.trim()) throw new ServiceError("Message is required", 400);
+
+    const captcha = await verifyRecaptchaToken(body.captchaToken, "feedback");
+    if (!captcha.ok) throw new ServiceError(captcha.error ?? "Captcha failed", 400);
 
     const ctx = getRequestContext(request);
     const row = await submitFeedback({

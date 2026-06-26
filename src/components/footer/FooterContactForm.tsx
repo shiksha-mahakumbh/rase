@@ -72,24 +72,34 @@ export default function FooterContactForm({
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-3" onFocus={armCaptcha}>
-        <input
-          type="email"
-          placeholder="Your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={inputClass}
-          required
-          aria-label="Your email"
-        />
-        <textarea
-          rows={2}
-          placeholder="Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className={inputClass}
-          required
-          aria-label="Your message"
-        />
+        <div>
+          <label htmlFor="footer-contact-email" className="mb-1 block text-xs font-semibold">
+            Your email
+          </label>
+          <input
+            id="footer-contact-email"
+            type="email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={inputClass}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="footer-contact-message" className="mb-1 block text-xs font-semibold">
+            Message
+          </label>
+          <textarea
+            id="footer-contact-message"
+            rows={2}
+            placeholder="How can we help?"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className={inputClass}
+            required
+          />
+        </div>
         <button type="submit" disabled={submitting} className={buttonClass}>
           {submitting ? "Sending…" : "Send Message"}
         </button>

@@ -8,6 +8,7 @@ import { event } from "@/design/tokens";
 import { REGISTRATION_SUCCESS_LINKS } from "@/data/registration-hub";
 import { ROUTES } from "@/constants/routes";
 import { CtaButton } from "@/components/ui";
+import { downloadSmk6Calendar, shareRegistrationSuccess } from "@/lib/registration/success-actions";
 import RegistrationReceipt, {
   type ReceiptData,
   buildReceiptData as buildReceiptDataShared,
@@ -152,6 +153,15 @@ function SuccessInner() {
               disabled={!receiptData}
             >
               Print fee receipt only
+            </ActionCard>
+            <ActionCard title="Add to calendar" onClick={() => downloadSmk6Calendar()}>
+              Download .ics for 9–11 Oct 2026
+            </ActionCard>
+            <ActionCard
+              title="Share registration"
+              onClick={() => void shareRegistrationSuccess(registrationId)}
+            >
+              Invite colleagues to register
             </ActionCard>
           </div>
 

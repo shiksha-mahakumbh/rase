@@ -6,6 +6,7 @@ import { shouldTrackAnalytics } from "@/lib/analytics/track-path";
 import { getSessionId, getVisitorId } from "@/lib/analytics/visitor-ids";
 import {
   COOKIE_ACCEPTED_EVENT,
+  COOKIE_WITHDRAWN_EVENT,
   hasAnalyticsConsent,
 } from "@/lib/cookie-consent";
 
@@ -40,8 +41,13 @@ export default function VisitorPageTracker() {
   useEffect(() => {
     setConsent(hasAnalyticsConsent());
     const onAccept = () => setConsent(true);
+    const onWithdraw = () => setConsent(false);
     window.addEventListener(COOKIE_ACCEPTED_EVENT, onAccept);
-    return () => window.removeEventListener(COOKIE_ACCEPTED_EVENT, onAccept);
+    window.addEventListener(COOKIE_WITHDRAWN_EVENT, onWithdraw);
+    return () => {
+      window.removeEventListener(COOKIE_ACCEPTED_EVENT, onAccept);
+      window.removeEventListener(COOKIE_WITHDRAWN_EVENT, onWithdraw);
+    };
   }, []);
 
   useEffect(() => {

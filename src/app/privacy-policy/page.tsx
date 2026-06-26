@@ -48,6 +48,23 @@ export default async function PrivacyPolicyPage() {
         with your consent. See our{" "}
         <Link href="/cookie-policy">Cookie Policy</Link> for details.
       </p>
+      <h2>Analytics and marketing</h2>
+      <p>
+        With your consent, we use first-party visitor analytics (page views and
+        traffic sources stored in our database), Google Analytics, Google Tag Manager,
+        Microsoft Clarity, and Meta Pixel to understand how visitors use the site.
+        Google AdSense may serve ads when enabled and consented.
+      </p>
+      <p>
+        Analytics data is retained for up to 12 months, then aggregated or deleted.
+        Processors include Google (Analytics, Ads, reCAPTCHA), Microsoft (Clarity),
+        Meta, Razorpay (payments), Supabase (hosting/database), and Vercel (hosting).
+      </p>
+      <p>
+        You can withdraw analytics consent anytime via the cookie banner or by clearing
+        site data in your browser. Newsletter subscribers can{" "}
+        <Link href="/newsletter/unsubscribe">unsubscribe here</Link>.
+      </p>
     </LegalPageShell>
   );
 }

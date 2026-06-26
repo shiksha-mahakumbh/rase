@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import NavBar from "@/components/layout/NavBar";
-import Footer from "@/components/layout/Footer";
+import ErrorPageChrome from "@/components/errors/ErrorPageChrome";
 
 export default function Error({
   error,
@@ -17,8 +16,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-brand-surface">
-      <NavBar />
+    <ErrorPageChrome>
       <main
         id="main-content"
         className="flex min-h-[50vh] flex-col items-center justify-center px-4 py-16 text-center"
@@ -50,7 +48,6 @@ export default function Error({
           </Link>
         </div>
       </main>
-      <Footer />
-    </div>
+    </ErrorPageChrome>
   );
 }

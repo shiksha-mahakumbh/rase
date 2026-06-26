@@ -69,6 +69,7 @@ export async function verifyRecaptchaToken(
     const allowed = allowedHostnames();
     if (!allowed.includes(data.hostname)) {
       console.warn("recaptcha hostname not in allowlist:", data.hostname, allowed);
+      return { ok: false, error: `Hostname not allowed: ${data.hostname}` };
     }
   }
 

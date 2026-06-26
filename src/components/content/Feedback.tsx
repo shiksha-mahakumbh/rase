@@ -1,9 +1,15 @@
 "use client";
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
+import dynamic from "next/dynamic";
 import { PAST_EDITIONS, UPCOMING_EDITION } from "@/data/past-editions";
-
+import { getCaptchaTokenForAction } from "@/lib/security/recaptcha-client";
 import { toast } from 'react-hot-toast';
+
+const RecaptchaScript = dynamic(
+  () => import("@/components/security/RecaptchaProvider"),
+  { ssr: false }
+);
 
 const FEEDBACK_EVENTS = [
   { value: "smk-6.0", label: `${UPCOMING_EDITION.title} (2026)` },
@@ -22,9 +28,15 @@ const FeedbackForm: React.FC = () => {
   const [experience, setExperience] = useState('');
   const [suggestions, setSuggestions] = useState('');
   const [loading, setLoading] = useState(false);
+  const [captchaArmed, setCaptchaArmed] = useState(false);
+
+  const armCaptcha = () => {
+    if (!captchaArmed) setCaptchaArmed(true);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    armCaptcha();
 
     if (!name || !email || !mobile || !affiliation || !event) {
       toast.error("Please fill in all required fields.");
@@ -33,6 +45,12 @@ const FeedbackForm: React.FC = () => {
 
     setLoading(true);
     try {
+      const captchaToken = await getCaptchaTokenForAction("feedback");
+      if (!captchaToken) {
+        toast.error("Security verification failed. Please try again.");
+        return;
+      }
+
       const message = [
         `Event: ${event}`,
         `Affiliation: ${affiliation}`,
@@ -51,6 +69,7 @@ const FeedbackForm: React.FC = () => {
           email,
           category: event,
           message,
+          captchaToken,
         }),
       });
 
@@ -84,7 +103,7 @@ const FeedbackForm: React.FC = () => {
     >
 
       <h2 className=" text-center text-2xl font-medium mb-4">Feedback Form</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onFocus={armCaptcha}>
         {['name', 'email', 'mobile', 'affiliation'].map((field, index) => (
           <motion.div
             key={field}
@@ -177,6 +196,7 @@ const FeedbackForm: React.FC = () => {
           </button>
         </div>
       </form>
+      {captchaArmed ? <RecaptchaScript /> : null}
     </motion.div>
   );
 };

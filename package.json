@@ -70,6 +70,7 @@
     "@prisma/client": "^6.19.3",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
+    "@sentry/nextjs": "^9.47.1",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.108.1",
     "antd": "^5.12.8",

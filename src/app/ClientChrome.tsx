@@ -25,6 +25,10 @@ const VisitorPageTracker = dynamic(
   () => import("@/components/analytics/VisitorPageTracker"),
   { ssr: false }
 );
+const CookiePreferences = dynamic(
+  () => import("@/components/common/CookiePreferences"),
+  { ssr: false }
+);
 const ConsentGatedAdSense = dynamic(
   () => import("@/components/analytics/ConsentGatedAdSense"),
   { ssr: false }
@@ -64,6 +68,7 @@ export default function ClientChrome() {
         <>
           <Toaster position="top-right" />
           <CookieConsent />
+          <CookiePreferences />
           <TrafficSourceCapture />
           <VisitorPageTracker />
           <AnalyticsLoader />
