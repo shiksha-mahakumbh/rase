@@ -112,27 +112,27 @@ export default function HeroSection({ content }: { content: HeroContent }) {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:justify-start">
               <CtaButton href={ROUTES.registration} variant="primary">
-                Register Now
+                {content.cta?.register ?? "Register Now"}
               </CtaButton>
               <CtaButton href={academicCouncilHash("conference")} variant="secondary">
-                Multi Track Conference
+                {content.cta?.conference ?? "Multi Track Conference"}
               </CtaButton>
               <Link
                 href={ROUTES.donation}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-xl border-2 border-brand-navy/15 px-5 py-2.5 text-sm font-bold text-brand-navy transition hover:border-brand-saffron/40 hover:text-brand-saffron"
               >
-                Support via Donation
+                {content.cta?.donation ?? "Support via Donation"}
               </Link>
               <Link
                 href="/abhiyaninphotoframe"
                 className="text-center text-sm font-semibold text-brand-navy underline decoration-brand-saffron/40 underline-offset-2 transition hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron sm:text-left"
               >
-                Abhiyan Photo Frame →
+                {content.cta?.photoFrame ?? "Abhiyan Photo Frame →"}
               </Link>
             </div>
 
             <div className="mt-8">
-              <CountdownBannerView theme="light" />
+              <CountdownBannerView theme="light" labels={content.countdown} />
             </div>
           </div>
 

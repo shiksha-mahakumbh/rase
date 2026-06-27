@@ -9,6 +9,10 @@ import { legacyCaseAliasDestination } from "@/config/legacy-case-aliases";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
+/** Retired accidental duplicate-folder URLs (Windows copy paths). */
+const GONE_COPY_PATH =
+  /\/(participantregistrationdatadekh|ngoregistrationdatadekh)(%20|\s)copy\/?$/i;
+
 /** Only non-default locales use the [locale] segment (see src/app/[locale]/*). */
 const NON_DEFAULT_LOCALE_PREFIX = /^\/(hi|fr|es|ar)(\/|$)/;
 
@@ -67,6 +71,16 @@ function withNoIndex(response: NextResponse, pathname: string): NextResponse {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (GONE_COPY_PATH.test(pathname)) {
+    return new NextResponse("This URL has been permanently removed.", {
+      status: 410,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    });
+  }
 
   const caseAlias = legacyCaseAliasDestination(pathname);
   if (caseAlias) {

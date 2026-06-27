@@ -5,6 +5,10 @@
     {
       "path": "/api/cron/analytics-retention",
       "schedule": "0 3 1 * *"
+    },
+    {
+      "path": "/api/cron/warm-cache",
+      "schedule": "0 */6 * * *"
     }
   ]
 }
