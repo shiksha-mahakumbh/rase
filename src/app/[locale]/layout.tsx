@@ -8,7 +8,9 @@ import { isRtl, type Locale } from "@/i18n/config";
 const UNPUBLISHED_LOCALES = new Set(["fr", "es", "ar"]);
 
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
+  return routing.locales
+    .filter((locale) => !UNPUBLISHED_LOCALES.has(locale))
+    .map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({
@@ -33,6 +35,10 @@ export default async function LocaleLayout({
   const { locale } = await params;
 
   if (!routing.locales.includes(locale as AppLocale)) {
+    notFound();
+  }
+
+  if (UNPUBLISHED_LOCALES.has(locale)) {
     notFound();
   }
 

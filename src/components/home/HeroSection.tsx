@@ -22,7 +22,7 @@ function HeroStats({ stats }: { stats: HeroContent["stats"] }) {
           </>
         );
         const className =
-          "rounded-2xl border border-brand-saffron/20 bg-white p-4 shadow-md shadow-brand-saffron/5 transition hover:border-brand-saffron/40 hover:shadow-lg md:p-5";
+          "min-h-[5.5rem] rounded-2xl border border-brand-saffron/20 bg-white p-4 shadow-md shadow-brand-saffron/5 transition hover:border-brand-saffron/40 hover:shadow-lg md:p-5";
 
         if (s.href) {
           return (
@@ -117,6 +117,12 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               <CtaButton href={academicCouncilHash("conference")} variant="secondary">
                 Multi Track Conference
               </CtaButton>
+              <Link
+                href={ROUTES.donation}
+                className="inline-flex min-h-[44px] items-center justify-center rounded-xl border-2 border-brand-navy/15 px-5 py-2.5 text-sm font-bold text-brand-navy transition hover:border-brand-saffron/40 hover:text-brand-saffron"
+              >
+                Support via Donation
+              </Link>
               <Link
                 href="/abhiyaninphotoframe"
                 className="text-center text-sm font-semibold text-brand-navy underline decoration-brand-saffron/40 underline-offset-2 transition hover:text-brand-saffron focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron sm:text-left"

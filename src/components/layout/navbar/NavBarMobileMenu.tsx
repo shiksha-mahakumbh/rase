@@ -3,10 +3,18 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import type { Menu } from "@/components/layout/navbar/types";
 import { getMenuIcon, NavChevronIcon } from "@/components/layout/navbar/NavMenuIcons";
-import { CTA_PATH, flattenSubMenu } from "@/constants/navigation";
+import { CTA_PATH, MOBILE_QUICK_LINKS, flattenSubMenu } from "@/constants/navigation";
 import { resolveNavHref } from "@/lib/security/safe-nav-url";
+
+const GlobalSearch = dynamic(() => import("@/components/search/GlobalSearch"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-11 w-full rounded-lg bg-slate-100" aria-hidden="true" />
+  ),
+});
 
 type NavLinkProps = {
   href: string;
@@ -165,6 +173,21 @@ export default function NavBarMobileMenu({ menus }: Props) {
               >
                 Participate — Registration
               </NavLink>
+              <div className="w-full">
+                <GlobalSearch compact />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {MOBILE_QUICK_LINKS.map((link) => (
+                  <NavLink
+                    key={link.path}
+                    href={link.path}
+                    onClick={close}
+                    className="flex min-h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-2 text-xs font-semibold text-brand-navy"
+                  >
+                    {link.title}
+                  </NavLink>
+                ))}
+              </div>
             </div>
             <ul className="flex flex-col p-4 font-medium">
               {menus.map((item) => {

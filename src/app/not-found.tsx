@@ -39,6 +39,24 @@ export default function NotFound() {
             Register
           </Link>
         </div>
+        <form action="/search" method="get" className="mt-8 flex w-full max-w-md gap-2">
+          <label htmlFor="not-found-search" className="sr-only">
+            Search site
+          </label>
+          <input
+            id="not-found-search"
+            name="q"
+            type="search"
+            placeholder="Search pages, FAQ, registration…"
+            className="min-h-[44px] flex-1 rounded-xl border border-slate-200 px-4 text-sm"
+          />
+          <button
+            type="submit"
+            className="min-h-[44px] rounded-xl bg-brand-saffron px-5 text-sm font-bold text-brand-navy"
+          >
+            Search
+          </button>
+        </form>
         <ul className="mt-8 grid max-w-lg gap-2 text-sm sm:grid-cols-2">
           {POPULAR_404_LINKS.map((link) => (
             <li key={link.href}>

@@ -45,7 +45,7 @@ export default function GlobalSearch({ compact = false }: GlobalSearchProps) {
         onKeyDown={(e) => {
           if (e.key === "Escape") setOpen(false);
         }}
-        className={`min-h-[40px] rounded-lg border border-slate-200 px-3 text-sm ${compact ? "w-36 min-w-[9rem] sm:w-44" : "w-32 xl:w-44"}`}
+        className={`min-h-[40px] rounded-lg border border-slate-200 px-3 text-sm ${compact ? "w-full min-w-0" : "w-36 min-w-[9rem] sm:w-44 xl:w-44"}`}
         aria-controls={open ? "global-search-results" : undefined}
       />
 
@@ -84,7 +84,7 @@ export default function GlobalSearch({ compact = false }: GlobalSearchProps) {
               className="text-sm font-semibold text-primary hover:underline"
               onClick={() => setOpen(false)}
             >
-              View all in Publications →
+              View all results →
             </Link>
           </li>
         </ul>

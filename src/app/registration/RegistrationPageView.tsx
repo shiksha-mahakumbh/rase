@@ -1,5 +1,7 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import RegistrationQuickLinks from "@/components/registration/RegistrationQuickLinks";
+import RegistrationIntroBanner from "@/components/registration/RegistrationIntroBanner";
+import RegistrationFaqSection from "@/components/registration/RegistrationFaqSection";
 import RegistrationHub from "./RegistrationHub";
 import {
   REGISTRATION_BREADCRUMBS,
@@ -34,7 +36,9 @@ export default function RegistrationPageView() {
       skipContainer
     >
       <RegistrationQuickLinks />
+      <RegistrationIntroBanner />
       <RegistrationHub />
+      <RegistrationFaqSection />
     </PublicPageShell>
   );
 }

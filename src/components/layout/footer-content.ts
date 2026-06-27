@@ -19,6 +19,9 @@ export const footerLogos: FooterLogo[] = [
 
 export const quickLinks: FooterLink[] = [
   { name: "Home", href: "/" },
+  { name: "Register for SMK 6.0", href: "/registration" },
+  { name: "My Registration", href: "/dashboard" },
+  { name: "Donation", href: "/donation" },
   { name: "Notice Board", href: "/noticeboard" },
   { name: "Past Editions", href: "/past-events" },
   { name: "Introduction", href: "/introduction" },
@@ -47,6 +50,7 @@ export const educationLinks: FooterLink[] = [
 export const programLinks: FooterLink[] = [
   { name: "Register for SMK 6.0", href: "/registration" },
   { name: "My Registration", href: "/dashboard" },
+  { name: "Support via Donation", href: "/donation" },
   { name: "Shiksha Mahakumbh 6.0", href: "/upcoming-events" },
   { name: "Downloads", href: "/downloads" },
   { name: "Media Centre", href: "/media-center" },
