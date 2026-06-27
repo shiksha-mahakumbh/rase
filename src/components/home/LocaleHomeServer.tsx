@@ -14,9 +14,10 @@ import { HERO_LCP_PRELOAD } from "@/components/home/HeroLcpImage";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 import type { ContentLocale } from "@prisma/client";
+import { cmsLocaleForRoute } from "@/lib/home/cms-locale";
 
 export default async function LocaleHomeServer({ locale }: { locale: string }) {
-  const cmsLocale = (locale === "hi" ? "hi" : "en") as ContentLocale;
+  const cmsLocale = cmsLocaleForRoute(locale);
   const [cmsData, featuredSpeakers, cmsPartners] = await Promise.all([
     loadCmsPageData(cmsLocale),
     loadCmsSpeakers(cmsLocale, true),

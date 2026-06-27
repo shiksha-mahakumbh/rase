@@ -4,10 +4,10 @@ import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { loadCmsHomepage } from "@/lib/cms/server";
 import { getTranslations } from "next-intl/server";
-import type { ContentLocale } from "@prisma/client";
+import { cmsLocaleForRoute } from "@/lib/home/cms-locale";
 
 export async function buildLocaleHomeMetadata(locale: string): Promise<Metadata> {
-  const cmsLocale = (locale === "hi" ? "hi" : "en") as ContentLocale;
+  const cmsLocale = cmsLocaleForRoute(locale);
   const t = await getTranslations({ locale, namespace: "meta" });
   const path = locale === "en" ? "/" : `/${locale}`;
 
