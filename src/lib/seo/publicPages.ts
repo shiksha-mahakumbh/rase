@@ -141,9 +141,8 @@ export const PUBLIC_PAGE_META = {
     description: "Share feedback on Shiksha Mahakumbh programmes and events.",
     path: "/feedback",
   }),
-  topics: createPageMetadata({
+  topics: createNoIndexMetadata({
     title: "Conference Topics",
-    description: "Research and conference themes for Shiksha Mahakumbh.",
     path: "/Topics",
   }),
   abstract: createPageMetadata({

@@ -6,7 +6,9 @@ export const SITE_NAME_HINDI = "शिक्षा महाकुंभ अभ�
 export const EVENT_EDITION = "6.0";
 export const EVENT_NAME = `Shiksha Mahakumbh Abhiyan ${EVENT_EDITION}`;
 
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/sLogo.png`;
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/branding/shiksha-mahakumbh-brand-hero.png`;
+export const DEFAULT_OG_WIDTH = 1200;
+export const DEFAULT_OG_HEIGHT = 630;
 
 export const ORGANIZATION_SCHEMA = {
   "@context": "https://schema.org",

@@ -166,14 +166,16 @@ export default function NavBarShell({ menus }: Props) {
             if (subItems?.length) {
               return (
                 <div key={menuKey} className="group relative">
-                  <span
-                    tabIndex={0}
+                  <button
+                    type="button"
                     className="flex cursor-default items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-brand-blue/5 hover:text-brand-blue xl:px-3 xl:py-2 xl:text-sm"
+                    aria-haspopup="menu"
+                    aria-expanded="false"
                   >
                     {icon}
                     <span>{item.title}</span>
-                    <NavChevronIcon className="h-3.5 w-3.5" />
-                  </span>
+                    <NavChevronIcon className="h-3.5 w-3.5" aria-hidden />
+                  </button>
                   <DesktopDropdownPanel item={item} isMega={isMega} />
                 </div>
               );

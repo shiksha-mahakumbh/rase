@@ -22,7 +22,12 @@ const PRESS_ARTICLE_PATHS = Object.values(PRESS_CANONICAL_PATHS).map((p) =>
 );
 
 /** Hindi locale pages with translated UI (body may mirror English). */
-const HI_SITEMAP_PATHS = ["hi", "hi/introduction", "hi/registration", "hi/contact-us"] as const;
+const HI_SITEMAP_PATHS = [
+  "hi",
+  "hi/introduction",
+  "hi/registration",
+  "hi/contact-us",
+] as const;
 
 const SITEMAP_PATHS = Array.from(
   new Set([

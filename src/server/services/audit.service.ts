@@ -12,6 +12,26 @@ export type AuditInput = {
   payload?: Prisma.InputJsonValue;
 };
 
+async function alertAuditWriteFailure(input: AuditInput, error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error("[audit_logs] write failed:", {
+    action: input.action,
+    entityType: input.entityType,
+    message,
+  });
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    try {
+      const Sentry = await import("@sentry/nextjs");
+      Sentry.captureMessage(`audit_logs write failed: ${input.action}`, {
+        level: "error",
+        extra: { entityType: input.entityType, entityId: input.entityId, message },
+      });
+    } catch {
+      // Sentry optional
+    }
+  }
+}
+
 export async function writeAuditLog(input: AuditInput) {
   try {
     return await prisma.auditLog.create({
@@ -27,7 +47,7 @@ export async function writeAuditLog(input: AuditInput) {
       },
     });
   } catch (error) {
-    console.error("audit_logs write failed:", error);
+    await alertAuditWriteFailure(input, error);
     return null;
   }
 }

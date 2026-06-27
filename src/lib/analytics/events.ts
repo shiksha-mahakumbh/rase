@@ -2,6 +2,7 @@ import {
   COOKIE_CONSENT_ACCEPTED,
   COOKIE_CONSENT_KEY,
 } from "@/lib/cookie-consent";
+import { getSessionId } from "@/lib/analytics/visitor-ids";
 
 export const ANALYTICS_EVENTS = {
   registrationStarted: "registration_started",
@@ -70,6 +71,18 @@ export function trackEvent(
     if (gtag) {
       gtag("event", name, payload);
     }
+
+    void fetch("/api/v2/analytics/funnel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: getSessionId(),
+        eventName: name,
+        path: enriched.page_path,
+        metadata: payload,
+      }),
+      keepalive: true,
+    }).catch(() => undefined);
   }
 
   const funnel = readFunnel();
