@@ -1,6 +1,7 @@
 /**
  * Rate limiting — in-memory fallback + optional Upstash Redis REST (distributed).
  */
+import { getUpstashRestCredentials } from "@/lib/security/upstash-env";
 type Entry = { count: number; resetAt: number };
 
 const store = new Map<string, Entry>();
@@ -52,9 +53,9 @@ async function upstashRateLimit(options: {
   limit: number;
   windowMs: number;
 }): Promise<RateLimitResult | null> {
-  const baseUrl = process.env.UPSTASH_REDIS_REST_URL?.replace(/\/$/, "");
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!baseUrl || !token) return null;
+  const creds = getUpstashRestCredentials();
+  if (!creds) return null;
+  const { url: baseUrl, token } = creds;
 
   const redisKey = `rl:${options.key}`;
   const windowSec = Math.max(1, Math.ceil(options.windowMs / 1000));
