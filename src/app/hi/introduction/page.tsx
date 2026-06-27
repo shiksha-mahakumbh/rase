@@ -1,4 +1,4 @@
-import IntroductionContent from "@/app/introduction/IntroductionContent";
+import HiIntroductionContent from "./HiIntroductionContent";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { getTranslations } from "next-intl/server";
@@ -18,5 +18,5 @@ export async function generateMetadata() {
 }
 
 export default function HiIntroductionPage() {
-  return <IntroductionContent />;
+  return <HiIntroductionContent />;
 }

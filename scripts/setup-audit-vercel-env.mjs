@@ -214,6 +214,25 @@ async function main() {
 
   if (!dryRun) {
     console.log("\nTrigger production redeploy via Git push or Vercel dashboard.");
+    try {
+      await vercelFetch(token, `/v13/deployments`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: "rase-co-in",
+          project: PROJECT_ID,
+          target: "production",
+          gitSource: {
+            type: "github",
+            org: "shiksha-mahakumbh",
+            repo: "rase",
+            ref: "main",
+          },
+        }),
+      });
+      console.log("[ok] Production redeploy triggered");
+    } catch (e) {
+      console.log("[warn] Redeploy trigger skipped:", e.message ?? e);
+    }
   }
 
   console.log("\nVerify after deploy: curl -s https://www.rase.co.in/api/v2/health");
