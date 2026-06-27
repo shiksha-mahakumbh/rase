@@ -2,7 +2,7 @@
 
 import { REGISTRATION_TYPE_OPTIONS, RegistrationType } from "@/types/registration";
 import {
-  CMT_SUBMISSION_URL,
+  CMT_SUBMIT_PATH,
   isExternalRedirectType,
   redirectToExternalSubmission,
 } from "@/lib/registration/config";
@@ -46,7 +46,7 @@ export default function CategoryStep({
         Select the track that best matches your participation. Multi Track
         Conference submissions open in{" "}
         <a
-          href={CMT_SUBMISSION_URL}
+          href={CMT_SUBMIT_PATH}
           className="font-semibold text-brand-saffron underline"
           target="_blank"
           rel="noopener noreferrer"

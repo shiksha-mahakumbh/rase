@@ -141,6 +141,12 @@ function SuccessInner() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <ActionCard
+              title="View my registration"
+              href="/dashboard"
+            >
+              Receipts, badge, and profile
+            </ActionCard>
+            <ActionCard
               title="Download receipt"
               onClick={handleDownloadReceipt}
               disabled={!receiptData}
@@ -216,6 +222,9 @@ function SuccessInner() {
           </section>
 
           <div className="flex flex-wrap justify-center gap-3">
+            <CtaButton href={ROUTES.dashboard} variant="primary">
+              View my registration
+            </CtaButton>
             <CtaButton href={ROUTES.home} variant="ghost">
               Back to home
             </CtaButton>
@@ -233,19 +242,33 @@ function ActionCard({
   title,
   children,
   onClick,
+  href,
   disabled,
 }: {
   title: string;
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  href?: string;
   disabled?: boolean;
 }) {
+  const className =
+    "min-h-[44px] rounded-xl border border-slate-200 bg-white p-4 text-left transition hover:border-brand-saffron/40 hover:shadow-md disabled:opacity-50";
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        <p className="text-sm font-bold text-brand-navy">{title}</p>
+        <p className="mt-1 text-xs text-slate-500">{children}</p>
+      </Link>
+    );
+  }
+
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="min-h-[44px] rounded-xl border border-slate-200 bg-white p-4 text-left transition hover:border-brand-saffron/40 hover:shadow-md disabled:opacity-50"
+      className={className}
     >
       <p className="text-sm font-bold text-brand-navy">{title}</p>
       <p className="mt-1 text-xs text-slate-500">{children}</p>

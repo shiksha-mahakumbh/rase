@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
+import { CMT_SUBMIT_PATH } from "@/lib/registration/config";
 
-/** Legacy call-for-papers topics list → Microsoft CMT submission (Phase 5) */
+/** Legacy call-for-papers topics list → CMT interstitial (Phase 5) */
 export default function TopicsRedirectPage() {
-  redirect(CMT_SUBMISSION_URL);
+  redirect(CMT_SUBMIT_PATH);
 }

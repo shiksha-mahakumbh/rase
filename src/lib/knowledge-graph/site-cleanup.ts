@@ -155,6 +155,8 @@ export const SITEMAP_CORE_PATHS: readonly string[] = [
   "cookie-policy",
   "coming-soon",
   "abhiyaninphotoframe",
+  "search",
+  "research/submit",
 ];
 
 export function isRedirectShellPath(pathname: string): boolean {
