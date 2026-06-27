@@ -22,7 +22,7 @@ const securityHeaders = [
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https:",
       "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.supabase.co https://api.razorpay.com https://lumberjack.razorpay.com https://www.clarity.ms https://*.clarity.ms https://connect.facebook.net https://pagead2.googlesyndication.com https://*.botpress.cloud wss://*.botpress.cloud https://vitals.vercel-insights.com https://www.facebook.com",
-      "frame-src 'self' https://www.googletagmanager.com https://checkout.razorpay.com https://api.razorpay.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+      "frame-src 'self' https://www.googletagmanager.com https://checkout.razorpay.com https://api.razorpay.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com https://maps.google.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self' https://checkout.razorpay.com",

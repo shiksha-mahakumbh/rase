@@ -2,6 +2,16 @@ import Link from "next/link";
 import NavBarShell from "@/components/layout/navbar/NavBarShell";
 import { NAV_MENUS } from "@/constants/navigation";
 import { DynamicFooter } from "@/components/layout/SiteDynamicChrome";
+import { ROUTES } from "@/constants/routes";
+
+const POPULAR_404_LINKS = [
+  { label: "Register for SMK 6.0", href: ROUTES.registration },
+  { label: "My Registration", href: ROUTES.dashboard },
+  { label: "Academic Council", href: ROUTES.academicCouncil },
+  { label: "Past Editions", href: ROUTES.pastEvents },
+  { label: "Search site", href: ROUTES.search },
+  { label: "FAQ", href: ROUTES.faq },
+] as const;
 
 export default function NotFound() {
   return (
@@ -23,12 +33,24 @@ export default function NotFound() {
             Home
           </Link>
           <Link
-            href="/registration"
+            href={ROUTES.registration}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl border-2 border-brand-saffron px-5 py-2.5 text-sm font-bold text-brand-saffron"
           >
             Register
           </Link>
         </div>
+        <ul className="mt-8 grid max-w-lg gap-2 text-sm sm:grid-cols-2">
+          {POPULAR_404_LINKS.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="block rounded-lg border border-slate-200 bg-white px-4 py-2.5 font-semibold text-brand-navy hover:border-brand-saffron/40"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </main>
       <DynamicFooter />
     </div>

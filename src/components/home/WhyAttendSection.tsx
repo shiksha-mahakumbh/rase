@@ -20,6 +20,7 @@ export default function WhyAttendSection({ content }: { content: WhyAttendConten
               title={f.title}
               description={f.description}
               badge={f.badge}
+              href={f.href}
               icon={iconForWhyAttend(f.title)}
             />
           ))}

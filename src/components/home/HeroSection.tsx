@@ -1,28 +1,43 @@
 import Link from "next/link";
 import { CtaButton } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
-import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
+import { academicCouncilHash } from "@/lib/home/home-link-targets";
 import type { HeroContent } from "@/lib/home/build-hero-content";
 import CountdownBannerView from "./CountdownBannerView";
 import HeroLcpImage from "./HeroLcpImage";
 
 function HeroStats({ stats }: { stats: HeroContent["stats"] }) {
   return (
-    <div className="mt-6 grid grid-cols-2 gap-3">
-      {stats.map((s) => (
-        <div
-          key={s.label}
-          className="rounded-2xl border border-brand-saffron/20 bg-white p-4 shadow-md shadow-brand-saffron/5 md:p-5"
-        >
-          <p className="text-2xl font-extrabold text-brand-navy md:text-3xl">
-            {s.value.toLocaleString("en-IN")}
-            {s.suffix}
-          </p>
-          <p className="mt-1 text-xs font-medium uppercase tracking-wide text-slate-500 md:text-sm">
-            {s.label}
-          </p>
-        </div>
-      ))}
+    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {stats.map((s) => {
+        const inner = (
+          <>
+            <p className="text-2xl font-extrabold text-brand-navy md:text-3xl">
+              {s.value.toLocaleString("en-IN")}
+              {s.suffix}
+            </p>
+            <p className="mt-1 text-xs font-medium uppercase tracking-wide text-slate-500 md:text-sm">
+              {s.label}
+            </p>
+          </>
+        );
+        const className =
+          "rounded-2xl border border-brand-saffron/20 bg-white p-4 shadow-md shadow-brand-saffron/5 transition hover:border-brand-saffron/40 hover:shadow-lg md:p-5";
+
+        if (s.href) {
+          return (
+            <Link key={s.label} href={s.href} className={`block ${className}`}>
+              {inner}
+            </Link>
+          );
+        }
+
+        return (
+          <div key={s.label} className={className}>
+            {inner}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -99,7 +114,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               <CtaButton href={ROUTES.registration} variant="primary">
                 Register Now
               </CtaButton>
-              <CtaButton href={CMT_SUBMISSION_URL} variant="secondary">
+              <CtaButton href={academicCouncilHash("conference")} variant="secondary">
                 Multi Track Conference
               </CtaButton>
               <Link

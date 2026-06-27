@@ -1,7 +1,9 @@
 import type { CmsHomepage } from "@/lib/cms/types";
 import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 import { ROUTES } from "@/constants/routes";
-import { CMT_SUBMISSION_URL, cmtSubmissionDateLabel } from "@/lib/registration/config";
+import { academicCouncilHash } from "@/lib/home/home-link-targets";
+import { resolveWhyAttendHref } from "@/lib/home/home-link-targets";
+import { cmtSubmissionDateLabel } from "@/lib/registration/config";
 import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
 export type TrustStripLogo = { src: string; alt: string; href: string };
@@ -15,6 +17,7 @@ export type WhyAttendFeature = {
   title: string;
   description: string;
   badge?: string;
+  href?: string;
 };
 
 export type WhyAttendContent = {
@@ -32,8 +35,6 @@ export type DiscoverInsight = {
   tag: string;
   accent: string;
   tagBg: string;
-  imageSrc: string;
-  imageAlt: string;
   external: boolean;
 };
 
@@ -73,83 +74,81 @@ const DEFAULT_WHY_ATTEND: WhyAttendFeature[] = [
     description:
       "Engage with national education policy, implementation frameworks, and institutional roadmaps.",
     badge: "Impact",
+    href: ROUTES.introduction,
   },
   {
     title: "Research & Publications",
     description:
       "Present abstracts, full papers, and proceedings aligned with Indian and global education research.",
     badge: "Academic",
+    href: "/publications",
   },
   {
     title: "Innovation & Startups",
     description:
       "Showcase projects, exhibitions, and entrepreneurial ideas from schools and higher education.",
     badge: "Innovation",
+    href: academicCouncilHash("exhibition"),
   },
   {
     title: "Olympiads & Talent",
     description:
       "Compete in olympiads, talent conclaves, and cultural programmes celebrating student excellence.",
+    href: academicCouncilHash("olympiad"),
   },
   {
     title: "Conclaves & Workshops",
     description:
       "Multi-track conclaves on holistic education, best practices, and Bharatiya knowledge systems.",
+    href: academicCouncilHash("conclave"),
   },
   {
     title: "Global Networking",
     description:
       "Connect educators, NGOs, industry, and youth on one credible international platform.",
+    href: ROUTES.contact,
   },
 ];
 
 const DEFAULT_DISCOVER: DiscoverInsight[] = [
   {
-    title: "NEP 2020 Implementation Frameworks",
-    date: "2026",
-    author: "Academic Council",
-    href: "/departments/academic-council",
+    title: "NEP 2020 & Bharat@2047",
+    date: "Policy",
+    author: "Introduction",
+    href: ROUTES.introduction,
     tag: "Policy",
     accent: "from-brand-blue/60 to-brand-blue/20",
     tagBg: "bg-brand-blue",
-    imageSrc: "/2024M/Press8.jpg",
-    imageAlt: "NEP 2020 policy session at Shiksha Mahakumbh",
     external: false,
   },
   {
-    title: "Research Proceedings & Souvenir",
-    date: "SMK 5.0 archive",
-    author: "Past editions",
-    href: "/publications/souvenir-abstracts-mtc",
-    tag: "Research",
+    title: "Shiksha Mahakumbh 5.0",
+    date: "Past edition",
+    author: "Archive",
+    href: "/past_event/shiksha-mahakumbh-5.0",
+    tag: "Editions",
     accent: "from-brand-saffron/50 to-brand-saffron/15",
     tagBg: "bg-brand-saffron",
-    imageSrc: "/2024M/Vyakhanmala.jpg",
-    imageAlt: "Research proceedings release at Shiksha Mahakumbh",
     external: false,
   },
   {
     title: "Multi Track Conference",
     date: cmtSubmissionDateLabel(),
-    author: "Research Track",
-    href: CMT_SUBMISSION_URL,
-    tag: "Submit",
+    author: "Academic Council",
+    href: academicCouncilHash("conference"),
+    tag: "Research",
     accent: "from-brand-emerald/50 to-brand-emerald/15",
     tagBg: "bg-brand-emerald",
-    imageSrc: "/2024M/Press7.jpg",
-    imageAlt: "Multi Track Conference inauguration",
-    external: true,
+    external: false,
   },
   {
     title: "Past Editions & Proceedings",
     date: "Archive",
     author: "SMK History",
     href: "/past-events",
-    tag: "Editions",
+    tag: "Publications",
     accent: "from-brand-violet/50 to-brand-violet/15",
     tagBg: "bg-brand-violet",
-    imageSrc: "/2024K/k6.jpg",
-    imageAlt: "Past Shiksha Mahakumbh edition ceremony",
     external: false,
   },
 ];
@@ -158,26 +157,18 @@ const DISCOVER_ACCENTS = [
   {
     accent: "from-brand-blue/60 to-brand-blue/20",
     tagBg: "bg-brand-blue",
-    imageSrc: "/2024M/Press8.jpg",
-    imageAlt: "Shiksha Mahakumbh highlight",
   },
   {
     accent: "from-brand-saffron/50 to-brand-saffron/15",
     tagBg: "bg-brand-saffron",
-    imageSrc: "/2024M/Vyakhanmala.jpg",
-    imageAlt: "Shiksha Mahakumbh highlight",
   },
   {
     accent: "from-brand-emerald/50 to-brand-emerald/15",
     tagBg: "bg-brand-emerald",
-    imageSrc: "/2024M/Press7.jpg",
-    imageAlt: "Shiksha Mahakumbh highlight",
   },
   {
     accent: "from-brand-violet/50 to-brand-violet/15",
     tagBg: "bg-brand-violet",
-    imageSrc: "/2024K/k6.jpg",
-    imageAlt: "Shiksha Mahakumbh highlight",
   },
 ];
 
@@ -187,23 +178,23 @@ const DEFAULT_TRACKS: EventTrack[] = [
     date: "During SMK 6.0",
     venue: "NIT Hamirpur",
     description: "Holistic education, policy, and Bharatiya knowledge systems.",
-    href: ROUTES.academicCouncil,
+    href: academicCouncilHash("conclave"),
     badge: "Conclave",
   },
   {
     title: "Multi Track Conference",
     date: cmtSubmissionDateLabel(),
-    venue: "Microsoft CMT",
-    description: "Submit papers and abstracts via the official CMT portal.",
-    href: CMT_SUBMISSION_URL,
+    venue: "15 research tracks",
+    description: "Hybrid international conference with peer-reviewed publication pathways.",
+    href: academicCouncilHash("conference"),
     badge: "Research",
   },
   {
     title: "Olympiads & Awards",
     date: "Classes 3–10 · dates TBA",
     venue: "National participation",
-    description: "Student olympiads, best practices, and recognition awards — register via the hub; exam dates to be announced.",
-    href: ROUTES.registration,
+    description: "Student olympiads and excellence awards — register via the hub.",
+    href: academicCouncilHash("olympiad"),
     badge: "Students",
   },
   {
@@ -211,24 +202,24 @@ const DEFAULT_TRACKS: EventTrack[] = [
     date: "Showcase",
     venue: "Innovation pavilion",
     description: "School and HEI project displays, startups, and exhibitions.",
-    href: ROUTES.registration,
+    href: academicCouncilHash("projects"),
     badge: "Innovation",
   },
   {
-    title: "Workshops",
-    date: "Hands-on",
-    venue: "On campus",
-    description: "Capacity building sessions for educators and coordinators.",
-    href: "/workshops",
-    badge: "Workshop",
+    title: "Best Practices & Patrika",
+    date: "Open call",
+    venue: "Academic Council",
+    description: "Grassroots models and Bal Shodh Patrika student research journal.",
+    href: academicCouncilHash("best-practices"),
+    badge: "Practice",
   },
   {
-    title: "Accommodation",
-    date: "On request",
-    venue: "Hamirpur region",
-    description: "Request accommodation during registration for approved delegates.",
-    href: ROUTES.registration,
-    badge: "Travel",
+    title: "Cultural Programmes",
+    date: "On campus",
+    venue: "NIT Hamirpur",
+    description: "Folk dance, music, and artistic presentations at the summit.",
+    href: academicCouncilHash("cultural"),
+    badge: "Culture",
   },
 ];
 
@@ -292,7 +283,12 @@ export function buildWhyAttendContent(
       "subtitle",
       "Six reasons educators, researchers, students, and institutions join India's flagship education summit."
     ),
-    features: cmsFeatures.length ? cmsFeatures : DEFAULT_WHY_ATTEND,
+    features: cmsFeatures.length
+      ? cmsFeatures.map((f) => ({
+          ...f,
+          href: resolveWhyAttendHref(f.title),
+        }))
+      : DEFAULT_WHY_ATTEND,
   };
 }
 
@@ -327,8 +323,6 @@ export function buildDiscoverContent(
             tag: item.tag ?? "News",
             accent: preset.accent,
             tagBg: preset.tagBg,
-            imageSrc: item.imageSrc ?? preset.imageSrc,
-            imageAlt: item.imageAlt ?? item.title ?? "Shiksha Mahakumbh update",
             external,
           };
         })
