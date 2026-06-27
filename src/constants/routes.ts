@@ -25,6 +25,9 @@ export const ROUTES = {
   terms: "/terms-and-conditions",
   disclaimer: "/disclaimer",
   refund: "/refund-policy",
+  dashboard: "/dashboard",
+  cmtSubmit: "/research/submit",
+  search: "/search",
 } as const;
 
 /** Routes that expose PII — require admin session cookie */

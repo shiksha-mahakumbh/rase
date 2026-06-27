@@ -1,6 +1,6 @@
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { SITE_URL } from "@/config/site";
-import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
+import { CMT_SUBMIT_PATH } from "@/lib/registration/config";
 import { committeePathForEdition } from "@/lib/committee/edition-slugs";
 import { event } from "@/design/tokens";
 
@@ -36,10 +36,11 @@ export const REGISTRATION_QUICK_LINKS = [
   { label: "Organising Committee", href: committeePathForEdition("6.0"), icon: "👥" },
   { label: "Upcoming Events", href: CANONICAL_ROUTES.upcomingEvents, icon: "🗓️" },
   { label: "Contact DHE", href: CANONICAL_ROUTES.contact, icon: "📞" },
-  { label: "Submit Paper (CMT)", href: CMT_SUBMISSION_URL, icon: "📝", external: true },
+  { label: "Submit Paper (CMT)", href: CMT_SUBMIT_PATH, icon: "📝" },
 ] as const;
 
 export const REGISTRATION_SUCCESS_LINKS = [
+  { label: "My registration portal", href: "/dashboard" },
   { label: "Academic Council programmes", href: CANONICAL_ROUTES.departments.academicCouncil },
   { label: "Edition 6.0 brochure", href: CANONICAL_ROUTES.downloads },
   { label: "Organising committee", href: committeePathForEdition("6.0") },
@@ -81,7 +82,7 @@ export const REGISTRATION_FAQ = [
   },
   {
     question: "How do I submit a research paper?",
-    answer: `Authors submit via the official Microsoft CMT portal at ${CMT_SUBMISSION_URL}.`,
+    answer: `Authors submit via the official Microsoft CMT portal (${CMT_SUBMIT_PATH}).`,
   },
   {
     question: "Which categories require payment?",

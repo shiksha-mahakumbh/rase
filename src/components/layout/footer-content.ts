@@ -46,6 +46,7 @@ export const educationLinks: FooterLink[] = [
 
 export const programLinks: FooterLink[] = [
   { name: "Register for SMK 6.0", href: "/registration" },
+  { name: "My Registration", href: "/dashboard" },
   { name: "Shiksha Mahakumbh 6.0", href: "/upcoming-events" },
   { name: "Downloads", href: "/downloads" },
   { name: "Media Centre", href: "/media-center" },

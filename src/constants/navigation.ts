@@ -1,10 +1,11 @@
 import type { Menu, MenuGroup } from "@/components/layout/navbar/types";
 import { ROUTES } from "@/constants/routes";
-import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
+import { CMT_SUBMIT_PATH } from "@/lib/registration/config";
 
 export const POPULAR_LINKS = [
   { path: ROUTES.registration, title: "Register Now" },
-  { path: CMT_SUBMISSION_URL, title: "Multi Track Conference" },
+  { path: ROUTES.dashboard, title: "My Registration" },
+  { path: CMT_SUBMIT_PATH, title: "Multi Track Conference" },
   { path: ROUTES.academicCouncil, title: "Academic Programme" },
   { path: ROUTES.upcomingEvents, title: "Upcoming Events" },
   { path: "/noticeboard", title: "Notice Board" },
@@ -53,6 +54,7 @@ export const ABOUT_NAV_GROUPS: MenuGroup[] = [
 
 /** Top-level participate links — also merged into CMS header menus when missing. */
 export const PARTICIPATE_NAV_ITEMS: Menu[] = [
+  { path: ROUTES.dashboard, title: "My Registration" },
   { path: ROUTES.donation, title: "Donation" },
 ];
 
@@ -70,7 +72,7 @@ export const NAV_MENUS: Menu[] = [
     title: "Research",
     subMenu: [
       { path: "https://pub.dhe.org.in", title: "Journal" },
-      { path: CMT_SUBMISSION_URL, title: "Multi Track Conference" },
+      { path: CMT_SUBMIT_PATH, title: "Multi Track Conference" },
       { path: "/proceedings", title: "Proceedings" },
       { path: "/publications", title: "Publications" },
       { path: "/books", title: "Books" },

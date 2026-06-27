@@ -44,6 +44,8 @@ const nextConfig = {
     ignoreDuringBuilds: process.env.SKIP_NEXT_STATIC_CHECKS === "1",
   },
   experimental: {
+    /** Required for legacy case aliases (e.g. /Proceeding1 → /proceeding1) without self-loops. */
+    caseSensitiveRoutes: true,
     webpackMemoryOptimizations: true,
     optimizePackageImports: [
       "framer-motion",

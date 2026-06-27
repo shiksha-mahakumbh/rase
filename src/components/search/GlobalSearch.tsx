@@ -80,7 +80,7 @@ export default function GlobalSearch({ compact = false }: GlobalSearchProps) {
           )}
           <li className="border-t px-4 py-2">
             <Link
-              href={`/publications?q=${encodeURIComponent(q)}`}
+              href={`/search?q=${encodeURIComponent(q)}`}
               className="text-sm font-semibold text-primary hover:underline"
               onClick={() => setOpen(false)}
             >
