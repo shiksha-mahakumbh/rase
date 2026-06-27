@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isUpstashConfigured } from "@/lib/security/upstash-env";
 
 export const dynamic = "force-dynamic";
 
@@ -17,9 +18,7 @@ export async function GET() {
     }
   }
 
-  const upstashConfigured = Boolean(
-    process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-  );
+  const upstashConfigured = isUpstashConfigured();
   const sentryConfigured = Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN);
   const cronConfigured = Boolean(process.env.CRON_SECRET);
   const emailSecretConfigured = Boolean(process.env.REGISTRATION_EMAIL_SECRET);
