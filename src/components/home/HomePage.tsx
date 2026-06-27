@@ -18,6 +18,7 @@ const Footer = dynamic(() => import("@/components/layout/Footer"));
 const GlassCard = dynamic(() => import("@/components/ui/GlassCard"));
 const UpcomingEvent = dynamic(() => import("@/components/home/sections/UpcomingEvent"));
 const GallerySection = dynamic(() => import("./GallerySection"));
+const TestimonialsStrip = dynamic(() => import("./TestimonialsStrip"));
 const HomeFaqSection = dynamic(() => import("./HomeFaqSection"));
 const SpeakerHighlightsSection = dynamic(() => import("./SpeakerHighlightsSection"));
 const VenueTravelSection = dynamic(() => import("./VenueTravelSection"));
@@ -145,6 +146,14 @@ export default function HomePage({
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <ReservedAdSlot slotId="home-footer" />
         </div>
+        <LazySection
+          minHeight="12rem"
+          rootMargin="0px 0px 120px 0px"
+          idleFirst
+          fallback={<SectionSkeleton lines={2} />}
+        >
+          <TestimonialsStrip />
+        </LazySection>
         <LazySection
           minHeight="20rem"
           rootMargin="0px 0px 120px 0px"

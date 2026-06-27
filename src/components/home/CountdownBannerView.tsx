@@ -1,18 +1,36 @@
 import { event } from "@/design/tokens";
 import { getCountdownSnapshot } from "@/lib/home/countdown";
 
-const UNITS = [
+const DEFAULT_UNITS = [
   { label: "Days", key: "days" as const },
   { label: "Hours", key: "hours" as const },
   { label: "Min", key: "minutes" as const },
   { label: "Sec", key: "seconds" as const },
 ];
 
-export default function CountdownBannerView({ theme = "dark" }: { theme?: "dark" | "light" }) {
+type CountdownLabels = {
+  label: string;
+  days: string;
+  hours: string;
+  minutes: string;
+  seconds: string;
+};
+
+export default function CountdownBannerView({
+  theme = "dark",
+  labels,
+}: {
+  theme?: "dark" | "light";
+  labels?: CountdownLabels;
+}) {
   const left = getCountdownSnapshot();
   if (left.ended) return null;
 
   const isLight = theme === "light";
+  const units = DEFAULT_UNITS.map((u) => ({
+    ...u,
+    label: labels?.[u.key] ?? u.label,
+  }));
 
   return (
     <div
@@ -31,10 +49,10 @@ export default function CountdownBannerView({ theme = "dark" }: { theme?: "dark"
             : "text-xs font-bold uppercase tracking-wider text-brand-saffron"
         }
       >
-        Event begins in
+        {labels?.label ?? "Event begins in"}
       </span>
       <div className="flex gap-2">
-        {UNITS.map((u) => (
+        {units.map((u) => (
           <div
             key={u.label}
             className={

@@ -14,7 +14,8 @@ const LEGACY_REDIRECTS = [
   { source: "/committeepage", destination: "/committees", permanent: true },
   { source: "/media", destination: "/media-center", permanent: true },
   { source: "/Press_Release", destination: "/press", permanent: true },
-  { source: "/commingsoon", destination: "/coming-soon", permanent: true },
+  { source: "/commingsoon", destination: "/merchandise", permanent: true },
+  { source: "/coming-soon", destination: "/merchandise", permanent: true },
   { source: "/Accomodation", destination: "/registration", permanent: true },
   { source: "/accommodation", destination: "/registration", permanent: true },
   { source: "/registration/Accomodation", destination: "/registration", permanent: true },
@@ -52,26 +53,7 @@ const LEGACY_REDIRECTS = [
   { source: "/media/shiksha-kumbh/2024/print", destination: "/media/shiksha-mahakumbh/3.0/print", permanent: true },
   { source: "/media/shiksha-kumbh/2023/digital", destination: "/media/shiksha-mahakumbh/2.0/digital", permanent: true },
   { source: "/media/shiksha-kumbh/2023/print", destination: "/media/shiksha-mahakumbh/2.0/print", permanent: true },
-  {
-    source: "/participantregistrationdatadekh%20copy",
-    destination: "/admin",
-    permanent: true,
-  },
-  {
-    source: "/participantregistrationdatadekh copy",
-    destination: "/admin",
-    permanent: true,
-  },
-  {
-    source: "/ngoregistrationdatadekh%20copy",
-    destination: "/admin",
-    permanent: true,
-  },
-  {
-    source: "/ngoregistrationdatadekh copy",
-    destination: "/admin",
-    permanent: true,
-  },
+  // Accidental Windows duplicate folders — 410 in middleware (see src/middleware.ts)
   // Registration sub-routes → hub
   { source: "/registration/volunteer", destination: "/registration", permanent: true },
   { source: "/registration/participant", destination: "/registration", permanent: true },
@@ -162,7 +144,7 @@ const LEGACY_REDIRECTS = [
   { source: "/skill-development", destination: "/upcoming-events", permanent: true },
   { source: "/innovation", destination: "/upcoming-events", permanent: true },
   { source: "/policy", destination: "/upcoming-events", permanent: true },
-  { source: "/leadership", destination: "/upcoming-events", permanent: true },
+  { source: "/leadership", destination: "/introduction", permanent: true },
   { source: "/teacher-development", destination: "/upcoming-events", permanent: true },
   { source: "/student-development", destination: "/upcoming-events", permanent: true },
   { source: "/educational-technology", destination: "/upcoming-events", permanent: true },

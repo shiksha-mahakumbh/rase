@@ -28,6 +28,7 @@ export const ABOUT_NAV_GROUPS: MenuGroup[] = [
     label: "Overview",
     items: [
       { path: ROUTES.introduction, title: "Introduction" },
+      { path: "/introduction#leadership", title: "Leadership" },
       { path: "/past-events", title: "Past Editions" },
       { path: "/abhiyaninphotoframe", title: "Photo Frame" },
     ],

@@ -19,7 +19,6 @@ import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 import hiMessages from "@/i18n/messages/hi.json";
 
 export const revalidate = 3600;
-export const maxDuration = 60;
 
 const HI_HOME_META = {
   title: hiMessages.meta.homeTitle,
@@ -50,7 +49,7 @@ export default async function HiHomePage() {
     cmsSpeakers: featuredSpeakers,
     homepagePartners: getHomepagePartners(cmsData.homepage),
   });
-  const heroContent = buildHeroContent(cmsData.homepage);
+  const heroContent = buildHeroContent(cmsData.homepage, "hi");
   const homeSections = buildHomeSectionsContent(cmsData.homepage);
   const tickerItems = resolveTickerItems(cmsData.announcementBars, "hi");
   const navMenus = navMenusFromCms(cmsData.headerMenu);
