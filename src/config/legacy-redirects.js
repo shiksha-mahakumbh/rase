@@ -128,16 +128,10 @@ const LEGACY_REDIRECTS = [
   { source: "/past_event/sm24", destination: "/past_event/shiksha-mahakumbh-4.0", permanent: true },
   { source: "/past_event/sm25", destination: "/past_event/shiksha-mahakumbh-5.0", permanent: true },
   { source: "/past_event", destination: "/past-events", permanent: true },
-  // Case aliases — require experimental.caseSensitiveRoutes in next.config.js (Next.js redirects are case-insensitive by default).
-  { source: "/Proceeding1", destination: "/proceeding1", permanent: true },
-  { source: "/Proceeding2", destination: "/proceeding2", permanent: true },
-  { source: "/Proceeding3", destination: "/proceeding3", permanent: true },
+  // Case aliases handled by redirect shell pages (see src/app/Proceeding1, batonceremony, etc.)
+  // — next.config redirects are case-insensitive and loop on canonical paths.
   { source: "/topics", destination: "/research/submit", permanent: false },
   { source: "/talkshow", destination: "/media-center", permanent: true },
-  { source: "/batonceremony", destination: "/BatonCeremony", permanent: true },
-  { source: "/residentialcamp", destination: "/ResidentialCamp", permanent: true },
-  { source: "/Residential_Camp", destination: "/ResidentialCamp", permanent: true },
-  { source: "/Baton", destination: "/BatonCeremony", permanent: true },
   // Committee edition routes — retired year-based slugs
   { source: "/committee/shikshamahakumbh2026", destination: "/committee/Shiksha%20Mahakumbh%206.0", permanent: true },
   { source: "/committee/shikshamahakumbh2025", destination: "/committee/Shiksha%20Mahakumbh%205.0", permanent: true },

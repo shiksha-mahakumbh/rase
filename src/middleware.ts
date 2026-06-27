@@ -5,6 +5,7 @@ import { ADMIN_SESSION_COOKIE } from "@/constants/auth";
 import { routing } from "@/i18n/routing";
 import { verifyAdminSessionTokenEdge } from "@/lib/security/admin-session-edge";
 import { isRedirectShellPath } from "@/lib/knowledge-graph/site-cleanup";
+import { legacyCaseAliasDestination } from "@/config/legacy-case-aliases";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -66,6 +67,13 @@ function withNoIndex(response: NextResponse, pathname: string): NextResponse {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  const caseAlias = legacyCaseAliasDestination(pathname);
+  if (caseAlias) {
+    const url = request.nextUrl.clone();
+    url.pathname = caseAlias;
+    return withDocumentLang(NextResponse.redirect(url, 308), pathname);
+  }
 
   if (isOpsPath(pathname)) {
     if (!isAdminLoginLanding(pathname) && !pathname.startsWith("/api/")) {
