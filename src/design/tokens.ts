@@ -42,5 +42,7 @@ export const impactStats = [
   { value: 5, label: "Completed Editions", suffix: "" },
   { value: 6, label: "Current Edition", suffix: ".0" },
   { value: 500, label: "Institutions Engaged", suffix: "+" },
+  { value: 1200, label: "Research Papers Presented", suffix: "+" },
+  { value: 14, label: "States & UTs Reached", suffix: "+" },
   { value: 2047, label: "Bharat@2047 Vision", suffix: "" },
 ] as const;

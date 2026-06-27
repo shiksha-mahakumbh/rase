@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { SectionHeader } from "@/components/ui";
 import { event } from "@/design/tokens";
+import { NIT_HAMIRPUR_MAP_EMBED_URL, NIT_HAMIRPUR_MAP_LINK } from "@/config/venue-maps";
 import { useCms } from "@/lib/cms/context";
 import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 
@@ -26,11 +28,7 @@ export default function VenueTravelSection() {
   const cta = getSection(cms?.homepage, "cta");
   const travelBlocks = sectionItems<{ title: string; items: string[] }>(cta, "travel");
   const travel = travelBlocks.length ? travelBlocks : DEFAULT_TRAVEL;
-  const mapUrl = sectionField(
-    cta,
-    "mapEmbedUrl",
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3396.847!2d76.5264!3d31.7089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d855aa1dab861%3A0x6f86fcbf8fad16fa!2sNational%20Institute%20of%20Technology%2C%20Hamirpur!5e0!3m2!1sen!2sin!4v1717000000000!5m2!1sen!2sin"
-  );
+  const mapUrl = sectionField(cta, "mapEmbedUrl", NIT_HAMIRPUR_MAP_EMBED_URL);
 
   return (
     <section
@@ -68,14 +66,26 @@ export default function VenueTravelSection() {
               </div>
             ))}
           </div>
-          <iframe
-            title="NIT Hamirpur location map"
-            src={mapUrl}
-            loading="lazy"
-            className="min-h-[280px] w-full rounded-2xl border border-slate-200"
-            allowFullScreen
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+          <div>
+            <iframe
+              title="NIT Hamirpur location map"
+              src={mapUrl}
+              loading="lazy"
+              className="min-h-[280px] w-full rounded-2xl border border-slate-200"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <p className="mt-3 text-center text-sm">
+              <Link
+                href={NIT_HAMIRPUR_MAP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-brand-navy underline"
+              >
+                Open NIT Hamirpur in Google Maps
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </section>

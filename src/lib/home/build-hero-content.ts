@@ -1,11 +1,13 @@
 import type { CmsHomepage } from "@/lib/cms/types";
 import { getSection, sectionField, sectionItems } from "@/lib/cms/utils";
 import { event, impactStats } from "@/design/tokens";
+import { resolveHeroStatHref } from "@/lib/home/home-link-targets";
 
 export type HeroStat = {
   label: string;
   value: number;
   suffix: string;
+  href?: string;
 };
 
 export type HeroContent = {
@@ -39,12 +41,14 @@ export function buildHeroContent(homepage: CmsHomepage | null | undefined): Hero
           suffix:
             s.suffix ??
             (typeof s.value === "string" && Number.isNaN(Number(s.value)) ? s.value : ""),
+          href: resolveHeroStatHref(s.label),
         };
       })
     : impactStats.map((s) => ({
         label: s.label,
         value: s.value,
         suffix: s.suffix ?? "",
+        href: resolveHeroStatHref(s.label),
       }));
 
   return {

@@ -1,32 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CtaButton } from "@/components/ui";
-import { ROUTES } from "@/constants/routes";
+import { CtaButton } from "@/components/ui";import { ROUTES } from "@/constants/routes";
+import { academicCouncilHash } from "@/lib/home/home-link-targets";
 
 const PILLARS = [
   {
     title: "NEP 2020",
     subtitle: "Policy & Implementation",
     color: "from-brand-blue to-brand-blue-light",
-    href: "/introduction",
+    href: ROUTES.introduction,
   },
   {
     title: "Research",
     subtitle: "Papers & Proceedings",
     color: "from-brand-saffron to-brand-saffron-dark",
-    href: "/proceedings",
+    href: "/publications",
   },
   {
     title: "Olympiads",
     subtitle: "Talent & Excellence",
     color: "from-brand-emerald to-emerald-600",
-    href: ROUTES.registration,
+    href: academicCouncilHash("olympiad"),
   },
   {
     title: "Conclaves",
     subtitle: "7 Thematic Forums",
     color: "from-brand-violet to-brand-violet-light",
-    href: "/departments/academic-council#conclave",
+    href: academicCouncilHash("conclave"),
   },
 ];
 

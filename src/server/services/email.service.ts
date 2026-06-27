@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import type { EmailLogStatus } from "@prisma/client";
+import { SITE_URL } from "@/config/site";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { EVENT_NAME } from "@/types/registration";
@@ -115,10 +116,14 @@ function getTransporter() {
   });
 }
 
+function participantPortalHtml(): string {
+  return `<p style="margin-top:16px"><a href="${SITE_URL}/dashboard">View your registration (Participant Portal)</a> — download receipts, badges, and update your profile using your registration ID and email.</p>`;
+}
+
 function buildHtml(template: EmailTemplate, data: Record<string, string>) {
   switch (template) {
     case "registration_confirmation":
-      return `<p>Dear ${data.fullName},</p><p>Your registration for ${EVENT_NAME} is confirmed.</p><p>Registration ID: <strong>${data.registrationId}</strong></p>`;
+      return `<p>Dear ${data.fullName},</p><p>Your registration for ${EVENT_NAME} is confirmed.</p><p>Registration ID: <strong>${data.registrationId}</strong></p>${participantPortalHtml()}`;
     case "registration_complete":
       return `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b">
         <p>Dear ${data.fullName},</p>
@@ -130,7 +135,8 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
           <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>` : ""}
         </table>
         ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">Download receipt online</a></p>` : ""}
-        <p style="margin-top:16px">Your receipt PDF is attached. Please bring your registration number to the event venue for check-in.</p>
+        ${participantPortalHtml()}
+        <p style="margin-top:16px">Your receipt PDF is attached when applicable. Please bring your registration number to the event venue for check-in.</p>
         <p>Regards,<br/>${EVENT_NAME} Team</p>
       </div>`;
     case "payment_confirmation":
@@ -144,6 +150,7 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
           <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>
         </table>
         ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">Download receipt online</a></p>` : ""}
+        ${participantPortalHtml()}
         <p style="margin-top:16px">Please bring your registration number to the event venue for check-in.</p>
         <p>Regards,<br/>${EVENT_NAME} Team</p>
       </div>`;

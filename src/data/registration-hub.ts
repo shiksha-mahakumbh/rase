@@ -33,6 +33,7 @@ export const REGISTRATION_BREADCRUMBS = [
 export const REGISTRATION_QUICK_LINKS = [
   { label: "Academic Council", href: CANONICAL_ROUTES.departments.academicCouncil, icon: "🎓" },
   { label: "Edition Brochures", href: CANONICAL_ROUTES.downloads, icon: "📄" },
+  { label: "My Registration", href: "/dashboard", icon: "🪪" },
   { label: "Organising Committee", href: committeePathForEdition("6.0"), icon: "👥" },
   { label: "Upcoming Events", href: CANONICAL_ROUTES.upcomingEvents, icon: "🗓️" },
   { label: "Contact DHE", href: CANONICAL_ROUTES.contact, icon: "📞" },

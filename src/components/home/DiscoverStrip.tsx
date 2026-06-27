@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
@@ -8,18 +7,11 @@ import type { DiscoverContent, DiscoverInsight } from "@/lib/home/build-home-sec
 function InsightCard({ item }: { item: DiscoverInsight }) {
   const inner = (
     <>
-      <div className={`relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${item.accent}`}>
-        <Image
-          src={item.imageSrc}
-          alt={item.imageAlt}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          loading="lazy"
-          className="object-cover transition duration-300 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/50 via-transparent to-transparent" />
+      <div
+        className={`relative flex min-h-[5.5rem] items-end overflow-hidden rounded-t-2xl bg-gradient-to-br ${item.accent} p-5`}
+      >
         <span
-          className={`absolute bottom-4 left-4 rounded-full px-2.5 py-0.5 text-xs font-bold text-white ${item.tagBg}`}
+          className={`rounded-full px-2.5 py-0.5 text-xs font-bold text-white ${item.tagBg}`}
         >
           {item.tag}
         </span>

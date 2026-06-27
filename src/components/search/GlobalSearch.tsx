@@ -45,7 +45,7 @@ export default function GlobalSearch({ compact = false }: GlobalSearchProps) {
         onKeyDown={(e) => {
           if (e.key === "Escape") setOpen(false);
         }}
-        className={`min-h-[40px] rounded-lg border border-slate-200 px-3 text-sm ${compact ? "w-28" : "w-32 xl:w-44"}`}
+        className={`min-h-[40px] rounded-lg border border-slate-200 px-3 text-sm ${compact ? "w-36 min-w-[9rem] sm:w-44" : "w-32 xl:w-44"}`}
         aria-controls={open ? "global-search-results" : undefined}
       />
 
