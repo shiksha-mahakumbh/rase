@@ -116,17 +116,17 @@ export default function HeroSection({ content }: { content: HeroContent }) {
           </div>
 
           <div className="order-1 lg:order-2">
-            <div className="relative mx-auto max-w-lg lg:max-w-none">
+            <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
               <div
                 className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-brand-saffron/30 via-white to-brand-blue/20 blur-sm"
                 aria-hidden
               />
-              <div className="relative overflow-hidden rounded-2xl border-2 border-white bg-white p-2 shadow-[0_20px_60px_rgba(255,153,51,0.18)]">
-                <div className="relative aspect-[4/3] w-full">
+              <div className="relative rounded-2xl border-2 border-white bg-white p-3 shadow-[0_20px_60px_rgba(255,153,51,0.18)]">
+                <div className="relative aspect-[1024/534] w-full">
                   <HeroLcpImage
                     src={heroImage}
                     alt="Shiksha Mahakumbh Abhiyan — Department of Holistic Education"
-                    className="absolute inset-0 h-full w-full rounded-xl object-contain"
+                    className="absolute inset-0 h-full w-full rounded-xl"
                   />
                 </div>
               </div>
