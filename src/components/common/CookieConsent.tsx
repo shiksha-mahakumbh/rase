@@ -14,7 +14,7 @@ import {
   setAnalyticsConsent,
 } from "@/lib/cookie-consent";
 
-const COOKIE_DEFER_MS = 18_000;
+const COOKIE_DEFER_MS = 8_000;
 
 export default function CookieConsent() {
   const pathname = usePathname();
@@ -37,7 +37,20 @@ export default function CookieConsent() {
 
     const onModalClosed = () => show();
     window.addEventListener(WELCOME_MODAL_CLOSED_EVENT, onModalClosed);
-    const fallback = window.setTimeout(show, COOKIE_DEFER_MS);
+
+    const armFallback = () => window.setTimeout(show, COOKIE_DEFER_MS);
+    let fallback = 0;
+    if (typeof requestIdleCallback !== "undefined") {
+      const idleId = requestIdleCallback(() => {
+        fallback = armFallback();
+      }, { timeout: COOKIE_DEFER_MS });
+      return () => {
+        window.removeEventListener(WELCOME_MODAL_CLOSED_EVENT, onModalClosed);
+        cancelIdleCallback(idleId);
+        if (fallback) window.clearTimeout(fallback);
+      };
+    }
+    fallback = armFallback();
 
     return () => {
       window.removeEventListener(WELCOME_MODAL_CLOSED_EVENT, onModalClosed);

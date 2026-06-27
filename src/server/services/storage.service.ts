@@ -3,6 +3,7 @@ import { prisma } from "@/server/db/prisma";
 import { getSupabaseAdmin } from "@/server/db/supabase";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
+import { assertFileMagicBytes } from "@/lib/security/file-validation";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 
@@ -90,9 +91,28 @@ export function validateUploadFile(file: {
   }
 }
 
-/** Placeholder hook for future virus scanning integration */
-export async function virusScanHook(_file: Buffer, _fileName: string): Promise<void> {
-  // Integrate ClamAV / third-party scanner in Phase 11
+/** Pre-upload validation hook — extend with ClamAV when available. */
+export async function virusScanHook(file: Buffer, fileName: string): Promise<void> {
+  assertFileMagicBytes(file, fileName);
+  if (process.env.CLAMAV_SCAN_URL) {
+    try {
+      const res = await fetch(process.env.CLAMAV_SCAN_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/octet-stream", "X-Filename": fileName },
+        body: file,
+      });
+      if (!res.ok) {
+        throw new ServiceError("Virus scan failed", 503, "SCAN_UNAVAILABLE");
+      }
+      const result = (await res.json()) as { clean?: boolean };
+      if (result.clean === false) {
+        throw new ServiceError("File rejected by virus scan", 400, "FILE_INFECTED");
+      }
+    } catch (error) {
+      if (error instanceof ServiceError) throw error;
+      console.error("[virusScanHook] external scanner unavailable:", error);
+    }
+  }
 }
 
 export async function uploadFile(options: {

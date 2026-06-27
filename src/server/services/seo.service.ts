@@ -221,6 +221,16 @@ export async function getSeoForEntity(
   });
 }
 
+/** Resolve SEO metadata for a published CMS page slug (P3-14). */
+export async function getSeoForPageSlug(slug: string, locale: ContentLocale = "en") {
+  const page = await prisma.page.findFirst({
+    where: { slug, locale, status: "published", deletedAt: null },
+    select: { id: true },
+  });
+  if (!page) return null;
+  return getSeoForEntity("page", page.id, locale);
+}
+
 export async function getSitemapEntries(locale?: ContentLocale) {
   const where: Prisma.SeoMetadataWhereInput = {
     sitemapInclude: true,
