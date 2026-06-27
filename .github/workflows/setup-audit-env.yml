@@ -1,0 +1,37 @@
+name: Setup Audit Production Env
+
+on:
+  workflow_dispatch:
+
+jobs:
+  vercel-env:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_0PYXWQMwAV9fPWOTuxk54H9K
+      VERCEL_PROJECT_ID: prj_k6YZpm35GqkuZcYOohnXVTM0Uy9f
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@54
+
+      - name: Push audit env vars to Vercel production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_RASE }}
+        run: node scripts/setup-audit-vercel-env.mjs
+
+      - name: Production health check
+        run: |
+          sleep 30
+          curl -sf "https://www.rase.co.in/api/v2/health" | node -e "
+            let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{
+              const j=JSON.parse(d);
+              console.log(JSON.stringify(j.ops,null,2));
+              const ok=j.ops?.cronConfigured&&j.ops?.emailSecretConfigured;
+              if(!ok) process.exit(1);
+            });"
