@@ -23,6 +23,7 @@
     "verify:env": "node scripts/verify-env.mjs",
     "setup:vercel:audit": "node scripts/setup-audit-vercel-env.mjs",
     "setup:vercel:complete": "node scripts/complete-vercel-setup.mjs",
+    "setup:sentry": "node scripts/install-sentry-vercel.mjs",
     "predeploy:check": "node scripts/pre-deploy-check.mjs",
     "check:legacy-urls": "node scripts/check-legacy-storage-urls.mjs",
     "audit:firebase-removal": "node scripts/firebase-removal-audit.mjs",

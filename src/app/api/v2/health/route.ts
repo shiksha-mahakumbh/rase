@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isSentryConfigured } from "@/lib/monitoring/sentry-env";
 import { isUpstashConfigured } from "@/lib/security/upstash-env";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ export async function GET() {
   }
 
   const upstashConfigured = isUpstashConfigured();
-  const sentryConfigured = Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN);
+  const sentryConfigured = isSentryConfigured();
   const cronConfigured = Boolean(process.env.CRON_SECRET);
   const emailSecretConfigured = Boolean(process.env.REGISTRATION_EMAIL_SECRET);
 
