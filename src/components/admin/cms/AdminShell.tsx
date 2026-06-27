@@ -116,7 +116,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         >
           {sidebar}
         </aside>
-        <main className="min-w-0 flex-1 p-4 md:p-6 lg:p-8">{children}</main>
+        <main id="main-content" className="min-w-0 flex-1 p-4 md:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );
