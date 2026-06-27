@@ -87,6 +87,12 @@ const tests = [
       res.ok && /faq|question|answer|सामान्य/i.test(text) ? null : `HTTP ${res.status}`,
   },
   {
+    name: "locale-hi-home",
+    path: "/hi",
+    assert: async (res, text) =>
+      res.ok && text.length > 500 ? null : `HTTP ${res.status} or empty`,
+  },
+  {
     name: "locale-hi-introduction",
     path: "/hi/introduction",
     assert: async (res, text) =>

@@ -24,8 +24,11 @@ function withDocumentLang(response: NextResponse, pathname: string): NextRespons
 }
 
 function shouldRunIntlMiddleware(pathname: string): boolean {
-  // Let App Router serve app/[locale]/contact-us directly (intl middleware 404s this path).
-  if (/^\/(hi|fr|es|ar)\/contact-us(\/|$)/.test(pathname)) {
+  // Static app/hi/* routes (incl. /hi homepage) — skip intl rewrite.
+  if (pathname === "/hi" || pathname.startsWith("/hi/")) {
+    return false;
+  }
+  if (/^\/(fr|es|ar)\/contact-us(\/|$)/.test(pathname)) {
     return false;
   }
   return NON_DEFAULT_LOCALE_PREFIX.test(pathname);
