@@ -52,6 +52,13 @@ export const ABOUT_NAV_GROUPS: MenuGroup[] = [
   },
 ];
 
+export const MOBILE_QUICK_LINKS = [
+  { path: "/noticeboard", title: "Notice Board" },
+  { path: "/workshops", title: "Workshops" },
+  { path: ROUTES.downloads, title: "Brochures" },
+  { path: ROUTES.donation, title: "Donation" },
+] as const;
+
 /** Top-level participate links — also merged into CMS header menus when missing. */
 export const PARTICIPATE_NAV_ITEMS: Menu[] = [
   { path: ROUTES.dashboard, title: "My Registration" },
@@ -71,12 +78,10 @@ export const NAV_MENUS: Menu[] = [
     path: ROUTES.home,
     title: "Research",
     subMenu: [
-      { path: "https://pub.dhe.org.in", title: "Journal" },
-      { path: CMT_SUBMIT_PATH, title: "Multi Track Conference" },
+      { path: CMT_SUBMIT_PATH, title: "Submit Paper (CMT)" },
       { path: "/proceedings", title: "Proceedings" },
       { path: "/publications", title: "Publications" },
-      { path: "/books", title: "Books" },
-      { path: "/publications/souvenir-abstracts-mtc", title: "Souvenir" },
+      { path: "https://pub.dhe.org.in", title: "Journal" },
     ],
   },
   {

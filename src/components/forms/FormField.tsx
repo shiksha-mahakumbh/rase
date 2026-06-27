@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FieldErrors, FieldValues, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { formClasses } from "@/components/forms/formClasses";
 import RazorpayCheckout from "@/components/payments/RazorpayCheckout";
@@ -266,6 +267,19 @@ export function PaymentBlock({
       {showPayButton && !amount && (
         <p className="text-sm text-slate-600">
           No registration fee for this category. Proceed to submit.
+        </p>
+      )}
+      {typeof fee === "number" && fee > 0 && (
+        <p className="mt-3 text-xs text-slate-500">
+          Paid registrations are generally non-refundable once confirmed. See our{" "}
+          <Link href="/refund-policy" className="font-semibold text-brand-navy underline">
+            refund policy
+          </Link>
+          . Need help?{" "}
+          <Link href="/contact-us" className="font-semibold text-brand-navy underline">
+            Contact us
+          </Link>
+          .
         </p>
       )}
     </div>

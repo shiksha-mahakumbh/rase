@@ -3,6 +3,7 @@ import { SITE_URL } from "@/config/site";
 import { CMT_SUBMIT_PATH } from "@/lib/registration/config";
 import { committeePathForEdition } from "@/lib/committee/edition-slugs";
 import { event } from "@/design/tokens";
+import type { RegistrationType } from "@/types/registration";
 
 export const REGISTRATION_PATH = CANONICAL_ROUTES.registration;
 
@@ -30,9 +31,47 @@ export const REGISTRATION_BREADCRUMBS = [
   { name: "Register", path: REGISTRATION_PATH },
 ] as const;
 
+/** Step-1 category groupings — reduces choice paralysis on the registration hub. */
+export const REGISTRATION_CATEGORY_GROUPS: {
+  title: string;
+  hint: string;
+  types: RegistrationType[];
+  recommended?: boolean;
+}[] = [
+  {
+    title: "Most participants",
+    hint: "Faculty, students, and institutional delegates attending SMK 6.0",
+    types: ["Delegate Registration"],
+    recommended: true,
+  },
+  {
+    title: "Programme tracks",
+    hint: "Free on-site forms — conclaves, awards, olympiad, exhibitions, and more",
+    types: [
+      "Conclave",
+      "Awards",
+      "Olympiad",
+      "Exhibition",
+      "Best Practices",
+      "Bal Shodh Patrika",
+      "Cultural Program",
+    ],
+  },
+  {
+    title: "Paid add-ons",
+    hint: "Project displays and accommodation for event dates",
+    types: ["Projects", "Accommodation"],
+  },
+  {
+    title: "Research papers",
+    hint: "Secure on-site page before Microsoft CMT (opens 30 June 2026)",
+    types: ["Multi Track Conference"],
+  },
+];
+
 export const REGISTRATION_QUICK_LINKS = [
+  { label: "Edition Brochures", href: `${CANONICAL_ROUTES.downloads}#edition-brochures`, icon: "📄" },
   { label: "Academic Council", href: CANONICAL_ROUTES.departments.academicCouncil, icon: "🎓" },
-  { label: "Edition Brochures", href: CANONICAL_ROUTES.downloads, icon: "📄" },
   { label: "My Registration", href: "/dashboard", icon: "🪪" },
   { label: "Organising Committee", href: committeePathForEdition("6.0"), icon: "👥" },
   { label: "Upcoming Events", href: CANONICAL_ROUTES.upcomingEvents, icon: "🗓️" },
@@ -43,7 +82,8 @@ export const REGISTRATION_QUICK_LINKS = [
 export const REGISTRATION_SUCCESS_LINKS = [
   { label: "My registration portal", href: "/dashboard" },
   { label: "Academic Council programmes", href: CANONICAL_ROUTES.departments.academicCouncil },
-  { label: "Edition 6.0 brochure", href: CANONICAL_ROUTES.downloads },
+  { label: "Edition 6.0 brochure", href: `${CANONICAL_ROUTES.downloads}#edition-brochures` },
+  { label: "Official merchandise", href: CANONICAL_ROUTES.merchandise },
   { label: "Organising committee", href: committeePathForEdition("6.0") },
   { label: "Prabandhan (logistics)", href: CANONICAL_ROUTES.departments.prabandhan },
 ] as const;

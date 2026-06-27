@@ -275,7 +275,12 @@ function RegistrationHubInner() {
             )}
             {showPaymentStep && step === 3 && (
               <p className="text-sm text-slate-600">
-                Complete payment and submit your registration.
+                Complete payment and submit your registration. Paid registrations are
+                generally non-refundable once confirmed — see the{" "}
+                <a href="/refund-policy" className="font-semibold text-brand-saffron underline">
+                  refund policy
+                </a>
+                .
               </p>
             )}
 

@@ -117,10 +117,10 @@ const Merchandise = () => {
                 </p>
                 <div className="mt-4 text-center">
                   <Link
-                    href="/coming-soon"
+                    href={`/contact-us?subject=${encodeURIComponent(`Merchandise: ${item.title}`)}`}
                     className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-saffron px-8 py-3 font-bold text-brand-navy transition hover:bg-brand-saffron-dark"
                   >
-                    Buy Now
+                    Order via Contact
                   </Link>
                 </div>
               </div>

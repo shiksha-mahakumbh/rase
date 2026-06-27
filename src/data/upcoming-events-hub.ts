@@ -53,8 +53,8 @@ export const UPCOMING_EVENTS: UpcomingEventCard[] = [
     venue: "IIT Jammu",
     venueFull: "Indian Institute of Technology Jammu",
     status: "announced",
-    registrationHref: CANONICAL_ROUTES.comingSoon,
-    ctaLabel: "Coming Soon",
+    registrationHref: `${CANONICAL_ROUTES.upcomingEvents}#smk-7-0`,
+    ctaLabel: "Details forthcoming",
     description:
       "The next national edition of Shiksha Mahakumbh Abhiyan at IIT Jammu. Dates and registration will be announced soon.",
     highlight: "Edition 7.0 — programme details forthcoming",
@@ -78,7 +78,7 @@ export const UPCOMING_EVENTS_PAGE_HERO = {
   eyebrow: "Programmes · Global Education Movement",
   title: "Shiksha Mahakumbh 6.0 & Beyond",
   subtitle:
-    "Register for Shiksha Mahakumbh 6.0 at NIT Hamirpur (9–11 October 2026). Edition 7.0 at IIT Jammu — dates to be announced.",
+    "Register for Shiksha Mahakumbh 6.0 at NIT Hamirpur (9–11 October 2026). Future editions will be announced here.",
 } as const;
 
 export const UPCOMING_EVENTS_STATS = [

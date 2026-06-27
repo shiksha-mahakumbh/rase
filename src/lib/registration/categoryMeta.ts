@@ -115,3 +115,26 @@ const META: Record<RegistrationType, CategoryMeta> = {
 export function getCategoryMeta(type: RegistrationType): CategoryMeta {
   return META[type];
 }
+
+export type FeeBadgeTone = "free" | "paid" | "external" | "variable";
+
+const FEE_BADGES: Record<RegistrationType, { label: string; tone: FeeBadgeTone }> = {
+  "Delegate Registration": { label: "₹0–₹8000", tone: "variable" },
+  "Multi Track Conference": { label: "External · CMT", tone: "external" },
+  Conclave: { label: "Free", tone: "free" },
+  "Best Practices": { label: "Free", tone: "free" },
+  Olympiad: { label: "₹200 / student", tone: "paid" },
+  Awards: { label: "Free", tone: "free" },
+  Exhibition: { label: "Free", tone: "free" },
+  Projects: { label: "₹200–₹400", tone: "paid" },
+  "Bal Shodh Patrika": { label: "Free", tone: "free" },
+  "Cultural Program": { label: "Free", tone: "free" },
+  Accommodation: { label: "Paid · lodging", tone: "paid" },
+};
+
+export function getCategoryFeeBadge(type: RegistrationType): {
+  label: string;
+  tone: FeeBadgeTone;
+} {
+  return FEE_BADGES[type];
+}

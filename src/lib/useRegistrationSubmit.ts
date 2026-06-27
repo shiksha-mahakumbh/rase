@@ -191,10 +191,12 @@ export function useRegistrationSubmit() {
       router.push(`/registration/success?${successParams.toString()}`);
     } catch (error) {
       console.error(error);
-      toast.error(
+      const message =
         error instanceof Error
           ? error.message
-          : "Registration failed. Please try again."
+          : "Registration failed. Please try again.";
+      toast.error(
+        `${message} Need help? Contact us at /contact-us or email academics@shikshamahakumbh.com.`
       );
     } finally {
       setLoading(false);

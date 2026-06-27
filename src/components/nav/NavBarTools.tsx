@@ -6,7 +6,7 @@ const GlobalSearch = dynamic(() => import("@/components/search/GlobalSearch"), {
   ssr: false,
   loading: () => (
     <div
-      className="hidden h-10 w-32 shrink-0 rounded-lg bg-slate-100 xl:block xl:w-44"
+      className="hidden h-10 w-32 shrink-0 rounded-lg bg-slate-100 lg:block lg:w-44"
       aria-hidden="true"
     />
   ),

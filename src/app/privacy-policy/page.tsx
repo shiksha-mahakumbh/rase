@@ -19,6 +19,11 @@ export default async function PrivacyPolicyPage() {
     "privacy-policy",
     <LegalPageShell title="Privacy Policy" path="/privacy-policy">
       <p>Last updated: May 2026</p>
+      <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+        This policy is maintained by the organizing team. For legal queries or
+        institutional review requests, contact{" "}
+        <a href="mailto:academics@shikshamahakumbh.com">academics@shikshamahakumbh.com</a>.
+      </p>
       <h2>Information we collect</h2>
       <p>
         When you register for Shiksha Mahakumbh events, we collect information you
