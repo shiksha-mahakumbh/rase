@@ -76,9 +76,17 @@ if (!skipIntegrations) {
       "preview",
       "-n",
       "rase-monitoring",
+      "--plan",
+      "am3_f",
+      "-m",
+      "platform=javascript-nextjs",
+      "-m",
+      "region=us",
+      "-m",
+      "name=rase-co-in",
       "--non-interactive",
     ],
-    "Install Sentry"
+    "Install Sentry (Developer free plan)"
   );
 }
 
