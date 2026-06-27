@@ -86,6 +86,10 @@ export const REGISTRATION_FAQ = [
     answer: `Authors submit via the official Microsoft CMT portal (${CMT_SUBMIT_PATH}).`,
   },
   {
+    question: "How do I access my registration after signing up?",
+    answer: `Use the Participant Portal at ${SITE_URL}/dashboard with your registration ID and the email you used during registration. Download receipts, badges, and update your profile there.`,
+  },
+  {
     question: "Which categories require payment?",
     answer:
       "Delegate registration may require payment depending on category and fee. Projects and Accommodation use the paid registration flow. Conclave, Olympiad, Awards, Exhibition, Best Practices, Bal Shodh Patrika, and Cultural Program are free on-site forms unless otherwise noted.",
