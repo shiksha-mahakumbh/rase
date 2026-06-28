@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SITE_URL } from "@/config/site";
+import { purgePublicPageCaches } from "@/lib/cache/purge-public-pages";
 
 export const dynamic = "force-dynamic";
 
 const WARM_PATHS = ["/", "/hi", "/hi/introduction", "/registration", "/upcoming-events"];
 
-/** Cron: warm ISR cache for high-traffic public routes (especially /hi). */
-export async function GET(request: NextRequest) {
+function authorizeCron(request: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
   const auth = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  if (!secret || auth !== secret) {
+  return Boolean(secret && auth === secret);
+}
+
+/** Cron: purge ISR/CMS caches then warm high-traffic public routes. */
+export async function GET(request: NextRequest) {
+  if (!authorizeCron(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  purgePublicPageCaches();
 
   const base = SITE_URL.replace(/\/$/, "");
   const results: Array<{ path: string; status: number | "error" }> = [];
@@ -28,5 +35,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ ok: true, warmed: results });
+  return NextResponse.json({ ok: true, purged: true, warmed: results });
 }

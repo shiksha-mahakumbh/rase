@@ -43,3 +43,26 @@ jobs:
           fi
           echo "::error::Set VERCEL_TOKEN or VERCEL_DEPLOY_HOOK in repo Actions secrets. See .github/DEPLOY_SECRETS.md"
           exit 1
+
+      - name: Purge ISR and warm homepage cache
+        if: success()
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SITE_URL: https://www.rase.co.in
+        run: |
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "::warning::CRON_SECRET not set — skip post-deploy cache purge"
+            exit 0
+          fi
+          echo "Waiting for Vercel production to become ready…"
+          sleep 120
+          for attempt in 1 2 3 4 5; do
+            if curl -fsS -H "Authorization: Bearer ${CRON_SECRET}" "${SITE_URL}/api/cron/warm-cache"; then
+              echo ""
+              echo "Cache purged and warmed."
+              exit 0
+            fi
+            echo "Warm-cache attempt ${attempt} failed — retry in 30s"
+            sleep 30
+          done
+          echo "::warning::Post-deploy cache purge did not succeed — run warm-cache manually"
