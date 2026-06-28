@@ -235,5 +235,6 @@ function mapUploadedFiles(uploaded: Record<string, unknown>) {
   if (uploaded.recommendationLetter)
     mapped.recommendationLetter = uploaded.recommendationLetter;
   if (uploaded.studentList) mapped.studentList = uploaded.studentList;
+  if (uploaded.studentIdCard) mapped.studentIdCard = uploaded.studentIdCard;
   return mapped;
 }

@@ -5,7 +5,7 @@ import {
   PROJECT_COLLEGE_STUDENT_FEE,
   PROJECT_SCHOOL_STUDENT_FEE,
 } from "@/lib/registration/fees";
-import { DELEGATE_FEES } from "@/types/registration";
+import { DELEGATE_FEES } from "@/lib/registration/delegate-categories";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
 
 export type CategoryMeta = {
@@ -26,8 +26,12 @@ const META: Record<RegistrationType, CategoryMeta> = {
       "Complete all participant details before payment.",
     ],
     eligibility: ["Faculty", "Students", "Principals", "Researchers", "Industry professionals"],
-    fee: `Student: Free · Teacher: ₹${DELEGATE_FEES["Teacher (₹1000)"]} · Principal/Scholar: ₹2000 · Director/VC: ₹3000 · Industry: ₹8000`,
-    documentsRequired: ["Payment receipt for paid categories", "PAN (if fee ≥ ₹2000)"],
+    fee: `Student: Free · Teacher/Principal: ₹${DELEGATE_FEES["Teacher (₹1100)"]} · Research Scholar: ₹${DELEGATE_FEES["Research Scholar (₹251)"]} · Director/VC: ₹${DELEGATE_FEES["Director / VC / Chairperson (₹2100)"]} · Industry: ₹${DELEGATE_FEES["Industry Delegate (₹5100)"]}`,
+    documentsRequired: [
+      "Student ID card for free student category",
+      "Payment receipt for paid categories",
+      "PAN (if fee ≥ ₹2000)",
+    ],
     importantNotes: ["Keep your registration ID for check-in", "Fee varies by category"],
   },
   "Multi Track Conference": {
@@ -119,7 +123,7 @@ export function getCategoryMeta(type: RegistrationType): CategoryMeta {
 export type FeeBadgeTone = "free" | "paid" | "external" | "variable";
 
 const FEE_BADGES: Record<RegistrationType, { label: string; tone: FeeBadgeTone }> = {
-  "Delegate Registration": { label: "₹0–₹8000", tone: "variable" },
+  "Delegate Registration": { label: "₹0–₹5100", tone: "variable" },
   "Multi Track Conference": { label: "External · CMT", tone: "external" },
   Conclave: { label: "Free", tone: "free" },
   "Best Practices": { label: "Free", tone: "free" },

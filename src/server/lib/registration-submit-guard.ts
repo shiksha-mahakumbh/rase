@@ -1,5 +1,6 @@
 import { normalizePhoneInput, validatePanForAmount } from "@/lib/registration/validation";
 import { resolveRegistrationFee } from "@/lib/registration/fees";
+import { validateDelegateRegistrationPayload } from "@/lib/registration/delegate-categories";
 import type { PaymentStatus, RegistrationType } from "@/types/registration";
 import { assertVerifiedPaymentForSubmit } from "@/server/services/razorpay-verified.service";
 import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
@@ -86,6 +87,13 @@ export async function guardRegistrationSubmit(input: {
       400,
       "FEE_MISMATCH"
     );
+  }
+
+  if (type === "Delegate Registration") {
+    const delegateErr = validateDelegateRegistrationPayload(data);
+    if (delegateErr) {
+      throw new ServiceError(delegateErr, 400, "INVALID_DELEGATE_DATA");
+    }
   }
 
   const panErr = validatePanForAmount(

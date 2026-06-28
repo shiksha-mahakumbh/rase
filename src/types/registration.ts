@@ -118,11 +118,11 @@ export interface DelegateRegistrationData extends BaseRegistration {
   registrationType: "Delegate Registration";
   delegateCategory:
     | "Student (Free)"
-    | "Teacher (₹1000)"
-    | "Principal (₹2000)"
-    | "Research Scholar (₹2000)"
-    | "Director / VC / Chairperson (₹3000)"
-    | "Industry Delegate (₹8000)";
+    | "Teacher (₹1100)"
+    | "Principal (₹1100)"
+    | "Research Scholar (₹251)"
+    | "Director / VC / Chairperson (₹2100)"
+    | "Industry Delegate (₹5100)";
   registrationFee: number;
 }
 
@@ -257,14 +257,8 @@ export const TYPE_COLLECTION_MAP: Record<RegistrationType, string> = {
   "Cultural Program": "registrations",
 };
 
-export const DELEGATE_FEES: Record<string, number> = {
-  "Student (Free)": 0,
-  "Teacher (₹1000)": 1000,
-  "Principal (₹2000)": 2000,
-  "Research Scholar (₹2000)": 2000,
-  "Director / VC / Chairperson (₹3000)": 3000,
-  "Industry Delegate (₹8000)": 8000,
-};
+export { DELEGATE_FEES } from "@/lib/registration/delegate-categories";
+export type { DelegateCategory } from "@/lib/registration/delegate-categories";
 
 export const OLYMPIAD_FEE_PER_STUDENT = 200;
 
