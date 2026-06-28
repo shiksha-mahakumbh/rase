@@ -57,7 +57,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
   return (
     <section
       aria-label="Shiksha Mahakumbh hero"
-      className="brand-hero-bg relative min-h-[38rem] overflow-hidden sm:min-h-[40rem] lg:min-h-[30rem]"
+      className="brand-hero-bg relative min-h-[83rem] overflow-hidden md:min-h-[42rem] lg:min-h-[30rem]"
     >
       <div
         className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-brand-saffron/15 blur-3xl"
@@ -80,7 +80,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               {badge}
             </span>
 
-            <h1 className="mt-5 min-h-[5.5rem] font-devanagari text-3xl font-extrabold leading-tight sm:min-h-[6rem] sm:text-4xl md:min-h-[6.5rem] md:text-5xl">
+            <h1 className="mt-5 min-h-[8rem] font-devanagari text-3xl font-extrabold leading-tight sm:min-h-[8.5rem] sm:text-4xl md:min-h-[6.5rem] md:text-5xl">
               {headline.includes("महाकुंभ") ? (
                 <span className="text-brand-navy">{headline}</span>
               ) : (
