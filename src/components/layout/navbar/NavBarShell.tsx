@@ -5,8 +5,9 @@ import type { CmsMenu } from "@/lib/cms/types";
 import NavBrandBlock from "@/components/layout/navbar/NavBrandBlock";
 import { NavShellLink } from "@/components/layout/navbar/NavShellLink";
 import { getMenuIcon, NavChevronIcon } from "@/components/layout/navbar/NavMenuIcons";
-import NavBarMobileActions from "@/components/layout/navbar/NavBarMobileActions";
-import NavBarToolsDeferred from "@/components/nav/NavBarToolsDeferred";
+import NavLanguageLinks from "@/components/layout/navbar/NavLanguageLinks";
+import NavBarSearchDeferred from "@/components/layout/navbar/NavBarSearchDeferred";
+import NavBarMobileMenuDeferred from "@/components/layout/navbar/NavBarMobileMenuDeferred";
 import NavBarScrollEnhance from "@/components/layout/navbar/NavBarScrollEnhance";
 
 type Props = {
@@ -194,17 +195,20 @@ export default function NavBarShell({ menus }: Props) {
           })}
         </nav>
 
-        <NavBarToolsDeferred visibility="desktop" />
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
+          <NavBarSearchDeferred />
+          <NavLanguageLinks />
+        </div>
 
         <div className="flex min-w-[14.5rem] shrink-0 items-center gap-1.5 sm:min-w-[15.5rem] sm:gap-2 lg:hidden">
-          <NavBarMobileActions menus={mobileMenus}>
-            <NavShellLink
-              href={CTA_PATH}
-              className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
-            >
-              Register
-            </NavShellLink>
-          </NavBarMobileActions>
+          <NavLanguageLinks className="flex lg:hidden" />
+          <NavShellLink
+            href={CTA_PATH}
+            className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
+          >
+            Register
+          </NavShellLink>
+          <NavBarMobileMenuDeferred menus={mobileMenus} />
         </div>
       </div>
     </header>

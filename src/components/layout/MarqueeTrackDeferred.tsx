@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import type { TickerItem } from "@/data/default-announcements";
-import { scheduleAfterLcp } from "@/lib/perf/schedule-after-lcp";
 import { TickerChip } from "./TickerChip";
 
 const MarqueeTrack = dynamic(() => import("./MarqueeTrack"), { ssr: false });
@@ -26,7 +25,13 @@ export default function MarqueeTrackDeferred({ items }: { items: readonly Ticker
   const [animated, setAnimated] = useState(false);
 
   useEffect(() => {
-    return scheduleAfterLcp(() => setAnimated(true), { bufferMs: 600, fallbackMs: 8000 });
+    const arm = () => setAnimated(true);
+    if (typeof requestIdleCallback !== "undefined") {
+      const id = requestIdleCallback(arm, { timeout: 3500 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(arm, 2000);
+    return () => window.clearTimeout(t);
   }, []);
 
   if (!animated) {
