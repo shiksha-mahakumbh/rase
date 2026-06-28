@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import type { ReactNode } from "react";
-import { scheduleAfterLcp } from "@/lib/perf/schedule-after-lcp";
 
 type LazySectionProps = {
   children: ReactNode;
@@ -27,7 +26,13 @@ export default function LazySection({
 
   useEffect(() => {
     if (!idleFirst) return;
-    return scheduleAfterLcp(() => setArmed(true), { bufferMs: 500, fallbackMs: 9000 });
+    const arm = () => setArmed(true);
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(arm, { timeout: 3500 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const t = setTimeout(arm, 2000);
+    return () => clearTimeout(t);
   }, [idleFirst]);
 
   const { ref, inView } = useInView({

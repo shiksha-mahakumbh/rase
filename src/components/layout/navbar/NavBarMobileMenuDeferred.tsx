@@ -1,22 +1,13 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import type { Menu } from "@/components/layout/navbar/types";
 import { scheduleAfterLcp } from "@/lib/perf/schedule-after-lcp";
 
-const NavBarTools = dynamic(() => import("@/components/nav/NavBarTools"), { ssr: false });
 const NavBarMobileMenu = dynamic(() => import("@/components/layout/navbar/NavBarMobileMenu"), {
   ssr: false,
 });
-
-function MobileToolsPlaceholder() {
-  return (
-    <div className="flex items-center gap-2 lg:hidden" aria-hidden="true">
-      <div className="h-11 min-w-[7.5rem] rounded-lg border border-slate-200 bg-white" />
-    </div>
-  );
-}
 
 function HamburgerPlaceholder() {
   return (
@@ -33,35 +24,17 @@ function HamburgerPlaceholder() {
   );
 }
 
-/** Single post-LCP hydration for mobile language tools + drawer menu. */
-export default function NavBarMobileActions({
-  menus,
-  children,
-}: {
-  menus: Menu[];
-  children: ReactNode;
-}) {
+/** Mobile drawer — staggered later than search to spread main-thread work. */
+export default function NavBarMobileMenuDeferred({ menus }: { menus: Menu[] }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    return scheduleAfterLcp(() => setReady(true), { bufferMs: 400, fallbackMs: 9000 });
+    return scheduleAfterLcp(() => setReady(true), { bufferMs: 1600, fallbackMs: 11000 });
   }, []);
 
   if (!ready) {
-    return (
-      <>
-        <MobileToolsPlaceholder />
-        {children}
-        <HamburgerPlaceholder />
-      </>
-    );
+    return <HamburgerPlaceholder />;
   }
 
-  return (
-    <>
-      <NavBarTools visibility="mobile" />
-      {children}
-      <NavBarMobileMenu menus={menus} />
-    </>
-  );
+  return <NavBarMobileMenu menus={menus} />;
 }
