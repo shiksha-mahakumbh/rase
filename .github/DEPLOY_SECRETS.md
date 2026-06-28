@@ -1,6 +1,8 @@
-# GitHub Actions → Vercel production deploy
+# GitHub Actions → Vercel production deploy (manual backup)
 
-Backup deploy when Vercel Git integration is disconnected or webhooks miss pushes.
+**Primary:** Vercel Git integration deploys every push to `main` automatically.
+
+**This workflow:** manual only (`workflow_dispatch`) — use when Vercel Git missed a push or you need a redeploy without a new commit. It no longer runs on every push (avoids duplicate builds).
 
 ## Required: `VERCEL_TOKEN` **or** `VERCEL_DEPLOY_HOOK`
 
@@ -41,7 +43,7 @@ You may see harmless log noise during the Vercel build:
 
 Only treat the workflow as failed if the GitHub job exits non‑zero or the Vercel deployment shows **Error**.
 
-## Fix Vercel Git auto-deploy (recommended)
+## Fix Vercel Git auto-deploy (primary path)
 
 GitHub App on your account ≠ project linked in Vercel.
 
@@ -49,9 +51,11 @@ GitHub App on your account ≠ project linked in Vercel.
 2. [Vercel → rase-co-in → Settings → Git](https://vercel.com/dhe-projects/rase-co-in/settings/git) → **Connect** → production branch **`main`**
 3. `npx tsx scripts/verify-vercel-git.mjs` → should print ✓
 
-## Re-run failed workflow
+## Manual backup deploy
 
-[Actions → Vercel Production Deploy](https://github.com/shiksha-mahakumbh/rase/actions/workflows/vercel-production.yml) → **Run workflow**
+[Actions → Vercel Production Deploy (manual)](https://github.com/shiksha-mahakumbh/rase/actions/workflows/vercel-production.yml) → **Run workflow**
+
+Post-deploy ISR purge runs when `CRON_SECRET` is set in GitHub Actions secrets. Daily warm-cache also runs via Vercel cron (`vercel.json`).
 
 ## Production env (audit P1)
 

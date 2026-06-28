@@ -1,11 +1,8 @@
-# Production deploy on every main push (backup when Vercel GitHub App webhook misses).
-# Requires VERCEL_DEPLOY_HOOK or VERCEL_TOKEN — see .github/DEPLOY_SECRETS.md
-name: Vercel Production Deploy
+# Manual backup deploy only — Vercel Git auto-deploy on push to main is primary.
+# Run from Actions → "Run workflow" if a webhook missed. See .github/DEPLOY_SECRETS.md
+name: Vercel Production Deploy (manual)
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 concurrency:
