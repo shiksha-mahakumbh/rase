@@ -82,7 +82,7 @@ export const DONATION_IMPACT_AREAS = [
   },
 ] as const;
 
-export type DonationTierId = "supporter" | "patron" | "gold" | "platinum" | "custom";
+export type DonationTierId = "supporter" | "patron" | "champion" | "custom";
 
 export const DONATION_TIERS = [
   {
@@ -98,34 +98,32 @@ export const DONATION_TIERS = [
     name: "Patron",
     amount: 25_000,
     badge: "Patron",
-    description: "Sponsor delegate access and regional education conclaves.",
+    description: "Support delegate access and regional education conclaves.",
     highlights: ["Name on supporter wall", "80G tax receipt", "Event programme mention"],
   },
   {
-    id: "gold" as const,
-    name: "Gold Sponsor",
-    amount: 100_000,
-    badge: "Gold",
-    description: "Co-brand a summit track or thematic conclave at Shiksha Mahakumbh.",
-    highlights: ["Branding visibility", "Dedicated liaison", "80G tax receipt"],
-  },
-  {
-    id: "platinum" as const,
-    name: "Platinum Sponsor",
-    amount: 500_000,
-    badge: "Platinum",
-    description: "Lead national partnership for edition programmes and global outreach.",
-    highlights: ["Premium branding", "VIP recognition", "Custom sponsorship plan"],
+    id: "champion" as const,
+    name: "Champion",
+    amount: 50_000,
+    badge: "Champion",
+    description: "Accelerate research tracks and holistic learning programmes.",
+    highlights: ["Enhanced acknowledgement", "80G tax receipt", "Programme updates"],
   },
 ] as const;
 
 export const DONATION_MIN_AMOUNT = 100;
 
+export const DONATION_SECTION = {
+  title: "Make a Tax-Deductible Donation",
+  subtitle:
+    "Individual and institutional contributions eligible under Section 80G. Secure Razorpay payment, instant receipt by email, and download or print anytime.",
+} as const;
+
 export const DONATION_PAGE_HERO = {
   eyebrow: "Support · 80G Tax Benefit · Global Movement",
   title: "Donate & Sponsor Shiksha Mahakumbh",
   subtitle:
-    "Fuel India's national education movement — secure online payment via Razorpay, instant 80G-eligible receipt by email, and download or print your donation certificate anytime.",
+    "Two ways to support the Abhiyan — make an 80G-eligible donation for immediate tax benefit, or choose an institutional sponsorship package for SMK 6.0 branding and delegate benefits.",
 } as const;
 
 /** @deprecated Use DONATION_PAGE_HERO — kept for home section compatibility */
@@ -189,7 +187,7 @@ export const DONATION_FAQ = [
   {
     question: "What is the difference between donation and sponsorship?",
     answer:
-      "Donations are individual or institutional contributions. Sponsorships are tiered partnerships — organisation name is required for sponsorship receipts.",
+      "Donations are individual or institutional 80G contributions (from ₹100). Sponsorships are tiered SMK 6.0 partnership packages — from Banner (₹2 lakh) through Platinum (₹20 lakh) to Title Sponsor (₹1 crore) — with branding, delegate passes, exhibition space, and souvenir options as per the official sponsorship brochure.",
   },
   {
     question: "How do I get my 80G receipt?",
