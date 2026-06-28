@@ -62,7 +62,7 @@ Set in Vercel → **rase-co-in** → Settings → Environment Variables:
 | `UPSTASH_REDIS_REST_URL` | Distributed rate limits (P1-10) |
 | `UPSTASH_REDIS_REST_TOKEN` | Upstash REST auth |
 | `NEXT_PUBLIC_SENTRY_DSN` | Error monitoring (P1-12) |
-| `CRON_SECRET` | Protects `/api/cron/analytics-retention` (Vercel sends `Authorization: Bearer`) |
+| `CRON_SECRET` | Bearer for `/api/cron/*` (analytics retention, warm-cache purge) |
 
 See `docs/security/ADMIN_OPS_SECRET_ROTATION.md` for ops secret rotation.
 
@@ -75,6 +75,6 @@ Set in Vercel → **rase-co-in** → Settings → Environment Variables:
 | `UPSTASH_REDIS_REST_URL` | Distributed rate limits (P1-10) |
 | `UPSTASH_REDIS_REST_TOKEN` | Upstash REST auth |
 | `NEXT_PUBLIC_SENTRY_DSN` | Error monitoring (P1-12) |
-| `CRON_SECRET` | Bearer for `/api/cron/analytics-retention` |
+| `CRON_SECRET` | Bearer for `/api/cron/*` (analytics retention, warm-cache purge) |
 
 Rotate `ADMIN_OPS_SECRET` per `docs/security/ADMIN_OPS_SECRET_ROTATION.md`.
