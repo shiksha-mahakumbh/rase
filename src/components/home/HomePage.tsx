@@ -2,12 +2,11 @@ import { Suspense } from "react";
 import HeroSection from "./HeroSection";
 import HomeSectionNav from "./HomeSectionNav";
 import type { CmsPageData } from "@/lib/cms/types";
-import { CmsProvider } from "@/lib/cms/context";
 import SectionSkeleton from "@/components/performance/SectionSkeleton";
 import AnnouncementsMarquee from "@/components/layout/AnnouncementsMarquee";
 import NavBarShell from "@/components/layout/navbar/NavBarShell";
 import HomeBelowFold from "./HomeBelowFold";
-import HomeWelcomeModalDeferred from "./HomeWelcomeModalDeferred";
+import HomeWelcomeModalWithCms from "./HomeWelcomeModalWithCms";
 import type { HeroContent } from "@/lib/home/build-hero-content";
 import type { HomeSectionsContent } from "@/lib/home/build-home-sections";
 import type { TickerItem } from "@/data/default-announcements";
@@ -38,18 +37,16 @@ export default function HomePage({
         <AnnouncementsMarquee items={tickerItems} />
         <HomeSectionNav />
 
-        <CmsProvider data={cmsData}>
-          <Suspense
-            fallback={
-              <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
-                <SectionSkeleton lines={6} />
-              </div>
-            }
-          >
-            <HomeBelowFold locale={locale} homeSections={homeSections} />
-          </Suspense>
-          <HomeWelcomeModalDeferred />
-        </CmsProvider>
+        <Suspense
+          fallback={
+            <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+              <SectionSkeleton lines={6} />
+            </div>
+          }
+        >
+          <HomeBelowFold locale={locale} homeSections={homeSections} />
+        </Suspense>
+        <HomeWelcomeModalWithCms cmsData={cmsData} />
       </main>
     </div>
   );
