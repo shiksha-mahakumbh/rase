@@ -247,6 +247,12 @@ export const CMS_NAV: AdminNavItem[] = [
     group: "operations",
   },
   {
+    label: "Donations",
+    href: "/admin/cms/donations",
+    description: "80G donations & sponsorships",
+    group: "operations",
+  },
+  {
     label: "Payment Recovery",
     href: "/admin/cms/payment-recovery",
     description: "Orphan payments & repair",

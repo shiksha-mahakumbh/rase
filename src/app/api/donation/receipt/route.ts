@@ -4,12 +4,26 @@ import {
   getDonationByReceiptToken,
 } from "@/server/services/donation.service";
 import { buildDonationReceiptHtml, buildDonationReceiptData } from "@/lib/receipt/donation-receipt";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { SITE_URL } from "@/config/site";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
+  const ip = getClientIp(request);
+  const limited = await rateLimitAsync({
+    key: `donation-receipt:${ip}`,
+    limit: 60,
+    windowMs: 60_000,
+  });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } }
+    );
+  }
+
   const token = request.nextUrl.searchParams.get("token");
   const format = request.nextUrl.searchParams.get("format");
 

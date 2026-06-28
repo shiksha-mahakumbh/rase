@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRazorpayClient } from "@/lib/razorpay/client.server";
 import { getRazorpayKeyId, isRazorpayConfigured } from "@/lib/razorpay/config";
+import { expectedDonationAmountPaise } from "@/lib/donation/tier-amount";
+import { DONATION_MIN_AMOUNT } from "@/data/donation-hub";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { recordVerifiedPayment } from "@/server/services/razorpay-verified.service";
 import { SITE_URL } from "@/config/site";
@@ -114,6 +116,31 @@ export async function handleCreateOrder(request: NextRequest) {
           { error: "Amount does not match registration fee for selected category" },
           { status: 400 }
         );
+      }
+    }
+
+    if (notes?.purpose === "donation") {
+      const amountRupees = amount / 100;
+      if (amountRupees < DONATION_MIN_AMOUNT) {
+        return NextResponse.json(
+          { error: `Minimum donation amount is ₹${DONATION_MIN_AMOUNT}` },
+          { status: 400 }
+        );
+      }
+      const donationKind =
+        notes.donationKind === "sponsorship" ? "sponsorship" : "donation";
+      if (notes.tierId) {
+        const expectedPaise = expectedDonationAmountPaise({
+          donationKind,
+          amountRupees,
+          tierId: notes.tierId,
+        });
+        if (expectedPaise == null || Math.abs(amount - expectedPaise) > 1) {
+          return NextResponse.json(
+            { error: "Amount does not match selected donation or sponsorship tier" },
+            { status: 400 }
+          );
+        }
       }
     }
 

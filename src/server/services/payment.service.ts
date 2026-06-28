@@ -1,6 +1,7 @@
 import type { PaymentStatus, Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
+import { handleDonationWebhookPayment } from "@/server/services/donation.service";
 import { ServiceError } from "@/server/lib/errors";
 
 /**
@@ -215,6 +216,24 @@ export async function processRazorpayWebhookEvent(body: {
   const razorpayPaymentId = paymentEntity?.id ?? null;
   const amountPaise = paymentEntity?.amount ?? orderEntity?.amount ?? null;
   const amount = amountPaise != null ? amountPaise / 100 : null;
+
+  if (notes?.purpose?.toLowerCase() === "donation") {
+    const donationResult = await handleDonationWebhookPayment({
+      orderId,
+      razorpayPaymentId,
+      notes,
+    });
+
+    if (donationResult) {
+      return {
+        ok: true,
+        event: eventName,
+        registrationId: donationResult.donationId,
+        paymentStatus,
+        duplicate: donationResult.status === "linked",
+      };
+    }
+  }
 
   const match =
     (orderId ? await findRegistrationByOrderId(orderId) : null) ??
