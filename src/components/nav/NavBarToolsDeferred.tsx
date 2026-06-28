@@ -23,21 +23,21 @@ function ToolsPlaceholder({ visibility }: { visibility: Props["visibility"] }) {
       {visibility !== "mobile" ? (
         <div className="hidden h-10 w-28 rounded-lg border border-slate-200 bg-white lg:block xl:w-36" />
       ) : null}
-      <div className="h-11 w-[5.5rem] rounded-lg border border-slate-200 bg-white" />
+      <div className="h-11 min-w-[7.5rem] rounded-lg border border-slate-200 bg-white" />
     </div>
   );
 }
 
-/** Defer search + language switcher until idle to reduce homepage TBT. */
+/** Defer search + language switcher until after LCP to reduce homepage TBT. */
 export default function NavBarToolsDeferred({ visibility = "desktop" }: Props) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     return scheduleAfterLcp(() => setReady(true), {
-      bufferMs: visibility === "mobile" ? 1200 : 600,
-      fallbackMs: visibility === "mobile" ? 12000 : 9000,
+      bufferMs: 400,
+      fallbackMs: 9000,
     });
-  }, [visibility]);
+  }, []);
 
   if (!ready) {
     return <ToolsPlaceholder visibility={visibility} />;

@@ -8,7 +8,7 @@ const LanguageSwitcher = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-11 w-[5.5rem] shrink-0 rounded-lg bg-slate-100" aria-hidden="true" />
+      <div className="h-11 min-w-[7.5rem] shrink-0 rounded-lg bg-slate-100" aria-hidden="true" />
     ),
   }
 );
