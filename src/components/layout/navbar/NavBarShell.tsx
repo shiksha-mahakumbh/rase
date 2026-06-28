@@ -133,7 +133,7 @@ export default function NavBarShell({ menus }: Props) {
   return (
     <header
       id="site-header"
-      className="sticky top-0 z-50 w-full border-b-2 border-brand-saffron/25 bg-white/90 py-1 shadow-sm backdrop-blur-md transition-all duration-300 motion-reduce:transition-none"
+      className="sticky top-0 z-50 min-h-[4.25rem] w-full border-b-2 border-brand-saffron/25 bg-white/90 py-1 shadow-sm backdrop-blur-md transition-all duration-300 motion-reduce:transition-none"
     >
       <NavBarScrollEnhance />
       <div className="mx-auto flex max-w-7xl min-w-0 items-center justify-between gap-2 px-3 py-3 transition-all duration-300 sm:px-4 lg:px-6">

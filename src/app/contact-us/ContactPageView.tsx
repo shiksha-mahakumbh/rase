@@ -2,7 +2,7 @@ import PublicPageShell from "@/components/layouts/PublicPageShell";
 import ContactQuickLinks from "@/components/contact/ContactQuickLinks";
 import ContactJsonLd from "@/components/contact/ContactJsonLd";
 import ContactUs from "@/components/content/ContactUs";
-import RecaptchaScript from "@/components/security/RecaptchaProvider";
+import DeferredRecaptchaScript from "@/components/security/DeferredRecaptchaScript";
 import {
   CONTACT_BREADCRUMBS,
   CONTACT_HERO_IMAGE,
@@ -28,7 +28,7 @@ export default function ContactPageView() {
       skipContainer
     >
       <ContactJsonLd />
-      <RecaptchaScript />
+      <DeferredRecaptchaScript />
       <ContactQuickLinks />
       <ContactUs />
     </PublicPageShell>

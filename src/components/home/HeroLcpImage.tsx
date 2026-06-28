@@ -31,7 +31,8 @@ export default function HeroLcpImage({
           alt={alt}
           width={1024}
           height={534}
-          decoding="async"
+          loading="eager"
+          decoding="sync"
           fetchPriority="high"
           className="h-full w-full object-contain object-center"
         />

@@ -36,8 +36,8 @@ export default function CountdownBannerView({
     <div
       className={
         isLight
-          ? "flex flex-wrap items-center justify-center gap-3 rounded-xl border border-brand-saffron/30 bg-white px-4 py-3 shadow-sm lg:justify-start"
-          : "flex flex-wrap items-center justify-center gap-3 rounded-xl border border-white/20 bg-black/20 px-4 py-3"
+          ? "flex min-h-[3.75rem] flex-wrap items-center justify-center gap-3 rounded-xl border border-brand-saffron/30 bg-white px-4 py-3 shadow-sm lg:justify-start"
+          : "flex min-h-[3.75rem] flex-wrap items-center justify-center gap-3 rounded-xl border border-white/20 bg-black/20 px-4 py-3"
       }
       role="timer"
       aria-label={`Countdown to ${event.name}`}

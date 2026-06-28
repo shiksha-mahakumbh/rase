@@ -28,7 +28,7 @@ export default function LazySection({
     if (!idleFirst) return;
     const arm = () => setArmed(true);
     if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      const id = window.requestIdleCallback(arm, { timeout: 3000 });
+      const id = window.requestIdleCallback(arm, { timeout: 5000 });
       return () => window.cancelIdleCallback(id);
     }
     const t = setTimeout(arm, 1500);
