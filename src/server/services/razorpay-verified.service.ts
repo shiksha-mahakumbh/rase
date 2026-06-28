@@ -102,6 +102,24 @@ export async function recordVerifiedPayment(input: RecordVerifiedPaymentInput) {
     };
   }
 
+  const existingDonation = await prisma.donationRecord.findFirst({
+    where: { razorpayPaymentId: input.razorpayPaymentId, deletedAt: null },
+    select: { id: true, donationId: true },
+  });
+
+  if (existingDonation) {
+    paymentLog("payment_already_linked_donation", {
+      payment_id: input.razorpayPaymentId,
+      donation_id: existingDonation.donationId,
+    });
+    return {
+      duplicate: true as const,
+      registrationUuid: existingDonation.id,
+      registrationPublicId: existingDonation.donationId,
+      amountPaise,
+    };
+  }
+
   const row = await prisma.razorpayVerifiedPayment.upsert({
     where: { razorpayPaymentId: input.razorpayPaymentId },
     create: {

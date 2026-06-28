@@ -38,6 +38,7 @@ type SuccessState = {
   fullName: string;
   amount: number;
   email: string;
+  emailSent: boolean;
 };
 
 const inputClass =
@@ -46,7 +47,7 @@ const inputClass =
 export default function DonationShowcase() {
   const [donationKind, setDonationKind] = useState<DonationKind>("donation");
   const [selectedDonationTier, setSelectedDonationTier] = useState<DonationTierId>("supporter");
-  const [selectedSponsorshipTier, setSelectedSponsorshipTier] = useState<SponsorshipTierId>("platinum");
+  const [selectedSponsorshipTier, setSelectedSponsorshipTier] = useState<SponsorshipTierId>("bronze");
   const [useCustomAmount, setUseCustomAmount] = useState(false);
   const [customAmount, setCustomAmount] = useState("");
   const [fullName, setFullName] = useState("");
@@ -57,6 +58,7 @@ export default function DonationShowcase() {
   const [address, setAddress] = useState("");
   const [payment, setPayment] = useState<RazorpayPaymentResult | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [finalizeError, setFinalizeError] = useState<string | null>(null);
   const [success, setSuccess] = useState<SuccessState | null>(null);
 
   const amount = useMemo(() => {
@@ -110,6 +112,7 @@ export default function DonationShowcase() {
   const finalizeDonation = useCallback(
     async (paymentResult: RazorpayPaymentResult) => {
       setSubmitting(true);
+      setFinalizeError(null);
       try {
         const res = await fetch("/api/donation/complete", {
           method: "POST",
@@ -143,10 +146,17 @@ export default function DonationShowcase() {
           fullName: fullName.trim(),
           amount,
           email: email.trim(),
+          emailSent: Boolean(data.emailSent),
         });
-        toast.success("Thank you! Your 80G receipt has been sent to your email.");
+        if (data.emailSent) {
+          toast.success("Thank you! Your 80G receipt has been sent to your email.");
+        } else {
+          toast.success("Donation confirmed. Download your receipt below.");
+        }
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Could not finalize donation");
+        const message = err instanceof Error ? err.message : "Could not finalize donation";
+        setFinalizeError(message);
+        toast.error(message);
       } finally {
         setSubmitting(false);
       }
@@ -201,7 +211,17 @@ export default function DonationShowcase() {
             Donation ID: <strong>{success.donationId}</strong>
           </p>
           <p className="mt-4 text-sm text-slate-600">
-            An 80G-eligible receipt has been emailed to <strong>{success.email}</strong>.
+            {success.emailSent ? (
+              <>
+                An 80G-eligible receipt has been emailed to <strong>{success.email}</strong>.
+              </>
+            ) : (
+              <>
+                Your payment is confirmed, but we could not email the receipt to{" "}
+                <strong>{success.email}</strong>. Please download or print it below, or contact us
+                if you need it resent.
+              </>
+            )}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <a
@@ -588,7 +608,11 @@ export default function DonationShowcase() {
               donationKind,
               email: email.trim(),
               fullName: fullName.trim(),
-              panNumber: normalizePan(panNumber),
+              ...(donationKind === "sponsorship"
+                ? { tierId: selectedSponsorshipTier }
+                : !useCustomAmount
+                  ? { tierId: selectedDonationTier }
+                  : {}),
             }}
             disabled={!formValid || submitting || Boolean(payment?.verified)}
             className="inline-flex min-h-[48px] w-full items-center justify-center rounded-xl bg-brand-saffron px-8 py-3 text-base font-bold text-brand-navy shadow-lg transition hover:bg-brand-saffron-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
@@ -600,6 +624,27 @@ export default function DonationShowcase() {
           <p className="mt-4 text-center text-sm text-slate-600">
             Processing your donation and sending receipt…
           </p>
+        )}
+
+        {finalizeError && payment && (
+          <div
+            role="alert"
+            className="mt-4 rounded-xl border border-amber-300 bg-amber-50 px-4 py-4 text-sm text-amber-950"
+          >
+            <p className="font-semibold">Payment received — confirmation pending</p>
+            <p className="mt-1">
+              Your Razorpay payment succeeded, but we could not finalize the donation record:{" "}
+              {finalizeError}
+            </p>
+            <button
+              type="button"
+              onClick={() => void finalizeDonation(payment)}
+              disabled={submitting}
+              className="mt-3 inline-flex min-h-[44px] items-center justify-center rounded-lg bg-brand-saffron px-5 py-2 text-sm font-bold text-brand-navy transition hover:bg-brand-saffron-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {submitting ? "Retrying…" : "Retry confirmation"}
+            </button>
+          </div>
         )}
 
         <p className="mt-6 text-center text-xs text-slate-500">

@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
       donationId: result.donationId,
       receiptToken: result.receiptToken,
       duplicate: result.duplicate ?? false,
+      emailSent: result.emailSent,
     });
   } catch (error) {
     if (error instanceof ServiceError) {
