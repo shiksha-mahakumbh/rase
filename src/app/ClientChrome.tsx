@@ -39,13 +39,29 @@ export default function ClientChrome() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    let cleanup: (() => void) | undefined;
     const arm = () => setReady(true);
-    if (typeof requestIdleCallback !== "undefined") {
-      const id = requestIdleCallback(arm, { timeout: 4000 });
-      return () => cancelIdleCallback(id);
+    const schedule = () => {
+      cleanup?.();
+      if (typeof requestIdleCallback !== "undefined") {
+        const id = requestIdleCallback(arm, { timeout: 6000 });
+        cleanup = () => cancelIdleCallback(id);
+      } else {
+        const t = window.setTimeout(arm, 3500);
+        cleanup = () => window.clearTimeout(t);
+      }
+    };
+
+    if (document.readyState === "complete") {
+      schedule();
+    } else {
+      window.addEventListener("load", schedule, { once: true });
     }
-    const t = window.setTimeout(arm, 2000);
-    return () => window.clearTimeout(t);
+
+    return () => {
+      window.removeEventListener("load", schedule);
+      cleanup?.();
+    };
   }, []);
 
   useEffect(() => {

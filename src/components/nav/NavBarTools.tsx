@@ -1,16 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-
-const GlobalSearch = dynamic(() => import("@/components/search/GlobalSearch"), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="hidden h-10 w-32 shrink-0 rounded-lg bg-slate-100 lg:block lg:w-44"
-      aria-hidden="true"
-    />
-  ),
-});
+import GlobalSearch from "@/components/search/GlobalSearch";
 
 const LanguageSwitcher = dynamic(
   () => import("@/components/i18n/LanguageSwitcher"),

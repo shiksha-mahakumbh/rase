@@ -7,7 +7,8 @@ import SiteJsonLd from "@/components/seo/SiteJsonLd";
 
 const inter = Inter({
   subsets: ["latin"],
-  display: "optional",
+  display: "swap",
+  preload: true,
   variable: "--font-inter",
   adjustFontFallback: true,
 });
@@ -15,6 +16,7 @@ const inter = Inter({
 const notoDevanagari = Noto_Sans_Devanagari({
   subsets: ["devanagari"],
   display: "optional",
+  preload: false,
   variable: "--font-devanagari",
   weight: ["800"],
   adjustFontFallback: true,

@@ -8,11 +8,11 @@ import HeroLcpImage from "./HeroLcpImage";
 
 function HeroStats({ stats }: { stats: HeroContent["stats"] }) {
   return (
-    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+    <div className="mt-6 min-h-[11.5rem] grid grid-cols-2 gap-3 sm:grid-cols-3">
       {stats.map((s) => {
         const inner = (
           <>
-            <p className="text-2xl font-extrabold text-brand-navy md:text-3xl">
+            <p className="font-sans text-2xl font-extrabold tabular-nums text-brand-navy md:text-3xl">
               {s.value.toLocaleString("en-IN")}
               {s.suffix}
             </p>

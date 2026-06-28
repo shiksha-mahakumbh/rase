@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 import type { TrustStripContent } from "@/lib/home/build-home-sections";
@@ -6,14 +5,13 @@ import type { TrustStripContent } from "@/lib/home/build-home-sections";
 function LogoTile({ logo }: { logo: TrustStripContent["logos"][number] }) {
   const safeHref = sanitizeExternalUrl(logo.href);
   const image = (
-    <Image
+    <img
       src={logo.src}
       alt={logo.alt}
       width={80}
       height={40}
-      sizes="80px"
       loading="lazy"
-      unoptimized
+      decoding="async"
       className="h-10 w-20 object-contain md:h-12 md:w-24"
     />
   );
