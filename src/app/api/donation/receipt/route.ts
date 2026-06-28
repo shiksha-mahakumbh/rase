@@ -39,13 +39,13 @@ export async function GET(request: NextRequest) {
       orderId: record.razorpayOrderId,
       transactionDate: record.createdAt,
     });
-    const html = buildDonationReceiptHtml(data, SITE_URL);
+    const html = buildDonationReceiptHtml(data, SITE_URL, { autoPrint: true, embedLogos: true });
     return new NextResponse(html, {
       headers: { "Content-Type": "text/html; charset=utf-8" },
     });
   }
 
-  const pdf = donationReceiptPdfForRecord({
+  const pdf = await donationReceiptPdfForRecord({
     ...record,
     amount,
   });

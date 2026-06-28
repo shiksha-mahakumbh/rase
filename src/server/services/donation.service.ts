@@ -165,7 +165,7 @@ export async function completeDonation(input: CompleteDonationInput) {
     transactionDate: record.createdAt,
   });
 
-  const receiptPdf = generateDonationReceiptPdfBuffer(receiptData);
+  const receiptPdf = await generateDonationReceiptPdfBuffer(receiptData);
   const receiptUrl = `${SITE_URL}/api/donation/receipt?token=${receiptToken}`;
 
   try {
@@ -215,7 +215,7 @@ export async function getDonationByReceiptToken(token: string) {
   });
 }
 
-export function donationReceiptPdfForRecord(record: {
+export async function donationReceiptPdfForRecord(record: {
   donationId: string;
   fullName: string;
   email: string;
@@ -251,5 +251,5 @@ export function donationReceiptPdfForRecord(record: {
     transactionDate: record.createdAt,
   });
 
-  return generateDonationReceiptPdfBuffer(data);
+  return await generateDonationReceiptPdfBuffer(data);
 }
