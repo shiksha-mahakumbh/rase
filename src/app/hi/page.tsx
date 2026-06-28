@@ -18,7 +18,7 @@ import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 import hiMessages from "@/i18n/messages/hi.json";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const HI_HOME_META = {
   title: hiMessages.meta.homeTitle,

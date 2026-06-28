@@ -18,7 +18,7 @@ import HeroLcpPreload from "@/components/home/HeroLcpPreload";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const FALLBACK_META = {
   title: "Shiksha Mahakumbh 6.0 — National Education Summit",
