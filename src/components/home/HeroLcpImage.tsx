@@ -23,24 +23,18 @@ export default function HeroLcpImage({
 
   if (isBrandHero) {
     return (
-      <picture className={`block h-full w-full ${className}`}>
-        <source
-          type="image/webp"
-          srcSet={`${BRAND_HERO_WEBP_640} 640w, ${BRAND_HERO_WEBP_768} 768w`}
-          sizes="(max-width: 1024px) 100vw, 560px"
-        />
-        <img
-          src={BRAND_HERO_WEBP_640}
-          alt={alt}
-          width={1024}
-          height={534}
-          sizes="(max-width: 1024px) 100vw, 560px"
-          loading="eager"
-          decoding="sync"
-          fetchPriority="high"
-          className="h-full w-full object-contain object-center"
-        />
-      </picture>
+      <img
+        src={BRAND_HERO_WEBP_640}
+        srcSet={`${BRAND_HERO_WEBP_640} 640w, ${BRAND_HERO_WEBP_768} 768w`}
+        sizes="(max-width: 1024px) 100vw, 560px"
+        alt={alt}
+        width={1024}
+        height={534}
+        loading="eager"
+        decoding="sync"
+        fetchPriority="high"
+        className={`h-full w-full object-contain object-center ${className}`}
+      />
     );
   }
 

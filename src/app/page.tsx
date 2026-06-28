@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import HomePage from "@/components/home/HomePage";
 import HomeJsonLd from "@/components/home/HomeJsonLd";
 import HomeEcosystemJsonLd from "@/components/home/HomeEcosystemJsonLd";
@@ -6,7 +7,7 @@ import PartnersShowcaseJsonLd from "@/components/home/PartnersShowcaseJsonLd";
 import { extractFaqsFromCmsData } from "@/lib/cms/faq";
 import { buildAffiliationShowcase } from "@/lib/cms/build-affiliation-showcase";
 import { getHomepagePartners } from "@/lib/cms/partners";
-import { loadCmsHomepage, loadCmsPageData } from "@/lib/cms/server";
+import { loadCmsHomepage, loadCmsHomeShell, loadCmsPageData } from "@/lib/cms/server";
 import { loadCmsSpeakers, loadCmsPartners } from "@/lib/cms/organizational";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
@@ -47,18 +48,23 @@ export async function generateMetadata(): Promise<Metadata> {
   return withHreflang(createPageMetadata(FALLBACK_META), "/");
 }
 
-export default async function Page() {
+async function HomePartnersJsonLdDeferred() {
   const [cmsData, featuredSpeakers, cmsPartners] = await Promise.all([
     loadCmsPageData(),
     loadCmsSpeakers("en", true),
     loadCmsPartners("en"),
   ]);
-  const faqs = extractFaqsFromCmsData(cmsData);
   const affiliationShowcase = buildAffiliationShowcase({
     cmsPartners,
     cmsSpeakers: featuredSpeakers,
     homepagePartners: getHomepagePartners(cmsData.homepage),
   });
+  return <PartnersShowcaseJsonLd grouped={affiliationShowcase} />;
+}
+
+export default async function Page() {
+  const cmsData = await loadCmsHomeShell();
+  const faqs = extractFaqsFromCmsData(cmsData);
   const heroContent = buildHeroContent(cmsData.homepage);
   const homeSections = buildHomeSectionsContent(cmsData.homepage);
   const tickerItems = resolveTickerItems(cmsData.announcementBars, "en");
@@ -69,8 +75,6 @@ export default async function Page() {
       <HeroLcpPreload />
       <HomePage
         cmsData={cmsData}
-        featuredSpeakers={featuredSpeakers}
-        cmsPartners={cmsPartners}
         heroContent={heroContent}
         homeSections={homeSections}
         tickerItems={tickerItems}
@@ -78,7 +82,9 @@ export default async function Page() {
       />
       <HomeJsonLd faqs={faqs} />
       <HomeEcosystemJsonLd />
-      <PartnersShowcaseJsonLd grouped={affiliationShowcase} />
+      <Suspense fallback={null}>
+        <HomePartnersJsonLdDeferred />
+      </Suspense>
       {cmsData.homepage?.seo?.schemaJsonLd && (
         <script
           type="application/ld+json"

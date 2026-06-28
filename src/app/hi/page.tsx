@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import HomePage from "@/components/home/HomePage";
 import HomeJsonLd from "@/components/home/HomeJsonLd";
 import HomeEcosystemJsonLd from "@/components/home/HomeEcosystemJsonLd";
@@ -6,7 +7,7 @@ import PartnersShowcaseJsonLd from "@/components/home/PartnersShowcaseJsonLd";
 import { extractFaqsFromCmsData } from "@/lib/cms/faq";
 import { buildAffiliationShowcase } from "@/lib/cms/build-affiliation-showcase";
 import { getHomepagePartners } from "@/lib/cms/partners";
-import { loadCmsPageData } from "@/lib/cms/server";
+import { loadCmsHomeShell, loadCmsPageData } from "@/lib/cms/server";
 import { loadCmsSpeakers, loadCmsPartners } from "@/lib/cms/organizational";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
@@ -35,19 +36,24 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-/** Hindi homepage — same cached en CMS shell as `/` with hi metadata and layout. */
-export default async function HiHomePage() {
+async function HiHomePartnersJsonLdDeferred() {
   const [cmsData, featuredSpeakers, cmsPartners] = await Promise.all([
     loadCmsPageData("en"),
     loadCmsSpeakers("en", true),
     loadCmsPartners("en"),
   ]);
-  const faqs = extractFaqsFromCmsData(cmsData);
   const affiliationShowcase = buildAffiliationShowcase({
     cmsPartners,
     cmsSpeakers: featuredSpeakers,
     homepagePartners: getHomepagePartners(cmsData.homepage),
   });
+  return <PartnersShowcaseJsonLd grouped={affiliationShowcase} />;
+}
+
+/** Hindi homepage — same cached en CMS shell as `/` with hi metadata and layout. */
+export default async function HiHomePage() {
+  const cmsData = await loadCmsHomeShell("en");
+  const faqs = extractFaqsFromCmsData(cmsData);
   const heroContent = buildHeroContent(cmsData.homepage, "hi");
   const homeSections = buildHomeSectionsContent(cmsData.homepage);
   const tickerItems = resolveTickerItems(cmsData.announcementBars, "hi");
@@ -58,16 +64,17 @@ export default async function HiHomePage() {
       <HeroLcpPreload />
       <HomePage
         cmsData={cmsData}
-        featuredSpeakers={featuredSpeakers}
-        cmsPartners={cmsPartners}
         heroContent={heroContent}
         homeSections={homeSections}
         tickerItems={tickerItems}
         navMenus={navMenus}
+        locale="en"
       />
       <HomeJsonLd faqs={faqs} />
       <HomeEcosystemJsonLd />
-      <PartnersShowcaseJsonLd grouped={affiliationShowcase} />
+      <Suspense fallback={null}>
+        <HiHomePartnersJsonLdDeferred />
+      </Suspense>
       {cmsData.homepage?.seo?.schemaJsonLd && (
         <script
           type="application/ld+json"

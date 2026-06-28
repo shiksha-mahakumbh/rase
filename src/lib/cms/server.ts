@@ -310,6 +310,33 @@ export async function loadCmsPageData(locale: ContentLocale = "en"): Promise<Cms
   })();
 }
 
+/** Homepage shell — hero/nav/marquee fields without notices or FAQ fetches (faster TTFB). */
+export async function loadCmsHomeShell(locale: ContentLocale = "en"): Promise<CmsPageData> {
+  return unstable_cache(
+    async () => {
+      const [homepage, settings, headerMenu, footerMenu, announcementBars] = await Promise.all([
+        loadCmsHomepage(locale),
+        loadCmsSettings(locale),
+        loadCmsHeaderMenu(locale),
+        loadCmsFooterMenu(locale),
+        loadCmsAnnouncementBars(locale),
+      ]);
+      return {
+        homepage,
+        settings,
+        headerMenu,
+        footerMenu,
+        announcementBars,
+        notices: [],
+        widgetNotices: [],
+        featuredFaqs: [],
+      };
+    },
+    ["cms-home-shell", locale],
+    { revalidate: 3600, tags: [`cms-home-shell-${locale}`] }
+  )();
+}
+
 /** Nav + footer + settings only — for inner public pages (no homepage/notices fetch). */
 export async function loadPublicChromeCms(locale: ContentLocale = "en"): Promise<CmsPageData> {
   return unstable_cache(
