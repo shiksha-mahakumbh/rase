@@ -5,7 +5,7 @@ import type { CmsMenu } from "@/lib/cms/types";
 import NavBrandBlock from "@/components/layout/navbar/NavBrandBlock";
 import { NavShellLink } from "@/components/layout/navbar/NavShellLink";
 import { getMenuIcon, NavChevronIcon } from "@/components/layout/navbar/NavMenuIcons";
-import NavBarMobileMenu from "@/components/layout/navbar/NavBarMobileMenu";
+import NavBarMobileActions from "@/components/layout/navbar/NavBarMobileActions";
 import NavBarToolsDeferred from "@/components/nav/NavBarToolsDeferred";
 import NavBarScrollEnhance from "@/components/layout/navbar/NavBarScrollEnhance";
 
@@ -196,15 +196,15 @@ export default function NavBarShell({ menus }: Props) {
 
         <NavBarToolsDeferred visibility="desktop" />
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
-          <NavBarToolsDeferred visibility="mobile" />
-          <NavShellLink
-            href={CTA_PATH}
-            className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
-          >
-            Register
-          </NavShellLink>
-          <NavBarMobileMenu menus={mobileMenus} />
+        <div className="flex min-w-[14.5rem] shrink-0 items-center gap-1.5 sm:min-w-[15.5rem] sm:gap-2 lg:hidden">
+          <NavBarMobileActions menus={mobileMenus}>
+            <NavShellLink
+              href={CTA_PATH}
+              className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-brand-saffron px-3 py-2.5 text-xs font-bold text-brand-navy shadow-md shadow-brand-saffron/20 sm:px-4 sm:text-sm"
+            >
+              Register
+            </NavShellLink>
+          </NavBarMobileActions>
         </div>
       </div>
     </header>
