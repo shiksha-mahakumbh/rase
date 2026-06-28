@@ -6,6 +6,9 @@ import {
 import { buildDonationReceiptHtml, buildDonationReceiptData } from "@/lib/receipt/donation-receipt";
 import { SITE_URL } from "@/config/site";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
   const format = request.nextUrl.searchParams.get("format");
