@@ -11,6 +11,7 @@ import {
   CommonParticipantFields,
   AccommodationSection,
 } from "@/components/forms/CommonParticipantFields";
+import { DelegateStudentFields } from "@/components/forms/DelegateStudentFields";
 import {
   FormField,
   FormSection,
@@ -21,7 +22,10 @@ import {
   sharedWatch,
 } from "@/components/forms/FormField";
 import { formClasses } from "@/components/forms/formClasses";
-import { DELEGATE_FEES } from "@/types/registration";
+import {
+  DELEGATE_FEES,
+  isDelegateStudentCategory,
+} from "@/lib/registration/delegate-categories";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { resolvePaymentStatus } from "@/lib/registration/config";
 import { buildRazorpayOrderNotes } from "@/lib/razorpay/order-notes";
@@ -42,6 +46,8 @@ export default function DelegateForm() {
   const flow = useRegistrationFlow();
   const [receipt, setReceipt] = useState<File | null>(null);
   const [receiptError, setReceiptError] = useState<string>();
+  const [studentIdCard, setStudentIdCard] = useState<File | null>(null);
+  const [studentIdCardError, setStudentIdCardError] = useState<string>();
   const [paymentVerified, setPaymentVerified] = useState(false);
 
   const {
@@ -64,6 +70,7 @@ export default function DelegateForm() {
   const email = watch("email");
   const contactNumber = watch("contactNumber");
   const institution = watch("institution");
+  const isStudent = isDelegateStudentCategory(category);
   const fee = useMemo(
     () => (category ? DELEGATE_FEES[category] ?? 0 : 0),
     [category]
@@ -87,12 +94,27 @@ export default function DelegateForm() {
       "delegateCategory",
       "accommodationRequired",
     ];
+    if (isStudent) {
+      fields.push("studentType", "studentIdNumber", "courseOrClass");
+      if (!studentIdCard) {
+        setStudentIdCardError("Upload a valid student ID card");
+        return false;
+      }
+      setStudentIdCardError(undefined);
+    }
     return trigger(fields);
-  }, [trigger]);
+  }, [trigger, isStudent, studentIdCard]);
 
   useRegisterPaymentGate(validateDetails);
 
   const onSubmit = async (data: DelegateFormValues) => {
+    if (isStudent && !studentIdCard) {
+      setStudentIdCardError("Upload a valid student ID card");
+      toast.error("Student ID card is required for free student registration.");
+      return;
+    }
+    setStudentIdCardError(undefined);
+
     if (fee > 0) {
       const paidOnline = Boolean(data.razorpayPaymentId?.trim());
       if (!paidOnline && !receipt) {
@@ -103,6 +125,10 @@ export default function DelegateForm() {
     }
     setReceiptError(undefined);
 
+    const files: Record<string, File | null | undefined> = {};
+    if (receipt) files.receipt = receipt;
+    if (studentIdCard) files.studentIdCard = studentIdCard;
+
     await submitRegistration({
       registrationType: "Delegate Registration",
       data: {
@@ -110,8 +136,15 @@ export default function DelegateForm() {
         delegateCategory: data.delegateCategory,
         registrationFee: fee,
         category: data.delegateCategory,
+        ...(isStudent
+          ? {
+              studentType: data.studentType,
+              studentIdNumber: data.studentIdNumber?.trim(),
+              courseOrClass: data.courseOrClass?.trim(),
+            }
+          : {}),
       },
-      files: receipt ? { receipt } : undefined,
+      files,
       paymentStatus: resolvePaymentStatus("Delegate Registration", {
         registrationFee: fee,
         hasPaymentProof: Boolean(
@@ -149,10 +182,20 @@ export default function DelegateForm() {
           </div>
         ) : category ? (
           <div className="md:col-span-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-            No payment required for this category. Submit directly after filling details.
+            No payment required for this category. Submit directly after filling details and
+            uploading student ID proof.
           </div>
         ) : null}
       </FormSection>
+
+      {isStudent ? (
+        <DelegateStudentFields
+          register={register}
+          errors={errors}
+          onStudentIdCardChange={setStudentIdCard}
+          studentIdCardError={studentIdCardError}
+        />
+      ) : null}
 
       <AccommodationSection register={sharedRegister(register)} watch={sharedWatch(watch)} errors={sharedErrors(errors)} />
 

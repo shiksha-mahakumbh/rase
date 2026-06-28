@@ -1,5 +1,5 @@
 import { RegistrationType } from "@/types/registration";
-import { DELEGATE_FEES } from "@/types/registration";
+import { delegateFeeForCategory as lookupDelegateFee } from "@/lib/registration/delegate-categories";
 
 export const PROJECT_SCHOOL_STUDENT_FEE = 200;
 export const PROJECT_COLLEGE_STUDENT_FEE = 400;
@@ -23,8 +23,7 @@ export function accommodationFeeForBedType(type: AccommodationBedType): number {
 }
 
 export function delegateFeeForCategory(category: string | undefined): number {
-  if (!category) return 0;
-  return DELEGATE_FEES[category] ?? 0;
+  return lookupDelegateFee(category);
 }
 
 export function resolveRegistrationFee(

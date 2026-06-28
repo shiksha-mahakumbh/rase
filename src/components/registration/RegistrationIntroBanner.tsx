@@ -10,7 +10,7 @@ export default function RegistrationIntroBanner() {
         </p>
         <p className="mt-1 text-sm text-slate-600">
           Most faculty, students, and institutional participants register as delegates
-          (₹0 for students · up to ₹8000 for industry). Programme tracks such as
+          (₹0 for students · up to ₹5100 for industry). Programme tracks such as
           Conclave, Awards, and Olympiad use separate free or paid forms below.
         </p>
         <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">

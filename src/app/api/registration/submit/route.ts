@@ -11,6 +11,7 @@ import {
 import { prisma } from "@/server/db/prisma";
 import { normalizePhoneInput, validatePanForAmount } from "@/lib/registration/validation";
 import { resolveRegistrationFee } from "@/lib/registration/fees";
+import { validateDelegateRegistrationPayload } from "@/lib/registration/delegate-categories";
 import type { PaymentStatus, RegistrationType } from "@/types/registration";
 import {
   assertVerifiedPaymentForSubmit,
@@ -152,6 +153,14 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    if (type === "Delegate Registration") {
+      const delegateErr = validateDelegateRegistrationPayload(data);
+      if (delegateErr) {
+        return NextResponse.json({ error: delegateErr }, { status: 400 });
+      }
+    }
+
     const panErr = validatePanForAmount(
       String(data.panNumber ?? payment?.panNumber ?? ""),
       fee

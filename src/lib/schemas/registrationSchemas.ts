@@ -1,9 +1,14 @@
 import { z } from "zod";
 import {
+  DELEGATE_CATEGORY_KEYS,
+  delegateFeeForCategory,
+  isDelegateStudentCategory,
+  validateDelegateStudentFields,
+} from "@/lib/registration/delegate-categories";
+import {
   isValidPan,
   isValidPhone,
   normalizePhoneInput,
-  panRequiredForAmount,
   validatePanForAmount,
 } from "@/lib/registration/validation";
 
@@ -121,14 +126,11 @@ export const paymentSchema = z.object({
 export const delegateSchema = commonParticipantSchema
   .merge(accommodationSchema)
   .extend({
-    delegateCategory: z.enum([
-      "Student (Free)",
-      "Teacher (₹1000)",
-      "Principal (₹2000)",
-      "Research Scholar (₹2000)",
-      "Director / VC / Chairperson (₹3000)",
-      "Industry Delegate (₹8000)",
-    ]),
+    delegateCategory: z.enum(DELEGATE_CATEGORY_KEYS),
+    studentType: z.enum(["School Student", "College Student"]).optional(),
+    studentIdNumber: z.string().optional(),
+    courseOrClass: z.string().optional(),
+    studentIdCard: z.unknown().optional(),
     registrationFee: z.number().optional(),
     utrNumber: z.string().optional(),
     transactionId: z.string().optional(),
@@ -138,20 +140,23 @@ export const delegateSchema = commonParticipantSchema
     razorpayOrderId: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const feeMap: Record<string, number> = {
-      "Student (Free)": 0,
-      "Teacher (₹1000)": 1000,
-      "Principal (₹2000)": 2000,
-      "Research Scholar (₹2000)": 2000,
-      "Director / VC / Chairperson (₹3000)": 3000,
-      "Industry Delegate (₹8000)": 8000,
-    };
-    const fee = feeMap[data.delegateCategory] ?? 0;
+    const fee = delegateFeeForCategory(data.delegateCategory);
     data.registrationFee = fee;
     if (fee > 0) {
       paymentProofRefine(data, ctx);
     }
     panRefineForFee({ panNumber: data.panNumber, registrationFee: fee }, ctx);
+
+    if (isDelegateStudentCategory(data.delegateCategory)) {
+      const studentErr = validateDelegateStudentFields(data as Record<string, unknown>);
+      if (studentErr) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: studentErr,
+          path: ["studentType"],
+        });
+      }
+    }
   });
 
 export const conclaveSchema = commonParticipantSchema
