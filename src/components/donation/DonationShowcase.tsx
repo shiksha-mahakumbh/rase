@@ -15,11 +15,17 @@ import {
   DONATION_IMPACT_AREAS,
   DONATION_MIN_AMOUNT,
   DONATION_PAGE_HERO,
+  DONATION_SECTION,
   DONATION_SUCCESS_LINKS,
   DONATION_TIERS,
   donation80GAddressLine,
   type DonationTierId,
 } from "@/data/donation-hub";
+import {
+  SPONSORSHIP_TIERS,
+  type SponsorshipTierId,
+} from "@/data/sponsorship-hub";
+import SponsorshipSection from "@/components/donation/SponsorshipSection";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import { normalizePan } from "@/lib/schemas/donationSchema";
 import { isValidPan } from "@/lib/registration/validation";
@@ -39,7 +45,9 @@ const inputClass =
 
 export default function DonationShowcase() {
   const [donationKind, setDonationKind] = useState<DonationKind>("donation");
-  const [selectedTier, setSelectedTier] = useState<DonationTierId>("supporter");
+  const [selectedDonationTier, setSelectedDonationTier] = useState<DonationTierId>("supporter");
+  const [selectedSponsorshipTier, setSelectedSponsorshipTier] = useState<SponsorshipTierId>("platinum");
+  const [useCustomAmount, setUseCustomAmount] = useState(false);
   const [customAmount, setCustomAmount] = useState("");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -52,18 +60,38 @@ export default function DonationShowcase() {
   const [success, setSuccess] = useState<SuccessState | null>(null);
 
   const amount = useMemo(() => {
-    if (selectedTier === "custom") {
+    if (useCustomAmount) {
       const n = Number.parseInt(customAmount.replace(/\D/g, ""), 10);
       return Number.isFinite(n) ? n : 0;
     }
-    const tier = DONATION_TIERS.find((t) => t.id === selectedTier);
+    if (donationKind === "sponsorship") {
+      const tier = SPONSORSHIP_TIERS.find((t) => t.id === selectedSponsorshipTier);
+      return tier?.amount ?? DONATION_MIN_AMOUNT;
+    }
+    const tier = DONATION_TIERS.find((t) => t.id === selectedDonationTier);
     return tier?.amount ?? DONATION_MIN_AMOUNT;
-  }, [selectedTier, customAmount]);
+  }, [donationKind, selectedDonationTier, selectedSponsorshipTier, useCustomAmount, customAmount]);
 
-  const selectedTierData = useMemo(
-    () => DONATION_TIERS.find((t) => t.id === selectedTier),
-    [selectedTier]
+  const selectedDonationTierData = useMemo(
+    () => DONATION_TIERS.find((t) => t.id === selectedDonationTier),
+    [selectedDonationTier]
   );
+
+  const selectedSponsorshipTierData = useMemo(
+    () => SPONSORSHIP_TIERS.find((t) => t.id === selectedSponsorshipTier),
+    [selectedSponsorshipTier]
+  );
+
+  const sponsorshipContactOnly = Boolean(
+    donationKind === "sponsorship" && selectedSponsorshipTierData?.contactOnly
+  );
+
+  const activeTierLabel =
+    donationKind === "sponsorship"
+      ? selectedSponsorshipTierData?.name
+      : useCustomAmount
+        ? "Custom amount"
+        : selectedDonationTierData?.name;
 
   const formValid = useMemo(() => {
     const panOk = isValidPan(normalizePan(panNumber));
@@ -74,9 +102,10 @@ export default function DonationShowcase() {
       phone.replace(/\D/g, "").length >= 10 &&
       panOk &&
       orgOk &&
-      amount >= DONATION_MIN_AMOUNT
+      amount >= DONATION_MIN_AMOUNT &&
+      !sponsorshipContactOnly
     );
-  }, [fullName, email, phone, panNumber, amount, donationKind, organization]);
+  }, [fullName, email, phone, panNumber, amount, donationKind, organization, sponsorshipContactOnly]);
 
   const finalizeDonation = useCallback(
     async (paymentResult: RazorpayPaymentResult) => {
@@ -94,7 +123,12 @@ export default function DonationShowcase() {
             organization: organization.trim() || undefined,
             address: address.trim() || undefined,
             amount,
-            tierId: selectedTier !== "custom" ? selectedTier : undefined,
+            tierId:
+              donationKind === "sponsorship"
+                ? selectedSponsorshipTier
+                : !useCustomAmount
+                  ? selectedDonationTier
+                  : undefined,
             razorpayPaymentId: paymentResult.razorpay_payment_id,
             razorpayOrderId: paymentResult.razorpay_order_id,
           }),
@@ -126,7 +160,9 @@ export default function DonationShowcase() {
       organization,
       address,
       amount,
-      selectedTier,
+      selectedDonationTier,
+      selectedSponsorshipTier,
+      useCustomAmount,
     ]
   );
 
@@ -327,45 +363,28 @@ export default function DonationShowcase() {
       </section>
 
       <section
-        id="donate-form"
-        aria-labelledby="donate-form-title"
+        id="donate"
+        aria-labelledby="donate-title"
         className="rounded-3xl border border-brand-saffron/20 bg-gradient-to-b from-white to-brand-surface-warm p-5 shadow-xl md:p-8"
       >
-        <h2 id="donate-form-title" className="text-xl font-bold text-brand-navy md:text-2xl">
-          Donation / Sponsorship Form
+        <h2 id="donate-title" className="text-xl font-bold text-brand-navy md:text-2xl">
+          {DONATION_SECTION.title}
         </h2>
-        <p className="mt-1 text-sm text-slate-600">
-          Secure payment via Razorpay · Instant 80G receipt to your email
-        </p>
-
-        <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label="Donation type">
-          {(["donation", "sponsorship"] as const).map((kind) => (
-            <button
-              key={kind}
-              type="button"
-              role="tab"
-              aria-selected={donationKind === kind}
-              onClick={() => setDonationKind(kind)}
-              className={`min-h-[44px] rounded-full px-5 py-2 text-sm font-semibold capitalize transition ${
-                donationKind === kind
-                  ? "bg-brand-navy text-white shadow-md"
-                  : "border border-slate-200 bg-white text-slate-600 hover:border-brand-saffron"
-              }`}
-            >
-              {kind}
-            </button>
-          ))}
-        </div>
+        <p className="mt-1 text-sm text-slate-600">{DONATION_SECTION.subtitle}</p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {DONATION_TIERS.map((tier) => (
             <button
               key={tier.id}
               type="button"
-              aria-pressed={selectedTier === tier.id}
-              onClick={() => setSelectedTier(tier.id)}
+              aria-pressed={donationKind === "donation" && !useCustomAmount && selectedDonationTier === tier.id}
+              onClick={() => {
+                setDonationKind("donation");
+                setUseCustomAmount(false);
+                setSelectedDonationTier(tier.id);
+              }}
               className={`rounded-2xl border p-4 text-left transition ${
-                selectedTier === tier.id
+                donationKind === "donation" && !useCustomAmount && selectedDonationTier === tier.id
                   ? "border-brand-saffron bg-brand-saffron/10 shadow-md ring-2 ring-brand-saffron/40"
                   : "border-slate-200 bg-white hover:border-brand-saffron/40"
               }`}
@@ -382,10 +401,13 @@ export default function DonationShowcase() {
           ))}
           <button
             type="button"
-            aria-pressed={selectedTier === "custom"}
-            onClick={() => setSelectedTier("custom")}
+            aria-pressed={donationKind === "donation" && useCustomAmount}
+            onClick={() => {
+              setDonationKind("donation");
+              setUseCustomAmount(true);
+            }}
             className={`rounded-2xl border p-4 text-left transition ${
-              selectedTier === "custom"
+              donationKind === "donation" && useCustomAmount
                 ? "border-brand-saffron bg-brand-saffron/10 shadow-md ring-2 ring-brand-saffron/40"
                 : "border-slate-200 bg-white hover:border-brand-saffron/40"
             }`}
@@ -398,9 +420,9 @@ export default function DonationShowcase() {
           </button>
         </div>
 
-        {selectedTierData && selectedTier !== "custom" && (
-          <ul className="mt-4 flex flex-wrap gap-2" aria-label={`${selectedTierData.name} tier benefits`}>
-            {selectedTierData.highlights.map((item) => (
+        {donationKind === "donation" && selectedDonationTierData && !useCustomAmount && (
+          <ul className="mt-4 flex flex-wrap gap-2" aria-label={`${selectedDonationTierData.name} benefits`}>
+            {selectedDonationTierData.highlights.map((item) => (
               <li
                 key={item}
                 className="rounded-full border border-brand-saffron/30 bg-brand-saffron/10 px-3 py-1 text-xs font-semibold text-brand-navy"
@@ -411,9 +433,9 @@ export default function DonationShowcase() {
           </ul>
         )}
 
-        {selectedTier === "custom" && (
+        {donationKind === "donation" && useCustomAmount && (
           <label className="mt-4 block max-w-xs">
-            <span className="text-sm font-semibold text-brand-navy">Amount (INR)</span>
+            <span className="text-sm font-semibold text-brand-navy">Donation amount (INR)</span>
             <input
               type="number"
               min={DONATION_MIN_AMOUNT}
@@ -425,6 +447,45 @@ export default function DonationShowcase() {
             />
           </label>
         )}
+      </section>
+
+      <SponsorshipSection
+        selectedTierId={selectedSponsorshipTier}
+        onSelectTier={(id) => {
+          setDonationKind("sponsorship");
+          setUseCustomAmount(false);
+          setSelectedSponsorshipTier(id);
+          document.getElementById("donate-form")?.scrollIntoView({ behavior: "smooth" });
+        }}
+      />
+
+      <section
+        id="donate-form"
+        aria-labelledby="donate-form-title"
+        className="rounded-3xl border border-brand-navy/10 bg-white p-5 shadow-xl md:p-8"
+      >
+        <h2 id="donate-form-title" className="text-xl font-bold text-brand-navy md:text-2xl">
+          Complete {donationKind === "sponsorship" ? "Sponsorship" : "Donation"} Payment
+        </h2>
+        <p className="mt-1 text-sm text-slate-600">
+          {activeTierLabel ? (
+            <>
+              Selected: <strong>{activeTierLabel}</strong> · Secure Razorpay · Instant 80G receipt
+            </>
+          ) : (
+            "Secure payment via Razorpay · Instant 80G receipt to your email"
+          )}
+        </p>
+
+        {sponsorshipContactOnly ? (
+          <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            Title and Title Co-Sponsor packages are confirmed through{" "}
+            <Link href={CANONICAL_ROUTES.departments.vitt} className="font-semibold underline">
+              Vitt Vibhag
+            </Link>
+            . Select another sponsorship tier below or use bank transfer details in the sponsorship section.
+          </p>
+        ) : null}
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           <label className="block md:col-span-2">
@@ -505,7 +566,9 @@ export default function DonationShowcase() {
             </p>
             {!formValid && (
               <p className="mt-1 text-xs text-amber-700">
-                Complete all required fields including valid PAN to proceed.
+                {sponsorshipContactOnly
+                  ? "Contact Vitt Vibhag for Title / Co-Title packages, or choose another tier."
+                  : "Complete all required fields including valid PAN to proceed."}
               </p>
             )}
           </div>
