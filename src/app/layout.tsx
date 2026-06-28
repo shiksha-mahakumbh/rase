@@ -7,7 +7,7 @@ import SiteJsonLd from "@/components/seo/SiteJsonLd";
 
 const inter = Inter({
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   preload: true,
   variable: "--font-inter",
   adjustFontFallback: true,

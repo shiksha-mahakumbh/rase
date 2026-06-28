@@ -14,6 +14,7 @@ import {
   notifyWelcomeModalClosed,
   WELCOME_MODAL_SEEN_KEY,
 } from "@/lib/home/is-home-path";
+import { scheduleAfterLcp } from "@/lib/perf/schedule-after-lcp";
 import {
   getFallbackWelcomeModal,
   pickWelcomeModalBar,
@@ -26,7 +27,7 @@ const NavCtaLink = dynamic(
   { ssr: false }
 );
 
-/** Home-only welcome modal — deferred until after load + idle to protect TBT/CLS. */
+/** Home-only welcome modal — opens only after LCP to protect CLS and render time. */
 export default function HomeWelcomeModal() {
   const cms = useCms();
   const pathname = usePathname();
@@ -62,31 +63,18 @@ export default function HomeWelcomeModal() {
   useEffect(() => {
     if (!isHomePath(pathname ?? "")) return;
 
-    const arm = () => {
-      if (sessionStorage.getItem(WELCOME_MODAL_SEEN_KEY)) {
-        notifyWelcomeModalClosed();
-        return;
-      }
-      const show = () => setEnabled(true);
-      if (typeof requestIdleCallback !== "undefined") {
-        requestIdleCallback(show, { timeout: 15000 });
-      } else {
-        window.setTimeout(show, 12000);
-      }
-    };
-
-    if (document.readyState === "complete") {
-      arm();
-      return;
-    }
-    window.addEventListener("load", arm, { once: true });
-    return () => window.removeEventListener("load", arm);
+    return scheduleAfterLcp(
+      () => {
+        if (sessionStorage.getItem(WELCOME_MODAL_SEEN_KEY)) {
+          notifyWelcomeModalClosed();
+          return;
+        }
+        setEnabled(true);
+        setIsOpen(true);
+      },
+      { bufferMs: 3000, fallbackMs: 18000 }
+    );
   }, [pathname]);
-
-  useEffect(() => {
-    if (!enabled) return;
-    if (!sessionStorage.getItem(WELCOME_MODAL_SEEN_KEY)) setIsOpen(true);
-  }, [enabled]);
 
   if (!enabled || !isHomePath(pathname ?? "")) return null;
 

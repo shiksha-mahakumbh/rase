@@ -173,9 +173,11 @@ export default function NavBarMobileMenu({ menus }: Props) {
               >
                 Participate — Registration
               </NavLink>
-              <div className="w-full">
-                <GlobalSearch compact />
-              </div>
+              {isOpen ? (
+                <div className="w-full">
+                  <GlobalSearch compact />
+                </div>
+              ) : null}
               <div className="grid grid-cols-2 gap-2">
                 {MOBILE_QUICK_LINKS.map((link) => (
                   <NavLink

@@ -8,13 +8,13 @@ type BrandLogoMarkProps = {
 /** Official Shiksha Mahakumbh Abhiyan logo artwork. */
 export default function BrandLogoMark({ className = "h-full w-full" }: BrandLogoMarkProps) {
   return (
-    <Image
+    <img
       src={BRAND_LOGO_SRC}
       alt={BRAND_ORG_NAME_HI}
       width={44}
       height={44}
+      decoding="async"
       className={`${className} object-contain`}
-      priority
     />
   );
 }

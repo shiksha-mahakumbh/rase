@@ -3,7 +3,6 @@ import HomePage from "@/components/home/HomePage";
 import HomeJsonLd from "@/components/home/HomeJsonLd";
 import HomeEcosystemJsonLd from "@/components/home/HomeEcosystemJsonLd";
 import PartnersShowcaseJsonLd from "@/components/home/PartnersShowcaseJsonLd";
-import { CmsProvider } from "@/lib/cms/context";
 import { extractFaqsFromCmsData } from "@/lib/cms/faq";
 import { buildAffiliationShowcase } from "@/lib/cms/build-affiliation-showcase";
 import { getHomepagePartners } from "@/lib/cms/partners";
@@ -14,7 +13,7 @@ import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { buildHeroContent } from "@/lib/home/build-hero-content";
 import { buildHomeSectionsContent } from "@/lib/home/build-home-sections";
-import { HERO_LCP_PRELOAD } from "@/components/home/HeroLcpImage";
+import HeroLcpPreload from "@/components/home/HeroLcpPreload";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 
@@ -66,13 +65,16 @@ export default async function Page() {
   const navMenus = navMenusFromCms(cmsData.headerMenu);
 
   return (
-    <CmsProvider data={cmsData}>
-      <link
-        rel="preload"
-        as="image"
-        href={HERO_LCP_PRELOAD}
-        type="image/webp"
-        fetchPriority="high"
+    <>
+      <HeroLcpPreload />
+      <HomePage
+        cmsData={cmsData}
+        featuredSpeakers={featuredSpeakers}
+        cmsPartners={cmsPartners}
+        heroContent={heroContent}
+        homeSections={homeSections}
+        tickerItems={tickerItems}
+        navMenus={navMenus}
       />
       <HomeJsonLd faqs={faqs} />
       <HomeEcosystemJsonLd />
@@ -85,14 +87,6 @@ export default async function Page() {
           }}
         />
       )}
-      <HomePage
-        featuredSpeakers={featuredSpeakers}
-        cmsPartners={cmsPartners}
-        heroContent={heroContent}
-        homeSections={homeSections}
-        tickerItems={tickerItems}
-        navMenus={navMenus}
-      />
-    </CmsProvider>
+    </>
   );
 }
