@@ -2,7 +2,6 @@ import HomePage from "@/components/home/HomePage";
 import HomeJsonLd from "@/components/home/HomeJsonLd";
 import HomeEcosystemJsonLd from "@/components/home/HomeEcosystemJsonLd";
 import PartnersShowcaseJsonLd from "@/components/home/PartnersShowcaseJsonLd";
-import { CmsProvider } from "@/lib/cms/context";
 import { extractFaqsFromCmsData } from "@/lib/cms/faq";
 import { buildAffiliationShowcase } from "@/lib/cms/build-affiliation-showcase";
 import { getHomepagePartners } from "@/lib/cms/partners";
@@ -10,10 +9,9 @@ import { loadCmsPageData } from "@/lib/cms/server";
 import { loadCmsSpeakers, loadCmsPartners } from "@/lib/cms/organizational";
 import { buildHeroContent } from "@/lib/home/build-hero-content";
 import { buildHomeSectionsContent } from "@/lib/home/build-home-sections";
-import { HERO_LCP_PRELOAD } from "@/components/home/HeroLcpImage";
+import HeroLcpPreload from "@/components/home/HeroLcpPreload";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
-import type { ContentLocale } from "@prisma/client";
 import { cmsLocaleForRoute } from "@/lib/home/cms-locale";
 
 export default async function LocaleHomeServer({ locale }: { locale: string }) {
@@ -35,13 +33,16 @@ export default async function LocaleHomeServer({ locale }: { locale: string }) {
   const navMenus = navMenusFromCms(cmsData.headerMenu);
 
   return (
-    <CmsProvider data={cmsData}>
-      <link
-        rel="preload"
-        as="image"
-        href={HERO_LCP_PRELOAD}
-        type="image/webp"
-        fetchPriority="high"
+    <>
+      <HeroLcpPreload />
+      <HomePage
+        cmsData={cmsData}
+        featuredSpeakers={featuredSpeakers}
+        cmsPartners={cmsPartners}
+        heroContent={heroContent}
+        homeSections={homeSections}
+        tickerItems={tickerItems}
+        navMenus={navMenus}
       />
       <HomeJsonLd faqs={faqs} />
       <HomeEcosystemJsonLd />
@@ -54,14 +55,6 @@ export default async function LocaleHomeServer({ locale }: { locale: string }) {
           }}
         />
       )}
-      <HomePage
-        featuredSpeakers={featuredSpeakers}
-        cmsPartners={cmsPartners}
-        heroContent={heroContent}
-        homeSections={homeSections}
-        tickerItems={tickerItems}
-        navMenus={navMenus}
-      />
-    </CmsProvider>
+    </>
   );
 }

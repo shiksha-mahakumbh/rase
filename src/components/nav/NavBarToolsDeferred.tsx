@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { scheduleAfterLcp } from "@/lib/perf/schedule-after-lcp";
 
 const NavBarTools = dynamic(() => import("@/components/nav/NavBarTools"), { ssr: false });
 
@@ -20,9 +21,9 @@ function ToolsPlaceholder({ visibility }: { visibility: Props["visibility"] }) {
   return (
     <div className={className} aria-hidden="true">
       {visibility !== "mobile" ? (
-        <div className="hidden h-10 w-28 rounded-lg bg-slate-100 lg:block xl:w-36" />
+        <div className="hidden h-10 w-28 rounded-lg border border-slate-200 bg-white lg:block xl:w-36" />
       ) : null}
-      <div className="h-11 w-[5.5rem] rounded-lg bg-slate-100" />
+      <div className="h-11 w-[5.5rem] rounded-lg border border-slate-200 bg-white" />
     </div>
   );
 }
@@ -32,14 +33,10 @@ export default function NavBarToolsDeferred({ visibility = "desktop" }: Props) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const arm = () => setReady(true);
-    const delay = visibility === "mobile" ? 6000 : 4000;
-    if (typeof requestIdleCallback !== "undefined") {
-      const id = requestIdleCallback(arm, { timeout: delay });
-      return () => cancelIdleCallback(id);
-    }
-    const t = window.setTimeout(arm, delay / 2);
-    return () => window.clearTimeout(t);
+    return scheduleAfterLcp(() => setReady(true), {
+      bufferMs: visibility === "mobile" ? 1200 : 600,
+      fallbackMs: visibility === "mobile" ? 12000 : 9000,
+    });
   }, [visibility]);
 
   if (!ready) {

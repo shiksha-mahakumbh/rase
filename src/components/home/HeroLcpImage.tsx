@@ -1,8 +1,11 @@
 const BRAND_HERO_PNG = "/branding/shiksha-mahakumbh-brand-hero.png";
-const BRAND_HERO_WEBP_640 = "/branding/shiksha-mahakumbh-brand-hero-640.webp";
-const BRAND_HERO_WEBP_768 = "/branding/shiksha-mahakumbh-brand-hero-768.webp";
+export const BRAND_HERO_WEBP_640 = "/branding/shiksha-mahakumbh-brand-hero-640.webp";
+export const BRAND_HERO_WEBP_768 = "/branding/shiksha-mahakumbh-brand-hero-768.webp";
 
+/** @deprecated use HERO_LCP_PRELOAD_640 */
 export const HERO_LCP_PRELOAD = BRAND_HERO_WEBP_640;
+export const HERO_LCP_PRELOAD_640 = BRAND_HERO_WEBP_640;
+export const HERO_LCP_PRELOAD_768 = BRAND_HERO_WEBP_768;
 
 type HeroLcpImageProps = {
   alt: string;
@@ -10,7 +13,7 @@ type HeroLcpImageProps = {
   className?: string;
 };
 
-/** Native LCP image — avoids Next/Image hydration delay on the hero. */
+/** Native LCP image — direct WebP src avoids PNG→WebP upgrade delay. */
 export default function HeroLcpImage({
   alt,
   src = BRAND_HERO_PNG,
@@ -27,10 +30,11 @@ export default function HeroLcpImage({
           sizes="(max-width: 1024px) 100vw, 560px"
         />
         <img
-          src={BRAND_HERO_PNG}
+          src={BRAND_HERO_WEBP_640}
           alt={alt}
           width={1024}
           height={534}
+          sizes="(max-width: 1024px) 100vw, 560px"
           loading="eager"
           decoding="sync"
           fetchPriority="high"
@@ -46,7 +50,8 @@ export default function HeroLcpImage({
       alt={alt}
       width={1024}
       height={534}
-      decoding="async"
+      loading="eager"
+      decoding="sync"
       fetchPriority="high"
       className={className}
     />
