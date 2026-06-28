@@ -3,7 +3,9 @@ import type { DonationReceiptData } from "@/lib/receipt/donation-receipt";
 import {
   buildDonationReceiptCertText,
   DONATION_RECEIPT_ORG,
+  DONATION_RECEIPT_THANKS_EN,
   getDonationReceiptRows,
+  pdfSafeText,
 } from "@/lib/receipt/donation-receipt-layout";
 import { DONATION_RECEIPT_THEME, rgb } from "@/lib/receipt/donation-receipt-theme";
 
@@ -50,6 +52,47 @@ function ensurePageSpace(doc: jsPDF, y: number, needed: number): number {
   if (y + needed <= pageHeight - 40) return y;
   doc.addPage();
   return 36;
+}
+
+function drawEnglishThanks(
+  doc: jsPDF,
+  left: number,
+  right: number,
+  pageWidth: number,
+  y: number
+): number {
+  const thanks = DONATION_RECEIPT_THANKS_EN;
+  const blockW = right - left;
+  let blockH = 28;
+  for (const line of thanks.lines) {
+    blockH += doc.splitTextToSize(line, blockW - 24).length * 11 + 4;
+  }
+
+  doc.setFillColor(...C.surfaceWarm);
+  doc.setDrawColor(...C.saffron);
+  doc.setLineWidth(1);
+  doc.roundedRect(left, y, blockW, blockH, 4, 4, "FD");
+  doc.setDrawColor(...C.saffronDark);
+  doc.setLineWidth(3);
+  doc.line(left, y, left, y + blockH);
+
+  let ty = y + 16;
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(...C.navy);
+  doc.text(thanks.heading, pageWidth / 2, ty, { align: "center" });
+  ty += 14;
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(...C.text);
+  for (const line of thanks.lines) {
+    const lines = doc.splitTextToSize(line, blockW - 24);
+    doc.text(lines, pageWidth / 2, ty, { align: "center" });
+    ty += lines.length * 11 + 2;
+  }
+
+  return y + blockH + 12;
 }
 
 /** jsPDF fallback — uses pre-rendered Hindi PNGs when available */
@@ -112,15 +155,15 @@ export function renderDonationReceiptPdf(
 
   if (assets.hindiCampaignImage) {
     try {
-      const imgW = Math.min(textWidth, 220);
-      const imgH = 22;
+      const imgW = Math.min(textWidth, 240);
+      const imgH = 26;
       addImage(doc, assets.hindiCampaignImage, textLeft + (textWidth - imgW) / 2, ty, imgW, imgH);
-      ty += imgH + 4;
+      ty += imgH + 6;
     } catch {
-      headerLine(org.campaignHi, true, 11, C.saffronDark);
+      headerLine("Shiksha Mahakumbh Abhiyan", true, 11, C.saffronDark);
     }
   } else {
-    headerLine(org.campaignHi, true, 11, C.saffronDark);
+    headerLine("Shiksha Mahakumbh Abhiyan", true, 11, C.saffronDark);
   }
 
   headerLine(org.department, true, 10, C.navy);
@@ -163,7 +206,7 @@ export function renderDonationReceiptPdf(
 
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...C.text);
-    const valueLines = doc.splitTextToSize(row.value, right - left - 118);
+    const valueLines = doc.splitTextToSize(pdfSafeText(row.value), right - left - 118);
     doc.text(valueLines, left + 118, y);
     y += Math.max(14, valueLines.length * 11);
 
@@ -178,7 +221,7 @@ export function renderDonationReceiptPdf(
   if (assets.hindiThanksImage) {
     try {
       const blockW = right - left;
-      const blockH = 88;
+      const blockH = 96;
       doc.setFillColor(...C.surfaceWarm);
       doc.setDrawColor(...C.saffron);
       doc.setLineWidth(1);
@@ -186,11 +229,13 @@ export function renderDonationReceiptPdf(
       doc.setDrawColor(...C.saffronDark);
       doc.setLineWidth(3);
       doc.line(left, y, left, y + blockH);
-      addImage(doc, assets.hindiThanksImage, left + 10, y + 8, blockW - 20, blockH - 16);
+      addImage(doc, assets.hindiThanksImage, left + 8, y + 6, blockW - 16, blockH - 12);
       y += blockH + 12;
     } catch {
-      y += 8;
+      y = drawEnglishThanks(doc, left, right, pageWidth, y);
     }
+  } else {
+    y = drawEnglishThanks(doc, left, right, pageWidth, y);
   }
 
   y = ensurePageSpace(doc, y, 80);
@@ -210,7 +255,7 @@ export function renderDonationReceiptPdf(
 
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...C.textMuted);
-  const certLines = doc.splitTextToSize(buildDonationReceiptCertText(data), right - left - 16);
+  const certLines = doc.splitTextToSize(pdfSafeText(buildDonationReceiptCertText(data)), right - left - 16);
   doc.text(certLines, left + 8, y);
   y += certLines.length * 10 + 16;
 

@@ -31,6 +31,18 @@ export const DONATION_RECEIPT_THANKS = {
   ],
 } as const;
 
+export const DONATION_RECEIPT_THANKS_EN = {
+  heading: "Heartfelt Thanks",
+  lines: [
+    "Your generous contribution will strengthen holistic education initiatives under the Shiksha Mahakumbh Abhiyan.",
+    "Your support is a precious gift to youth and the world of education — we remain deeply grateful.",
+  ],
+} as const;
+
+export function pdfSafeText(value: string): string {
+  return value.replace(/\u20B9/g, "Rs. ").replace(/₹/g, "Rs. ").replace(/—/g, "-");
+}
+
 export type DonationReceiptLogoAssets = {
   dheDataUrl?: string | null;
   eventDataUrl?: string | null;
