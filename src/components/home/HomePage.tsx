@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
 import HeroSection from "./HeroSection";
 import HomeSectionNav from "./HomeSectionNav";
 import type { CmsPageData } from "@/lib/cms/types";
@@ -8,13 +7,12 @@ import SectionSkeleton from "@/components/performance/SectionSkeleton";
 import AnnouncementsMarquee from "@/components/layout/AnnouncementsMarquee";
 import NavBarShell from "@/components/layout/navbar/NavBarShell";
 import HomeBelowFold from "./HomeBelowFold";
+import HomeWelcomeModalDeferred from "./HomeWelcomeModalDeferred";
 import type { HeroContent } from "@/lib/home/build-hero-content";
 import type { HomeSectionsContent } from "@/lib/home/build-home-sections";
 import type { TickerItem } from "@/data/default-announcements";
 import type { Menu } from "@/components/layout/navbar/types";
 import type { ContentLocale } from "@prisma/client";
-
-const HomeWelcomeModal = dynamic(() => import("./HomeWelcomeModal"), { ssr: false });
 
 export default function HomePage({
   cmsData,
@@ -50,7 +48,7 @@ export default function HomePage({
           >
             <HomeBelowFold locale={locale} homeSections={homeSections} />
           </Suspense>
-          <HomeWelcomeModal />
+          <HomeWelcomeModalDeferred />
         </CmsProvider>
       </main>
     </div>
