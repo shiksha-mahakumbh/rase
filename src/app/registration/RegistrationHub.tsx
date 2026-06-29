@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import RegistrationShell from "@/components/registration/RegistrationShell";
 import { EVENT_NAME, RegistrationType } from "@/types/registration";
 import RegistrationProgress from "@/components/registration/RegistrationProgress";
