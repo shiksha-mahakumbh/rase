@@ -11,8 +11,8 @@ import {
 } from "@/server/lib/registration-types";
 import { REGISTRATION_ID_PREFIX } from "@/types/registration";
 import { emailsMatch, toPublicRegistrationSummary } from "@/lib/security/registration-lookup";
-import { generateRegistrationQrDataUrl } from "@/server/services/receipt.service";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { generateRegistrationQrDataUrl } from "@/server/services/receipt-qr.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 
 export type SaveRegistrationInput = {
   registrationType: string;

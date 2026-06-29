@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 
 function startOfDay(d = new Date()) {
   const x = new Date(d);

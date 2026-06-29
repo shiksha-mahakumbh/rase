@@ -1,6 +1,6 @@
 import type { Prisma, RegistrationType, CheckInStatus, PaymentStatus } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 
 export type AttendeeListOptions = {
   limit?: number;

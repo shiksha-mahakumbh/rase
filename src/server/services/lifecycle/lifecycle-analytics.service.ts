@@ -1,5 +1,5 @@
 import { prisma } from "@/server/db/prisma";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 
 function daysAgo(n: number) {
   const d = new Date();
