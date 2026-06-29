@@ -70,9 +70,10 @@ export function buildReceiptData(payload: ReceiptPayload): ReceiptData {
 
 export const RECEIPT_ORG = {
   regdNo: "6401",
+  regdDate: "10-11-2023",
   pan: "AAETV1652K",
   address: "E-7, Orchid Towers, Sector 125, Sunny Enclave, SAS Nagar, Punjab-140301",
-  web: "dhe.org.in",
-  email: "director@dhe.org.in",
+  web: "shikshamahakumbh.com",
+  email: "info@shikshamahakumbh.com",
   eventName: EVENT_NAME,
 } as const;

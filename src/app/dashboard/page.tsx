@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 type Dashboard = {
@@ -25,8 +26,18 @@ type Dashboard = {
 };
 
 export default function ParticipantDashboardPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading…</div>}>
+      <ParticipantDashboardInner />
+    </Suspense>
+  );
+}
+
+function ParticipantDashboardInner() {
+  const searchParams = useSearchParams();
   const [registrationId, setRegistrationId] = useState("");
   const [email, setEmail] = useState("");
+  const [lookupToken, setLookupToken] = useState("");
   const [data, setData] = useState<Dashboard | null>(null);
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -34,13 +45,33 @@ export default function ParticipantDashboardPage() {
   const [whatsapp, setWhatsapp] = useState("");
   const [address, setAddress] = useState("");
 
+  useEffect(() => {
+    const id =
+      searchParams.get("id") ??
+      (typeof window !== "undefined" ? sessionStorage.getItem("smk_registration_id") : null);
+    const mail =
+      searchParams.get("email") ??
+      (typeof window !== "undefined" ? sessionStorage.getItem("smk_registration_email") : null);
+    const token =
+      searchParams.get("token") ??
+      (typeof window !== "undefined" ? sessionStorage.getItem("smk_lookup_token") : null);
+
+    if (id) setRegistrationId(id);
+    if (mail) setEmail(mail);
+    if (token) setLookupToken(token);
+  }, [searchParams]);
+
   const login = async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/participant/dashboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ registrationId: registrationId.trim(), email: email.trim() }),
+        body: JSON.stringify({
+          registrationId: registrationId.trim(),
+          email: email.trim(),
+          lookupToken: lookupToken.trim() || undefined,
+        }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Login failed");
@@ -64,6 +95,7 @@ export default function ParticipantDashboardPage() {
         body: JSON.stringify({
           registrationId: data?.registrationId,
           email,
+          lookupToken: lookupToken.trim() || undefined,
           contactNumber: contact,
           whatsappNumber: whatsapp,
           address,

@@ -1,5 +1,11 @@
 import { EVENT_NAME } from "@/types/registration";
-import { RECEIPT_ORG, type ReceiptData } from "@/lib/receipt/receipt-data";
+import { type ReceiptData } from "@/lib/receipt/receipt-data";
+import { DONATION_RECEIPT_ORG } from "@/lib/receipt/donation-receipt-layout";
+import {
+  REGISTRATION_RECEIPT_THANKS,
+  getRegistrationReceiptRows,
+  registrationReceiptTitle,
+} from "@/lib/receipt/registration-receipt-layout";
 import {
   RECEIPT_DHE_LOGO_PATH,
   RECEIPT_EVENT_LOGO_PATH,
@@ -7,104 +13,121 @@ import {
 
 export type ReceiptTemplateProps = {
   data: ReceiptData;
-  /** Root element id — used by print handler */
+  qrDataUrl?: string | null;
   id?: string;
   className?: string;
 };
 
 export default function ReceiptTemplate({
   data,
+  qrDataUrl,
   id = "registration-receipt",
   className = "",
 }: ReceiptTemplateProps) {
+  const org = DONATION_RECEIPT_ORG;
+  const thanks = REGISTRATION_RECEIPT_THANKS;
+
   return (
     <div
       id={id}
-      className={`mx-auto max-w-[720px] border-2 border-brand-navy/20 bg-white p-6 text-sm text-gray-900 print:m-0 print:border-black print:p-4 print:[break-inside:avoid] ${className}`}
+      className={`mx-auto max-w-[720px] overflow-hidden rounded-lg border-2 border-[#1E3A5F] border-t-4 border-t-[#FF9933] bg-white p-6 text-sm text-[#1E293B] shadow-lg print:m-0 print:rounded-none print:border-black print:shadow-none print:[break-inside:avoid] ${className}`}
     >
-      <header className="border-b border-brand-navy/30 pb-4 text-center">
-        <div className="flex items-start justify-between gap-4">
-          <div className="text-left text-xs">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={RECEIPT_DHE_LOGO_PATH}
-              alt="Department of Holistic Education"
-              width={72}
-              height={72}
-              className="mb-2 object-contain"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-            />
-            <p className="font-semibold text-brand-navy">Regd. No. {RECEIPT_ORG.regdNo}</p>
-            <p>PAN: {RECEIPT_ORG.pan}</p>
-          </div>
-          <div className="flex-1">
-            <p className="text-lg font-bold uppercase text-red-700">
-              Department of Holistic Education
-            </p>
-            <p className="text-xs font-semibold text-brand-navy">
-              A Unit of Vidya Bharti Institute of Training and Research Trust
-            </p>
-            <p className="mt-1 text-xs">{RECEIPT_ORG.address}</p>
-            <p className="text-xs">
-              Web: {RECEIPT_ORG.web} · E-mail: {RECEIPT_ORG.email}
-            </p>
-            <p className="mt-1 text-xs font-bold text-brand-navy">{EVENT_NAME}</p>
-          </div>
-          <div className="text-right">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={RECEIPT_EVENT_LOGO_PATH}
-              alt="Shiksha Mahakumbh"
-              width={80}
-              height={80}
-              className="object-contain"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-            />
-          </div>
+      <header className="flex items-start justify-between gap-3 border-b-2 border-[#1E3A5F] pb-4">
+        <div className="flex w-[84px] shrink-0 items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={RECEIPT_DHE_LOGO_PATH}
+            alt="Department of Holistic Education"
+            width={84}
+            height={84}
+            className="h-[84px] w-[84px] object-contain"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
+          />
         </div>
-        <h1 className="mt-4 text-xl font-extrabold uppercase tracking-wide text-brand-navy">
-          Registration Fee Receipt
-        </h1>
+
+        <div className="min-w-0 flex-1 text-center leading-snug">
+          <p className="text-[10px] text-slate-500">
+            <strong>Regd. No. {org.regdNo}</strong> | Date: {org.regdDate} | PAN: {org.pan}
+          </p>
+          <p className="mt-1 font-bold text-[#B45309] [font-family:'Noto_Sans_Devanagari',Mangal,sans-serif] text-lg">
+            {org.campaignHi}
+          </p>
+          <p className="text-xs font-bold tracking-wide text-[#0B1F3B]">{org.department}</p>
+          <p className="text-[9px] uppercase tracking-wider text-slate-500">{org.unitLine}</p>
+          <p className="text-[10px] font-bold leading-tight text-[#1E3A5F]">{org.trustName}</p>
+          <p className="mt-1 text-[9.5px] text-slate-500">
+            {org.addressLine1}
+            <br />
+            {org.addressLine2}
+            <br />
+            Web. {org.web}, E-mail: {org.email}
+          </p>
+        </div>
+
+        <div className="flex w-[84px] shrink-0 items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={RECEIPT_EVENT_LOGO_PATH}
+            alt="Shiksha Mahakumbh"
+            width={84}
+            height={84}
+            className="h-[84px] w-[84px] object-contain"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
+          />
+        </div>
       </header>
 
-      <section className="mt-4 grid gap-2 text-sm">
-        <ReceiptRow label="Receipt No." value={data.receiptNumber} />
-        <ReceiptRow label="Registration ID" value={data.registrationId} />
-        <ReceiptRow label="Date" value={data.date} />
-      </section>
+      <div className="my-4 rounded-lg bg-gradient-to-r from-[#0B1F3B] to-[#1E3A5F] px-3 py-2.5 text-center">
+        <h1 className="text-base font-bold uppercase tracking-wide text-white">
+          {registrationReceiptTitle(data.amount)}
+        </h1>
+      </div>
 
-      <section className="mt-4 border-t border-dashed border-gray-400 pt-4">
-        <h2 className="mb-2 font-bold text-brand-navy">Registrant Details</h2>
-        <ReceiptRow label="Name" value={data.fullName} />
-        <ReceiptRow label="Category" value={data.category} />
-        <ReceiptRow label="Institution" value={data.institution} />
-        <ReceiptRow label="Email" value={data.email} />
-        <ReceiptRow label="Phone" value={data.contactNumber} />
-      </section>
+      <table className="w-full border-collapse text-sm">
+        <tbody>
+          {getRegistrationReceiptRows(data).map((row) => (
+            <tr key={row.label} className="border-b border-dotted border-slate-300 even:bg-[#FFFBF5]">
+              <td className="w-[38%] whitespace-nowrap px-2 py-2 font-semibold text-[#1E3A5F]">
+                {row.label}
+              </td>
+              <td className="px-2 py-2">{row.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-      <section className="mt-4 border-t border-dashed border-gray-400 pt-4">
-        <h2 className="mb-2 font-bold text-brand-navy">Payment Details</h2>
-        <ReceiptRow label="Amount" value={`₹${data.amount.toLocaleString("en-IN")}`} />
-        <ReceiptRow label="Payment ID" value={data.paymentId ?? "—"} />
-        <ReceiptRow label="Order ID" value={data.orderId ?? "—"} />
-        <ReceiptRow label="Mode" value={data.paymentMode} />
-        <ReceiptRow label="Transaction Date" value={data.transactionDate} />
-        {data.panNumber ? <ReceiptRow label="PAN" value={data.panNumber} /> : null}
-      </section>
-
-      <footer className="mt-8 flex items-end justify-between border-t border-brand-navy/30 pt-6">
-        <div className="rounded border-2 border-brand-navy px-6 py-3 text-center font-bold text-red-700">
-          ₹{data.amount.toLocaleString("en-IN")}
+      {qrDataUrl ? (
+        <div className="my-4 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={qrDataUrl}
+            alt="Registration QR code"
+            width={160}
+            height={160}
+            className="mx-auto h-40 w-40 object-contain"
+          />
+          <p className="mt-2 text-xs text-slate-500">
+            Scan at venue check-in · {data.registrationId} · {EVENT_NAME}
+          </p>
         </div>
-        <div className="text-center text-xs">
-          <div className="mb-8 border-b border-gray-400 pb-1">Authorized Signature</div>
-          <p className="font-semibold text-brand-navy">Department of Holistic Education</p>
-        </div>
-      </footer>
+      ) : null}
+
+      <div className="my-4 rounded-lg border border-[#FF9933] border-l-4 border-l-[#B45309] bg-gradient-to-br from-[#FFFBF5] to-white p-4 text-center [font-family:'Noto_Sans_Devanagari',Mangal,sans-serif]">
+        <h2 className="text-base font-bold text-[#0B1F3B]">{thanks.heading}</h2>
+        {thanks.lines.map((line) => (
+          <p key={line} className="mt-2 text-[12.5px] leading-relaxed text-[#1E293B]">
+            {line}
+          </p>
+        ))}
+      </div>
+
+      <p className="text-center text-[10px] text-slate-500">
+        This is a computer-generated receipt for {EVENT_NAME}. No physical signature is required.
+      </p>
     </div>
   );
 }
