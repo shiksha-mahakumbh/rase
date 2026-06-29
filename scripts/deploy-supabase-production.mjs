@@ -53,6 +53,7 @@ async function execSqlFile(label, relativePath) {
 
 async function applyBuckets() {
   await execSqlFile("storage buckets", "supabase/sql/001_storage_buckets.sql");
+  await execSqlFile("publications bucket", "supabase/sql/002_publications_bucket.sql");
 }
 
 async function applySeed() {
@@ -69,6 +70,7 @@ async function applyRls() {
     "supabase/policies/analytics.sql",
     "supabase/policies/phase_b.sql",
     "supabase/policies/storage-production.sql",
+    "supabase/policies/storage-publications.sql",
   ];
   for (const file of files) {
     await execSqlFile(file, file);
