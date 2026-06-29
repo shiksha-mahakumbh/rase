@@ -4,7 +4,6 @@ import {
   buildRegistrationReceiptBodyHtml,
   REGISTRATION_RECEIPT_CSS,
 } from "@/lib/receipt/registration-receipt-layout";
-import { loadDonationReceiptLogoAssets } from "@/lib/receipt/donation-receipt-logos-server";
 
 /** HTML receipt for browser print — same layout as PDF download */
 export function buildRegistrationReceiptHtml(
@@ -22,13 +21,9 @@ export function buildRegistrationReceiptHtml(
   let logos: DonationReceiptLogoAssets = {};
 
   if (options.embedLogos) {
-    const loaded =
-      options.dheDataUrl !== undefined || options.eventDataUrl !== undefined
-        ? { dheDataUrl: options.dheDataUrl, eventDataUrl: options.eventDataUrl }
-        : loadDonationReceiptLogoAssets();
     logos = {
-      dheDataUrl: loaded.dheDataUrl,
-      eventDataUrl: loaded.eventDataUrl,
+      dheDataUrl: options.dheDataUrl ?? null,
+      eventDataUrl: options.eventDataUrl ?? null,
     };
   }
 
