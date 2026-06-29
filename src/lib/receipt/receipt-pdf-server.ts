@@ -7,7 +7,6 @@ import {
   type ReceiptPayload,
 } from "@/lib/receipt/receipt-data";
 import { renderRegistrationReceiptPdf } from "@/lib/receipt/registration-receipt-renderer";
-import { generateRegistrationReceiptPdfFromHtml } from "@/lib/receipt/registration-receipt-pdf-html";
 import {
   RECEIPT_DHE_LOGO_PATH,
   RECEIPT_EVENT_LOGO_PATH,
@@ -77,6 +76,9 @@ export async function generateReceiptPdfBufferFromData(
 ): Promise<Buffer> {
   const qrDataUrl = qrDataUrlFromBuffer(qrPng);
   try {
+    const { generateRegistrationReceiptPdfFromHtml } = await import(
+      "@/lib/receipt/registration-receipt-pdf-html"
+    );
     return await generateRegistrationReceiptPdfFromHtml(data, qrDataUrl);
   } catch (error) {
     console.warn("REGISTRATION_RECEIPT_PDF_HTML_FALLBACK", {

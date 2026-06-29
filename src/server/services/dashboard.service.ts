@@ -1,5 +1,5 @@
 import { prisma } from "@/server/db/prisma";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 import type { RegistrationAdminStats } from "@/types/admin-dashboard";
 
 export async function getRegistrationAdminStats(): Promise<RegistrationAdminStats> {

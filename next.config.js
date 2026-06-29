@@ -3,6 +3,13 @@ const { LEGACY_REDIRECTS } = require("./src/config/legacy-redirects.js");
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+const RECEIPT_LOGO_INCLUDES = [
+  "./public/images/dhe-logo.png",
+  "./public/images/shiksha-mahakumbh-logo.png",
+  "./public/receipt/hindi-campaign.png",
+  "./public/receipt/hindi-thanks-block.png",
+];
+
 /** @type {import('next').NextConfig} */
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -58,6 +65,7 @@ const nextConfig = {
   },
   /** Prevent ~600MB `public/` from being traced into API routes. */
   outputFileTracingExcludes: {
+    "/api/**": ["./public/**"],
     "/api/donation/complete": ["./public/**"],
     "/api/donation/receipt": ["./public/**"],
     "/api/donation/receipt/preview": ["./public/**"],
@@ -65,23 +73,22 @@ const nextConfig = {
     "/api/payments/create-order": ["./public/**"],
     "/api/payments/verify-payment": ["./public/**"],
     "/api/registration/submit": ["./public/**"],
+    "/api/registration/receipt": ["./public/**"],
+    "/api/registration/send-email": ["./public/**"],
+    "/api/participant/download": ["./public/**"],
     "/api/v2/registration/submit": ["./public/**"],
     "/api/v2/admin/donations": ["./public/**"],
     "/api/v2/admin/donations/[donationId]/resend-receipt": ["./public/**"],
+    "/api/v2/admin/receipts/[registrationId]": ["./public/**"],
   },
   outputFileTracingIncludes: {
-    "/api/donation/complete": [
-      "./public/images/dhe-logo.png",
-      "./public/images/shiksha-mahakumbh-logo.png",
-      "./public/receipt/hindi-campaign.png",
-      "./public/receipt/hindi-thanks-block.png",
-    ],
-    "/api/donation/receipt": [
-      "./public/images/dhe-logo.png",
-      "./public/images/shiksha-mahakumbh-logo.png",
-      "./public/receipt/hindi-campaign.png",
-      "./public/receipt/hindi-thanks-block.png",
-    ],
+    "/api/donation/complete": RECEIPT_LOGO_INCLUDES,
+    "/api/donation/receipt": RECEIPT_LOGO_INCLUDES,
+    "/api/registration/submit": RECEIPT_LOGO_INCLUDES,
+    "/api/registration/receipt": RECEIPT_LOGO_INCLUDES,
+    "/api/registration/send-email": RECEIPT_LOGO_INCLUDES,
+    "/api/participant/download": RECEIPT_LOGO_INCLUDES,
+    "/api/v2/admin/receipts/[registrationId]": RECEIPT_LOGO_INCLUDES,
   },
   /** Reduces dev memory spikes from PackFileCacheStrategy on large codebases */
   webpack: (config, { dev }) => {

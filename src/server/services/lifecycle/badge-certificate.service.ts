@@ -6,7 +6,7 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { EVENT_NAME } from "@/types/registration";
 import { SITE_URL } from "@/config/site";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 
 const TYPE_TO_BADGE: Partial<Record<string, BadgeTemplate>> = {
   Delegate: "Delegate",

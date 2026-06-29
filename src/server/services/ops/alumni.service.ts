@@ -2,7 +2,7 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { ServiceError } from "@/server/lib/errors";
 import { writeAuditLog } from "@/server/services/audit.service";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 import { SITE_URL } from "@/config/site";
 
 export async function listAlumni(options: {

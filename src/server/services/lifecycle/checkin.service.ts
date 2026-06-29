@@ -1,7 +1,7 @@
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 
 function parseRegistrationId(raw: string): string {
   const trimmed = raw.trim();
