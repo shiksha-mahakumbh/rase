@@ -31,6 +31,7 @@
     "check:legacy-urls": "node scripts/check-legacy-storage-urls.mjs",
     "audit:public": "node scripts/public-asset-audit.mjs",
     "upload:proceedings": "node scripts/upload-proceedings-github-release.mjs",
+    "sync:vercel-preview-env": "node scripts/sync-vercel-preview-env.mjs",
     "compress:public": "node scripts/compress-edition-gallery-images.mjs",
     "check:vercel-deploy": "node scripts/check-vercel-deploy.mjs",
     "audit:firebase-removal": "node scripts/firebase-removal-audit.mjs",
