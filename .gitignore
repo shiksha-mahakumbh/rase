@@ -9,6 +9,13 @@ docs/lighthouse/
 docs/launch-audit-results.json
 docs/production-go-live-results.json
 scripts/link-verify-result.json
+scripts/pdf-extract-tmp/
+build-output.txt
+reports/
+scripts/301-audit.mjs
+scripts/generate-route-audit-report.mjs
+scripts/removable-redirects-audit.mjs
+scripts/user-audit-probe.mjs
 .vercel
 exports/firebase/
 exports/gcp-firestore/
