@@ -15,10 +15,10 @@ export const PRESS_OG_IMAGES: Record<number, string> = {
   3: "/2024M/press3.jpg",
   4: "/2024M/press4.jpg",
   5: "/2024M/press5.jpg",
-  6: "/2024M/press6.jpg",
-  7: "/2024M/press7.jpg",
-  8: "/2024M/press8.jpg",
-  9: "/2024M/press9.jpg",
+  6: "/2024M/Press6.jpg",
+  7: "/2024M/Press7.jpg",
+  8: "/2024M/Press8.jpg",
+  9: "/2024M/Press8.jpg",
 };
 
 export function getPressOgImageUrl(pressNumber: number): string {
