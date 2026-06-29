@@ -32,6 +32,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Public asset audit
+        run: npm run audit:public
+
       - name: Security tests
         run: npm run test:security
         env:

@@ -29,6 +29,7 @@
     "setup:sentry": "node scripts/install-sentry-vercel.mjs",
     "predeploy:check": "node scripts/pre-deploy-check.mjs",
     "check:legacy-urls": "node scripts/check-legacy-storage-urls.mjs",
+    "audit:public": "node scripts/public-asset-audit.mjs",
     "audit:firebase-removal": "node scripts/firebase-removal-audit.mjs",
     "cleanup:vercel-firebase": "node scripts/cleanup-vercel-firebase-env.mjs",
     "export:gcp-firestore": "node scripts/gcp-export-firestore.mjs",
