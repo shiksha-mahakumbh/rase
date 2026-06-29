@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Compress public gallery assets
+        run: npm run compress:public
+
       - name: Lint
         run: npm run lint
 

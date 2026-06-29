@@ -1,5 +1,6 @@
 import { editionTitle, getEditionByNumber } from "@/data/past-editions";
 import { SMK_1_0_PATH, SMK_2_0_PATH, SMK_3_0_PATH, SMK_4_0_PATH, SMK_5_0_PATH } from "@/data/editions/paths";
+import { PROCEEDINGS_PDF } from "@/data/proceedings-pdfs";
 import { SITE_URL } from "@/config/site";
 
 export type ProceedingsVolumeEntry = {
@@ -43,7 +44,7 @@ export const PROCEEDINGS_CATALOG: ProceedingsVolumeEntry[] = [
     paperCountNote: "65 papers presented (Proceeding1.pdf)",
     coverSrc: "/proceeding1.jpg",
     coverAlt: `Proceedings Volume I — ${smk20.theme}, ${smk20.venue} ${smk20.year}`,
-    pdfHref: "/Proceeding1.pdf",
+    pdfHref: PROCEEDINGS_PDF.vol1,
     readHref: "/proceeding1",
     pastEventHref: SMK_2_0_PATH,
     accent: "from-brand-navy to-slate-800",
@@ -61,7 +62,7 @@ export const PROCEEDINGS_CATALOG: ProceedingsVolumeEntry[] = [
     paperCountNote: "Representative papers indexed online (Proceeding2.pdf); 81 papers at SMK 1.0",
     coverSrc: "/proceeding2.jpg",
     coverAlt: `Proceedings Volume II — ${smk10.theme}, ${smk10.venue} ${smk10.year}`,
-    pdfHref: "/Proceeding2.pdf",
+    pdfHref: PROCEEDINGS_PDF.vol2,
     readHref: "/proceeding2",
     pastEventHref: SMK_1_0_PATH,
     accent: "from-emerald-700 to-teal-900",
@@ -79,7 +80,7 @@ export const PROCEEDINGS_CATALOG: ProceedingsVolumeEntry[] = [
     paperCountNote: "61 papers presented (Proceeding3.pdf)",
     coverSrc: "/proceeding3.jpg",
     coverAlt: `Proceedings Volume III — ${smk30.theme}, ${smk30.venue} ${smk30.year}`,
-    pdfHref: "/Proceeding3.pdf",
+    pdfHref: PROCEEDINGS_PDF.vol3,
     readHref: "/proceeding3",
     pastEventHref: SMK_3_0_PATH,
     accent: "from-amber-600 to-orange-900",

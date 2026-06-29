@@ -28,11 +28,11 @@ const eventDetails = {
       - Session 7: Q&A and Networking`,
   },
   images: [
-    "/2023K/b1.JPG",
-    "/2023K/bandaru_dattareya.JPG",
+    "/2023K/b1.webp",
+    "/2023K/bandaru_dattareya.webp",
     "/2023K/k1.jpg",
-    "/2023K/k2.JPG",
-    "/2023K/Shri Aswini Updhaya.JPG",
+    "/2023K/k2.webp",
+    "/2023K/Shri Aswini Updhaya.webp",
   ],
 };
 

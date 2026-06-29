@@ -14,8 +14,20 @@ const WEBP_QUALITY = 78;
 const MAX_OUTPUT_KB = 180;
 
 const JOBS = [
-  { input: "2023K/k2.JPG", output: "2023K/k2.webp" },
-  { input: "2023K/b1.JPG", output: "2023K/b1.webp" },
+  { input: "2023K/k2.JPG", output: "2023K/k2.webp", removeSource: true },
+  { input: "2023K/b1.JPG", output: "2023K/b1.webp", removeSource: true },
+  {
+    input: "2023K/bandaru_dattareya.JPG",
+    output: "2023K/bandaru_dattareya.webp",
+    removeSource: true,
+    maxOutputKb: 220,
+  },
+  {
+    input: "2023K/Shri Aswini Updhaya.JPG",
+    output: "2023K/Shri Aswini Updhaya.webp",
+    removeSource: true,
+    maxOutputKb: 220,
+  },
   { input: "2023M/k3.jpeg", output: "2023M/k3-opt.webp" },
   { input: "2023M/k6.jpeg", output: "2023M/k6-opt.webp" },
   { input: "sm24printmedia/1.jpg", output: "sm24printmedia/1-lcp.webp" },
@@ -32,7 +44,7 @@ const JOBS = [
   { input: "sk24printmedia/18.jpg", output: "sk24printmedia/18-opt.webp" },
 ];
 
-async function compressOne({ input, output }) {
+async function compressOne({ input, output, removeSource = false, maxOutputKb = MAX_OUTPUT_KB }) {
   const inPath = path.join(PUBLIC, input);
   const outPath = path.join(PUBLIC, output);
 
@@ -51,7 +63,7 @@ async function compressOne({ input, output }) {
       .webp({ quality, effort: 4 })
       .toBuffer();
 
-    if (buffer.length <= MAX_OUTPUT_KB * 1024 || quality <= 52) break;
+    if (buffer.length <= maxOutputKb * 1024 || quality <= 52) break;
     quality -= 8;
   }
 
@@ -59,6 +71,11 @@ async function compressOne({ input, output }) {
   const inKb = Math.round(fs.statSync(inPath).size / 1024);
   const outKb = Math.round(buffer.length / 1024);
   console.log(`✓ ${input} (${inKb} KB) → ${output} (${outKb} KB, q=${quality})`);
+
+  if (removeSource && inPath !== outPath) {
+    fs.unlinkSync(inPath);
+    console.log(`  removed source ${input}`);
+  }
 }
 
 async function main() {

@@ -1,5 +1,6 @@
 import type { EditionDetailContent } from "@/data/editions/types";
 import { SMK_1_0_PATH } from "@/data/editions/paths";
+import { PROCEEDINGS_PDF } from "@/data/proceedings-pdfs";
 
 export { SMK_1_0_PATH };
 export const SMK_1_0_LEGACY_PATH = "/past_event/sm23";
@@ -69,7 +70,7 @@ export const SMK_1_0_CONTENT: EditionDetailContent = {
   campaignPdf: "/RASE_2023_1ST_EDITION_Campaign.pdf",
   proceedingHref: "/proceeding2",
   relatedLinks: [
-    { label: "Proceedings Volume II (PDF)", href: "/Proceeding2.pdf" },
+    { label: "Proceedings Volume II (PDF)", href: PROCEEDINGS_PDF.vol2 },
     { label: "Read Volume II online", href: "/proceeding2" },
     { label: "Campaign report (PDF)", href: "/RASE_2023_1ST_EDITION_Campaign.pdf" },
     { label: "Digital media archive", href: "/media/shiksha-mahakumbh/1.0/digital" },
