@@ -9,6 +9,7 @@
  * Usage:
  *   node scripts/setup-audit-vercel-env.mjs
  *   node scripts/setup-audit-vercel-env.mjs --dry-run
+ *   node scripts/setup-audit-vercel-env.mjs --preview   # sync audit vars to Preview env
  *
  * Requires VERCEL_TOKEN env or Vercel CLI auth (`npx vercel login`).
  */

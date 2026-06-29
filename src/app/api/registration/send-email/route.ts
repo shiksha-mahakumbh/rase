@@ -10,6 +10,7 @@ import {
   receiptDownloadUrl,
 } from "@/server/services/receipt.service";
 import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REG_ID_RE = /^SMK2026-\d{6}$/;

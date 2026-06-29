@@ -3,6 +3,7 @@ import { createApiHandler } from "@/server/lib/api-handler";
 import { prisma } from "@/server/db/prisma";
 import { ServiceError } from "@/server/lib/errors";
 import { resendPaymentEmail } from "@/server/services/admin/receipt-admin.service";
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 export const POST = createApiHandler(
   async (_request: NextRequest, context: { params: Promise<{ id: string }> }) => {

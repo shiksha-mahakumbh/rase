@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler } from "@/server/lib/api-handler";
-import { listDonationRecords } from "@/server/services/donation.service";
+import { listDonationRecords } from "@/server/services/donation-list.service";
 
 export const GET = createApiHandler(
   async (request: NextRequest) => {

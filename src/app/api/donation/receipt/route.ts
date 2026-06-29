@@ -6,9 +6,7 @@ import {
 import { buildDonationReceiptHtml, buildDonationReceiptData } from "@/lib/receipt/donation-receipt";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { SITE_URL } from "@/config/site";
-
-export const runtime = "nodejs";
-export const maxDuration = 60;
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);

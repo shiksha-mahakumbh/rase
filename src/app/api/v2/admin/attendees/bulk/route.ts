@@ -7,6 +7,7 @@ import {
 } from "@/server/services/lifecycle/badge-certificate.service";
 import { resendPaymentEmail } from "@/server/services/admin/receipt-admin.service";
 import { createCampaign, sendCampaign } from "@/server/services/lifecycle/communication.service";
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 export const POST = createApiHandler(
   async (request: NextRequest) => {

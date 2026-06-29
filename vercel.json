@@ -1,6 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
+  "functions": {
+    "src/app/api/registration/submit/route.ts": { "memory": 1024 },
+    "src/app/api/registration/receipt/route.ts": { "memory": 1024 },
+    "src/app/api/registration/send-email/route.ts": { "memory": 1024 },
+    "src/app/api/participant/download/route.ts": { "memory": 1024 },
+    "src/app/api/donation/complete/route.ts": { "memory": 1024 },
+    "src/app/api/donation/receipt/route.ts": { "memory": 1024 },
+    "src/app/api/v2/admin/receipts/[registrationId]/route.ts": { "memory": 1024 },
+    "src/app/api/v2/admin/donations/[donationId]/resend-receipt/route.ts": { "memory": 1024 },
+    "src/app/api/v2/admin/email-logs/[id]/resend/route.ts": { "memory": 1024 },
+    "src/app/api/v2/admin/attendees/bulk/route.ts": { "memory": 1024 }
+  },
   "crons": [
     {
       "path": "/api/cron/analytics-retention",

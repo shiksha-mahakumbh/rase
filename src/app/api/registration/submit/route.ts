@@ -29,7 +29,7 @@ import type { EmailLogStatus } from "@prisma/client";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const maxDuration = 60;
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 function submitLog(event: string, payload: Record<string, unknown>) {
   console.info("REGISTRATION_SUBMIT", { event, ...payload });

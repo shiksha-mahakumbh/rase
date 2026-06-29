@@ -9,6 +9,7 @@ import {
 import { generateBadgePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { generateCertificatePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { buildReceiptPayloadFromRegistration } from "@/server/services/admin/receipt-admin.service";
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 async function verifyParticipant(registrationId: string, email: string) {
   const reg = await prisma.registration.findFirst({

@@ -63,3 +63,6 @@ jobs:
             sleep 30
           done
           echo "::warning::Post-deploy cache purge did not succeed — run warm-cache manually"
+
+      - name: Production smoke test
+        run: node scripts/production-smoke-test.mjs https://www.rase.co.in

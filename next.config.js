@@ -80,6 +80,8 @@ const nextConfig = {
     "/api/v2/admin/donations": ["./public/**"],
     "/api/v2/admin/donations/[donationId]/resend-receipt": ["./public/**"],
     "/api/v2/admin/receipts/[registrationId]": ["./public/**"],
+    "/api/v2/admin/email-logs/[id]/resend": ["./public/**"],
+    "/api/v2/admin/attendees/bulk": ["./public/**"],
   },
   outputFileTracingIncludes: {
     "/api/donation/complete": RECEIPT_LOGO_INCLUDES,
@@ -89,6 +91,9 @@ const nextConfig = {
     "/api/registration/send-email": RECEIPT_LOGO_INCLUDES,
     "/api/participant/download": RECEIPT_LOGO_INCLUDES,
     "/api/v2/admin/receipts/[registrationId]": RECEIPT_LOGO_INCLUDES,
+    "/api/v2/admin/donations/[donationId]/resend-receipt": RECEIPT_LOGO_INCLUDES,
+    "/api/v2/admin/email-logs/[id]/resend": RECEIPT_LOGO_INCLUDES,
+    "/api/v2/admin/attendees/bulk": RECEIPT_LOGO_INCLUDES,
   },
   /** Reduces dev memory spikes from PackFileCacheStrategy on large codebases */
   webpack: (config, { dev }) => {
