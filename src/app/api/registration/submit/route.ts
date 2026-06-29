@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveRegistration } from "@/server/services/registration.service";
 import { isSupportedType } from "@/server/lib/registration-types";
-import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
+import { verifyRegistrationSubmitCaptcha } from "@/lib/security/registration-captcha";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { getRequestContext } from "@/server/lib/request";
 import {
@@ -223,7 +223,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const captcha = await verifyRecaptchaToken(captchaToken, "registration");
+    const captcha = await verifyRegistrationSubmitCaptcha({
+      captchaToken,
+      fee,
+      razorpayPaymentId,
+    });
     if (!captcha.ok) {
       console.warn("registration submit captcha failed:", captcha.error);
       return NextResponse.json(
