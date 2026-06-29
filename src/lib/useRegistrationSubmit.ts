@@ -35,10 +35,18 @@ async function getCaptchaToken(): Promise<string | null> {
     return process.env.NODE_ENV !== "production" ? "dev-bypass" : null;
   }
 
-  const ready = await waitForRecaptcha();
-  if (!ready) return null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const ready = await waitForRecaptcha(attempt === 0 ? 20_000 : 12_000);
+    if (!ready) {
+      await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+      continue;
+    }
+    const token = await executeRecaptcha("registration");
+    if (token) return token;
+    await new Promise((r) => setTimeout(r, 600));
+  }
 
-  return executeRecaptcha("registration");
+  return null;
 }
 
 async function uploadRegistrationFile(
@@ -79,10 +87,14 @@ export function useRegistrationSubmit() {
   }: SubmitOptions) => {
     setLoading(true);
     try {
+      const fee = data.registrationFee as number | undefined;
       const captchaToken = await getCaptchaToken();
-      if (!captchaToken) {
+      const hasVerifiedRazorpay = Boolean(
+        (fee ?? 0) > 0 && String(data.razorpayPaymentId ?? "").trim()
+      );
+      if (!captchaToken && !hasVerifiedRazorpay) {
         toast.error(
-          "Security check is still loading. Please wait a moment and try again."
+          "Security check could not load. Disable ad blockers, refresh the page, and try again."
         );
         return;
       }
@@ -113,7 +125,6 @@ export function useRegistrationSubmit() {
         );
       }
 
-      const fee = data.registrationFee as number | undefined;
       const resolvedPaymentStatus: PaymentStatus =
         paymentStatus ??
         resolvePaymentStatus(registrationType, {

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { verifyRecaptchaToken } from "@/lib/security/recaptcha";
+import { verifyRegistrationSubmitCaptcha } from "@/lib/security/registration-captcha";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
 import { getRequestContext } from "@/server/lib/request";
 import { getRegistrationService } from "@/server/backend";
@@ -23,7 +23,20 @@ export const POST = createApiHandler(
     }
     if (!body.data) throw new ServiceError("Invalid registration data", 400);
 
-    const captcha = await verifyRecaptchaToken(body.captchaToken, "registration");
+    const paymentData =
+      body.data.payment && typeof body.data.payment === "object"
+        ? (body.data.payment as Record<string, unknown>)
+        : null;
+    const fee = Number(body.data.registrationFee ?? paymentData?.registrationFee ?? 0);
+    const razorpayPaymentId = String(
+      body.data.razorpayPaymentId ?? paymentData?.razorpayPaymentId ?? ""
+    ).trim();
+
+    const captcha = await verifyRegistrationSubmitCaptcha({
+      captchaToken: body.captchaToken,
+      fee,
+      razorpayPaymentId: razorpayPaymentId || null,
+    });
     if (!captcha.ok) throw new ServiceError("Security verification failed", 403, "CAPTCHA_FAILED");
 
     const guarded = await guardRegistrationSubmit({

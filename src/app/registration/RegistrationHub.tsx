@@ -189,6 +189,18 @@ function RegistrationHubInner() {
     });
   }, [showPaymentStep, step]);
 
+  useEffect(() => {
+    if (step < 2) return;
+    void import("@/lib/security/recaptcha-client").then(
+      ({ isRecaptchaConfigured, waitForRecaptcha, executeRecaptcha }) => {
+        if (!isRecaptchaConfigured()) return;
+        void waitForRecaptcha(25_000).then((ready) => {
+          if (ready) void executeRecaptcha("registration");
+        });
+      }
+    );
+  }, [step]);
+
   const goToPayment = useCallback(async () => {
     const ok = (await flow?.requestPaymentStep()) ?? true;
     if (!ok) return;
