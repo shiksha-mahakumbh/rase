@@ -17,3 +17,7 @@ exports/**/*.json
 !exports/**/manifest.example.json
 public/abhiyanphotoframe.pdf
 public/abhiyan-photo-frame/
+public/donation-receipt-preview.html
+public/donation-receipt-preview.pdf
+public/fonts/
+.env*

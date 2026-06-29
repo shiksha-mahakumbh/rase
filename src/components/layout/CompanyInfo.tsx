@@ -101,7 +101,7 @@ const CompanyInfo: React.FC = () => {
               aria-label="Department of Holistic Education"
             >
               <Image
-                src="/DHELogo.png"
+                src="/logo.png"
                 alt="Department of Holistic Education (DHE) Logo"
                 className="h-20 w-20 transition-transform duration-300 hover:scale-110 md:h-28 md:w-28 lg:h-32 lg:w-32"
                 height={128}
