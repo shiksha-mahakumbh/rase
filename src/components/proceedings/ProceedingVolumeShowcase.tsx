@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import type { ProceedingsVolumeEntry } from "@/data/proceedings-hub";
+import { proceedingsPdfLinkProps } from "@/data/proceedings-pdfs";
 
 export interface ProceedingPaper {
   id: string;
@@ -120,8 +121,7 @@ export default function ProceedingVolumeShowcase({ volume, data }: Props) {
             </dl>
             <div className="mt-5 flex flex-wrap gap-3">
               <a
-                href={volume.pdfHref}
-                download={volume.pdfHref.substring(volume.pdfHref.lastIndexOf("/") + 1)}
+                {...proceedingsPdfLinkProps(volume.pdfHref)}
                 className="rounded-lg bg-brand-saffron px-4 py-2 text-sm font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white"
               >
                 Download PDF

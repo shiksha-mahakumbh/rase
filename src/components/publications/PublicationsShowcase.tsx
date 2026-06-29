@@ -9,6 +9,7 @@ import { LEGACY_PUBLICATION_ROUTES } from "@/lib/knowledge-graph/publication-cat
 import { DHE_JOURNALS_URL } from "@/lib/knowledge-graph/site-cleanup";
 import { CONTENT_REGISTRY, getCategoryLabel } from "@/lib/content/registry";
 import { PROCEEDINGS_CATALOG } from "@/data/proceedings-hub";
+import { proceedingsPdfLinkProps } from "@/data/proceedings-pdfs";
 import { SOUVENIR_ABSTRACTS_PAGE_PATH, SOUVENIR_CATALOG } from "@/data/souvenir-abstracts-hub";
 
 export default function PublicationsShowcase() {
@@ -69,8 +70,7 @@ export default function PublicationsShowcase() {
                     Read online
                   </Link>
                   <a
-                    href={volume.pdfHref}
-                    download
+                    {...proceedingsPdfLinkProps(volume.pdfHref)}
                     className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy hover:border-brand-saffron/40"
                   >
                     PDF

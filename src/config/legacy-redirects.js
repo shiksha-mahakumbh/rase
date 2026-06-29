@@ -1,4 +1,6 @@
 /** Permanent 301 redirects — legacy URLs → canonical (Phase 5A brand consolidation) */
+const { PROCEEDINGS_LEGACY_PDF_REDIRECTS } = require("./proceedings-pdf-cdn.cjs");
+
 const LEGACY_REDIRECTS = [
   { source: "/shikshamahakumbh", destination: "/introduction", permanent: true },
   { source: "/shikshakumbh", destination: "/introduction", permanent: true },
@@ -166,6 +168,7 @@ const LEGACY_REDIRECTS = [
     permanent: true,
   },
   { source: "/sitemap", destination: "/sitemap.xml", permanent: true },
+  ...PROCEEDINGS_LEGACY_PDF_REDIRECTS,
 ];
 
 module.exports = { LEGACY_REDIRECTS };

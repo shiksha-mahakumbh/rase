@@ -11,6 +11,7 @@ import {
   PROCEEDINGS_SOUVENIR_EDITIONS,
   PROCEEDINGS_STATS,
 } from "@/data/proceedings-hub";
+import { proceedingsPdfLinkProps } from "@/data/proceedings-pdfs";
 
 export default function ProceedingsShowcase() {
   return (
@@ -46,7 +47,6 @@ export default function ProceedingsShowcase() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           {PROCEEDINGS_CATALOG.map((volume) => {
-            const pdfFilename = volume.pdfHref.substring(volume.pdfHref.lastIndexOf("/") + 1);
             return (
               <article
                 key={volume.id}
@@ -98,16 +98,13 @@ export default function ProceedingsShowcase() {
                   </dl>
                   <div className="mt-5 flex flex-col gap-2">
                     <a
-                      href={volume.pdfHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...proceedingsPdfLinkProps(volume.pdfHref)}
                       className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-navy px-4 py-2 text-sm font-bold text-white hover:bg-brand-navy-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron"
                     >
                       Preview PDF
                     </a>
                     <a
-                      href={volume.pdfHref}
-                      download={pdfFilename}
+                      {...proceedingsPdfLinkProps(volume.pdfHref)}
                       className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-brand-saffron px-4 py-2 text-sm font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-navy"
                     >
                       Download
