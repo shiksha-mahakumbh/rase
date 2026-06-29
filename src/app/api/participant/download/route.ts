@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
 import { prisma } from "@/server/db/prisma";
-import { generateReceiptPdfBuffer } from "@/server/services/receipt.service";
+import {
+  generateReceiptPdfBuffer,
+  buildRegistrationArtifacts,
+} from "@/server/services/receipt.service";
 import { generateBadgePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { generateCertificatePdf } from "@/server/services/lifecycle/badge-certificate.service";
-import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
+import { buildReceiptPayloadFromRegistration } from "@/server/services/admin/receipt-admin.service";
 
 async function verifyParticipant(registrationId: string, email: string) {
   const reg = await prisma.registration.findFirst({
@@ -59,23 +62,14 @@ export async function GET(request: NextRequest) {
     }
 
     if (reg.paymentStatus !== "Paid" && reg.paymentStatus !== "Not_Required") {
-      return NextResponse.json({ error: "Receipt not available" }, { status: 403 });
+      return NextResponse.json({ error: "Receipt not available until payment is confirmed" }, { status: 403 });
     }
 
-    const pdf = generateReceiptPdfBuffer(
-      {
-        registrationId: reg.registrationId,
-        fullName: reg.fullName,
-        email: reg.email,
-        institution: reg.institution,
-        contactNumber: reg.contactNumber,
-        category: displayRegistrationType(String(reg.registrationType)),
-        amount: Number(reg.registrationFee ?? 0),
-        paymentId: reg.razorpayPaymentId ?? reg.transactionId ?? undefined,
-        transactionDate: reg.updatedAt.toISOString(),
-      },
-      null
-    );
+    const payload = buildReceiptPayloadFromRegistration(reg);
+    const { qrPng } = await buildRegistrationArtifacts(payload, {
+      registrationType: String(reg.registrationType),
+    });
+    const pdf = await generateReceiptPdfBuffer(payload, qrPng);
 
     return new NextResponse(pdf, {
       headers: {

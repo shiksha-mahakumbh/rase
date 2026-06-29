@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
-import { REG_ID_RE, verifyRegistrationLookupToken, emailsMatch } from "@/lib/security/registration-lookup";
+import { verifyParticipantCredentials } from "@/lib/security/participant-auth";
 import {
   getParticipantDashboard,
   updateParticipantProfile,
@@ -20,16 +20,12 @@ export async function POST(request: NextRequest) {
     const email = String(body.email ?? "").trim();
     const lookupToken = String(body.lookupToken ?? body.token ?? "").trim();
 
-    if (!REG_ID_RE.test(registrationId) || !email) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
-    }
-
-    const verified = lookupToken ? verifyRegistrationLookupToken(registrationId, lookupToken) : null;
-    if (!verified || !emailsMatch(verified.email, email)) {
+    const auth = await verifyParticipantCredentials(registrationId, email, lookupToken || undefined);
+    if (!auth.ok) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const dashboard = await getParticipantDashboard(registrationId, email);
+    const dashboard = await getParticipantDashboard(registrationId, auth.email);
     if (!dashboard) {
       return NextResponse.json({ error: "Registration not found" }, { status: 404 });
     }
@@ -54,16 +50,12 @@ export async function PATCH(request: NextRequest) {
     const email = String(body.email ?? "").trim();
     const lookupToken = String(body.lookupToken ?? body.token ?? "").trim();
 
-    if (!REG_ID_RE.test(registrationId) || !email) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
-    }
-
-    const verified = lookupToken ? verifyRegistrationLookupToken(registrationId, lookupToken) : null;
-    if (!verified || !emailsMatch(verified.email, email)) {
+    const auth = await verifyParticipantCredentials(registrationId, email, lookupToken || undefined);
+    if (!auth.ok) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const updated = await updateParticipantProfile(registrationId, email, {
+    const updated = await updateParticipantProfile(registrationId, auth.email, {
       contactNumber: body.contactNumber,
       whatsappNumber: body.whatsappNumber,
       address: body.address,

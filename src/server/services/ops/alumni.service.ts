@@ -170,8 +170,9 @@ export async function getParticipantDashboard(registrationId: string, email: str
         }
       : null,
     badgeAvailable: Boolean(reg.attendeeBadge?.generatedAt) || reg.paymentStatus === "Paid",
-    receiptAvailable: reg.paymentStatus === "Paid",
-    qrAvailable: Boolean(reg.qrGeneratedAt),
+    receiptAvailable:
+      reg.paymentStatus === "Paid" || reg.paymentStatus === "Not_Required",
+    qrAvailable: true,
     sessions: reg.sessionAttendances.map((s) => ({
       name: s.sessionName,
       attendedAt: s.attendedAt.toISOString(),

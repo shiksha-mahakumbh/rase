@@ -3,6 +3,7 @@ import type { EmailLogStatus } from "@prisma/client";
 import { SITE_URL } from "@/config/site";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
+import { REGISTRATION_RECEIPT_THANKS } from "@/lib/receipt/registration-receipt-layout";
 import { EVENT_NAME } from "@/types/registration";
 
 export type EmailTemplate =
@@ -37,6 +38,7 @@ function attachmentBufferOk(buf: Buffer | undefined, label: string, registration
 function buildEmailAttachments(options: {
   registrationId: string;
   receiptPdf?: Buffer;
+  qrPng?: Buffer;
 }): EmailAttachment[] {
   const attachments: EmailAttachment[] = [];
 
@@ -45,6 +47,15 @@ function buildEmailAttachments(options: {
       filename: `receipt-${options.registrationId}.pdf`,
       content: options.receiptPdf,
       contentType: "application/pdf",
+      contentDisposition: "attachment",
+    });
+  }
+
+  if (attachmentBufferOk(options.qrPng, "qr.png", options.registrationId)) {
+    attachments.push({
+      filename: `qr-${options.registrationId}.png`,
+      content: options.qrPng,
+      contentType: "image/png",
       contentDisposition: "attachment",
     });
   }
@@ -125,18 +136,22 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
     case "registration_confirmation":
       return `<p>Dear ${data.fullName},</p><p>Your registration for ${EVENT_NAME} is confirmed.</p><p>Registration ID: <strong>${data.registrationId}</strong></p>${participantPortalHtml()}`;
     case "registration_complete":
-      return `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b">
+      return `<div style="font-family:Arial,'Noto Sans Devanagari',sans-serif;line-height:1.6;color:#1e293b">
         <p>Dear ${data.fullName},</p>
         <p>Your registration for <strong>${EVENT_NAME}</strong> is confirmed.</p>
         <table style="border-collapse:collapse;margin:16px 0;width:100%;max-width:480px">
           <tr><td style="padding:6px 0;font-weight:600">Registration ID</td><td>${data.registrationId}</td></tr>
+          <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>
           ${data.isPaid === "1" ? `<tr><td style="padding:6px 0;font-weight:600">Payment ID</td><td>${data.transactionId ?? "—"}</td></tr>
-          <tr><td style="padding:6px 0;font-weight:600">Amount Paid</td><td>${data.amountPaid ?? "—"}</td></tr>
-          <tr><td style="padding:6px 0;font-weight:600">Category</td><td>${data.category ?? "—"}</td></tr>` : ""}
+          <tr><td style="padding:6px 0;font-weight:600">Amount Paid</td><td>${data.amountPaid ?? "—"}</td></tr>` : ""}
         </table>
-        ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">Download receipt online</a></p>` : ""}
+        <div style="margin:20px 0;padding:16px 18px;border:1px solid #FF9933;border-left:4px solid #B45309;border-radius:8px;background:#FFFBF5;text-align:center">
+          <p style="margin:0 0 8px;font-size:16px;font-weight:700;color:#0B1F3B">${REGISTRATION_RECEIPT_THANKS.heading}</p>
+          ${REGISTRATION_RECEIPT_THANKS.lines.map((line) => `<p style="margin:0 0 6px;font-size:13px;line-height:1.65">${line}</p>`).join("")}
+        </div>
+        ${data.receiptUrl ? `<p><a href="${data.receiptUrl}">View confirmation &amp; download receipt</a></p>` : ""}
         ${participantPortalHtml()}
-        <p style="margin-top:16px">Your receipt PDF is attached when applicable. Please bring your registration number to the event venue for check-in.</p>
+        <p style="margin-top:16px">Your receipt PDF and QR code are attached. Please bring your registration number to the event venue for check-in.</p>
         <p>Regards,<br/>${EVENT_NAME} Team</p>
       </div>`;
     case "payment_confirmation":
@@ -421,11 +436,13 @@ export async function sendRegistrationCompleteEmail(options: {
   transactionId?: string;
   receiptUrl?: string;
   receiptPdf?: Buffer;
+  qrPng?: Buffer;
   isPaid: boolean;
 }) {
   const attachments = buildEmailAttachments({
     registrationId: options.registrationId,
     receiptPdf: options.receiptPdf,
+    qrPng: options.qrPng,
   });
 
   if (attachments.length < 1) {

@@ -18,8 +18,9 @@ import {
   markVerifiedPaymentConsumed,
 } from "@/server/services/razorpay-verified.service";
 import {
-  generateReceiptPdfBuffer,
+  buildRegistrationArtifacts,
   receiptDownloadUrl,
+  qrStoragePathFor,
 } from "@/server/services/receipt.service";
 import { createRegistrationLookupToken } from "@/lib/security/registration-lookup";
 import { ServiceError } from "@/server/lib/errors";
@@ -289,33 +290,37 @@ export async function POST(request: NextRequest) {
 
     const isPaidOnline = fee > 0 && Boolean(razorpayPaymentId);
 
-    const receiptPdf = generateReceiptPdfBuffer(
-      {
-        registrationId: result.registrationId,
-        fullName,
-        category: categoryLabel,
-        institution: String(data.institution ?? "N/A"),
-        email,
-        contactNumber: contact,
-        amount: fee,
-        paymentId: razorpayPaymentId || undefined,
-        orderId: String(data.razorpayOrderId ?? payment?.razorpayOrderId ?? ""),
-        panNumber: String(data.panNumber ?? payment?.panNumber ?? "") || undefined,
-      },
-      null
-    );
+    const receiptPayload = {
+      registrationId: result.registrationId,
+      fullName,
+      category: categoryLabel,
+      institution: String(data.institution ?? "N/A"),
+      email,
+      contactNumber: contact,
+      amount: fee,
+      paymentId: razorpayPaymentId || undefined,
+      orderId: String(data.razorpayOrderId ?? payment?.razorpayOrderId ?? ""),
+      panNumber: String(data.panNumber ?? payment?.panNumber ?? "") || undefined,
+    };
+
+    const { receiptPdf, qrPng } = await buildRegistrationArtifacts(receiptPayload, {
+      registrationType: type,
+    });
     const artifactNow = new Date();
 
-    void prisma.registration.update({
+    await prisma.registration.update({
       where: { id: result.id },
       data: {
         receiptGeneratedAt: artifactNow,
+        qrGeneratedAt: artifactNow,
+        qrStoragePath: qrStoragePathFor(result.registrationId),
       },
     });
 
     submitLog("artifacts", {
       registration_id: result.registrationId,
       receipt_pdf_bytes: receiptPdf.length,
+      qr_png_bytes: qrPng.length,
     });
 
     void sendRegistrationCompleteEmail({
@@ -326,10 +331,9 @@ export async function POST(request: NextRequest) {
       category: categoryLabel,
       amountPaid: fee,
       transactionId: razorpayPaymentId || undefined,
-      receiptUrl: isPaidOnline
-        ? receiptDownloadUrl(result.registrationId, lookupToken)
-        : undefined,
+      receiptUrl: receiptDownloadUrl(result.registrationId, lookupToken),
       receiptPdf,
+      qrPng,
       isPaid: isPaidOnline,
     })
       .then(async (emailLog) => {

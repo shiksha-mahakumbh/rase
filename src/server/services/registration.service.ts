@@ -11,6 +11,8 @@ import {
 } from "@/server/lib/registration-types";
 import { REGISTRATION_ID_PREFIX } from "@/types/registration";
 import { emailsMatch, toPublicRegistrationSummary } from "@/lib/security/registration-lookup";
+import { generateRegistrationQrDataUrl } from "@/server/services/receipt.service";
+import { displayRegistrationType } from "@/server/services/admin/receipt-admin.service";
 
 export type SaveRegistrationInput = {
   registrationType: string;
@@ -325,23 +327,51 @@ export async function getPublicRegistrationSummary(
       fullName: true,
       institution: true,
       email: true,
+      contactNumber: true,
+      registrationFee: true,
       paymentStatus: true,
+      razorpayPaymentId: true,
+      razorpayOrderId: true,
+      metadata: true,
       accommodationRequired: true,
       accommodationStatus: true,
       createdAt: true,
+      updatedAt: true,
     },
   });
 
   if (!row) return null;
   if (!emailsMatch(row.email, email)) return null;
 
+  const meta = (row.metadata ?? {}) as Record<string, unknown>;
+  const category = String(
+    meta.delegateCategory ??
+      meta.category ??
+      meta.projectStudentType ??
+      meta.accommodationBedType ??
+      displayRegistrationType(String(row.registrationType))
+  );
+
+  const qrDataUrl = await generateRegistrationQrDataUrl({
+    registrationId: row.registrationId,
+    fullName: row.fullName,
+    registrationType: String(row.registrationType),
+    category,
+    institution: row.institution ?? "",
+    email: row.email,
+  });
+
   return toPublicRegistrationSummary({
     ...row,
     registrationType: String(row.registrationType),
     paymentStatus: String(row.paymentStatus),
+    registrationFee: row.registrationFee != null ? Number(row.registrationFee) : 0,
+    delegateCategory: category,
     accommodationRequired: row.accommodationRequired,
     accommodationStatus: row.accommodationStatus,
     createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    qrDataUrl,
   });
 }
 

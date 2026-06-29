@@ -16,31 +16,40 @@ import RegistrationReceipt, {
   printRegistrationReceipt,
 } from "@/components/registration/RegistrationReceipt";
 
-function buildReceiptData(
-  record: Record<string, unknown>,
-  registrationId: string
-): ReceiptData {
-  const payment = record.payment as Record<string, unknown> | undefined;
-  const fee = Number(record.registrationFee ?? payment?.registrationFee ?? 0);
+type PublicRecord = {
+  registrationId?: string;
+  fullName?: string;
+  email?: string;
+  contactNumber?: string | null;
+  registrationFee?: number;
+  registrationType?: string;
+  delegateCategory?: string | null;
+  institution?: string | null;
+  razorpayPaymentId?: string | null;
+  razorpayOrderId?: string | null;
+  paymentStatus?: string;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  qrDataUrl?: string | null;
+  accommodationRequired?: string | null;
+  accommodationStatus?: string | null;
+};
+
+function buildReceiptData(record: PublicRecord, registrationId: string): ReceiptData {
+  const fee = Number(record.registrationFee ?? 0);
 
   return buildReceiptDataShared({
     registrationId,
     fullName: String(record.fullName ?? "—"),
     category: String(
-      record.delegateCategory ??
-        record.category ??
-        record.projectStudentType ??
-        record.accommodationBedType ??
-        record.registrationType ??
-        "—"
+      record.delegateCategory ?? record.registrationType ?? "—"
     ),
     institution: String(record.institution ?? "—"),
     email: String(record.email ?? "—"),
     contactNumber: String(record.contactNumber ?? "—"),
     amount: fee,
-    paymentId: String(payment?.razorpayPaymentId ?? record.razorpayPaymentId ?? "") || undefined,
-    orderId: String(payment?.razorpayOrderId ?? record.razorpayOrderId ?? "") || undefined,
-    panNumber: String(payment?.panNumber ?? record.panNumber ?? "") || undefined,
+    paymentId: record.razorpayPaymentId ?? undefined,
+    orderId: record.razorpayOrderId ?? undefined,
     transactionDate: String(record.updatedAt ?? record.createdAt ?? ""),
   });
 }
@@ -49,8 +58,9 @@ function SuccessInner() {
   const searchParams = useSearchParams();
   const registrationId = searchParams.get("id");
   const lookupToken = searchParams.get("token");
-  const [record, setRecord] = useState<Record<string, unknown> | null>(null);
+  const [record, setRecord] = useState<PublicRecord | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!registrationId) {
@@ -65,17 +75,25 @@ function SuccessInner() {
             `/api/registration/${encodeURIComponent(registrationId)}?token=${encodeURIComponent(lookupToken)}`
           );
           if (res.ok) {
-            const data = await res.json();
-            setRecord(data as Record<string, unknown>);
+            const data = (await res.json()) as PublicRecord;
+            setRecord(data);
+            if (typeof window !== "undefined") {
+              sessionStorage.setItem("smk_lookup_token", lookupToken);
+              sessionStorage.setItem("smk_registration_id", registrationId);
+              if (data.email) sessionStorage.setItem("smk_registration_email", data.email);
+            }
+          } else {
+            const json = (await res.json().catch(() => ({}))) as { error?: string };
+            setFetchError(json.error ?? "Unable to load registration details");
           }
         }
       } catch {
-        // Leave record null — page still shows registration ID from URL
+        setFetchError("Unable to load registration details");
       }
       setLoading(false);
     };
 
-    fetchRecord();
+    void fetchRecord();
   }, [registrationId, lookupToken]);
 
   const receiptData = useMemo(() => {
@@ -83,14 +101,26 @@ function SuccessInner() {
     return buildReceiptData(record, registrationId);
   }, [record, registrationId]);
 
+  const qrDataUrl = record?.qrDataUrl ?? null;
+
+  const dashboardHref = registrationId
+    ? `/dashboard?id=${encodeURIComponent(registrationId)}${record?.email ? `&email=${encodeURIComponent(record.email)}` : ""}`
+    : ROUTES.dashboard;
+
   const handleDownloadReceipt = () => {
-    if (!receiptData) return;
-    void downloadRegistrationReceiptPdf(receiptData);
+    if (!receiptData || !registrationId) return;
+    void downloadRegistrationReceiptPdf(receiptData, {
+      registrationId,
+      token: lookupToken,
+      qrDataUrl,
+    }).catch(() => {
+      window.alert("Unable to download receipt. Please try again or check your email.");
+    });
   };
 
   const handlePrintReceipt = () => {
     if (!receiptData) return;
-    printRegistrationReceipt(receiptData);
+    printRegistrationReceipt(receiptData, qrDataUrl);
   };
 
   if (loading) {
@@ -107,7 +137,9 @@ function SuccessInner() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-      {receiptData ? <RegistrationReceipt data={receiptData} visible /> : null}
+      {receiptData ? (
+        <RegistrationReceipt data={receiptData} qrDataUrl={qrDataUrl} visible />
+      ) : null}
 
       <div className="overflow-hidden rounded-3xl border border-brand-emerald/30 bg-white shadow-xl print:hidden">
         <div className="bg-gradient-to-r from-brand-navy to-brand-navy-light px-6 py-8 text-center text-white md:px-10">
@@ -123,42 +155,68 @@ function SuccessInner() {
         </div>
 
         <div className="space-y-6 p-6 md:p-10">
+          {fetchError ? (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+              {fetchError}. Your registration ID is saved below — use it with your email on the participant portal.
+            </div>
+          ) : null}
+
           {registrationId && (
-            <div className="rounded-2xl border border-slate-200 bg-brand-surface p-6 text-center md:text-left">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Registration number
-              </p>
-              <p className="mt-1 font-mono text-2xl font-extrabold text-brand-navy">
-                {registrationId}
-              </p>
-              {record?.fullName ? (
-                <p className="mt-2 text-sm text-slate-600">
-                  {String(record.fullName)} · {String(record.registrationType ?? "")}
+            <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+              <div className="rounded-2xl border border-slate-200 bg-brand-surface p-6 text-center md:text-left">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Registration number
                 </p>
+                <p className="mt-1 font-mono text-2xl font-extrabold text-brand-navy">
+                  {registrationId}
+                </p>
+                {record?.fullName ? (
+                  <p className="mt-2 text-sm text-slate-600">
+                    {record.fullName}
+                    {record.delegateCategory || record.registrationType
+                      ? ` · ${record.delegateCategory ?? record.registrationType}`
+                      : ""}
+                  </p>
+                ) : null}
+                {record?.paymentStatus ? (
+                  <p className="mt-1 text-xs text-slate-500">Payment: {record.paymentStatus.replace(/_/g, " ")}</p>
+                ) : null}
+              </div>
+
+              {qrDataUrl ? (
+                <div className="rounded-2xl border border-dashed border-brand-saffron/50 bg-white p-4 text-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={qrDataUrl}
+                    alt="Registration QR code for venue check-in"
+                    width={180}
+                    height={180}
+                    className="mx-auto h-44 w-44 object-contain"
+                  />
+                  <p className="mt-2 text-xs font-semibold text-brand-navy">Venue check-in QR</p>
+                  <p className="text-[11px] text-slate-500">Save or screenshot for event day</p>
+                </div>
               ) : null}
             </div>
           )}
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <ActionCard
-              title="View my registration"
-              href="/dashboard"
-            >
+            <ActionCard title="View my registration" href={dashboardHref}>
               Receipts, badge, and profile
             </ActionCard>
             <ActionCard
               title="Download receipt"
               onClick={handleDownloadReceipt}
-              disabled={!receiptData}
+              disabled={!receiptData || !lookupToken}
             >
-              PDF fee receipt
+              PDF — same as print layout
             </ActionCard>
             <ActionCard
               title="Print receipt"
               onClick={handlePrintReceipt}
               disabled={!receiptData}
             >
-              Print fee receipt only
+              Opens print-friendly receipt
             </ActionCard>
             <ActionCard title="Add to calendar" onClick={() => downloadSmk6Calendar()}>
               Download .ics for 9–11 Oct 2026
@@ -174,12 +232,12 @@ function SuccessInner() {
           <section className="rounded-2xl border border-amber-200 bg-amber-50/80 p-5 text-sm text-amber-950">
             <h2 className="font-bold text-brand-navy">Next steps</h2>
             <ul className="mt-2 list-disc space-y-1 pl-5">
-              <li>Save your registration number for event check-in.</li>
-              <li>Watch your email for verification from the organising team.</li>
+              <li>Save your registration number and QR code for event check-in.</li>
+              <li>Check your email for confirmation, receipt PDF, and QR attachment.</li>
               {accommodation && (
                 <li>Accommodation requests are processed separately — you will be contacted.</li>
               )}
-              <li>Download or print your receipt for paid registrations.</li>
+              <li>Download or print your receipt — both use the same official layout.</li>
             </ul>
           </section>
 
@@ -193,10 +251,10 @@ function SuccessInner() {
               <h3 className="font-bold text-brand-navy">Support</h3>
               <p className="mt-2 text-slate-600">
                 <a
-                  href="mailto:academics@shikshamahakumbh.com"
+                  href="mailto:info@shikshamahakumbh.com"
                   className="font-semibold text-brand-navy underline"
                 >
-                  academics@shikshamahakumbh.com
+                  info@shikshamahakumbh.com
                 </a>
               </p>
               <Link href={ROUTES.contact} className="mt-1 inline-block font-semibold text-brand-saffron">
@@ -222,7 +280,7 @@ function SuccessInner() {
           </section>
 
           <div className="flex flex-wrap justify-center gap-3">
-            <CtaButton href={ROUTES.dashboard} variant="primary">
+            <CtaButton href={dashboardHref} variant="primary">
               View my registration
             </CtaButton>
             <CtaButton href={ROUTES.home} variant="ghost">

@@ -77,31 +77,55 @@ export type PublicRegistrationSummary = {
   registrationType: string;
   fullName: string;
   institution: string | null;
+  email: string;
+  contactNumber: string | null;
+  registrationFee: number;
   paymentStatus: string;
+  razorpayPaymentId: string | null;
+  razorpayOrderId: string | null;
+  delegateCategory: string | null;
   accommodationRequired: string | null;
   accommodationStatus: string | null;
   createdAt: string | null;
+  updatedAt: string | null;
+  qrDataUrl: string | null;
 };
 
 export function toPublicRegistrationSummary(data: {
   registrationId: string;
   registrationType: string;
   fullName: string;
+  email: string;
   institution?: string | null;
+  contactNumber?: string | null;
+  registrationFee?: number | null;
   paymentStatus?: string | null;
+  razorpayPaymentId?: string | null;
+  razorpayOrderId?: string | null;
+  delegateCategory?: string | null;
   accommodationRequired?: string | null;
   accommodationStatus?: string | null;
   createdAt?: unknown;
+  updatedAt?: unknown;
+  qrDataUrl?: string | null;
 }): PublicRegistrationSummary {
   return {
     registrationId: data.registrationId,
     registrationType: data.registrationType,
     fullName: data.fullName,
     institution: data.institution ?? null,
+    email: data.email,
+    contactNumber: data.contactNumber ?? null,
+    registrationFee: data.registrationFee ?? 0,
     paymentStatus: data.paymentStatus ?? "Pending",
+    razorpayPaymentId: data.razorpayPaymentId ?? null,
+    razorpayOrderId: data.razorpayOrderId ?? null,
+    delegateCategory: data.delegateCategory ?? null,
     accommodationRequired: data.accommodationRequired ?? null,
     accommodationStatus: data.accommodationStatus ?? null,
     createdAt: toIsoString(data.createdAt),
+    updatedAt: toIsoString(data.updatedAt),
+    qrDataUrl: data.qrDataUrl ?? null,
   };
 }
 

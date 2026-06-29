@@ -3,7 +3,7 @@ import { EVENT_NAME } from "@/types/registration";
 import { SITE_URL } from "@/config/site";
 import {
   generateReceiptPdfBuffer as generateReceiptPdfBufferShared,
-} from "@/lib/receipt/generate-receipt-pdf";
+} from "@/lib/receipt/receipt-pdf-server";
 import type { ReceiptPayload } from "@/lib/receipt/receipt-data";
 import {
   buildRegistrationQrPayload,
@@ -53,11 +53,28 @@ export async function generateRegistrationQrDataUrl(
   return `data:image/png;base64,${buffer.toString("base64")}`;
 }
 
-export function generateReceiptPdfBuffer(
+export async function generateReceiptPdfBuffer(
   data: ReceiptPayload,
   qrPng?: Buffer | null
-): Buffer {
+): Promise<Buffer> {
   return generateReceiptPdfBufferShared(data, qrPng);
+}
+
+export async function buildRegistrationArtifacts(
+  payload: ReceiptPayload,
+  options: { registrationType?: string } = {}
+) {
+  const qrPng = await generateRegistrationQrBuffer({
+    registrationId: payload.registrationId,
+    fullName: payload.fullName,
+    registrationType: options.registrationType ?? "",
+    category: payload.category,
+    institution: payload.institution,
+    email: payload.email,
+  });
+  const receiptPdf = await generateReceiptPdfBuffer(payload, qrPng);
+  const qrDataUrl = `data:image/png;base64,${qrPng.toString("base64")}`;
+  return { qrPng, receiptPdf, qrDataUrl };
 }
 
 export function receiptDownloadUrl(registrationId: string, token?: string) {

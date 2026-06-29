@@ -1,6 +1,6 @@
 import type { Registration, PaymentRecord, EmailLog } from "@prisma/client";
 import {
-  generateReceiptPdfBuffer,
+  buildRegistrationArtifacts,
   generateRegistrationQrBuffer,
   receiptDownloadUrl,
   qrStoragePathFor,
@@ -93,7 +93,9 @@ export async function getRegistrationByPublicId(publicId: string) {
 export async function regenerateReceipt(publicId: string, actorUserId?: string) {
   const reg = await getRegistrationByPublicId(publicId);
   const payload = buildReceiptPayloadFromRegistration(reg);
-  const pdf = generateReceiptPdfBuffer(payload, null);
+  const { receiptPdf: pdf } = await buildRegistrationArtifacts(payload, {
+    registrationType: String(reg.registrationType),
+  });
   const now = new Date();
 
   await prisma.registration.update({
@@ -147,7 +149,9 @@ export async function resendPaymentEmail(publicId: string, actorUserId?: string)
   const fee = payload.amount;
   const isPaidOnline = fee > 0 && Boolean(reg.razorpayPaymentId);
 
-  const receiptPdf = generateReceiptPdfBuffer(payload, null);
+  const { receiptPdf, qrPng } = await buildRegistrationArtifacts(payload, {
+    registrationType: String(reg.registrationType),
+  });
   const lookupToken = createRegistrationLookupToken(publicId, reg.email);
   const now = new Date();
 
@@ -159,10 +163,9 @@ export async function resendPaymentEmail(publicId: string, actorUserId?: string)
     category: payload.category,
     amountPaid: fee,
     transactionId: reg.razorpayPaymentId ?? undefined,
-    receiptUrl: isPaidOnline
-      ? receiptDownloadUrl(publicId, lookupToken)
-      : undefined,
+    receiptUrl: receiptDownloadUrl(publicId, lookupToken),
     receiptPdf,
+    qrPng,
     isPaid: isPaidOnline,
   });
 
