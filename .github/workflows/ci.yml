@@ -54,3 +54,40 @@ jobs:
           DIRECT_URL: postgresql://ci:ci@127.0.0.1:5432/ci
           NEXT_PUBLIC_SITE_URL: https://www.rase.co.in
           ADMIN_SESSION_SECRET: ci-test-admin-secret
+
+  vercel-deploy:
+    needs: quality
+    runs-on: ubuntu-latest
+    if: github.repository == 'shiksha-mahakumbh/rase' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    env:
+      VERCEL_ORG_ID: team_0PYXWQMwAV9fPWOTuxk54H9K
+      VERCEL_PROJECT_ID: prj_k6YZpm35GqkuZcYOohnXVTM0Uy9f
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger Vercel production deploy
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
+            echo "Triggering Vercel deploy hook…"
+            curl -fsS -X POST "$VERCEL_DEPLOY_HOOK"
+            exit 0
+          fi
+          if [ -n "${VERCEL_TOKEN:-}" ]; then
+            echo "No deploy hook — using Vercel CLI token deploy…"
+            npx vercel@54.15.1 pull --yes --environment=production --token="$VERCEL_TOKEN"
+            npx vercel@54.15.1 deploy --prod --token="$VERCEL_TOKEN" --yes
+            exit 0
+          fi
+          echo "::warning::Set VERCEL_DEPLOY_HOOK or VERCEL_TOKEN — relying on Vercel Git auto-deploy only"
+
+      - name: Verify production deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/check-vercel-deploy.mjs --sha=${{ github.sha }} --wait-min=25
+
+      - name: Production smoke test
+        run: node scripts/production-smoke-test.mjs https://www.rase.co.in

@@ -5,8 +5,7 @@ import {
 } from "@/lib/receipt/donation-receipt";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { SITE_URL } from "@/config/site";
-
-export const runtime = "nodejs";
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 /** Design preview — sample receipt without payment token (no auto-print) */
 export async function GET(request: NextRequest) {

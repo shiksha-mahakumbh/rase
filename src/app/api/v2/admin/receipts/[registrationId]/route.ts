@@ -3,6 +3,7 @@ import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError, toErrorResponse } from "@/server/lib/errors";
 import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
 import { regenerateReceipt, regenerateQr } from "@/server/services/admin/receipt-admin.service";
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 async function adminGuard(request: NextRequest, mutation = false) {
   const ip = getClientIp(request);

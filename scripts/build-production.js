@@ -36,6 +36,14 @@ function run(label, command, args, extraEnv = {}) {
 
 console.log(`System RAM: ~${totalRamMb()} MB — using split typecheck + compile build`);
 
+run("Compress public gallery assets", process.execPath, [
+  path.join(__dirname, "compress-edition-gallery-images.mjs"),
+]);
+
+run("Public asset audit", process.execPath, [
+  path.join(__dirname, "public-asset-audit.mjs"),
+]);
+
 run("TypeScript check", process.execPath, [
   `--max-old-space-size=${tscHeapMb()}`,
   tscBin,
