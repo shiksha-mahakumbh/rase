@@ -1,7 +1,7 @@
 import type { PaymentStatus, Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
-import { handleDonationWebhookPayment } from "@/server/services/donation.service";
+import { handleDonationWebhookPayment } from "@/server/services/donation-webhook.service";
 import { ServiceError } from "@/server/lib/errors";
 
 /**

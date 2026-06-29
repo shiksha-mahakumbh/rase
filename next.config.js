@@ -56,10 +56,18 @@ const nextConfig = {
       "@fortawesome/react-fontawesome",
     ],
   },
-  /** Prevent ~600MB `public/` from being traced into donation API routes. */
+  /** Prevent ~600MB `public/` from being traced into API routes. */
   outputFileTracingExcludes: {
     "/api/donation/complete": ["./public/**"],
     "/api/donation/receipt": ["./public/**"],
+    "/api/donation/receipt/preview": ["./public/**"],
+    "/api/payments/razorpay-webhook": ["./public/**"],
+    "/api/payments/create-order": ["./public/**"],
+    "/api/payments/verify-payment": ["./public/**"],
+    "/api/registration/submit": ["./public/**"],
+    "/api/v2/registration/submit": ["./public/**"],
+    "/api/v2/admin/donations": ["./public/**"],
+    "/api/v2/admin/donations/[donationId]/resend-receipt": ["./public/**"],
   },
   outputFileTracingIncludes: {
     "/api/donation/complete": [
