@@ -43,6 +43,8 @@
     "gcp:shutdown": "node scripts/gcp-shutdown-project.mjs",
     "audit:go-live": "node scripts/launch-go-live-audit.mjs",
     "audit:production": "node scripts/production-registration-audit.mjs",
+    "audit:database": "node scripts/audit-database-production.mjs",
+    "audit:supabase": "node scripts/audit-supabase-remote.mjs",
     "audit:past-editions": "tsx scripts/audit-past-editions.ts",
     "audit:past-editions-performance": "tsx scripts/audit-past-editions-performance.ts",
     "audit:site-performance": "tsx scripts/audit-site-performance.ts",

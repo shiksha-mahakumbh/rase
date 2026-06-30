@@ -91,7 +91,11 @@ async function execSqlFile(client, label, relativePath) {
       await client.query(q);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      if (/already exists|duplicate key|policy .* already exists/i.test(msg)) {
+      if (
+        /already exists|duplicate key|policy .* already exists|must be owner of table/i.test(
+          msg
+        )
+      ) {
         console.warn(`[skip] ${label}: ${msg.slice(0, 120)}`);
         continue;
       }
