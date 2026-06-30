@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { LEGACY_VISITOR_OFFSET } from "@/lib/analytics/visitor-ids";
 
-type VisitorCounts = {
+type VisitorStatsResponse = {
+  success?: boolean;
   daily: number;
   total: number;
   displayTotal: number;
@@ -12,7 +13,7 @@ type VisitorCounts = {
   degraded?: boolean;
 };
 
-const FALLBACK: VisitorCounts = {
+const FALLBACK: VisitorStatsResponse = {
   daily: 0,
   total: 0,
   displayTotal: LEGACY_VISITOR_OFFSET,
@@ -41,8 +42,8 @@ export default function FooterVisitorCounter() {
 
     async function loadCounts() {
       try {
-        const res = await fetch("/api/visitors", { cache: "no-store" });
-        const data = (await res.json()) as VisitorCounts;
+        const res = await fetch("/api/v2/analytics/stats", { cache: "no-store" });
+        const data = (await res.json()) as VisitorStatsResponse;
         if (cancelled) return;
 
         const isDegraded =

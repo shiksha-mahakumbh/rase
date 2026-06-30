@@ -7,7 +7,10 @@ import { isSupportedType } from "@/server/lib/registration-types";
 import { guardRegistrationSubmit } from "@/server/lib/registration-submit-guard";
 import { markVerifiedPaymentConsumed } from "@/server/services/razorpay-verified.service";
 import { writeAuditLog } from "@/server/services/audit.service";
+import { runRegistrationPostSubmit } from "@/server/services/registration-post-submit.service";
 import { ServiceError } from "@/server/lib/errors";
+
+export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 export const POST = createApiHandler(
   async (request: NextRequest) => {
@@ -95,6 +98,17 @@ export const POST = createApiHandler(
       guarded.email && result.registrationId
         ? createRegistrationLookupToken(result.registrationId, guarded.email)
         : undefined;
+
+    await runRegistrationPostSubmit({
+      result,
+      registrationType: guarded.type,
+      data: guarded.data,
+      email: guarded.email,
+      fullName: guarded.fullName,
+      contact: guarded.contact,
+      fee: guarded.fee,
+      razorpayPaymentId: guarded.razorpayPaymentId,
+    });
 
     return {
       success: true,

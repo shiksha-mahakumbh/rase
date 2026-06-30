@@ -11,11 +11,11 @@ export default function AdminSystemHealth() {
 
   useEffect(() => {
     setSentryConfigured(Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN));
-    fetch("/api/health")
+    fetch("/api/v2/health")
       .then((r) => r.json())
       .then((data) => {
-        if (data.status === "ok") {
-          setApiHealth("ok");
+        if (data.status === "ok" || data.status === "degraded") {
+          setApiHealth(data.status === "ok" ? "ok" : "error");
           setHealthDetail(data.timestamp ?? "");
         } else {
           setApiHealth("error");
@@ -28,7 +28,7 @@ export default function AdminSystemHealth() {
     <section className="rounded-2xl border bg-white p-4 shadow-sm" aria-label="System health">
       <h2 className="text-lg font-bold text-primary">System Health</h2>
       <ul className="mt-3 space-y-2 text-sm">
-        <HealthRow label="API /api/health" status={apiHealth} detail={healthDetail} />
+        <HealthRow label="API /api/v2/health" status={apiHealth} detail={healthDetail} />
         <HealthRow
           label="Error reporting"
           status={sentryConfigured ? "ok" : "warn"}

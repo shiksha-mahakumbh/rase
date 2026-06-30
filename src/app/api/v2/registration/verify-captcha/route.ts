@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
-import { handleRegistrationReceiptGet } from "@/server/lib/registration-receipt-handler";
+import { handleVerifyCaptchaPost } from "@/server/lib/registration-verify-captcha-handler";
 
-export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
-
-/** @deprecated Use /api/v2/registration/receipt — thin compatibility shim. */
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
-    key: `registration-receipt:${ip}`,
-    limit: 60,
+    key: `v2-registration-captcha:${ip}`,
+    limit: 30,
     windowMs: 60_000,
   });
   if (!limited.ok) {
@@ -18,5 +15,5 @@ export async function GET(request: NextRequest) {
       { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } }
     );
   }
-  return handleRegistrationReceiptGet(request);
+  return handleVerifyCaptchaPost(request);
 }

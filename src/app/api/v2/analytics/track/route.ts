@@ -45,6 +45,19 @@ export async function POST(request: NextRequest) {
       countAsVisit?: boolean;
     };
 
+    if (!body.sessionId?.trim() || !body.visitorId?.trim()) {
+      return NextResponse.json(
+        { error: "sessionId and visitorId required", code: "INVALID_BODY" },
+        { status: 400 }
+      );
+    }
+    if (!body.path?.trim()) {
+      return NextResponse.json(
+        { error: "path required", code: "INVALID_BODY" },
+        { status: 400 }
+      );
+    }
+
     if (!shouldTrackAnalytics(body.path)) {
       return NextResponse.json({ success: true, tracked: false, reason: "excluded_path" });
     }

@@ -5,7 +5,7 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify } from "@/server/lib/cms-utils";
 
-const MAX_BYTES = 15 * 1024 * 1024;
+const MAX_BYTES = 10 * 1024 * 1024;
 const STORAGE_BUCKET = "media";
 
 const MIME_MAP: Record<string, MediaAssetType> = {
@@ -61,7 +61,7 @@ export async function uploadMediaAsset(input: {
   ipAddress?: string | null;
 }) {
   if (input.file.length > MAX_BYTES) {
-    throw new ServiceError("File exceeds 15 MB limit", 400, "FILE_TOO_LARGE");
+    throw new ServiceError("File exceeds 10 MB limit", 400, "FILE_TOO_LARGE");
   }
 
   const assetType = detectAssetType(input.mimeType, input.fileName);

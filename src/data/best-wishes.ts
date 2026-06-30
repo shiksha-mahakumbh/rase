@@ -1,4 +1,4 @@
-import { FIREBASE_BEST_WISHES } from "@/data/best-wishes-firebase";
+import { LEGACY_BEST_WISHES } from "@/data/best-wishes-legacy";
 
 export type BestWishEntry = {
   id: string;
@@ -209,7 +209,7 @@ const STATIC_BEST_WISHES: BestWishEntry[] = [
 
 export const BEST_WISHES_ENTRIES: BestWishEntry[] = [
   ...STATIC_BEST_WISHES,
-  ...(FIREBASE_BEST_WISHES as BestWishEntry[]),
+  ...(LEGACY_BEST_WISHES as BestWishEntry[]),
 ];
 
 export const BEST_WISHES_HERO = {

@@ -72,6 +72,8 @@ const nextConfig = {
     "/api/payments/razorpay-webhook": ["./public/**"],
     "/api/payments/create-order": ["./public/**"],
     "/api/payments/verify-payment": ["./public/**"],
+    "/api/v2/registration/submit": ["./public/**"],
+    "/api/v2/registration/receipt": ["./public/**"],
     "/api/registration/submit": ["./public/**"],
     "/api/registration/receipt": ["./public/**"],
     "/api/registration/send-email": ["./public/**"],
@@ -86,6 +88,8 @@ const nextConfig = {
   outputFileTracingIncludes: {
     "/api/donation/complete": RECEIPT_LOGO_INCLUDES,
     "/api/donation/receipt": RECEIPT_LOGO_INCLUDES,
+    "/api/v2/registration/submit": RECEIPT_LOGO_INCLUDES,
+    "/api/v2/registration/receipt": RECEIPT_LOGO_INCLUDES,
     "/api/registration/submit": RECEIPT_LOGO_INCLUDES,
     "/api/registration/receipt": RECEIPT_LOGO_INCLUDES,
     "/api/registration/send-email": RECEIPT_LOGO_INCLUDES,

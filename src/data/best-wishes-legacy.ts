@@ -1,6 +1,6 @@
-/** Recovered from Firebase `wishesReceived` collection — Shiksha Mahakumbh Abhiyan */
+/** Recovered from legacy `wishesReceived` collection — Shiksha Mahakumbh Abhiyan */
 
-export const FIREBASE_BEST_WISHES = [
+export const LEGACY_BEST_WISHES = [
 
   {
 

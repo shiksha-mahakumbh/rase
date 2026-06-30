@@ -25,8 +25,8 @@ export type RegistrationSubmitGuardResult = {
 };
 
 /**
- * Validates registration submit payload with the same rules as the legacy
- * `/api/registration/submit` route (fee, PAN, payment proof, Razorpay verify).
+ * Validates registration submit payload with the same rules as
+ * `/api/v2/registration/submit` (fee, PAN, payment proof, Razorpay verify).
  */
 export async function guardRegistrationSubmit(input: {
   registrationType: string;

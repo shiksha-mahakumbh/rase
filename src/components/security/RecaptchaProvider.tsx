@@ -18,7 +18,7 @@ export function useRecaptcha() {
     const token = await execute(action);
     if (!token) return false;
 
-    const res = await fetch("/api/registration/verify-captcha", {
+    const res = await fetch("/api/v2/registration/verify-captcha", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, action }),

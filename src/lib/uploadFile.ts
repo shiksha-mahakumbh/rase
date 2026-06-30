@@ -17,7 +17,7 @@ export async function uploadFile(
   formData.append("registrationType", registrationType);
   formData.append("field", field);
 
-  const res = await fetch("/api/registration/upload", {
+  const res = await fetch("/api/v2/registration/upload", {
     method: "POST",
     body: formData,
   });

@@ -31,6 +31,7 @@ export async function GET() {
     const stats = await getPublicVisitorStats();
     return NextResponse.json(
       {
+        success: true,
         daily: stats.daily,
         total: stats.total,
         displayTotal: stats.displayTotal,
@@ -40,6 +41,8 @@ export async function GET() {
       {
         headers: {
           "Cache-Control": "private, no-store, max-age=0",
+          Deprecation: "true",
+          Link: '</api/v2/analytics/stats>; rel="successor-version"',
         },
       }
     );

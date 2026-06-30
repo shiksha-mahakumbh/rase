@@ -72,10 +72,11 @@ function SuccessInner() {
       try {
         if (lookupToken) {
           const res = await fetch(
-            `/api/registration/${encodeURIComponent(registrationId)}?token=${encodeURIComponent(lookupToken)}`
+            `/api/v2/registration/${encodeURIComponent(registrationId)}?token=${encodeURIComponent(lookupToken)}`
           );
           if (res.ok) {
-            const data = (await res.json()) as PublicRecord;
+            const body = (await res.json()) as { registration?: PublicRecord };
+            const data = body.registration ?? (body as PublicRecord);
             setRecord(data);
             if (typeof window !== "undefined") {
               sessionStorage.setItem("smk_lookup_token", lookupToken);

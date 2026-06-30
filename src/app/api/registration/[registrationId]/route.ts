@@ -1,29 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
-import {
-  REG_ID_RE,
-  verifyRegistrationLookupToken,
-} from "@/lib/security/registration-lookup";
-import { getPublicRegistrationSummary } from "@/server/services/registration.service";
+import { handlePublicRegistrationLookup } from "@/server/lib/registration-lookup-handler";
+import { toErrorResponse } from "@/server/lib/errors";
 
 type RouteContext = {
   params: Promise<{ registrationId: string }>;
 };
 
-async function resolveVerifiedEmail(
-  registrationId: string,
-  request: NextRequest
-): Promise<string | null> {
-  const token = request.nextUrl.searchParams.get("token")?.trim();
-  if (token) {
-    const verified = verifyRegistrationLookupToken(registrationId, token);
-    return verified?.email ?? null;
-  }
-
-  const email = request.nextUrl.searchParams.get("email")?.trim();
-  return email || null;
-}
-
+/** @deprecated Use /api/v2/registration/[id] — returns flat JSON for backward compatibility. */
 export async function GET(request: NextRequest, context: RouteContext) {
   const { registrationId } = await context.params;
 
@@ -41,33 +25,24 @@ export async function GET(request: NextRequest, context: RouteContext) {
     );
   }
 
-  if (!REG_ID_RE.test(registrationId)) {
-    return NextResponse.json({ error: "Invalid registration ID" }, { status: 400 });
-  }
-
-  const email = await resolveVerifiedEmail(registrationId, request);
-  if (!email) {
-    return NextResponse.json(
-      { error: "Email or confirmation token required" },
-      { status: 401 }
-    );
-  }
-
   try {
-    const summary = await getPublicRegistrationSummary(registrationId, email);
-    if (!summary) {
-      return NextResponse.json({ error: "Registration not found" }, { status: 404 });
-    }
-    return NextResponse.json(summary);
+    const summary = await handlePublicRegistrationLookup(request, registrationId);
+    return NextResponse.json(summary, {
+      headers: {
+        Deprecation: "true",
+        Link: `</api/v2/registration/${registrationId}>; rel="successor-version"`,
+      },
+    });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.error("registration lookup error:", message);
+    const mapped = toErrorResponse(error);
     return NextResponse.json(
       {
-        error: "Unable to load registration",
-        ...(process.env.NODE_ENV !== "production" ? { detail: message } : {}),
+        error: mapped.error,
+        ...(process.env.NODE_ENV !== "production" && mapped.code
+          ? { code: mapped.code }
+          : {}),
       },
-      { status: 500 }
+      { status: mapped.status }
     );
   }
 }

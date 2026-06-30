@@ -59,7 +59,7 @@ async function uploadRegistrationFile(
   formData.append("registrationType", registrationType);
   formData.append("field", field);
 
-  const res = await fetch("/api/registration/upload", {
+  const res = await fetch("/api/v2/registration/upload", {
     method: "POST",
     body: formData,
   });
@@ -160,7 +160,7 @@ export function useRegistrationSubmit() {
         paymentId: data.razorpayPaymentId ?? null,
       });
 
-      const res = await fetch("/api/registration/submit", {
+      const res = await fetch("/api/v2/registration/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

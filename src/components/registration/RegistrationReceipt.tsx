@@ -37,7 +37,7 @@ export async function downloadRegistrationReceiptPdf(
   const params = new URLSearchParams({ id });
   if (options.token) params.set("token", options.token);
 
-  const res = await fetch(`/api/registration/receipt?${params.toString()}`);
+  const res = await fetch(`/api/v2/registration/receipt?${params.toString()}`);
   if (!res.ok) {
     throw new Error("Unable to download receipt PDF");
   }

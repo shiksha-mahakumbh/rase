@@ -1,6 +1,6 @@
 {
-  "passed": 13,
-  "failed": 0,
+  "passed": 14,
+  "failed": 1,
   "results": [
     {
       "test": "lookup_token_valid",
@@ -29,13 +29,23 @@
     },
     {
       "test": "registration_get_requires_auth",
-      "status": "PASS",
-      "detail": "GET registration requires token or email"
+      "status": "FAIL",
+      "detail": "GET registration still open"
     },
     {
       "test": "middleware_rejects_legacy_cookie",
       "status": "PASS",
       "detail": "Middleware rejects legacy =1 cookie"
+    },
+    {
+      "test": "middleware_document_lang",
+      "status": "PASS",
+      "detail": "Middleware sets x-document-lang header"
+    },
+    {
+      "test": "visitor_tracker_consent",
+      "status": "PASS",
+      "detail": "Visitor tracker gated by cookie consent"
     },
     {
       "test": "registration_backend_supabase",
@@ -55,7 +65,7 @@
     {
       "test": "no_firebase_npm_package",
       "status": "PASS",
-      "detail": "No firebase or firebase-admin in package.json"
+      "detail": "No firebase or firebase-admin in runtime dependencies"
     },
     {
       "test": "next_config_no_legacy_storage_host",

@@ -57,13 +57,13 @@ if (!supportedMatch || !typeMapMatch) {
   }
 }
 
-if (fs.existsSync(path.resolve("src/app/api/registration/submit/route.ts"))) {
+if (fs.existsSync(path.resolve("src/app/api/v2/registration/submit/route.ts"))) {
   const submitRoute = fs.readFileSync(
-    path.resolve("src/app/api/registration/submit/route.ts"),
+    path.resolve("src/app/api/v2/registration/submit/route.ts"),
     "utf8"
   );
-  if (/isSupportedType\(registrationType\)/.test(submitRoute)) {
-    pass("submit_uses_is_supported_type", "POST /api/registration/submit validates via isSupportedType");
+  if (/isSupportedType\(body\.registrationType\)/.test(submitRoute)) {
+    pass("submit_uses_is_supported_type", "POST /api/v2/registration/submit validates via isSupportedType");
   } else {
     fail("submit_uses_is_supported_type", "Submit route missing isSupportedType check");
   }

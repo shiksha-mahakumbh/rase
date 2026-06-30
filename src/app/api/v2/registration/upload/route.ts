@@ -43,6 +43,13 @@ export const POST = createApiHandler(
       storagePath: result.storagePath,
       url: result.signedUrl,
       bucket,
+      file: {
+        name: file.name,
+        url: result.signedUrl,
+        path: result.storagePath,
+        contentType: file.type || undefined,
+        size: file.size,
+      },
     };
   },
   { rateLimitKey: "v2-registration-upload", limit: 30 }

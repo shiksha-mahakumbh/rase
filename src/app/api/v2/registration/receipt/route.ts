@@ -4,11 +4,10 @@ import { handleRegistrationReceiptGet } from "@/server/lib/registration-receipt-
 
 export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
-/** @deprecated Use /api/v2/registration/receipt — thin compatibility shim. */
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
-    key: `registration-receipt:${ip}`,
+    key: `v2-registration-receipt:${ip}`,
     limit: 60,
     windowMs: 60_000,
   });

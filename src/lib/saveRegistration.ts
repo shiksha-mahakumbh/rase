@@ -23,7 +23,7 @@ export interface SaveRegistrationResult {
 export async function saveRegistration(
   input: SaveRegistrationInput
 ): Promise<SaveRegistrationResult> {
-  const res = await fetch("/api/registration/submit", {
+  const res = await fetch("/api/v2/registration/submit", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
