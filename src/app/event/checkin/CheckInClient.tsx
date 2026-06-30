@@ -1,35 +1,125 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAdmin, canPerformCheckIn } from "@/lib/adminAuth";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
+import CheckInQrScanner from "@/components/admin/checkin/CheckInQrScanner";
 
 type AttendeeLookup = {
   registrationId: string;
   name: string;
   category: string;
   institution: string;
+  registrationStatus: string;
   paymentStatus: string;
   checkInStatus: string;
-  isFirstCheckIn: boolean;
   kitDistributed: boolean;
   certificateEligible: boolean;
+  isFirstCheckIn: boolean;
+  contactHint: string;
+  warnings: string[];
+  blockReason: string | null;
+  canCheckIn: boolean;
+  canReceiveKit: boolean;
+  canMarkCertificate: boolean;
   sessions: Array<{ name: string; attendedAt: string }>;
 };
 
+type RecentCheckIn = {
+  registrationId: string;
+  name: string;
+  location: string | null;
+  checkedInAt: string;
+};
+
+type EventSession = { id: string; title: string };
+
 const CHECKIN_LOCATIONS = ["Main Gate", "Registration Desk", "Conclave Hall", "Exhibition"] as const;
 
-export default function CheckInClient() {
+const RECENT_LOCAL_KEY = "smk_checkin_recent";
+
+function playBeep() {
+  try {
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 880;
+    gain.gain.value = 0.08;
+    osc.start();
+    osc.stop(ctx.currentTime + 0.12);
+  } catch {
+    // optional feedback
+  }
+}
+
+function pushLocalRecent(entry: RecentCheckIn) {
+  try {
+    const raw = sessionStorage.getItem(RECENT_LOCAL_KEY);
+    const list: RecentCheckIn[] = raw ? (JSON.parse(raw) as RecentCheckIn[]) : [];
+    const next = [entry, ...list.filter((r) => r.registrationId !== entry.registrationId)].slice(0, 8);
+    sessionStorage.setItem(RECENT_LOCAL_KEY, JSON.stringify(next));
+    return next;
+  } catch {
+    return [];
+  }
+}
+
+export default function CheckInClient({ standalone = false }: { standalone?: boolean }) {
+  const searchParams = useSearchParams();
   const { role } = useAdmin();
   const canPerformActions = canPerformCheckIn(role);
 
   const [scanInput, setScanInput] = useState("");
   const [sessionName, setSessionName] = useState("");
+  const [eventSessions, setEventSessions] = useState<EventSession[]>([]);
   const [location, setLocation] = useState<(typeof CHECKIN_LOCATIONS)[number]>("Main Gate");
   const [attendee, setAttendee] = useState<AttendeeLookup | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [scannerOn, setScannerOn] = useState(false);
+  const [recent, setRecent] = useState<RecentCheckIn[]>([]);
+  const lastScanRef = useRef("");
+  const scanCooldownRef = useRef(0);
+
+  const loadRecent = useCallback(async () => {
+    try {
+      const data = await adminCmsFetch<{ items: RecentCheckIn[] }>("checkin?recent=1");
+      setRecent(data.items ?? []);
+    } catch {
+      try {
+        const raw = sessionStorage.getItem(RECENT_LOCAL_KEY);
+        if (raw) setRecent(JSON.parse(raw) as RecentCheckIn[]);
+      } catch {
+        setRecent([]);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadRecent();
+    void (async () => {
+      try {
+        const data = await adminCmsFetch<{ items?: EventSession[] } | EventSession[]>("sessions");
+        const items = Array.isArray(data) ? data : (data.items ?? []);
+        setEventSessions(items.map((s) => ({ id: s.id, title: s.title })));
+      } catch {
+        setEventSessions([]);
+      }
+    })();
+  }, [loadRecent]);
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      setScanInput(id);
+      void lookup(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const lookup = async (raw?: string) => {
     const id = (raw ?? scanInput).trim();
@@ -39,6 +129,8 @@ export default function CheckInClient() {
     try {
       const data = await adminCmsFetch<AttendeeLookup>(`checkin?id=${encodeURIComponent(id)}`);
       setAttendee(data);
+      setScanInput(data.registrationId);
+      playBeep();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Not found");
       setAttendee(null);
@@ -51,22 +143,35 @@ export default function CheckInClient() {
     if (!attendee || !canPerformActions) return;
     setBusy(true);
     try {
-      const res = await adminCmsFetch<{ message?: string; duplicate?: boolean; attendee?: AttendeeLookup }>(
-        "checkin",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            registrationId: attendee.registrationId,
-            action,
-            sessionName: action === "session" ? sessionName : undefined,
-            location,
-          }),
-        }
-      );
+      const res = await adminCmsFetch<{
+        message?: string;
+        duplicate?: boolean;
+        attendee?: AttendeeLookup;
+      }>("checkin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          registrationId: attendee.registrationId,
+          action,
+          sessionName: action === "session" ? sessionName : undefined,
+          location,
+        }),
+      });
       if (res.message) setBanner(res.message);
-      setAttendee(res.attendee ?? attendee);
-      toast.success(action.replace(/_/g, " "));
+      if (res.attendee) setAttendee(res.attendee);
+      playBeep();
+      toast.success(res.message ?? action.replace(/_/g, " "));
+
+      if (action === "check_in" && !res.duplicate && res.attendee) {
+        const entry: RecentCheckIn = {
+          registrationId: res.attendee.registrationId,
+          name: res.attendee.name,
+          location,
+          checkedInAt: new Date().toISOString(),
+        };
+        setRecent(pushLocalRecent(entry));
+        void loadRecent();
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Action failed");
     } finally {
@@ -74,16 +179,41 @@ export default function CheckInClient() {
     }
   };
 
-  return (
-    <div className="pb-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-brand-navy">Event Check-In</h1>
-        <p className="text-sm text-slate-600">Scan or enter a registration ID at the gate.</p>
-      </div>
+  const onQrScan = (text: string) => {
+    const now = Date.now();
+    if (text === lastScanRef.current && now - scanCooldownRef.current < 2000) return;
+    lastScanRef.current = text;
+    scanCooldownRef.current = now;
+    setScanInput(text);
+    void lookup(text);
+  };
 
-      <div className="mx-auto max-w-lg space-y-4">
+  return (
+    <div>
+      {!standalone && (
+        <p className="mb-4 text-sm text-slate-600">
+          Scan QR or enter ID at the gate.{" "}
+          <a href="/event/checkin" className="font-semibold text-brand-navy underline">
+            Open mobile gate view →
+          </a>
+        </p>
+      )}
+
+      <div className="space-y-4">
         <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <label className="block text-sm font-semibold text-slate-700">Check-in location</label>
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <label className="text-sm font-semibold text-slate-700">Camera scanner</label>
+            <button
+              type="button"
+              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold"
+              onClick={() => setScannerOn((v) => !v)}
+            >
+              {scannerOn ? "Stop camera" : "Start camera"}
+            </button>
+          </div>
+          <CheckInQrScanner active={scannerOn} onScan={onQrScan} />
+
+          <label className="mt-4 block text-sm font-semibold text-slate-700">Check-in location</label>
           <select
             className="mt-2 w-full rounded-xl border border-slate-300 px-3 py-3 text-sm"
             value={location}
@@ -96,14 +226,14 @@ export default function CheckInClient() {
             ))}
           </select>
 
-          <label className="mt-4 block text-sm font-semibold text-slate-700">Enter Registration ID</label>
+          <label className="mt-4 block text-sm font-semibold text-slate-700">Registration ID</label>
           <input
             className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-4 text-lg font-mono"
             value={scanInput}
             onChange={(e) => setScanInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && void lookup()}
-            placeholder="SMK2026-000001"
-            autoFocus
+            placeholder="SMK2026-000001 or scan QR"
+            autoFocus={!scannerOn}
           />
           <button
             type="button"
@@ -117,7 +247,11 @@ export default function CheckInClient() {
 
         {banner && (
           <div
-            className={`rounded-2xl px-4 py-6 text-center text-xl font-extrabold ${banner.includes("ALREADY") ? "bg-amber-100 text-amber-900" : "bg-emerald-100 text-emerald-900"}`}
+            className={`rounded-2xl px-4 py-6 text-center text-xl font-extrabold ${
+              banner.includes("ALREADY") || banner.includes("KIT ALREADY")
+                ? "bg-amber-100 text-amber-900"
+                : "bg-emerald-100 text-emerald-900"
+            }`}
           >
             {banner}
           </div>
@@ -132,10 +266,26 @@ export default function CheckInClient() {
                 {attendee.category} · {attendee.institution}
               </p>
               <p className="mt-1 text-sm">
-                Payment: <strong>{attendee.paymentStatus}</strong> · Check-in:{" "}
+                Status: <strong>{attendee.registrationStatus}</strong> · Payment:{" "}
+                <strong>{attendee.paymentStatus}</strong> · Check-in:{" "}
                 <strong>{attendee.checkInStatus}</strong>
               </p>
+              <p className="text-xs text-slate-500">Contact hint: {attendee.contactHint}</p>
             </div>
+
+            {attendee.blockReason && (
+              <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-900">
+                {attendee.blockReason}
+              </p>
+            )}
+
+            {attendee.warnings.length > 0 && !attendee.blockReason && (
+              <ul className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                {attendee.warnings.map((w) => (
+                  <li key={w}>• {w}</li>
+                ))}
+              </ul>
+            )}
 
             {!canPerformActions ? (
               <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
@@ -147,15 +297,15 @@ export default function CheckInClient() {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    disabled={busy}
-                    className="min-h-[52px] rounded-xl bg-emerald-600 font-bold text-white"
+                    disabled={busy || !attendee.canCheckIn}
+                    className="min-h-[52px] rounded-xl bg-emerald-600 font-bold text-white disabled:opacity-50"
                     onClick={() => void act("check_in")}
                   >
                     Mark Check-In
                   </button>
                   <button
                     type="button"
-                    disabled={busy || attendee.kitDistributed}
+                    disabled={busy || !attendee.canReceiveKit}
                     className="min-h-[52px] rounded-xl bg-brand-saffron font-bold text-brand-navy hover:bg-brand-saffron-dark hover:text-white disabled:opacity-50"
                     onClick={() => void act("kit")}
                   >
@@ -163,8 +313,8 @@ export default function CheckInClient() {
                   </button>
                   <button
                     type="button"
-                    disabled={busy || attendee.certificateEligible}
-                    className="min-h-[52px] rounded-xl bg-violet-600 font-bold text-white disabled:opacity-50"
+                    disabled={busy || !attendee.canMarkCertificate}
+                    className="col-span-2 min-h-[52px] rounded-xl bg-violet-600 font-bold text-white disabled:opacity-50"
                     onClick={() => void act("certificate_eligible")}
                   >
                     Certificate Eligible
@@ -172,15 +322,30 @@ export default function CheckInClient() {
                 </div>
 
                 <div className="flex gap-2">
-                  <input
-                    className="flex-1 rounded-lg border px-3 py-3"
-                    placeholder="Session name"
-                    value={sessionName}
-                    onChange={(e) => setSessionName(e.target.value)}
-                  />
+                  {eventSessions.length > 0 ? (
+                    <select
+                      className="flex-1 rounded-lg border px-3 py-3 text-sm"
+                      value={sessionName}
+                      onChange={(e) => setSessionName(e.target.value)}
+                    >
+                      <option value="">Select session</option>
+                      {eventSessions.map((s) => (
+                        <option key={s.id} value={s.title}>
+                          {s.title}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      className="flex-1 rounded-lg border px-3 py-3"
+                      placeholder="Session name"
+                      value={sessionName}
+                      onChange={(e) => setSessionName(e.target.value)}
+                    />
+                  )}
                   <button
                     type="button"
-                    disabled={busy || !sessionName.trim()}
+                    disabled={busy || !sessionName.trim() || Boolean(attendee.blockReason)}
                     className="rounded-xl bg-slate-800 px-4 font-bold text-white disabled:opacity-50"
                     onClick={() => void act("session")}
                   >
@@ -195,11 +360,39 @@ export default function CheckInClient() {
                 <p className="font-semibold">Sessions attended:</p>
                 <ul className="mt-1 list-disc pl-5">
                   {attendee.sessions.map((s) => (
-                    <li key={s.name}>{s.name}</li>
+                    <li key={`${s.name}-${s.attendedAt}`}>
+                      {s.name}{" "}
+                      <span className="text-xs text-slate-400">
+                        {new Date(s.attendedAt).toLocaleString()}
+                      </span>
+                    </li>
                   ))}
                 </ul>
               </div>
             )}
+          </div>
+        )}
+
+        {recent.length > 0 && (
+          <div className="rounded-2xl bg-white p-4 shadow-sm">
+            <h3 className="mb-2 text-sm font-bold text-brand-navy">Recent check-ins</h3>
+            <ul className="divide-y text-sm">
+              {recent.map((r) => (
+                <li key={`${r.registrationId}-${r.checkedInAt}`} className="flex justify-between py-2">
+                  <button
+                    type="button"
+                    className="text-left font-mono text-brand-navy hover:underline"
+                    onClick={() => {
+                      setScanInput(r.registrationId);
+                      void lookup(r.registrationId);
+                    }}
+                  >
+                    {r.registrationId}
+                  </button>
+                  <span className="truncate pl-2 text-slate-500">{r.name}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>

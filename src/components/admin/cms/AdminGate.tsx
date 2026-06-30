@@ -40,7 +40,10 @@ function AdminGateContent({ children }: { children: ReactNode }) {
               try {
                 await login(email, password);
                 const next = searchParams.get("next");
-                if (next && next.startsWith("/admin")) {
+                if (
+                  next &&
+                  (next.startsWith("/admin") || next.startsWith("/event/checkin"))
+                ) {
                   window.location.assign(next);
                 }
               } catch (error) {

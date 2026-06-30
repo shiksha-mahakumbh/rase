@@ -250,7 +250,7 @@ function DetailContent() {
           }}
         />
         <p className="mt-3 text-sm">
-          <Link href={record.links.checkIn} className="text-primary underline">
+          <Link href={`${record.links.checkIn}`} className="text-primary underline">
             Open check-in gate →
           </Link>
         </p>

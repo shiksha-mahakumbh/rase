@@ -1,15 +1,24 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
-import { ADMIN_CHECKIN_ROLES } from "@/server/lib/admin-rbac";
+import { ADMIN_CHECKIN_ROLES, getAdminActorUid } from "@/server/lib/admin-rbac";
+import { ServiceError } from "@/server/lib/errors";
 import {
   lookupAttendeeForCheckIn,
   performCheckInAction,
+  listRecentCheckIns,
 } from "@/server/services/lifecycle/checkin.service";
 
 export const GET = createApiHandler(
   async (request: NextRequest) => {
-    const id = new URL(request.url).searchParams.get("id");
-    if (!id) throw new Error("id query param required");
+    const { searchParams } = new URL(request.url);
+    if (searchParams.get("recent") === "1") {
+      return { items: await listRecentCheckIns() };
+    }
+
+    const id = searchParams.get("id");
+    if (!id?.trim()) {
+      throw new ServiceError("id query param required", 400, "MISSING_ID");
+    }
     return lookupAttendeeForCheckIn(id);
   },
   { requireAdmin: true, rateLimitKey: "admin-checkin-lookup", limit: 180 }
@@ -24,15 +33,18 @@ export const POST = createApiHandler(
       location?: string;
     }>(await request.json());
 
-    if (!body.registrationId || !body.action) {
-      throw new Error("registrationId and action required");
+    if (!body.registrationId?.trim() || !body.action) {
+      throw new ServiceError("registrationId and action required", 400, "INVALID_BODY");
     }
+
+    const actorUserId = getAdminActorUid(request);
 
     return performCheckInAction({
       registrationId: body.registrationId,
       action: body.action,
       sessionName: body.sessionName,
       location: body.location,
+      actorUserId: actorUserId ?? undefined,
     });
   },
   { requireAdmin: true, adminRoles: ADMIN_CHECKIN_ROLES, rateLimitKey: "admin-checkin-action", limit: 120 }

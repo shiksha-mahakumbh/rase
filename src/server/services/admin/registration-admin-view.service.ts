@@ -259,7 +259,7 @@ export async function buildAdminRegistrationView(
     links: {
       receiptsAdmin: `/admin/cms/receipts`,
       paymentAudit: `/admin/cms/payment-audit`,
-      checkIn: `/admin/cms/checkin`,
+      checkIn: `/admin/cms/checkin?id=${encodeURIComponent(row.registrationId)}`,
     },
     createdAt: String(row.createdAt ?? ""),
     updatedAt: String(row.updatedAt ?? ""),
