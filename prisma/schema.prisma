@@ -25,8 +25,8 @@ enum YesNo {
 }
 
 enum VidyaBhartiStatus {
-  Vidya_Bharti      @map("Vidya Bharti")
-  Non_Vidya_Bharti  @map("Non Vidya Bharti")
+  Vidya_Bharti     @map("Vidya Bharti")
+  Non_Vidya_Bharti @map("Non Vidya Bharti")
 }
 
 enum RegistrationType {
@@ -35,14 +35,14 @@ enum RegistrationType {
   Exhibition
   Accommodation
   Awards
-  Best_Practices    @map("Best Practices")
+  Best_Practices @map("Best Practices")
   Olympiad
   Talent
   Volunteer
   NGO
   Participant
   // Legacy — migration only, no new submissions
-  Legacy_Other      @map("Legacy Other")
+  Legacy_Other   @map("Legacy Other")
 }
 
 enum RegistrationStatus {
@@ -499,25 +499,25 @@ enum MediaAssetType {
 // ─── Auth & RBAC ─────────────────────────────────────────────────────────────
 
 model User {
-  id            String    @id @default(uuid()) @db.Uuid
-  authUserId    String?   @unique @map("auth_user_id") @db.Uuid // Supabase auth.users.id
-  email         String    @unique
-  fullName      String?   @map("full_name")
-  avatarUrl     String?   @map("avatar_url")
-  phone         String?
-  isActive      Boolean   @default(true) @map("is_active")
-  lastLoginAt   DateTime? @map("last_login_at") @db.Timestamptz(6)
-  lastLoginIp   String?   @map("last_login_ip")
-  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id          String    @id @default(uuid()) @db.Uuid
+  authUserId  String?   @unique @map("auth_user_id") @db.Uuid // Supabase auth.users.id
+  email       String    @unique
+  fullName    String?   @map("full_name")
+  avatarUrl   String?   @map("avatar_url")
+  phone       String?
+  isActive    Boolean   @default(true) @map("is_active")
+  lastLoginAt DateTime? @map("last_login_at") @db.Timestamptz(6)
+  lastLoginIp String?   @map("last_login_ip")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
 
-  userRoles     UserRole[]
-  auditLogs     AuditLog[]       @relation("AuditActor")
-  emailLogs     EmailLog[]
-  uploadedFiles UploadedFile[]   @relation("UploadedBy")
-  contactReplies ContactMessage[] @relation("ContactReplier")
-  feedbackReplies Feedback[]      @relation("FeedbackReplier")
+  userRoles       UserRole[]
+  auditLogs       AuditLog[]       @relation("AuditActor")
+  emailLogs       EmailLog[]
+  uploadedFiles   UploadedFile[]   @relation("UploadedBy")
+  contactReplies  ContactMessage[] @relation("ContactReplier")
+  feedbackReplies Feedback[]       @relation("FeedbackReplier")
 
   @@index([email])
   @@index([authUserId])
@@ -525,13 +525,13 @@ model User {
 }
 
 model Role {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String   @unique // Super Admin, Admin, Data Entry, Coordinator, etc.
-  slug        String   @unique
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String    @unique // Super Admin, Admin, Data Entry, Coordinator, etc.
+  slug        String    @unique
   description String?
-  isSystem    Boolean  @default(false) @map("is_system")
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  isSystem    Boolean   @default(false) @map("is_system")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   userRoles       UserRole[]
@@ -542,8 +542,8 @@ model Role {
 
 model Permission {
   id          String   @id @default(uuid()) @db.Uuid
-  resource    String   // registrations, committees, media, settings, users
-  action      String   // read, create, update, delete, export, manage
+  resource    String // registrations, committees, media, settings, users
+  action      String // read, create, update, delete, export, manage
   slug        String   @unique // registrations.read, committees.manage
   description String?
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -609,13 +609,13 @@ model RegistrationCounter {
 // ─── Core Registration Engine ─────────────────────────────────────────────────
 
 model Registration {
-  id                   String              @id @default(uuid()) @db.Uuid
-  registrationId       String              @unique @map("registration_id") // SMK2026-000001
-  registrationType     RegistrationType    @map("registration_type")
-  registrationStatus   RegistrationStatus  @default(Submitted) @map("registration_status")
-  paymentStatus        PaymentStatus       @default(Not_Required) @map("payment_status")
-  accommodationStatus  AccommodationStatus @default(Not_Required) @map("accommodation_status")
-  emailDeliveryStatus  EmailDeliveryStatus? @map("email_delivery_status")
+  id                  String               @id @default(uuid()) @db.Uuid
+  registrationId      String               @unique @map("registration_id") // SMK2026-000001
+  registrationType    RegistrationType     @map("registration_type")
+  registrationStatus  RegistrationStatus   @default(Submitted) @map("registration_status")
+  paymentStatus       PaymentStatus        @default(Not_Required) @map("payment_status")
+  accommodationStatus AccommodationStatus  @default(Not_Required) @map("accommodation_status")
+  emailDeliveryStatus EmailDeliveryStatus? @map("email_delivery_status")
 
   // Receipt & QR tracking
   receiptGeneratedAt  DateTime? @map("receipt_generated_at") @db.Timestamptz(6)
@@ -626,40 +626,40 @@ model Registration {
   qrSentAt            DateTime? @map("qr_sent_at") @db.Timestamptz(6)
 
   // Lifecycle — check-in, kit, certificate eligibility
-  state                        String?
-  checkInStatus                CheckInStatus @default(Not_Checked_In) @map("check_in_status")
-  checkedInAt                  DateTime?     @map("checked_in_at") @db.Timestamptz(6)
-  checkedInByUserId            String?       @map("checked_in_by_user_id") @db.Uuid
-  checkInLocation              String?       @map("check_in_location")
-  kitDistributed               Boolean       @default(false) @map("kit_distributed")
-  kitDistributedAt             DateTime?     @map("kit_distributed_at") @db.Timestamptz(6)
-  certificateEligible          Boolean       @default(false) @map("certificate_eligible")
-  certificateLifecycleStatus   CertificateLifecycleStatus @default(Not_Applicable) @map("certificate_lifecycle_status")
+  state                      String?
+  checkInStatus              CheckInStatus              @default(Not_Checked_In) @map("check_in_status")
+  checkedInAt                DateTime?                  @map("checked_in_at") @db.Timestamptz(6)
+  checkedInByUserId          String?                    @map("checked_in_by_user_id") @db.Uuid
+  checkInLocation            String?                    @map("check_in_location")
+  kitDistributed             Boolean                    @default(false) @map("kit_distributed")
+  kitDistributedAt           DateTime?                  @map("kit_distributed_at") @db.Timestamptz(6)
+  certificateEligible        Boolean                    @default(false) @map("certificate_eligible")
+  certificateLifecycleStatus CertificateLifecycleStatus @default(Not_Applicable) @map("certificate_lifecycle_status")
 
   // Common participant fields
-  fullName       String  @map("full_name")
+  fullName       String            @map("full_name")
   gender         Gender
   designation    String
   institution    String
   address        String
-  country        String  @default("India")
+  country        String            @default("India")
   email          String
-  contactNumber  String  @map("contact_number")
-  whatsappNumber String? @map("whatsapp_number")
+  contactNumber  String            @map("contact_number")
+  whatsappNumber String?           @map("whatsapp_number")
   vidyaBharti    VidyaBhartiStatus @map("vidya_bharti")
 
   // Accommodation
-  accommodationRequired YesNo  @default(No) @map("accommodation_required")
+  accommodationRequired YesNo   @default(No) @map("accommodation_required")
   accommodationDate     String? @map("accommodation_date")
   accommodationType     String? @map("accommodation_type")
   participantCategory   String? @map("participant_category")
 
   // Payment snapshot
-  registrationFee  Decimal? @map("registration_fee") @db.Decimal(12, 2)
-  utrNumber        String?  @map("utr_number")
-  transactionId    String?  @map("transaction_id")
-  razorpayOrderId  String?  @map("razorpay_order_id")
-  razorpayPaymentId String? @map("razorpay_payment_id")
+  registrationFee   Decimal? @map("registration_fee") @db.Decimal(12, 2)
+  utrNumber         String?  @map("utr_number")
+  transactionId     String?  @map("transaction_id")
+  razorpayOrderId   String?  @map("razorpay_order_id")
+  razorpayPaymentId String?  @map("razorpay_payment_id")
 
   // Flexible payload for type-specific fields not yet normalized
   metadata Json @default("{}")
@@ -676,34 +676,34 @@ model Registration {
   updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
-  statusHistory        RegistrationStatusHistory[]
-  uploadedFiles        UploadedFile[]
-  paymentRecords       PaymentRecord[]
-  accommodationRequest AccommodationRequest?
-  emailLogs            EmailLog[]
-  auditLogs            AuditLog[]
-  checkInRecords       CheckInRecord[]
-  attendeeCertificate  AttendeeCertificate?
-  attendeeBadge        AttendeeBadge?
-  sessionAttendances   SessionAttendance[]
-  researchSubmissions  ResearchSubmission[]
+  statusHistory           RegistrationStatusHistory[]
+  uploadedFiles           UploadedFile[]
+  paymentRecords          PaymentRecord[]
+  accommodationRequest    AccommodationRequest?
+  emailLogs               EmailLog[]
+  auditLogs               AuditLog[]
+  checkInRecords          CheckInRecord[]
+  attendeeCertificate     AttendeeCertificate?
+  attendeeBadge           AttendeeBadge?
+  sessionAttendances      SessionAttendance[]
+  researchSubmissions     ResearchSubmission[]
   communicationRecipients CommunicationRecipient[]
-  volunteerAssignment  VolunteerAssignment?
-  speakerOperations    SpeakerOperations?
-  alumniRecord         AlumniRecord?
-  whatsAppMessageLogs  WhatsAppMessageLog[]
-  generatedDocuments   GeneratedDocument[]
+  volunteerAssignment     VolunteerAssignment?
+  speakerOperations       SpeakerOperations?
+  alumniRecord            AlumniRecord?
+  whatsAppMessageLogs     WhatsAppMessageLog[]
+  generatedDocuments      GeneratedDocument[]
 
-  conclaveRegistration      ConclaveRegistration?
-  delegateRegistration      DelegateRegistration?
-  exhibitionRegistration    ExhibitionRegistration?
-  awardsRegistration        AwardsRegistration?
-  bestPracticeRegistration  BestPracticeRegistration?
-  olympiadRegistration      OlympiadRegistration?
-  talentRegistration        TalentRegistration?
-  volunteerApplication      VolunteerApplication?
-  ngoRegistration           NgoRegistration?
-  participantRegistration   ParticipantRegistration?
+  conclaveRegistration     ConclaveRegistration?
+  delegateRegistration     DelegateRegistration?
+  exhibitionRegistration   ExhibitionRegistration?
+  awardsRegistration       AwardsRegistration?
+  bestPracticeRegistration BestPracticeRegistration?
+  olympiadRegistration     OlympiadRegistration?
+  talentRegistration       TalentRegistration?
+  volunteerApplication     VolunteerApplication?
+  ngoRegistration          NgoRegistration?
+  participantRegistration  ParticipantRegistration?
 
   @@index([registrationType])
   @@index([registrationStatus])
@@ -718,13 +718,13 @@ model Registration {
 }
 
 model RegistrationStatusHistory {
-  id               String             @id @default(uuid()) @db.Uuid
-  registrationId   String             @map("registration_id") @db.Uuid
-  fromStatus       RegistrationStatus? @map("from_status")
-  toStatus         RegistrationStatus @map("to_status")
-  changedByUserId  String?            @map("changed_by_user_id") @db.Uuid
-  reason           String?
-  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  id              String              @id @default(uuid()) @db.Uuid
+  registrationId  String              @map("registration_id") @db.Uuid
+  fromStatus      RegistrationStatus? @map("from_status")
+  toStatus        RegistrationStatus  @map("to_status")
+  changedByUserId String?             @map("changed_by_user_id") @db.Uuid
+  reason          String?
+  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -735,13 +735,13 @@ model RegistrationStatusHistory {
 // ─── Type-specific registration tables ───────────────────────────────────────
 
 model ConclaveRegistration {
-  id               String @id @default(uuid()) @db.Uuid
-  registrationId   String @unique @map("registration_id") @db.Uuid
-  conclaveSelection String @map("conclave_selection")
-  participationType String @map("participation_type")
-  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id                String    @id @default(uuid()) @db.Uuid
+  registrationId    String    @unique @map("registration_id") @db.Uuid
+  conclaveSelection String    @map("conclave_selection")
+  participationType String    @map("participation_type")
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt         DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -749,13 +749,13 @@ model ConclaveRegistration {
 }
 
 model DelegateRegistration {
-  id               String @id @default(uuid()) @db.Uuid
-  registrationId   String @unique @map("registration_id") @db.Uuid
-  delegateCategory String @map("delegate_category")
-  panNumber        String? @map("pan_number")
-  chequeNumber     String? @map("cheque_number")
-  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id               String    @id @default(uuid()) @db.Uuid
+  registrationId   String    @unique @map("registration_id") @db.Uuid
+  delegateCategory String    @map("delegate_category")
+  panNumber        String?   @map("pan_number")
+  chequeNumber     String?   @map("cheque_number")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
@@ -764,12 +764,12 @@ model DelegateRegistration {
 }
 
 model ExhibitionRegistration {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  projectTitle   String? @map("project_title")
-  projectSummary String? @map("project_summary") @db.Text
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id             String    @id @default(uuid()) @db.Uuid
+  registrationId String    @unique @map("registration_id") @db.Uuid
+  projectTitle   String?   @map("project_title")
+  projectSummary String?   @map("project_summary") @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
@@ -778,13 +778,13 @@ model ExhibitionRegistration {
 }
 
 model AwardsRegistration {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  awardCategory  String @map("award_category")
-  nominationDetails String? @map("nomination_details") @db.Text
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id                String    @id @default(uuid()) @db.Uuid
+  registrationId    String    @unique @map("registration_id") @db.Uuid
+  awardCategory     String    @map("award_category")
+  nominationDetails String?   @map("nomination_details") @db.Text
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt         DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -792,15 +792,15 @@ model AwardsRegistration {
 }
 
 model BestPracticeRegistration {
-  id               String @id @default(uuid()) @db.Uuid
-  registrationId   String @unique @map("registration_id") @db.Uuid
+  id               String    @id @default(uuid()) @db.Uuid
+  registrationId   String    @unique @map("registration_id") @db.Uuid
   title            String
-  organizationName String @map("organization_name")
-  areaOfWork       String @map("area_of_work")
-  description      String @db.Text
-  wordCount        Int?   @map("word_count")
-  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  organizationName String    @map("organization_name")
+  areaOfWork       String    @map("area_of_work")
+  description      String    @db.Text
+  wordCount        Int?      @map("word_count")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
@@ -809,13 +809,13 @@ model BestPracticeRegistration {
 }
 
 model OlympiadRegistration {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  olympiadTrack  String @map("olympiad_track")
-  schoolName     String? @map("school_name")
+  id             String    @id @default(uuid()) @db.Uuid
+  registrationId String    @unique @map("registration_id") @db.Uuid
+  olympiadTrack  String    @map("olympiad_track")
+  schoolName     String?   @map("school_name")
   grade          String?
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
@@ -824,13 +824,13 @@ model OlympiadRegistration {
 }
 
 model TalentRegistration {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  talentCategory String @map("talent_category")
-  performanceTitle String? @map("performance_title")
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id               String    @id @default(uuid()) @db.Uuid
+  registrationId   String    @unique @map("registration_id") @db.Uuid
+  talentCategory   String    @map("talent_category")
+  performanceTitle String?   @map("performance_title")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -838,12 +838,12 @@ model TalentRegistration {
 }
 
 model VolunteerApplication {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  volunteerRole  String @map("volunteer_role")
+  id             String    @id @default(uuid()) @db.Uuid
+  registrationId String    @unique @map("registration_id") @db.Uuid
+  volunteerRole  String    @map("volunteer_role")
   availability   String?
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
@@ -852,13 +852,13 @@ model VolunteerApplication {
 }
 
 model NgoRegistration {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  ngoName        String @map("ngo_name")
-  registrationNumber String? @map("registration_number")
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id                 String    @id @default(uuid()) @db.Uuid
+  registrationId     String    @unique @map("registration_id") @db.Uuid
+  ngoName            String    @map("ngo_name")
+  registrationNumber String?   @map("registration_number")
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -866,12 +866,12 @@ model NgoRegistration {
 }
 
 model ParticipantRegistration {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  participantType String @map("participant_type")
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id              String    @id @default(uuid()) @db.Uuid
+  registrationId  String    @unique @map("registration_id") @db.Uuid
+  participantType String    @map("participant_type")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -879,25 +879,25 @@ model ParticipantRegistration {
 }
 
 model AccommodationRequest {
-  id             String @id @default(uuid()) @db.Uuid
-  registrationId String @unique @map("registration_id") @db.Uuid
-  status         AccommodationStatus @default(Requested)
-  notes          String? @db.Text
-  bedType        String? @map("bed_type")
-  building       String?
-  roomNumber     String? @map("room_number")
-  bedNumber      String? @map("bed_number")
-  roomId         String? @map("room_id") @db.Uuid
-  checkInDate    DateTime? @map("check_in_date") @db.Date
-  checkOutDate   DateTime? @map("check_out_date") @db.Date
-  allocatedAt    DateTime? @map("allocated_at") @db.Timestamptz(6)
-  allocatedByUserId String? @map("allocated_by_user_id") @db.Uuid
-  accommodationEmailSentAt DateTime? @map("accommodation_email_sent_at") @db.Timestamptz(6)
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id                       String              @id @default(uuid()) @db.Uuid
+  registrationId           String              @unique @map("registration_id") @db.Uuid
+  status                   AccommodationStatus @default(Requested)
+  notes                    String?             @db.Text
+  bedType                  String?             @map("bed_type")
+  building                 String?
+  roomNumber               String?             @map("room_number")
+  bedNumber                String?             @map("bed_number")
+  roomId                   String?             @map("room_id") @db.Uuid
+  checkInDate              DateTime?           @map("check_in_date") @db.Date
+  checkOutDate             DateTime?           @map("check_out_date") @db.Date
+  allocatedAt              DateTime?           @map("allocated_at") @db.Timestamptz(6)
+  allocatedByUserId        String?             @map("allocated_by_user_id") @db.Uuid
+  accommodationEmailSentAt DateTime?           @map("accommodation_email_sent_at") @db.Timestamptz(6)
+  createdAt                DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt                DateTime?           @map("deleted_at") @db.Timestamptz(6)
 
-  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  registration Registration       @relation(fields: [registrationId], references: [id], onDelete: Cascade)
   room         AccommodationRoom? @relation(fields: [roomId], references: [id], onDelete: SetNull)
 
   @@index([roomId])
@@ -906,16 +906,16 @@ model AccommodationRequest {
 }
 
 model AccommodationRoom {
-  id          String   @id @default(uuid()) @db.Uuid
-  building    String
-  roomNumber  String   @map("room_number")
-  bedNumber   String?  @map("bed_number")
-  bedType     String?  @map("bed_type")
-  capacity    Int      @default(1)
-  occupied    Int      @default(0)
-  isActive    Boolean  @default(true) @map("is_active")
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id         String   @id @default(uuid()) @db.Uuid
+  building   String
+  roomNumber String   @map("room_number")
+  bedNumber  String?  @map("bed_number")
+  bedType    String?  @map("bed_type")
+  capacity   Int      @default(1)
+  occupied   Int      @default(0)
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   allocations AccommodationRequest[]
 
@@ -927,7 +927,7 @@ model AccommodationRoom {
 model CheckInRecord {
   id               String   @id @default(uuid()) @db.Uuid
   registrationId   String   @map("registration_id") @db.Uuid
-  action           String   // check_in | kit | certificate_eligible | session
+  action           String // check_in | kit | certificate_eligible | session
   sessionName      String?  @map("session_name")
   location         String?
   recordedByUserId String?  @map("recorded_by_user_id") @db.Uuid
@@ -949,7 +949,7 @@ model SessionAttendance {
   attendedAt       DateTime @default(now()) @map("attended_at") @db.Timestamptz(6)
   recordedByUserId String?  @map("recorded_by_user_id") @db.Uuid
 
-  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  registration Registration  @relation(fields: [registrationId], references: [id], onDelete: Cascade)
   eventSession EventSession? @relation(fields: [eventSessionId], references: [id], onDelete: SetNull)
 
   @@unique([registrationId, sessionName])
@@ -958,17 +958,17 @@ model SessionAttendance {
 }
 
 model AttendeeCertificate {
-  id               String          @id @default(uuid()) @db.Uuid
-  registrationId   String          @unique @map("registration_id") @db.Uuid
-  certificateNo    String          @unique @map("certificate_no")
-  certificateType  CertificateType @map("certificate_type")
-  verifyCode       String          @unique @map("verify_code")
-  issuedAt         DateTime?       @map("issued_at") @db.Timestamptz(6)
-  issuedByUserId   String?         @map("issued_by_user_id") @db.Uuid
-  storagePath      String?         @map("storage_path")
-  revokedAt        DateTime?       @map("revoked_at") @db.Timestamptz(6)
-  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id              String          @id @default(uuid()) @db.Uuid
+  registrationId  String          @unique @map("registration_id") @db.Uuid
+  certificateNo   String          @unique @map("certificate_no")
+  certificateType CertificateType @map("certificate_type")
+  verifyCode      String          @unique @map("verify_code")
+  issuedAt        DateTime?       @map("issued_at") @db.Timestamptz(6)
+  issuedByUserId  String?         @map("issued_by_user_id") @db.Uuid
+  storagePath     String?         @map("storage_path")
+  revokedAt       DateTime?       @map("revoked_at") @db.Timestamptz(6)
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -1010,6 +1010,7 @@ model ResearchSubmission {
 
   @@index([status])
   @@index([authorEmail])
+  @@index([registrationId])
   @@map("research_submissions")
 }
 
@@ -1037,15 +1038,15 @@ model CommunicationCampaign {
 }
 
 model CommunicationRecipient {
-  id             String   @id @default(uuid()) @db.Uuid
-  campaignId     String   @map("campaign_id") @db.Uuid
-  registrationId String?  @map("registration_id") @db.Uuid
+  id             String    @id @default(uuid()) @db.Uuid
+  campaignId     String    @map("campaign_id") @db.Uuid
+  registrationId String?   @map("registration_id") @db.Uuid
   email          String?
   phone          String?
-  status         String   @default("pending")
-  errorMessage   String?  @map("error_message") @db.Text
+  status         String    @default("pending")
+  errorMessage   String?   @map("error_message") @db.Text
   sentAt         DateTime? @map("sent_at") @db.Timestamptz(6)
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
   campaign     CommunicationCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   registration Registration?         @relation(fields: [registrationId], references: [id], onDelete: SetNull)
@@ -1080,6 +1081,7 @@ model UploadedFile {
 
   @@index([registrationId])
   @@index([bucket, storagePath])
+  @@index([uploadedById])
   @@map("uploaded_files")
 }
 
@@ -1103,7 +1105,7 @@ model PaymentRecord {
   updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt         DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
-  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  registration  Registration   @relation(fields: [registrationId], references: [id], onDelete: Cascade)
   webhookEvents WebhookEvent[]
 
   @@index([registrationId])
@@ -1134,21 +1136,22 @@ model RazorpayVerifiedPayment {
 }
 
 model WebhookEvent {
-  id              String   @id @default(uuid()) @db.Uuid
-  paymentRecordId String?  @map("payment_record_id") @db.Uuid
-  eventType       String   @map("event_type")
-  razorpayEventId String?  @unique @map("razorpay_event_id")
-  payload         Json     @default("{}")
-  signatureValid  Boolean  @default(false) @map("signature_valid")
-  processed       Boolean  @default(false)
-  retryCount      Int      @default(0) @map("retry_count")
+  id              String    @id @default(uuid()) @db.Uuid
+  paymentRecordId String?   @map("payment_record_id") @db.Uuid
+  eventType       String    @map("event_type")
+  razorpayEventId String?   @unique @map("razorpay_event_id")
+  payload         Json      @default("{}")
+  signatureValid  Boolean   @default(false) @map("signature_valid")
+  processed       Boolean   @default(false)
+  retryCount      Int       @default(0) @map("retry_count")
   lastProcessedAt DateTime? @map("last_processed_at") @db.Timestamptz(6)
-  errorMessage    String?  @map("error_message") @db.Text
-  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  errorMessage    String?   @map("error_message") @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
   paymentRecord PaymentRecord? @relation(fields: [paymentRecordId], references: [id], onDelete: SetNull)
 
   @@index([eventType, createdAt])
+  @@index([paymentRecordId])
   @@map("webhook_events")
 }
 
@@ -1172,7 +1175,7 @@ model DonationRecord {
   razorpayOrderId   String?       @map("razorpay_order_id")
   razorpayPaymentId String?       @unique @map("razorpay_payment_id")
   paymentStatus     PaymentStatus @default(Paid) @map("payment_status")
-  receiptToken      String        @unique @map("receipt_token") @default(uuid()) @db.Uuid
+  receiptToken      String        @unique @default(uuid()) @map("receipt_token") @db.Uuid
   receiptSentAt     DateTime?     @map("receipt_sent_at") @db.Timestamptz(6)
   metadata          Json          @default("{}")
   createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -1203,23 +1206,24 @@ model AuditLog {
 
   @@index([action, createdAt])
   @@index([registrationId])
+  @@index([actorUserId])
   @@map("audit_logs")
 }
 
 model EmailLog {
-  id             String           @id @default(uuid()) @db.Uuid
-  registrationId String?          @map("registration_id") @db.Uuid
-  toEmail        String           @map("to_email")
+  id             String         @id @default(uuid()) @db.Uuid
+  registrationId String?        @map("registration_id") @db.Uuid
+  toEmail        String         @map("to_email")
   subject        String
   template       String?
-  status         EmailLogStatus   @default(queued)
-  provider       String           @default("brevo")
-  providerMsgId  String?          @map("provider_msg_id")
-  errorMessage   String?          @map("error_message") @db.Text
-  retryCount     Int              @default(0) @map("retry_count")
-  sentAt         DateTime?        @map("sent_at") @db.Timestamptz(6)
-  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  status         EmailLogStatus @default(queued)
+  provider       String         @default("brevo")
+  providerMsgId  String?        @map("provider_msg_id")
+  errorMessage   String?        @map("error_message") @db.Text
+  retryCount     Int            @default(0) @map("retry_count")
+  sentAt         DateTime?      @map("sent_at") @db.Timestamptz(6)
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   registration Registration? @relation(fields: [registrationId], references: [id], onDelete: SetNull)
   user         User?         @relation(fields: [userId], references: [id])
@@ -1227,6 +1231,7 @@ model EmailLog {
 
   @@index([status, createdAt])
   @@index([registrationId])
+  @@index([userId])
   @@map("email_logs")
 }
 
@@ -1257,28 +1262,29 @@ model Committee {
 }
 
 model CommitteeMember {
-  id            String         @id @default(uuid()) @db.Uuid
-  committeeId   String         @map("committee_id") @db.Uuid
-  fullName      String         @map("full_name")
-  designation   String?
-  institution   String?
-  email         String?
-  phone         String?
-  socialLinks   Json           @default("{}") @map("social_links")
-  locale        ContentLocale?
-  photoUrl      String?        @map("photo_url")
-  mediaAssetId  String?        @map("media_asset_id") @db.Uuid
-  bio           String?        @db.Text
-  sortOrder     Int            @default(0) @map("sort_order")
-  isActive      Boolean        @default(true) @map("is_active")
-  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt     DateTime?      @map("deleted_at") @db.Timestamptz(6)
+  id           String         @id @default(uuid()) @db.Uuid
+  committeeId  String         @map("committee_id") @db.Uuid
+  fullName     String         @map("full_name")
+  designation  String?
+  institution  String?
+  email        String?
+  phone        String?
+  socialLinks  Json           @default("{}") @map("social_links")
+  locale       ContentLocale?
+  photoUrl     String?        @map("photo_url")
+  mediaAssetId String?        @map("media_asset_id") @db.Uuid
+  bio          String?        @db.Text
+  sortOrder    Int            @default(0) @map("sort_order")
+  isActive     Boolean        @default(true) @map("is_active")
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?      @map("deleted_at") @db.Timestamptz(6)
 
   committee  Committee   @relation(fields: [committeeId], references: [id], onDelete: Cascade)
   mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
 
   @@index([committeeId, sortOrder])
+  @@index([mediaAssetId])
   @@map("committee_members")
 }
 
@@ -1310,38 +1316,39 @@ model Event {
   deletedAt          DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
   media            EventMedia[]
-  brochureDownload Download? @relation("EventBrochure", fields: [brochureDownloadId], references: [id], onDelete: SetNull)
+  brochureDownload Download?    @relation("EventBrochure", fields: [brochureDownloadId], references: [id], onDelete: SetNull)
 
   @@unique([slug, locale])
   @@index([status, startDate])
   @@index([locale, isFeatured])
+  @@index([brochureDownloadId])
   @@map("events")
 }
 
 model EventMedia {
-  id                  String              @id @default(uuid()) @db.Uuid
-  eventId             String?             @map("event_id") @db.Uuid
+  id                  String               @id @default(uuid()) @db.Uuid
+  eventId             String?              @map("event_id") @db.Uuid
   slug                String?
-  locale              ContentLocale       @default(en)
-  status              PageStatus          @default(draft)
-  mediaType           MediaType           @map("media_type")
+  locale              ContentLocale        @default(en)
+  status              PageStatus           @default(draft)
+  mediaType           MediaType            @map("media_type")
   mediaCenterCategory MediaCenterCategory? @map("media_center_category")
   title               String?
   excerpt             String?
-  description         String?             @db.Text
+  description         String?              @db.Text
   url                 String
-  storagePath         String?             @map("storage_path")
+  storagePath         String?              @map("storage_path")
   category            String?
-  tags                String[]            @default([])
+  tags                String[]             @default([])
   edition             String?
-  publishAt           DateTime?           @map("publish_at") @db.Timestamptz(6)
-  relatedIds          Json                @default("[]") @map("related_ids")
-  mediaAssetId        String?             @map("media_asset_id") @db.Uuid
-  isFeatured          Boolean             @default(false) @map("is_featured")
-  sortOrder           Int                 @default(0) @map("sort_order")
-  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt           DateTime?           @map("deleted_at") @db.Timestamptz(6)
+  publishAt           DateTime?            @map("publish_at") @db.Timestamptz(6)
+  relatedIds          Json                 @default("[]") @map("related_ids")
+  mediaAssetId        String?              @map("media_asset_id") @db.Uuid
+  isFeatured          Boolean              @default(false) @map("is_featured")
+  sortOrder           Int                  @default(0) @map("sort_order")
+  createdAt           DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime?            @map("deleted_at") @db.Timestamptz(6)
 
   event      Event?      @relation(fields: [eventId], references: [id], onDelete: SetNull)
   mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
@@ -1349,6 +1356,8 @@ model EventMedia {
   @@index([mediaType, isFeatured])
   @@index([mediaCenterCategory, status, publishAt])
   @@index([slug, locale])
+  @@index([eventId])
+  @@index([mediaAssetId])
   @@map("event_media")
 }
 
@@ -1375,14 +1384,16 @@ model Download {
   updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt     DateTime?      @map("deleted_at") @db.Timestamptz(6)
 
-  replacedBy Download?  @relation("DownloadVersion", fields: [replacedById], references: [id], onDelete: SetNull)
-  replaces   Download[] @relation("DownloadVersion")
-  mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
-  eventBrochures Event[] @relation("EventBrochure")
+  replacedBy     Download?   @relation("DownloadVersion", fields: [replacedById], references: [id], onDelete: SetNull)
+  replaces       Download[]  @relation("DownloadVersion")
+  mediaAsset     MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+  eventBrochures Event[]     @relation("EventBrochure")
 
   @@index([status, isCurrent, expiresAt])
   @@index([downloadType, category])
   @@index([tags])
+  @@index([mediaAssetId])
+  @@index([replacedById])
   @@map("downloads")
 }
 
@@ -1423,6 +1434,7 @@ model ContactMessage {
   repliedBy User? @relation("ContactReplier", fields: [repliedById], references: [id], onDelete: SetNull)
 
   @@index([status, createdAt])
+  @@index([repliedById])
   @@map("contact_messages")
 }
 
@@ -1445,21 +1457,22 @@ model Feedback {
   repliedBy User? @relation("FeedbackReplier", fields: [repliedById], references: [id], onDelete: SetNull)
 
   @@index([status, createdAt])
+  @@index([repliedById])
   @@map("feedback")
 }
 
 // ─── Announcements & Notifications ───────────────────────────────────────────
 
 model Announcement {
-  id          String   @id @default(uuid()) @db.Uuid
+  id          String    @id @default(uuid()) @db.Uuid
   title       String
-  body        String   @db.Text
-  isPinned    Boolean  @default(false) @map("is_pinned")
-  isPublished Boolean  @default(true) @map("is_published")
+  body        String    @db.Text
+  isPinned    Boolean   @default(false) @map("is_pinned")
+  isPublished Boolean   @default(true) @map("is_published")
   publishAt   DateTime? @map("publish_at") @db.Timestamptz(6)
   expiresAt   DateTime? @map("expires_at") @db.Timestamptz(6)
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   @@index([isPublished, publishAt])
@@ -1512,18 +1525,19 @@ model SpeakerProfile {
 
   @@unique([slug, locale])
   @@index([status, locale, isFeatured])
+  @@index([mediaAssetId])
   @@map("speaker_profiles")
 }
 
 model Sponsor {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   name      String
-  logoUrl   String?  @map("logo_url")
+  logoUrl   String?   @map("logo_url")
   website   String?
   tier      String?
-  sortOrder Int      @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  sortOrder Int       @default(0) @map("sort_order")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   @@map("sponsors")
@@ -1551,6 +1565,7 @@ model Partner {
   mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
 
   @@index([partnerCategory, status, locale, sortOrder])
+  @@index([mediaAssetId])
   @@map("partners")
 }
 
@@ -1573,16 +1588,16 @@ model EntityRevision {
 // ─── Analytics — Phase B.5 Visitor Intelligence ─────────────────────────────
 
 model VisitorAnalytics {
-  id         String   @id @default(uuid()) @db.Uuid
-  date       DateTime @db.Date
-  dailyCount Int      @default(0) @map("daily_count")
-  totalCount Int      @default(0) @map("total_count")
-  uniqueCount Int     @default(0) @map("unique_count")
-  returningCount Int  @default(0) @map("returning_count")
-  botFiltered Int     @default(0) @map("bot_filtered")
-  metadata   Json     @default("{}")
-  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id             String   @id @default(uuid()) @db.Uuid
+  date           DateTime @db.Date
+  dailyCount     Int      @default(0) @map("daily_count")
+  totalCount     Int      @default(0) @map("total_count")
+  uniqueCount    Int      @default(0) @map("unique_count")
+  returningCount Int      @default(0) @map("returning_count")
+  botFiltered    Int      @default(0) @map("bot_filtered")
+  metadata       Json     @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@unique([date])
   @@map("visitor_analytics")
@@ -1637,6 +1652,7 @@ model VisitorPageView {
   @@index([path])
   @@index([pageCategory, viewedAt])
   @@index([viewedAt])
+  @@index([sessionId])
   @@map("visitor_page_views")
 }
 
@@ -1655,6 +1671,7 @@ model VisitorEvent {
 
   @@index([eventType, occurredAt])
   @@index([entityType, entityId])
+  @@index([sessionId])
   @@map("visitor_events")
 }
 
@@ -1709,21 +1726,21 @@ model TrafficSource {
 // ─── Phase 3.5: Dynamic Pages CMS ─────────────────────────────────────────────
 
 model Page {
-  id          String     @id @default(uuid()) @db.Uuid
+  id          String        @id @default(uuid()) @db.Uuid
   title       String
   slug        String
-  pageType    PageType   @default(static) @map("page_type")
+  pageType    PageType      @default(static) @map("page_type")
   locale      ContentLocale @default(en)
-  excerpt     String?    @db.Text
-  content     String?    @db.Text
-  status      PageStatus @default(draft)
-  publishAt   DateTime?  @map("publish_at") @db.Timestamptz(6)
-  publishedAt DateTime?  @map("published_at") @db.Timestamptz(6)
-  createdById String?    @map("created_by_id") @db.Uuid
-  updatedById String?    @map("updated_by_id") @db.Uuid
-  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt   DateTime?  @map("deleted_at") @db.Timestamptz(6)
+  excerpt     String?       @db.Text
+  content     String?       @db.Text
+  status      PageStatus    @default(draft)
+  publishAt   DateTime?     @map("publish_at") @db.Timestamptz(6)
+  publishedAt DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdById String?       @map("created_by_id") @db.Uuid
+  updatedById String?       @map("updated_by_id") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
   sections  PageSection[]
   revisions PageRevision[]
@@ -1754,15 +1771,15 @@ model PageSection {
 }
 
 model PageRevision {
-  id          String   @id @default(uuid()) @db.Uuid
-  pageId      String   @map("page_id") @db.Uuid
-  version     Int
-  title       String
-  slug        String
-  content     String?  @db.Text
-  sectionsSnapshot Json @default("[]") @map("sections_snapshot")
-  createdById String?  @map("created_by_id") @db.Uuid
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  id               String   @id @default(uuid()) @db.Uuid
+  pageId           String   @map("page_id") @db.Uuid
+  version          Int
+  title            String
+  slug             String
+  content          String?  @db.Text
+  sectionsSnapshot Json     @default("[]") @map("sections_snapshot")
+  createdById      String?  @map("created_by_id") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
@@ -1774,29 +1791,29 @@ model PageRevision {
 // ─── Phase 3.5: Global SEO Engine ───────────────────────────────────────────
 
 model SeoMetadata {
-  id               String        @id @default(uuid()) @db.Uuid
-  entityType       String        @map("entity_type")
-  entityId         String        @map("entity_id") @db.Uuid
-  locale           ContentLocale @default(en)
-  seoTitle         String?       @map("seo_title")
-  metaDescription  String?       @map("meta_description") @db.Text
-  metaKeywords     String[]      @map("meta_keywords")
-  canonicalUrl     String?       @map("canonical_url")
-  robots           String        @default("index,follow")
-  ogTitle          String?       @map("og_title")
-  ogDescription    String?       @map("og_description") @db.Text
-  ogImageUrl       String?       @map("og_image_url")
-  twitterCard      String        @default("summary_large_image") @map("twitter_card")
-  twitterTitle     String?       @map("twitter_title")
-  twitterDescription String?     @map("twitter_description") @db.Text
-  twitterImageUrl  String?       @map("twitter_image_url")
-  schemaJsonLd     Json?         @map("schema_json_ld")
-  hreflangAlternates Json?       @default("[]") @map("hreflang_alternates")
-  sitemapInclude   Boolean       @default(true) @map("sitemap_include")
-  sitemapPriority  Decimal?      @map("sitemap_priority") @db.Decimal(2, 1)
-  sitemapChangefreq String?      @map("sitemap_changefreq")
-  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                 String        @id @default(uuid()) @db.Uuid
+  entityType         String        @map("entity_type")
+  entityId           String        @map("entity_id") @db.Uuid
+  locale             ContentLocale @default(en)
+  seoTitle           String?       @map("seo_title")
+  metaDescription    String?       @map("meta_description") @db.Text
+  metaKeywords       String[]      @map("meta_keywords")
+  canonicalUrl       String?       @map("canonical_url")
+  robots             String        @default("index,follow")
+  ogTitle            String?       @map("og_title")
+  ogDescription      String?       @map("og_description") @db.Text
+  ogImageUrl         String?       @map("og_image_url")
+  twitterCard        String        @default("summary_large_image") @map("twitter_card")
+  twitterTitle       String?       @map("twitter_title")
+  twitterDescription String?       @map("twitter_description") @db.Text
+  twitterImageUrl    String?       @map("twitter_image_url")
+  schemaJsonLd       Json?         @map("schema_json_ld")
+  hreflangAlternates Json?         @default("[]") @map("hreflang_alternates")
+  sitemapInclude     Boolean       @default(true) @map("sitemap_include")
+  sitemapPriority    Decimal?      @map("sitemap_priority") @db.Decimal(2, 1)
+  sitemapChangefreq  String?       @map("sitemap_changefreq")
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@unique([entityType, entityId, locale])
   @@index([entityType, sitemapInclude])
@@ -1806,13 +1823,13 @@ model SeoMetadata {
 // ─── Phase 3.5: Media Library ─────────────────────────────────────────────────
 
 model MediaFolder {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   name      String
   slug      String
-  parentId  String?  @map("parent_id") @db.Uuid
-  sortOrder Int      @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  parentId  String?   @map("parent_id") @db.Uuid
+  sortOrder Int       @default(0) @map("sort_order")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   parent   MediaFolder?  @relation("FolderTree", fields: [parentId], references: [id], onDelete: SetNull)
@@ -1845,9 +1862,9 @@ model MediaAsset {
   updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt    DateTime?      @map("deleted_at") @db.Timestamptz(6)
 
-  folder     MediaFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
-  replacedBy MediaAsset?  @relation("AssetReplacement", fields: [replacedById], references: [id], onDelete: SetNull)
-  replaces   MediaAsset[] @relation("AssetReplacement")
+  folder            MediaFolder?       @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  replacedBy        MediaAsset?        @relation("AssetReplacement", fields: [replacedById], references: [id], onDelete: SetNull)
+  replaces          MediaAsset[]       @relation("AssetReplacement")
   downloads         Download[]
   noticeAttachments NoticeAttachment[]
   albumItems        MediaAlbumItem[]
@@ -1859,20 +1876,21 @@ model MediaAsset {
   @@index([folderId])
   @@index([tags])
   @@index([assetType, isCurrent])
+  @@index([replacedById])
   @@map("media_assets")
 }
 
 // ─── Phase B: Notice Board ────────────────────────────────────────────────────
 
 model NoticeCategory {
-  id          String   @id @default(uuid()) @db.Uuid
+  id          String    @id @default(uuid()) @db.Uuid
   name        String
-  slug        String   @unique
-  description String?  @db.Text
-  sortOrder   Int      @default(0) @map("sort_order")
-  isActive    Boolean  @default(true) @map("is_active")
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  slug        String    @unique
+  description String?   @db.Text
+  sortOrder   Int       @default(0) @map("sort_order")
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   notices Notice[]
@@ -1881,23 +1899,23 @@ model NoticeCategory {
 }
 
 model Notice {
-  id          String       @id @default(uuid()) @db.Uuid
+  id          String        @id @default(uuid()) @db.Uuid
   title       String
   slug        String
-  categoryId  String?      @map("category_id") @db.Uuid
-  description String       @db.Text
-  priority    Int          @default(0)
-  status      NoticeStatus @default(draft)
-  isPinned    Boolean      @default(false) @map("is_pinned")
+  categoryId  String?       @map("category_id") @db.Uuid
+  description String        @db.Text
+  priority    Int           @default(0)
+  status      NoticeStatus  @default(draft)
+  isPinned    Boolean       @default(false) @map("is_pinned")
   locale      ContentLocale @default(en)
-  publishAt   DateTime?    @map("publish_at") @db.Timestamptz(6)
-  expireAt    DateTime?    @map("expire_at") @db.Timestamptz(6)
-  publishedAt DateTime?    @map("published_at") @db.Timestamptz(6)
-  createdById String?      @map("created_by_id") @db.Uuid
-  updatedById String?      @map("updated_by_id") @db.Uuid
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt   DateTime?    @map("deleted_at") @db.Timestamptz(6)
+  publishAt   DateTime?     @map("publish_at") @db.Timestamptz(6)
+  expireAt    DateTime?     @map("expire_at") @db.Timestamptz(6)
+  publishedAt DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdById String?       @map("created_by_id") @db.Uuid
+  updatedById String?       @map("updated_by_id") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
   category    NoticeCategory?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   attachments NoticeAttachment[]
@@ -1905,6 +1923,7 @@ model Notice {
   @@unique([slug, locale])
   @@index([status, publishAt, expireAt])
   @@index([isPinned, priority])
+  @@index([categoryId])
   @@map("notices")
 }
 
@@ -1923,30 +1942,31 @@ model NoticeAttachment {
   mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
 
   @@index([noticeId, sortOrder])
+  @@index([mediaAssetId])
   @@map("notice_attachments")
 }
 
 // ─── Phase B: Global Settings ─────────────────────────────────────────────────
 
 model SiteSetting {
-  id                String        @id @default(uuid()) @db.Uuid
-  locale            ContentLocale @default(en)
-  organizationName  String?       @map("organization_name")
-  tagline           String?
-  logoUrl           String?       @map("logo_url")
-  faviconUrl        String?       @map("favicon_url")
-  contactEmail      String?       @map("contact_email")
-  supportEmail      String?       @map("support_email")
-  phoneNumbers      Json          @default("[]") @map("phone_numbers")
-  officeAddresses   Json          @default("[]") @map("office_addresses")
-  socialLinks       Json          @default("{}") @map("social_links")
-  copyrightText     String?       @map("copyright_text")
-  footerContent     Json?         @map("footer_content")
-  registrationOpen  Boolean       @default(true) @map("registration_open")
-  maintenanceMode   Boolean       @default(false) @map("maintenance_mode")
-  extra             Json          @default("{}")
-  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id               String        @id @default(uuid()) @db.Uuid
+  locale           ContentLocale @default(en)
+  organizationName String?       @map("organization_name")
+  tagline          String?
+  logoUrl          String?       @map("logo_url")
+  faviconUrl       String?       @map("favicon_url")
+  contactEmail     String?       @map("contact_email")
+  supportEmail     String?       @map("support_email")
+  phoneNumbers     Json          @default("[]") @map("phone_numbers")
+  officeAddresses  Json          @default("[]") @map("office_addresses")
+  socialLinks      Json          @default("{}") @map("social_links")
+  copyrightText    String?       @map("copyright_text")
+  footerContent    Json?         @map("footer_content")
+  registrationOpen Boolean       @default(true) @map("registration_open")
+  maintenanceMode  Boolean       @default(false) @map("maintenance_mode")
+  extra            Json          @default("{}")
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@unique([locale])
   @@map("site_settings")
@@ -2074,26 +2094,27 @@ model MediaAlbumItem {
   mediaAsset MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
 
   @@index([albumId, sortOrder])
+  @@index([mediaAssetId])
   @@map("media_album_items")
 }
 
 model AnnouncementBar {
-  id           String              @id @default(uuid()) @db.Uuid
-  title        String
-  message      String              @db.Text
-  barType      AnnouncementBarType @default(global) @map("bar_type")
-  colorTheme   String              @default("primary") @map("color_theme")
-  ctaLabel     String?             @map("cta_label")
-  ctaUrl       String?             @map("cta_url")
-  locale       ContentLocale       @default(en)
-  isDismissible Boolean            @default(true) @map("is_dismissible")
-  isActive     Boolean             @default(true) @map("is_active")
-  priority     Int                 @default(0)
-  startsAt     DateTime?           @map("starts_at") @db.Timestamptz(6)
-  endsAt       DateTime?           @map("ends_at") @db.Timestamptz(6)
-  createdAt    DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt    DateTime?           @map("deleted_at") @db.Timestamptz(6)
+  id            String              @id @default(uuid()) @db.Uuid
+  title         String
+  message       String              @db.Text
+  barType       AnnouncementBarType @default(global) @map("bar_type")
+  colorTheme    String              @default("primary") @map("color_theme")
+  ctaLabel      String?             @map("cta_label")
+  ctaUrl        String?             @map("cta_url")
+  locale        ContentLocale       @default(en)
+  isDismissible Boolean             @default(true) @map("is_dismissible")
+  isActive      Boolean             @default(true) @map("is_active")
+  priority      Int                 @default(0)
+  startsAt      DateTime?           @map("starts_at") @db.Timestamptz(6)
+  endsAt        DateTime?           @map("ends_at") @db.Timestamptz(6)
+  createdAt     DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime?           @map("deleted_at") @db.Timestamptz(6)
 
   @@index([isActive, startsAt, endsAt])
   @@index([barType, locale])
@@ -2103,22 +2124,22 @@ model AnnouncementBar {
 // ─── Phase 4: AI Operations & Automation ─────────────────────────────────────
 
 model EventSession {
-  id              String           @id @default(uuid()) @db.Uuid
-  slug            String           @unique
-  title           String
-  sessionType     EventSessionType @default(other) @map("session_type")
-  description     String?          @db.Text
-  venue           String?
-  capacity        Int              @default(100)
-  startAt         DateTime         @map("start_at") @db.Timestamptz(6)
-  endAt           DateTime         @map("end_at") @db.Timestamptz(6)
-  speakerName     String?          @map("speaker_name")
-  speakerProfileId String?         @map("speaker_profile_id") @db.Uuid
-  qrToken         String?          @unique @map("qr_token")
-  isActive        Boolean          @default(true) @map("is_active")
-  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt       DateTime?        @map("deleted_at") @db.Timestamptz(6)
+  id               String           @id @default(uuid()) @db.Uuid
+  slug             String           @unique
+  title            String
+  sessionType      EventSessionType @default(other) @map("session_type")
+  description      String?          @db.Text
+  venue            String?
+  capacity         Int              @default(100)
+  startAt          DateTime         @map("start_at") @db.Timestamptz(6)
+  endAt            DateTime         @map("end_at") @db.Timestamptz(6)
+  speakerName      String?          @map("speaker_name")
+  speakerProfileId String?          @map("speaker_profile_id") @db.Uuid
+  qrToken          String?          @unique @map("qr_token")
+  isActive         Boolean          @default(true) @map("is_active")
+  createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?        @map("deleted_at") @db.Timestamptz(6)
 
   attendances       SessionAttendance[]
   speakerOperations SpeakerOperations[]
@@ -2164,6 +2185,7 @@ model SpeakerOperations {
   eventSession EventSession? @relation(fields: [eventSessionId], references: [id], onDelete: SetNull)
 
   @@index([honorariumStatus])
+  @@index([eventSessionId])
   @@map("speaker_operations")
 }
 
@@ -2256,5 +2278,6 @@ model GeneratedDocument {
 
   @@index([documentType])
   @@index([bulkBatchId])
+  @@index([registrationId])
   @@map("generated_documents")
 }

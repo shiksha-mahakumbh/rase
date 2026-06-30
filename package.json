@@ -9,7 +9,7 @@
     "dev": "node scripts/run-next.js dev",
     "dev:turbo": "node scripts/run-next.js dev --turbo",
     "dev:clean": "node scripts/clean-next-cache.js --kill-node && node scripts/run-next.js dev",
-    "postinstall": "prisma generate",
+    "postinstall": "node scripts/prisma-postinstall.mjs",
     "build": "node scripts/build-production.js",
     "build:next-only": "node scripts/run-next.js build",
     "build:clean": "node scripts/clean-next-cache.js --kill-node && node scripts/build-production.js",
@@ -33,6 +33,8 @@
     "upload:proceedings": "node scripts/upload-proceedings-github-release.mjs",
     "sync:vercel-preview-env": "node scripts/sync-vercel-preview-env.mjs",
     "sync:preview-supabase": "node scripts/sync-preview-supabase-secrets.mjs",
+    "sync:preview-service-role": "node scripts/add-preview-service-role.mjs",
+    "sync:preview-supabase-keys": "node scripts/add-preview-supabase-keys.mjs",
     "purge:git-history": "node scripts/purge-git-history-blobs.mjs",
     "compress:public": "node scripts/compress-edition-gallery-images.mjs",
     "check:vercel-deploy": "node scripts/check-vercel-deploy.mjs",
@@ -44,6 +46,7 @@
     "audit:go-live": "node scripts/launch-go-live-audit.mjs",
     "audit:production": "node scripts/production-registration-audit.mjs",
     "audit:database": "node scripts/audit-database-production.mjs",
+    "audit:prisma": "node scripts/audit-prisma.mjs",
     "audit:supabase": "node scripts/audit-supabase-remote.mjs",
     "audit:past-editions": "tsx scripts/audit-past-editions.ts",
     "audit:past-editions-performance": "tsx scripts/audit-past-editions-performance.ts",
@@ -51,6 +54,7 @@
     "compress:edition-gallery": "node scripts/compress-edition-gallery-images.mjs",
     "browserslist:update": "npx browserslist@latest --update-db",
     "db:generate": "prisma generate",
+    "db:generate:safe": "node scripts/prisma-generate-safe.mjs",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
@@ -66,9 +70,6 @@
     "seed:press": "node scripts/seed-press-cms.mjs --publish",
     "seed:press:draft": "node scripts/seed-press-cms.mjs",
     "extract:abhiyan-images": "node scripts/pdf-extract-tmp/extract.mjs && node scripts/pdf-extract-tmp/render-pages.cjs && node scripts/pdf-extract-tmp/crop-portraits.cjs"
-  },
-  "prisma": {
-    "seed": "node scripts/supabase/seed-rbac.mjs"
   },
   "browserslist": [
     "chrome >= 92",
