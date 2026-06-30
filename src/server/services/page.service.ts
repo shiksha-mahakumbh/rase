@@ -5,6 +5,7 @@ import { upsertSeoForEntity } from "@/server/services/seo.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify, isPublishedStatus } from "@/server/lib/cms-utils";
 import { sanitizeCmsHtmlField } from "@/server/lib/cms-sanitize";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
 
 export type CreatePageInput = {
   title: string;
@@ -113,6 +114,7 @@ export async function createPage(input: CreatePageInput) {
     payload: { title: page.title, slug: page.slug },
   });
 
+  purgeCmsContentCaches({ locales: [locale], slug: page.slug });
   return page;
 }
 
@@ -155,6 +157,7 @@ export async function updatePage(
     payload: { title: page.title },
   });
 
+  purgeCmsContentCaches({ locales: [page.locale], slug: page.slug });
   return page;
 }
 
@@ -176,6 +179,7 @@ export async function publishPage(id: string, userId?: string) {
     payload: { slug: page.slug },
   });
 
+  purgeCmsContentCaches({ locales: [page.locale], slug: page.slug });
   return page;
 }
 
@@ -196,6 +200,7 @@ export async function deletePage(id: string, userId?: string) {
     actorUserId: userId ?? null,
   });
 
+  purgeCmsContentCaches({ locales: [page.locale], slug: page.slug });
   return page;
 }
 

@@ -1,5 +1,5 @@
-import AdminShell from "@/components/admin/cms/AdminShell";
+import AdminRegistrationsShell from "@/components/admin/cms/AdminRegistrationsShell";
 
 export default function RegistrationsLayout({ children }: { children: React.ReactNode }) {
-  return <AdminShell>{children}</AdminShell>;
+  return <AdminRegistrationsShell>{children}</AdminRegistrationsShell>;
 }

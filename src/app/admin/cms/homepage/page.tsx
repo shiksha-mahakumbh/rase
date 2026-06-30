@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
 import {
@@ -9,6 +9,9 @@ import {
   AdminButton,
   AdminTextarea,
   AdminLoading,
+  AdminLocaleSelect,
+  CmsReadOnlyBanner,
+  useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 
 type Section = {
@@ -33,6 +36,8 @@ const SECTION_HINTS: Record<string, string> = {
 };
 
 export default function HomepageAdminPage() {
+  const canMutate = useCmsCanMutate();
+  const [locale, setLocale] = useState("en");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [sectionKeys, setSectionKeys] = useState<string[]>([]);
@@ -40,32 +45,36 @@ export default function HomepageAdminPage() {
   const [activeKey, setActiveKey] = useState("hero");
   const [pageStatus, setPageStatus] = useState("draft");
 
-  useEffect(() => {
-    void (async () => {
-      try {
-        const data = await adminCmsFetch<{
-          page: { status: string; sections: Section[] };
-          sectionKeys: string[];
-        }>("homepage?locale=en");
-        setSectionKeys(data.sectionKeys ?? []);
-        setPageStatus(data.page?.status ?? "draft");
-        const map: Record<string, string> = {};
-        for (const s of data.page?.sections ?? []) {
-          map[s.sectionKey] = JSON.stringify(s.content ?? {}, null, 2);
-        }
-        for (const key of data.sectionKeys ?? []) {
-          if (!map[key]) map[key] = SECTION_HINTS[key] ?? "{}";
-        }
-        setSections(map);
-      } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Failed to load homepage");
-      } finally {
-        setLoading(false);
+  const loadHomepage = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await adminCmsFetch<{
+        page: { status: string; sections: Section[] };
+        sectionKeys: string[];
+      }>(`homepage?locale=${locale}`);
+      setSectionKeys(data.sectionKeys ?? []);
+      setPageStatus(data.page?.status ?? "draft");
+      const map: Record<string, string> = {};
+      for (const s of data.page?.sections ?? []) {
+        map[s.sectionKey] = JSON.stringify(s.content ?? {}, null, 2);
       }
-    })();
-  }, []);
+      for (const key of data.sectionKeys ?? []) {
+        if (!map[key]) map[key] = SECTION_HINTS[key] ?? "{}";
+      }
+      setSections(map);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to load homepage");
+    } finally {
+      setLoading(false);
+    }
+  }, [locale]);
+
+  useEffect(() => {
+    void loadHomepage();
+  }, [loadHomepage]);
 
   const saveSection = async () => {
+    if (!canMutate) return;
     setSaving(true);
     try {
       let content: Record<string, unknown>;
@@ -78,7 +87,7 @@ export default function HomepageAdminPage() {
       await adminCmsFetch("homepage/sections", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sectionKey: activeKey, content, locale: "en" }),
+        body: JSON.stringify({ sectionKey: activeKey, content, locale }),
       });
       toast.success(`Saved ${activeKey} section`);
     } catch (e) {
@@ -89,11 +98,12 @@ export default function HomepageAdminPage() {
   };
 
   const publish = async () => {
+    if (!canMutate) return;
     try {
       await adminCmsFetch("homepage", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "publish", locale: "en" }),
+        body: JSON.stringify({ action: "publish", locale }),
       });
       setPageStatus("published");
       toast.success("Homepage published");
@@ -106,21 +116,27 @@ export default function HomepageAdminPage() {
 
   return (
     <div>
+      <CmsReadOnlyBanner />
       <AdminPageHeader
         title="Homepage CMS"
         description={`Edit homepage sections. Status: ${pageStatus}.`}
         actions={
-          <>
-            <a href="/" target="_blank" rel="noopener noreferrer">
-              <AdminButton variant="secondary">Preview site</AdminButton>
-            </a>
-            <AdminButton onClick={saveSection} disabled={saving}>
-              Save section
-            </AdminButton>
-            <AdminButton onClick={publish}>Publish homepage</AdminButton>
-          </>
+          canMutate ? (
+            <>
+              <a href={locale === "hi" ? "/hi" : "/"} target="_blank" rel="noopener noreferrer">
+                <AdminButton variant="secondary">Preview site</AdminButton>
+              </a>
+              <AdminButton onClick={saveSection} disabled={saving}>
+                Save section
+              </AdminButton>
+              <AdminButton onClick={publish}>Publish homepage</AdminButton>
+            </>
+          ) : undefined
         }
       />
+      <AdminCard className="mb-4 max-w-xs">
+        <AdminLocaleSelect value={locale} onChange={setLocale} />
+      </AdminCard>
       <div className="grid gap-4 lg:grid-cols-4">
         <AdminCard className="space-y-1 p-3">
           {sectionKeys.map((key) => (
@@ -152,6 +168,7 @@ export default function HomepageAdminPage() {
             onChange={(e) =>
               setSections({ ...sections, [activeKey]: e.target.value })
             }
+            disabled={!canMutate}
           />
         </AdminCard>
       </div>

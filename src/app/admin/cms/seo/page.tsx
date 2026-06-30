@@ -3,6 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
+import { robotsToFlags } from "@/lib/seo/robots-meta";
 import SeoPreview from "@/components/admin/cms/SeoPreview";
 import {
   AdminPageHeader,
@@ -11,9 +12,14 @@ import {
   AdminInput,
   AdminTextarea,
   AdminSelect,
+  AdminLocaleSelect,
+  CmsReadOnlyBanner,
+  useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 
 export default function SeoManagerPage() {
+  const canMutate = useCmsCanMutate();
+  const [locale, setLocale] = useState("en");
   const [entityType, setEntityType] = useState("page");
   const [entityId, setEntityId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,16 +42,17 @@ export default function SeoManagerPage() {
     setLoading(true);
     try {
       const data = await adminCmsFetch<{ seo: Record<string, unknown> | null }>(
-        `seo/${entityType}/${entityId}?locale=en`
+        `seo/${entityType}/${entityId}?locale=${locale}`
       );
       const s = data.seo ?? {};
+      const flags = robotsToFlags(typeof s.robots === "string" ? s.robots : undefined);
       setForm({
         seoTitle: String(s.seoTitle ?? ""),
         metaDescription: String(s.metaDescription ?? ""),
         metaKeywords: Array.isArray(s.metaKeywords) ? (s.metaKeywords as string[]).join(", ") : "",
         canonicalUrl: String(s.canonicalUrl ?? ""),
-        robotsIndex: s.robotsIndex !== false,
-        robotsFollow: s.robotsFollow !== false,
+        robotsIndex: s.robotsIndex !== undefined ? Boolean(s.robotsIndex) : flags.index,
+        robotsFollow: s.robotsFollow !== undefined ? Boolean(s.robotsFollow) : flags.follow,
         ogTitle: String(s.ogTitle ?? ""),
         ogDescription: String(s.ogDescription ?? ""),
         ogImageUrl: String(s.ogImageUrl ?? ""),
@@ -61,7 +68,7 @@ export default function SeoManagerPage() {
   };
 
   const save = async () => {
-    if (!entityId.trim()) return;
+    if (!entityId.trim() || !canMutate) return;
     try {
       let schemaJsonLd: unknown;
       if (form.schemaJsonLd.trim()) {
@@ -71,7 +78,7 @@ export default function SeoManagerPage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          locale: "en",
+          locale,
           seoTitle: form.seoTitle,
           metaDescription: form.metaDescription,
           metaKeywords: form.metaKeywords.split(",").map((k) => k.trim()).filter(Boolean),
@@ -93,14 +100,18 @@ export default function SeoManagerPage() {
 
   return (
     <div>
+      <CmsReadOnlyBanner />
       <AdminPageHeader
         title="SEO Manager"
         description="Edit metadata, OpenGraph, Twitter Cards, and JSON-LD for any CMS entity."
-        actions={<AdminButton onClick={save}>Save SEO</AdminButton>}
+        actions={
+          canMutate ? <AdminButton onClick={save}>Save SEO</AdminButton> : undefined
+        }
       />
 
       <AdminCard className="mb-6">
-        <div className="grid gap-3 md:grid-cols-4">
+        <div className="grid gap-3 md:grid-cols-5">
+          <AdminLocaleSelect value={locale} onChange={setLocale} />
           <AdminSelect
             label="Entity type"
             value={entityType}
@@ -137,28 +148,29 @@ export default function SeoManagerPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <AdminCard className="space-y-4">
           <h2 className="font-semibold text-brand-navy">Basic metadata</h2>
-          <AdminInput label="SEO title" value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} />
-          <AdminTextarea label="Meta description" rows={3} value={form.metaDescription} onChange={(e) => setForm({ ...form, metaDescription: e.target.value })} />
-          <AdminInput label="Keywords (comma-separated)" value={form.metaKeywords} onChange={(e) => setForm({ ...form, metaKeywords: e.target.value })} />
-          <AdminInput label="Canonical URL" value={form.canonicalUrl} onChange={(e) => setForm({ ...form, canonicalUrl: e.target.value })} />
+          <AdminInput label="SEO title" value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} disabled={!canMutate} />
+          <AdminTextarea label="Meta description" rows={3} value={form.metaDescription} onChange={(e) => setForm({ ...form, metaDescription: e.target.value })} disabled={!canMutate} />
+          <AdminInput label="Keywords (comma-separated)" value={form.metaKeywords} onChange={(e) => setForm({ ...form, metaKeywords: e.target.value })} disabled={!canMutate} />
+          <AdminInput label="Canonical URL" value={form.canonicalUrl} onChange={(e) => setForm({ ...form, canonicalUrl: e.target.value })} disabled={!canMutate} />
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.robotsIndex} onChange={(e) => setForm({ ...form, robotsIndex: e.target.checked })} />
+            <input type="checkbox" checked={form.robotsIndex} disabled={!canMutate} onChange={(e) => setForm({ ...form, robotsIndex: e.target.checked })} />
             Allow indexing
           </label>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.robotsFollow} onChange={(e) => setForm({ ...form, robotsFollow: e.target.checked })} />
+            <input type="checkbox" checked={form.robotsFollow} disabled={!canMutate} onChange={(e) => setForm({ ...form, robotsFollow: e.target.checked })} />
             Allow following links
           </label>
         </AdminCard>
         <AdminCard className="space-y-4">
           <h2 className="font-semibold text-brand-navy">Social & schema</h2>
-          <AdminInput label="OG title" value={form.ogTitle} onChange={(e) => setForm({ ...form, ogTitle: e.target.value })} />
-          <AdminTextarea label="OG description" rows={2} value={form.ogDescription} onChange={(e) => setForm({ ...form, ogDescription: e.target.value })} />
-          <AdminInput label="OG image URL" value={form.ogImageUrl} onChange={(e) => setForm({ ...form, ogImageUrl: e.target.value })} />
+          <AdminInput label="OG title" value={form.ogTitle} onChange={(e) => setForm({ ...form, ogTitle: e.target.value })} disabled={!canMutate} />
+          <AdminTextarea label="OG description" rows={2} value={form.ogDescription} onChange={(e) => setForm({ ...form, ogDescription: e.target.value })} disabled={!canMutate} />
+          <AdminInput label="OG image URL" value={form.ogImageUrl} onChange={(e) => setForm({ ...form, ogImageUrl: e.target.value })} disabled={!canMutate} />
           <AdminSelect
             label="Twitter card"
             value={form.twitterCard}
             onChange={(e) => setForm({ ...form, twitterCard: e.target.value })}
+            disabled={!canMutate}
             options={[
               { value: "summary_large_image", label: "Summary large image" },
               { value: "summary", label: "Summary" },
@@ -170,6 +182,7 @@ export default function SeoManagerPage() {
             className="font-mono text-xs"
             value={form.schemaJsonLd}
             onChange={(e) => setForm({ ...form, schemaJsonLd: e.target.value })}
+            disabled={!canMutate}
           />
         </AdminCard>
       </div>

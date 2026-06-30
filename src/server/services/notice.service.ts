@@ -6,6 +6,7 @@ import { ServiceError } from "@/server/lib/errors";
 import { slugify, isNoticeVisible } from "@/server/lib/cms-utils";
 import { sanitizeNoticeDescription } from "@/server/lib/cms-sanitize";
 import { saveEntityRevision } from "@/server/services/entity-revision.service";
+import { purgeNoticesCaches } from "@/server/lib/cms-cache-purge";
 
 export type CreateNoticeInput = {
   title: string;
@@ -136,6 +137,7 @@ export async function createNotice(input: CreateNoticeInput) {
     payload: { title: notice.title, slug: notice.slug },
   });
 
+  purgeNoticesCaches([locale]);
   return notice;
 }
 
@@ -207,6 +209,8 @@ export async function updateNotice(
     payload: { title: notice.title },
   });
 
+  purgeNoticesCaches([notice.locale]);
+
   return prisma.notice.findUnique({
     where: { id },
     include: { category: true, attachments: { orderBy: { sortOrder: "asc" } } },
@@ -247,6 +251,8 @@ export async function publishNotice(id: string, userId?: string) {
     payload: { slug: notice.slug },
   });
 
+  purgeNoticesCaches([notice.locale]);
+
   return notice;
 }
 
@@ -266,6 +272,8 @@ export async function deleteNotice(id: string, userId?: string) {
     entityId: notice.id,
     actorUserId: userId ?? null,
   });
+
+  purgeNoticesCaches([notice.locale]);
 
   return notice;
 }

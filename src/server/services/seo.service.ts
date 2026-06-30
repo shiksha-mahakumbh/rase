@@ -3,6 +3,7 @@ import { prisma } from "@/server/db/prisma";
 import { SITE_URL } from "@/config/site";
 import { validateSchemaJsonLd } from "@/lib/seo/schema-json-ld";
 import { ServiceError } from "@/server/lib/errors";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
 
 const SITE_NAME = "Shiksha Mahakumbh Abhiyan";
 const ORG_NAME = "Department of Holistic Education (DHE)";
@@ -171,7 +172,7 @@ export async function upsertSeoForEntity(input: SeoInput) {
       canonicalUrl: canonical,
     });
 
-  return prisma.seoMetadata.upsert({
+  const result = await prisma.seoMetadata.upsert({
     where: {
       entityType_entityId_locale: {
         entityType: input.entityType,
@@ -221,6 +222,9 @@ export async function upsertSeoForEntity(input: SeoInput) {
       sitemapChangefreq: input.sitemapChangefreq,
     },
   });
+
+  purgeCmsContentCaches({ locales: [locale] });
+  return result;
 }
 
 export async function getSeoForEntity(
@@ -369,5 +373,7 @@ export function resolveOpenGraphImage(seo: {
 }
 
 export async function deleteSeoForEntity(entityType: string, entityId: string) {
-  return prisma.seoMetadata.deleteMany({ where: { entityType, entityId } });
+  const result = await prisma.seoMetadata.deleteMany({ where: { entityType, entityId } });
+  purgeCmsContentCaches();
+  return result;
 }

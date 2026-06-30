@@ -3,6 +3,7 @@
 import { use, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
+import AdminRevisionsPanel from "@/components/admin/cms/AdminRevisionsPanel";
 import {
   AdminPageHeader,
   AdminCard,
@@ -10,6 +11,8 @@ import {
   AdminInput,
   AdminTextarea,
   AdminLoading,
+  CmsReadOnlyBanner,
+  useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 
 export default function PageEditorPage({
@@ -18,6 +21,7 @@ export default function PageEditorPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const canMutate = useCmsCanMutate();
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ title: "", slug: "", excerpt: "", content: "", status: "draft" });
 
@@ -42,6 +46,7 @@ export default function PageEditorPage({
   }, [id]);
 
   const save = async (action?: "publish" | "archive") => {
+    if (!canMutate) return;
     try {
       const body = action
         ? { action }
@@ -67,23 +72,27 @@ export default function PageEditorPage({
 
   return (
     <div>
+      <CmsReadOnlyBanner />
       <AdminPageHeader
         title="Edit page"
         description={`Status: ${form.status}`}
         actions={
-          <>
-            <AdminButton variant="secondary" onClick={() => save()}>Save</AdminButton>
-            <AdminButton onClick={() => save("publish")}>Publish</AdminButton>
-            <AdminButton variant="danger" onClick={() => save("archive")}>Archive</AdminButton>
-          </>
+          canMutate ? (
+            <>
+              <AdminButton variant="secondary" onClick={() => save()}>Save</AdminButton>
+              <AdminButton onClick={() => save("publish")}>Publish</AdminButton>
+              <AdminButton variant="danger" onClick={() => save("archive")}>Archive</AdminButton>
+            </>
+          ) : undefined
         }
       />
       <AdminCard className="space-y-4">
-        <AdminInput label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-        <AdminInput label="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
-        <AdminTextarea label="Excerpt" rows={2} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} />
-        <AdminTextarea label="Content" rows={12} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} />
+        <AdminInput label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} disabled={!canMutate} />
+        <AdminInput label="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} disabled={!canMutate} />
+        <AdminTextarea label="Excerpt" rows={2} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} disabled={!canMutate} />
+        <AdminTextarea label="Content" rows={12} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} disabled={!canMutate} />
       </AdminCard>
+      <AdminRevisionsPanel apiPath={`pages/${id}/revisions`} title="Page revisions" />
     </div>
   );
 }

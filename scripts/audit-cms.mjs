@@ -70,6 +70,64 @@ const checks = [
     pass: read("src/lib/cms/server.ts").includes('getPublicHomepage("en")'),
     detail: "hi locale falls back to en homepage when missing",
   },
+  {
+    id: "cms-cache-purge-on-write",
+    pass:
+      read("src/server/services/page.service.ts").includes("purgeCmsContentCaches") &&
+      read("src/server/services/notice.service.ts").includes("purgeNoticesCaches") &&
+      read("src/server/services/site-settings.service.ts").includes("purgeCmsContentCaches"),
+    detail: "CMS services purge ISR/cache tags after mutations",
+  },
+  {
+    id: "seo-robots-mapping",
+    pass:
+      read("src/lib/seo/robots-meta.ts").includes("normalizeSeoBody") &&
+      read("src/app/api/v2/admin/seo/[entityType]/[entityId]/route.ts").includes("enrichSeoForAdmin"),
+    detail: "SEO admin API maps robotsIndex/Follow ↔ robots string",
+  },
+  {
+    id: "admin-locale-selectors",
+    pass:
+      read("src/app/admin/cms/homepage/page.tsx").includes("AdminLocaleSelect") &&
+      read("src/app/admin/cms/settings/page.tsx").includes("AdminLocaleSelect") &&
+      read("src/app/admin/cms/seo/page.tsx").includes("AdminLocaleSelect"),
+    detail: "homepage/settings/SEO admin pages support en + hi locale",
+  },
+  {
+    id: "admin-revision-panels",
+    pass:
+      read("src/app/admin/cms/pages/[id]/page.tsx").includes("AdminRevisionsPanel") &&
+      read("src/components/admin/cms/NoticeEditor.tsx").includes("AdminRevisionsPanel") &&
+      read("src/components/admin/cms/CommitteeEditor.tsx").includes("AdminRevisionsPanel"),
+    detail: "CMS editors expose revision history UI",
+  },
+  {
+    id: "cms-role-gating-ui",
+    pass:
+      read("src/components/admin/cms/AdminUi.tsx").includes("CmsReadOnlyBanner") &&
+      read("src/lib/adminAuth.tsx").includes("canMutateCms"),
+    detail: "Data Entry role sees read-only CMS banner + gated actions",
+  },
+  {
+    id: "cms-dashboard-grouped",
+    pass: read("src/app/admin/cms/page.tsx").includes("GROUP_ORDER"),
+    detail: "CMS dashboard grouped by nav sections",
+  },
+  {
+    id: "cms-audit-logs-ui",
+    pass: fs.existsSync(path.join(src, "app/admin/cms/audit-logs/page.tsx")),
+    detail: "audit logs admin page wired to v2 API",
+  },
+  {
+    id: "admin-mutation-rate-limit",
+    pass: read("src/server/lib/api-handler.ts").includes("v2-admin-mutation"),
+    detail: "v2 admin mutations default to rate limiting",
+  },
+  {
+    id: "registrations-slim-nav",
+    pass: fs.existsSync(path.join(src, "components/admin/cms/AdminRegistrationsShell.tsx")),
+    detail: "registration routes use slim admin shell",
+  },
 ];
 
 let failed = 0;

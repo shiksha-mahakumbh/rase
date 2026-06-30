@@ -3,6 +3,13 @@ import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify, isPublishedStatus } from "@/server/lib/cms-utils";
+import { revalidatePath } from "next/cache";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
+
+function purgeGalleryCaches(locale: ContentLocale = "en") {
+  revalidatePath("/gallery");
+  purgeCmsContentCaches({ locales: [locale] });
+}
 
 export async function listMediaAlbums(options: {
   albumType?: AlbumType;
@@ -109,6 +116,8 @@ export async function createMediaAlbum(input: {
     payload: { event: "album_created", slug },
   });
 
+  purgeGalleryCaches(locale);
+
   return album;
 }
 
@@ -168,6 +177,8 @@ export async function updateMediaAlbum(
     }
   }
 
+  purgeGalleryCaches(existing.locale);
+
   return getMediaAlbum(id);
 }
 
@@ -179,6 +190,8 @@ export async function deleteMediaAlbum(id: string) {
     where: { id },
     data: { deletedAt: new Date(), status: "archived" },
   });
+
+  purgeGalleryCaches(existing.locale);
 
   return { success: true };
 }

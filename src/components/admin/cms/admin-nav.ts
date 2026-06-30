@@ -121,6 +121,12 @@ export const CMS_NAV: AdminNavItem[] = [
     group: "site",
   },
   {
+    label: "Audit Logs",
+    href: "/admin/cms/audit-logs",
+    description: "CMS & system change history",
+    group: "site",
+  },
+  {
     label: "Analytics",
     href: "/admin/cms/analytics",
     description: "Visitors & traffic",

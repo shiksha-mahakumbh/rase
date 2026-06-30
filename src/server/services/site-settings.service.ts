@@ -1,6 +1,7 @@
 import type { ContentLocale, Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
 
 const CACHE_TTL_MS = 60_000;
 const cache = new Map<string, { data: unknown; expiresAt: number }>();
@@ -97,6 +98,8 @@ export async function upsertSiteSettings(
     actorUserId: userId ?? null,
     payload: { locale },
   });
+
+  purgeCmsContentCaches({ locales: [locale] });
 
   return settings;
 }

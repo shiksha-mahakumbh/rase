@@ -5,6 +5,13 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { upsertSeoForEntity, buildWebPageSchema } from "@/server/services/seo.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify, isDownloadVisible } from "@/server/lib/cms-utils";
+import { revalidatePath } from "next/cache";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
+
+function purgeDownloadCaches() {
+  revalidatePath("/downloads");
+  purgeCmsContentCaches();
+}
 
 export type CreateDownloadInput = {
   title: string;
@@ -89,6 +96,8 @@ export async function createDownload(input: CreateDownloadInput) {
     payload: { title: row.title },
   });
 
+  purgeDownloadCaches();
+
   return { download: row, upload: uploaded };
 }
 
@@ -155,6 +164,8 @@ export async function replaceDownload(
     payload: { version: newVersion.version, replacedId: id },
   });
 
+  purgeDownloadCaches();
+
   return { download: newVersion, upload: uploaded, previousId: id };
 }
 
@@ -185,6 +196,8 @@ export async function updateDownload(
     payload: { title: row.title },
   });
 
+  purgeDownloadCaches();
+
   return row;
 }
 
@@ -200,6 +213,7 @@ export async function deleteDownload(id: string, ipAddress?: string | null) {
     where: { id },
     data: { deletedAt: new Date(), isCurrent: false, status: "archived" },
   });
+  purgeDownloadCaches();
   return row;
 }
 

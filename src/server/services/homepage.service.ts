@@ -9,6 +9,7 @@ import {
 } from "@/server/services/page.service";
 import { upsertSeoForEntity, buildWebPageSchema } from "@/server/services/seo.service";
 import { ServiceError } from "@/server/lib/errors";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
 
 export const HOMEPAGE_SLUG = "home";
 export const HOMEPAGE_SECTION_KEYS = [
@@ -89,7 +90,7 @@ export async function updateHomepageSection(
   }
 
   const page = await getOrCreateHomepage(input.locale ?? "en");
-  return upsertPageSection(page.id, {
+  const section = await upsertPageSection(page.id, {
     sectionKey,
     sectionType: DEFAULT_SECTION_TYPES[sectionKey],
     title: input.title,
@@ -97,6 +98,8 @@ export async function updateHomepageSection(
     sortOrder: input.sortOrder,
     isVisible: input.isVisible,
   });
+  purgeCmsContentCaches({ locales: [input.locale ?? "en"], includeHome: true });
+  return section;
 }
 
 export async function updateHomepageSections(
@@ -124,6 +127,8 @@ export async function updateHomepageSections(
       })
     );
   }
+
+  purgeCmsContentCaches({ locales: [locale], includeHome: true });
 
   return { pageId: page.id, sections: results };
 }

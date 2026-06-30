@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { useAdmin, canMutateCms } from "@/lib/adminAuth";
 
 export function AdminPageHeader({
   title,
@@ -205,4 +206,45 @@ export function AdminPagination({
       </div>
     </div>
   );
+}
+
+export function AdminLocaleSelect({
+  value,
+  onChange,
+  label = "Locale",
+  className = "",
+}: {
+  value: string;
+  onChange: (locale: string) => void;
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <AdminSelect
+      label={label}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={className}
+      options={[
+        { value: "en", label: "English (en)" },
+        { value: "hi", label: "Hindi (hi)" },
+      ]}
+    />
+  );
+}
+
+export function CmsReadOnlyBanner() {
+  const { role } = useAdmin();
+  if (canMutateCms(role)) return null;
+  return (
+    <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+      View-only access — you can browse CMS content but cannot save or publish. Contact an Admin for
+      changes.
+    </div>
+  );
+}
+
+export function useCmsCanMutate(): boolean {
+  const { role } = useAdmin();
+  return canMutateCms(role);
 }

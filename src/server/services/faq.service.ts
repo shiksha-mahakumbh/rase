@@ -3,6 +3,13 @@ import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify } from "@/server/lib/cms-utils";
+import { revalidatePath } from "next/cache";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
+
+function purgeFaqCaches(locale: ContentLocale = "en") {
+  revalidatePath("/faq");
+  purgeCmsContentCaches({ locales: [locale] });
+}
 
 export async function listFaqCategories(options: {
   locale?: ContentLocale;
@@ -52,6 +59,8 @@ export async function createFaqCategory(input: {
     payload: { event: "faq_category_created", slug },
   });
 
+  purgeFaqCaches(locale);
+
   return category;
 }
 
@@ -77,6 +86,8 @@ export async function updateFaqCategory(
     },
   });
 
+  purgeFaqCaches(category.locale);
+
   return category;
 }
 
@@ -88,6 +99,8 @@ export async function deleteFaqCategory(id: string) {
     where: { id },
     data: { deletedAt: new Date(), isActive: false },
   });
+
+  purgeFaqCaches(existing.locale);
 
   return { success: true };
 }
@@ -157,6 +170,8 @@ export async function createFaq(input: {
     payload: { event: "faq_created", locale: faq.locale },
   });
 
+  purgeFaqCaches(faq.locale);
+
   return faq;
 }
 
@@ -189,6 +204,8 @@ export async function updateFaq(
     include: { category: true },
   });
 
+  purgeFaqCaches(faq.locale);
+
   return faq;
 }
 
@@ -200,6 +217,8 @@ export async function deleteFaq(id: string) {
     where: { id },
     data: { deletedAt: new Date(), status: "archived" },
   });
+
+  purgeFaqCaches(existing.locale);
 
   return { success: true };
 }

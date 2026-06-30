@@ -2,6 +2,7 @@ import type { AnnouncementBarType, ContentLocale, Prisma } from "@prisma/client"
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { isAnnouncementBarActive } from "@/server/lib/cms-utils";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
 
 export type CreateAnnouncementBarInput = {
   title: string;
@@ -30,7 +31,7 @@ function activeBarWhere(now = new Date()): Prisma.AnnouncementBarWhereInput {
 }
 
 export async function createAnnouncementBar(input: CreateAnnouncementBarInput) {
-  return prisma.announcementBar.create({
+  const bar = await prisma.announcementBar.create({
     data: {
       title: input.title,
       message: input.message,
@@ -46,6 +47,8 @@ export async function createAnnouncementBar(input: CreateAnnouncementBarInput) {
       endsAt: input.endsAt ?? null,
     },
   });
+  purgeCmsContentCaches({ locales: [bar.locale] });
+  return bar;
 }
 
 export async function updateAnnouncementBar(
@@ -63,14 +66,18 @@ export async function updateAnnouncementBar(
     payload: { title: bar.title },
   });
 
+  purgeCmsContentCaches({ locales: [bar.locale] });
+
   return bar;
 }
 
 export async function deleteAnnouncementBar(id: string) {
-  return prisma.announcementBar.update({
+  const bar = await prisma.announcementBar.update({
     where: { id },
     data: { deletedAt: new Date(), isActive: false },
   });
+  purgeCmsContentCaches({ locales: [bar.locale] });
+  return bar;
 }
 
 export async function listActiveAnnouncementBars(locale: ContentLocale = "en") {

@@ -3,6 +3,12 @@ import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify } from "@/server/lib/cms-utils";
+import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
+
+async function purgeMenuCache(menuId: string) {
+  const menu = await prisma.menu.findUnique({ where: { id: menuId }, select: { locale: true } });
+  if (menu) purgeCmsContentCaches({ locales: [menu.locale] });
+}
 
 export async function createMenu(input: {
   name: string;
@@ -25,6 +31,9 @@ export async function createMenu(input: {
       menuType: input.menuType,
       locale,
     },
+  }).then((menu) => {
+    purgeCmsContentCaches({ locales: [locale] });
+    return menu;
   });
 }
 
@@ -97,7 +106,7 @@ export async function upsertMenuItem(
   }
 ) {
   if (input.id) {
-    return prisma.menuItem.update({
+    const item = await prisma.menuItem.update({
       where: { id: input.id },
       data: {
         parentId: input.parentId,
@@ -110,9 +119,11 @@ export async function upsertMenuItem(
         isVisible: input.isVisible,
       },
     });
+    await purgeMenuCache(menuId);
+    return item;
   }
 
-  return prisma.menuItem.create({
+  const item = await prisma.menuItem.create({
     data: {
       menuId,
       parentId: input.parentId ?? null,
@@ -125,6 +136,8 @@ export async function upsertMenuItem(
       isVisible: input.isVisible ?? true,
     },
   });
+  await purgeMenuCache(menuId);
+  return item;
 }
 
 export async function reorderMenuItems(
@@ -151,6 +164,7 @@ export async function reorderMenuItems(
     where: { id: menuId },
     select: { slug: true, locale: true },
   });
+  purgeCmsContentCaches({ locales: [menu.locale] });
   return getMenuBySlug(menu.slug, menu.locale);
 }
 
@@ -166,6 +180,8 @@ export async function deleteMenuItem(id: string) {
     entityId: item.menuId,
     payload: { action: "delete_item", itemId: id },
   });
+
+  await purgeMenuCache(item.menuId);
 
   return item;
 }
@@ -184,6 +200,8 @@ export async function updateMenu(
     actorUserId: userId ?? null,
     payload: { name: menu.name },
   });
+
+  purgeCmsContentCaches({ locales: [menu.locale] });
 
   return menu;
 }

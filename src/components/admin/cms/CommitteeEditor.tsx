@@ -12,7 +12,10 @@ import {
   AdminTextarea,
   AdminSelect,
   AdminLoading,
+  CmsReadOnlyBanner,
+  useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
+import AdminRevisionsPanel from "@/components/admin/cms/AdminRevisionsPanel";
 
 const COMMITTEE_CATEGORIES = [
   "National_Advisory_Board",
@@ -43,6 +46,7 @@ type Member = {
 
 export default function CommitteeEditor({ committeeId }: { committeeId?: string }) {
   const router = useRouter();
+  const canMutate = useCmsCanMutate();
   const [loading, setLoading] = useState(!!committeeId);
   const [saving, setSaving] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
@@ -89,6 +93,7 @@ export default function CommitteeEditor({ committeeId }: { committeeId?: string 
   }, [committeeId]);
 
   const save = async (action?: "publish" | "archive") => {
+    if (!canMutate) return;
     setSaving(true);
     try {
       const body = {
@@ -140,7 +145,7 @@ export default function CommitteeEditor({ committeeId }: { committeeId?: string 
   };
 
   const addMember = async () => {
-    if (!committeeId || !newMember.fullName.trim()) return;
+    if (!canMutate || !committeeId || !newMember.fullName.trim()) return;
     try {
       await adminCmsFetch(`committees/${committeeId}/members`, {
         method: "POST",
@@ -159,6 +164,7 @@ export default function CommitteeEditor({ committeeId }: { committeeId?: string 
   };
 
   const removeMember = async (memberId: string) => {
+    if (!canMutate) return;
     if (!confirm("Remove this member?")) return;
     try {
       await adminCmsFetch(`committees/members/${memberId}`, { method: "DELETE" });
@@ -173,25 +179,32 @@ export default function CommitteeEditor({ committeeId }: { committeeId?: string 
 
   return (
     <div>
+      <CmsReadOnlyBanner />
       <AdminPageHeader
         title={committeeId ? "Edit committee" : "Create committee"}
         actions={
-          <>
+          canMutate ? (
+            <>
+              <AdminButton variant="secondary" onClick={() => router.back()}>
+                Back
+              </AdminButton>
+              <AdminButton onClick={() => save()} disabled={saving}>
+                Save draft
+              </AdminButton>
+              <AdminButton onClick={() => save("publish")} disabled={saving}>
+                Publish
+              </AdminButton>
+              {committeeId && (
+                <AdminButton variant="secondary" onClick={() => save("archive")} disabled={saving}>
+                  Archive
+                </AdminButton>
+              )}
+            </>
+          ) : (
             <AdminButton variant="secondary" onClick={() => router.back()}>
               Back
             </AdminButton>
-            <AdminButton onClick={() => save()} disabled={saving}>
-              Save draft
-            </AdminButton>
-            <AdminButton onClick={() => save("publish")} disabled={saving}>
-              Publish
-            </AdminButton>
-            {committeeId && (
-              <AdminButton variant="secondary" onClick={() => save("archive")} disabled={saving}>
-                Archive
-              </AdminButton>
-            )}
-          </>
+          )
         }
       />
       <div className="grid gap-6 lg:grid-cols-3">
@@ -301,6 +314,12 @@ export default function CommitteeEditor({ committeeId }: { committeeId?: string 
           </AdminCard>
         </div>
       </div>
+      {committeeId ? (
+        <AdminRevisionsPanel
+          apiPath={`committees/${committeeId}/revisions`}
+          title="Committee revisions"
+        />
+      ) : null}
     </div>
   );
 }

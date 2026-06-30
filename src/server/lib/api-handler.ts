@@ -25,10 +25,14 @@ export function createApiHandler<T, C extends AppRouteContext = AppRouteContext>
 ) {
   return async (request: NextRequest, context: C) => {
     const ip = getClientIp(request);
-    if (options.rateLimitKey) {
+    const method = request.method.toUpperCase();
+    const isMutation = !["GET", "HEAD"].includes(method);
+    const rateLimitKey =
+      options.rateLimitKey ?? (options.requireAdmin && isMutation ? "v2-admin-mutation" : undefined);
+    if (rateLimitKey) {
       const limited = await rateLimitAsync({
-        key: `${options.rateLimitKey}:${ip}`,
-        limit: options.limit ?? 30,
+        key: `${rateLimitKey}:${ip}`,
+        limit: options.limit ?? 60,
         windowMs: options.windowMs ?? 60_000,
       });
       if (!limited.ok) {
@@ -43,8 +47,6 @@ export function createApiHandler<T, C extends AppRouteContext = AppRouteContext>
       if (options.requireAdmin) {
         const { requireAdminSecret } = await import("@/server/lib/admin-guard");
         requireAdminSecret(request);
-        const method = request.method.toUpperCase();
-        const isMutation = !["GET", "HEAD"].includes(method);
         if (options.adminRoles?.length) {
           const { assertAdminRoles } = await import("@/server/lib/admin-rbac");
           assertAdminRoles(request, options.adminRoles);

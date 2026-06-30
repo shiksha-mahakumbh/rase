@@ -12,12 +12,16 @@ import {
   AdminTextarea,
   AdminSelect,
   AdminLoading,
+  CmsReadOnlyBanner,
+  useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
+import AdminRevisionsPanel from "@/components/admin/cms/AdminRevisionsPanel";
 
 type Category = { id: string; name: string };
 
 export default function NoticeEditor({ noticeId }: { noticeId?: string }) {
   const router = useRouter();
+  const canMutate = useCmsCanMutate();
   const [loading, setLoading] = useState(!!noticeId);
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -68,6 +72,7 @@ export default function NoticeEditor({ noticeId }: { noticeId?: string }) {
   }, [noticeId]);
 
   const save = async (publish = false) => {
+    if (!canMutate) return;
     setSaving(true);
     try {
       const body = {
@@ -120,20 +125,27 @@ export default function NoticeEditor({ noticeId }: { noticeId?: string }) {
 
   return (
     <div>
+      <CmsReadOnlyBanner />
       <AdminPageHeader
         title={noticeId ? "Edit notice" : "Create notice"}
         actions={
-          <>
+          canMutate ? (
+            <>
+              <AdminButton variant="secondary" onClick={() => router.back()}>
+                Back
+              </AdminButton>
+              <AdminButton onClick={() => save(false)} disabled={saving}>
+                Save draft
+              </AdminButton>
+              <AdminButton onClick={() => save(true)} disabled={saving}>
+                Publish
+              </AdminButton>
+            </>
+          ) : (
             <AdminButton variant="secondary" onClick={() => router.back()}>
               Back
             </AdminButton>
-            <AdminButton onClick={() => save(false)} disabled={saving}>
-              Save draft
-            </AdminButton>
-            <AdminButton onClick={() => save(true)} disabled={saving}>
-              Publish
-            </AdminButton>
-          </>
+          )
         }
       />
       <div className="grid gap-6 lg:grid-cols-3">
@@ -200,6 +212,9 @@ export default function NoticeEditor({ noticeId }: { noticeId?: string }) {
           </AdminCard>
         </div>
       </div>
+      {noticeId ? (
+        <AdminRevisionsPanel apiPath={`notices/${noticeId}/revisions`} title="Notice revisions" />
+      ) : null}
     </div>
   );
 }

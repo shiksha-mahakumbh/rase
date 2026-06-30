@@ -116,8 +116,13 @@ export function useAdmin() {
   return ctx;
 }
 
-export function canManageStatus(role: AdminRole | null): boolean {
+export function canMutateCms(role: AdminRole | null): boolean {
   return role === "Super Admin" || role === "Admin";
+}
+
+/** @deprecated use canMutateCms */
+export function canManageStatus(role: AdminRole | null): boolean {
+  return canMutateCms(role);
 }
 
 export function canExport(role: AdminRole | null): boolean {
