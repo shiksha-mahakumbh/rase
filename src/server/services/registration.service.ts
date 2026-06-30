@@ -13,6 +13,8 @@ import { REGISTRATION_ID_PREFIX } from "@/types/registration";
 import { emailsMatch, toPublicRegistrationSummary } from "@/lib/security/registration-lookup";
 import { generateRegistrationQrDataUrl } from "@/server/services/receipt-qr.service";
 import { displayRegistrationType } from "@/server/lib/registration-type-labels";
+import { buildAdminRegistrationView } from "@/server/services/admin/registration-admin-view.service";
+import type { AdminRegistrationView } from "@/lib/admin/registration-detail-types";
 
 export type SaveRegistrationInput = {
   registrationType: string;
@@ -263,8 +265,12 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
   };
 }
 
-/** Admin-only — full registration row (public ID or UUID). */
-export async function getRegistrationForAdminView(idOrPublicId: string) {
+import type { AdminRegistrationView } from "@/lib/admin/registration-detail-types";
+
+/** Admin-only — formatted registration view (public ID or UUID). */
+export async function getRegistrationForAdminView(
+  idOrPublicId: string
+): Promise<AdminRegistrationView | null> {
   const isPublicId = /^SMK/.test(idOrPublicId);
   const row = await prisma.registration.findFirst({
     where: isPublicId
@@ -285,11 +291,13 @@ export async function getRegistrationForAdminView(idOrPublicId: string) {
       uploadedFiles: { where: { isCurrent: true, deletedAt: null } },
       paymentRecords: { where: { deletedAt: null }, orderBy: { createdAt: "desc" }, take: 1 },
       emailLogs: { orderBy: { createdAt: "desc" }, take: 20 },
+      statusHistory: { orderBy: { createdAt: "desc" }, take: 20 },
     },
   });
 
   if (!row) return null;
-  return serializeRegistrationForAdmin(row);
+  const serialized = serializeRegistrationForAdmin(row);
+  return buildAdminRegistrationView(serialized);
 }
 
 function serializeRegistrationForAdmin(row: object) {
@@ -476,7 +484,8 @@ export async function updateRegistrationsBulk(
 export async function updateRegistrationByPublicId(
   registrationId: string,
   field: BulkStatusField,
-  value: string
+  value: string,
+  context?: { actorUserId?: string | null }
 ) {
   const row = await prisma.registration.findFirst({
     where: { registrationId, deletedAt: null },
@@ -485,7 +494,18 @@ export async function updateRegistrationByPublicId(
 
   const data: Prisma.RegistrationUpdateInput = { updatedAt: new Date() };
   if (field === "registrationStatus") {
-    data.registrationStatus = asRegistrationStatus(value);
+    const next = asRegistrationStatus(value);
+    data.registrationStatus = next;
+    if (row.registrationStatus !== next) {
+      await prisma.registrationStatusHistory.create({
+        data: {
+          registrationId: row.id,
+          fromStatus: row.registrationStatus,
+          toStatus: next,
+          changedByUserId: context?.actorUserId ?? null,
+        },
+      });
+    }
   } else if (field === "paymentStatus") {
     data.paymentStatus = asPaymentStatus(value);
   } else {
@@ -495,8 +515,9 @@ export async function updateRegistrationByPublicId(
   await prisma.registration.update({ where: { id: row.id }, data });
 
   await writeAuditLog({
-    action: "registration_updated",
+    action: field === "registrationStatus" ? "registration_status_changed" : "registration_updated",
     registrationId: row.id,
+    actorUserId: context?.actorUserId ?? null,
     payload: { registrationId, field, value },
   });
 

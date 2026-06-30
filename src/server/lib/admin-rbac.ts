@@ -24,3 +24,9 @@ export function assertAdminRoles(
   }
   return role;
 }
+
+/** Actor uid from signed gateway headers (cookie proxy). */
+export function getAdminActorUid(request: NextRequest): string | null {
+  if (!getAdminRoleFromRequest(request)) return null;
+  return request.headers.get("x-admin-uid");
+}

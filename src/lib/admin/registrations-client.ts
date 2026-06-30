@@ -1,5 +1,6 @@
 import type { RegistrationAdminStats } from "@/types/admin-dashboard";
 import type { RegistrationRow } from "@/lib/exportRegistrations";
+import type { AdminRegistrationView } from "@/lib/admin/registration-detail-types";
 
 export type { RegistrationRow };
 
@@ -11,6 +12,11 @@ export interface RegistrationsPageResult {
   total: number;
 }
 
+import {
+  displayAccommodationStatus,
+  displayPaymentStatus,
+} from "@/lib/admin/registration-labels";
+
 function mapItemToRow(item: Record<string, unknown>): RegistrationRow {
   return {
     id: String(item.id ?? item.registrationId ?? ""),
@@ -20,9 +26,11 @@ function mapItemToRow(item: Record<string, unknown>): RegistrationRow {
     email: String(item.email ?? ""),
     contactNumber: String(item.contactNumber ?? ""),
     institution: String(item.institution ?? ""),
-    paymentStatus: item.paymentStatus as RegistrationRow["paymentStatus"],
-    registrationStatus: item.registrationStatus as RegistrationRow["registrationStatus"],
-    accommodationStatus: item.accommodationStatus as RegistrationRow["accommodationStatus"],
+    paymentStatus: displayPaymentStatus(item.paymentStatus) as RegistrationRow["paymentStatus"],
+    registrationStatus: String(item.registrationStatus ?? "") as RegistrationRow["registrationStatus"],
+    accommodationStatus: displayAccommodationStatus(
+      item.accommodationStatus
+    ) as RegistrationRow["accommodationStatus"],
     accommodationRequired: item.accommodationRequired as RegistrationRow["accommodationRequired"],
     createdAt: item.createdAt as RegistrationRow["createdAt"],
     updatedAt: item.updatedAt as RegistrationRow["updatedAt"],
@@ -95,7 +103,7 @@ export async function fetchAllRegistrations(type?: string): Promise<Registration
 
 export async function fetchRegistrationByPublicId(
   registrationId: string
-): Promise<Record<string, unknown> | null> {
+): Promise<AdminRegistrationView | null> {
   const res = await fetch(
     `/api/admin/gateway/registrations/${encodeURIComponent(registrationId)}`,
     {
@@ -116,7 +124,7 @@ export async function fetchRegistrationByPublicId(
     throw new Error(`Failed to load registration: ${detail}`);
   }
   const body = await res.json();
-  return (body.registration ?? body) as Record<string, unknown>;
+  return (body.registration ?? null) as AdminRegistrationView | null;
 }
 
 export async function fetchRegistrationAdminStats(): Promise<RegistrationAdminStats> {

@@ -5,9 +5,11 @@ import {
   updateRegistrationByPublicId,
   type BulkStatusField,
 } from "@/server/services/registration.service";
-import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
+import { ADMIN_MANAGE_ROLES, getAdminActorUid } from "@/server/lib/admin-rbac";
 import { ServiceError } from "@/server/lib/errors";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
+import { writeAuditLog } from "@/server/services/audit.service";
+import type { AdminRegistrationView } from "@/lib/admin/registration-detail-types";
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -18,7 +20,7 @@ const ALLOWED_FIELDS: BulkStatusField[] = [
   "accommodationStatus",
 ];
 
-function resolvePublicIdForPatch(idParam: string, row: Record<string, unknown>): string {
+function resolvePublicIdForPatch(idParam: string, row: AdminRegistrationView): string {
   if (REG_ID_RE.test(idParam)) return idParam;
   const publicId = row.registrationId;
   if (typeof publicId === "string" && REG_ID_RE.test(publicId)) return publicId;
@@ -26,7 +28,7 @@ function resolvePublicIdForPatch(idParam: string, row: Record<string, unknown>):
 }
 
 export const GET = createApiHandler(
-  async (_request: NextRequest, context: { params: Promise<{ registrationId: string }> }) => {
+  async (request: NextRequest, context: { params: Promise<{ registrationId: string }> }) => {
     const { registrationId } = await context.params;
     console.info("ADMIN_VIEW_REQUEST", { registrationId });
 
@@ -46,6 +48,15 @@ export const GET = createApiHandler(
       });
       throw new ServiceError("Registration not found", 404, "NOT_FOUND");
     }
+
+    await writeAuditLog({
+      action: "admin_action",
+      entityType: "registrations",
+      entityId: row.id,
+      registrationId: row.id,
+      actorUserId: getAdminActorUid(request),
+      payload: { event: "registration_viewed", publicId: row.registrationId },
+    });
 
     console.info("ADMIN_VIEW_SUCCESS", {
       registrationId: row.registrationId,
@@ -83,7 +94,8 @@ export const PATCH = createApiHandler(
     return updateRegistrationByPublicId(
       publicId,
       body.field as BulkStatusField,
-      body.value
+      body.value,
+      { actorUserId: getAdminActorUid(request) }
     );
   },
   { requireAdmin: true, adminRoles: ADMIN_MANAGE_ROLES, rateLimitKey: "v2-admin-registration-patch", limit: 60 }

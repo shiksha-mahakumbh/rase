@@ -4,6 +4,11 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { RegistrationRow } from "@/lib/exportRegistrations";
 import { formatRegistrationDate } from "@/lib/format-date";
+import {
+  displayAccommodationStatus,
+  displayPaymentStatus,
+  displayRegistrationStatus,
+} from "@/lib/admin/registration-labels";
 
 interface RegistrationTableProps {
   rows: RegistrationRow[];
@@ -157,8 +162,8 @@ export default function RegistrationTable({
             <p className="mt-2 font-medium">{row.fullName}</p>
             <p className="text-xs text-gray-500">{row.registrationType}</p>
             <div className="mt-2 flex flex-wrap gap-2 text-xs">
-              <StatusBadge value={row.paymentStatus} />
-              <StatusBadge value={row.accommodationStatus} />
+              <StatusBadge value={row.paymentStatus} kind="payment" />
+              <StatusBadge value={row.accommodationStatus} kind="accommodation" />
               {row.emailDeliveryStatus && (
                 <span className="rounded-full bg-slate-200 px-2 py-0.5 font-semibold text-slate-700">
                   Email: {String(row.emailDeliveryStatus)}
@@ -228,10 +233,10 @@ export default function RegistrationTable({
                 <td className="px-4 py-3">{row.email}</td>
                 <td className="px-4 py-3">{row.contactNumber}</td>
                 <td className="px-4 py-3">
-                  <StatusBadge value={row.paymentStatus} />
+                  <StatusBadge value={row.paymentStatus} kind="payment" />
                 </td>
                 <td className="px-4 py-3">
-                  <StatusBadge value={row.accommodationStatus} />
+                  <StatusBadge value={row.accommodationStatus} kind="accommodation" />
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap">
                   {formatRegistrationDate(row.createdAt)}
@@ -288,31 +293,37 @@ export default function RegistrationTable({
   );
 }
 
-function StatusBadge({ value }: { value?: string }) {
+function StatusBadge({ value, kind }: { value?: string; kind?: "payment" | "accommodation" | "registration" }) {
+  const raw = value ?? "";
   const display =
-    value === "Pending" ? "Pending Payment" : value;
+    kind === "registration"
+      ? displayRegistrationStatus(raw)
+      : kind === "accommodation"
+        ? displayAccommodationStatus(raw)
+        : displayPaymentStatus(raw);
+
   const colors: Record<string, string> = {
     Paid: "bg-green-100 text-green-800",
     "Pending Payment": "bg-amber-100 text-amber-800",
-    Pending: "bg-amber-100 text-amber-800",
     Submitted: "bg-sky-100 text-sky-800",
     Failed: "bg-red-100 text-red-800",
+    "Not Required": "bg-gray-100 text-gray-600",
+    Pending: "bg-amber-100 text-amber-800",
     Verified: "bg-blue-100 text-blue-800",
     Approved: "bg-green-100 text-green-800",
     Rejected: "bg-red-100 text-red-800",
     Confirmed: "bg-blue-100 text-blue-800",
     Allocated: "bg-purple-100 text-purple-800",
     Requested: "bg-amber-100 text-amber-800",
-    "Not Required": "bg-gray-100 text-gray-600",
   };
 
   return (
     <span
       className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${
-        colors[display ?? ""] ?? colors[value ?? ""] ?? "bg-gray-100 text-gray-700"
+        colors[display] ?? "bg-gray-100 text-gray-700"
       }`}
     >
-      {display ?? "—"}
+      {display || "—"}
     </span>
   );
 }
