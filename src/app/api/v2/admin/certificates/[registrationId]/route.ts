@@ -1,24 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
+import { adminBinaryGuard } from "@/server/lib/admin-binary-guard";
+import { getAdminActorUid } from "@/server/lib/admin-rbac";
 import { generateCertificatePdf } from "@/server/services/lifecycle/badge-certificate.service";
 import { toErrorResponse } from "@/server/lib/errors";
-
-async function guard(request: NextRequest) {
-  const ip = getClientIp(request);
-  const limited = await rateLimitAsync({ key: `admin-cert:${ip}`, limit: 30, windowMs: 60_000 });
-  if (!limited.ok) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  const { requireAdminSecret } = await import("@/server/lib/admin-guard");
-  const { assertAdminRoles, ADMIN_EXPORT_ROLES } = await import("@/server/lib/admin-rbac");
-  requireAdminSecret(request);
-  assertAdminRoles(request, ADMIN_EXPORT_ROLES);
-  return null;
-}
 
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ registrationId: string }> }
 ) {
-  const blocked = await guard(request);
+  const blocked = await adminBinaryGuard(request, { rateLimitKey: "admin-cert", limit: 30 });
   if (blocked) return blocked;
   try {
     const { registrationId } = await context.params;
@@ -39,11 +29,16 @@ export async function POST(
   request: NextRequest,
   context: { params: Promise<{ registrationId: string }> }
 ) {
-  const blocked = await guard(request);
+  const blocked = await adminBinaryGuard(request, {
+    rateLimitKey: "admin-cert-mutate",
+    limit: 30,
+    mutation: true,
+  });
   if (blocked) return blocked;
   try {
     const { registrationId } = await context.params;
-    const result = await generateCertificatePdf(registrationId);
+    const actorUserId = getAdminActorUid(request) ?? undefined;
+    const result = await generateCertificatePdf(registrationId, undefined, actorUserId);
     return NextResponse.json({
       success: true,
       certificateNo: result.certificateNo,

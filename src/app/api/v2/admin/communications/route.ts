@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { ServiceError } from "@/server/lib/errors";
 import {
   listCampaigns,
   createCampaign,
@@ -37,7 +38,7 @@ export const POST = createApiHandler(
       return sendCampaign(body.campaignId);
     }
 
-    if (!body.name || !body.channel) throw new Error("name and channel required");
+    if (!body.name || !body.channel) throw new ServiceError("name and channel required", 400, "INVALID_BODY");
     return createCampaign({
       name: body.name,
       channel: body.channel,

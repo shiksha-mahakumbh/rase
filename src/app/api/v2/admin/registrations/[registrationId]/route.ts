@@ -30,22 +30,13 @@ function resolvePublicIdForPatch(idParam: string, row: AdminRegistrationView): s
 export const GET = createApiHandler(
   async (request: NextRequest, context: { params: Promise<{ registrationId: string }> }) => {
     const { registrationId } = await context.params;
-    console.info("ADMIN_VIEW_REQUEST", { registrationId });
 
     if (!REG_ID_RE.test(registrationId) && !UUID_RE.test(registrationId)) {
-      console.error("ADMIN_VIEW_FAILED", {
-        registrationId,
-        error: "Invalid ID format",
-      });
       throw new ServiceError("Invalid registration ID", 400, "INVALID_ID");
     }
 
     const row = await getRegistrationForAdminView(registrationId);
     if (!row) {
-      console.error("ADMIN_VIEW_FAILED", {
-        registrationId,
-        error: "Registration not found",
-      });
       throw new ServiceError("Registration not found", 404, "NOT_FOUND");
     }
 
@@ -56,11 +47,6 @@ export const GET = createApiHandler(
       registrationId: row.id,
       actorUserId: getAdminActorUid(request),
       payload: { event: "registration_viewed", publicId: row.registrationId },
-    });
-
-    console.info("ADMIN_VIEW_SUCCESS", {
-      registrationId: row.registrationId,
-      uuid: row.id,
     });
 
     return { registration: row };

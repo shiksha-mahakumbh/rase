@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { ServiceError } from "@/server/lib/errors";
 import {
   listAccommodationRooms,
   createAccommodationRoom,
@@ -19,7 +20,7 @@ export const POST = createApiHandler(
       bedType?: string;
       capacity?: number;
     }>(await request.json());
-    if (!body.building || !body.roomNumber) throw new Error("building and roomNumber required");
+    if (!body.building || !body.roomNumber) throw new ServiceError("building and roomNumber required", 400, "INVALID_BODY");
     return createAccommodationRoom({
       building: body.building,
       roomNumber: body.roomNumber,

@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import type { WorkflowTrigger } from "@prisma/client";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { ServiceError } from "@/server/lib/errors";
 import {
   listWorkflowRules,
   upsertWorkflowRule,
@@ -26,7 +27,7 @@ export const POST = createApiHandler(
       return toggleWorkflowRule(body.id, body.isEnabled ?? true);
     }
 
-    if (!body.name || !body.trigger) throw new Error("name and trigger required");
+    if (!body.name || !body.trigger) throw new ServiceError("name and trigger required", 400, "INVALID_BODY");
     return upsertWorkflowRule({
       id: body.id,
       name: body.name,

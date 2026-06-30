@@ -7,10 +7,13 @@ import {
 } from "@/server/services/lifecycle/badge-certificate.service";
 import { resendPaymentEmail } from "@/server/services/admin/receipt-admin.service";
 import { createCampaign, sendCampaign } from "@/server/services/lifecycle/communication.service";
+import { getAdminActorUid } from "@/server/lib/admin-rbac";
+import { ServiceError } from "@/server/lib/errors";
 export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 export const POST = createApiHandler(
   async (request: NextRequest) => {
+    const actorUserId = getAdminActorUid(request) ?? undefined;
     const body = assertBody<{
       action?: string;
       registrationIds?: string[];
@@ -34,7 +37,7 @@ export const POST = createApiHandler(
         const results = [];
         for (const id of ids.slice(0, 50)) {
           try {
-            await resendPaymentEmail(id);
+            await resendPaymentEmail(id, actorUserId);
             results.push({ registrationId: id, ok: true });
           } catch (e) {
             results.push({
@@ -63,7 +66,7 @@ export const POST = createApiHandler(
         return sendCampaign(campaign.id);
       }
       default:
-        throw new Error("Unknown bulk action");
+        throw new ServiceError("Unknown bulk action", 400, "INVALID_ACTION");
     }
   },
   { requireAdmin: true, rateLimitKey: "admin-attendees-bulk", limit: 20 }

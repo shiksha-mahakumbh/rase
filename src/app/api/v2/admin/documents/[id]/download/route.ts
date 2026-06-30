@@ -1,24 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
+import { adminBinaryGuard } from "@/server/lib/admin-binary-guard";
+import { getAdminActorUid } from "@/server/lib/admin-rbac";
 import { prisma } from "@/server/db/prisma";
 import type { DocumentLetterType } from "@prisma/client";
 import { generateDocument } from "@/server/services/ops/document-generation.service";
+import { writeAuditLog } from "@/server/services/audit.service";
 import { toErrorResponse } from "@/server/lib/errors";
 
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  const ip = getClientIp(request);
-  const limited = await rateLimitAsync({ key: `admin-doc-dl:${ip}`, limit: 60, windowMs: 60_000 });
-  if (!limited.ok) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  const blocked = await adminBinaryGuard(request, {
+    rateLimitKey: "admin-doc-dl",
+    limit: 60,
+    mutation: true,
+  });
+  if (blocked) return blocked;
 
   try {
-    const { requireAdminSecret } = await import("@/server/lib/admin-guard");
-    const { assertAdminRoles, ADMIN_MANAGE_ROLES } = await import("@/server/lib/admin-rbac");
-    requireAdminSecret(request);
-    assertAdminRoles(request, ADMIN_MANAGE_ROLES);
-
     const { id } = await context.params;
     const doc = await prisma.generatedDocument.findUnique({ where: { id } });
     if (!doc) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -31,6 +31,15 @@ export async function GET(
       documentType: doc.documentType as DocumentLetterType,
       registrationId: reg?.registrationId,
       vars: (doc.metadata as Record<string, string>) ?? {},
+    });
+
+    await writeAuditLog({
+      action: "admin_action",
+      entityType: "generated_documents",
+      entityId: doc.id,
+      registrationId: doc.registrationId ?? undefined,
+      actorUserId: getAdminActorUid(request),
+      payload: { event: "document_downloaded", title: doc.title },
     });
 
     return new NextResponse(new Uint8Array(pdf), {

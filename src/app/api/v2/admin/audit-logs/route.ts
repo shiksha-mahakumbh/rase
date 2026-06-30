@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import type { AuditAction } from "@prisma/client";
 import { createApiHandler } from "@/server/lib/api-handler";
+import { ADMIN_SENSITIVE_READ_ROLES } from "@/server/lib/admin-rbac";
 import { listAuditLogs } from "@/server/services/audit.service";
 
 export const GET = createApiHandler(
@@ -14,5 +15,5 @@ export const GET = createApiHandler(
       registrationId: searchParams.get("registrationId") ?? undefined,
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminRoles: ADMIN_SENSITIVE_READ_ROLES }
 );

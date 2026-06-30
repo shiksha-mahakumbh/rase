@@ -5,6 +5,9 @@ import { verifyAdminGatewayContext } from "@/server/lib/admin-gateway-context";
 
 export const ADMIN_MANAGE_ROLES: AdminRole[] = ["Super Admin", "Admin"];
 
+/** Sensitive admin reads (audit trails, webhooks, subscriber PII). */
+export const ADMIN_SENSITIVE_READ_ROLES: AdminRole[] = ADMIN_MANAGE_ROLES;
+
 export const ADMIN_EXPORT_ROLES: AdminRole[] = ["Super Admin", "Admin", "Data Entry"];
 
 /** Gate staff may perform check-in actions without full admin privileges. */

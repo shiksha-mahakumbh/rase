@@ -74,6 +74,23 @@ export async function getRegistrationByPublicId(publicId: string) {
   return reg;
 }
 
+/** Render receipt PDF without updating registration timestamps or audit logs. */
+export async function renderReceiptPdf(publicId: string) {
+  const reg = await getRegistrationByPublicId(publicId);
+  const payload = buildReceiptPayloadFromRegistration(reg);
+  const { receiptPdf: pdf } = await buildRegistrationArtifacts(payload, {
+    registrationType: String(reg.registrationType),
+  });
+  return { pdf, registrationId: publicId };
+}
+
+/** Render QR PNG without updating registration timestamps or audit logs. */
+export async function renderQrPng(publicId: string) {
+  await getRegistrationByPublicId(publicId);
+  const qr = await generateRegistrationQrBuffer(publicId);
+  return { qr, registrationId: publicId };
+}
+
 export async function regenerateReceipt(publicId: string, actorUserId?: string) {
   const reg = await getRegistrationByPublicId(publicId);
   const payload = buildReceiptPayloadFromRegistration(reg);

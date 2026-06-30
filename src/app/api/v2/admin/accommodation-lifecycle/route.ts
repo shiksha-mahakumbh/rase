@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { ServiceError } from "@/server/lib/errors";
 import {
   listAccommodationWithRooms,
   allocateRoom,
@@ -32,7 +33,7 @@ export const POST = createApiHandler(
     }>(await request.json());
 
     if (body.action === "allocate") {
-      if (!body.requestId || !body.roomId) throw new Error("requestId and roomId required");
+      if (!body.requestId || !body.roomId) throw new ServiceError("requestId and roomId required", 400, "INVALID_BODY");
       return allocateRoom({
         requestId: body.requestId,
         roomId: body.roomId,
@@ -43,11 +44,11 @@ export const POST = createApiHandler(
     }
 
     if (body.action === "update-status") {
-      if (!body.requestId || !body.status) throw new Error("requestId and status required");
+      if (!body.requestId || !body.status) throw new ServiceError("requestId and status required", 400, "INVALID_BODY");
       return updateAccommodationRequestStatus(body.requestId, body.status, body.notes);
     }
 
-    throw new Error("Unknown action");
+    throw new ServiceError("Unknown action", 400, "INVALID_ACTION");
   },
   { requireAdmin: true, rateLimitKey: "admin-accommodation-action", limit: 30 }
 );

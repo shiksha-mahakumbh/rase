@@ -1,10 +1,12 @@
 import { NextRequest } from "next/server";
 import type { MediaType } from "@prisma/client";
 import { createApiHandler } from "@/server/lib/api-handler";
+import { withDeprecationHeaders } from "@/server/lib/admin-deprecation";
 import { getRequestContext } from "@/server/lib/request";
+import { ServiceError } from "@/server/lib/errors";
 import { uploadMedia, listMedia } from "@/server/services/media.service";
 
-export const GET = createApiHandler(
+const getHandler = createApiHandler(
   async (request: NextRequest) => {
     const { searchParams } = new URL(request.url);
     const mediaType = searchParams.get("mediaType") as MediaType | null;
@@ -19,11 +21,11 @@ export const GET = createApiHandler(
   { requireAdmin: true }
 );
 
-export const POST = createApiHandler(
+const postHandler = createApiHandler(
   async (request: NextRequest) => {
     const form = await request.formData();
     const file = form.get("file");
-    if (!(file instanceof File)) throw new Error("File required");
+    if (!(file instanceof File)) throw new ServiceError("File required", 400, "INVALID_BODY");
     const ctx = getRequestContext(request);
     const result = await uploadMedia({
       file: Buffer.from(await file.arrayBuffer()),
@@ -40,3 +42,13 @@ export const POST = createApiHandler(
   },
   { requireAdmin: true }
 );
+
+export const GET = withDeprecationHeaders(getHandler, {
+  successor: "/api/v2/admin/media-library",
+  note: "Legacy media API — use /api/v2/admin/media-library instead",
+});
+
+export const POST = withDeprecationHeaders(postHandler, {
+  successor: "/api/v2/admin/media-library",
+  note: "Legacy media API — use /api/v2/admin/media-library instead",
+});

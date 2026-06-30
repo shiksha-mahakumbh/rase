@@ -139,6 +139,12 @@ export const CMS_NAV: AdminNavItem[] = [
     group: "operations",
   },
   {
+    label: "Newsletter",
+    href: "/admin/cms/newsletter",
+    description: "Marketing email subscribers",
+    group: "operations",
+  },
+  {
     label: "Feedback Inbox",
     href: "/admin/cms/feedback",
     description: "Visitor feedback",

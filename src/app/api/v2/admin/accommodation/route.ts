@@ -1,9 +1,10 @@
 import { NextRequest } from "next/server";
 import type { AccommodationStatus } from "@prisma/client";
 import { createApiHandler } from "@/server/lib/api-handler";
+import { withDeprecationHeaders } from "@/server/lib/admin-deprecation";
 import { listAccommodationRequests } from "@/server/services/accommodation.service";
 
-export const GET = createApiHandler(
+const handler = createApiHandler(
   async (request: NextRequest) => {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") as AccommodationStatus | null;
@@ -15,3 +16,8 @@ export const GET = createApiHandler(
   },
   { requireAdmin: true }
 );
+
+export const GET = withDeprecationHeaders(handler, {
+  successor: "/api/v2/admin/accommodation-lifecycle",
+  note: "Legacy accommodation API — use /api/v2/admin/accommodation-lifecycle instead",
+});

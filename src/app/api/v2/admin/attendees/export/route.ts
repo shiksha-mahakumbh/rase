@@ -1,20 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
+import { adminBinaryGuard } from "@/server/lib/admin-binary-guard";
 import { exportAttendeesCsv } from "@/server/services/lifecycle/attendee.service";
 import { toErrorResponse } from "@/server/lib/errors";
 
 export async function GET(request: NextRequest) {
-  const ip = getClientIp(request);
-  const limited = await rateLimitAsync({ key: `admin-attendees-export:${ip}`, limit: 20, windowMs: 60_000 });
-  if (!limited.ok) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
+  const blocked = await adminBinaryGuard(request, {
+    rateLimitKey: "admin-attendees-export",
+    limit: 20,
+  });
+  if (blocked) return blocked;
 
   try {
-    const { requireAdminSecret } = await import("@/server/lib/admin-guard");
-    const { assertAdminRoles, ADMIN_EXPORT_ROLES } = await import("@/server/lib/admin-rbac");
-    requireAdminSecret(request);
-    assertAdminRoles(request, ADMIN_EXPORT_ROLES);
     const { searchParams } = new URL(request.url);
     const csv = await exportAttendeesCsv({
       search: searchParams.get("search") ?? undefined,

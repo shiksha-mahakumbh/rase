@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { ServiceError } from "@/server/lib/errors";
 import {
   listResearchSubmissions,
   createResearchSubmission,
@@ -30,7 +31,7 @@ export const POST = createApiHandler(
       registrationId?: string;
     }>(await request.json());
     if (!body.title || !body.authorName || !body.authorEmail || !body.abstractText) {
-      throw new Error("title, authorName, authorEmail, abstractText required");
+      throw new ServiceError("title, authorName, authorEmail, abstractText required", 400, "INVALID_BODY");
     }
     return createResearchSubmission({
       title: body.title,

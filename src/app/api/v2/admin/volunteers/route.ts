@@ -6,6 +6,7 @@ import {
   markVolunteerAttendance,
   generateVolunteerRoster,
 } from "@/server/services/ops/volunteer-ops.service";
+import { ServiceError } from "@/server/lib/errors";
 
 export const GET = createApiHandler(
   async (request: NextRequest) => {
@@ -40,7 +41,7 @@ export const POST = createApiHandler(
     }
 
     if (!body.registrationId || !body.department) {
-      throw new Error("registrationId and department required");
+      throw new ServiceError("registrationId and department required", 400, "INVALID_BODY");
     }
     return assignVolunteer({
       registrationId: body.registrationId,

@@ -28,11 +28,16 @@ export function createApiHandler<T, C extends AppRouteContext = AppRouteContext>
     const method = request.method.toUpperCase();
     const isMutation = !["GET", "HEAD"].includes(method);
     const rateLimitKey =
-      options.rateLimitKey ?? (options.requireAdmin && isMutation ? "v2-admin-mutation" : undefined);
+      options.rateLimitKey ??
+      (options.requireAdmin
+        ? isMutation
+          ? "v2-admin-mutation"
+          : "v2-admin-read"
+        : undefined);
     if (rateLimitKey) {
       const limited = await rateLimitAsync({
         key: `${rateLimitKey}:${ip}`,
-        limit: options.limit ?? 60,
+        limit: options.limit ?? (isMutation ? 60 : 120),
         windowMs: options.windowMs ?? 60_000,
       });
       if (!limited.ok) {

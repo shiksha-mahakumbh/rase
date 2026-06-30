@@ -1,37 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
-import { ServiceError, toErrorResponse } from "@/server/lib/errors";
-import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
-import { regenerateReceipt, regenerateQr } from "@/server/services/admin/receipt-admin.service";
+import { adminBinaryGuard } from "@/server/lib/admin-binary-guard";
+import { getAdminActorUid } from "@/server/lib/admin-rbac";
+import { toErrorResponse } from "@/server/lib/errors";
+import {
+  regenerateReceipt,
+  regenerateQr,
+  renderReceiptPdf,
+  renderQrPng,
+} from "@/server/services/admin/receipt-admin.service";
 export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
-
-async function adminGuard(request: NextRequest, mutation = false) {
-  const ip = getClientIp(request);
-  const limited = await rateLimitAsync({
-    key: `admin-receipt:${ip}`,
-    limit: 60,
-    windowMs: 60_000,
-  });
-  if (!limited.ok) {
-    return NextResponse.json(
-      { error: "Too many requests" },
-      { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } }
-    );
-  }
-  const { requireAdminSecret } = await import("@/server/lib/admin-guard");
-  const { assertAdminRoles } = await import("@/server/lib/admin-rbac");
-  requireAdminSecret(request);
-  if (mutation) {
-    assertAdminRoles(request, ADMIN_MANAGE_ROLES);
-  }
-  return null;
-}
 
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ registrationId: string }> }
 ) {
-  const blocked = await adminGuard(request);
+  const blocked = await adminBinaryGuard(request, { rateLimitKey: "admin-receipt", limit: 120 });
   if (blocked) return blocked;
 
   try {
@@ -40,7 +23,7 @@ export async function GET(
     const type = searchParams.get("type") ?? "receipt";
 
     if (type === "qr") {
-      const { qr } = await regenerateQr(registrationId);
+      const { qr } = await renderQrPng(registrationId);
       return new NextResponse(new Uint8Array(qr), {
         headers: {
           "Content-Type": "image/png",
@@ -49,7 +32,7 @@ export async function GET(
       });
     }
 
-    const { pdf } = await regenerateReceipt(registrationId);
+    const { pdf } = await renderReceiptPdf(registrationId);
     return new NextResponse(new Uint8Array(pdf), {
       headers: {
         "Content-Type": "application/pdf",
@@ -66,14 +49,19 @@ export async function POST(
   request: NextRequest,
   context: { params: Promise<{ registrationId: string }> }
 ) {
-  const blocked = await adminGuard(request, true);
+  const blocked = await adminBinaryGuard(request, {
+    rateLimitKey: "admin-receipt-mutate",
+    limit: 60,
+    mutation: true,
+  });
   if (blocked) return blocked;
 
   try {
     const { registrationId } = await context.params;
+    const actorUserId = getAdminActorUid(request) ?? undefined;
     const body = (await request.json().catch(() => ({}))) as { type?: string };
     if (body.type === "qr") {
-      const result = await regenerateQr(registrationId);
+      const result = await regenerateQr(registrationId, actorUserId);
       return NextResponse.json({
         success: true,
         registrationId: result.registrationId,
@@ -81,16 +69,13 @@ export async function POST(
         generatedAt: result.generatedAt.toISOString(),
       });
     }
-    const result = await regenerateReceipt(registrationId);
+    const result = await regenerateReceipt(registrationId, actorUserId);
     return NextResponse.json({
       success: true,
       registrationId: result.registrationId,
       generatedAt: result.generatedAt.toISOString(),
     });
   } catch (error) {
-    if (error instanceof ServiceError) {
-      return NextResponse.json({ error: error.message }, { status: error.status });
-    }
     const mapped = toErrorResponse(error);
     return NextResponse.json({ error: mapped.error }, { status: mapped.status });
   }

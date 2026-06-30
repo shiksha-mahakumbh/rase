@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { ServiceError } from "@/server/lib/errors";
 import {
   listAlumni,
   convertAttendeesToAlumni,
@@ -47,7 +48,7 @@ export const POST = createApiHandler(
       });
     }
 
-    throw new Error("Unknown action");
+    throw new ServiceError("Unknown action", 400, "INVALID_ACTION");
   },
   { requireAdmin: true, rateLimitKey: "admin-alumni-action", limit: 10 }
 );

@@ -7,6 +7,7 @@ import {
   updateEventSession,
   recordSessionAttendance,
 } from "@/server/services/ops/session-ops.service";
+import { ServiceError } from "@/server/lib/errors";
 
 export const GET = createApiHandler(
   async (request: NextRequest) => {
@@ -36,7 +37,7 @@ export const POST = createApiHandler(
     }>(await request.json());
 
     if (body.action === "attendance") {
-      if (!body.registrationId) throw new Error("registrationId required");
+      if (!body.registrationId) throw new ServiceError("registrationId required", 400, "INVALID_BODY");
       return recordSessionAttendance({
         registrationId: body.registrationId,
         sessionId: body.sessionId,
@@ -49,7 +50,7 @@ export const POST = createApiHandler(
     }
 
     if (!body.title || !body.startAt || !body.endAt) {
-      throw new Error("title, startAt, endAt required");
+      throw new ServiceError("title, startAt, endAt required", 400, "INVALID_BODY");
     }
     return createEventSession({
       title: body.title,

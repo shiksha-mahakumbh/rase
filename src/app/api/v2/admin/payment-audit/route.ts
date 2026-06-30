@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler } from "@/server/lib/api-handler";
+import { ADMIN_SENSITIVE_READ_ROLES } from "@/server/lib/admin-rbac";
 import { listPaymentAuditLogs } from "@/server/services/admin/payments-admin.service";
 
 export const GET = createApiHandler(
@@ -13,5 +14,10 @@ export const GET = createApiHandler(
       orderId: searchParams.get("orderId") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-payment-audit", limit: 60 }
+  {
+    requireAdmin: true,
+    adminRoles: ADMIN_SENSITIVE_READ_ROLES,
+    rateLimitKey: "admin-payment-audit",
+    limit: 60,
+  }
 );

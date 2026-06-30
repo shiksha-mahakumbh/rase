@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import type { DocumentLetterType } from "@prisma/client";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
+import { ServiceError } from "@/server/lib/errors";
 import {
   generateDocument,
   bulkGenerateDocuments,
@@ -28,7 +29,7 @@ export const POST = createApiHandler(
       vars?: Record<string, string>;
     }>(await request.json());
 
-    if (!body.documentType) throw new Error("documentType required");
+    if (!body.documentType) throw new ServiceError("documentType required", 400, "INVALID_BODY");
 
     if (body.action === "bulk" && body.registrationIds?.length) {
       return bulkGenerateDocuments({
@@ -38,7 +39,7 @@ export const POST = createApiHandler(
     }
 
     if (!body.registrationId && !body.vars) {
-      throw new Error("registrationId or vars required");
+      throw new ServiceError("registrationId or vars required", 400, "INVALID_BODY");
     }
 
     const { document, pdf, batchId } = await generateDocument({

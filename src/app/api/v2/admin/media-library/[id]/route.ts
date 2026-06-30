@@ -34,7 +34,7 @@ export const PATCH = createApiHandler(
     const { id } = await context.params;
     const form = await request.formData();
     const file = form.get("file");
-    if (!(file instanceof File)) throw new Error("File required for replace");
+    if (!(file instanceof File)) throw new ServiceError("File required for replace", 400, "INVALID_BODY");
 
     const ctx = getRequestContext(request);
     const asset = await replaceMediaAsset(id, {
