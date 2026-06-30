@@ -10,7 +10,6 @@ import {
   AdminTextarea,
   AdminLoading,
   AdminLocaleSelect,
-  CmsReadOnlyBanner,
   useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 
@@ -116,7 +115,6 @@ export default function HomepageAdminPage() {
 
   return (
     <div>
-      <CmsReadOnlyBanner />
       <AdminPageHeader
         title="Homepage CMS"
         description={`Edit homepage sections. Status: ${pageStatus}.`}

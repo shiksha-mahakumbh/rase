@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useAdmin } from "@/lib/adminAuth";
-import { CMS_NAV, CMS_NAV_GROUPS } from "./admin-nav";
+import {
+  CMS_NAV_GROUPS,
+  filterCmsNavForRole,
+  getManageOnlyNavHrefs,
+  canAccessNavItem,
+} from "./admin-nav";
+import { CmsReadOnlyBanner } from "./AdminUi";
 
 function NavLink({
   href,
@@ -32,10 +39,25 @@ function NavLink({
   );
 }
 
+const MANAGE_ONLY_PATHS = getManageOnlyNavHrefs();
+
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, role, logout } = useAdmin();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navItems = filterCmsNavForRole(role);
+
+  useEffect(() => {
+    if (!role) return;
+    const blocked = MANAGE_ONLY_PATHS.some(
+      (href) => pathname === href || pathname.startsWith(`${href}/`)
+    );
+    if (blocked && !canAccessNavItem(role, "manage")) {
+      toast.error("You do not have access to that page.");
+      router.replace("/admin/cms");
+    }
+  }, [pathname, role, router]);
 
   const groups = Object.keys(CMS_NAV_GROUPS) as Array<keyof typeof CMS_NAV_GROUPS>;
 
@@ -47,30 +69,34 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         </p>
         <p className="px-3 text-sm font-semibold text-brand-navy">CMS Admin</p>
       </div>
-      {groups.map((group) => (
-        <div key={group}>
-          <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            {CMS_NAV_GROUPS[group]}
-          </p>
-          <div className="space-y-1">
-            {CMS_NAV.filter((item) => item.group === group).map((item) => (
-              <NavLink
-                key={item.href}
-                href={item.href}
-                label={item.label}
-                active={
-                  item.href === "/admin"
-                    ? pathname === "/admin" || pathname.startsWith("/admin/registrations")
-                    : item.href === "/admin/cms"
-                      ? pathname === "/admin/cms"
-                      : pathname.startsWith(item.href)
-                }
-                onClick={() => setMobileOpen(false)}
-              />
-            ))}
+      {groups.map((group) => {
+        const items = navItems.filter((item) => item.group === group);
+        if (items.length === 0) return null;
+        return (
+          <div key={group}>
+            <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              {CMS_NAV_GROUPS[group]}
+            </p>
+            <div className="space-y-1">
+              {items.map((item) => (
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  active={
+                    item.href === "/admin"
+                      ? pathname === "/admin" || pathname.startsWith("/admin/registrations")
+                      : item.href === "/admin/cms"
+                        ? pathname === "/admin/cms"
+                        : pathname.startsWith(item.href)
+                  }
+                  onClick={() => setMobileOpen(false)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </nav>
   );
 
@@ -116,7 +142,10 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         >
           {sidebar}
         </aside>
-        <main id="main-content" className="min-w-0 flex-1 p-4 md:p-6 lg:p-8">{children}</main>
+        <main id="main-content" className="min-w-0 flex-1 p-4 md:p-6 lg:p-8">
+          <CmsReadOnlyBanner />
+          {children}
+        </main>
       </div>
     </div>
   );

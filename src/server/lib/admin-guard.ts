@@ -20,6 +20,17 @@ export function requireAdminSecret(request: NextRequest): void {
     throw new ServiceError("Unauthorized", 401, "UNAUTHORIZED");
   }
 
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.ADMIN_OPS_ALLOW_DIRECT === "true"
+  ) {
+    throw new ServiceError(
+      "Direct admin API access is disabled in production",
+      503,
+      "ADMIN_MISCONFIGURED"
+    );
+  }
+
   const allowDirect = process.env.ADMIN_OPS_ALLOW_DIRECT === "true";
   if (allowDirect || process.env.NODE_ENV !== "production") {
     return;

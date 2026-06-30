@@ -1,11 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { proxyToV2Admin } from "@/server/lib/admin-gateway-proxy";
 import { verifyAdminRequest } from "@/server/lib/admin-request-auth";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError } from "@/server/lib/errors";
 
 export const runtime = "nodejs";
 
 async function handle(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  const ip = getClientIp(request);
+  const limited = await rateLimitAsync({
+    key: `admin-gateway:${ip}`,
+    limit: 120,
+    windowMs: 60_000,
+  });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } }
+    );
+  }
+
   try {
     const session = await verifyAdminRequest(request);
     const { path } = await context.params;

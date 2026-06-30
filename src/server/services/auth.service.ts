@@ -5,6 +5,25 @@ import type { AdminRole } from "@/types/registration";
 
 const ADMIN_ROLE_NAMES: AdminRole[] = ["Super Admin", "Admin", "Data Entry"];
 
+const ROLE_PRIORITY: Record<AdminRole, number> = {
+  "Super Admin": 0,
+  Admin: 1,
+  "Data Entry": 2,
+};
+
+function pickHighestAdminRole(roles: AdminRole[]): AdminRole | null {
+  let best: AdminRole | null = null;
+  let bestPriority = Infinity;
+  for (const role of roles) {
+    const priority = ROLE_PRIORITY[role];
+    if (priority < bestPriority) {
+      best = role;
+      bestPriority = priority;
+    }
+  }
+  return best;
+}
+
 function getBootstrapEmails(): string[] {
   const raw = process.env.ADMIN_BOOTSTRAP_EMAILS ?? "";
   return raw
@@ -56,12 +75,13 @@ export async function resolveAdminRoleForUser(
     });
   }
 
+  const roles: AdminRole[] = [];
   for (const ur of user.userRoles) {
     const role = normalizeRoleName(ur.role.name);
-    if (role) return role;
+    if (role) roles.push(role);
   }
 
-  return null;
+  return pickHighestAdminRole(roles);
 }
 
 async function ensureBootstrapUser(

@@ -3,8 +3,13 @@ import { cookies } from "next/headers";
 import { ADMIN_SESSION_COOKIE } from "@/constants/auth";
 import { verifyAdminSessionToken } from "@/lib/security/admin-session";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
+import {
+  clearAdminSessionCookie,
+  maybeRotateAdminSessionCookie,
+  verifyAndRefreshAdminSession,
+} from "@/server/lib/admin-request-auth";
 
-/** Return current admin session from HMAC cookie (if valid). */
+/** Return current admin session from HMAC cookie (if valid), re-validated against DB. */
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
@@ -21,21 +26,31 @@ export async function GET(request: NextRequest) {
 
   const cookieStore = await cookies();
   const raw = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
-  const secret = process.env.ADMIN_SESSION_SECRET;
 
-  if (!raw || !secret) {
+  if (!raw) {
     return NextResponse.json({ authenticated: false });
   }
 
-  const session = verifyAdminSessionToken(raw);
+  const tokenSession = verifyAdminSessionToken(raw);
+  if (!tokenSession) {
+    const response = NextResponse.json({ authenticated: false });
+    clearAdminSessionCookie(response);
+    return response;
+  }
+
+  const session = await verifyAndRefreshAdminSession(raw);
   if (!session) {
-    return NextResponse.json({ authenticated: false });
+    const response = NextResponse.json({ authenticated: false });
+    clearAdminSessionCookie(response);
+    return response;
   }
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     authenticated: true,
     email: session.email,
     role: session.role,
     uid: session.uid,
   });
+  maybeRotateAdminSessionCookie(response, session, tokenSession.role);
+  return response;
 }

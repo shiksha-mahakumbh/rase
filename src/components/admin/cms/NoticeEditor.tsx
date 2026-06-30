@@ -12,7 +12,6 @@ import {
   AdminTextarea,
   AdminSelect,
   AdminLoading,
-  CmsReadOnlyBanner,
   useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 import AdminRevisionsPanel from "@/components/admin/cms/AdminRevisionsPanel";
@@ -125,7 +124,6 @@ export default function NoticeEditor({ noticeId }: { noticeId?: string }) {
 
   return (
     <div>
-      <CmsReadOnlyBanner />
       <AdminPageHeader
         title={noticeId ? "Edit notice" : "Create notice"}
         actions={

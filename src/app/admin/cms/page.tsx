@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { CMS_NAV, type AdminNavItem } from "@/components/admin/cms/admin-nav";
+import { filterCmsNavForRole, type AdminNavItem } from "@/components/admin/cms/admin-nav";
 import { AdminPageHeader, AdminCard } from "@/components/admin/cms/AdminUi";
+import { useAdmin } from "@/lib/adminAuth";
 
 const GROUP_LABELS: Record<AdminNavItem["group"], string> = {
   content: "Content",
@@ -21,7 +22,8 @@ const GROUP_ORDER: AdminNavItem["group"][] = [
 ];
 
 export default function CmsDashboardPage() {
-  const modules = CMS_NAV.filter((item) => item.href !== "/admin/cms");
+  const { role } = useAdmin();
+  const modules = filterCmsNavForRole(role).filter((item) => item.href !== "/admin/cms");
 
   return (
     <div>

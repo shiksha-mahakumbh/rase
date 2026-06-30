@@ -25,7 +25,7 @@ interface AdminContextValue {
 
 const AdminContext = createContext<AdminContextValue | undefined>(undefined);
 
-const AUTH_INIT_TIMEOUT_MS = 12000;
+const AUTH_INIT_TIMEOUT_MS = 8000;
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AdminUser | null>(null);
@@ -118,6 +118,11 @@ export function useAdmin() {
 
 export function canMutateCms(role: AdminRole | null): boolean {
   return role === "Super Admin" || role === "Admin";
+}
+
+/** Sensitive admin reads and CMS mutations (Super Admin & Admin). */
+export function canAccessSensitiveAdmin(role: AdminRole | null): boolean {
+  return canMutateCms(role);
 }
 
 /** @deprecated use canMutateCms */

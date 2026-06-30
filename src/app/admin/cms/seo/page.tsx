@@ -13,7 +13,6 @@ import {
   AdminTextarea,
   AdminSelect,
   AdminLocaleSelect,
-  CmsReadOnlyBanner,
   useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 
@@ -100,7 +99,6 @@ export default function SeoManagerPage() {
 
   return (
     <div>
-      <CmsReadOnlyBanner />
       <AdminPageHeader
         title="SEO Manager"
         description="Edit metadata, OpenGraph, Twitter Cards, and JSON-LD for any CMS entity."

@@ -1,8 +1,14 @@
+import type { AdminRole } from "@/types/registration";
+
+export type AdminNavAccess = "any" | "manage";
+
 export type AdminNavItem = {
   label: string;
   href: string;
   description?: string;
   group: "content" | "organizational" | "site" | "insights" | "operations";
+  /** "manage" = Super Admin & Admin only; default "any" = all admin roles */
+  access?: AdminNavAccess;
 };
 
 export const CMS_NAV: AdminNavItem[] = [
@@ -125,12 +131,14 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/audit-logs",
     description: "CMS & system change history",
     group: "site",
+    access: "manage",
   },
   {
     label: "Analytics",
     href: "/admin/cms/analytics",
     description: "Visitors & traffic",
     group: "insights",
+    access: "manage",
   },
   {
     label: "Contact Inbox",
@@ -143,6 +151,7 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/newsletter",
     description: "Marketing email subscribers",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Feedback Inbox",
@@ -185,30 +194,35 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/communications",
     description: "Email / SMS / WhatsApp campaigns",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Event Analytics",
     href: "/admin/cms/event-analytics",
     description: "Check-in, occupancy, certificates",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Executive Dashboard",
     href: "/admin/cms/executive-dashboard",
     description: "Live metrics & real-time alerts",
     group: "operations",
+    access: "manage",
   },
   {
     label: "AI Insights",
     href: "/admin/cms/ai-insights",
     description: "Trends, forecasts & recommendations",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Workflow Automation",
     href: "/admin/cms/workflow-automation",
     description: "Auto email & WhatsApp rules",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Volunteers",
@@ -239,6 +253,7 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/documents",
     description: "Letters & bulk generation",
     group: "operations",
+    access: "manage",
   },
   {
     label: "WhatsApp Logs",
@@ -269,6 +284,7 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/payment-recovery",
     description: "Orphan payments & repair",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Receipts & QR",
@@ -281,18 +297,21 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/email-logs",
     description: "Delivery monitoring & resend",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Webhook Logs",
     href: "/admin/cms/webhooks",
     description: "Razorpay webhook events",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Payment Audit",
     href: "/admin/cms/payment-audit",
     description: "End-to-end payment audit trail",
     group: "operations",
+    access: "manage",
   },
 ];
 
@@ -303,3 +322,20 @@ export const CMS_NAV_GROUPS: Record<AdminNavItem["group"], string> = {
   insights: "Insights",
   operations: "Operations",
 };
+
+export function canAccessNavItem(
+  role: AdminRole | null,
+  access: AdminNavAccess = "any"
+): boolean {
+  if (!role) return false;
+  if (access === "any") return true;
+  return role === "Super Admin" || role === "Admin";
+}
+
+export function filterCmsNavForRole(role: AdminRole | null): AdminNavItem[] {
+  return CMS_NAV.filter((item) => canAccessNavItem(role, item.access ?? "any"));
+}
+
+export function getManageOnlyNavHrefs(): string[] {
+  return CMS_NAV.filter((item) => item.access === "manage").map((item) => item.href);
+}

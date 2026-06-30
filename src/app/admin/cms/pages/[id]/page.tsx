@@ -11,7 +11,6 @@ import {
   AdminInput,
   AdminTextarea,
   AdminLoading,
-  CmsReadOnlyBanner,
   useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 
@@ -72,7 +71,6 @@ export default function PageEditorPage({
 
   return (
     <div>
-      <CmsReadOnlyBanner />
       <AdminPageHeader
         title="Edit page"
         description={`Status: ${form.status}`}

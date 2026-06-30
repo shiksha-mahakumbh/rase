@@ -125,4 +125,22 @@ for (const [group, vars] of Object.entries(groups)) {
 console.log(
   JSON.stringify({ checked: results.length, missingRequired: fail, vars: results }, null, 2)
 );
+
+const isProductionDeploy =
+  env.VERCEL_ENV === "production" || env.NODE_ENV === "production";
+
+if (isProductionDeploy && env.ADMIN_OPS_ALLOW_DIRECT === "true") {
+  fail++;
+  results.push({
+    group: "admin",
+    key: "ADMIN_OPS_ALLOW_DIRECT",
+    present: true,
+    valid: false,
+    required: true,
+    ok: false,
+    note: "Must not be true in production — disables signed gateway enforcement",
+  });
+  console.error("ADMIN_OPS_ALLOW_DIRECT must not be true in production");
+}
+
 process.exit(fail > 0 ? 1 : 0);

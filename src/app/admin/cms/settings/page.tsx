@@ -11,7 +11,6 @@ import {
   AdminTextarea,
   AdminLoading,
   AdminLocaleSelect,
-  CmsReadOnlyBanner,
   useCmsCanMutate,
 } from "@/components/admin/cms/AdminUi";
 
@@ -112,7 +111,6 @@ export default function SettingsAdminPage() {
 
   return (
     <div>
-      <CmsReadOnlyBanner />
       <AdminPageHeader
         title="Site Settings"
         description="Organization details, contact info, social links, and feature toggles."
