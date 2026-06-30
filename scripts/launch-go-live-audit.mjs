@@ -41,7 +41,7 @@ async function phaseDiagnostics() {
 
 async function phaseRegistration(registrationId = "SMK2026-000001") {
   const lookup = await http("GET", `/api/registration/${registrationId}`);
-  const lookupPost = await http("POST", "/api/registration/lookup", {
+  const lookupPost = await http("POST", "/api/v2/registration/lookup", {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ registrationId, email: "probe@example.invalid" }),
   });

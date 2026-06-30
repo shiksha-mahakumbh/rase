@@ -31,7 +31,7 @@ const beforeLatest = await prisma.emailLog.findFirst({
 
 console.log("Before:", { beforeCount, latestStatus: beforeLatest?.status ?? null });
 
-const res = await fetch(`${PROD_BASE}/api/registration/send-email`, {
+const res = await fetch(`${PROD_BASE}/api/v2/registration/send-email`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -43,6 +43,7 @@ const res = await fetch(`${PROD_BASE}/api/registration/send-email`, {
 });
 
 const apiBody = await res.json().catch(() => ({}));
+const endpointDisabled = res.status === 410;
 
 const afterLatest = await prisma.emailLog.findFirst({
   orderBy: { createdAt: "desc" },
@@ -63,7 +64,7 @@ console.log(
     {
       verifiedAt: new Date().toISOString(),
       prodUrl: PROD_BASE,
-      api: { http: res.status, body: apiBody },
+      api: { http: res.status, body: apiBody, endpointDisabled },
       registration: {
         registrationId: reg.registrationId,
         registrationUuid: reg.id,

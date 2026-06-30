@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import { createApiHandler } from "@/server/lib/api-handler";
 import { getPublicVisitorStats } from "@/server/services/visitor-analytics.service";
 
-export const GET = createApiHandler(async () => {
-  const stats = await getPublicVisitorStats();
-  return { success: true, ...stats };
-});
+export const GET = createApiHandler(
+  async () => {
+    const stats = await getPublicVisitorStats();
+    return { success: true, ...stats };
+  },
+  { rateLimitKey: "v2-analytics-stats", limit: 120, windowMs: 60_000 }
+);
 
 export async function OPTIONS() {
   return new NextResponse(null, {

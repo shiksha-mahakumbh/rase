@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
-import { REG_ID_RE } from "@/lib/security/registration-lookup";
-import { getPublicRegistrationSummary } from "@/server/services/registration.service";
+import { handlePublicRegistrationLookupPost } from "@/server/lib/registration-lookup-handler";
+import { toErrorResponse } from "@/server/lib/errors";
 
+/** @deprecated Use POST /api/v2/registration/lookup — returns flat JSON for backward compatibility. */
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
@@ -20,28 +21,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const registrationId = String(body.registrationId ?? "").trim();
-    const email = String(body.email ?? "").trim();
-
-    if (!REG_ID_RE.test(registrationId)) {
-      return NextResponse.json({ error: "Invalid registration ID" }, { status: 400 });
-    }
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email or confirmation token required" },
-        { status: 401 }
-      );
-    }
-
-    const summary = await getPublicRegistrationSummary(registrationId, email);
-    if (!summary) {
-      return NextResponse.json({ error: "Registration not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(summary);
+    const summary = await handlePublicRegistrationLookupPost(body);
+    return NextResponse.json(summary, {
+      headers: {
+        Deprecation: "true",
+        Link: '</api/v2/registration/lookup>; rel="successor-version"',
+      },
+    });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.error("registration lookup POST error:", message);
-    return NextResponse.json({ error: "Unable to load registration" }, { status: 500 });
+    const mapped = toErrorResponse(error);
+    return NextResponse.json({ error: mapped.error }, { status: mapped.status });
   }
 }

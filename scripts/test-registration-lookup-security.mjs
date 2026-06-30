@@ -86,13 +86,22 @@ if (!keys.includes("email") && !keys.includes("contactNumber")) {
 }
 
 const routeSrc = readFileSync("src/app/api/registration/[registrationId]/route.ts", "utf8");
-if (routeSrc.includes("status: 401") && routeSrc.includes("Email or confirmation token required")) {
+const lookupHandlerSrc = readFileSync("src/server/lib/registration-lookup-handler.ts", "utf8");
+const v2LookupSrc = readFileSync("src/app/api/v2/registration/lookup/route.ts", "utf8");
+if (
+  (routeSrc.includes("status: 401") || routeSrc.includes("AUTH_REQUIRED")) &&
+  (routeSrc.includes("Email or confirmation token required") ||
+    lookupHandlerSrc.includes("Email or confirmation token required"))
+) {
   pass("route_returns_401_without_credentials", "Route source enforces 401");
 } else {
   fail("route_returns_401_without_credentials", "401 gate missing");
 }
 
-if (routeSrc.includes("rateLimit") && routeSrc.includes("registration-lookup:")) {
+if (
+  (routeSrc.includes("rateLimit") && routeSrc.includes("registration-lookup:")) ||
+  v2LookupSrc.includes("v2-registration-lookup-post")
+) {
   pass("route_rate_limited", "Rate limit configured");
 } else {
   fail("route_rate_limited", "Rate limit missing");

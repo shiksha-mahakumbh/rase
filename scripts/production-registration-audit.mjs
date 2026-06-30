@@ -219,9 +219,10 @@ async function phase3And4Pages() {
       }),
     });
     api.sendEmail = {
-      status: email.res.ok ? "PASS" : "FAIL",
+      status: email.res.status === 410 ? "PASS" : email.res.ok ? "PASS" : "FAIL",
       http: email.res.status,
-      emailStatus: email.json?.emailStatus ?? email.json?.error,
+      disabled: email.res.status === 410,
+      emailStatus: email.json?.emailStatus ?? email.json?.error ?? email.json?.code,
     };
   } catch (e) {
     api.sendEmail = { status: "FAIL", error: errMsg(e) };

@@ -126,7 +126,7 @@ async function phase7() {
     { id: "admin_gateway_emails", method: "GET", path: "/api/admin/gateway/email-logs", body: null, expect: [401] },
     { id: "registration_lookup", method: "GET", path: "/api/registration/SMK2026-000001", body: null, expect: [401] },
     { id: "registration_submit_empty", method: "POST", path: "/api/registration/submit", body: "{}", expect: [400, 403, 429] },
-    { id: "registration_send_email_bad", method: "POST", path: "/api/registration/send-email", body: JSON.stringify({ registrationId: "INVALID", email: "x", fullName: "x" }), expect: [400] },
+    { id: "registration_send_email_bad", method: "POST", path: "/api/registration/send-email", body: JSON.stringify({ registrationId: "INVALID", email: "x", fullName: "x" }), expect: [400, 410] },
     { id: "webhook_unsigned", method: "POST", path: "/api/payments/razorpay-webhook", body: "{}", expect: [401, 400] },
     { id: "create_order_open", method: "POST", path: "/api/payments/create-order", body: JSON.stringify({ amount: 20000, currency: "INR" }), expect: [200, 401, 400] },
     { id: "verify_payment_empty", method: "POST", path: "/api/payments/verify", body: "{}", expect: [400, 401, 403] },

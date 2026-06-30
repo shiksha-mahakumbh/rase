@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySupabaseAdmin } from "@/server/lib/supabase-admin-auth";
 import { ServiceError } from "@/server/lib/errors";
+import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import {
   ADMIN_SESSION_COOKIE,
   adminSessionCookieOptions,
@@ -9,6 +10,19 @@ import {
 
 /** Exchange Supabase access token for signed HttpOnly admin session cookie. */
 export async function POST(request: NextRequest) {
+  const ip = getClientIp(request);
+  const limited = await rateLimitAsync({
+    key: `admin-session:${ip}`,
+    limit: 10,
+    windowMs: 60_000,
+  });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } }
+    );
+  }
+
   try {
     const session = await verifySupabaseAdmin(request);
     const token = createAdminSessionToken({
