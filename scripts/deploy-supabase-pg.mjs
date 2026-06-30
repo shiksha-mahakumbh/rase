@@ -66,12 +66,20 @@ function readSql(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), "utf8");
 }
 
-function splitSqlStatements(sql) {
-  if (sql.includes("$$")) return [sql];
+function stripSqlComments(sql) {
   return sql
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("--"))
+    .join("\n");
+}
+
+function splitSqlStatements(sql) {
+  const cleaned = stripSqlComments(sql);
+  if (cleaned.includes("$$")) return [cleaned];
+  return cleaned
     .split(/;\s*\n/)
     .map((s) => s.trim())
-    .filter((s) => s.length > 0 && !s.startsWith("--") && !s.startsWith("\\"));
+    .filter((s) => s.length > 0 && !s.startsWith("\\"));
 }
 
 async function execSqlFile(client, label, relativePath) {

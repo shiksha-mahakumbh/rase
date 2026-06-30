@@ -26,10 +26,14 @@ function splitSqlStatements(sql) {
   if (sql.includes("$$")) {
     return [sql];
   }
-  return sql
+  const cleaned = sql
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("--"))
+    .join("\n");
+  return cleaned
     .split(/;\s*\n/)
     .map((s) => s.trim())
-    .filter((s) => s.length > 0 && !s.startsWith("--") && !s.startsWith("\\"));
+    .filter((s) => s.length > 0 && !s.startsWith("\\"));
 }
 
 async function execSqlFile(label, relativePath) {
