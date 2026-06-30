@@ -61,9 +61,9 @@ export const CMS_NAV: AdminNavItem[] = [
     group: "content",
   },
   {
-    label: "Media Library",
+    label: "Asset Library",
     href: "/admin/cms/media",
-    description: "Images, PDFs, assets",
+    description: "Upload images, PDFs & brochures (folders)",
     group: "content",
   },
   {
@@ -93,7 +93,7 @@ export const CMS_NAV: AdminNavItem[] = [
   {
     label: "Media Center",
     href: "/admin/cms/media-center",
-    description: "Press, news & media",
+    description: "Press releases & news entries (not file uploads)",
     group: "organizational",
   },
   {

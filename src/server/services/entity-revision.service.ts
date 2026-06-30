@@ -7,7 +7,8 @@ export type RevisionEntityType =
   | "speaker"
   | "partner"
   | "event"
-  | "media_entry";
+  | "media_entry"
+  | "notice";
 
 async function nextVersion(entityType: string, entityId: string) {
   const last = await prisma.entityRevision.findFirst({

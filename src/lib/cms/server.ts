@@ -110,7 +110,10 @@ export async function loadCmsHomepage(locale: ContentLocale = "en"): Promise<Cms
   return unstable_cache(
     async () => {
       try {
-        const result = await getPublicHomepage(locale);
+        let result = await getPublicHomepage(locale);
+        if (!result && locale !== "en") {
+          result = await getPublicHomepage("en");
+        }
         if (!result) return null;
         return {
           page: {

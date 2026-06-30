@@ -15,6 +15,7 @@ import { buildHeroContent } from "@/lib/home/build-hero-content";
 import { buildHomeSectionsContent } from "@/lib/home/build-home-sections";
 import HeroLcpPreload from "@/components/home/HeroLcpPreload";
 import { resolveTickerItems } from "@/data/default-announcements";
+import { safeJsonLdScriptContent } from "@/lib/seo/schema-json-ld";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 import hiMessages from "@/i18n/messages/hi.json";
 
@@ -38,9 +39,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function HiHomePartnersJsonLdDeferred() {
   const [cmsData, featuredSpeakers, cmsPartners] = await Promise.all([
-    loadCmsPageData("en"),
-    loadCmsSpeakers("en", true),
-    loadCmsPartners("en"),
+    loadCmsPageData("hi"),
+    loadCmsSpeakers("hi", true),
+    loadCmsPartners("hi"),
   ]);
   const affiliationShowcase = buildAffiliationShowcase({
     cmsPartners,
@@ -50,9 +51,9 @@ async function HiHomePartnersJsonLdDeferred() {
   return <PartnersShowcaseJsonLd grouped={affiliationShowcase} />;
 }
 
-/** Hindi homepage — same cached en CMS shell as `/` with hi metadata and layout. */
+/** Hindi homepage — uses hi CMS when published; server falls back to English content. */
 export default async function HiHomePage() {
-  const cmsData = await loadCmsHomeShell("en");
+  const cmsData = await loadCmsHomeShell("hi");
   const faqs = extractFaqsFromCmsData(cmsData);
   const heroContent = buildHeroContent(cmsData.homepage, "hi");
   const homeSections = buildHomeSectionsContent(cmsData.homepage);
@@ -68,21 +69,19 @@ export default async function HiHomePage() {
         homeSections={homeSections}
         tickerItems={tickerItems}
         navMenus={navMenus}
-        locale="en"
+        locale="hi"
       />
       <HomeJsonLd faqs={faqs} />
       <HomeEcosystemJsonLd />
       <Suspense fallback={null}>
         <HiHomePartnersJsonLdDeferred />
       </Suspense>
-      {cmsData.homepage?.seo?.schemaJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(cmsData.homepage.seo.schemaJsonLd),
-          }}
-        />
-      )}
+      {(() => {
+        const jsonLd = safeJsonLdScriptContent(cmsData.homepage?.seo?.schemaJsonLd);
+        return jsonLd ? (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+        ) : null;
+      })()}
     </>
   );
 }

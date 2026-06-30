@@ -8,6 +8,16 @@ import { slugify } from "@/server/lib/cms-utils";
 const MAX_BYTES = 10 * 1024 * 1024;
 const STORAGE_BUCKET = "media";
 
+export function buildMediaPublicUrl(storagePath: string): string | null {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!base) return null;
+  return `${base.replace(/\/$/, "")}/storage/v1/object/public/${STORAGE_BUCKET}/${storagePath}`;
+}
+
+function resolveAssetPublicUrl(asset: { storagePath: string; publicUrl: string | null }): string | null {
+  return buildMediaPublicUrl(asset.storagePath) ?? asset.publicUrl;
+}
+
 const MIME_MAP: Record<string, MediaAssetType> = {
   "image/jpeg": "image",
   "image/png": "image",
@@ -75,9 +85,7 @@ export async function uploadMediaAsset(input: {
 
   if (error) throw new ServiceError("Media upload failed", 500, "UPLOAD_FAILED");
 
-  const { data: signed } = await supabase.storage
-    .from(STORAGE_BUCKET)
-    .createSignedUrl(storagePath, 60 * 60 * 24 * 7);
+  const publicUrl = buildMediaPublicUrl(storagePath);
 
   const previous = await prisma.mediaAsset.findFirst({
     where: {
@@ -102,7 +110,7 @@ export async function uploadMediaAsset(input: {
       fileName: safeName,
       originalName: input.fileName,
       storagePath,
-      publicUrl: signed?.signedUrl ?? null,
+      publicUrl,
       mimeType: input.mimeType,
       assetType,
       sizeBytes: input.file.length,
@@ -129,7 +137,14 @@ export async function uploadMediaAsset(input: {
     payload: { fileName: input.fileName, assetType },
   });
 
-  return asset;
+  return withMediaFileUrl(asset);
+}
+
+export function withMediaFileUrl<T extends { storagePath: string; publicUrl: string | null }>(
+  asset: T
+): T & { fileUrl: string | null } {
+  const fileUrl = resolveAssetPublicUrl(asset);
+  return { ...asset, publicUrl: fileUrl, fileUrl };
 }
 
 export async function replaceMediaAsset(
@@ -215,7 +230,12 @@ export async function searchMediaAssets(options: {
     prisma.mediaAsset.count({ where }),
   ]);
 
-  return { items, total, limit, offset };
+  return {
+    items: items.map((asset) => withMediaFileUrl(asset)),
+    total,
+    limit,
+    offset,
+  };
 }
 
 export async function trackMediaUsage(assetId: string) {

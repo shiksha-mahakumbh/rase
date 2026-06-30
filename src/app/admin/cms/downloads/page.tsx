@@ -154,7 +154,7 @@ export default function DownloadsAdminPage() {
       {loading ? (
         <AdminLoading />
       ) : items.length === 0 ? (
-        <AdminEmpty message="No downloads yet." />
+        <AdminEmpty message="No downloads yet. Upload a file above to publish brochures and documents on /downloads." />
       ) : (
         <AdminCard className="overflow-x-auto p-0">
           <table className="min-w-full text-sm">

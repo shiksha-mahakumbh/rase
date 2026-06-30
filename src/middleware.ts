@@ -70,6 +70,24 @@ function withNoIndex(response: NextResponse, pathname: string): NextResponse {
   return withDocumentLang(response, pathname);
 }
 
+function isMaintenanceExempt(pathname: string): boolean {
+  if (pathname === "/maintenance" || pathname.startsWith("/maintenance/")) return true;
+  if (isOpsPath(pathname)) return true;
+  return false;
+}
+
+async function isMaintenanceMode(request: NextRequest): Promise<boolean> {
+  try {
+    const url = new URL("/api/v2/settings/maintenance", request.nextUrl.origin);
+    const res = await fetch(url, { next: { revalidate: 60 } });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { maintenanceMode?: boolean };
+    return Boolean(data.maintenanceMode);
+  } catch {
+    return false;
+  }
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -88,6 +106,13 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = caseAlias;
     return withDocumentLang(NextResponse.redirect(url, 308), pathname);
+  }
+
+  if (!isMaintenanceExempt(pathname) && (await isMaintenanceMode(request))) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/maintenance";
+    url.search = "";
+    return withDocumentLang(NextResponse.redirect(url), pathname);
   }
 
   if (isOpsPath(pathname)) {

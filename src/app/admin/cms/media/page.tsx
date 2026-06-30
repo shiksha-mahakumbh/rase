@@ -196,7 +196,7 @@ export default function MediaLibraryPage() {
           {loading ? (
             <AdminLoading />
           ) : assets.length === 0 ? (
-            <AdminEmpty message="No assets in this folder." />
+            <AdminEmpty message="No assets yet. Upload images or PDFs above — they appear on the public site once linked from pages, gallery, or downloads." />
           ) : (
             <>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">

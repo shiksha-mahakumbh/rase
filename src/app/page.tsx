@@ -16,6 +16,7 @@ import { buildHeroContent } from "@/lib/home/build-hero-content";
 import { buildHomeSectionsContent } from "@/lib/home/build-home-sections";
 import HeroLcpPreload from "@/components/home/HeroLcpPreload";
 import { resolveTickerItems } from "@/data/default-announcements";
+import { safeJsonLdScriptContent } from "@/lib/seo/schema-json-ld";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
 
 export const revalidate = 3600;
@@ -85,14 +86,12 @@ export default async function Page() {
       <Suspense fallback={null}>
         <HomePartnersJsonLdDeferred />
       </Suspense>
-      {cmsData.homepage?.seo?.schemaJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(cmsData.homepage.seo.schemaJsonLd),
-          }}
-        />
-      )}
+      {(() => {
+        const jsonLd = safeJsonLdScriptContent(cmsData.homepage?.seo?.schemaJsonLd);
+        return jsonLd ? (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+        ) : null;
+      })()}
     </>
   );
 }

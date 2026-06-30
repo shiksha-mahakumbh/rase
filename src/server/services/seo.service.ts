@@ -1,6 +1,8 @@
 import type { ContentLocale, Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { SITE_URL } from "@/config/site";
+import { validateSchemaJsonLd } from "@/lib/seo/schema-json-ld";
+import { ServiceError } from "@/server/lib/errors";
 
 const SITE_NAME = "Shiksha Mahakumbh Abhiyan";
 const ORG_NAME = "Department of Holistic Education (DHE)";
@@ -147,8 +149,22 @@ function defaultSchemaForEntity(
 export async function upsertSeoForEntity(input: SeoInput) {
   const locale = input.locale ?? "en";
   const canonical = input.canonicalUrl ?? `/${input.entityType}/${input.entityId}`;
+
+  let validatedSchema: Prisma.InputJsonValue | undefined;
+  if (input.schemaJsonLd !== undefined && input.schemaJsonLd !== null) {
+    try {
+      validatedSchema = validateSchemaJsonLd(input.schemaJsonLd) as Prisma.InputJsonValue;
+    } catch (e) {
+      throw new ServiceError(
+        e instanceof Error ? e.message : "Invalid schemaJsonLd",
+        400,
+        "INVALID_SCHEMA"
+      );
+    }
+  }
+
   const schema =
-    input.schemaJsonLd ??
+    validatedSchema ??
     defaultSchemaForEntity(input.entityType, {
       seoTitle: input.seoTitle,
       metaDescription: input.metaDescription,
@@ -198,7 +214,7 @@ export async function upsertSeoForEntity(input: SeoInput) {
       twitterTitle: input.twitterTitle,
       twitterDescription: input.twitterDescription,
       twitterImageUrl: input.twitterImageUrl,
-      schemaJsonLd: input.schemaJsonLd ? (input.schemaJsonLd as Prisma.InputJsonValue) : undefined,
+      schemaJsonLd: validatedSchema,
       hreflangAlternates: input.hreflangAlternates,
       sitemapInclude: input.sitemapInclude,
       sitemapPriority: input.sitemapPriority,

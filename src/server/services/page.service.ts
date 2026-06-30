@@ -4,6 +4,7 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { upsertSeoForEntity } from "@/server/services/seo.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify, isPublishedStatus } from "@/server/lib/cms-utils";
+import { sanitizeCmsHtmlField } from "@/server/lib/cms-sanitize";
 
 export type CreatePageInput = {
   title: string;
@@ -75,8 +76,8 @@ export async function createPage(input: CreatePageInput) {
       slug,
       pageType: input.pageType ?? "static",
       locale,
-      excerpt: input.excerpt ?? null,
-      content: input.content ?? null,
+      excerpt: sanitizeCmsHtmlField(input.excerpt),
+      content: sanitizeCmsHtmlField(input.content),
       status: input.status ?? "draft",
       publishAt: input.publishAt ?? null,
       createdById: input.createdById ?? null,
@@ -123,9 +124,17 @@ export async function updatePage(
   const { seo, ...pageData } = data;
   await saveRevision(id, userId);
 
+  const sanitized: Prisma.PageUpdateInput = { ...pageData };
+  if (typeof pageData.content === "string") {
+    sanitized.content = sanitizeCmsHtmlField(pageData.content);
+  }
+  if (typeof pageData.excerpt === "string") {
+    sanitized.excerpt = sanitizeCmsHtmlField(pageData.excerpt);
+  }
+
   const page = await prisma.page.update({
     where: { id },
-    data: { ...pageData, updatedById: userId ?? undefined },
+    data: { ...sanitized, updatedById: userId ?? undefined },
     include: { sections: { orderBy: { sortOrder: "asc" } } },
   });
 

@@ -4,6 +4,8 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { upsertSeoForEntity, buildNewsArticleSchema } from "@/server/services/seo.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify, isNoticeVisible } from "@/server/lib/cms-utils";
+import { sanitizeNoticeDescription } from "@/server/lib/cms-sanitize";
+import { saveEntityRevision } from "@/server/services/entity-revision.service";
 
 export type CreateNoticeInput = {
   title: string;
@@ -87,7 +89,7 @@ export async function createNotice(input: CreateNoticeInput) {
       title: input.title,
       slug,
       categoryId: input.categoryId ?? null,
-      description: input.description,
+      description: sanitizeNoticeDescription(input.description),
       priority: input.priority ?? 0,
       status: input.status ?? "draft",
       isPinned: input.isPinned ?? false,
@@ -147,9 +149,27 @@ export async function updateNotice(
 ) {
   const { seo, attachments, ...noticeData } = data;
 
+  const existing = await prisma.notice.findFirst({
+    where: { id, deletedAt: null },
+    include: { category: true, attachments: { orderBy: { sortOrder: "asc" } } },
+  });
+  if (!existing) throw new ServiceError("Notice not found", 404, "NOT_FOUND");
+
+  await saveEntityRevision({
+    entityType: "notice",
+    entityId: id,
+    snapshot: existing as unknown as Prisma.InputJsonValue,
+    createdById: userId ?? null,
+  });
+
+  const sanitized: Prisma.NoticeUpdateInput = { ...noticeData };
+  if (typeof noticeData.description === "string") {
+    sanitized.description = sanitizeNoticeDescription(noticeData.description);
+  }
+
   const notice = await prisma.notice.update({
     where: { id },
-    data: { ...noticeData, updatedById: userId ?? undefined },
+    data: { ...sanitized, updatedById: userId ?? undefined },
     include: { category: true, attachments: true },
   });
 
