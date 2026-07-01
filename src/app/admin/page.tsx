@@ -1,10 +1,10 @@
-import AdminShell from "@/components/admin/cms/AdminShell";
+import AdminRegistrationsShell from "@/components/admin/cms/AdminRegistrationsShell";
 import RegistrationDashboard from "@/components/admin/RegistrationDashboard";
 
 export default function AdminPage() {
   return (
-    <AdminShell>
+    <AdminRegistrationsShell>
       <RegistrationDashboard />
-    </AdminShell>
+    </AdminRegistrationsShell>
   );
 }

@@ -92,6 +92,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     await fetch("/api/admin/session", { method: "DELETE", credentials: "include" });
     setUser(null);
     setRole(null);
+    window.location.assign("/admin");
   };
 
   return (

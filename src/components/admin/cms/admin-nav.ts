@@ -182,12 +182,14 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/accommodation-lifecycle",
     description: "Room allocation & check-in",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Research Submissions",
     href: "/admin/cms/research",
     description: "Abstract review & acceptance",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Communications",
@@ -229,24 +231,28 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/volunteers",
     description: "Assignments, shifts & rosters",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Sessions",
     href: "/admin/cms/sessions",
     description: "Conclaves, workshops & attendance",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Speaker Operations",
     href: "/admin/cms/speaker-operations",
     description: "Travel, honorarium & schedules",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Alumni",
     href: "/admin/cms/alumni",
     description: "Post-event alumni database",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Document Center",
@@ -260,12 +266,14 @@ export const CMS_NAV: AdminNavItem[] = [
     href: "/admin/cms/whatsapp-logs",
     description: "Delivery status tracking",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Payment Monitoring",
     href: "/admin/cms/payment-monitoring",
     description: "Revenue & payment health dashboard",
     group: "operations",
+    access: "manage",
   },
   {
     label: "Payments",
@@ -339,3 +347,53 @@ export function filterCmsNavForRole(role: AdminRole | null): AdminNavItem[] {
 export function getManageOnlyNavHrefs(): string[] {
   return CMS_NAV.filter((item) => item.access === "manage").map((item) => item.href);
 }
+
+const CMS_NAV_HREFS = CMS_NAV.map((item) => item.href);
+
+/** Longest-prefix active match — avoids /media highlighting on /media-center. */
+export function isNavItemActive(pathname: string, item: AdminNavItem): boolean {
+  if (item.href === "/admin") {
+    return pathname === "/admin" || pathname.startsWith("/admin/registrations");
+  }
+  if (item.href === "/admin/cms") {
+    return pathname === "/admin/cms";
+  }
+  if (pathname === item.href) return true;
+  if (!pathname.startsWith(`${item.href}/`)) return false;
+
+  for (const other of CMS_NAV_HREFS) {
+    if (other === item.href) continue;
+    if (other.startsWith(`${item.href}/`) && pathname.startsWith(other)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function getActiveNavItem(pathname: string): AdminNavItem | null {
+  let best: AdminNavItem | null = null;
+  for (const item of CMS_NAV) {
+    if (!isNavItemActive(pathname, item)) continue;
+    if (!best || item.href.length > best.href.length) best = item;
+  }
+  return best;
+}
+
+export function getNavGroupForPath(pathname: string): AdminNavItem["group"] | null {
+  return getActiveNavItem(pathname)?.group ?? null;
+}
+
+export function isManageOnlyPath(pathname: string): boolean {
+  return getManageOnlyNavHrefs().some(
+    (href) => pathname === href || pathname.startsWith(`${href}/`)
+  );
+}
+
+export const REGISTRATION_NAV = [
+  { href: "/admin", label: "Registration dashboard" },
+  { href: "/admin/cms/receipts", label: "Receipts & QR" },
+  { href: "/admin/cms/payments", label: "Payments" },
+  { href: "/admin/cms/checkin", label: "Event check-in" },
+  { href: "/admin/cms/attendees", label: "Attendees" },
+  { href: "/admin/cms", label: "Full CMS panel →" },
+] as const;
