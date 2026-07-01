@@ -1,4 +1,25 @@
 {
   "npm.packageManager": "npm",
-  "npm.autoDetect": "on"
+  "npm.autoDetect": "on",
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/.vercel/**": true,
+    "**/public/**": true,
+    "**/exports/**": true,
+    "**/reports/**": true,
+    "**/coverage/**": true,
+    "**/scripts/pdf-extract-tmp/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/public": true,
+    "**/exports": true,
+    "**/reports": true,
+    "**/package-lock.json": true
+  },
+  "files.exclude": {
+    "**/.next": true
+  }
 }
