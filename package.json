@@ -18,6 +18,12 @@
     "start": "node scripts/run-next.js start",
     "lint": "next lint",
     "smoke:prod": "node scripts/production-smoke-test.mjs",
+    "test:smoke": "node scripts/production-smoke-test.mjs",
+    "test:smoke:local": "node scripts/production-smoke-test.mjs http://127.0.0.1:3000",
+    "test:unit": "node scripts/run-unit-tests.mjs",
+    "test:e2e": "playwright test",
+    "test:integration": "node scripts/test-integration-contracts.mjs",
+    "test:load": "node scripts/test-load-baseline.mjs",
     "backup:drill": "node scripts/backup-restore-drill.mjs",
     "validate:go-live": "node scripts/validate-go-live.mjs",
     "analyze:bundle": "node scripts/analyze-bundle.mjs",
@@ -66,7 +72,7 @@
     "db:seed": "node scripts/supabase/seed-rbac.mjs",
     "db:deploy-supabase": "node scripts/deploy-supabase-production.mjs",
     "db:deploy-supabase-pg": "node scripts/deploy-supabase-pg.mjs",
-    "test:security": "node scripts/staging-security-check.mjs && node scripts/firebase-removal-audit.mjs && node scripts/test-registration-lookup-security.mjs && node scripts/test-registration-types.mjs && node scripts/test-v2-registration-security.mjs && node scripts/test-admin-registration-detail.mjs && node scripts/test-admin-cms.mjs && node scripts/test-admin-checkin.mjs && node scripts/test-admin-v2-api.mjs && node scripts/test-admin-gate.mjs && node scripts/test-admin-shell.mjs && node scripts/test-admin-rbac.mjs && node scripts/test-admin-authentication.mjs && node scripts/test-admin-sessions.mjs && node scripts/test-admin-tokens.mjs && node scripts/test-security-phase1.mjs && node scripts/test-security-phase2.mjs && node scripts/test-security-phase3.mjs && node scripts/test-security-phase4.mjs && node scripts/test-security-phase5.mjs && node scripts/test-security-phase6.mjs && node scripts/test-security-phase7.mjs && node scripts/test-security-phase8.mjs && node scripts/test-security-phase9.mjs && node scripts/test-security-phase10.mjs",
+    "test:security": "node scripts/staging-security-check.mjs && node scripts/firebase-removal-audit.mjs && node scripts/test-registration-lookup-security.mjs && node scripts/test-registration-types.mjs && node scripts/test-v2-registration-security.mjs && node scripts/test-admin-registration-detail.mjs && node scripts/test-admin-cms.mjs && node scripts/test-admin-checkin.mjs && node scripts/test-admin-v2-api.mjs && node scripts/test-admin-gate.mjs && node scripts/test-admin-shell.mjs && node scripts/test-admin-rbac.mjs && node scripts/test-admin-authentication.mjs && node scripts/test-admin-sessions.mjs && node scripts/test-admin-tokens.mjs && node scripts/test-security-phase1.mjs && node scripts/test-security-phase2.mjs && node scripts/test-security-phase3.mjs && node scripts/test-security-phase4.mjs && node scripts/test-security-phase5.mjs && node scripts/test-security-phase6.mjs && node scripts/test-security-phase7.mjs && node scripts/test-security-phase8.mjs && node scripts/test-security-phase9.mjs && node scripts/test-security-phase10.mjs && node scripts/test-security-phase11.mjs",
     "test:visitor-analytics": "node scripts/test-visitor-analytics-race.mjs",
     "test": "npm run test:security && npm run test:visitor-analytics",
     "seed:cms": "node scripts/seed-cms-content.mjs",
@@ -129,6 +135,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@types/node": "^20.17.9",
     "@types/nodemailer": "^8.0.0",
     "@types/qrcode": "^1.5.5",
@@ -147,6 +154,7 @@
     "prisma": "^6.19.3",
     "sharp": "^0.35.2",
     "tailwindcss": "^3.4.13",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }

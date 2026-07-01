@@ -1,4 +1,4 @@
-﻿# Shiksha Mahakumbh — rase.co.in
+# Shiksha Mahakumbh — rase.co.in
 
 Production web platform for **Shiksha Mahakumbh 6.0** (national education summit). Built with Next.js App Router, Supabase Postgres (Prisma), and Vercel.
 
@@ -43,6 +43,11 @@ Verify: `npm run verify:env`
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript |
 | `npm run test:security` | Security + audit phase checks |
+| `npm run test:unit` | Node unit tests (`tests/unit`) |
+| `npm run test:e2e` | Playwright smoke + accessibility specs |
+| `npm run test:smoke` | HTTP smoke probes (prod URL or pass base URL) |
+| `npm run test:integration` | Integration script contracts (+ optional live run) |
+| `npm run test:load` | Concurrent health load baseline |
 | `npm run db:migrate:deploy` | Apply Prisma migrations (loads `.env`) |
 | `npm run db:validate` | Validate Prisma schema |
 
@@ -56,6 +61,8 @@ src/
   server/        # Services, API handler, Prisma client
 prisma/          # Schema and migrations
 scripts/         # Audits, seeds, CI helpers
+tests/unit/      # Node native unit tests
+e2e/             # Playwright smoke and a11y specs
 docs/            # Platform, deployment, conventions
 public/          # Static assets, ads.txt, manifest
 ```
@@ -66,7 +73,7 @@ See [docs/CODE_CONVENTIONS.md](docs/CODE_CONVENTIONS.md) for naming and API rule
 
 CI (`.github/workflows/ci.yml`) runs lint, typecheck, security tests, performance audit, and build on every push to `main`.
 
-Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase10.mjs` in the `test:security` chain.
+Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase11.mjs` in the `test:security` chain.
 
 ## Migrations
 
