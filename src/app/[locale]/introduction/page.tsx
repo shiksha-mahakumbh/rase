@@ -1,7 +1,7 @@
 import IntroductionContent from "@/app/introduction/IntroductionContent";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
-import { openGraphLocale } from "@/lib/cookie-consent";
+import { openGraphLocale } from "@/lib/seo/locale";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({

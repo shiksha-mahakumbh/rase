@@ -1,7 +1,7 @@
 import ContactPageView from "@/app/contact-us/ContactPageView";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
-import { openGraphLocale } from "@/lib/cookie-consent";
+import { openGraphLocale } from "@/lib/seo/locale";
 import {
   CONTACT_OG_IMAGE,
   CONTACT_PATH,

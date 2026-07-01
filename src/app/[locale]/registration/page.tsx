@@ -2,7 +2,7 @@ import RegistrationPageView from "@/app/registration/RegistrationPageView";
 import RegistrationJsonLd from "@/components/seo/RegistrationJsonLd";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
-import { openGraphLocale } from "@/lib/cookie-consent";
+import { openGraphLocale } from "@/lib/seo/locale";
 import {
   REGISTRATION_OG_IMAGE,
   REGISTRATION_PATH,

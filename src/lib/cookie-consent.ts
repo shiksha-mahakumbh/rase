@@ -26,7 +26,3 @@ export function setAnalyticsConsent(accepted: boolean): void {
   );
   window.dispatchEvent(new Event(accepted ? COOKIE_ACCEPTED_EVENT : COOKIE_WITHDRAWN_EVENT));
 }
-
-export function openGraphLocale(appLocale: string): "en_IN" | "hi_IN" {
-  return appLocale === "hi" ? "hi_IN" : "en_IN";
-}

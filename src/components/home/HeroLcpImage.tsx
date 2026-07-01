@@ -2,8 +2,7 @@ const BRAND_HERO_PNG = "/branding/shiksha-mahakumbh-brand-hero.png";
 export const BRAND_HERO_WEBP_640 = "/branding/shiksha-mahakumbh-brand-hero-640.webp";
 export const BRAND_HERO_WEBP_768 = "/branding/shiksha-mahakumbh-brand-hero-768.webp";
 
-/** @deprecated use HERO_LCP_PRELOAD_640 */
-export const HERO_LCP_PRELOAD = BRAND_HERO_WEBP_640;
+/** Native LCP preload URLs — use _640 / _768 exports directly. */
 export const HERO_LCP_PRELOAD_640 = BRAND_HERO_WEBP_640;
 export const HERO_LCP_PRELOAD_768 = BRAND_HERO_WEBP_768;
 
