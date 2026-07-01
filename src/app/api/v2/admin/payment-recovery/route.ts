@@ -4,7 +4,7 @@ import {
   detectOrphanPayments,
   runRecoveryAction,
 } from "@/server/services/admin/reconciliation.service";
-import { ADMIN_MANAGE_ROLES, getAdminActorUid } from "@/server/lib/admin-rbac";
+import { getAdminActorUid } from "@/server/lib/admin-rbac";
 import { ServiceError } from "@/server/lib/errors";
 
 export const GET = createApiHandler(
@@ -35,5 +35,5 @@ export const POST = createApiHandler(
     if (!action) throw new ServiceError("action required", 400, "INVALID_ACTION");
     return runRecoveryAction(action, body as Record<string, unknown>, getAdminActorUid(request) ?? undefined);
   },
-  { requireAdmin: true, adminRoles: ADMIN_MANAGE_ROLES, rateLimitKey: "admin-payment-recovery-action", limit: 30 }
+  { requireAdmin: true, adminResource: "payments", mutationPermission: "payments.read", rateLimitKey: "admin-payment-recovery-action", limit: 30 }
 );
