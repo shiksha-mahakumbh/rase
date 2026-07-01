@@ -89,6 +89,7 @@ const groups = {
     { key: "NEXT_PUBLIC_GTM_ID", required: false },
     { key: "NEXT_PUBLIC_CLARITY_ID", required: false },
     { key: "NEXT_PUBLIC_META_PIXEL_ID", required: false },
+    { key: "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION", required: false },
   ],
   ads: [
     { key: "NEXT_PUBLIC_ADSENSE_ENABLED", required: false },

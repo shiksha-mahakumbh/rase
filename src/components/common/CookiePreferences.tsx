@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
+  COOKIE_ACCEPTED_EVENT,
   COOKIE_CONSENT_ACCEPTED,
   COOKIE_CONSENT_ESSENTIAL,
   COOKIE_CONSENT_KEY,
+  COOKIE_WITHDRAWN_EVENT,
   setAnalyticsConsent,
 } from "@/lib/cookie-consent";
 
@@ -20,7 +22,13 @@ export default function CookiePreferences() {
     };
     sync();
     window.addEventListener("storage", sync);
-    return () => window.removeEventListener("storage", sync);
+    window.addEventListener(COOKIE_ACCEPTED_EVENT, sync);
+    window.addEventListener(COOKIE_WITHDRAWN_EVENT, sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener(COOKIE_ACCEPTED_EVENT, sync);
+      window.removeEventListener(COOKIE_WITHDRAWN_EVENT, sync);
+    };
   }, []);
 
   const save = () => {
@@ -33,7 +41,7 @@ export default function CookiePreferences() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 left-4 z-[99] rounded-full border border-slate-200 bg-white/95 px-3 py-2 text-xs font-semibold text-brand-navy shadow-md backdrop-blur hover:bg-white"
+        className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 z-[99] rounded-full border border-slate-200 bg-white/95 px-3 py-2 text-xs font-semibold text-brand-navy shadow-md backdrop-blur hover:bg-white"
       >
         Cookie preferences
       </button>
@@ -63,7 +71,8 @@ export default function CookiePreferences() {
               <span>
                 <span className="block text-sm font-semibold text-brand-navy">Analytics</span>
                 <span className="text-xs text-slate-600">
-                  Google Analytics, Clarity, Meta Pixel, and first-party visitor stats.
+                  Google Analytics, Clarity, Meta Pixel, AdSense (when enabled), and
+                  first-party visitor stats.
                 </span>
               </span>
             </label>

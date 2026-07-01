@@ -3,13 +3,11 @@
 import { useEffect } from "react";
 import { captureTrafficSource } from "@/lib/analytics/events";
 import { captureAttribution } from "@/lib/analytics/attribution";
-
-const CONSENT_KEY = "smk_cookie_consent";
-
-function hasAnalyticsConsent(): boolean {
-  if (typeof window === "undefined") return false;
-  return localStorage.getItem(CONSENT_KEY) === "accepted";
-}
+import {
+  COOKIE_ACCEPTED_EVENT,
+  COOKIE_WITHDRAWN_EVENT,
+  hasAnalyticsConsent,
+} from "@/lib/cookie-consent";
 
 export default function TrafficSourceCapture() {
   useEffect(() => {
@@ -20,8 +18,12 @@ export default function TrafficSourceCapture() {
     };
 
     run();
-    window.addEventListener("smk-cookie-accepted", run);
-    return () => window.removeEventListener("smk-cookie-accepted", run);
+    window.addEventListener(COOKIE_ACCEPTED_EVENT, run);
+    window.addEventListener(COOKIE_WITHDRAWN_EVENT, run);
+    return () => {
+      window.removeEventListener(COOKIE_ACCEPTED_EVENT, run);
+      window.removeEventListener(COOKIE_WITHDRAWN_EVENT, run);
+    };
   }, []);
   return null;
 }

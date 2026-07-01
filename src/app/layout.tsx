@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientChrome from "./ClientChrome";
 import DocumentLangSync from "@/components/common/DocumentLangSync";
 import SiteJsonLd from "@/components/seo/SiteJsonLd";
+import { ADSENSE_PUBLISHER_ID } from "@/lib/growth/adsense";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,8 +43,15 @@ export const metadata: Metadata = {
     title: "Shiksha Mahakumbh",
   },
   other: {
-    "google-adsense-account": "ca-pub-4330032354977759",
+    "google-adsense-account": ADSENSE_PUBLISHER_ID,
   },
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? {
+        verification: {
+          google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        },
+      }
+    : {}),
 };
 
 export const viewport: Viewport = {

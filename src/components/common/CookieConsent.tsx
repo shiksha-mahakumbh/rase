@@ -74,12 +74,13 @@ export default function CookieConsent() {
     <div
       role="dialog"
       aria-label="Cookie consent"
-      className="fixed bottom-0 left-0 right-0 z-[100] border-t border-gray-200 bg-white/95 p-4 shadow-2xl backdrop-blur-md md:p-6"
+      className="fixed bottom-0 left-0 right-0 z-[100] border-t border-gray-200 bg-white/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl backdrop-blur-md md:p-6"
     >
       <div className="mx-auto flex max-w-5xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p className="text-sm text-gray-700">
-          We use cookies for essential functionality and, with your consent, analytics
-          to improve the site. See our{" "}
+          We use essential cookies for site functionality. With your consent, we also use
+          analytics and advertising cookies (Google Analytics, AdSense when enabled) to
+          improve the site. See our{" "}
           <Link href="/privacy-policy" className="font-semibold text-brand-navy underline">
             Privacy Policy
           </Link>
