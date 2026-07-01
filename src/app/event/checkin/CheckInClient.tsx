@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAdmin, canPerformCheckIn } from "@/lib/adminAuth";
@@ -193,9 +194,9 @@ export default function CheckInClient({ standalone = false }: { standalone?: boo
       {!standalone && (
         <p className="mb-4 text-sm text-slate-600">
           Scan QR or enter ID at the gate.{" "}
-          <a href="/event/checkin" className="font-semibold text-brand-navy underline">
+          <Link href="/event/checkin" className="font-semibold text-brand-navy underline">
             Open mobile gate view →
-          </a>
+          </Link>
         </p>
       )}
 
