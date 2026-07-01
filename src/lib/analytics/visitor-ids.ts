@@ -1,4 +1,10 @@
-export const LEGACY_VISITOR_OFFSET = 94_567;
+export {
+  LEGACY_VISITOR_OFFSET,
+  ANALYTICS_TIMEZONE,
+  computeVisitorDisplayTotal,
+  DEFAULT_FIRESTORE_VISITOR_BASELINE,
+  resolveFirestoreVisitorBaseline,
+} from "@/lib/analytics/visitor-stats-constants";
 
 const VISITOR_ID_KEY = "smk_visitor_id";
 const SESSION_ID_KEY = "smk_session_id";

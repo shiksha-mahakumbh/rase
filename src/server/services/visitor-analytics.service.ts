@@ -4,12 +4,16 @@ import { isPrismaUniqueViolation } from "@/lib/prisma/errors";
 import { writeAuditLog } from "@/server/services/audit.service";
 import {
   ACTIVE_WINDOW_MS,
+  ANALYTICS_TIMEZONE,
   LEGACY_VISITOR_OFFSET,
+  analyticsRollupDate,
   categorizePath,
+  computeVisitorDisplayTotal,
   extractReferrerDomain,
   hashIp,
   isBotUserAgent,
   parseUserAgent,
+  resolveFirestoreVisitorBaseline,
   resolveTrafficSource,
   startOfDay,
   startOfMonth,
@@ -26,6 +30,10 @@ export type PublicVisitorStats = {
   displayTotal: number;
   activeUsers: number;
   uniqueToday: number;
+  liveSessions: number;
+  legacyOffset: number;
+  firestoreBaseline: number;
+  timezone: string;
   source: "supabase" | "fallback";
 };
 
@@ -56,6 +64,16 @@ function invalidateStatsCache() {
   statsCache = null;
 }
 
+async function countDistinctVisitors(
+  where: Prisma.VisitorSessionWhereInput
+): Promise<number> {
+  const groups = await prisma.visitorSession.groupBy({
+    by: ["visitorId"],
+    where,
+  });
+  return groups.length;
+}
+
 /** Handles concurrent first-hit races on the same sessionId (P2002). */
 async function upsertVisitorSession(
   sessionId: string,
@@ -84,7 +102,7 @@ async function upsertDailyRollup(input: {
   returningDelta: number;
   botFiltered?: number;
 }) {
-  const today = startOfDay();
+  const today = analyticsRollupDate();
 
   await prisma.visitorAnalytics.upsert({
     where: { date: today },
@@ -271,26 +289,31 @@ export async function getPublicVisitorStats(useCache = true): Promise<PublicVisi
 
   try {
     const today = startOfDay();
+    const rollupDate = analyticsRollupDate();
     const activeSince = new Date(Date.now() - ACTIVE_WINDOW_MS);
+    const nonBot = { isBot: false } as const;
 
-    const [uniqueToday, totalUnique, activeUsers] = await Promise.all([
-      prisma.visitorSession.count({
-        where: { isBot: false, startedAt: { gte: today } },
-      }),
-      prisma.visitorSession.count({ where: { isBot: false } }),
-      prisma.visitorSession.count({
-        where: { isBot: false, lastActiveAt: { gte: activeSince } },
-      }),
+    const [uniqueToday, totalUnique, liveSessions, activeUsers] = await Promise.all([
+      countDistinctVisitors({ ...nonBot, startedAt: { gte: today } }),
+      countDistinctVisitors(nonBot),
+      prisma.visitorSession.count({ where: nonBot }),
+      countDistinctVisitors({ ...nonBot, lastActiveAt: { gte: activeSince } }),
     ]);
 
-    const rollup = await prisma.visitorAnalytics.findUnique({ where: { date: today } });
+    const rollup = await prisma.visitorAnalytics.findUnique({ where: { date: rollupDate } });
+    const daily = Math.max(rollup?.uniqueCount ?? 0, uniqueToday);
+    const firestoreBaseline = resolveFirestoreVisitorBaseline();
 
     const data: PublicVisitorStats = {
-      daily: Math.max(rollup?.uniqueCount ?? 0, uniqueToday),
+      daily,
       total: totalUnique,
-      displayTotal: totalUnique + LEGACY_VISITOR_OFFSET,
+      displayTotal: computeVisitorDisplayTotal(liveSessions),
       activeUsers,
       uniqueToday,
+      liveSessions,
+      legacyOffset: LEGACY_VISITOR_OFFSET,
+      firestoreBaseline,
+      timezone: ANALYTICS_TIMEZONE,
       source: "supabase",
     };
 
@@ -300,9 +323,13 @@ export async function getPublicVisitorStats(useCache = true): Promise<PublicVisi
     return {
       daily: 0,
       total: 0,
-      displayTotal: LEGACY_VISITOR_OFFSET,
+      displayTotal: computeVisitorDisplayTotal(0),
       activeUsers: 0,
       uniqueToday: 0,
+      liveSessions: 0,
+      legacyOffset: LEGACY_VISITOR_OFFSET,
+      firestoreBaseline: resolveFirestoreVisitorBaseline(),
+      timezone: ANALYTICS_TIMEZONE,
       source: "fallback",
     };
   }
@@ -477,7 +504,7 @@ export async function getDeviceBreakdown(since?: Date) {
 export async function getRegistrationConversionRate() {
   const today = startOfDay();
   const [visitorsToday, registrationsToday] = await Promise.all([
-    prisma.visitorSession.count({ where: { isBot: false, startedAt: { gte: today } } }),
+    countDistinctVisitors({ isBot: false, startedAt: { gte: today } }),
     prisma.registration.count({
       where: { deletedAt: null, createdAt: { gte: today } },
     }),

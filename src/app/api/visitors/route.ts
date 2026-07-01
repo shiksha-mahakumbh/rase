@@ -5,12 +5,12 @@ import {
   getPublicVisitorStats,
   recordVisitorHit,
 } from "@/server/services/visitor-analytics.service";
-import { LEGACY_VISITOR_OFFSET } from "@/server/lib/visitor-analytics-utils";
+import { computeVisitorDisplayTotal } from "@/server/lib/visitor-analytics-utils";
 
 const FALLBACK = {
   daily: 0,
   total: 0,
-  displayTotal: LEGACY_VISITOR_OFFSET,
+  displayTotal: computeVisitorDisplayTotal(0),
   activeUsers: 0,
   uniqueToday: 0,
   source: "fallback" as const,

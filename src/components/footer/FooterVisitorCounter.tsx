@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LEGACY_VISITOR_OFFSET } from "@/lib/analytics/visitor-ids";
+import { computeVisitorDisplayTotal } from "@/lib/analytics/visitor-ids";
 
 type VisitorStatsResponse = {
   success?: boolean;
@@ -16,7 +16,7 @@ type VisitorStatsResponse = {
 const FALLBACK: VisitorStatsResponse = {
   daily: 0,
   total: 0,
-  displayTotal: LEGACY_VISITOR_OFFSET,
+  displayTotal: computeVisitorDisplayTotal(0),
   activeUsers: 0,
 };
 
@@ -95,7 +95,7 @@ export default function FooterVisitorCounter() {
       <div className="flex items-center justify-around gap-2">
         <div className="text-center">
           <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">
-            Daily Visitors
+            Today (IST)
           </p>
           <p className="text-lg font-extrabold text-brand-saffron md:text-xl">
             {loading ? <CounterSkeleton /> : dailyVisitors}
@@ -104,11 +104,16 @@ export default function FooterVisitorCounter() {
         <div className="h-8 w-px bg-white/20" aria-hidden />
         <div className="text-center">
           <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">
-            Total Visitors
+            All-Time Visitors
           </p>
           <p className="text-lg font-extrabold text-brand-saffron md:text-xl">
             {loading ? <CounterSkeleton /> : displayTotal?.toLocaleString()}
           </p>
+          {!loading && displayTotal != null && (
+            <p className="mt-0.5 text-[9px] text-white/45">
+              includes historical visits through 2025
+            </p>
+          )}
         </div>
         <div className="h-8 w-px bg-white/20" aria-hidden />
         <div className="text-center">

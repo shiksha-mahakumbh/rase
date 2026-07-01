@@ -1,7 +1,13 @@
 import type { PageCategory } from "@prisma/client";
 import { createHash } from "crypto";
+import { ANALYTICS_TIMEZONE as TZ } from "@/lib/analytics/visitor-stats-constants";
 
-export const LEGACY_VISITOR_OFFSET = 94_567;
+export { LEGACY_VISITOR_OFFSET, ANALYTICS_TIMEZONE } from "@/lib/analytics/visitor-stats-constants";
+export {
+  computeVisitorDisplayTotal,
+  DEFAULT_FIRESTORE_VISITOR_BASELINE,
+  resolveFirestoreVisitorBaseline,
+} from "@/lib/analytics/visitor-stats-constants";
 export const ACTIVE_WINDOW_MS = 5 * 60 * 1000;
 
 const BOT_PATTERNS = [
@@ -137,20 +143,48 @@ export function resolveTrafficSource(input: {
   return { source: domain, medium: "referral" };
 }
 
-export function startOfDay(d = new Date()): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+export function startOfDay(d = new Date(), timeZone = TZ): Date {
+  const dateKey = formatDateKeyInZone(d, timeZone);
+  return new Date(`${dateKey}T00:00:00+05:30`);
 }
 
-export function startOfWeek(d = new Date()): Date {
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  return new Date(d.getFullYear(), d.getMonth(), diff);
+/** Calendar date key for visitor_analytics.date (@db.Date) aligned to IST. */
+export function analyticsRollupDate(d = new Date(), timeZone = TZ): Date {
+  const dateKey = formatDateKeyInZone(d, timeZone);
+  return new Date(`${dateKey}T00:00:00.000Z`);
 }
 
-export function startOfMonth(d = new Date()): Date {
-  return new Date(d.getFullYear(), d.getMonth(), 1);
+function formatDateKeyInZone(d: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
 }
 
-export function startOfYear(d = new Date()): Date {
-  return new Date(d.getFullYear(), 0, 1);
+function addDaysToDateKey(dateKey: string, delta: number): string {
+  const [y, m, day] = dateKey.split("-").map(Number);
+  const shifted = new Date(Date.UTC(y, m - 1, day + delta));
+  return shifted.toISOString().slice(0, 10);
+}
+
+export function startOfWeek(d = new Date(), timeZone = TZ): Date {
+  const dateKey = formatDateKeyInZone(d, timeZone);
+  const weekday = new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short" }).format(d);
+  const map: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const dow = map[weekday] ?? 0;
+  const mondayOffset = dow === 0 ? -6 : 1 - dow;
+  const mondayKey = addDaysToDateKey(dateKey, mondayOffset);
+  return new Date(`${mondayKey}T00:00:00+05:30`);
+}
+
+export function startOfMonth(d = new Date(), timeZone = TZ): Date {
+  const dateKey = formatDateKeyInZone(d, timeZone);
+  return new Date(`${dateKey.slice(0, 7)}-01T00:00:00+05:30`);
+}
+
+export function startOfYear(d = new Date(), timeZone = TZ): Date {
+  const dateKey = formatDateKeyInZone(d, timeZone);
+  return new Date(`${dateKey.slice(0, 4)}-01-01T00:00:00+05:30`);
 }

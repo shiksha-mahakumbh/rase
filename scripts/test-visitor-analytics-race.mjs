@@ -50,6 +50,27 @@ if (/visitorPageView\.create\s*\(/.test(trackVisitBlock)) {
   fail("source_page_view_create", "visitorPageView.create missing");
 }
 
+if (
+  /async function countDistinctVisitors/.test(serviceSource) &&
+  /by:\s*\[\s*"visitorId"\s*\]/.test(serviceSource)
+) {
+  pass("source_distinct_visitor_stats", "Public stats count distinct visitor_id");
+} else {
+  fail("source_distinct_visitor_stats", "getPublicVisitorStats should use countDistinctVisitors / groupBy visitorId");
+}
+
+if (/computeVisitorDisplayTotal/.test(serviceSource)) {
+  pass("source_display_total_formula", "Display total preserves legacy + Firestore baseline");
+} else {
+  fail("source_display_total_formula", "computeVisitorDisplayTotal missing from visitor analytics service");
+}
+
+if (/Asia\/Kolkata|ANALYTICS_TIMEZONE/.test(readFileSync("src/server/lib/visitor-analytics-utils.ts", "utf8"))) {
+  pass("source_ist_timezone", "Analytics day boundaries use Asia/Kolkata");
+} else {
+  fail("source_ist_timezone", "IST timezone not configured in visitor-analytics-utils");
+}
+
 // --- Route: POST delegates to recordVisitorHit ---
 if (/recordVisitorHit/.test(routeSource) && /POST/.test(routeSource)) {
   pass("route_delegates_to_service", "POST /api/visitors calls recordVisitorHit");

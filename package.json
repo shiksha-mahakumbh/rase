@@ -47,6 +47,7 @@
     "audit:production": "node scripts/production-registration-audit.mjs",
     "audit:database": "node scripts/audit-database-production.mjs",
     "audit:prisma": "node scripts/audit-prisma.mjs",
+    "audit:visitor-count": "node scripts/audit-visitor-count.mjs",
     "audit:cms": "node scripts/audit-cms.mjs",
     "audit:supabase": "node scripts/audit-supabase-remote.mjs",
     "audit:past-editions": "tsx scripts/audit-past-editions.ts",
