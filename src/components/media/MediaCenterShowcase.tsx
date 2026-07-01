@@ -78,6 +78,8 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
             key={t.id}
             type="button"
             role="tab"
+            id={`media-tab-${t.id}`}
+            aria-controls="media-tabpanel"
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
             className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition min-h-[44px] ${
@@ -91,6 +93,7 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
         ))}
       </div>
 
+      <div id="media-tabpanel" role="tabpanel" aria-labelledby={`media-tab-${tab}`}>
       {(tab === "all" || tab === "gallery") && (
         <section className="mt-8" aria-labelledby="media-quick-links">
           <h2 id="media-quick-links" className="sr-only">
@@ -227,6 +230,7 @@ export default function MediaCenterShowcase({ cmsItems = [] }: Props) {
           )}
         </section>
       )}
+      </div>
 
       <section
         className="mt-10 rounded-2xl border border-brand-navy/10 bg-gradient-to-br from-brand-navy/5 to-brand-surface-warm p-5 md:p-8"

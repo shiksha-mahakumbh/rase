@@ -64,7 +64,7 @@ export function AdminButton({
   return (
     <button
       type="button"
-      className={`inline-flex min-h-[36px] items-center justify-center rounded-lg font-semibold transition disabled:opacity-50 ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex min-h-[44px] items-center justify-center rounded-lg font-semibold transition disabled:opacity-50 ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
       {children}

@@ -18,7 +18,7 @@ export default function StickyRegisterBar() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-2xl backdrop-blur-md md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl backdrop-blur-md md:hidden"
       role="region"
       aria-label="Quick registration"
     >

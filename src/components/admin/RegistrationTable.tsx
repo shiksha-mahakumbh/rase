@@ -184,6 +184,7 @@ export default function RegistrationTable({
               <th className="px-4 py-3">
                 <input
                   type="checkbox"
+                  aria-label="Select all registrations on this page"
                   checked={
                     paginated.length > 0 &&
                     paginated.every((r) => selected.has(r.id))

@@ -7,7 +7,7 @@ export default function FloatingActionButton() {
   return (
     <Link
       href={ROUTES.registration}
-      className="fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand-saffron text-brand-navy shadow-xl transition hover:scale-105 hover:bg-brand-saffron-dark hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron md:bottom-8 md:right-8 md:h-16 md:w-16"
+      className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand-saffron text-brand-navy shadow-xl transition hover:scale-105 hover:bg-brand-saffron-dark hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-saffron md:bottom-8 md:right-8 md:h-16 md:w-16"
       aria-label="Register for Shiksha Mahakumbh 6.0"
     >
       <svg

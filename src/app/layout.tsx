@@ -32,9 +32,14 @@ export const metadata: Metadata = {
   },
   description:
     "Shiksha Mahakumbh 6.0 at NIT Hamirpur — India's premier multidisciplinary education summit aligned with NEP 2020.",
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: "/sLogo.png",
     apple: "/sLogo.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Shiksha Mahakumbh",
   },
   other: {
     "google-adsense-account": "ca-pub-4330032354977759",
@@ -44,6 +49,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#1e3a5f",
 };
 
 export default function RootLayout({

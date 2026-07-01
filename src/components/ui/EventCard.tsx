@@ -28,7 +28,7 @@ export default function EventCard({
         <div className="relative h-40 w-full bg-slate-100 md:h-48">
           <Image
             src={imageSrc}
-            alt=""
+            alt={`${title} event`}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 33vw"

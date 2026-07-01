@@ -58,6 +58,8 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
 
   useEffect(() => {
     if (!isOpen) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     document.addEventListener("keydown", handleEscape);
     document.body.style.overflow = "hidden";
 
@@ -86,6 +88,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
       document.removeEventListener("keydown", handleEscape);
       document.removeEventListener("keydown", handleTab);
       document.body.style.overflow = "";
+      previouslyFocused?.focus();
     };
   }, [isOpen, handleEscape]);
 

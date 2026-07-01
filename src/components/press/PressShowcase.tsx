@@ -78,6 +78,8 @@ export default function PressShowcase({ catalog }: Props) {
             key={tab.id}
             type="button"
             role="tab"
+            id={`press-tab-${tab.id}`}
+            aria-controls="press-tabpanel"
             aria-selected={filter === tab.id}
             onClick={() => setFilter(tab.id)}
             className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition min-h-[44px] ${
@@ -91,6 +93,7 @@ export default function PressShowcase({ catalog }: Props) {
         ))}
       </div>
 
+      <div id="press-tabpanel" role="tabpanel" aria-labelledby={`press-tab-${filter}`}>
       {featured && (filter === "all" || featured.locale === filter) && (
         <section className="mt-10" aria-labelledby="featured-press">
           <h2 id="featured-press" className="text-lg font-bold text-brand-navy md:text-xl">
@@ -133,6 +136,7 @@ export default function PressShowcase({ catalog }: Props) {
           </ul>
         )}
       </section>
+      </div>
     </div>
   );
 }

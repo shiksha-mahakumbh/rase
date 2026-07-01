@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -55,6 +55,8 @@ export default function NavBarMobileMenu({ menus }: Props) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [headerOffset, setHeaderOffset] = useState("4rem");
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => setIsOpen(false), []);
 
@@ -112,9 +114,39 @@ export default function NavBarMobileMenu({ menus }: Props) {
     close();
   }, [pathname, close]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      menuButtonRef.current?.focus();
+      return;
+    }
+
+    const drawer = drawerRef.current;
+    const focusable = drawer?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable?.[0];
+    const last = focusable?.[focusable.length - 1];
+    requestAnimationFrame(() => first?.focus());
+
+    const handleTab = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || !focusable?.length) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleTab);
+    return () => document.removeEventListener("keydown", handleTab);
+  }, [isOpen]);
+
   return (
     <>
       <button
+        ref={menuButtonRef}
         type="button"
         className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-saffron/30 bg-white text-brand-navy shadow-sm"
         onClick={() => setIsOpen((open) => !open)}
@@ -155,7 +187,9 @@ export default function NavBarMobileMenu({ menus }: Props) {
             aria-label="Close menu overlay"
           />
           <div
+            ref={drawerRef}
             id="mobile-nav-drawer"
+            tabIndex={-1}
             className="fixed right-0 z-50 flex w-[min(100%,320px)] flex-col overflow-y-auto border-l border-gray-200 bg-white/95 shadow-2xl backdrop-blur-xl lg:hidden"
             style={{
               top: headerOffset,
@@ -184,7 +218,7 @@ export default function NavBarMobileMenu({ menus }: Props) {
                     key={link.path}
                     href={link.path}
                     onClick={close}
-                    className="flex min-h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-2 text-xs font-semibold text-brand-navy"
+                    className="flex min-h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-2 text-xs font-semibold text-brand-navy"
                   >
                     {link.title}
                   </NavLink>

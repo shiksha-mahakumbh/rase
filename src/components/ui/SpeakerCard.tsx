@@ -11,7 +11,7 @@ export default function SpeakerCard({ name, role, imageSrc }: SpeakerCardProps) 
     <article className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm md:p-5">
       <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full bg-brand-navy/10 md:h-24 md:w-24">
         {imageSrc ? (
-          <Image src={imageSrc} alt="" fill className="object-cover object-top" sizes="96px" />
+          <Image src={imageSrc} alt={`Portrait of ${name}`} fill className="object-cover object-top" sizes="96px" />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-brand-navy/40">
             {name.charAt(0)}

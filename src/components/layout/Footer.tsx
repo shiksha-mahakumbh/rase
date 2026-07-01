@@ -345,7 +345,7 @@ const Footer: React.FC = () => {
               ))}
             </nav>
             <p className="text-center text-sm text-white/80">{copyrightLine}</p>
-            <p className="mx-auto mt-3 max-w-4xl text-center text-xs leading-relaxed text-white/50">
+            <p className="mx-auto mt-3 max-w-4xl text-center text-xs leading-relaxed text-white/70">
               The Microsoft CMT service was used for managing the peer-reviewing process for this
               conference. This service was provided for free by Microsoft, and they bore all related
               expenses, including costs for Azure cloud services as well as software development and

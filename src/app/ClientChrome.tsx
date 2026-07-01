@@ -33,6 +33,10 @@ const ConsentGatedAdSense = dynamic(
   () => import("@/components/analytics/ConsentGatedAdSense"),
   { ssr: false }
 );
+const ServiceWorkerRegister = dynamic(
+  () => import("@/components/pwa/ServiceWorkerRegister"),
+  { ssr: false }
+);
 
 /** Global client chrome — does not wrap page children (server-first layout). */
 export default function ClientChrome() {
@@ -89,6 +93,7 @@ export default function ClientChrome() {
           <VisitorPageTracker />
           <AnalyticsLoader />
           <ConsentGatedAdSense />
+          <ServiceWorkerRegister />
           {process.env.NEXT_PUBLIC_BOTPRESS_ENABLED === "true" ? (
             <>
               <Script

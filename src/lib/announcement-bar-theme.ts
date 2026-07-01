@@ -23,7 +23,7 @@ export function welcomeModalSubtitleClass(colorTheme?: AnnouncementColorTheme): 
     case "navy":
     case "primary":
     default:
-      return "text-amber-200";
+      return "text-white/90";
   }
 }
 
