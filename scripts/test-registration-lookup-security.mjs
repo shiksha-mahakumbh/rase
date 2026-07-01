@@ -88,8 +88,14 @@ if (!keys.includes("email") && !keys.includes("contactNumber")) {
 const routeSrc = readFileSync("src/app/api/registration/[registrationId]/route.ts", "utf8");
 const lookupHandlerSrc = readFileSync("src/server/lib/registration-lookup-handler.ts", "utf8");
 const v2LookupSrc = readFileSync("src/app/api/v2/registration/lookup/route.ts", "utf8");
+const authEnforced =
+  routeSrc.includes("handlePublicRegistrationLookup") ||
+  routeSrc.includes("status: 401") ||
+  routeSrc.includes("AUTH_REQUIRED") ||
+  lookupHandlerSrc.includes("AUTH_REQUIRED");
+
 if (
-  (routeSrc.includes("status: 401") || routeSrc.includes("AUTH_REQUIRED")) &&
+  authEnforced &&
   (routeSrc.includes("Email or confirmation token required") ||
     lookupHandlerSrc.includes("Email or confirmation token required"))
 ) {
