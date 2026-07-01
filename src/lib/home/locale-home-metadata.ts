@@ -3,10 +3,11 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { loadCmsHomepage } from "@/lib/cms/server";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { cmsLocaleForRoute } from "@/lib/home/cms-locale";
 
 export async function buildLocaleHomeMetadata(locale: string): Promise<Metadata> {
+  setRequestLocale(locale);
   const cmsLocale = cmsLocaleForRoute(locale);
   const t = await getTranslations({ locale, namespace: "meta" });
   const path = locale === "en" ? "/" : `/${locale}`;

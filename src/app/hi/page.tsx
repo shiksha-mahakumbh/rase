@@ -17,6 +17,7 @@ import HeroLcpPreload from "@/components/home/HeroLcpPreload";
 import { resolveTickerItems } from "@/data/default-announcements";
 import { safeJsonLdScriptContent } from "@/lib/seo/schema-json-ld";
 import { navMenusFromCms } from "@/components/layout/navbar/NavBarShell";
+import { setRequestLocale } from "next-intl/server";
 import hiMessages from "@/i18n/messages/hi.json";
 
 export const revalidate = 3600;
@@ -28,6 +29,7 @@ const HI_HOME_META = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
+  setRequestLocale("hi");
   return withHreflang(
     createPageMetadata({
       ...HI_HOME_META,
@@ -53,6 +55,7 @@ async function HiHomePartnersJsonLdDeferred() {
 
 /** Hindi homepage — uses hi CMS when published; server falls back to English content. */
 export default async function HiHomePage() {
+  setRequestLocale("hi");
   const cmsData = await loadCmsHomeShell("hi");
   const faqs = extractFaqsFromCmsData(cmsData);
   const heroContent = buildHeroContent(cmsData.homepage, "hi");

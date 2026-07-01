@@ -6,9 +6,10 @@ import {
   CONTACT_PATH,
   contactMetaDescription,
 } from "@/data/contact-hub";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata() {
+  setRequestLocale("hi");
   const t = await getTranslations({ locale: "hi", namespace: "meta" });
 
   return withHreflang(

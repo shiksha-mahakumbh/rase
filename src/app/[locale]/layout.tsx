@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { routing, type AppLocale } from "@/i18n/routing";
@@ -9,7 +9,7 @@ const UNPUBLISHED_LOCALES = new Set(["fr", "es", "ar"]);
 
 export function generateStaticParams() {
   return routing.locales
-    .filter((locale) => !UNPUBLISHED_LOCALES.has(locale))
+    .filter((locale) => !UNPUBLISHED_LOCALES.has(locale) && locale !== "hi")
     .map((locale) => ({ locale }));
 }
 
@@ -42,6 +42,7 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  setRequestLocale(locale);
   const messages = await getMessages({ locale });
 
   return (

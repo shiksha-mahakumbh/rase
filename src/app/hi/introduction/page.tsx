@@ -1,9 +1,10 @@
 import HiIntroductionContent from "./HiIntroductionContent";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata() {
+  setRequestLocale("hi");
   const t = await getTranslations({ locale: "hi", namespace: "meta" });
 
   return withHreflang(

@@ -2,36 +2,32 @@ import RegistrationPageView from "@/app/registration/RegistrationPageView";
 import RegistrationJsonLd from "@/components/seo/RegistrationJsonLd";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
-import { openGraphLocale } from "@/lib/cookie-consent";
 import {
   REGISTRATION_OG_IMAGE,
   REGISTRATION_PATH,
   registrationMetaDescription,
 } from "@/data/registration-hub";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import hiMessages from "@/i18n/messages/hi.json";
+import { setRequestLocale } from "next-intl/server";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: "registration" });
+export async function generateMetadata() {
+  setRequestLocale("hi");
 
   return withHreflang(
     createPageMetadata({
-      title: t("title"),
+      title: hiMessages.registration.title,
       description: registrationMetaDescription(),
-      path: locale === "en" ? REGISTRATION_PATH : `/${locale}${REGISTRATION_PATH}`,
-      locale: openGraphLocale(locale),
+      path: "/hi/registration",
+      locale: "hi_IN",
       ogImageUrl: REGISTRATION_OG_IMAGE,
     }),
     REGISTRATION_PATH
   );
 }
 
-export default function LocaleRegistrationPage() {
+export default function HiRegistrationPage() {
+  setRequestLocale("hi");
+
   return (
     <>
       <RegistrationJsonLd />

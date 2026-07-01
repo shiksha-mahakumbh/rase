@@ -4,9 +4,10 @@ import {
   INTRODUCTION_HERO_IMAGE,
   INTRODUCTION_HERO_IMAGE_ALT,
 } from "@/data/introduction-content";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export default async function HiIntroductionContent() {
+  setRequestLocale("hi");
   const t = await getTranslations({ locale: "hi", namespace: "introduction" });
   const meta = await getTranslations({ locale: "hi", namespace: "meta" });
 

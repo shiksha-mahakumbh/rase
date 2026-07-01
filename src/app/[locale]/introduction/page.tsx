@@ -2,7 +2,7 @@ import IntroductionContent from "@/app/introduction/IntroductionContent";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { openGraphLocale } from "@/lib/cookie-consent";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
   params,
@@ -10,6 +10,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "meta" });
 
   return withHreflang(

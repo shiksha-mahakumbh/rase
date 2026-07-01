@@ -7,7 +7,7 @@ import {
   CONTACT_PATH,
   contactMetaDescription,
 } from "@/data/contact-hub";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
   params,
@@ -15,6 +15,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "meta" });
 
   return withHreflang(

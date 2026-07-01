@@ -8,6 +8,7 @@ import { isRedirectShellPath } from "@/lib/knowledge-graph/site-cleanup";
 import { legacyCaseAliasDestination } from "@/config/legacy-case-aliases";
 
 const intlMiddleware = createIntlMiddleware(routing);
+const NEXT_INTL_LOCALE_HEADER = "x-next-intl-locale";
 
 /** Retired accidental duplicate-folder URLs (Windows copy paths). */
 const GONE_COPY_PATH =
@@ -27,6 +28,17 @@ function withDocumentLang(response: NextResponse, pathname: string): NextRespons
   response.headers.set("x-document-lang", documentLangForPath(pathname));
   response.headers.set("x-pathname", pathname);
   return response;
+}
+
+function withHiIntlLocale(request: NextRequest, pathname: string): NextResponse {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set(NEXT_INTL_LOCALE_HEADER, "hi");
+  return withDocumentLang(
+    NextResponse.next({
+      request: { headers: requestHeaders },
+    }),
+    pathname
+  );
 }
 
 function shouldRunIntlMiddleware(pathname: string): boolean {
@@ -135,6 +147,9 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!shouldRunIntlMiddleware(pathname)) {
+    if (pathname === "/hi" || pathname.startsWith("/hi/")) {
+      return withHiIntlLocale(request, pathname);
+    }
     return withDocumentLang(NextResponse.next(), pathname);
   }
 
