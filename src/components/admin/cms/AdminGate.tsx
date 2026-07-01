@@ -4,6 +4,7 @@ import { ReactNode, Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAdmin } from "@/lib/adminAuth";
+import { isSafeAdminRedirectPath } from "@/lib/admin/safe-redirect";
 
 function AdminGateFallback() {
   return (
@@ -40,10 +41,7 @@ function AdminGateContent({ children }: { children: ReactNode }) {
               try {
                 await login(email, password);
                 const next = searchParams.get("next");
-                if (
-                  next &&
-                  (next.startsWith("/admin") || next.startsWith("/event/checkin"))
-                ) {
+                if (next && isSafeAdminRedirectPath(next)) {
                   window.location.assign(next);
                 }
               } catch (error) {
@@ -58,6 +56,7 @@ function AdminGateContent({ children }: { children: ReactNode }) {
             <input
               type="email"
               required
+              autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
@@ -66,6 +65,7 @@ function AdminGateContent({ children }: { children: ReactNode }) {
             <input
               type="password"
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
