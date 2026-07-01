@@ -45,3 +45,18 @@ export function purgeCmsGlobalSiteCaches() {
   revalidatePath("/contact-us");
   revalidatePath("/faq");
 }
+
+export function purgeFaqCaches(locale: ContentLocale = "en") {
+  revalidatePath("/faq");
+  purgeCmsContentCaches({ locales: [locale] });
+}
+
+export function purgeGalleryCaches(locale: ContentLocale = "en") {
+  revalidatePath("/gallery");
+  purgeCmsContentCaches({ locales: [locale] });
+}
+
+export function purgeDownloadCaches() {
+  revalidatePath("/downloads");
+  purgeCmsContentCaches();
+}

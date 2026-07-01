@@ -3,12 +3,9 @@ import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify } from "@/server/lib/cms-utils";
-import { revalidatePath } from "next/cache";
-import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
 
 function purgeFaqCaches(locale: ContentLocale = "en") {
-  revalidatePath("/faq");
-  purgeCmsContentCaches({ locales: [locale] });
+  void import("@/server/lib/cms-cache-purge").then(({ purgeFaqCaches: purge }) => purge(locale));
 }
 
 export async function listFaqCategories(options: {

@@ -12,7 +12,7 @@ import {
   EVENT_HUB_ROUTES,
   WORKSHOP_ARCHIVE,
 } from "@/lib/knowledge-graph/conference-catalog";
-import { EventsListing } from "@/components/events/CmsEventView";
+import { EventsListing } from "@/components/events/EventsListing";
 import type { CmsEventCard } from "@/lib/cms/types";
 
 type Props = {

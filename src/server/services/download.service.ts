@@ -5,12 +5,9 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { upsertSeoForEntity, buildWebPageSchema } from "@/server/services/seo.service";
 import { ServiceError } from "@/server/lib/errors";
 import { slugify, isDownloadVisible } from "@/server/lib/cms-utils";
-import { revalidatePath } from "next/cache";
-import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
 
 function purgeDownloadCaches() {
-  revalidatePath("/downloads");
-  purgeCmsContentCaches();
+  void import("@/server/lib/cms-cache-purge").then(({ purgeDownloadCaches: purge }) => purge());
 }
 
 export type CreateDownloadInput = {
