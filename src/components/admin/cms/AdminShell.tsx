@@ -8,9 +8,9 @@ import { useAdmin } from "@/lib/adminAuth";
 import {
   CMS_NAV_GROUPS,
   filterCmsNavForRole,
-  canAccessNavItem,
+  canAccessCmsPath,
+  getCmsFallbackPath,
   isNavItemActive,
-  isManageOnlyPath,
   getNavGroupForPath,
 } from "./admin-nav";
 import { CmsReadOnlyBanner } from "./AdminUi";
@@ -69,20 +69,21 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navItems = filterCmsNavForRole(role, permissions);
-  const manageBlocked =
+  const accessDenied =
     Boolean(role) &&
-    isManageOnlyPath(pathname) &&
-    !canAccessNavItem(role, "manage", permissions);
+    !loading &&
+    pathname.startsWith("/admin/cms") &&
+    !canAccessCmsPath(pathname, role, permissions);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    if (!role || !manageBlocked) return;
+    if (!role || !accessDenied) return;
     toast.error("You do not have access to that page.");
-    router.replace("/admin/cms");
-  }, [manageBlocked, role, router]);
+    router.replace(getCmsFallbackPath(role, permissions));
+  }, [accessDenied, role, permissions, router]);
 
   const groups = Object.keys(CMS_NAV_GROUPS) as Array<keyof typeof CMS_NAV_GROUPS>;
 
@@ -157,9 +158,9 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           {sidebar}
         </aside>
         <main id="admin-main-content" className="min-w-0 flex-1 p-4 md:p-6 lg:p-8">
-          {loading || manageBlocked ? (
+          {loading || accessDenied ? (
             <div className="flex items-center justify-center py-16 text-sm text-slate-500">
-              {manageBlocked ? "Redirecting…" : "Loading admin session…"}
+              {accessDenied ? "Redirecting…" : "Loading admin session…"}
             </div>
           ) : (
             <>

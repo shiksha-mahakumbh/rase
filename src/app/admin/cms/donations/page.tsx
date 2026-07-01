@@ -11,6 +11,7 @@ import {
   AdminLoading,
   AdminEmpty,
   AdminPagination,
+  AdminSafeExternalLink,
 } from "@/components/admin/cms/AdminUi";
 import { OpsStatusBadge, formatInr, formatDateTime } from "@/components/admin/ops/OpsUi";
 
@@ -134,14 +135,12 @@ export default function AdminDonationsPage() {
                   </td>
                   <td className="px-3 py-3">
                     <div className="flex flex-wrap gap-2">
-                      <a
+                      <AdminSafeExternalLink
                         href={row.receiptDownloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="text-xs font-semibold text-brand-blue hover:underline"
                       >
                         PDF
-                      </a>
+                      </AdminSafeExternalLink>
                       <button
                         type="button"
                         onClick={() => void resendReceipt(row.donationId)}

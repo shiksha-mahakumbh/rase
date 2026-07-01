@@ -29,6 +29,13 @@ export async function adminCmsFetch<T = unknown>(
 
   if (!res.ok) {
     const err = (data as { error?: string; code?: string }) ?? {};
+    if (res.status === 401 || res.status === 403) {
+      throw new AdminCmsApiError(
+        "Session expired or insufficient permissions. Sign in again.",
+        res.status,
+        err.code
+      );
+    }
     throw new AdminCmsApiError(
       err.error ?? `Request failed (${res.status})`,
       res.status,

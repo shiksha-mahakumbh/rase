@@ -45,7 +45,7 @@ type Member = {
 
 export default function CommitteeEditor({ committeeId }: { committeeId?: string }) {
   const router = useRouter();
-  const canMutate = useCmsCanMutate();
+  const canMutate = useCmsCanMutate("committees.manage");
   const [loading, setLoading] = useState(!!committeeId);
   const [saving, setSaving] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);

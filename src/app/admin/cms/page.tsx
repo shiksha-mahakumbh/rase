@@ -22,8 +22,10 @@ const GROUP_ORDER: AdminNavItem["group"][] = [
 ];
 
 export default function CmsDashboardPage() {
-  const { role } = useAdmin();
-  const modules = filterCmsNavForRole(role).filter((item) => item.href !== "/admin/cms");
+  const { role, permissions } = useAdmin();
+  const modules = filterCmsNavForRole(role, permissions).filter(
+    (item) => item.href !== "/admin/cms"
+  );
 
   return (
     <div>

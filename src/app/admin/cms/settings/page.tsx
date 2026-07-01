@@ -15,7 +15,7 @@ import {
 } from "@/components/admin/cms/AdminUi";
 
 export default function SettingsAdminPage() {
-  const canMutate = useCmsCanMutate();
+  const canMutate = useCmsCanMutate("settings.manage");
   const [locale, setLocale] = useState("en");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

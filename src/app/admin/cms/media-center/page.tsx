@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
 import {
@@ -40,6 +41,7 @@ const MEDIA_CATEGORIES = [
 ] as const;
 
 export default function MediaCenterAdminPage() {
+  const router = useRouter();
   const [items, setItems] = useState<MediaEntry[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -144,7 +146,7 @@ export default function MediaCenterAdminPage() {
       toast.success("Entry created");
       setShowCreate(false);
       setForm({ title: "", mediaCenterCategory: "news", excerpt: "", url: "", tags: "" });
-      window.location.href = `/admin/cms/media-center/${created.entry.id}`;
+      router.push(`/admin/cms/media-center/${created.entry.id}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Create failed");
     } finally {

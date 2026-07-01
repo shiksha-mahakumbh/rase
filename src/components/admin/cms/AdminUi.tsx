@@ -1,7 +1,10 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useAdmin, canMutateCms } from "@/lib/adminAuth";
+import { useAdmin } from "@/lib/adminAuth";
+import { roleHasPermission } from "@/lib/admin-role-capabilities";
+import type { PermissionSlug } from "@/lib/permissions";
+import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
 export function AdminPageHeader({
   title,
@@ -234,8 +237,8 @@ export function AdminLocaleSelect({
 }
 
 export function CmsReadOnlyBanner() {
-  const { role } = useAdmin();
-  if (canMutateCms(role)) return null;
+  const { role, permissions } = useAdmin();
+  if (roleHasPermission(role, "media.manage", permissions)) return null;
   return (
     <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
       View-only access — you can browse CMS content but cannot save or publish. Contact an Admin for
@@ -244,7 +247,31 @@ export function CmsReadOnlyBanner() {
   );
 }
 
-export function useCmsCanMutate(): boolean {
-  const { role } = useAdmin();
-  return canMutateCms(role);
+export function useCmsCanMutate(requiredPermission: PermissionSlug = "media.manage"): boolean {
+  const { role, permissions } = useAdmin();
+  return roleHasPermission(role, requiredPermission, permissions);
+}
+
+/** External link that only renders for http(s) URLs from CMS records. */
+export function AdminSafeExternalLink({
+  href,
+  children,
+  className = "",
+  ...props
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string | null | undefined }) {
+  const safe = sanitizeExternalUrl(href);
+  if (!safe) {
+    return <span className={`text-slate-500 ${className}`}>Unavailable</span>;
+  }
+  return (
+    <a
+      href={safe}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+      {...props}
+    >
+      {children}
+    </a>
+  );
 }

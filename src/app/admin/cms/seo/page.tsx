@@ -17,7 +17,7 @@ import {
 } from "@/components/admin/cms/AdminUi";
 
 export default function SeoManagerPage() {
-  const canMutate = useCmsCanMutate();
+  const canMutate = useCmsCanMutate("settings.manage");
   const [locale, setLocale] = useState("en");
   const [entityType, setEntityType] = useState("page");
   const [entityId, setEntityId] = useState("");

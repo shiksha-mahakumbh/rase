@@ -14,6 +14,7 @@ import {
   AdminEmpty,
   AdminPagination,
   StatusBadge,
+  AdminSafeExternalLink,
 } from "@/components/admin/cms/AdminUi";
 
 type Download = {
@@ -182,9 +183,9 @@ export default function DownloadsAdminPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex gap-2">
-                      <a href={d.fileUrl} target="_blank" rel="noopener noreferrer">
+                      <AdminSafeExternalLink href={d.fileUrl}>
                         <AdminButton size="sm" variant="ghost">Open</AdminButton>
-                      </a>
+                      </AdminSafeExternalLink>
                       <AdminButton size="sm" variant="danger" onClick={() => remove(d.id)}>
                         Delete
                       </AdminButton>

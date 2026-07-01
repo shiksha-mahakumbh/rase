@@ -447,6 +447,30 @@ export function isManageOnlyPath(pathname: string): boolean {
   );
 }
 
+/** Whether the signed-in role may open this CMS path (nav + permission matrix). */
+export function canAccessCmsPath(
+  pathname: string,
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): boolean {
+  if (!role || !pathname.startsWith("/admin/cms")) return false;
+
+  const item = getActiveNavItem(pathname);
+  if (!item) return false;
+
+  return canAccessNavItem(role, item.access ?? "any", permissions, item);
+}
+
+/** First CMS module the role may open — used when redirecting from forbidden paths. */
+export function getCmsFallbackPath(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): string {
+  const items = filterCmsNavForRole(role, permissions);
+  const first = items.find((item) => item.href !== "/admin/cms");
+  return first?.href ?? "/admin";
+}
+
 export const REGISTRATION_NAV = [
   { href: "/admin", label: "Registration dashboard" },
   { href: "/admin/cms/receipts", label: "Receipts & QR" },

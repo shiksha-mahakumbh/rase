@@ -12,7 +12,9 @@ import {
   AdminLoading,
   AdminEmpty,
   AdminPagination,
+  AdminSafeExternalLink,
 } from "@/components/admin/cms/AdminUi";
+import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
 type Folder = { id: string; name: string; slug: string; parentId: string | null };
 type Asset = {
@@ -203,8 +205,8 @@ export default function MediaLibraryPage() {
                 {assets.map((a) => (
                   <AdminCard key={a.id} className="p-3">
                     <div className="relative mb-2 aspect-square overflow-hidden rounded-lg bg-slate-100">
-                      {isImage(a.mimeType) ? (
-                        <Image src={a.fileUrl} alt={a.altText ?? a.fileName} fill className="object-cover" sizes="200px" />
+                      {isImage(a.mimeType) && sanitizeExternalUrl(a.fileUrl) ? (
+                        <Image src={sanitizeExternalUrl(a.fileUrl)!} alt={a.altText ?? a.fileName} fill className="object-cover" sizes="200px" />
                       ) : (
                         <div className="flex h-full items-center justify-center text-xs text-slate-500">
                           {a.mimeType.includes("pdf") ? "PDF" : a.assetType}
@@ -214,9 +216,9 @@ export default function MediaLibraryPage() {
                     <p className="truncate text-xs font-medium">{a.fileName}</p>
                     <p className="truncate text-[10px] text-slate-500">{a.tags.join(", ")}</p>
                     <div className="mt-2 flex gap-1">
-                      <a href={a.fileUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-brand-navy underline">
+                      <AdminSafeExternalLink href={a.fileUrl} className="text-xs text-brand-navy underline">
                         Open
-                      </a>
+                      </AdminSafeExternalLink>
                       <button type="button" className="text-xs text-red-600" onClick={() => remove(a.id)}>
                         Delete
                       </button>
