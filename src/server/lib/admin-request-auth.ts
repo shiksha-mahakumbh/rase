@@ -1,11 +1,13 @@
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { ADMIN_SESSION_COOKIE } from "@/constants/auth";
 import {
   adminSessionCookieOptions,
   createAdminSessionToken,
   verifyAdminSessionToken,
 } from "@/lib/security/admin-session";
-import { ServiceError } from "@/server/lib/errors";import { resolveAdminRoleForUser } from "@/server/services/auth.service";
+import { ServiceError } from "@/server/lib/errors";
+import { resolveAdminRoleForUser } from "@/server/services/auth.service";
 import type { AdminRole } from "@/types/registration";
 
 export type VerifiedAdminSession = {
@@ -35,7 +37,7 @@ export async function verifyAndRefreshAdminSession(
   return { uid: session.uid, email: session.email, role };
 }
 
-export function clearAdminSessionCookie(response: { cookies: { set: (...args: unknown[]) => void } }) {
+export function clearAdminSessionCookie(response: NextResponse) {
   response.cookies.set(ADMIN_SESSION_COOKIE, "", {
     ...adminSessionCookieOptions(0),
     maxAge: 0,
@@ -44,7 +46,7 @@ export function clearAdminSessionCookie(response: { cookies: { set: (...args: un
 
 /** Set a fresh signed cookie when DB role differs from the token payload. */
 export function maybeRotateAdminSessionCookie(
-  response: { cookies: { set: (...args: unknown[]) => void } },
+  response: NextResponse,
   session: VerifiedAdminSession,
   tokenRole: AdminRole
 ) {

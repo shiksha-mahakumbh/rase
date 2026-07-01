@@ -91,7 +91,7 @@ export default function NewsletterAdminPage() {
             offset={offset}
             limit={limit}
             total={total}
-            onChange={setOffset}
+            onPage={setOffset}
           />
         ) : null}
       </AdminCard>

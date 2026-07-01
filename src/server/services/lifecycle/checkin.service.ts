@@ -64,13 +64,12 @@ function buildCheckInEligibility(reg: Registration): {
   }
 
   const canCheckIn = !blockReason && reg.checkInStatus !== "Checked_In";
-  const canReceiveKit = reg.registrationStatus !== "Rejected" && !reg.kitDistributed;
+  const canReceiveKit = !reg.kitDistributed;
   const paidOk =
     reg.paymentStatus === "Paid" ||
     reg.paymentStatus === "Not_Required" ||
     reg.paymentStatus === "Submitted";
-  const canMarkCertificate =
-    reg.registrationStatus !== "Rejected" && paidOk && !reg.certificateEligible;
+  const canMarkCertificate = paidOk && !reg.certificateEligible;
 
   return { canCheckIn, canReceiveKit, canMarkCertificate, warnings, blockReason };
 }

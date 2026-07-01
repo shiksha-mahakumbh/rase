@@ -265,8 +265,6 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
   };
 }
 
-import type { AdminRegistrationView } from "@/lib/admin/registration-detail-types";
-
 /** Admin-only — formatted registration view (public ID or UUID). */
 export async function getRegistrationForAdminView(
   idOrPublicId: string
