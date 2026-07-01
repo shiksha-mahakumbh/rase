@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.github
+.env
+.env.*
+!.env.example
+coverage
+playwright-report
+test-results
+*.log
+docs/go-live/_proof-artifacts
+docs/go-live/_manual-proof-artifacts

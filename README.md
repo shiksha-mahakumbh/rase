@@ -32,7 +32,7 @@ Copy `.env.example` to `.env.local`. Required for local dev:
 - `NEXT_PUBLIC_SITE_URL`
 - Supabase anon + service role keys
 
-Verify: `npm run verify:env`
+Verify: `npm run verify:env` | `npm run audit:secrets`
 
 ## Scripts
 
@@ -48,6 +48,7 @@ Verify: `npm run verify:env`
 | `npm run test:smoke` | HTTP smoke probes (prod URL or pass base URL) |
 | `npm run test:integration` | Integration script contracts (+ optional live run) |
 | `npm run test:load` | Concurrent health load baseline |
+| `npm run audit:secrets` | Static scan for secret leaks and tracked `.env` files |
 | `npm run db:migrate:deploy` | Apply Prisma migrations (loads `.env`) |
 | `npm run db:validate` | Validate Prisma schema |
 
@@ -63,6 +64,7 @@ prisma/          # Schema and migrations
 scripts/         # Audits, seeds, CI helpers
 tests/unit/      # Node native unit tests
 e2e/             # Playwright smoke and a11y specs
+docs/devops/     # Docker, secrets, alerting, runbooks
 docs/            # Platform, deployment, conventions
 public/          # Static assets, ads.txt, manifest
 ```
@@ -73,7 +75,7 @@ See [docs/CODE_CONVENTIONS.md](docs/CODE_CONVENTIONS.md) for naming and API rule
 
 CI (`.github/workflows/ci.yml`) runs lint, typecheck, security tests, performance audit, and build on every push to `main`.
 
-Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase11.mjs` in the `test:security` chain.
+Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase12.mjs` in the `test:security` chain.
 
 ## Migrations
 

@@ -1,8 +1,12 @@
 # Monitoring & Incident Response Runbook
 
-Operational guide for production incidents. Architecture detail: `docs/MONITORING_ARCHITECTURE.md`.
+Operational guide for production incidents on **rase.co.in** (Vercel + Supabase + Razorpay).
 
-**On-call first step:** `GET https://www.rase.co.in/api/health` → expect JSON `{ "status": "ok" }`.
+Architecture: [`MONITORING_ARCHITECTURE.md`](MONITORING_ARCHITECTURE.md)  
+Alerts: [`docs/devops/ALERTING.md`](devops/ALERTING.md)
+
+**On-call first step:** `GET https://www.rase.co.in/api/v2/health` → expect `{ "status": "ok" }`.  
+**Detailed probe:** `GET https://www.rase.co.in/api/v2/status` or open `/status`.
 
 ---
 
@@ -10,9 +14,9 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 
 | Level | Definition | Response time |
 |-------|------------|---------------|
-| S1 | Registration down nationally | &lt; 15 min |
-| S2 | Email or payments broken | &lt; 1 h |
-| S3 | Analytics/SEO/monitoring degraded | &lt; 24 h |
+| S1 | Registration down nationally | < 15 min |
+| S2 | Email or payments broken | < 1 h |
+| S3 | Analytics/SEO/monitoring degraded | < 24 h |
 | S4 | Cosmetic / non-critical | Next business day |
 
 ---
@@ -21,35 +25,30 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 
 ### Symptoms
 
-- Users cannot submit step 3
-- Firestore permission errors in browser console
-- Spike in `/api/client-error` or support tickets
+- Users cannot complete registration submit
+- Spike in `/api/client-error` or Sentry on `/api/v2/registration/submit`
+- Support tickets referencing payment or validation errors
 
 ### Diagnosis
 
-1. Health check + hosting status (Vercel/host panel).
-2. Browser DevTools → Network on `saveRegistration` / Firestore writes.
-3. Firebase Console → Firestore → **Usage** and **Rules** simulator.
-4. Test one registration with admin account observing new doc in `registrations`.
+1. `/api/v2/health` and `/status` (database row).
+2. Browser DevTools → Network on `POST /api/v2/registration/submit`.
+3. Supabase dashboard → Database health, connection pool saturation.
+4. Admin test registration with observer on new Prisma row.
 
 ### Common causes & fixes
 
 | Cause | Fix |
 |-------|-----|
-| Rules not deployed or too strict | Republish `firebase/firestore.rules`; test `validRegistrationCreate()` |
-| `registrationCounters` write blocked | Use documented counter path; temporary admin-only increment if emergency |
+| Database unreachable | Verify `DATABASE_URL` on Vercel; check Supabase status |
 | reCAPTCHA misconfigured | Verify production domain keys |
-| Client bundle error | Rollback deploy; check `client-error` payloads |
+| Razorpay verify failure | Check keys + webhook secret; see payment section |
+| Deploy regression | Roll back Vercel deployment; run `npm run test:smoke` |
 
 ### Communication
 
-- Status: internal WhatsApp/email to DHE coordinators
-- User-facing: homepage banner only if outage &gt; 30 min
-
-### Do not
-
-- Disable reCAPTCHA in production without approval
-- Open Firestore rules to public read on registrations
+- Internal: coordinator WhatsApp/email
+- User-facing: homepage banner only if outage > 30 min
 
 ---
 
@@ -58,23 +57,23 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 ### Symptoms
 
 - Registrations succeed but no confirmation email
-- `/api/registration/send-email` returns 5xx/429
+- `/api/v2/registration/send-email` or SMTP routes return 5xx/429
 
 ### Diagnosis
 
-1. Hosting logs for send-email route.
-2. Verify `SMTP_*` and `REGISTRATION_EMAIL_SECRET`.
-3. Send test via admin or staging registration.
+1. Vercel logs for email routes.
+2. Verify `BREVO_SMTP_*` or `SMTP_*` credentials via `npm run verify:env`.
+3. Staging send test.
 
 ### Fix
 
 | Issue | Action |
 |-------|--------|
-| SMTP credentials expired | Rotate password; update env; redeploy |
-| Rate limit tripped | Wait window; investigate abuse IP |
-| Secret mismatch | Align `REGISTRATION_EMAIL_SECRET` header between client and server |
+| SMTP credentials expired | Rotate password; update Vercel env; redeploy |
+| Rate limit tripped | Investigate abuse IP; Upstash counters |
+| Template/runtime error | Check Sentry; rollback if recent deploy |
 
-**Note:** Registration **by design** still completes if email fails — export CSV from admin and send manual confirmations if prolonged outage.
+**Note:** Registration may still complete if email fails — export CSV from admin for manual follow-up during prolonged outage.
 
 ---
 
@@ -83,7 +82,7 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 ### Symptoms
 
 - Razorpay dashboard shows webhook failures
-- Payments captured but admin status stale
+- Payments captured but registration payment status stale
 
 ### Diagnosis
 
@@ -96,26 +95,26 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 | Issue | Action |
 |-------|--------|
 | Wrong secret | Update env; redeploy |
-| URL not reachable | Fix DNS/hosting |
-| 200 but no Firestore update | **Known gap** — reconcile payments manually in admin until sync is implemented |
+| URL not reachable | Fix DNS/Vercel deployment |
+| Processing error | Check Sentry + admin orphan reconciliation tools |
 
 ---
 
-## 4. Firebase quota monitoring
+## 4. Supabase / database monitoring
 
-### Watch (Firebase Console → Usage)
+### Watch
 
 | Metric | Warning sign |
 |--------|----------------|
-| Firestore reads/writes | Spike during campaign |
-| Storage bandwidth | Large registration uploads |
-| Auth | Admin login failures |
+| Connection pool saturation | Timeouts on registration submit |
+| Storage bandwidth | Large upload campaigns |
+| Auth (admin) | Admin login failures |
 
 ### Actions
 
-- Enable billing alerts
-- Admin: paginated queries only (already implemented)
-- Archive old test registrations to separate collection (policy decision)
+- Enable Supabase billing/usage alerts
+- Use paginated admin queries only
+- Run retention cron (`/api/cron/analytics-retention`) — requires `CRON_SECRET`
 
 ---
 
@@ -123,35 +122,35 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 
 | Data | Method | Frequency |
 |------|--------|-----------|
-| Firestore `registrations` | Scheduled export → GCS | Daily (configure in Console) |
+| Postgres | Supabase backups / PITR | Continuous (plan-dependent) |
 | Admin exports | CSV/Excel from `/admin` | Weekly minimum |
 | Rules & code | Git `rase` repository | Continuous |
 | Static assets | `public/` in repo + CDN cache | On release |
 
-**Restore test:** Quarterly restore drill from GCS export to staging project.
+**Restore test:** `npm run backup:drill` quarterly.
 
 ---
 
 ## 6. Rollback procedures
 
-1. **Hosting:** Redeploy previous production build (Vercel → Deployments → Promote).
-2. **Firestore rules:** Console → Rules → **Revert** to last known good version if registration broke after rules change.
+1. **Hosting:** Vercel → Deployments → Promote previous production build.
+2. **Database:** Avoid destructive rollback; use forward migrations only (`npm run db:migrate:deploy`).
 3. **Env:** Roll back only changed variables; never delete `NEXT_PUBLIC_SITE_URL` mid-incident.
-4. **Verify:** `node scripts/validate-go-live.mjs` + one test registration.
+4. **Verify:** `npm run test:smoke` + one test registration.
 
-**Post-incident:** Log timeline in internal doc; update this runbook if new failure mode found.
+**Post-incident:** Log timeline internally; update [`docs/devops/RUNBOOKS.md`](devops/RUNBOOKS.md) if new failure mode found.
 
 ---
 
-## 7. Client errors & optional Sentry
+## 7. Client errors & Sentry
 
 | Path | Purpose |
 |------|---------|
 | `ErrorBoundary` | UI catch |
 | `POST /api/client-error` | Rate-limited beacon |
-| Sentry (optional) | Install `@sentry/nextjs` + `NEXT_PUBLIC_SENTRY_DSN` |
+| Sentry (`NEXT_PUBLIC_SENTRY_DSN`) | Production error grouping |
 
-**Triage:** Group by `message` + `url` in logs; prioritize registration and admin paths.
+**Triage:** Group by `message` + `url` in Sentry; prioritize registration and admin paths.
 
 ---
 
@@ -166,8 +165,8 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 
 | Role | Contact |
 |------|---------|
-| Hosting admin | |
-| Firebase owner | |
+| Vercel admin | |
+| Supabase owner | |
 | DHE communications | |
 | Razorpay account owner | |
 
@@ -175,6 +174,6 @@ Operational guide for production incidents. Architecture detail: `docs/MONITORIN
 
 ## Related
 
-- `docs/GO_LIVE_VALIDATION_REPORT.md`
-- `docs/DEPLOYMENT_CHECKLIST.md`
-- `scripts/validate-go-live.mjs`
+- [`docs/devops/RUNBOOKS.md`](devops/RUNBOOKS.md)
+- [`docs/VERCEL_PRODUCTION_RELEASE_RUNBOOK.md`](VERCEL_PRODUCTION_RELEASE_RUNBOOK.md)
+- [`scripts/validate-go-live.mjs`](../scripts/validate-go-live.mjs)

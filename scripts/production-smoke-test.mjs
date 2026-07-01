@@ -23,6 +23,25 @@ const tests = [
     },
   },
   {
+    name: "status-api",
+    path: "/api/v2/status",
+    assert: async (res, text) => {
+      if (!res.ok) return `HTTP ${res.status}`;
+      try {
+        const j = JSON.parse(text);
+        return j.status && j.service && j.checks ? null : "invalid status payload";
+      } catch {
+        return "not JSON";
+      }
+    },
+  },
+  {
+    name: "status-page",
+    path: "/status",
+    assert: async (res, text) =>
+      res.ok && /Service Status|Operational|Degraded/i.test(text) ? null : "status page missing",
+  },
+  {
     name: "health-legacy",
     path: "/api/health",
     assert: async (res, text) => {

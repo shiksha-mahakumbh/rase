@@ -1,0 +1,19 @@
+# Local Docker parity for Next.js + Supabase-backed runtime.
+# Database remains external (Supabase). Copy .env.local before starting.
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        DATABASE_URL: ${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local}
+        DIRECT_URL: ${DIRECT_URL:-postgresql://local:local@127.0.0.1:5432/local}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+        ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET:-local-docker-admin-secret}
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: .env.local
+        required: false
+    environment:
+      NODE_ENV: production
