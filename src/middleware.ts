@@ -6,7 +6,6 @@ import { routing } from "@/i18n/routing";
 import { verifyAdminSessionTokenEdge } from "@/lib/security/admin-session-edge";
 import { isManageOnlyPath } from "@/components/admin/cms/admin-nav";
 import {
-  canAccessManagePath,
   roleHasPermission,
 } from "@/lib/admin-role-capabilities";
 import type { AdminRole } from "@/types/registration";
@@ -154,7 +153,7 @@ export async function middleware(request: NextRequest) {
         return withNoIndex(NextResponse.redirect(url), pathname);
       }
 
-      if (isManageOnlyPath(pathname) && !canAccessManagePath(role)) {
+      if (isManageOnlyPath(pathname) && !roleHasPermission(role, "media.manage")) {
         const url = request.nextUrl.clone();
         url.pathname = "/admin/cms";
         return withNoIndex(NextResponse.redirect(url), pathname);

@@ -2,12 +2,18 @@ import type { AdminRole } from "@/types/registration";
 import type { PermissionSlug } from "@/lib/permissions";
 import { FALLBACK_ROLE_PERMISSIONS } from "@/lib/permissions";
 
-export function canMutateCms(role: AdminRole | null): boolean {
-  return role === "Super Admin" || role === "Admin";
+export function canMutateCms(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): boolean {
+  return roleHasPermission(role, "media.manage", permissions);
 }
 
-export function canAccessManagePath(role: AdminRole | null): boolean {
-  return canMutateCms(role);
+export function canAccessManagePath(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): boolean {
+  return canMutateCms(role, permissions);
 }
 
 export function roleHasPermission(

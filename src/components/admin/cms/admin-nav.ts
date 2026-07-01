@@ -386,11 +386,11 @@ export function canAccessNavItem(
   item?: AdminNavItem
 ): boolean {
   if (!role) return false;
-  if (access === "manage" && !canMutateCms(role)) return false;
+  if (access === "manage" && !canMutateCms(role, permissions)) return false;
   if (item) {
     return roleHasPermission(role, navItemPermission(item), permissions);
   }
-  return access !== "manage" || canMutateCms(role);
+  return access !== "manage" || canMutateCms(role, permissions);
 }
 
 export function filterCmsNavForRole(
