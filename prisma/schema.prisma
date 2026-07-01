@@ -715,6 +715,8 @@ model Registration {
   @@index([email])
   @@index([createdAt])
   @@index([deletedAt])
+  @@index([deletedAt, createdAt])
+  @@index([registrationType, registrationStatus, createdAt])
   @@map("registrations")
 }
 
@@ -1228,7 +1230,7 @@ model EmailLog {
   updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   registration Registration? @relation(fields: [registrationId], references: [id], onDelete: SetNull)
-  user         User?         @relation(fields: [userId], references: [id])
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId       String?       @map("user_id") @db.Uuid
 
   @@index([status, createdAt])

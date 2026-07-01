@@ -1,37 +1,45 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { prisma } from "@/server/db/prisma";
+import {
+  purgeAuditLogsOlderThan,
+  purgeEmailLogsOlderThan,
+  purgeVisitorSessionsOlderThan,
+} from "@/server/services/retention.service";
 import { withCronAuth } from "@/server/lib/cron-route";
 
 export const dynamic = "force-dynamic";
 
-const RETENTION_MONTHS = 12;
-const DELETE_BATCH_SIZE = 500;
+const VISITOR_RETENTION_MONTHS = 12;
+const AUDIT_LOG_RETENTION_MONTHS = 24;
+const EMAIL_LOG_RETENTION_MONTHS = 12;
 
-/** Cron: delete visitor sessions (and cascaded page views/events) older than 12 months. */
-export const GET = withCronAuth(async (_request: NextRequest) => {
+function monthsAgo(months: number): Date {
   const cutoff = new Date();
-  cutoff.setMonth(cutoff.getMonth() - RETENTION_MONTHS);
+  cutoff.setMonth(cutoff.getMonth() - months);
+  return cutoff;
+}
 
-  let deletedSessions = 0;
-  while (true) {
-    const batch = await prisma.visitorSession.findMany({
-      where: { startedAt: { lt: cutoff } },
-      select: { id: true },
-      take: DELETE_BATCH_SIZE,
-    });
-    if (batch.length === 0) break;
+/** Cron: purge visitor analytics, audit logs, and email logs past retention windows. */
+export const GET = withCronAuth(async (_request: NextRequest) => {
+  const visitorCutoff = monthsAgo(VISITOR_RETENTION_MONTHS);
+  const auditCutoff = monthsAgo(AUDIT_LOG_RETENTION_MONTHS);
+  const emailCutoff = monthsAgo(EMAIL_LOG_RETENTION_MONTHS);
 
-    const result = await prisma.visitorSession.deleteMany({
-      where: { id: { in: batch.map((row) => row.id) } },
-    });
-    deletedSessions += result.count;
-    if (batch.length < DELETE_BATCH_SIZE) break;
-  }
+  const [deletedVisitorSessions, deletedAuditLogs, deletedEmailLogs] = await Promise.all([
+    purgeVisitorSessionsOlderThan(visitorCutoff),
+    purgeAuditLogsOlderThan(auditCutoff),
+    purgeEmailLogsOlderThan(emailCutoff),
+  ]);
 
   return NextResponse.json({
     ok: true,
-    deletedSessions,
-    cutoff: cutoff.toISOString(),
+    deletedVisitorSessions,
+    deletedAuditLogs,
+    deletedEmailLogs,
+    cutoffs: {
+      visitorSessions: visitorCutoff.toISOString(),
+      auditLogs: auditCutoff.toISOString(),
+      emailLogs: emailCutoff.toISOString(),
+    },
   });
 });

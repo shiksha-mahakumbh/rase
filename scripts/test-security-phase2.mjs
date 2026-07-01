@@ -100,7 +100,11 @@ if (includesSrc("lib/cms/server.ts", /unstable_cache/) && existsRepo("src/server
 }
 
 // 41–42 Background / Cron Jobs
-if (includesSrc("app/api/cron/analytics-retention/route.ts", /DELETE_BATCH_SIZE/) && includesSrc("server/lib/cron-auth.ts", /CRON_SECRET/)) {
+if (
+  (includesSrc("server/services/retention.service.ts", /DELETE_BATCH_SIZE/) ||
+    includesSrc("app/api/cron/analytics-retention/route.ts", /DELETE_BATCH_SIZE/)) &&
+  includesSrc("server/lib/cron-auth.ts", /CRON_SECRET/)
+) {
   pass("cron_auth_and_batching", "Cron routes use shared auth and batched retention deletes");
 } else {
   fail("cron_auth_and_batching", "Cron auth or batching incomplete");
