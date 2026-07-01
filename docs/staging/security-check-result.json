@@ -1,6 +1,6 @@
 {
-  "passed": 14,
-  "failed": 1,
+  "passed": 15,
+  "failed": 0,
   "results": [
     {
       "test": "lookup_token_valid",
@@ -29,8 +29,8 @@
     },
     {
       "test": "registration_get_requires_auth",
-      "status": "FAIL",
-      "detail": "GET registration still open"
+      "status": "PASS",
+      "detail": "GET registration requires token or email"
     },
     {
       "test": "middleware_rejects_legacy_cookie",

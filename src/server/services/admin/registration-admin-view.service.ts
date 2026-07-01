@@ -46,6 +46,7 @@ const SKIP_METADATA_KEYS = new Set([
 ]);
 
 import type { AdminRegistrationView, AdminRegistrationDocument } from "@/lib/admin/registration-detail-types";
+import { sanitizeExternalUrl } from "@/lib/security/safe-external-url";
 
 async function freshSignedUrl(bucket: string, storagePath: string): Promise<string | null> {
   try {
@@ -63,7 +64,8 @@ async function freshSignedUrl(bucket: string, storagePath: string): Promise<stri
 function fileMetaUrl(meta: unknown): string | null {
   if (!meta || typeof meta !== "object") return null;
   const url = (meta as { url?: string }).url;
-  return typeof url === "string" && url.trim() ? url : null;
+  if (typeof url !== "string" || !url.trim()) return null;
+  return sanitizeExternalUrl(url) ?? null;
 }
 
 function flattenTypeDetails(row: Record<string, unknown>): Record<string, string> {
@@ -114,7 +116,9 @@ export async function buildAdminRegistrationView(
     const bucket = String(f.bucket ?? "registrations");
     const label = displayUploadFieldName(fieldName);
     let url = storagePath ? await freshSignedUrl(bucket, storagePath) : null;
-    if (!url && typeof f.signedUrl === "string") url = f.signedUrl;
+    if (!url && typeof f.signedUrl === "string") {
+      url = sanitizeExternalUrl(f.signedUrl) ?? null;
+    }
     if (!url) continue;
     const dedupe = `${fieldName}:${url}`;
     if (seen.has(dedupe)) continue;
@@ -257,8 +261,8 @@ export async function buildAdminRegistrationView(
       accommodation: ["Not Required", "Requested", "Confirmed", "Allocated"],
     },
     links: {
-      receiptsAdmin: `/admin/cms/receipts`,
-      paymentAudit: `/admin/cms/payment-audit`,
+      receiptsAdmin: `/admin/cms/receipts?search=${encodeURIComponent(String(row.registrationId ?? ""))}`,
+      paymentAudit: `/admin/cms/payment-audit?registrationId=${encodeURIComponent(String(row.registrationId ?? ""))}`,
       checkIn: `/admin/cms/checkin?id=${encodeURIComponent(String(row.registrationId ?? ""))}`,
     },
     createdAt: String(row.createdAt ?? ""),

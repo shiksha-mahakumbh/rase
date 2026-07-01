@@ -8,11 +8,14 @@ import {
 import { getAdminActorUid } from "@/server/lib/admin-rbac";
 import { ServiceError } from "@/server/lib/errors";
 import { REG_ID_RE } from "@/lib/security/registration-lookup";
+import {
+  ADMIN_REGISTRATION_PUBLIC_ID_RE,
+  ADMIN_REGISTRATION_UUID_RE,
+} from "@/lib/admin/registration-id";
 import { writeAuditLog } from "@/server/services/audit.service";
 import type { AdminRegistrationView } from "@/lib/admin/registration-detail-types";
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_RE = ADMIN_REGISTRATION_UUID_RE;
 
 const ALLOWED_FIELDS: BulkStatusField[] = [
   "registrationStatus",

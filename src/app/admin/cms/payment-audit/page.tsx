@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
 import {
@@ -25,11 +26,22 @@ type AuditRow = {
 };
 
 export default function PaymentAuditPage() {
+  return (
+    <Suspense fallback={<AdminLoading />}>
+      <PaymentAuditInner />
+    </Suspense>
+  );
+}
+
+function PaymentAuditInner() {
+  const searchParams = useSearchParams();
   const [items, setItems] = useState<AuditRow[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [offset, setOffset] = useState(0);
-  const [registrationId, setRegistrationId] = useState("");
+  const [registrationId, setRegistrationId] = useState(
+    () => searchParams.get("registrationId") ?? ""
+  );
   const [paymentId, setPaymentId] = useState("");
   const limit = 50;
 

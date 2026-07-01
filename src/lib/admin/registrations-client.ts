@@ -112,6 +112,9 @@ export async function fetchRegistrationByPublicId(
     }
   );
   if (res.status === 404) return null;
+  if (res.status === 401 || res.status === 403) {
+    throw new Error("Session expired or insufficient permissions. Sign in again.");
+  }
   if (!res.ok) {
     let detail = `HTTP ${res.status}`;
     try {
@@ -120,7 +123,9 @@ export async function fetchRegistrationByPublicId(
     } catch {
       /* ignore */
     }
-    console.error("ADMIN_VIEW_FAILED", { registrationId, detail, status: res.status });
+    if (process.env.NODE_ENV === "development") {
+      console.error("ADMIN_VIEW_FAILED", { status: res.status, detail });
+    }
     throw new Error(`Failed to load registration: ${detail}`);
   }
   const body = await res.json();

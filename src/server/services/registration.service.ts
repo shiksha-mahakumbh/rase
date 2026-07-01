@@ -10,7 +10,11 @@ import {
   toPrismaRegistrationType,
 } from "@/server/lib/registration-types";
 import { REGISTRATION_ID_PREFIX } from "@/types/registration";
-import { emailsMatch, toPublicRegistrationSummary } from "@/lib/security/registration-lookup";
+import { emailsMatch, toPublicRegistrationSummary, REG_ID_RE } from "@/lib/security/registration-lookup";
+import {
+  ADMIN_REGISTRATION_PUBLIC_ID_RE,
+  ADMIN_REGISTRATION_UUID_RE,
+} from "@/lib/admin/registration-id";
 import { generateRegistrationQrDataUrl } from "@/server/services/receipt-qr.service";
 import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 import { buildAdminRegistrationView } from "@/server/services/admin/registration-admin-view.service";
@@ -271,7 +275,10 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
 export async function getRegistrationForAdminView(
   idOrPublicId: string
 ): Promise<AdminRegistrationView | null> {
-  const isPublicId = /^SMK/.test(idOrPublicId);
+  const isPublicId = ADMIN_REGISTRATION_PUBLIC_ID_RE.test(idOrPublicId);
+  const isUuid = ADMIN_REGISTRATION_UUID_RE.test(idOrPublicId);
+  if (!isPublicId && !isUuid) return null;
+
   const row = await prisma.registration.findFirst({
     where: isPublicId
       ? { registrationId: idOrPublicId, deletedAt: null }

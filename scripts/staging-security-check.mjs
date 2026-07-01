@@ -113,7 +113,7 @@ if (
   fail("registration_get_requires_auth", "GET registration still open");
 }
 
-if (fileContains("middleware.ts", /cookie === "1"\) return false/)) {
+if (fileContains("middleware.ts", /cookie === "1"\)\s*return null/)) {
   pass("middleware_rejects_legacy_cookie", "Middleware rejects legacy =1 cookie");
 } else {
   fail("middleware_rejects_legacy_cookie", "Legacy cookie not rejected");

@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
 import {
@@ -33,7 +34,16 @@ type PaymentRow = {
 };
 
 export default function ReceiptManagementPage() {
-  const [search, setSearch] = useState("");
+  return (
+    <Suspense fallback={<AdminLoading />}>
+      <ReceiptManagementInner />
+    </Suspense>
+  );
+}
+
+function ReceiptManagementInner() {
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(() => searchParams.get("search") ?? "");
   const [items, setItems] = useState<PaymentRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
