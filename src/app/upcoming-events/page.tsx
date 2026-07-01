@@ -1,5 +1,5 @@
 import UpcomingEventsQuickLinks from "@/components/upcoming-events/UpcomingEventsQuickLinks";
-import UpcomingEventsShowcase from "@/components/upcoming-events/UpcomingEventsShowcase";
+import { UpcomingEventsShowcase } from "@/lib/perf/deferred-showcases";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import {
   UPCOMING_EVENTS_BREADCRUMBS,

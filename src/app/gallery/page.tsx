@@ -1,5 +1,5 @@
 import GalleryJsonLd from "@/components/gallery/GalleryJsonLd";
-import GalleryShowcase from "@/components/gallery/GalleryShowcase";
+import { GalleryShowcase } from "@/lib/perf/deferred-showcases";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import type { GalleryTab } from "@/data/gallery-hub";
 

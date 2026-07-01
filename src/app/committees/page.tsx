@@ -1,5 +1,5 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import CommitteesShowcase from "@/components/committee/CommitteesShowcase";
+import { CommitteesShowcase } from "@/lib/perf/deferred-showcases";
 import AdSlotRegion from "@/components/showcase/AdSlotRegion";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import {

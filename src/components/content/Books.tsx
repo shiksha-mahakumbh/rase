@@ -57,7 +57,14 @@ const Books: React.FC = () => {
         <div className="book-card relative bg-white w-64 h-80 mx-auto shadow-xl rounded-lg transform transition-transform duration-700 hover:rotate-y-6">
           <a href="/" target="_blank">
             <div className="absolute inset-0 z-10 flex items-center justify-center">
-              <Image alt="book" src={bookImage} className="w-full h-full object-cover rounded-lg cursor-pointer" />
+              <Image
+                alt="Recent Advances in School Education book cover"
+                src={bookImage}
+                width={256}
+                height={320}
+                sizes="256px"
+                className="w-full h-full object-cover rounded-lg cursor-pointer"
+              />
             </div>
             <div className="absolute inset-0 z-20 flex items-center justify-center text-center text-white bg-black bg-opacity-50 p-4 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-500">
               <div>

@@ -1,5 +1,5 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
-import MediaCenterShowcase from "@/components/media/MediaCenterShowcase";
+import { MediaCenterShowcase } from "@/lib/perf/deferred-showcases";
 import MediaCenterJsonLd from "@/components/media/MediaCenterJsonLd";
 import { loadCmsMediaCenterHub } from "@/lib/cms/organizational";
 

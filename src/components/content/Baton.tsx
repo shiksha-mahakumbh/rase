@@ -50,13 +50,11 @@ const Guest: React.FC<{
     <div className="w-full h-60 overflow-hidden rounded-lg relative">
       <Image
         src={imageSrc}
-        alt={name}
-        layout="fill" // Makes image fill the container
-        objectFit="cover" // Ensures proper cropping
-        className="rounded-lg"
-        priority // Prioritize image loading for above-the-fold images
-        placeholder="blur" // Add a blurred placeholder while the image loads
-        blurDataURL="/path-to-placeholder-image.jpg" // Optional LQIP (Low-Quality Image Placeholder)
+        alt={name || "Baton ceremony participant"}
+        fill
+        sizes="(max-width: 768px) 100vw, 20vw"
+        className="rounded-lg object-cover"
+        loading="lazy"
       />
     </div>
     <h3 className="text-lg font-bold mt-4 text-center">{name}</h3>

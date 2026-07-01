@@ -41,6 +41,9 @@ jobs:
       - name: Public asset audit
         run: npm run audit:public
 
+      - name: Site performance guardrails
+        run: npm run audit:site-performance
+
       - name: Security tests
         run: npm run test:security
         env:

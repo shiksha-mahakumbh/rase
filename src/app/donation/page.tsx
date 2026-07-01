@@ -1,5 +1,5 @@
 import DonationQuickLinks from "@/components/donation/DonationQuickLinks";
-import DonationShowcase from "@/components/donation/DonationShowcase";
+import { DonationShowcase } from "@/lib/perf/deferred-showcases";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import { DONATION_BREADCRUMBS, DONATION_PATH } from "@/data/donation-hub";
 

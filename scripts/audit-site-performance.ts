@@ -125,10 +125,11 @@ if (!regPageSrc.includes("imagePriority: false")) {
 }
 
 const heroSrc = read("src/components/home/HeroSection.tsx");
+const heroLcpSrc = read("src/components/home/HeroLcpImage.tsx");
 if (heroSrc.includes('"use client"')) {
   issues.push("HeroSection must be server-rendered for homepage LCP");
-} else if (!heroSrc.includes('fetchPriority="high"')) {
-  issues.push("HeroSection LCP image should use fetchPriority high");
+} else if (!heroLcpSrc.includes('fetchPriority="high"')) {
+  issues.push("HeroLcpImage should use fetchPriority high for LCP");
 } else if (heroSrc.includes("HeroCountdown") || /from\s+["'].\/CountdownBanner["']/.test(heroSrc)) {
   issues.push("HeroSection must use server CountdownBannerView (no client countdown hydration)");
 } else if (!heroSrc.includes("CountdownBannerView")) {
@@ -170,6 +171,30 @@ if (marqueeSrc.includes('"use client"')) {
   issues.push("AnnouncementsMarquee must render MarqueeTrack with server items");
 } else {
   ok("AnnouncementsMarquee: server shell + client CSS scroll");
+}
+
+const deferredShowcases = read("src/lib/perf/deferred-showcases.ts");
+if (!deferredShowcases.includes("dynamic(") || !deferredShowcases.includes("CommitteesShowcase")) {
+  issues.push("deferred-showcases.ts must dynamic-import heavy showcase hubs");
+} else {
+  ok("Showcase hubs: centralized dynamic imports");
+}
+
+for (const [file, symbol] of [
+  ["src/app/committees/page.tsx", "deferred-showcases"],
+  ["src/app/donation/page.tsx", "deferred-showcases"],
+  ["src/app/gallery/page.tsx", "deferred-showcases"],
+  ["src/app/downloads/page.tsx", "deferred-showcases"],
+  ["src/app/upcoming-events/page.tsx", "deferred-showcases"],
+  ["src/app/media-center/page.tsx", "deferred-showcases"],
+] as const) {
+  const src = read(file);
+  if (!src.includes(symbol)) {
+    issues.push(`${file} should import showcase from deferred-showcases`);
+  }
+}
+if (!issues.some((i) => i.includes("deferred-showcases"))) {
+  ok("Hub pages: deferred showcase imports");
 }
 
 // ── Page inventory ──

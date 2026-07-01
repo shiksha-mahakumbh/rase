@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { loadCmsDownloads, loadDefaultOgImage, loadRouteSeo } from "@/lib/cms/server";
-import DownloadsShowcase from "@/components/downloads/DownloadsShowcase";
+import { DownloadsShowcase } from "@/lib/perf/deferred-showcases";
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { metadataFromCmsSeo } from "@/lib/seo/cms-metadata";
