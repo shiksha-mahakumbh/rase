@@ -28,6 +28,13 @@ export function canPerformCheckIn(
   return roleHasPermission(role, "registrations.update", permissions);
 }
 
+export function canAccessCheckInGate(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): boolean {
+  return roleHasPermission(role, "registrations.read", permissions);
+}
+
 export function canExport(
   role: AdminRole | null,
   permissions?: readonly PermissionSlug[] | null

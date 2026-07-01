@@ -3,19 +3,29 @@ import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { ServiceError } from "@/server/lib/errors";
 import { displayRegistrationType } from "@/server/lib/registration-type-labels";
+import { REG_ID_RE } from "@/lib/security/registration-lookup";
 
 /** Parse plain ID, JSON QR payload, or SMK####-###### from scanner input. */
 export function parseRegistrationId(raw: string): string {
   const trimmed = raw.trim();
   try {
     const parsed = JSON.parse(trimmed) as { registrationId?: string };
-    if (parsed.registrationId) return parsed.registrationId.trim().toUpperCase();
-  } catch {
+    if (parsed.registrationId) {
+      const id = parsed.registrationId.trim().toUpperCase();
+      if (!REG_ID_RE.test(id)) {
+        throw new ServiceError("Invalid registration ID", 400, "INVALID_ID");
+      }
+      return id;
+    }
+  } catch (e) {
+    if (e instanceof ServiceError) throw e;
     // not JSON — use as-is
   }
   const match = trimmed.match(/SMK\d{4}-\d{6}/i);
   if (match) return match[0].toUpperCase();
-  return trimmed.toUpperCase();
+  const upper = trimmed.toUpperCase();
+  if (REG_ID_RE.test(upper)) return upper;
+  throw new ServiceError("Invalid registration ID", 400, "INVALID_ID");
 }
 
 function maskPhone(value: string): string {
@@ -126,8 +136,8 @@ export async function lookupAttendeeForCheckIn(rawId: string) {
   const registrationId = parseRegistrationId(rawId);
   const reg = await prisma.registration.findFirst({
     where: {
+      registrationId,
       deletedAt: null,
-      OR: [{ registrationId }, { id: registrationId }],
     },
     include: {
       sessionAttendances: { select: { sessionName: true, attendedAt: true } },

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useAdmin } from "@/lib/adminAuth";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useAdmin, canAccessCheckInGate, canPerformCheckIn } from "@/lib/adminAuth";
 import AdminHeader from "./AdminHeader";
 
 const GATE_LINKS = [
@@ -20,7 +21,33 @@ export default function AdminCheckInShell({
   variant?: "embedded" | "standalone";
 }) {
   const pathname = usePathname();
-  const { user, role, logout } = useAdmin();
+  const router = useRouter();
+  const { user, role, permissions, loading, logout } = useAdmin();
+  const canAccess = canAccessCheckInGate(role, permissions);
+  const canMutate = canPerformCheckIn(role, permissions);
+  const accessDenied = Boolean(role) && !loading && !canAccess;
+
+  useEffect(() => {
+    if (accessDenied) router.replace("/admin");
+  }, [accessDenied, router]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <p className="text-sm text-slate-600">Loading check-in…</p>
+      </div>
+    );
+  }
+
+  if (accessDenied) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+        <p className="text-center text-sm text-slate-600">
+          Your account does not have permission to access check-in.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -54,6 +81,11 @@ export default function AdminCheckInShell({
           ) : undefined
         }
       />
+      {!canMutate && (
+        <p className="mx-auto max-w-lg px-4 pt-3 text-center text-xs text-amber-800">
+          Lookup only — gate actions require registrations update permission.
+        </p>
+      )}
       <main id="admin-main-content" className="mx-auto max-w-lg p-4 pb-8">
         {children}
       </main>

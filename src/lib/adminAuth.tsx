@@ -12,6 +12,7 @@ import type { PermissionSlug } from "@/lib/permissions";
 import {
   canMutateCms,
   canPerformCheckIn,
+  canAccessCheckInGate,
   roleHasPermission,
   canUpdateRegistrations,
 } from "@/lib/admin-role-capabilities";
@@ -139,7 +140,7 @@ export function useAdmin() {
   return ctx;
 }
 
-export { canMutateCms, canPerformCheckIn };
+export { canMutateCms, canPerformCheckIn, canAccessCheckInGate };
 
 export function canAccessSensitiveAdmin(
   role: AdminRole | null,

@@ -7,7 +7,7 @@ import { verifyAdminSessionTokenEdge } from "@/lib/security/admin-session-edge";
 import { isManageOnlyPath } from "@/components/admin/cms/admin-nav";
 import {
   canAccessManagePath,
-  canPerformCheckIn,
+  roleHasPermission,
 } from "@/lib/admin-role-capabilities";
 import type { AdminRole } from "@/types/registration";
 import { isRedirectShellPath } from "@/lib/knowledge-graph/site-cleanup";
@@ -144,10 +144,13 @@ export async function middleware(request: NextRequest) {
 
       const role = session.role as AdminRole;
       const isCheckInPath =
-        pathname === "/event/checkin" || pathname.startsWith("/event/checkin/");
-      if (isCheckInPath && !canPerformCheckIn(role)) {
+        pathname === "/event/checkin" ||
+        pathname.startsWith("/event/checkin/") ||
+        pathname === "/admin/cms/checkin" ||
+        pathname.startsWith("/admin/cms/checkin/");
+      if (isCheckInPath && !roleHasPermission(role, "registrations.read")) {
         const url = request.nextUrl.clone();
-        url.pathname = "/admin/cms";
+        url.pathname = "/admin";
         return withNoIndex(NextResponse.redirect(url), pathname);
       }
 

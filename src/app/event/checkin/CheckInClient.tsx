@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAdmin, canPerformCheckIn } from "@/lib/adminAuth";
 import { adminCmsFetch } from "@/lib/admin-cms-api";
+import { ADMIN_REGISTRATION_PUBLIC_ID_RE } from "@/lib/admin/registration-id";
 import CheckInQrScanner from "@/components/admin/checkin/CheckInQrScanner";
 
 type AttendeeLookup = {
@@ -69,6 +70,27 @@ function pushLocalRecent(entry: RecentCheckIn) {
   }
 }
 
+function normalizeCheckInLookupId(raw: string): string | null {
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  try {
+    const parsed = JSON.parse(trimmed) as { registrationId?: string };
+    if (parsed.registrationId) {
+      const id = parsed.registrationId.trim().toUpperCase();
+      return ADMIN_REGISTRATION_PUBLIC_ID_RE.test(id) ? id : null;
+    }
+  } catch {
+    // not JSON — use as plain ID
+  }
+  const match = trimmed.match(/SMK\d{4}-\d{6}/i);
+  if (match) {
+    const id = match[0].toUpperCase();
+    return ADMIN_REGISTRATION_PUBLIC_ID_RE.test(id) ? id : null;
+  }
+  const upper = trimmed.toUpperCase();
+  return ADMIN_REGISTRATION_PUBLIC_ID_RE.test(upper) ? upper : null;
+}
+
 export default function CheckInClient({ standalone = false }: { standalone?: boolean }) {
   const searchParams = useSearchParams();
   const { role, permissions } = useAdmin();
@@ -123,8 +145,11 @@ export default function CheckInClient({ standalone = false }: { standalone?: boo
   }, [searchParams]);
 
   const lookup = async (raw?: string) => {
-    const id = (raw ?? scanInput).trim();
-    if (!id) return;
+    const id = normalizeCheckInLookupId(raw ?? scanInput);
+    if (!id) {
+      toast.error("Enter a valid SMK registration ID (e.g. SMK2026-000001)");
+      return;
+    }
     setBusy(true);
     setBanner(null);
     try {

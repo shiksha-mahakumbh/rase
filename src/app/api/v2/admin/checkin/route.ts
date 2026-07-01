@@ -47,5 +47,5 @@ export const POST = createApiHandler(
       actorUserId: actorUserId ?? undefined,
     });
   },
-  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-checkin-action", limit: 120 }
+  { requireAdmin: true, adminResource: "registrations", mutationPermission: "registrations.update", rateLimitKey: "admin-checkin-action", limit: 120 }
 );
