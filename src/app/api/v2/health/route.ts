@@ -14,8 +14,16 @@ export async function GET() {
       const { prisma } = await import("@/server/db/prisma");
       await prisma.$queryRaw`SELECT 1`;
       database = "connected";
-    } catch {
+    } catch (error) {
+      const { isPrismaConnectionError } = await import("@/lib/prisma/errors");
       database = "error";
+      if (process.env.NODE_ENV === "development") {
+        console.error(
+          "[health] database probe failed:",
+          isPrismaConnectionError(error) ? "connection" : "query",
+          error
+        );
+      }
     }
   }
 

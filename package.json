@@ -58,7 +58,7 @@
     "db:generate:safe": "node scripts/prisma-generate-safe.mjs",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
-    "db:push": "prisma db push",
+    "db:push": "node scripts/guard-db-push.mjs && prisma db push",
     "db:studio": "prisma studio",
     "db:validate": "prisma validate",
     "db:seed": "node scripts/supabase/seed-rbac.mjs",

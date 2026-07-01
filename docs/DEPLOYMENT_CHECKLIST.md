@@ -25,6 +25,18 @@
 | `NEXT_PUBLIC_GTM_ID` or `NEXT_PUBLIC_GA_ID` | Analytics |
 | `NEXT_PUBLIC_SENTRY_DSN` | Optional monitoring |
 | `SMTP_*` | Email delivery |
+| `DATABASE_URL` | Supabase pooler (Prisma runtime) |
+| `DIRECT_URL` | Supabase direct (migrations, build SSG) |
+
+## Prisma / database (required for CMS + registrations)
+
+See **`docs/prisma/DATABASE_OPS.md`** for full runbook.
+
+- [ ] `npm run db:validate` passes locally before schema PRs
+- [ ] **Never** `npm run db:push` on production (use `db:migrate:deploy` / GitHub workflow)
+- [ ] `DATABASE_URL` + `DIRECT_URL` set in Vercel **and** GitHub Actions secrets
+- [ ] After `prisma/**` merge to `main`, confirm [Prisma Migrate Deploy](https://github.com/shiksha-mahakumbh/rase/actions/workflows/prisma-migrate-deploy.yml) succeeded
+- [ ] Optional: run [Prisma Production Audit](https://github.com/shiksha-mahakumbh/rase/actions/workflows/prisma-audit.yml) manually after major schema changes
 
 ## Vercel production cutover (FULL GO)
 

@@ -70,15 +70,15 @@ Set in Vercel → **rase-co-in** → Settings → Environment Variables:
 
 See `docs/security/ADMIN_OPS_SECRET_ROTATION.md` for ops secret rotation.
 
-## Production env (audit P1)
+## Prisma / Supabase (GitHub Actions)
 
-Set in Vercel → **rase-co-in** → Settings → Environment Variables:
+| Secret | Purpose |
+|--------|---------|
+| `DATABASE_URL` | Pooled Supabase URL — runtime + `migrate deploy` |
+| `DIRECT_URL` | Direct Supabase URL — audits, migration DDL |
 
-| Variable | Purpose |
-|----------|---------|
-| `UPSTASH_REDIS_REST_URL` | Distributed rate limits (P1-10) |
-| `UPSTASH_REDIS_REST_TOKEN` | Upstash REST auth |
-| `NEXT_PUBLIC_SENTRY_DSN` | Error monitoring (P1-12) |
-| `CRON_SECRET` | Bearer for `/api/cron/*` (analytics retention, warm-cache purge) |
+Workflows: **Prisma Migrate Deploy** (on `prisma/**` push), **Prisma Production Audit** (weekly + manual).
+
+**Never use `prisma db push` on production.** See `docs/prisma/DATABASE_OPS.md`.
 
 Rotate `ADMIN_OPS_SECRET` per `docs/security/ADMIN_OPS_SECRET_ROTATION.md`.

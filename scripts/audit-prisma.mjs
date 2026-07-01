@@ -140,7 +140,9 @@ async function main() {
   if (lastNum < regCount) {
     gaps.push(`Counter last_number (${lastNum}) < registration count (${regCount})`);
   } else if (lastNum > regCount + 5) {
-    gaps.push(`Counter ahead of rows: last_number=${lastNum}, registrations=${regCount} (likely failed/abandoned IDs)`);
+    gaps.push(
+      `Counter ahead of rows: last_number=${lastNum}, registrations=${regCount} (historical gaps from pre-atomic ID allocation or abandoned saves)`
+    );
   }
 
   const report = {
@@ -188,6 +190,10 @@ async function main() {
   };
 
   console.log(JSON.stringify(report, null, 2));
+
+  if (gaps.length > 0 || !report.production.migrationsUpToDate) {
+    process.exit(1);
+  }
 }
 
 main()

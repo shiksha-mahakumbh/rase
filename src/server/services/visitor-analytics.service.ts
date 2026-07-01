@@ -1,6 +1,6 @@
 import type { PageCategory, Prisma } from "@prisma/client";
-import { Prisma as PrismaNamespace } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
+import { isPrismaUniqueViolation } from "@/lib/prisma/errors";
 import { writeAuditLog } from "@/server/services/audit.service";
 import {
   ACTIVE_WINDOW_MS,
@@ -69,10 +69,7 @@ async function upsertVisitorSession(
       update,
     });
   } catch (error) {
-    if (
-      error instanceof PrismaNamespace.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
+    if (isPrismaUniqueViolation(error)) {
       return prisma.visitorSession.update({
         where: { sessionId },
         data: update,

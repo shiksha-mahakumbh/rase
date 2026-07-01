@@ -35,21 +35,23 @@ export type SaveRegistrationResult = {
 const COUNTER_YEAR = 2026;
 const COUNTER_PREFIX = REGISTRATION_ID_PREFIX;
 
-export async function generateRegistrationId(): Promise<string> {
-  return prisma.$transaction(async (tx) => {
-    const counter = await tx.registrationCounter.upsert({
-      where: { prefix: COUNTER_PREFIX },
-      create: { year: COUNTER_YEAR, prefix: COUNTER_PREFIX, lastNumber: 0 },
-      update: {},
-    });
-
-    const updated = await tx.registrationCounter.update({
-      where: { id: counter.id },
-      data: { lastNumber: { increment: 1 } },
-    });
-
-    return `${COUNTER_PREFIX}-${String(updated.lastNumber).padStart(6, "0")}`;
+async function allocateRegistrationId(tx: Prisma.TransactionClient): Promise<string> {
+  const counter = await tx.registrationCounter.upsert({
+    where: { prefix: COUNTER_PREFIX },
+    create: { year: COUNTER_YEAR, prefix: COUNTER_PREFIX, lastNumber: 0 },
+    update: {},
   });
+
+  const updated = await tx.registrationCounter.update({
+    where: { id: counter.id },
+    data: { lastNumber: { increment: 1 } },
+  });
+
+  return `${COUNTER_PREFIX}-${String(updated.lastNumber).padStart(6, "0")}`;
+}
+
+export async function generateRegistrationId(): Promise<string> {
+  return prisma.$transaction((tx) => allocateRegistrationId(tx));
 }
 
 async function createTypeExtension(
@@ -191,7 +193,6 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
     throw new ServiceError("Valid email is required", 400, "INVALID_EMAIL");
   }
 
-  const registrationId = await generateRegistrationId();
   const paymentStatus = asPaymentStatus(input.paymentStatus ?? input.data.paymentStatus);
   const registrationStatus = asRegistrationStatus(input.registrationStatus ?? input.data.registrationStatus);
   const accommodationStatus = asAccommodationStatus(
@@ -200,6 +201,7 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
   );
 
   const result = await prisma.$transaction(async (tx) => {
+    const registrationId = await allocateRegistrationId(tx);
     const master = await tx.registration.create({
       data: {
         registrationId,
@@ -243,7 +245,7 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
       });
     }
 
-    return { master, typeDocId };
+    return { master, typeDocId, registrationId };
   });
 
   await writeAuditLog({
@@ -252,14 +254,14 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
     ipAddress: input.submittedIp ?? null,
     userAgent: input.userAgent ?? null,
     payload: {
-      registrationId,
+      registrationId: result.registrationId,
       registrationType: input.registrationType,
       typeDocId: result.typeDocId,
     },
   });
 
   return {
-    registrationId,
+    registrationId: result.registrationId,
     id: result.master.id,
     typeDocId: result.typeDocId,
   };

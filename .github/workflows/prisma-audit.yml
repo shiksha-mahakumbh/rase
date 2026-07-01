@@ -1,22 +1,18 @@
-# Run Prisma migrations against production after merge to main.
-# Requires DATABASE_URL (pooled) and DIRECT_URL in repo secrets — see .github/DEPLOY_SECRETS.md
-name: Prisma Migrate Deploy
+# Read-only Prisma schema vs production DB drift check.
+# Requires DATABASE_URL + DIRECT_URL in repo secrets — see .github/DEPLOY_SECRETS.md
+name: Prisma Production Audit
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - "prisma/migrations/**"
-      - "prisma/schema.prisma"
+  schedule:
+    - cron: "0 6 * * 1"
 
 concurrency:
-  group: prisma-migrate-${{ github.ref }}
+  group: prisma-audit
   cancel-in-progress: false
 
 jobs:
-  migrate:
+  audit:
     runs-on: ubuntu-latest
     if: github.repository == 'shiksha-mahakumbh/rase'
     steps:
@@ -33,8 +29,8 @@ jobs:
       - name: Validate Prisma schema
         run: npm run db:validate
 
-      - name: Apply migrations
+      - name: Audit schema vs production database
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
-        run: npx prisma migrate deploy
+        run: npm run audit:prisma
