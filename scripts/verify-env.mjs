@@ -48,6 +48,7 @@ const groups = {
     { key: "ADMIN_OPS_SECRET", required: true, production: true },
     { key: "ADMIN_SESSION_SECRET", required: true, production: true },
     { key: "REGISTRATION_LOOKUP_SECRET", required: true, production: true },
+    { key: "REGISTRATION_UPLOAD_SECRET", required: false, productionRecommended: true },
     { key: "ADMIN_GATEWAY_SIGNING_SECRET", required: false, productionRecommended: true },
     { key: "ADMIN_BOOTSTRAP_EMAILS", required: false },
   ],

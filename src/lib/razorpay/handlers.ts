@@ -60,6 +60,8 @@ function expectedAmountPaiseFromOrderNotes(
 }
 
 export async function handleCreateOrder(request: NextRequest) {
+  const { assertSameOrigin } = await import("@/server/lib/same-origin");
+  assertSameOrigin(request);
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
     key: `razorpay-create-order:${ip}`,
@@ -190,6 +192,8 @@ export async function handleCreateOrder(request: NextRequest) {
 }
 
 export async function handleVerifyPayment(request: NextRequest) {
+  const { assertSameOrigin } = await import("@/server/lib/same-origin");
+  assertSameOrigin(request);
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
     key: `razorpay-verify:${ip}`,
