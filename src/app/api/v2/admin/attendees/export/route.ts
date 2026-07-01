@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
   const blocked = await adminBinaryGuard(request, {
     rateLimitKey: "admin-attendees-export",
     limit: 20,
+    permission: "registrations.export",
   });
   if (blocked) return blocked;
 

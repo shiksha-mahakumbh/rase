@@ -14,7 +14,7 @@ export const GET = createApiHandler(
     const { searchParams } = new URL(request.url);
     return listEventSessions({ activeOnly: searchParams.get("all") !== "1" });
   },
-  { requireAdmin: true, rateLimitKey: "admin-sessions", limit: 60 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-sessions", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -63,5 +63,5 @@ export const POST = createApiHandler(
       speakerName: body.speakerName,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-sessions-action", limit: 30 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-sessions-action", limit: 30 }
 );

@@ -3,5 +3,5 @@ import { getLifecycleAnalytics } from "@/server/services/lifecycle/lifecycle-ana
 
 export const GET = createApiHandler(
   async () => getLifecycleAnalytics(),
-  { requireAdmin: true, rateLimitKey: "admin-lifecycle-analytics", limit: 60 }
+  { requireAdmin: true, adminResource: "audit_logs", rateLimitKey: "admin-lifecycle-analytics", limit: 60 }
 );

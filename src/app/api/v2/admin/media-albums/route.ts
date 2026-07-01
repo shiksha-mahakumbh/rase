@@ -14,7 +14,7 @@ export const GET = createApiHandler(
       locale: (searchParams.get("locale") as ContentLocale) ?? undefined,
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -38,5 +38,5 @@ export const POST = createApiHandler(
     });
     return { success: true, album };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

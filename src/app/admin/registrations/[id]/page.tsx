@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 function DetailContent() {
   const params = useParams();
   const id = params.id as string;
-  const { role } = useAdmin();
+  const { role, permissions } = useAdmin();
   const [record, setRecord] = useState<AdminRegistrationView | null>(null);
   const [fetching, setFetching] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -43,7 +43,7 @@ function DetailContent() {
     field: "registrationStatus" | "paymentStatus" | "accommodationStatus",
     value: string
   ) => {
-    if (!canManageStatus(role)) return;
+    if (!canManageStatus(role, permissions)) return;
     try {
       const res = await fetch(
         `/api/admin/gateway/registrations/${encodeURIComponent(id)}`,
@@ -138,7 +138,7 @@ function DetailContent() {
         </div>
       </div>
 
-      {canManageStatus(role) && (
+      {canManageStatus(role, permissions) && (
         <section className="rounded-2xl border bg-white p-5">
           <h2 className="mb-4 font-bold text-primary">Status Management</h2>
           <div className="grid gap-4 md:grid-cols-3">

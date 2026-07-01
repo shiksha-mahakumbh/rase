@@ -15,7 +15,7 @@ export const GET = createApiHandler(
     const partner = await getPartner(id);
     return { success: true, partner };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -55,7 +55,7 @@ export const PATCH = createApiHandler(
     });
     return { success: true, partner };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -64,5 +64,5 @@ export const DELETE = createApiHandler(
     const partner = await deletePartner(id);
     return { success: true, partner };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

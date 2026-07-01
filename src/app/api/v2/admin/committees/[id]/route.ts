@@ -15,7 +15,7 @@ export const GET = createApiHandler(
     const committee = await getCommittee(id);
     return { success: true, committee };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );
 
 export const PATCH = createApiHandler(
@@ -52,7 +52,7 @@ export const PATCH = createApiHandler(
     } as Parameters<typeof updateCommittee>[1]);
     return { success: true, committee };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );
 
 export const DELETE = createApiHandler(
@@ -61,5 +61,5 @@ export const DELETE = createApiHandler(
     const committee = await deleteCommittee(id);
     return { success: true, committee };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );

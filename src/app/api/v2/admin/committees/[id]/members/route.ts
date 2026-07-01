@@ -15,7 +15,7 @@ export const POST = createApiHandler(
     const row = await addCommitteeMember({ committeeId, ...body });
     return { success: true, member: row };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );
 
 export const PUT = createApiHandler(
@@ -25,5 +25,5 @@ export const PUT = createApiHandler(
     await reorderCommitteeMembers(committeeId, body.memberIds);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );

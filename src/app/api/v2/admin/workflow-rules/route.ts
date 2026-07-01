@@ -8,7 +8,7 @@ import {
   toggleWorkflowRule,
 } from "@/server/services/ops/workflow-automation.service";
 
-export const GET = createApiHandler(async () => listWorkflowRules(), { requireAdmin: true });
+export const GET = createApiHandler(async () => listWorkflowRules(), { requireAdmin: true, adminResource: "media" });
 
 export const POST = createApiHandler(
   async (request: NextRequest) => {
@@ -38,5 +38,5 @@ export const POST = createApiHandler(
       templateBody: body.templateBody,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-workflows", limit: 30 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-workflows", limit: 30 }
 );

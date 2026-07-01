@@ -8,7 +8,7 @@ import {
 
 export const GET = createApiHandler(
   async () => listAccommodationRooms(),
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "registrations" }
 );
 
 export const POST = createApiHandler(
@@ -29,5 +29,5 @@ export const POST = createApiHandler(
       capacity: body.capacity,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-accommodation-rooms", limit: 30 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-accommodation-rooms", limit: 30 }
 );

@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { createApiHandler } from "@/server/lib/api-handler";
-import { ADMIN_SENSITIVE_READ_ROLES } from "@/server/lib/admin-rbac";
 import { getExecutiveDashboard, getSessionAttendanceSummary } from "@/server/services/ops/executive-dashboard.service";
 
 export const GET = createApiHandler(
@@ -11,10 +10,7 @@ export const GET = createApiHandler(
     }
     return getExecutiveDashboard();
   },
-  {
-    requireAdmin: true,
-    adminRoles: ADMIN_SENSITIVE_READ_ROLES,
-    rateLimitKey: "admin-executive",
+  { requireAdmin: true, adminResource: "audit_logs", rateLimitKey: "admin-executive",
     limit: 60,
   }
 );

@@ -9,7 +9,7 @@ export const GET = createApiHandler(
     const feedback = await getFeedback(id);
     return { success: true, feedback };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "feedback" }
 );
 
 export const PATCH = createApiHandler(
@@ -23,5 +23,5 @@ export const PATCH = createApiHandler(
     const feedback = await updateFeedback(id, body);
     return { success: true, feedback };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "feedback" }
 );

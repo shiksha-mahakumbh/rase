@@ -14,7 +14,7 @@ export async function GET(
   const blocked = await adminBinaryGuard(request, {
     rateLimitKey: "admin-doc-dl",
     limit: 60,
-    mutation: true,
+    permission: "exports.create",
   });
   if (blocked) return blocked;
 

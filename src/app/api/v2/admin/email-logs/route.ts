@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { createApiHandler } from "@/server/lib/api-handler";
-import { ADMIN_SENSITIVE_READ_ROLES } from "@/server/lib/admin-rbac";
 import { listEmailLogs } from "@/server/services/admin/monitoring.service";
 
 export const GET = createApiHandler(
@@ -14,10 +13,7 @@ export const GET = createApiHandler(
       registrationId: searchParams.get("registrationId") ?? undefined,
     });
   },
-  {
-    requireAdmin: true,
-    adminRoles: ADMIN_SENSITIVE_READ_ROLES,
-    rateLimitKey: "admin-email-logs",
+  { requireAdmin: true, adminResource: "audit_logs", rateLimitKey: "admin-email-logs",
     limit: 120,
   }
 );

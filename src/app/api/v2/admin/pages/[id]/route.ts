@@ -17,7 +17,7 @@ export const GET = createApiHandler(
     });
     return { success: true, page, seo };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -37,7 +37,7 @@ export const PATCH = createApiHandler(
     const page = await updatePage(id, body as never);
     return { success: true, page };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -46,5 +46,5 @@ export const DELETE = createApiHandler(
     await deletePage(id);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

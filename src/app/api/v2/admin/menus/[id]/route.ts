@@ -19,7 +19,7 @@ export const GET = createApiHandler(
     if (!menu) throw new ServiceError("Menu not found", 404, "NOT_FOUND");
     return { success: true, menu };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -32,5 +32,5 @@ export const PATCH = createApiHandler(
     const menu = await updateMenu(id, body);
     return { success: true, menu };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

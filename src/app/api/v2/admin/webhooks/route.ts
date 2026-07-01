@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { createApiHandler } from "@/server/lib/api-handler";
-import { ADMIN_SENSITIVE_READ_ROLES } from "@/server/lib/admin-rbac";
 import { listWebhookLogs } from "@/server/services/admin/reconciliation.service";
 
 export const GET = createApiHandler(
@@ -13,10 +12,7 @@ export const GET = createApiHandler(
       status,
     });
   },
-  {
-    requireAdmin: true,
-    adminRoles: ADMIN_SENSITIVE_READ_ROLES,
-    rateLimitKey: "admin-webhooks",
+  { requireAdmin: true, adminResource: "payments", rateLimitKey: "admin-webhooks",
     limit: 60,
   }
 );

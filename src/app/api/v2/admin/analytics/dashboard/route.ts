@@ -10,5 +10,5 @@ export const GET = createApiHandler(
     ]);
     return { success: true, analytics, operations };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "audit_logs" }
 );

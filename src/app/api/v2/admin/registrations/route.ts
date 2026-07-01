@@ -13,5 +13,5 @@ export const GET = createApiHandler(
       search: searchParams.get("search") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "v2-admin-registrations", limit: 60 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "v2-admin-registrations", limit: 60 }
 );

@@ -16,7 +16,7 @@ export const GET = createApiHandler(
       includeDeleted: searchParams.get("includeDeleted") === "true",
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -43,5 +43,5 @@ export const POST = createApiHandler(
     });
     return { success: true, ...result };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

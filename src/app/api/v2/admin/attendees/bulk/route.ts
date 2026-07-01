@@ -69,5 +69,5 @@ export const POST = createApiHandler(
         throw new ServiceError("Unknown bulk action", 400, "INVALID_ACTION");
     }
   },
-  { requireAdmin: true, rateLimitKey: "admin-attendees-bulk", limit: 20 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-attendees-bulk", limit: 20 }
 );

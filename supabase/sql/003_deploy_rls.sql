@@ -9,3 +9,4 @@
 \ir ../policies/analytics.sql
 \ir ../policies/phase_b.sql
 \ir ../policies/storage-production.sql
+\ir ../policies/rbac-tiered.sql

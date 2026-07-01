@@ -65,12 +65,14 @@ function SidebarSkeleton() {
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, role, loading, logout } = useAdmin();
+  const { user, role, permissions, loading, logout } = useAdmin();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navItems = filterCmsNavForRole(role);
+  const navItems = filterCmsNavForRole(role, permissions);
   const manageBlocked =
-    Boolean(role) && isManageOnlyPath(pathname) && !canAccessNavItem(role, "manage");
+    Boolean(role) &&
+    isManageOnlyPath(pathname) &&
+    !canAccessNavItem(role, "manage", permissions);
 
   useEffect(() => {
     setMobileOpen(false);

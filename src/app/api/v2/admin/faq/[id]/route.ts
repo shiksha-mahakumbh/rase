@@ -15,7 +15,7 @@ export const GET = createApiHandler(
     if (!faq) throw new ServiceError("FAQ not found", 404, "NOT_FOUND");
     return { success: true, faq };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -34,7 +34,7 @@ export const PATCH = createApiHandler(
     const faq = await updateFaq(id, body);
     return { success: true, faq };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -43,5 +43,5 @@ export const DELETE = createApiHandler(
     await deleteFaq(id);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

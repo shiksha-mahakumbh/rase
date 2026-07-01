@@ -1,4 +1,9 @@
 import type { AdminRole } from "@/types/registration";
+import type { PermissionSlug } from "@/lib/permissions";
+import {
+  canMutateCms,
+  roleHasPermission,
+} from "@/lib/admin-role-capabilities";
 
 export type AdminNavAccess = "any" | "manage";
 
@@ -9,6 +14,8 @@ export type AdminNavItem = {
   group: "content" | "organizational" | "site" | "insights" | "operations";
   /** "manage" = Super Admin & Admin only; default "any" = all admin roles */
   access?: AdminNavAccess;
+  /** Permission slug required when access is not "manage" */
+  permission?: PermissionSlug;
 };
 
 export const CMS_NAV: AdminNavItem[] = [
@@ -331,17 +338,68 @@ export const CMS_NAV_GROUPS: Record<AdminNavItem["group"], string> = {
   operations: "Operations",
 };
 
-export function canAccessNavItem(
-  role: AdminRole | null,
-  access: AdminNavAccess = "any"
-): boolean {
-  if (!role) return false;
-  if (access === "any") return true;
-  return role === "Super Admin" || role === "Admin";
+/** Resolve the minimum permission slug for a nav item. */
+function navItemPermission(item: AdminNavItem): PermissionSlug {
+  if (item.permission) return item.permission;
+  if (item.access === "manage") return "media.manage";
+  const href = item.href;
+  if (href.includes("committees")) return "committees.read";
+  if (
+    href.includes("payments") ||
+    href.includes("donation") ||
+    href.includes("payment") ||
+    href.includes("webhook")
+  ) {
+    return "payments.read";
+  }
+  if (
+    href.includes("audit") ||
+    href.includes("email-logs") ||
+    href.includes("newsletter") ||
+    href.includes("analytics") ||
+    href.includes("executive") ||
+    href.includes("ai-insights") ||
+    href.includes("whatsapp") ||
+    href.includes("communications")
+  ) {
+    return "audit_logs.read";
+  }
+  if (href.includes("contact")) return "contact.read";
+  if (href.includes("feedback")) return "feedback.read";
+  if (href.includes("settings")) return "settings.manage";
+  if (
+    href === "/admin" ||
+    href.includes("attendees") ||
+    href.includes("checkin") ||
+    href.includes("accommodation") ||
+    href.includes("receipts")
+  ) {
+    return "registrations.read";
+  }
+  return "media.read";
 }
 
-export function filterCmsNavForRole(role: AdminRole | null): AdminNavItem[] {
-  return CMS_NAV.filter((item) => canAccessNavItem(role, item.access ?? "any"));
+export function canAccessNavItem(
+  role: AdminRole | null,
+  access: AdminNavAccess = "any",
+  permissions?: readonly PermissionSlug[] | null,
+  item?: AdminNavItem
+): boolean {
+  if (!role) return false;
+  if (access === "manage" && !canMutateCms(role)) return false;
+  if (item) {
+    return roleHasPermission(role, navItemPermission(item), permissions);
+  }
+  return access !== "manage" || canMutateCms(role);
+}
+
+export function filterCmsNavForRole(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): AdminNavItem[] {
+  return CMS_NAV.filter((item) =>
+    canAccessNavItem(role, item.access ?? "any", permissions, item)
+  );
 }
 
 export function getManageOnlyNavHrefs(): string[] {

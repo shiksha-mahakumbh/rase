@@ -24,5 +24,5 @@ export const PUT = createApiHandler(
 
     return { success: true, section };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

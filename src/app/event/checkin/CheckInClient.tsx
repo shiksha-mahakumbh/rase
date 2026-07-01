@@ -71,8 +71,8 @@ function pushLocalRecent(entry: RecentCheckIn) {
 
 export default function CheckInClient({ standalone = false }: { standalone?: boolean }) {
   const searchParams = useSearchParams();
-  const { role } = useAdmin();
-  const canPerformActions = canPerformCheckIn(role);
+  const { role, permissions } = useAdmin();
+  const canPerformActions = canPerformCheckIn(role, permissions);
 
   const [scanInput, setScanInput] = useState("");
   const [sessionName, setSessionName] = useState("");

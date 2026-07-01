@@ -31,7 +31,7 @@ export const PATCH = createApiHandler(
     const member = await updateCommitteeMember(memberId, body);
     return { success: true, member };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );
 
 export const DELETE = createApiHandler(
@@ -40,5 +40,5 @@ export const DELETE = createApiHandler(
     await removeCommitteeMember(memberId);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );

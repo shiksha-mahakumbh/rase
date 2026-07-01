@@ -8,7 +8,7 @@ export const GET = createApiHandler(
     const folders = await listFolders(parentId === "null" ? null : parentId ?? null);
     return { success: true, folders };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -22,5 +22,5 @@ export const POST = createApiHandler(
     const folder = await createFolder(body);
     return { success: true, folder };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

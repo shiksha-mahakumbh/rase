@@ -36,7 +36,7 @@ export type AccommodationStatus =
   | "Confirmed"
   | "Allocated";
 
-export type AdminRole = "Super Admin" | "Admin" | "Data Entry";
+export type AdminRole = "Super Admin" | "Admin" | "Data Entry" | "Coordinator";
 
 export type AccommodationDate =
   | "8–11 Oct 2026"

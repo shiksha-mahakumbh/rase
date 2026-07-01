@@ -15,7 +15,7 @@ export const GET = createApiHandler(
       offset: Number(searchParams.get("offset") ?? 0),
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );
 
 export const POST = createApiHandler(
@@ -39,5 +39,5 @@ export const POST = createApiHandler(
     });
     return { success: true, committee };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );

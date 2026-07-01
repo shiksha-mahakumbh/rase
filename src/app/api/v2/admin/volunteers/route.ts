@@ -20,7 +20,7 @@ export const GET = createApiHandler(
       department: searchParams.get("department") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-volunteers", limit: 60 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-volunteers", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -53,5 +53,5 @@ export const POST = createApiHandler(
       notes: body.notes,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-volunteers-action", limit: 30 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-volunteers-action", limit: 30 }
 );

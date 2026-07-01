@@ -16,7 +16,7 @@ export const GET = createApiHandler(
       offset: Number(searchParams.get("offset") ?? 0),
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-speaker-ops", limit: 60 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-speaker-ops", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -33,5 +33,5 @@ export const POST = createApiHandler(
     }>(await request.json());
     return upsertSpeakerOperations(body);
   },
-  { requireAdmin: true, rateLimitKey: "admin-speaker-ops-action", limit: 30 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-speaker-ops-action", limit: 30 }
 );

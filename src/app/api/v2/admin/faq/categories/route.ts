@@ -17,7 +17,7 @@ export const GET = createApiHandler(
       includeInactive: searchParams.get("includeInactive") === "true",
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -33,7 +33,7 @@ export const POST = createApiHandler(
     const category = await createFaqCategory(body);
     return { success: true, category };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -49,7 +49,7 @@ export const PATCH = createApiHandler(
     const category = await updateFaqCategory(body.id, body);
     return { success: true, category };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -60,5 +60,5 @@ export const DELETE = createApiHandler(
     await deleteFaqCategory(id);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

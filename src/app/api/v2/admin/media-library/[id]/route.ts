@@ -26,7 +26,7 @@ export const GET = createApiHandler(
 
     return { success: true, asset, signedUrl: signed };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -46,7 +46,7 @@ export const PATCH = createApiHandler(
 
     return { success: true, asset };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -56,5 +56,5 @@ export const DELETE = createApiHandler(
     await deleteMediaAsset(id, ctx.ip);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

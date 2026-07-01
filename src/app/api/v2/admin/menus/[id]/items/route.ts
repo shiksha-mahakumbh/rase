@@ -20,7 +20,7 @@ export const POST = createApiHandler(
     const item = await upsertMenuItem(menuId, body);
     return { success: true, item };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PUT = createApiHandler(
@@ -33,7 +33,7 @@ export const PUT = createApiHandler(
     const menu = await reorderMenuItems(menuId, body.items);
     return { success: true, menu };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -44,5 +44,5 @@ export const DELETE = createApiHandler(
     const item = await deleteMenuItem(itemId);
     return { success: true, item };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

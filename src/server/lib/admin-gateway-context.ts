@@ -28,7 +28,14 @@ export function verifyAdminGatewayContext(request: NextRequest): AdminRole | nul
   const sig = request.headers.get("x-admin-context-sig");
 
   if (!email || !uid || !role || !sig) return null;
-  if (role !== "Super Admin" && role !== "Admin" && role !== "Data Entry") return null;
+  if (
+    role !== "Super Admin" &&
+    role !== "Admin" &&
+    role !== "Data Entry" &&
+    role !== "Coordinator"
+  ) {
+    return null;
+  }
 
   try {
     const expected = signAdminGatewayContext(email, role as AdminRole, uid);

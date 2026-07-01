@@ -19,7 +19,7 @@ export const GET = createApiHandler(
       offset: Number(searchParams.get("offset") ?? 0),
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-communications", limit: 60 }
+  { requireAdmin: true, adminResource: "audit_logs", rateLimitKey: "admin-communications", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -47,5 +47,5 @@ export const POST = createApiHandler(
       bodyHtml: body.bodyHtml,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-communications-create", limit: 20 }
+  { requireAdmin: true, adminResource: "audit_logs", mutationPermission: "media.manage", rateLimitKey: "admin-communications-create", limit: 20 }
 );

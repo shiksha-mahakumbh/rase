@@ -38,5 +38,5 @@ export const GET = createApiHandler(
       conversion,
     };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

@@ -11,5 +11,5 @@ export const GET = createApiHandler(
       search: searchParams.get("search") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-donations", limit: 120 }
+  { requireAdmin: true, adminResource: "payments", rateLimitKey: "admin-donations", limit: 120 }
 );

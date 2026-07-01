@@ -3,7 +3,7 @@ import { createNoticeCategory, listNoticeCategories } from "@/server/services/no
 
 export const GET = createApiHandler(
   async () => ({ items: await listNoticeCategories(true) }),
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -17,5 +17,5 @@ export const POST = createApiHandler(
     const category = await createNoticeCategory(body);
     return { success: true, category };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

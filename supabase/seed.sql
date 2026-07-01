@@ -61,11 +61,11 @@ WHERE p.slug IN (
 )
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
--- Data Entry — read + update registrations
+-- Data Entry — read, update, and export registrations (gate staff)
 INSERT INTO role_permissions (id, role_id, permission_id)
 SELECT gen_random_uuid(), '00000000-0000-4000-8000-000000000003', p.id
 FROM permissions p
-WHERE p.slug IN ('registrations.read', 'registrations.update')
+WHERE p.slug IN ('registrations.read', 'registrations.update', 'registrations.export')
 ON CONFLICT (role_id, permission_id) DO NOTHING;
 
 -- Coordinator — read registrations + committees

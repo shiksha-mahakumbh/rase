@@ -15,7 +15,7 @@ export const GET = createApiHandler(
     const page = await getOrCreateHomepage(locale);
     return { success: true, page, sectionKeys: HOMEPAGE_SECTION_KEYS };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PUT = createApiHandler(
@@ -51,7 +51,7 @@ export const PUT = createApiHandler(
 
     return { success: true, ...results };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -63,5 +63,5 @@ export const PATCH = createApiHandler(
     }
     return { success: false };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

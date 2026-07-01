@@ -15,7 +15,7 @@ export const GET = createApiHandler(
     const speaker = await getSpeaker(id);
     return { success: true, speaker };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -63,7 +63,7 @@ export const PATCH = createApiHandler(
     } as Parameters<typeof updateSpeaker>[1]);
     return { success: true, speaker };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -72,5 +72,5 @@ export const DELETE = createApiHandler(
     const speaker = await deleteSpeaker(id);
     return { success: true, speaker };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

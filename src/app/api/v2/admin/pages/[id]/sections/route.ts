@@ -18,5 +18,5 @@ export const PUT = createApiHandler(
     const section = await upsertPageSection(pageId, body);
     return { success: true, section };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

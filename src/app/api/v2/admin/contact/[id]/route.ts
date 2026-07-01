@@ -9,7 +9,7 @@ export const GET = createApiHandler(
     const message = await getContactMessage(id);
     return { success: true, message };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "contact" }
 );
 
 export const PATCH = createApiHandler(
@@ -23,5 +23,5 @@ export const PATCH = createApiHandler(
     const message = await updateContactMessage(id, body);
     return { success: true, message };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "contact" }
 );

@@ -21,5 +21,5 @@ export const GET = createApiHandler(
 
     return { success: true, stats, metrics, chart, categories };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

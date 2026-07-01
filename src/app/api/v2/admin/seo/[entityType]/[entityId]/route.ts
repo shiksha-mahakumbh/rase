@@ -11,7 +11,7 @@ export const GET = createApiHandler(
     const seo = await getSeoForEntity(entityType, entityId, locale);
     return { success: true, seo: enrichSeoForAdmin(seo) };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PUT = createApiHandler(
@@ -26,7 +26,7 @@ export const PUT = createApiHandler(
     } as never);
     return { success: true, seo: enrichSeoForAdmin(seo) };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -35,5 +35,5 @@ export const DELETE = createApiHandler(
     await deleteSeoForEntity(entityType, entityId);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

@@ -8,6 +8,13 @@ import {
   ReactNode,
 } from "react";
 import { AdminRole } from "@/types/registration";
+import type { PermissionSlug } from "@/lib/permissions";
+import {
+  canMutateCms,
+  canPerformCheckIn,
+  roleHasPermission,
+  canUpdateRegistrations,
+} from "@/lib/admin-role-capabilities";
 
 export type AdminUser = {
   uid: string;
@@ -17,6 +24,7 @@ export type AdminUser = {
 interface AdminContextValue {
   user: AdminUser | null;
   role: AdminRole | null;
+  permissions: PermissionSlug[];
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -30,6 +38,7 @@ const AUTH_INIT_TIMEOUT_MS = 8000;
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AdminUser | null>(null);
   const [role, setRole] = useState<AdminRole | null>(null);
+  const [permissions, setPermissions] = useState<PermissionSlug[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,6 +66,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         if (data.authenticated) {
           setUser({ uid: data.uid, email: data.email });
           setRole(data.role as AdminRole);
+          setPermissions(Array.isArray(data.permissions) ? data.permissions : []);
         }
       } catch (error) {
         console.error("Admin session bootstrap failed:", error);
@@ -86,12 +96,23 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const data = await res.json();
     setUser({ uid: data.uid ?? "", email: data.email });
     setRole(data.role as AdminRole);
+    setPermissions(Array.isArray(data.permissions) ? data.permissions : []);
+
+    const bootstrap = await fetch("/api/admin/session/bootstrap", {
+      credentials: "include",
+      cache: "no-store",
+    });
+    const bootData = await bootstrap.json();
+    if (bootData.authenticated && Array.isArray(bootData.permissions)) {
+      setPermissions(bootData.permissions);
+    }
   };
 
   const logout = async () => {
     await fetch("/api/admin/session", { method: "DELETE", credentials: "include" });
     setUser(null);
     setRole(null);
+    setPermissions([]);
     window.location.assign("/admin");
   };
 
@@ -100,6 +121,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         role,
+        permissions,
         loading,
         login,
         logout,
@@ -117,24 +139,25 @@ export function useAdmin() {
   return ctx;
 }
 
-export function canMutateCms(role: AdminRole | null): boolean {
-  return role === "Super Admin" || role === "Admin";
+export { canMutateCms, canPerformCheckIn };
+
+export function canAccessSensitiveAdmin(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): boolean {
+  return roleHasPermission(role, "audit_logs.read", permissions);
 }
 
-/** Sensitive admin reads and CMS mutations (Super Admin & Admin). */
-export function canAccessSensitiveAdmin(role: AdminRole | null): boolean {
-  return canMutateCms(role);
+export function canManageStatus(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): boolean {
+  return canUpdateRegistrations(role, permissions);
 }
 
-/** @deprecated use canMutateCms */
-export function canManageStatus(role: AdminRole | null): boolean {
-  return canMutateCms(role);
-}
-
-export function canExport(role: AdminRole | null): boolean {
-  return role === "Super Admin" || role === "Admin" || role === "Data Entry";
-}
-
-export function canPerformCheckIn(role: AdminRole | null): boolean {
-  return canExport(role);
+export function canExport(
+  role: AdminRole | null,
+  permissions?: readonly PermissionSlug[] | null
+): boolean {
+  return roleHasPermission(role, "registrations.export", permissions);
 }

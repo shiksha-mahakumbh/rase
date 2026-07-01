@@ -17,7 +17,7 @@ export const GET = createApiHandler(
       reviewerUserId: searchParams.get("reviewerUserId") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-research", limit: 60 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-research", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -42,5 +42,5 @@ export const POST = createApiHandler(
       registrationId: body.registrationId,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-research-create", limit: 20 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-research-create", limit: 20 }
 );

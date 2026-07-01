@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import type { AdminRole } from "@/types/registration";
+import type { PermissionSlug } from "@/lib/permissions";
 
 export type AdminBinaryGuardOptions = {
   rateLimitKey: string;
   limit?: number;
   windowMs?: number;
+  /** Explicit permission slug (DB-backed). */
+  permission?: PermissionSlug;
   /** When omitted, export roles for reads and manage roles for mutations */
   roles?: readonly AdminRole[];
   mutation?: boolean;
@@ -30,10 +33,17 @@ export async function adminBinaryGuard(
   }
 
   const { requireAdminSecret } = await import("@/server/lib/admin-guard");
+  requireAdminSecret(request);
+
+  if (options.permission) {
+    const { assertPermission } = await import("@/server/lib/admin-rbac");
+    await assertPermission(request, options.permission);
+    return null;
+  }
+
   const { assertAdminRoles, ADMIN_EXPORT_ROLES, ADMIN_MANAGE_ROLES } = await import(
     "@/server/lib/admin-rbac"
   );
-  requireAdminSecret(request);
   const roles =
     options.roles ?? (options.mutation ? ADMIN_MANAGE_ROLES : ADMIN_EXPORT_ROLES);
   assertAdminRoles(request, roles);

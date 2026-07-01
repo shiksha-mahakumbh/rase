@@ -15,7 +15,7 @@ export const GET = createApiHandler(
       featured: searchParams.get("featured") === "true" ? true : undefined,
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -33,5 +33,5 @@ export const POST = createApiHandler(
     const faq = await createFaq(body);
     return { success: true, faq };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

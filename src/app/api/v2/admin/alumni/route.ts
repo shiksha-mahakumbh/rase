@@ -18,7 +18,7 @@ export const GET = createApiHandler(
       search: searchParams.get("search") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-alumni", limit: 60 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-alumni", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -50,5 +50,5 @@ export const POST = createApiHandler(
 
     throw new ServiceError("Unknown action", 400, "INVALID_ACTION");
   },
-  { requireAdmin: true, rateLimitKey: "admin-alumni-action", limit: 10 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-alumni-action", limit: 10 }
 );

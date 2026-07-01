@@ -4,6 +4,12 @@ import type { NextRequest } from "next/server";
 import { ADMIN_SESSION_COOKIE } from "@/constants/auth";
 import { routing } from "@/i18n/routing";
 import { verifyAdminSessionTokenEdge } from "@/lib/security/admin-session-edge";
+import { isManageOnlyPath } from "@/components/admin/cms/admin-nav";
+import {
+  canAccessManagePath,
+  canPerformCheckIn,
+} from "@/lib/admin-role-capabilities";
+import type { AdminRole } from "@/types/registration";
 import { isRedirectShellPath } from "@/lib/knowledge-graph/site-cleanup";
 import { legacyCaseAliasDestination } from "@/config/legacy-case-aliases";
 
@@ -68,13 +74,12 @@ function isAdminLoginLanding(pathname: string): boolean {
   return pathname === "/admin" || pathname === "/admin/";
 }
 
-async function hasValidAdminSession(request: NextRequest): Promise<boolean> {
+async function getAdminSession(request: NextRequest) {
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
   const secret = process.env.ADMIN_SESSION_SECRET;
-  if (!cookie || !secret) return false;
-  if (cookie === "1") return false;
-  const session = await verifyAdminSessionTokenEdge(cookie, secret);
-  return Boolean(session);
+  if (!cookie || !secret) return null;
+  if (cookie === "1") return null;
+  return verifyAdminSessionTokenEdge(cookie, secret);
 }
 
 function withNoIndex(response: NextResponse, pathname: string): NextResponse {
@@ -129,11 +134,26 @@ export async function middleware(request: NextRequest) {
 
   if (isOpsPath(pathname)) {
     if (!isAdminLoginLanding(pathname) && !pathname.startsWith("/api/")) {
-      const authed = await hasValidAdminSession(request);
-      if (!authed) {
+      const session = await getAdminSession(request);
+      if (!session) {
         const url = request.nextUrl.clone();
         url.pathname = "/admin";
         url.searchParams.set("next", pathname);
+        return withNoIndex(NextResponse.redirect(url), pathname);
+      }
+
+      const role = session.role as AdminRole;
+      const isCheckInPath =
+        pathname === "/event/checkin" || pathname.startsWith("/event/checkin/");
+      if (isCheckInPath && !canPerformCheckIn(role)) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/admin/cms";
+        return withNoIndex(NextResponse.redirect(url), pathname);
+      }
+
+      if (isManageOnlyPath(pathname) && !canAccessManagePath(role)) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/admin/cms";
         return withNoIndex(NextResponse.redirect(url), pathname);
       }
     }

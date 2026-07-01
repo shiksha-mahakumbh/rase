@@ -10,7 +10,7 @@ export const GET = createApiHandler(
     const includeInactive = searchParams.get("includeInactive") === "true";
     return { items: await listMenus(locale, includeInactive) };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -40,5 +40,5 @@ export const POST = createApiHandler(
     });
     return { success: true, menu };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

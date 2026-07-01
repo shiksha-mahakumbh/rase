@@ -3,5 +3,5 @@ import { getPaymentMonitoringAnalytics } from "@/server/services/admin/monitorin
 
 export const GET = createApiHandler(
   async () => getPaymentMonitoringAnalytics(),
-  { requireAdmin: true, rateLimitKey: "admin-payments-analytics", limit: 60 }
+  { requireAdmin: true, adminResource: "payments", rateLimitKey: "admin-payments-analytics", limit: 60 }
 );

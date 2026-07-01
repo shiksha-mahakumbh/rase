@@ -7,5 +7,5 @@ export const GET = createApiHandler(
     const revisions = await listEntityRevisions("committee", id);
     return { success: true, revisions };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "committees" }
 );

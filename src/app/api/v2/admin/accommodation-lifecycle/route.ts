@@ -17,7 +17,7 @@ export const GET = createApiHandler(
       status: (searchParams.get("status") as AccommodationStatus) ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-accommodation", limit: 60 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-accommodation", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -50,5 +50,5 @@ export const POST = createApiHandler(
 
     throw new ServiceError("Unknown action", 400, "INVALID_ACTION");
   },
-  { requireAdmin: true, rateLimitKey: "admin-accommodation-action", limit: 30 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-accommodation-action", limit: 30 }
 );

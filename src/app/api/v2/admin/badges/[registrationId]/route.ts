@@ -8,7 +8,11 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ registrationId: string }> }
 ) {
-  const blocked = await adminBinaryGuard(request, { rateLimitKey: "admin-badge", limit: 60 });
+  const blocked = await adminBinaryGuard(request, {
+    rateLimitKey: "admin-badge",
+    limit: 60,
+    permission: "registrations.export",
+  });
   if (blocked) return blocked;
   try {
     const { registrationId } = await context.params;

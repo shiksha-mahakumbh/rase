@@ -1,3 +1,4 @@
+import { ADMIN_MANAGE_ROLES } from "@/server/lib/admin-rbac";
 import { NextRequest } from "next/server";
 import { createApiHandler } from "@/server/lib/api-handler";
 import { getAdminActorUid } from "@/server/lib/admin-rbac";
@@ -19,5 +20,5 @@ export const POST = createApiHandler(
     }
     return resendPaymentEmail(log.registration.registrationId, getAdminActorUid(request) ?? undefined);
   },
-  { requireAdmin: true, rateLimitKey: "admin-email-resend", limit: 20 }
+  { requireAdmin: true, adminRoles: ADMIN_MANAGE_ROLES, rateLimitKey: "admin-email-resend", limit: 20 }
 );

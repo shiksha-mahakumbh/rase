@@ -14,7 +14,7 @@ const handler = createApiHandler(
       status: status ?? undefined,
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "registrations" }
 );
 
 export const GET = withDeprecationHeaders(handler, {

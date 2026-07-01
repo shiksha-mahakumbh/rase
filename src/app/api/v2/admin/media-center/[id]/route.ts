@@ -19,7 +19,7 @@ export const GET = createApiHandler(
     if (!entry) throw new ServiceError("Media entry not found", 404, "NOT_FOUND");
     return { success: true, entry };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -62,7 +62,7 @@ export const PATCH = createApiHandler(
     } as Parameters<typeof updateMediaEntry>[1]);
     return { success: true, entry };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -71,5 +71,5 @@ export const DELETE = createApiHandler(
     const entry = await deleteMediaEntry(id);
     return { success: true, entry };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

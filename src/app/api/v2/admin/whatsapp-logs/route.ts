@@ -11,5 +11,5 @@ export const GET = createApiHandler(
       status: searchParams.get("status") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-whatsapp", limit: 60 }
+  { requireAdmin: true, adminResource: "audit_logs", rateLimitKey: "admin-whatsapp", limit: 60 }
 );

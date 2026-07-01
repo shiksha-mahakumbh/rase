@@ -15,7 +15,7 @@ export const GET = createApiHandler(
     const event = await getEventCms(id);
     return { success: true, event };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -66,7 +66,7 @@ export const PATCH = createApiHandler(
     } as Parameters<typeof updateEventCms>[1]);
     return { success: true, event };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -75,5 +75,5 @@ export const DELETE = createApiHandler(
     const event = await deleteEventCms(id);
     return { success: true, event };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

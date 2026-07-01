@@ -14,7 +14,7 @@ export const GET = createApiHandler(
     if (!bar) throw new ServiceError("Announcement bar not found", 404, "NOT_FOUND");
     return { success: true, bar };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -41,7 +41,7 @@ export const PATCH = createApiHandler(
     });
     return { success: true, bar };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -50,5 +50,5 @@ export const DELETE = createApiHandler(
     const bar = await deleteAnnouncementBar(id);
     return { success: true, bar };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

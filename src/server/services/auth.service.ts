@@ -3,12 +3,18 @@ import { getSupabaseAdmin } from "@/server/db/supabase";
 import { ServiceError } from "@/server/lib/errors";
 import type { AdminRole } from "@/types/registration";
 
-const ADMIN_ROLE_NAMES: AdminRole[] = ["Super Admin", "Admin", "Data Entry"];
+const ADMIN_ROLE_NAMES: AdminRole[] = [
+  "Super Admin",
+  "Admin",
+  "Data Entry",
+  "Coordinator",
+];
 
 const ROLE_PRIORITY: Record<AdminRole, number> = {
   "Super Admin": 0,
   Admin: 1,
   "Data Entry": 2,
+  Coordinator: 3,
 };
 
 function pickHighestAdminRole(roles: AdminRole[]): AdminRole | null {
@@ -36,8 +42,8 @@ function normalizeRoleName(name: string): AdminRole | null {
   if (ADMIN_ROLE_NAMES.includes(name as AdminRole)) {
     return name as AdminRole;
   }
-  if (name === "Coordinator" || name === "Reviewer") {
-    return "Data Entry";
+  if (name === "Reviewer") {
+    return "Coordinator";
   }
   return null;
 }

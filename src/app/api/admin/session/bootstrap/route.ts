@@ -8,6 +8,7 @@ import {
   maybeRotateAdminSessionCookie,
   verifyAndRefreshAdminSession,
 } from "@/server/lib/admin-request-auth";
+import { getPermissionsForRole } from "@/server/services/permission.service";
 
 /** Return current admin session from HMAC cookie (if valid), re-validated against DB. */
 export async function GET(request: NextRequest) {
@@ -45,11 +46,14 @@ export async function GET(request: NextRequest) {
     return response;
   }
 
+  const permissionSet = await getPermissionsForRole(session.role);
+
   const response = NextResponse.json({
     authenticated: true,
     email: session.email,
     role: session.role,
     uid: session.uid,
+    permissions: Array.from(permissionSet),
   });
   maybeRotateAdminSessionCookie(response, session, tokenSession.role);
   return response;

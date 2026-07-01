@@ -11,5 +11,5 @@ export const GET = createApiHandler(
       status: searchParams.get("status") ?? undefined,
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "contact" }
 );

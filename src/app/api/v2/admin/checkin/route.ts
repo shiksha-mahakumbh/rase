@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
-import { ADMIN_CHECKIN_ROLES, getAdminActorUid } from "@/server/lib/admin-rbac";
+import { getAdminActorUid } from "@/server/lib/admin-rbac";
 import { ServiceError } from "@/server/lib/errors";
 import {
   lookupAttendeeForCheckIn,
@@ -21,7 +21,7 @@ export const GET = createApiHandler(
     }
     return lookupAttendeeForCheckIn(id);
   },
-  { requireAdmin: true, rateLimitKey: "admin-checkin-lookup", limit: 180 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-checkin-lookup", limit: 180 }
 );
 
 export const POST = createApiHandler(
@@ -47,5 +47,5 @@ export const POST = createApiHandler(
       actorUserId: actorUserId ?? undefined,
     });
   },
-  { requireAdmin: true, adminRoles: ADMIN_CHECKIN_ROLES, rateLimitKey: "admin-checkin-action", limit: 120 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-checkin-action", limit: 120 }
 );

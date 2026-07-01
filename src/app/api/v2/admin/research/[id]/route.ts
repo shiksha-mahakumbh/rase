@@ -16,5 +16,5 @@ export const PATCH = createApiHandler(
     }>(await request.json());
     return updateResearchSubmission(id, body);
   },
-  { requireAdmin: true, rateLimitKey: "admin-research-update", limit: 30 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-research-update", limit: 30 }
 );

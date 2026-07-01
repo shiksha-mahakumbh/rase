@@ -17,5 +17,5 @@ export const GET = createApiHandler(
       emailStatus: searchParams.get("emailStatus") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-payments", limit: 120 }
+  { requireAdmin: true, adminResource: "payments", rateLimitKey: "admin-payments", limit: 120 }
 );

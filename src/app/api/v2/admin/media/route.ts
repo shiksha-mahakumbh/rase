@@ -18,7 +18,7 @@ const getHandler = createApiHandler(
       }),
     };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 const postHandler = createApiHandler(
@@ -40,7 +40,7 @@ const postHandler = createApiHandler(
     });
     return { success: true, ...result };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const GET = withDeprecationHeaders(getHandler, {

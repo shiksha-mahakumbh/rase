@@ -8,7 +8,11 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ registrationId: string }> }
 ) {
-  const blocked = await adminBinaryGuard(request, { rateLimitKey: "admin-cert", limit: 30 });
+  const blocked = await adminBinaryGuard(request, {
+    rateLimitKey: "admin-cert",
+    limit: 30,
+    permission: "registrations.export",
+  });
   if (blocked) return blocked;
   try {
     const { registrationId } = await context.params;
@@ -33,6 +37,7 @@ export async function POST(
     rateLimitKey: "admin-cert-mutate",
     limit: 30,
     mutation: true,
+    permission: "registrations.update",
   });
   if (blocked) return blocked;
   try {

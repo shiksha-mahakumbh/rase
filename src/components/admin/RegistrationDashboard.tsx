@@ -50,7 +50,7 @@ const EMPTY_STATS: RegistrationAdminStats = {
 };
 
 export default function RegistrationDashboard() {
-  const { role } = useAdmin();
+  const { role, permissions } = useAdmin();
   const [registrations, setRegistrations] = useState<RegistrationRow[]>([]);
   const [stats, setStats] = useState<RegistrationAdminStats>(EMPTY_STATS);
   const [fetching, setFetching] = useState(false);
@@ -122,7 +122,7 @@ export default function RegistrationDashboard() {
     field: "registrationStatus" | "paymentStatus",
     value: string
   ) => {
-    if (!canManageStatus(role) || !selected.size) return;
+    if (!canManageStatus(role, permissions) || !selected.size) return;
 
     try {
       const res = await fetch("/api/admin/gateway/registrations/bulk-status", {
@@ -186,7 +186,7 @@ export default function RegistrationDashboard() {
 
         <AnalyticsCharts registrations={registrations} />
 
-        {canExport(role) && (
+        {canExport(role, permissions) && (
           <div className="flex flex-wrap gap-2 rounded-xl border bg-white p-4">
             <button
               type="button"
@@ -219,7 +219,7 @@ export default function RegistrationDashboard() {
             >
               Print
             </button>
-            {canManageStatus(role) && selected.size > 0 && (
+            {canManageStatus(role, permissions) && selected.size > 0 && (
               <>
                 <button
                   type="button"

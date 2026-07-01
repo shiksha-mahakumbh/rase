@@ -16,5 +16,5 @@ export const GET = createApiHandler(
       paymentStatus: searchParams.get("paymentStatus") ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-attendees", limit: 120 }
+  { requireAdmin: true, adminResource: "registrations", rateLimitKey: "admin-attendees", limit: 120 }
 );

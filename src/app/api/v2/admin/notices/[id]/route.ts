@@ -23,7 +23,7 @@ export const GET = createApiHandler(
     if (!notice) throw new ServiceError("Notice not found", 404, "NOT_FOUND");
     return { success: true, notice };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -63,7 +63,7 @@ export const PATCH = createApiHandler(
     });
     return { success: true, notice };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -72,5 +72,5 @@ export const DELETE = createApiHandler(
     const notice = await deleteNotice(id);
     return { success: true, notice };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

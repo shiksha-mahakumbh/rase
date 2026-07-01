@@ -9,7 +9,7 @@ export const GET = createApiHandler(
     const settings = await getSiteSettings(locale, false);
     return { success: true, settings };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "settings" }
 );
 
 export const PUT = createApiHandler(
@@ -36,5 +36,5 @@ export const PUT = createApiHandler(
     const settings = await upsertSiteSettings(data, locale ?? "en");
     return { success: true, settings };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "settings" }
 );

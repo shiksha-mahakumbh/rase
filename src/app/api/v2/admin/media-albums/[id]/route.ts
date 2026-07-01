@@ -13,7 +13,7 @@ export const GET = createApiHandler(
     const album = await getMediaAlbum(id);
     return { success: true, album };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const PATCH = createApiHandler(
@@ -37,7 +37,7 @@ export const PATCH = createApiHandler(
     });
     return { success: true, album };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const DELETE = createApiHandler(
@@ -46,5 +46,5 @@ export const DELETE = createApiHandler(
     await deleteMediaAlbum(id);
     return { success: true };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

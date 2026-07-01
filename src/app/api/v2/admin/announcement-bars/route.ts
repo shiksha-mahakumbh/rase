@@ -17,7 +17,7 @@ export const GET = createApiHandler(
       offset: Number(searchParams.get("offset") ?? 0),
     });
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );
 
 export const POST = createApiHandler(
@@ -44,5 +44,5 @@ export const POST = createApiHandler(
     });
     return { success: true, bar };
   },
-  { requireAdmin: true }
+  { requireAdmin: true, adminResource: "media" }
 );

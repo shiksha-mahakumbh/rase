@@ -16,7 +16,7 @@ export const GET = createApiHandler(
       documentType: (searchParams.get("type") as DocumentLetterType) ?? undefined,
     });
   },
-  { requireAdmin: true, rateLimitKey: "admin-documents", limit: 60 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-documents", limit: 60 }
 );
 
 export const POST = createApiHandler(
@@ -55,5 +55,5 @@ export const POST = createApiHandler(
       sizeBytes: pdf.length,
     };
   },
-  { requireAdmin: true, rateLimitKey: "admin-documents-gen", limit: 20 }
+  { requireAdmin: true, adminResource: "media", rateLimitKey: "admin-documents-gen", limit: 20 }
 );

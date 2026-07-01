@@ -47,7 +47,7 @@ const ROLE_PERMISSIONS = {
     "contact.read", "contact.manage", "feedback.read", "feedback.manage",
     "exports.create", "payments.read", "audit_logs.read",
   ],
-  "data-entry": ["registrations.read", "registrations.update"],
+  "data-entry": ["registrations.read", "registrations.update", "registrations.export"],
   coordinator: ["registrations.read", "committees.read"],
 };
 
