@@ -200,8 +200,6 @@ export async function signInWithEmailPassword(email: string, password: string) {
   });
 
   return {
-    accessToken: data.session.access_token,
-    refreshToken: data.session.refresh_token,
     uid: session.uid,
     email: session.email,
     role: session.role,
