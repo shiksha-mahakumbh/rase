@@ -1,6 +1,12 @@
 import { ECOSYSTEM_REGISTRY } from "./registries";
 import type { EcosystemItem, EcosystemKind, EcosystemSearchFilters } from "./types";
 
+export const MAX_SEARCH_QUERY_LENGTH = 200;
+
+function normalizeQuery(q?: string): string {
+  return (q?.trim() ?? "").slice(0, MAX_SEARCH_QUERY_LENGTH);
+}
+
 function matchesQuery(item: EcosystemItem, q: string): boolean {
   const lower = q.toLowerCase();
   return (
@@ -28,8 +34,11 @@ export function searchEcosystem(filters: EcosystemSearchFilters = {}) {
       i.tags.some((t) => t.toLowerCase() === filters.tag?.toLowerCase())
     );
   }
-  if (filters.q?.trim()) {
-    items = items.filter((i) => matchesQuery(i, filters.q!.trim()));
+  if (filters.q) {
+    const q = normalizeQuery(filters.q);
+    if (q) {
+      items = items.filter((i) => matchesQuery(i, q));
+    }
   }
 
   items.sort(
@@ -49,8 +58,9 @@ export function searchEcosystem(filters: EcosystemSearchFilters = {}) {
 }
 
 export function globalSearch(query: string, limit = 8) {
-  if (!query.trim()) return [];
-  return searchEcosystem({ q: query, pageSize: limit }).items;
+  const q = normalizeQuery(query);
+  if (!q) return [];
+  return searchEcosystem({ q, pageSize: limit }).items;
 }
 
 export function searchSpeakers(q: string) {
@@ -74,8 +84,9 @@ export function searchKnowledge(q: string) {
     "insight",
     "event-report",
   ];
+  const normalized = normalizeQuery(q);
   return ECOSYSTEM_REGISTRY.filter(
-    (i) => kinds.includes(i.kind) && (!q.trim() || matchesQuery(i, q))
+    (i) => kinds.includes(i.kind) && (!normalized || matchesQuery(i, normalized))
   ).slice(0, 24);
 }
 

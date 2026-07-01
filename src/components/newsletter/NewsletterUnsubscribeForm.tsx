@@ -2,20 +2,37 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { getCaptchaTokenForAction } from "@/lib/security/recaptcha-client";
+
+const RecaptchaScript = dynamic(
+  () => import("@/components/security/RecaptchaProvider"),
+  { ssr: false }
+);
 
 type SubmitState = "idle" | "loading" | "success" | "error";
 
 export default function NewsletterUnsubscribeForm({
   initialEmail = "",
+  initialToken = "",
 }: {
   initialEmail?: string;
+  initialToken?: string;
 }) {
   const [email, setEmail] = useState(initialEmail);
+  const [token] = useState(initialToken);
+  const [website, setWebsite] = useState("");
+  const [captchaArmed, setCaptchaArmed] = useState(false);
   const [status, setStatus] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const armCaptcha = () => {
+    if (!captchaArmed && !token) setCaptchaArmed(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    armCaptcha();
     const trimmed = email.trim();
     if (!trimmed) return;
 
@@ -23,10 +40,23 @@ export default function NewsletterUnsubscribeForm({
     setErrorMessage(null);
 
     try {
+      let captchaToken: string | undefined;
+      if (!token) {
+        captchaToken = (await getCaptchaTokenForAction("newsletter_unsubscribe")) ?? undefined;
+        if (!captchaToken) {
+          throw new Error("Security verification failed");
+        }
+      }
+
       const res = await fetch("/api/v2/newsletter/unsubscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed }),
+        body: JSON.stringify({
+          email: trimmed,
+          token: token || undefined,
+          captchaToken,
+          website,
+        }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
@@ -59,8 +89,20 @@ export default function NewsletterUnsubscribeForm({
   return (
     <form
       onSubmit={(e) => void handleSubmit(e)}
+      onFocus={armCaptcha}
       className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8"
     >
+      {captchaArmed ? <RecaptchaScript /> : null}
+      <input
+        type="text"
+        name="website"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+      />
       <label htmlFor="unsubscribe-email" className="block text-sm font-semibold text-brand-navy">
         Email address
       </label>

@@ -10,5 +10,5 @@ export const GET = createApiHandler(
       offset: Number(searchParams.get("offset") ?? 0),
     });
   },
-  { requireAdmin: true, adminResource: "audit_logs" }
+  { requireAdmin: true, adminResource: "contact" }
 );

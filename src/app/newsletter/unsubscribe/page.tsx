@@ -11,12 +11,13 @@ export const metadata = createPageMetadata({
 });
 
 type Props = {
-  searchParams: Promise<{ email?: string }>;
+  searchParams: Promise<{ email?: string; token?: string }>;
 };
 
 export default async function NewsletterUnsubscribePage({ searchParams }: Props) {
   const params = await searchParams;
   const initialEmail = params.email?.trim() ?? "";
+  const initialToken = params.token?.trim() ?? "";
 
   return (
     <PublicPageShell
@@ -29,7 +30,7 @@ export default async function NewsletterUnsubscribePage({ searchParams }: Props)
       showCta={false}
     >
       <div className="mx-auto max-w-lg px-4 py-10">
-        <NewsletterUnsubscribeForm initialEmail={initialEmail} />
+        <NewsletterUnsubscribeForm initialEmail={initialEmail} initialToken={initialToken} />
       </div>
     </PublicPageShell>
   );

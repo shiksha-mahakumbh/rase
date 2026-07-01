@@ -1,7 +1,7 @@
 import type { FeedbackStatus } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
-import { sendFeedbackAcknowledgement } from "@/server/services/email.service";
+import { sendFeedbackAcknowledgement, sendAdminAlert, sendFeedbackReplyEmail } from "@/server/services/email.service";
 import { ServiceError } from "@/server/lib/errors";
 
 export async function submitFeedback(input: {
@@ -36,6 +36,9 @@ export async function submitFeedback(input: {
   });
 
   if (row.email) void sendFeedbackAcknowledgement({ email: row.email });
+  void sendAdminAlert({
+    message: `New feedback from ${row.fullName ?? "anonymous"}${row.email ? ` <${row.email}>` : ""}: ${row.category ?? "general"}`,
+  });
 
   return row;
 }
@@ -96,6 +99,10 @@ export async function updateFeedback(
     actorUserId: input.repliedById,
     payload: { event: "feedback_updated", status: row.status },
   });
+
+  if (hasReply && row.email && row.adminReply) {
+    void sendFeedbackReplyEmail({ email: row.email, reply: row.adminReply });
+  }
 
   return row;
 }

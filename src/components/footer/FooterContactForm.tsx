@@ -19,6 +19,7 @@ export default function FooterContactForm({
 }: FooterContactFormProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [captchaArmed, setCaptchaArmed] = useState(false);
 
@@ -54,6 +55,7 @@ export default function FooterContactForm({
           email,
           message,
           subject: "Footer contact",
+          website,
         }),
       });
       if (!res.ok) {
@@ -72,6 +74,16 @@ export default function FooterContactForm({
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-3" onFocus={armCaptcha}>
+        <input
+          type="text"
+          name="website"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="absolute -left-[9999px] h-0 w-0 opacity-0"
+        />
         <div>
           <label htmlFor="footer-contact-email" className="mb-1 block text-xs font-semibold">
             Your email

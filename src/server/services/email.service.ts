@@ -12,7 +12,11 @@ export type EmailTemplate =
   | "payment_confirmation"
   | "admin_alert"
   | "contact_acknowledgement"
-  | "feedback_acknowledgement";
+  | "contact_reply"
+  | "feedback_acknowledgement"
+  | "feedback_reply"
+  | "newsletter_confirm"
+  | "newsletter_welcome";
 
 type EmailAttachment = {
   filename: string;
@@ -173,8 +177,16 @@ function buildHtml(template: EmailTemplate, data: Record<string, string>) {
       return `<p>Admin alert: ${data.message}</p>`;
     case "contact_acknowledgement":
       return `<p>Dear ${data.fullName},</p><p>We received your message and will respond shortly.</p>`;
+    case "contact_reply":
+      return `<p>Dear ${data.fullName},</p><p>Our team has replied to your message:</p><blockquote style="margin:16px 0;padding:12px 16px;border-left:4px solid #FF9933;background:#f8fafc">${data.reply}</blockquote>`;
     case "feedback_acknowledgement":
       return `<p>Thank you for your feedback on ${EVENT_NAME}.</p>`;
+    case "feedback_reply":
+      return `<p>Thank you for your feedback on ${EVENT_NAME}.</p><p>Our team has responded:</p><blockquote style="margin:16px 0;padding:12px 16px;border-left:4px solid #FF9933;background:#f8fafc">${data.reply}</blockquote>`;
+    case "newsletter_confirm":
+      return `<p>Please confirm your subscription to ${EVENT_NAME} updates.</p><p><a href="${data.confirmUrl}">Confirm subscription</a></p><p>This link expires in 48 hours.</p>`;
+    case "newsletter_welcome":
+      return `<p>Your subscription to ${EVENT_NAME} updates is confirmed.</p><p><a href="${data.unsubscribeUrl}">Unsubscribe</a> anytime.</p>`;
     default:
       return data.message ?? "";
   }
@@ -539,5 +551,51 @@ export async function sendAdminAlert(options: { message: string; toEmail?: strin
     subject: `${EVENT_NAME} — Admin Alert`,
     html: buildHtml("admin_alert", { message: options.message }),
     template: "admin_alert",
+  });
+}
+
+export async function sendContactReplyEmail(options: {
+  fullName: string;
+  email: string;
+  reply: string;
+}) {
+  return queueEmail({
+    toEmail: options.email,
+    subject: `${EVENT_NAME} — Reply to Your Message`,
+    html: buildHtml("contact_reply", { fullName: options.fullName, reply: options.reply }),
+    template: "contact_reply",
+  });
+}
+
+export async function sendFeedbackReplyEmail(options: { email: string; reply: string }) {
+  return queueEmail({
+    toEmail: options.email,
+    subject: `${EVENT_NAME} — Response to Your Feedback`,
+    html: buildHtml("feedback_reply", { reply: options.reply }),
+    template: "feedback_reply",
+  });
+}
+
+export async function sendNewsletterConfirmEmail(options: {
+  email: string;
+  confirmUrl: string;
+}) {
+  return queueEmail({
+    toEmail: options.email,
+    subject: `${EVENT_NAME} — Confirm Your Subscription`,
+    html: buildHtml("newsletter_confirm", { confirmUrl: options.confirmUrl }),
+    template: "newsletter_confirm",
+  });
+}
+
+export async function sendNewsletterWelcomeEmail(options: {
+  email: string;
+  unsubscribeUrl: string;
+}) {
+  return queueEmail({
+    toEmail: options.email,
+    subject: `${EVENT_NAME} — Subscription Confirmed`,
+    html: buildHtml("newsletter_welcome", { unsubscribeUrl: options.unsubscribeUrl }),
+    template: "newsletter_welcome",
   });
 }

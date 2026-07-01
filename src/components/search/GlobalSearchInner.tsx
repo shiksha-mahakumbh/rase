@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { globalSearch } from "@/lib/ecosystem/search";
+import { globalSearch, MAX_SEARCH_QUERY_LENGTH } from "@/lib/ecosystem/search";
 import { kindLabel } from "@/lib/ecosystem/types";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
 
@@ -51,9 +51,10 @@ export default function GlobalSearchInner({
         value={q}
         onFocus={() => setOpen(true)}
         onChange={(e) => {
-          setQ(e.target.value);
+          setQ(e.target.value.slice(0, MAX_SEARCH_QUERY_LENGTH));
           setOpen(true);
         }}
+        maxLength={MAX_SEARCH_QUERY_LENGTH}
         onKeyDown={(e) => {
           if (e.key === "Escape") setOpen(false);
         }}

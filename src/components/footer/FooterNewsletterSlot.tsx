@@ -2,17 +2,31 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { getCaptchaTokenForAction } from "@/lib/security/recaptcha-client";
 
-type SubmitState = "idle" | "loading" | "success" | "error";
+const RecaptchaScript = dynamic(
+  () => import("@/components/security/RecaptchaProvider"),
+  { ssr: false }
+);
+
+type SubmitState = "idle" | "loading" | "success" | "pending" | "error";
 
 export default function FooterNewsletterSlot() {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState("");
+  const [captchaArmed, setCaptchaArmed] = useState(false);
   const [status, setStatus] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const armCaptcha = () => {
+    if (!captchaArmed) setCaptchaArmed(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    armCaptcha();
     const trimmed = email.trim();
     if (!trimmed || !consent) return;
 
@@ -20,18 +34,32 @@ export default function FooterNewsletterSlot() {
     setErrorMessage(null);
 
     try {
+      const captchaToken = await getCaptchaTokenForAction("newsletter");
+      if (!captchaToken) {
+        throw new Error("Security verification failed");
+      }
+
       const res = await fetch("/api/v2/newsletter/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed, marketingConsent: true }),
+        body: JSON.stringify({
+          email: trimmed,
+          marketingConsent: true,
+          captchaToken,
+          website,
+        }),
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        pendingConfirmation?: boolean;
+      };
       if (!res.ok) {
         throw new Error(data.error ?? "Subscription failed");
       }
-      setStatus("success");
+      setStatus(data.pendingConfirmation ? "pending" : "success");
       setEmail("");
       setConsent(false);
+      setWebsite("");
     } catch (err) {
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Subscription failed");
@@ -40,6 +68,7 @@ export default function FooterNewsletterSlot() {
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+      {captchaArmed ? <RecaptchaScript /> : null}
       <h3 className="mb-1 text-sm font-bold uppercase tracking-wider text-brand-saffron-dark">
         Stay Informed
       </h3>
@@ -50,8 +79,22 @@ export default function FooterNewsletterSlot() {
         <p className="text-sm text-brand-emerald" role="status">
           Thank you — you&apos;re subscribed to SMK updates.
         </p>
+      ) : status === "pending" ? (
+        <p className="text-sm text-brand-emerald" role="status">
+          Check your inbox to confirm your subscription.
+        </p>
       ) : (
-        <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-3">
+        <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-3" onFocus={armCaptcha}>
+          <input
+            type="text"
+            name="website"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="absolute -left-[9999px] h-0 w-0 opacity-0"
+          />
           <div className="flex flex-col gap-2 sm:flex-row">
             <label htmlFor="footer-newsletter-email" className="sr-only">
               Email for newsletter

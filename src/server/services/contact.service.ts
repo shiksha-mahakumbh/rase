@@ -1,7 +1,7 @@
 import type { ContactStatus } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
 import { writeAuditLog } from "@/server/services/audit.service";
-import { sendContactAcknowledgement } from "@/server/services/email.service";
+import { sendContactAcknowledgement, sendAdminAlert, sendContactReplyEmail } from "@/server/services/email.service";
 import { ServiceError } from "@/server/lib/errors";
 
 export async function submitContactMessage(input: {
@@ -36,6 +36,9 @@ export async function submitContactMessage(input: {
   });
 
   void sendContactAcknowledgement({ fullName: row.fullName, email: row.email });
+  void sendAdminAlert({
+    message: `New contact message from ${row.fullName} <${row.email}>: ${row.subject ?? "(no subject)"}`,
+  });
 
   return row;
 }
@@ -96,6 +99,14 @@ export async function updateContactMessage(
     actorUserId: input.repliedById,
     payload: { event: "contact_updated", status: row.status },
   });
+
+  if (hasReply && row.email && row.adminReply) {
+    void sendContactReplyEmail({
+      fullName: row.fullName,
+      email: row.email,
+      reply: row.adminReply,
+    });
+  }
 
   return row;
 }

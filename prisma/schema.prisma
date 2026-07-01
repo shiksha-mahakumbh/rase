@@ -259,6 +259,7 @@ enum EventStatus {
 }
 
 enum NewsletterStatus {
+  pending
   subscribed
   unsubscribed
   bounced
