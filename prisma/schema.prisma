@@ -1153,6 +1153,7 @@ model WebhookEvent {
 
   @@index([eventType, createdAt])
   @@index([paymentRecordId])
+  @@index([processed, signatureValid, createdAt])
   @@map("webhook_events")
 }
 
