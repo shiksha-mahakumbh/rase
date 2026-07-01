@@ -104,7 +104,10 @@ function fileContains(rel, pattern) {
   return pattern.test(content);
 }
 
-if (fileContains("app/api/registration/[registrationId]/route.ts", /Email or confirmation token required/)) {
+if (
+  fileContains("server/lib/registration-lookup-handler.ts", /Email or confirmation token required/) ||
+  fileContains("app/api/registration/[registrationId]/route.ts", /Email or confirmation token required/)
+) {
   pass("registration_get_requires_auth", "GET registration requires token or email");
 } else {
   fail("registration_get_requires_auth", "GET registration still open");
