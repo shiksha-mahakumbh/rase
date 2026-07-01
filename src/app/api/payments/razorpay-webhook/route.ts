@@ -12,10 +12,10 @@ function timingSafeHexEqual(provided: string, expected: string): boolean {
   }
 }
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
-import { processRazorpayWebhookEvent } from "@/server/services/payment.service";
+import { ingestRazorpayWebhook } from "@/server/services/payment.service";
 
 /**
- * Razorpay webhook — verify signature and process payment events.
+ * Razorpay webhook — verify signature, dedupe by event id, process payment/refund events.
  * Set RAZORPAY_WEBHOOK_SECRET in production.
  */
 export async function POST(request: NextRequest) {
@@ -50,8 +50,17 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const event = JSON.parse(body) as Parameters<typeof processRazorpayWebhookEvent>[0];
-    const result = await processRazorpayWebhookEvent(event);
+    const event = JSON.parse(body) as Parameters<typeof ingestRazorpayWebhook>[0];
+    const result = await ingestRazorpayWebhook(event);
+
+    if (result.duplicate) {
+      return NextResponse.json({
+        received: true,
+        processed: true,
+        duplicate: true,
+        event: result.event,
+      });
+    }
 
     if (!result.ok) {
       console.warn("[razorpay-webhook]", result.event, result.error);

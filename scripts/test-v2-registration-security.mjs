@@ -30,14 +30,12 @@ if (includes("app/api/v2/registration/submit/route.ts", /guardRegistrationSubmit
 }
 
 if (
-  includes("app/api/v2/registration/submit/route.ts", /markVerifiedPaymentConsumed/) &&
-  !includes("app/api/v2/registration/submit/route.ts", /paymentStatus:\s*body\.paymentStatus[^,]*,\s*submittedIp/s)
+  includes("server/services/registration.service.ts", /consumeVerifiedPaymentInTransaction/) &&
+  includes("app/api/v2/registration/submit/route.ts", /razorpayPaymentId:\s*guarded\.razorpayPaymentId/)
 ) {
-  pass("v2_submit_payment_consume", "v2 submit marks verified payment consumed");
-} else if (includes("app/api/v2/registration/submit/route.ts", /markVerifiedPaymentConsumed/)) {
-  pass("v2_submit_payment_consume", "v2 submit marks verified payment consumed");
+  pass("v2_submit_payment_consume", "v2 submit consumes verified payment inside registration transaction");
 } else {
-  fail("v2_submit_payment_consume", "v2 submit does not mark payment consumed");
+  fail("v2_submit_payment_consume", "v2 submit does not atomically consume payment");
 }
 
 if (

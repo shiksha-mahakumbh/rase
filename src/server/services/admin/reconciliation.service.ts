@@ -184,6 +184,19 @@ export async function manualLinkPayment(input: {
     throw new ServiceError("Verified payment not found", 404, "NOT_FOUND");
   }
 
+  if (verified.consumedAt) {
+    throw new ServiceError("Payment already linked to a registration", 409, "PAYMENT_ALREADY_USED");
+  }
+
+  const expectedFee = Number(reg.registrationFee ?? 0);
+  if (expectedFee > 0 && Math.abs(Number(verified.amount) - expectedFee) > 0.01) {
+    throw new ServiceError(
+      "Payment amount does not match registration fee",
+      400,
+      "AMOUNT_MISMATCH"
+    );
+  }
+
   await prisma.$transaction(async (tx) => {
     await tx.registration.update({
       where: { id: reg.id },

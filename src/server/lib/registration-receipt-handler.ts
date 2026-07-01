@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import {
   REG_ID_RE,
+  emailsMatch,
   verifyRegistrationLookupToken,
 } from "@/lib/security/registration-lookup";
 import { prisma } from "@/server/db/prisma";
@@ -43,6 +44,10 @@ export async function handleRegistrationReceiptGet(request: NextRequest) {
   });
   if (!reg) {
     return NextResponse.json({ error: "Registration not found" }, { status: 404 });
+  }
+
+  if (!emailsMatch(reg.email, verified.email)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const payload = buildReceiptPayloadFromRegistration(reg);

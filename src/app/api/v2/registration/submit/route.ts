@@ -5,7 +5,6 @@ import { getRequestContext } from "@/server/lib/request";
 import { getRegistrationService } from "@/server/backend";
 import { isSupportedType } from "@/server/lib/registration-types";
 import { guardRegistrationSubmit } from "@/server/lib/registration-submit-guard";
-import { markVerifiedPaymentConsumed } from "@/server/services/razorpay-verified.service";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { runRegistrationPostSubmit } from "@/server/services/registration-post-submit.service";
 import { ServiceError } from "@/server/lib/errors";
@@ -66,15 +65,9 @@ export const POST = createApiHandler(
       paymentStatus: guarded.paymentStatus,
       submittedIp: ctx.ip,
       userAgent: ctx.userAgent,
+      razorpayPaymentId: guarded.razorpayPaymentId || undefined,
+      expectedFeeRupees: guarded.fee > 0 ? guarded.fee : undefined,
     });
-
-    if (guarded.razorpayPaymentId) {
-      await markVerifiedPaymentConsumed(
-        guarded.razorpayPaymentId,
-        result.id,
-        result.registrationId
-      );
-    }
 
     await writeAuditLog({
       action: "registration_saved",

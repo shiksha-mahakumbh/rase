@@ -19,6 +19,7 @@ import { generateRegistrationQrDataUrl } from "@/server/services/receipt-qr.serv
 import { displayRegistrationType } from "@/server/lib/registration-type-labels";
 import { buildAdminRegistrationView } from "@/server/services/admin/registration-admin-view.service";
 import type { AdminRegistrationView } from "@/lib/admin/registration-detail-types";
+import { consumeVerifiedPaymentInTransaction } from "@/server/services/razorpay-verified.service";
 
 export type SaveRegistrationInput = {
   registrationType: string;
@@ -28,6 +29,8 @@ export type SaveRegistrationInput = {
   accommodationStatus?: string;
   submittedIp?: string | null;
   userAgent?: string | null;
+  razorpayPaymentId?: string;
+  expectedFeeRupees?: number;
 };
 
 export type SaveRegistrationResult = {
@@ -246,6 +249,15 @@ export async function saveRegistration(input: SaveRegistrationInput): Promise<Sa
           razorpayPaymentId: payment.razorpayPaymentId ? String(payment.razorpayPaymentId) : null,
           metadata: payment as Prisma.InputJsonValue,
         },
+      });
+    }
+
+    if (input.razorpayPaymentId && (input.expectedFeeRupees ?? 0) > 0) {
+      await consumeVerifiedPaymentInTransaction(tx, {
+        razorpayPaymentId: input.razorpayPaymentId,
+        registrationUuid: master.id,
+        registrationPublicId: registrationId,
+        expectedFeeRupees: input.expectedFeeRupees ?? 0,
       });
     }
 

@@ -117,8 +117,8 @@ if (readRepo("vercel.json").includes("/api/cron/warm-cache")) {
 }
 
 // 43 Webhooks
-if (includesSrc("app/api/payments/razorpay-webhook/route.ts", /timingSafeHexEqual|timingSafeEqual/) && includesSrc("server/services/payment.service.ts", /razorpayEventId/)) {
-  pass("webhooks_idempotent", "Razorpay webhook verifies signature and dedupes by event id");
+if (includesSrc("app/api/payments/razorpay-webhook/route.ts", /ingestRazorpayWebhook/) && includesSrc("server/services/payment.service.ts", /recordWebhookEvent/)) {
+  pass("webhooks_idempotent", "Razorpay webhook ingests events with dedupe before processing");
 } else {
   fail("webhooks_idempotent", "Webhook idempotency or signature check missing");
 }

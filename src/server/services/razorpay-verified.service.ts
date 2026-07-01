@@ -64,6 +64,11 @@ export async function recordVerifiedPayment(input: RecordVerifiedPaymentInput) {
         client_order_id: input.razorpayOrderId,
         remote_order_id: remote.orderId,
       });
+      throw new ServiceError(
+        "Payment order id does not match Razorpay record",
+        400,
+        "ORDER_ID_MISMATCH"
+      );
     }
     if (!remote.captured) {
       throw new ServiceError(
@@ -78,6 +83,11 @@ export async function recordVerifiedPayment(input: RecordVerifiedPaymentInput) {
       payment_id: input.razorpayPaymentId,
       error: error instanceof Error ? error.message : String(error),
     });
+    throw new ServiceError(
+      "Unable to confirm payment status with Razorpay",
+      503,
+      "PAYMENT_STATUS_UNAVAILABLE"
+    );
   }
 
   if (amountPaise < 100) {
@@ -242,4 +252,53 @@ export async function markVerifiedPaymentConsumed(
     registration_id: registrationPublicId,
     registration_uuid: registrationUuid,
   });
+}
+
+/** Atomically mark a verified payment consumed inside a registration transaction. */
+export async function consumeVerifiedPaymentInTransaction(
+  tx: Prisma.TransactionClient,
+  input: {
+    razorpayPaymentId: string;
+    registrationUuid: string;
+    registrationPublicId: string;
+    expectedFeeRupees: number;
+  }
+) {
+  const expectedPaise = Math.round(input.expectedFeeRupees * 100);
+  const verified = await tx.razorpayVerifiedPayment.findUnique({
+    where: { razorpayPaymentId: input.razorpayPaymentId },
+  });
+
+  if (!verified) {
+    throw new ServiceError(
+      "Payment not verified. Complete Razorpay checkout before submitting.",
+      400,
+      "PAYMENT_NOT_VERIFIED"
+    );
+  }
+
+  if (Math.abs(verified.amountPaise - expectedPaise) > 1) {
+    throw new ServiceError(
+      "Payment amount does not match registration fee.",
+      400,
+      "AMOUNT_MISMATCH"
+    );
+  }
+
+  const updated = await tx.razorpayVerifiedPayment.updateMany({
+    where: { razorpayPaymentId: input.razorpayPaymentId, consumedAt: null },
+    data: {
+      consumedAt: new Date(),
+      registrationUuid: input.registrationUuid,
+      registrationPublicId: input.registrationPublicId,
+    },
+  });
+
+  if (updated.count === 0) {
+    throw new ServiceError(
+      "This payment has already been used for another registration.",
+      409,
+      "PAYMENT_ALREADY_USED"
+    );
+  }
 }

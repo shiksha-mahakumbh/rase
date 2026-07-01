@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { completeDonation } from "@/server/services/donation.service";
 import { donationFormSchema } from "@/lib/schemas/donationSchema";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
+import { assertSameOrigin } from "@/server/lib/same-origin";
 import { ServiceError } from "@/server/lib/errors";
 export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
 export async function POST(request: NextRequest) {
+  assertSameOrigin(request);
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
     key: `donation-complete:${ip}`,

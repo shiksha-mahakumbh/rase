@@ -64,12 +64,68 @@ export async function recordWebhookEvent(input: {
       payload: input.payload,
       signatureValid: input.signatureValid,
       paymentRecordId: input.paymentRecordId ?? null,
-      processed: input.signatureValid,
+      processed: false,
       errorMessage: input.errorMessage ?? null,
     },
   });
 
   return { event, duplicate: false };
+}
+
+export async function completeWebhookEvent(
+  webhookEventId: string,
+  ok: boolean,
+  errorMessage?: string
+) {
+  await prisma.webhookEvent.update({
+    where: { id: webhookEventId },
+    data: {
+      processed: ok,
+      lastProcessedAt: new Date(),
+      errorMessage: errorMessage ?? null,
+      retryCount: ok ? undefined : { increment: 1 },
+    },
+  });
+}
+
+export type RazorpayWebhookBody = Parameters<typeof processRazorpayWebhookEvent>[0] & {
+  id?: string;
+};
+
+/** Persist webhook event (dedupe by Razorpay event id) then process payment/refund handlers. */
+export async function ingestRazorpayWebhook(body: RazorpayWebhookBody): Promise<RazorpayWebhookResult> {
+  const eventName = body.event ?? "unknown";
+  const razorpayEventId = typeof body.id === "string" ? body.id : undefined;
+
+  const recorded = await recordWebhookEvent({
+    eventType: eventName,
+    razorpayEventId,
+    payload: body as Prisma.InputJsonValue,
+    signatureValid: true,
+  });
+
+  if (recorded.duplicate) {
+    return {
+      ok: true,
+      duplicate: true,
+      event: eventName,
+    };
+  }
+
+  const webhookEventId = recorded.event.id;
+
+  try {
+    const result = eventName.startsWith("refund.")
+      ? await processRazorpayRefundWebhook(body)
+      : await processRazorpayWebhookEvent(body);
+
+    await completeWebhookEvent(webhookEventId, result.ok, result.error);
+    return result;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    await completeWebhookEvent(webhookEventId, false, message);
+    throw error;
+  }
 }
 
 export async function markPaymentCompleted(input: {
@@ -328,6 +384,93 @@ export async function processRazorpayWebhookEvent(body: {
     registrationId: match.registrationId,
     registrationUuid: match.registrationUuid,
     paymentStatus,
+  };
+}
+
+type RazorpayRefundEntity = {
+  id?: string;
+  payment_id?: string;
+  status?: string;
+};
+
+export async function processRazorpayRefundWebhook(body: {
+  event?: string;
+  payload?: {
+    refund?: { entity?: RazorpayRefundEntity };
+    payment?: { entity?: RazorpayPaymentEntity };
+  };
+}): Promise<RazorpayWebhookResult> {
+  const eventName = body.event ?? "refund.unknown";
+  const refundEntity = body.payload?.refund?.entity;
+  const paymentId =
+    refundEntity?.payment_id ?? body.payload?.payment?.entity?.id ?? null;
+  const refundId = refundEntity?.id ?? null;
+  const refundStatus = refundEntity?.status ?? "processed";
+
+  if (!paymentId || !refundId) {
+    return {
+      ok: false,
+      event: eventName,
+      error: "Refund payload missing payment or refund id",
+    };
+  }
+
+  const paymentRecord = await prisma.paymentRecord.findFirst({
+    where: { razorpayPaymentId: paymentId, deletedAt: null },
+    include: { registration: true },
+  });
+
+  if (paymentRecord) {
+    await recordRefund({
+      paymentRecordId: paymentRecord.id,
+      refundId,
+      refundStatus,
+    });
+
+    if (paymentRecord.registration) {
+      await prisma.registration.update({
+        where: { id: paymentRecord.registration.id },
+        data: { paymentStatus: "Failed" },
+      });
+    }
+
+    return {
+      ok: true,
+      event: eventName,
+      registrationId: paymentRecord.registration?.registrationId,
+      paymentStatus: "Failed",
+    };
+  }
+
+  const donation = await prisma.donationRecord.findFirst({
+    where: { razorpayPaymentId: paymentId, deletedAt: null },
+  });
+
+  if (donation) {
+    await prisma.donationRecord.update({
+      where: { id: donation.id },
+      data: { paymentStatus: "Failed" },
+    });
+
+    await writeAuditLog({
+      action: "payment_refunded",
+      entityType: "donation_records",
+      entityId: donation.id,
+      payload: { refundId, refundStatus, razorpayPaymentId: paymentId },
+    });
+
+    return {
+      ok: true,
+      event: eventName,
+      registrationId: donation.donationId,
+      paymentStatus: "Failed",
+    };
+  }
+
+  return {
+    ok: false,
+    event: eventName,
+    error: "No payment record found for refund",
   };
 }
 
