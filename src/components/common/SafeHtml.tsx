@@ -7,7 +7,7 @@ type SafeHtmlProps = {
 };
 
 /**
- * Renders CMS HTML through DOMPurify before injection.
+ * Renders CMS HTML through server-safe sanitization before injection.
  */
 export default function SafeHtml({
   html,

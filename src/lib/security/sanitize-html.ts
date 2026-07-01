@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
 const CMS_ALLOWED_TAGS = [
   "p",
@@ -33,35 +33,27 @@ const CMS_ALLOWED_TAGS = [
   "div",
   "sup",
   "sub",
-];
+] as const;
 
-const CMS_ALLOWED_ATTR = [
-  "href",
-  "title",
-  "target",
-  "rel",
-  "src",
-  "alt",
-  "width",
-  "height",
-  "class",
-  "id",
-  "colspan",
-  "rowspan",
-];
+const CMS_ALLOWED_ATTRIBUTES: sanitizeHtml.IOptions["allowedAttributes"] = {
+  a: ["href", "title", "target", "rel"],
+  img: ["src", "alt", "width", "height"],
+  th: ["colspan", "rowspan"],
+  td: ["colspan", "rowspan"],
+  "*": ["class", "id"],
+};
 
 /**
  * Sanitize CMS-authored HTML before rendering. Strips scripts, event handlers,
  * and dangerous URLs while preserving semantic markup.
+ * Uses sanitize-html (no jsdom) so Next.js API routes can import this at build time.
  */
 export function sanitizeCmsHtml(html: string): string {
   if (!html?.trim()) return "";
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: CMS_ALLOWED_TAGS,
-    ALLOWED_ATTR: CMS_ALLOWED_ATTR,
-    ALLOW_DATA_ATTR: false,
-    ADD_ATTR: ["target"],
-    FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "form", "input"],
-    FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover"],
+  return sanitizeHtml(html, {
+    allowedTags: [...CMS_ALLOWED_TAGS],
+    allowedAttributes: CMS_ALLOWED_ATTRIBUTES,
+    allowVulnerableTags: false,
+    disallowedTagsMode: "discard",
   });
 }
