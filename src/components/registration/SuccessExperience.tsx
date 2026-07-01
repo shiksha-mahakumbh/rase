@@ -19,8 +19,6 @@ import RegistrationReceipt, {
 type PublicRecord = {
   registrationId?: string;
   fullName?: string;
-  email?: string;
-  contactNumber?: string | null;
   registrationFee?: number;
   registrationType?: string;
   delegateCategory?: string | null;
@@ -35,7 +33,11 @@ type PublicRecord = {
   accommodationStatus?: string | null;
 };
 
-function buildReceiptData(record: PublicRecord, registrationId: string): ReceiptData {
+function buildReceiptData(
+  record: PublicRecord,
+  registrationId: string,
+  registrantEmail?: string | null
+): ReceiptData {
   const fee = Number(record.registrationFee ?? 0);
 
   return buildReceiptDataShared({
@@ -45,8 +47,8 @@ function buildReceiptData(record: PublicRecord, registrationId: string): Receipt
       record.delegateCategory ?? record.registrationType ?? "—"
     ),
     institution: String(record.institution ?? "—"),
-    email: String(record.email ?? "—"),
-    contactNumber: String(record.contactNumber ?? "—"),
+    email: String(registrantEmail ?? "—"),
+    contactNumber: "—",
     amount: fee,
     paymentId: record.razorpayPaymentId ?? undefined,
     orderId: record.razorpayOrderId ?? undefined,
@@ -61,11 +63,17 @@ function SuccessInner() {
   const [record, setRecord] = useState<PublicRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [registrantEmail, setRegistrantEmail] = useState<string | null>(null);
 
   useEffect(() => {
     if (!registrationId) {
       setLoading(false);
       return;
+    }
+
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("smk_registration_email");
+      if (stored) setRegistrantEmail(stored);
     }
 
     const fetchRecord = async () => {
@@ -81,7 +89,6 @@ function SuccessInner() {
             if (typeof window !== "undefined") {
               sessionStorage.setItem("smk_lookup_token", lookupToken);
               sessionStorage.setItem("smk_registration_id", registrationId);
-              if (data.email) sessionStorage.setItem("smk_registration_email", data.email);
             }
           } else {
             const json = (await res.json().catch(() => ({}))) as { error?: string };
@@ -99,13 +106,13 @@ function SuccessInner() {
 
   const receiptData = useMemo(() => {
     if (!record || !registrationId) return null;
-    return buildReceiptData(record, registrationId);
-  }, [record, registrationId]);
+    return buildReceiptData(record, registrationId, registrantEmail);
+  }, [record, registrationId, registrantEmail]);
 
   const qrDataUrl = record?.qrDataUrl ?? null;
 
   const dashboardHref = registrationId
-    ? `/dashboard?id=${encodeURIComponent(registrationId)}${record?.email ? `&email=${encodeURIComponent(record.email)}` : ""}`
+    ? `/dashboard?id=${encodeURIComponent(registrationId)}${lookupToken ? `&token=${encodeURIComponent(lookupToken)}` : ""}${registrantEmail ? `&email=${encodeURIComponent(registrantEmail)}` : ""}`
     : ROUTES.dashboard;
 
   const handleDownloadReceipt = () => {

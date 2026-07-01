@@ -9,6 +9,7 @@ export const POST = createApiHandler(
       email?: string;
       token?: string;
       lookupToken?: string;
+      captchaToken?: string;
     }>(await request.json());
 
     const registration = await handlePublicRegistrationLookupPost(body);

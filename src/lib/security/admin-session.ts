@@ -9,6 +9,7 @@ export type AdminSessionPayload = {
   uid: string;
   email: string;
   role: AdminRole;
+  sessionVersion: number;
   exp: number;
 };
 
@@ -44,6 +45,7 @@ export function verifyAdminSessionToken(token: string): AdminSessionPayload | nu
 
     const parsed = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8")) as AdminSessionPayload;
     if (!parsed.uid || !parsed.email || !parsed.role || typeof parsed.exp !== "number") return null;
+    if (typeof parsed.sessionVersion !== "number") return null;
     if (Date.now() > parsed.exp) return null;
 
     return parsed;

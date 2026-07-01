@@ -27,7 +27,7 @@ interface SubmitOptions {
   paymentStatus?: PaymentStatus;
 }
 
-async function getCaptchaToken(): Promise<string | null> {
+async function getCaptchaToken(action: string): Promise<string | null> {
   const { executeRecaptcha, isRecaptchaConfigured, waitForRecaptcha } =
     await import("@/lib/security/recaptcha-client");
 
@@ -41,7 +41,7 @@ async function getCaptchaToken(): Promise<string | null> {
       await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
       continue;
     }
-    const token = await executeRecaptcha("registration");
+    const token = await executeRecaptcha(action);
     if (token) return token;
     await new Promise((r) => setTimeout(r, 600));
   }
@@ -49,15 +49,36 @@ async function getCaptchaToken(): Promise<string | null> {
   return null;
 }
 
+async function getUploadToken(captchaToken: string): Promise<string> {
+  const res = await fetch("/api/v2/registration/verify-captcha", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token: captchaToken, action: "registration" }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(
+      typeof err.error === "string" ? err.error : "Security check failed"
+    );
+  }
+  const body = await res.json();
+  if (!body.uploadToken) {
+    throw new Error("Security check failed");
+  }
+  return body.uploadToken as string;
+}
+
 async function uploadRegistrationFile(
   file: File,
   registrationType: RegistrationType,
-  field: string
+  field: string,
+  uploadToken: string
 ): Promise<UploadedFileMeta> {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("registrationType", registrationType);
   formData.append("field", field);
+  formData.append("uploadToken", uploadToken);
 
   const res = await fetch("/api/v2/registration/upload", {
     method: "POST",
@@ -88,7 +109,8 @@ export function useRegistrationSubmit() {
     setLoading(true);
     try {
       const fee = data.registrationFee as number | undefined;
-      const captchaToken = await getCaptchaToken();
+      const uploadEntries = Object.entries(files).filter(([, v]) => v);
+      const captchaToken = await getCaptchaToken("registration");
       const hasVerifiedRazorpay = Boolean(
         (fee ?? 0) > 0 && String(data.razorpayPaymentId ?? "").trim()
       );
@@ -99,10 +121,18 @@ export function useRegistrationSubmit() {
         return;
       }
 
-      const uploaded: Record<string, unknown> = {};
-      const uploadEntries = Object.entries(files).filter(([, v]) => v);
-
+      let uploadToken: string | undefined;
       if (uploadEntries.length > 0) {
+        if (!captchaToken) {
+          toast.error("Security check required before uploading files.");
+          return;
+        }
+        uploadToken = await getUploadToken(captchaToken);
+      }
+
+      const uploaded: Record<string, unknown> = {};
+
+      if (uploadEntries.length > 0 && uploadToken) {
         await Promise.all(
           uploadEntries.map(async ([key, value]) => {
             if (!value) return;
@@ -110,7 +140,7 @@ export function useRegistrationSubmit() {
               const results: UploadedFileMeta[] = [];
               for (const file of value) {
                 results.push(
-                  await uploadRegistrationFile(file, registrationType, key)
+                  await uploadRegistrationFile(file, registrationType, key, uploadToken!)
                 );
               }
               uploaded[key] = results;
@@ -118,7 +148,8 @@ export function useRegistrationSubmit() {
               uploaded[key] = await uploadRegistrationFile(
                 value,
                 registrationType,
-                key
+                key,
+                uploadToken!
               );
             }
           })
@@ -193,6 +224,9 @@ export function useRegistrationSubmit() {
 
       clearAllRegistrationDrafts();
       toast.success("Registration submitted successfully!");
+      if (typeof window !== "undefined" && typeof data.email === "string") {
+        sessionStorage.setItem("smk_registration_email", data.email.trim());
+      }
       const successParams = new URLSearchParams({
         id: result.registrationId,
       });

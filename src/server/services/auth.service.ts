@@ -48,15 +48,31 @@ function normalizeRoleName(name: string): AdminRole | null {
   return null;
 }
 
-export async function resolveAdminRoleForUser(
+export type AdminSessionContext = {
+  uid: string;
+  email: string;
+  role: AdminRole;
+  sessionVersion: number;
+};
+
+export async function bumpAdminSessionVersion(userId: string): Promise<void> {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { sessionVersion: { increment: 1 } },
+  });
+}
+
+export async function resolveAdminSessionForUser(
   authUserId: string,
   email: string
-): Promise<AdminRole | null> {
+): Promise<AdminSessionContext | null> {
   const normalizedEmail = email.toLowerCase();
 
   if (getBootstrapEmails().includes(normalizedEmail)) {
     await ensureBootstrapUser(authUserId, email, "Super Admin");
-    return "Super Admin";
+    console.warn(
+      `[auth] Bootstrap Super Admin login: ${normalizedEmail} (ADMIN_BOOTSTRAP_EMAILS)`
+    );
   }
 
   const user = await prisma.user.findFirst({
@@ -87,7 +103,23 @@ export async function resolveAdminRoleForUser(
     if (role) roles.push(role);
   }
 
-  return pickHighestAdminRole(roles);
+  const role = pickHighestAdminRole(roles);
+  if (!role) return null;
+
+  return {
+    uid: authUserId,
+    email: user.email,
+    role,
+    sessionVersion: user.sessionVersion,
+  };
+}
+
+export async function resolveAdminRoleForUser(
+  authUserId: string,
+  email: string
+): Promise<AdminRole | null> {
+  const session = await resolveAdminSessionForUser(authUserId, email);
+  return session?.role ?? null;
 }
 
 async function ensureBootstrapUser(
@@ -157,8 +189,8 @@ export async function signInWithEmailPassword(email: string, password: string) {
     throw new ServiceError("Invalid credentials", 401, "INVALID_CREDENTIALS");
   }
 
-  const role = await resolveAdminRoleForUser(data.user.id, data.user.email);
-  if (!role) {
+  const session = await resolveAdminSessionForUser(data.user.id, data.user.email);
+  if (!session) {
     throw new ServiceError("Forbidden", 403, "FORBIDDEN");
   }
 
@@ -170,9 +202,10 @@ export async function signInWithEmailPassword(email: string, password: string) {
   return {
     accessToken: data.session.access_token,
     refreshToken: data.session.refresh_token,
-    uid: data.user.id,
-    email: data.user.email,
-    role,
+    uid: session.uid,
+    email: session.email,
+    role: session.role,
+    sessionVersion: session.sessionVersion,
   };
 }
 
@@ -180,4 +213,5 @@ export type AdminSessionPayload = {
   uid: string;
   email: string;
   role: AdminRole;
+  sessionVersion: number;
 };

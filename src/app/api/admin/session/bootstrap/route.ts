@@ -55,6 +55,9 @@ export async function GET(request: NextRequest) {
     uid: session.uid,
     permissions: Array.from(permissionSet),
   });
-  maybeRotateAdminSessionCookie(response, session, tokenSession.role);
+  maybeRotateAdminSessionCookie(response, session, {
+    role: tokenSession.role,
+    sessionVersion: tokenSession.sessionVersion,
+  });
   return response;
 }

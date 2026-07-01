@@ -7,9 +7,11 @@ import {
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError } from "@/server/lib/errors";
 import { signInWithEmailPassword } from "@/server/services/auth.service";
+import { assertSameOrigin } from "@/server/lib/same-origin";
 
 /** Email/password admin login → signed HttpOnly session cookie. */
 export async function POST(request: NextRequest) {
+  assertSameOrigin(request);
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
     key: `admin-login:${ip}`,
@@ -37,6 +39,7 @@ export async function POST(request: NextRequest) {
       uid: session.uid,
       email: session.email,
       role: session.role,
+      sessionVersion: session.sessionVersion,
     });
 
     const response = NextResponse.json({

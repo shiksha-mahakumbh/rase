@@ -48,6 +48,7 @@ const groups = {
     { key: "ADMIN_OPS_SECRET", required: true, production: true },
     { key: "ADMIN_SESSION_SECRET", required: true, production: true },
     { key: "REGISTRATION_LOOKUP_SECRET", required: true, production: true },
+    { key: "ADMIN_GATEWAY_SIGNING_SECRET", required: false, productionRecommended: true },
     { key: "ADMIN_BOOTSTRAP_EMAILS", required: false },
   ],
   registration: [
@@ -79,7 +80,7 @@ const groups = {
     { key: "SMTP_PASS", required: false },
     { key: "SMTP_FROM", required: false },
     { key: "SMTP_PORT", required: false },
-    { key: "REGISTRATION_EMAIL_SECRET", required: true, production: true },
+    { key: "REGISTRATION_EMAIL_SECRET", required: false },
     { key: "REGISTRATION_EMAIL_REQUIRE_SECRET", required: false },
   ],
   analytics: [

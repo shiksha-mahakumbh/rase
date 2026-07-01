@@ -7,13 +7,14 @@ import {
   verifyAdminSessionToken,
 } from "@/lib/security/admin-session";
 import { ServiceError } from "@/server/lib/errors";
-import { resolveAdminRoleForUser } from "@/server/services/auth.service";
+import { resolveAdminSessionForUser } from "@/server/services/auth.service";
 import type { AdminRole } from "@/types/registration";
 
 export type VerifiedAdminSession = {
   uid: string;
   email: string;
   role: AdminRole;
+  sessionVersion: number;
 };
 
 /** Re-resolve admin role from DB; returns null if user inactive or role revoked. */
@@ -21,7 +22,8 @@ export async function refreshAdminRole(
   uid: string,
   email: string
 ): Promise<AdminRole | null> {
-  return resolveAdminRoleForUser(uid, email);
+  const session = await resolveAdminSessionForUser(uid, email);
+  return session?.role ?? null;
 }
 
 /** Verify HMAC cookie and refresh role from DB (stale sessions fail closed). */
@@ -31,10 +33,11 @@ export async function verifyAndRefreshAdminSession(
   const session = verifyAdminSessionToken(token);
   if (!session) return null;
 
-  const role = await refreshAdminRole(session.uid, session.email);
-  if (!role) return null;
+  const fresh = await resolveAdminSessionForUser(session.uid, session.email);
+  if (!fresh) return null;
+  if (fresh.sessionVersion !== session.sessionVersion) return null;
 
-  return { uid: session.uid, email: session.email, role };
+  return fresh;
 }
 
 export function clearAdminSessionCookie(response: NextResponse) {
@@ -44,17 +47,23 @@ export function clearAdminSessionCookie(response: NextResponse) {
   });
 }
 
-/** Set a fresh signed cookie when DB role differs from the token payload. */
+/** Set a fresh signed cookie when DB role or session version differs from token. */
 export function maybeRotateAdminSessionCookie(
   response: NextResponse,
   session: VerifiedAdminSession,
-  tokenRole: AdminRole
+  tokenSession: { role: AdminRole; sessionVersion: number }
 ) {
-  if (session.role === tokenRole) return;
+  if (
+    session.role === tokenSession.role &&
+    session.sessionVersion === tokenSession.sessionVersion
+  ) {
+    return;
+  }
   const token = createAdminSessionToken({
     uid: session.uid,
     email: session.email,
     role: session.role,
+    sessionVersion: session.sessionVersion,
   });
   response.cookies.set(ADMIN_SESSION_COOKIE, token, adminSessionCookieOptions());
 }

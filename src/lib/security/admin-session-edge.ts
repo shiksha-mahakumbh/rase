@@ -39,6 +39,7 @@ export async function verifyAdminSessionTokenEdge(
     ) as AdminSessionPayload;
 
     if (!parsed.uid || !parsed.email || !parsed.role || typeof parsed.exp !== "number") return null;
+    if (typeof parsed.sessionVersion !== "number") return null;
     if (Date.now() > parsed.exp) return null;
 
     return parsed;

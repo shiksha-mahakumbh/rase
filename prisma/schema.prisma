@@ -506,6 +506,7 @@ model User {
   avatarUrl   String?   @map("avatar_url")
   phone       String?
   isActive    Boolean   @default(true) @map("is_active")
+  sessionVersion Int    @default(0) @map("session_version")
   lastLoginAt DateTime? @map("last_login_at") @db.Timestamptz(6)
   lastLoginIp String?   @map("last_login_ip")
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)

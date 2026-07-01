@@ -3,10 +3,12 @@ import { proxyToV2Admin } from "@/server/lib/admin-gateway-proxy";
 import { verifyAdminRequest } from "@/server/lib/admin-request-auth";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { ServiceError } from "@/server/lib/errors";
+import { assertSameOrigin } from "@/server/lib/same-origin";
 
 export const runtime = "nodejs";
 
 async function handle(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  assertSameOrigin(request);
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
     key: `admin-gateway:${ip}`,

@@ -1,13 +1,27 @@
 import { NextResponse } from "next/server";
-import { isSentryConfigured } from "@/lib/monitoring/sentry-env";
-import { isUpstashConfigured } from "@/lib/security/upstash-env";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
-  const backend = "supabase";
+  const isProduction = process.env.NODE_ENV === "production";
 
+  if (isProduction) {
+    let status: "ok" | "degraded" = "ok";
+    if (process.env.DATABASE_URL) {
+      try {
+        const { prisma } = await import("@/server/db/prisma");
+        await prisma.$queryRaw`SELECT 1`;
+      } catch {
+        status = "degraded";
+      }
+    }
+    return NextResponse.json({ status, service: "rase-web" });
+  }
+
+  const { isSentryConfigured } = await import("@/lib/monitoring/sentry-env");
+  const { isUpstashConfigured } = await import("@/lib/security/upstash-env");
+
+  const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
   let database: "connected" | "not_configured" | "error" = "not_configured";
   if (hasDatabaseUrl) {
     try {
@@ -17,35 +31,28 @@ export async function GET() {
     } catch (error) {
       const { isPrismaConnectionError } = await import("@/lib/prisma/errors");
       database = "error";
-      if (process.env.NODE_ENV === "development") {
-        console.error(
-          "[health] database probe failed:",
-          isPrismaConnectionError(error) ? "connection" : "query",
-          error
-        );
-      }
+      console.error(
+        "[health] database probe failed:",
+        isPrismaConnectionError(error) ? "connection" : "query",
+        error
+      );
     }
   }
-
-  const upstashConfigured = isUpstashConfigured();
-  const sentryConfigured = isSentryConfigured();
-  const cronConfigured = Boolean(process.env.CRON_SECRET);
-  const emailSecretConfigured = Boolean(process.env.REGISTRATION_EMAIL_SECRET);
 
   return NextResponse.json({
     status: database === "error" ? "degraded" : "ok",
     service: "rase-web",
-    backend,
+    backend: "supabase",
     supabase: {
       database,
       configured: hasDatabaseUrl && Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
     },
     ops: {
-      rateLimitMode: upstashConfigured ? "upstash" : "in-memory",
-      upstashConfigured,
-      sentryConfigured,
-      cronConfigured,
-      emailSecretConfigured,
+      rateLimitMode: isUpstashConfigured() ? "upstash" : "in-memory",
+      upstashConfigured: isUpstashConfigured(),
+      sentryConfigured: isSentryConfigured(),
+      cronConfigured: Boolean(process.env.CRON_SECRET),
+      gatewaySigningConfigured: Boolean(process.env.ADMIN_GATEWAY_SIGNING_SECRET),
     },
     timestamp: new Date().toISOString(),
   });

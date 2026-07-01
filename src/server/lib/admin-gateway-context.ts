@@ -10,6 +10,11 @@ function opsSecret(): string {
   return secret;
 }
 
+/** Separate signing secret for gateway context (falls back to ops secret for migration). */
+function gatewaySigningSecret(): string {
+  return process.env.ADMIN_GATEWAY_SIGNING_SECRET ?? opsSecret();
+}
+
 /** HMAC signature for gateway-proxied admin role headers (prevents x-admin-role spoofing). */
 export function signAdminGatewayContext(
   email: string,
@@ -17,7 +22,7 @@ export function signAdminGatewayContext(
   uid: string
 ): string {
   const payload = `${email}|${role}|${uid}`;
-  return createHmac("sha256", opsSecret()).update(payload).digest("base64url");
+  return createHmac("sha256", gatewaySigningSecret()).update(payload).digest("base64url");
 }
 
 /** Trust admin role only when gateway signed the context headers. */

@@ -71,14 +71,12 @@ export function emailsMatch(stored: string | null | undefined, provided: string)
   return normalizeEmail(stored) === normalizeEmail(provided);
 }
 
-/** Public-safe fields only — never expose full PII via anonymous lookup. */
+/** Public-safe fields only — never expose email or phone via lookup. */
 export type PublicRegistrationSummary = {
   registrationId: string;
   registrationType: string;
   fullName: string;
   institution: string | null;
-  email: string;
-  contactNumber: string | null;
   registrationFee: number;
   paymentStatus: string;
   razorpayPaymentId: string | null;
@@ -95,9 +93,7 @@ export function toPublicRegistrationSummary(data: {
   registrationId: string;
   registrationType: string;
   fullName: string;
-  email: string;
   institution?: string | null;
-  contactNumber?: string | null;
   registrationFee?: number | null;
   paymentStatus?: string | null;
   razorpayPaymentId?: string | null;
@@ -114,8 +110,6 @@ export function toPublicRegistrationSummary(data: {
     registrationType: data.registrationType,
     fullName: data.fullName,
     institution: data.institution ?? null,
-    email: data.email,
-    contactNumber: data.contactNumber ?? null,
     registrationFee: data.registrationFee ?? 0,
     paymentStatus: data.paymentStatus ?? "Pending",
     razorpayPaymentId: data.razorpayPaymentId ?? null,

@@ -14,5 +14,13 @@ export function verifyRazorpayPaymentSignature(
     .createHmac("sha256", keySecret)
     .update(`${orderId}|${paymentId}`)
     .digest("hex");
-  return expected === signature;
+
+  try {
+    const a = Buffer.from(signature, "hex");
+    const b = Buffer.from(expected, "hex");
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
 }

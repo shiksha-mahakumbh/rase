@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
-import { REG_ID_RE } from "@/lib/security/registration-lookup";
+import {
+  REG_ID_RE,
+  emailsMatch,
+  verifyRegistrationLookupToken,
+} from "@/lib/security/registration-lookup";
 import { prisma } from "@/server/db/prisma";
 import {
   generateReceiptPdfBuffer,
@@ -11,17 +15,17 @@ import { generateCertificatePdf } from "@/server/services/lifecycle/badge-certif
 import { buildReceiptPayloadFromRegistration } from "@/server/services/admin/receipt-admin.service";
 export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 
-async function verifyParticipant(registrationId: string, email: string) {
-  const reg = await prisma.registration.findFirst({
-    where: { registrationId, deletedAt: null },
-  });
-  if (!reg || reg.email.toLowerCase() !== email.toLowerCase()) return null;
-  return reg;
+function isPaidStatus(status: string): boolean {
+  return status === "Paid" || status === "Not_Required";
 }
 
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);
-  const limited = await rateLimitAsync({ key: `participant-download:${ip}`, limit: 20, windowMs: 60_000 });
+  const limited = await rateLimitAsync({
+    key: `participant-download:${ip}`,
+    limit: 20,
+    windowMs: 60_000,
+  });
   if (!limited.ok) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
@@ -29,18 +33,31 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const registrationId = String(searchParams.get("registrationId") ?? "").trim();
   const email = String(searchParams.get("email") ?? "").trim();
+  const token = String(searchParams.get("token") ?? searchParams.get("lookupToken") ?? "").trim();
   const type = String(searchParams.get("type") ?? "receipt");
 
-  if (!REG_ID_RE.test(registrationId) || !email) {
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
+  if (!REG_ID_RE.test(registrationId) || !email || !token) {
+    return NextResponse.json(
+      { error: "Registration ID, email, and confirmation token are required" },
+      { status: 400 }
+    );
   }
 
-  const reg = await verifyParticipant(registrationId, email);
-  if (!reg) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  const verified = verifyRegistrationLookupToken(registrationId, token);
+  if (!verified || !emailsMatch(verified.email, email)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const reg = await prisma.registration.findFirst({
+    where: { registrationId, deletedAt: null },
+  });
+  if (!reg || !emailsMatch(reg.email, email)) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
   try {
     if (type === "badge") {
-      if (reg.paymentStatus !== "Paid" && reg.paymentStatus !== "Not_Required") {
+      if (!isPaidStatus(String(reg.paymentStatus))) {
         return NextResponse.json({ error: "Badge not available" }, { status: 403 });
       }
       const { pdf } = await generateBadgePdf(registrationId);
@@ -53,6 +70,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (type === "certificate") {
+      if (!isPaidStatus(String(reg.paymentStatus))) {
+        return NextResponse.json(
+          { error: "Certificate not available until payment is confirmed" },
+          { status: 403 }
+        );
+      }
       const { pdf } = await generateCertificatePdf(registrationId);
       return new NextResponse(pdf, {
         headers: {
@@ -62,8 +85,11 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    if (reg.paymentStatus !== "Paid" && reg.paymentStatus !== "Not_Required") {
-      return NextResponse.json({ error: "Receipt not available until payment is confirmed" }, { status: 403 });
+    if (!isPaidStatus(String(reg.paymentStatus))) {
+      return NextResponse.json(
+        { error: "Receipt not available until payment is confirmed" },
+        { status: 403 }
+      );
     }
 
     const payload = buildReceiptPayloadFromRegistration(reg);

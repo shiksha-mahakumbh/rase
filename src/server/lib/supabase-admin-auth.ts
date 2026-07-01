@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { ServiceError } from "@/server/lib/errors";
 import {
-  resolveAdminRoleForUser,
+  resolveAdminSessionForUser,
   verifySupabaseAccessToken,
   type AdminSessionPayload,
 } from "@/server/services/auth.service";
@@ -18,10 +18,10 @@ export async function verifySupabaseAdmin(
   }
 
   const { uid, email } = await verifySupabaseAccessToken(token);
-  const role = await resolveAdminRoleForUser(uid, email);
-  if (!role) {
+  const session = await resolveAdminSessionForUser(uid, email);
+  if (!session) {
     throw new ServiceError("Forbidden", 403, "FORBIDDEN");
   }
 
-  return { uid, email, role };
+  return session;
 }

@@ -5,6 +5,7 @@ import { uploadFile } from "@/server/services/storage.service";
 import { isSupportedType } from "@/server/lib/registration-types";
 import { resolveRegistrationUploadBucket } from "@/server/lib/registration-upload-bucket";
 import { ServiceError } from "@/server/lib/errors";
+import { verifyUploadToken } from "@/lib/security/upload-token";
 
 export const POST = createApiHandler(
   async (request: NextRequest) => {
@@ -13,6 +14,15 @@ export const POST = createApiHandler(
     const registrationType = String(form.get("registrationType") ?? "");
     const fieldName = String(form.get("field") ?? "file");
     const registrationId = form.get("registrationId")?.toString();
+    const uploadToken = String(form.get("uploadToken") ?? "").trim();
+
+    if (!verifyUploadToken(uploadToken)) {
+      throw new ServiceError(
+        "Valid upload authorization required — complete captcha verification first",
+        403,
+        "UPLOAD_FORBIDDEN"
+      );
+    }
 
     if (!registrationType || !isSupportedType(registrationType)) {
       throw new ServiceError("Invalid registration type", 400, "INVALID_TYPE");

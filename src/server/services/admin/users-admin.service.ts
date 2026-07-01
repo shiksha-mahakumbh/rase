@@ -2,6 +2,7 @@ import { prisma } from "@/server/db/prisma";
 import { ServiceError } from "@/server/lib/errors";
 import type { AdminRole } from "@/types/registration";
 import { invalidatePermissionCache } from "@/server/services/permission.service";
+import { bumpAdminSessionVersion } from "@/server/services/auth.service";
 
 const ASSIGNABLE_ROLES: AdminRole[] = [
   "Super Admin",
@@ -92,6 +93,9 @@ export async function updateAdminUser(
         ...(data.fullName !== undefined ? { fullName: data.fullName } : {}),
       },
     });
+    if (data.isActive !== undefined) {
+      await bumpAdminSessionVersion(userId);
+    }
   }
 
   if (data.roleNames?.length) {
@@ -114,6 +118,7 @@ export async function updateAdminUser(
         data: roles.map((role) => ({ userId, roleId: role.id })),
       }),
     ]);
+    await bumpAdminSessionVersion(userId);
     invalidatePermissionCache();
   }
 

@@ -8,9 +8,11 @@ import {
   createAdminSessionToken,
 } from "@/lib/security/admin-session";
 import { assertAdminSession, clearAdminSessionCookie } from "@/server/lib/admin-request-auth";
+import { assertSameOrigin } from "@/server/lib/same-origin";
 
 /** Exchange Supabase access token for signed HttpOnly admin session cookie. */
 export async function POST(request: NextRequest) {
+  assertSameOrigin(request);
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
     key: `admin-session:${ip}`,
@@ -30,6 +32,7 @@ export async function POST(request: NextRequest) {
       uid: session.uid,
       email: session.email,
       role: session.role,
+      sessionVersion: session.sessionVersion,
     });
 
     const response = NextResponse.json({ success: true, role: session.role });
@@ -43,6 +46,7 @@ export async function POST(request: NextRequest) {
 
 /** Clear signed admin session cookie (requires valid session). */
 export async function DELETE(request: NextRequest) {
+  assertSameOrigin(request);
   const ip = getClientIp(request);
   const limited = await rateLimitAsync({
     key: `admin-session-logout:${ip}`,

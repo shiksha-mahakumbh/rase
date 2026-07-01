@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+
+function timingSafeHexEqual(provided: string, expected: string): boolean {
+  try {
+    const a = Buffer.from(provided, "hex");
+    const b = Buffer.from(expected, "hex");
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
+}
 import { getClientIp, rateLimitAsync } from "@/lib/security/rateLimit";
 import { processRazorpayWebhookEvent } from "@/server/services/payment.service";
 
@@ -34,7 +45,7 @@ export async function POST(request: NextRequest) {
     .update(body)
     .digest("hex");
 
-  if (!signature || signature !== expected) {
+  if (!signature || !timingSafeHexEqual(signature, expected)) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
   }
 

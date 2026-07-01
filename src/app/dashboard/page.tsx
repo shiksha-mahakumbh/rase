@@ -64,6 +64,22 @@ function ParticipantDashboardInner() {
   const login = async () => {
     setLoading(true);
     try {
+      let captchaToken: string | undefined;
+      if (!lookupToken.trim()) {
+        const { executeRecaptcha, isRecaptchaConfigured, waitForRecaptcha } =
+          await import("@/lib/security/recaptcha-client");
+        if (isRecaptchaConfigured()) {
+          const ready = await waitForRecaptcha();
+          if (!ready) throw new Error("Security check could not load. Refresh and try again.");
+          captchaToken = (await executeRecaptcha("participant_dashboard")) ?? undefined;
+          if (!captchaToken) throw new Error("Captcha verification failed");
+        } else if (process.env.NODE_ENV === "production") {
+          throw new Error("Confirmation link or security check required");
+        } else {
+          captchaToken = "dev-bypass";
+        }
+      }
+
       const res = await fetch("/api/participant/dashboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -71,10 +87,17 @@ function ParticipantDashboardInner() {
           registrationId: registrationId.trim(),
           email: email.trim(),
           lookupToken: lookupToken.trim() || undefined,
+          captchaToken,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Login failed");
+      if (json.lookupToken) {
+        setLookupToken(json.lookupToken);
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("smk_lookup_token", json.lookupToken);
+        }
+      }
       setData(json);
       setContact(json.profile.contactNumber);
       setWhatsapp(json.profile.whatsappNumber ?? "");
@@ -108,6 +131,16 @@ function ParticipantDashboardInner() {
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Update failed");
     }
+  };
+
+  const downloadQuery = (type: string) => {
+    const params = new URLSearchParams({
+      type,
+      registrationId: data!.registrationId,
+      email: email.trim(),
+      token: lookupToken.trim(),
+    });
+    return `/api/participant/download?${params.toString()}`;
   };
 
   if (!data) {
@@ -152,29 +185,29 @@ function ParticipantDashboardInner() {
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          {data.receiptAvailable && (
+          {data.receiptAvailable && lookupToken && (
             <a
-              href={`/api/participant/download?type=receipt&registrationId=${encodeURIComponent(data.registrationId)}&email=${encodeURIComponent(email)}`}
+              href={downloadQuery("receipt")}
               className="rounded-xl border bg-white p-4 text-center font-semibold text-brand-navy hover:bg-slate-50"
             >
               Download Receipt
             </a>
           )}
-          {data.badgeAvailable && (
+          {data.badgeAvailable && lookupToken && (
             <a
-              href={`/api/participant/download?type=badge&registrationId=${encodeURIComponent(data.registrationId)}&email=${encodeURIComponent(email)}`}
+              href={downloadQuery("badge")}
               className="rounded-xl border bg-white p-4 text-center font-semibold text-brand-navy hover:bg-slate-50"
             >
               Download Badge
             </a>
           )}
-          {data.certificate && (
+          {data.certificate && lookupToken && (
             <>
               <a href={data.certificate.verifyUrl ?? "#"} className="rounded-xl border bg-white p-4 text-center font-semibold text-brand-navy hover:bg-slate-50" target="_blank" rel="noreferrer">
                 Verify Certificate
               </a>
               <a
-                href={`/api/participant/download?type=certificate&registrationId=${encodeURIComponent(data.registrationId)}&email=${encodeURIComponent(email)}`}
+                href={downloadQuery("certificate")}
                 className="rounded-xl border bg-white p-4 text-center font-semibold text-brand-navy hover:bg-slate-50"
               >
                 Download Certificate
