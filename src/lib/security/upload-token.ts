@@ -3,9 +3,10 @@ import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 const UPLOAD_TTL_MS = 15 * 60 * 1000;
 
 function uploadSecret(): string {
-  const secret = process.env.REGISTRATION_LOOKUP_SECRET;
+  const secret =
+    process.env.REGISTRATION_UPLOAD_SECRET ?? process.env.REGISTRATION_LOOKUP_SECRET;
   if (!secret) {
-    throw new Error("REGISTRATION_LOOKUP_SECRET is not configured");
+    throw new Error("REGISTRATION_UPLOAD_SECRET or REGISTRATION_LOOKUP_SECRET is not configured");
   }
   return secret;
 }

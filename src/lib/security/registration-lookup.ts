@@ -26,9 +26,13 @@ export function createRegistrationLookupToken(
   registrationId: string,
   email: string
 ): string {
+  const rid = registrationId.trim().toUpperCase();
+  if (!REG_ID_RE.test(rid)) {
+    throw new Error("Invalid registration ID for lookup token");
+  }
   const exp = Date.now() + TOKEN_TTL_MS;
   const payload = JSON.stringify({
-    rid: registrationId,
+    rid,
     email: normalizeEmail(email),
     exp,
   });
@@ -41,6 +45,8 @@ export function verifyRegistrationLookupToken(
   registrationId: string,
   token: string
 ): { email: string } | null {
+  const rid = registrationId.trim().toUpperCase();
+  if (!REG_ID_RE.test(rid)) return null;
   try {
     const [encoded, sig] = token.split(".");
     if (!encoded || !sig) return null;
@@ -56,7 +62,8 @@ export function verifyRegistrationLookupToken(
       exp?: number;
     };
 
-    if (parsed.rid !== registrationId) return null;
+    if (!parsed.rid || !REG_ID_RE.test(parsed.rid)) return null;
+    if (parsed.rid !== rid) return null;
     if (!parsed.email || typeof parsed.exp !== "number") return null;
     if (Date.now() > parsed.exp) return null;
 

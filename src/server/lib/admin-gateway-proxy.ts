@@ -14,9 +14,18 @@ export function adminGatewayProxyHeaders(session: AdminSessionPayload): Headers 
   headers.set("x-admin-role", session.role);
   headers.set("x-admin-email", session.email);
   headers.set("x-admin-uid", session.uid);
+  const expMs = Date.now() + 60_000;
+  headers.set("x-admin-session-version", String(session.sessionVersion));
+  headers.set("x-admin-context-exp", String(expMs));
   headers.set(
     "x-admin-context-sig",
-    signAdminGatewayContext(session.email, session.role, session.uid)
+    signAdminGatewayContext(
+      session.email,
+      session.role,
+      session.uid,
+      session.sessionVersion,
+      expMs
+    )
   );
   return headers;
 }
