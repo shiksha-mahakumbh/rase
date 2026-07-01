@@ -109,7 +109,6 @@ export const REDIRECT_SHELL_PATHS = new Set([
 export const SITEMAP_CORE_PATHS: readonly string[] = [
   "",
   "registration",
-  "registration/success",
   "introduction",
   "contact-us",
   "upcoming-events",
@@ -129,6 +128,7 @@ export const SITEMAP_CORE_PATHS: readonly string[] = [
   "past_event/Teacher_Development_Program",
   "past_event/Spoken_English_Workshop",
   "best-wishes",
+  "partners",
   "merchandise",
   "committees",
   "downloads",

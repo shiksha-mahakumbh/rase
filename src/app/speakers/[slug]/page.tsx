@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const speaker = await loadCmsSpeakerBySlug(slug);
 
-  if (!speaker) return { title: "Speaker" };
+  if (!speaker) notFound();
 
   const description =
     speaker.bio?.replace(/<[^>]+>/g, "").slice(0, 160) ??

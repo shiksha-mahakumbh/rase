@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return pressArticleMeta(fallback.pressNumber);
   }
 
-  return { title: "Press Release" };
+  notFound();
 }
 
 export default async function PressSlugPage({ params }: PageProps) {

@@ -13,7 +13,7 @@ const breadcrumb = {
       "@type": "ListItem",
       position: 3,
       name: "Media & Press",
-      item: `${SITE_URL}/media`,
+      item: `${SITE_URL}/media-center`,
     },
   ],
 };
@@ -24,7 +24,7 @@ const collection = {
   name: "Shiksha Mahakumbh Media Centre",
   description:
     "Media coverage, press releases, digital and print archives of Shiksha Mahakumbh Abhiyan.",
-  url: `${SITE_URL}/media`,
+  url: `${SITE_URL}/media-center`,
 };
 
 export default function MediaLayout({

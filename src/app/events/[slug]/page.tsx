@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const event = await loadCmsEventBySlug(slug);
 
-  if (!event) return { title: "Event" };
+  if (!event) notFound();
 
   return metadataFromCmsSeo(event.seo, {
     title: event.title,

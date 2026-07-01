@@ -34,7 +34,7 @@ export function metadataFromCmsSeo(
   const noIndex = seo?.robots?.includes("noindex") ?? false;
 
   return {
-    title: `${title} | ${SITE_NAME}`,
+    title,
     description,
     alternates: {
       canonical: url,

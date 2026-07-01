@@ -1,6 +1,6 @@
 import type { ContentLocale, Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
-import { SITE_URL } from "@/config/site";
+import { SITE_URL, DEFAULT_OG_IMAGE } from "@/config/site";
 import { validateSchemaJsonLd } from "@/lib/seo/schema-json-ld";
 import { ServiceError } from "@/server/lib/errors";
 import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
@@ -332,19 +332,8 @@ export async function generateSitemapIndex() {
     take: 500,
   });
 
-  for (const n of notices) {
-    const url = `${SITE_URL}/noticeboard#${n.slug}`;
-    if (!merged.some((e) => e.url === url)) {
-      merged.push({
-        url,
-        lastModified: n.updatedAt,
-        changeFrequency: "weekly",
-        priority: 0.5,
-        locale: n.locale,
-        hreflangAlternates: [],
-      });
-    }
-  }
+  // Notices share the /noticeboard canonical URL — avoid fragment-only sitemap entries.
+  void notices;
 
   return merged;
 }
@@ -368,7 +357,7 @@ export function resolveOpenGraphImage(seo: {
   return (
     seo.ogImageUrl ??
     seo.twitterImageUrl ??
-    `${SITE_URL}/og-default.jpg`
+    DEFAULT_OG_IMAGE
   );
 }
 

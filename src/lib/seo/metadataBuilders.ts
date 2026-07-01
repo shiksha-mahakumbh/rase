@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createPageMetadata } from "@/lib/seo/metadata";
-import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/config/site";
+import { DEFAULT_OG_HEIGHT, DEFAULT_OG_IMAGE, DEFAULT_OG_WIDTH, SITE_URL } from "@/config/site";
 
 type BaseOpts = {
   title: string;
@@ -32,7 +32,7 @@ function buildMetadata(
       ...(typeof base.openGraph === "object" ? base.openGraph : {}),
       type: openGraphType,
       url,
-      images: [{ url: image, width: 512, height: 512, alt: opts.title }],
+      images: [{ url: image, width: DEFAULT_OG_WIDTH, height: DEFAULT_OG_HEIGHT, alt: opts.title }],
     },
   };
 }
@@ -155,7 +155,7 @@ export function createNoIndexMetadata(opts: {
   path: string;
 }): Metadata {
   return {
-    title: `${opts.title} | ${SITE_NAME}`,
+    title: opts.title,
     robots: { index: false, follow: false, nocache: true },
     alternates: { canonical: `${SITE_URL}${opts.path}` },
   };
@@ -167,7 +167,7 @@ export function createRedirectShellMetadata(opts: {
   path: string;
 }): Metadata {
   return {
-    title: `${opts.title} | ${SITE_NAME}`,
+    title: opts.title,
     robots: { index: false, follow: true },
     alternates: { canonical: `${SITE_URL}${opts.path}` },
   };

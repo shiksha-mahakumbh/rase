@@ -1,16 +1,21 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import ConferenceHubPage from "@/components/conferences/ConferenceHubPage";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import { WORKSHOP_ARCHIVE, WORKSHOPS_HUB } from "@/lib/knowledge-graph/conference-catalog";
 import { WORKSHOPS_PAGE_HERO, WORKSHOPS_STATS } from "@/data/workshops-hub";
 import { buildBreadcrumbSchema, buildCollectionPageSchema } from "@/lib/seo/schema";
+import { createPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: WORKSHOPS_HUB.title,
   description: WORKSHOPS_HUB.description,
-  alternates: { canonical: WORKSHOPS_HUB.path },
-};
+  path: WORKSHOPS_HUB.path,
+  keywords: [
+    "Shiksha Mahakumbh workshops",
+    "teacher development programme",
+    "education workshops India",
+  ],
+});
 
 const WORKSHOP_HINTS: Record<string, string> = {
   "/past_event/Teacher_Development_Program":

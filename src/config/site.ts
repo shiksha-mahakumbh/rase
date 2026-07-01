@@ -1,5 +1,5 @@
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.shikshamahakumbh.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.rase.co.in";
 
 export const SITE_NAME = "Shiksha Mahakumbh Abhiyan";
 export const SITE_NAME_HINDI = "शिक्षा महाकुंभ अभियान";

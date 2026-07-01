@@ -4,6 +4,8 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { withHreflang } from "@/lib/seo/hreflang";
 import { loadCmsPageData } from "@/lib/cms/server";
 import { CmsProvider } from "@/lib/cms/context";
+import { buildFaqPageSchema, extractFaqsFromCmsData } from "@/lib/cms/faq";
+import { HOME_DEFAULT_FAQS } from "@/data/home-faqs";
 
 export async function generateMetadata() {
   return withHreflang(
@@ -24,9 +26,17 @@ export async function generateMetadata() {
 
 export default async function FaqPage() {
   const cmsData = await loadCmsPageData("en");
+  const faqs = extractFaqsFromCmsData(cmsData);
+  const faqSchema = buildFaqPageSchema(faqs.length ? faqs : HOME_DEFAULT_FAQS);
 
   return (
     <CmsProvider data={cmsData}>
+      {faqSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
       <PublicPageShell
         hero={{
           eyebrow: "Help",

@@ -13,6 +13,7 @@ import {
   createEventMetadata,
   createPublicationMetadata,
   createNoIndexMetadata,
+  createRedirectShellMetadata,
 } from "@/lib/seo/metadataBuilders";
 import { getPressOgImageUrl, PRESS_OG_IMAGES } from "@/lib/seo/pressShare";
 import { committeePathFromSlug } from "@/lib/committee/edition-slugs";
@@ -48,10 +49,8 @@ export const PUBLIC_PAGE_META = {
     publicationType: "Proceedings",
     image: getProceedingOgImage("/proceeding3"),
   }),
-  journals: createPublicationMetadata({
+  journals: createRedirectShellMetadata({
     title: "DHE Journal",
-    description:
-      "Official journal platform for Shiksha Mahakumbh and Department of Holistic Education research publications.",
     path: "/journals",
   }),
   books: createPublicationMetadata({
@@ -145,16 +144,13 @@ export const PUBLIC_PAGE_META = {
     title: "Conference Topics",
     path: "/Topics",
   }),
-  abstract: createPageMetadata({
-    title: "Multi Track Conference",
-    description: "Multi Track Conference submissions via Microsoft CMT for Shiksha Mahakumbh.",
+  abstract: createRedirectShellMetadata({
+    title: "Abstract Submission — Multi Track Conference",
     path: "/abstract",
   }),
-  fulllengthpaper: createPublicationMetadata({
-    title: "Multi Track Conference",
-    description: "Multi Track Conference submission via Microsoft CMT.",
+  fulllengthpaper: createRedirectShellMetadata({
+    title: "Full-Length Paper Submission — Multi Track Conference",
     path: "/fulllengthpaper",
-    publicationType: "Paper",
   }),
   conclave: createEventMetadata({
     title: "VC & Policy Conclaves",
@@ -177,14 +173,12 @@ export const PUBLIC_PAGE_META = {
     path: "/gallery",
     keywords: ["Shiksha Mahakumbh YouTube", "education conference videos", "RASE documentaries"],
   }),
-  keynotespeakers: createPageMetadata({
+  keynotespeakers: createRedirectShellMetadata({
     title: "Keynote Speakers",
-    description: "Distinguished keynote speakers at Shiksha Mahakumbh national summits.",
     path: "/keynotespeakers",
   }),
-  paper: createPageMetadata({
-    title: "Multi Track Conference",
-    description: "Multi Track Conference via Microsoft CMT for Shiksha Mahakumbh.",
+  paper: createRedirectShellMetadata({
+    title: "Paper Submission — Multi Track Conference",
     path: "/paper",
   }),
   pastEventSmk20: createEventMetadata({
@@ -272,9 +266,8 @@ export const PUBLIC_PAGE_META = {
     path: "/merchandise",
     keywords: ["Shiksha Mahakumbh merchandise", "education summit store"],
   }),
-  talkShow: createPageMetadata({
+  talkShow: createRedirectShellMetadata({
     title: "Talk Show",
-    description: "Education talk shows and dialogues from Shiksha Mahakumbh Abhiyan.",
     path: "/TalkShow",
   }),
 } as const;

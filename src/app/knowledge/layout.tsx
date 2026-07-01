@@ -1,11 +1,8 @@
-import { createPageMetadata } from "@/lib/seo/metadata";
+import { createRedirectShellMetadata } from "@/lib/seo/metadataBuilders";
 
-export const metadata = createPageMetadata({
+export const metadata = createRedirectShellMetadata({
   title: "Knowledge Hub",
-  description:
-    "Articles, research, policy updates, news, and event reports from Shiksha Mahakumbh Abhiyan.",
   path: "/knowledge",
-  keywords: ["education research", "policy", "NEP", "Shiksha Mahakumbh publications"],
 });
 
 export default function KnowledgeLayout({
