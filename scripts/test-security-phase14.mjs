@@ -115,9 +115,10 @@ if (
 if (
   pkg.scripts["audit:site-performance"] &&
   pkg.scripts["lighthouse:local"] &&
+  pkg.scripts["verify:lighthouse:prod"] &&
   readRepo(".github/workflows/ci.yml").includes("audit:site-performance")
 ) {
-  pass("final_lighthouse_pass", "Site performance audit and Lighthouse runner in CI");
+  pass("final_lighthouse_pass", "Site performance audit, Lighthouse runner, and PSI prod verify");
 } else {
   fail("final_lighthouse_pass", "Lighthouse / performance audit wiring incomplete");
 }
@@ -154,10 +155,12 @@ if (pkg.scripts["verify:rollback"] && existsRepo("scripts/verify-rollback-readin
 // 149 Monitoring verification
 if (
   pkg.scripts["verify:monitoring"] &&
+  pkg.scripts["verify:production-ops"] &&
   existsRepo("scripts/verify-monitoring-live.mjs") &&
+  existsRepo("scripts/verify-production-ops.mjs") &&
   readRepo("scripts/production-smoke-test.mjs").includes("/api/v2/status")
 ) {
-  pass("monitoring_verification", "Live monitoring probes and status smoke checks wired");
+  pass("monitoring_verification", "Live monitoring and production ops probes wired");
 } else {
   fail("monitoring_verification", "Monitoring verification incomplete");
 }

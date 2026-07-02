@@ -52,6 +52,12 @@ jobs:
           REGISTRATION_LOOKUP_SECRET: ci-test-lookup-secret
           ADMIN_SESSION_SECRET: ci-test-admin-secret
 
+      - name: Integration contracts
+        run: npm run test:integration
+
+      - name: Unit tests
+        run: npm run test:unit
+
       - name: Production build
         run: npm run build
         env:
@@ -60,6 +66,24 @@ jobs:
           DIRECT_URL: postgresql://ci:ci@127.0.0.1:5432/ci
           NEXT_PUBLIC_SITE_URL: https://www.rase.co.in
           ADMIN_SESSION_SECRET: ci-test-admin-secret
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: E2E tests
+        run: npm run test:e2e
+        env:
+          CI: "true"
+
+  docker:
+    runs-on: ubuntu-latest
+    if: github.repository == 'shiksha-mahakumbh/rase'
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docker build
+        run: docker build -t rase-web:ci .
 
   vercel-deploy:
     needs: quality
@@ -97,3 +121,6 @@ jobs:
 
       - name: Production smoke test
         run: node scripts/production-smoke-test.mjs https://www.rase.co.in
+
+      - name: Production ops verification
+        run: node scripts/verify-production-ops.mjs https://www.rase.co.in

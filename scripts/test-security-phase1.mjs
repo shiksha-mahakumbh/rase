@@ -62,10 +62,14 @@ if (clientSecretLeaks.length === 0) {
 }
 
 // 13–15 Supabase / DB / RLS
-if (existsRepo("supabase/policies/registrations.sql") && existsRepo("supabase/policies/rbac-tiered.sql")) {
-  pass("supabase_rls_policies", "Supabase RLS policy files present");
+if (
+  existsRepo("supabase/policies/registrations.sql") &&
+  existsRepo("supabase/policies/rbac-tiered.sql") &&
+  readRepo("scripts/deploy-supabase-production.mjs").includes("rbac-tiered.sql")
+) {
+  pass("supabase_rls_policies", "Supabase RLS policy files and deploy script include rbac-tiered");
 } else {
-  fail("supabase_rls_policies", "Missing supabase policy SQL files");
+  fail("supabase_rls_policies", "Missing supabase policy SQL files or deploy wiring");
 }
 
 if (includesSrc("server/db/prisma.ts", /DATABASE_URL/) && !readSrc("server/db/prisma.ts").includes("$executeRawUnsafe")) {

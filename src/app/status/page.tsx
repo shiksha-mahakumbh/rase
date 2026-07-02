@@ -81,6 +81,32 @@ export default async function StatusPage() {
                   {payload.checks.cronConfigured ? "Configured" : "Not configured"}
                 </td>
               </tr>
+              <tr>
+                <td className="px-4 py-3">RLS policies (public schema)</td>
+                <td className="px-4 py-3">
+                  {payload.checks.rlsPolicyCount === null
+                    ? "Unknown"
+                    : `${payload.checks.rlsPolicyCount} active`}
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3">RLS policies (storage)</td>
+                <td className="px-4 py-3">
+                  {payload.checks.storagePolicyCount === null
+                    ? "Unknown"
+                    : `${payload.checks.storagePolicyCount} active`}
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3">Anon API — roles table blocked</td>
+                <td className="px-4 py-3">
+                  {payload.checks.anonRolesBlocked === null
+                    ? "Unknown"
+                    : payload.checks.anonRolesBlocked
+                      ? "Blocked"
+                      : "Exposed"}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

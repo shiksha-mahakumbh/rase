@@ -70,6 +70,7 @@ async function applySeed() {
 
 async function applyRls() {
   const files = [
+    "supabase/policies/rbac-tiered.sql",
     "supabase/policies/registrations.sql",
     "supabase/policies/production-hardening.sql",
     "supabase/policies/payments.sql",
@@ -77,6 +78,7 @@ async function applyRls() {
     "supabase/policies/cms.sql",
     "supabase/policies/analytics.sql",
     "supabase/policies/phase_b.sql",
+    "supabase/policies/storage.sql",
     "supabase/policies/storage-production.sql",
     "supabase/policies/storage-publications.sql",
   ];

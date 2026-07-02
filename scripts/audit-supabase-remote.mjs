@@ -127,7 +127,13 @@ async function main() {
     report.gaps.push("SUPABASE_SERVICE_ROLE_KEY not available locally (expected for Vercel-only secrets)");
   }
 
+  const strict = process.argv.includes("--strict") || process.env.AUDIT_SUPABASE_STRICT === "1";
   console.log(JSON.stringify(report, null, 2));
+
+  if (strict && report.gaps.length > 0) {
+    console.error(`\n✗ audit:supabase — ${report.gaps.length} gap(s)`);
+    process.exit(1);
+  }
 }
 
 main().catch((e) => {

@@ -21,6 +21,8 @@ const base = (baseArg || process.env.NEXT_PUBLIC_SITE_URL || "https://www.rase.c
 );
 
 const steps = [
+  { name: "unit_tests", cmd: ["node", "scripts/run-unit-tests.mjs"] },
+  { name: "integration_contracts", cmd: ["node", "scripts/test-integration-contracts.mjs"] },
   { name: "phase14_audit", cmd: ["node", "scripts/test-security-phase14.mjs"] },
   { name: "rollback_readiness", cmd: ["node", "scripts/verify-rollback-readiness.mjs"] },
 ];
@@ -29,7 +31,10 @@ if (live) {
   steps.push(
     { name: "validate_go_live", cmd: ["node", "scripts/validate-go-live.mjs", base] },
     { name: "monitoring_live", cmd: ["node", "scripts/verify-monitoring-live.mjs", base] },
-    { name: "production_smoke", cmd: ["node", "scripts/production-smoke-test.mjs", base] }
+    { name: "production_ops", cmd: ["node", "scripts/verify-production-ops.mjs", base] },
+    { name: "lighthouse_prod", cmd: ["node", "scripts/verify-lighthouse-prod.mjs", base] },
+    { name: "production_smoke", cmd: ["node", "scripts/production-smoke-test.mjs", base] },
+    { name: "go_live_report", cmd: ["node", "scripts/generate-go-live-report.mjs", base] }
   );
 } else {
   console.log(
@@ -52,5 +57,6 @@ for (const step of steps) {
 
 console.log(`\n${failed === 0 ? "✓" : "✗"} certify:go-live — ${steps.length - failed}/${steps.length} steps passed`);
 console.log("Sign-off checklist: docs/go-live/GO_LIVE_SIGN_OFF.md");
+console.log("Verification report: docs/go-live/VERIFICATION_REPORT.json");
 
 process.exit(failed > 0 ? 1 : 0);

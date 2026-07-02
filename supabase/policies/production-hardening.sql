@@ -45,3 +45,28 @@ CREATE POLICY registration_counters_deny_all ON registration_counters
   FOR ALL TO anon, authenticated
   USING (false)
   WITH CHECK (false);
+
+-- RBAC tables: deny anon (RLS on with no permissive policy = deny; explicit for audits)
+DROP POLICY IF EXISTS roles_deny_anon_all ON roles;
+CREATE POLICY roles_deny_anon_all ON roles
+  FOR ALL TO anon
+  USING (false)
+  WITH CHECK (false);
+
+DROP POLICY IF EXISTS permissions_deny_anon_all ON permissions;
+CREATE POLICY permissions_deny_anon_all ON permissions
+  FOR ALL TO anon
+  USING (false)
+  WITH CHECK (false);
+
+DROP POLICY IF EXISTS user_roles_deny_anon_all ON user_roles;
+CREATE POLICY user_roles_deny_anon_all ON user_roles
+  FOR ALL TO anon
+  USING (false)
+  WITH CHECK (false);
+
+DROP POLICY IF EXISTS role_permissions_deny_anon_all ON role_permissions;
+CREATE POLICY role_permissions_deny_anon_all ON role_permissions
+  FOR ALL TO anon
+  USING (false)
+  WITH CHECK (false);

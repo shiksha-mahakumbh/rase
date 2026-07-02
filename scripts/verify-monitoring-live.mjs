@@ -17,7 +17,19 @@ const probes = [
   {
     name: "status-api",
     path: "/api/v2/status",
-    validate: (res, json) => res.ok && json?.service && json?.checks,
+    validate: (res, json) =>
+      res.ok &&
+      json?.service &&
+      json?.checks &&
+      json.checks.database === "connected" &&
+      json.checks.sentryConfigured === true &&
+      json.checks.rateLimitMode === "upstash" &&
+      json.checks.cronConfigured === true &&
+      typeof json.checks.rlsPolicyCount === "number" &&
+      json.checks.rlsPolicyCount >= 5 &&
+      typeof json.checks.storagePolicyCount === "number" &&
+      json.checks.storagePolicyCount >= 3 &&
+      json.checks.anonRolesBlocked === true,
   },
   {
     name: "status-page",

@@ -1,0 +1,6 @@
+{
+  "note": "Run npm run certify:go-live:live or npm run generate:go-live-report to populate this file.",
+  "generatedAt": null,
+  "baseUrl": "https://www.rase.co.in",
+  "probes": {}
+}

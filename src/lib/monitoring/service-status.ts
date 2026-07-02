@@ -11,6 +11,9 @@ export type ServiceStatusPayload = {
     sentryConfigured: boolean;
     rateLimitMode: "upstash" | "in-memory";
     cronConfigured: boolean;
+    rlsPolicyCount: number | null;
+    storagePolicyCount: number | null;
+    anonRolesBlocked: boolean | null;
   };
   timestamp: string;
 };
@@ -35,7 +38,59 @@ export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
     }
   }
 
-  const status = database === "error" ? "degraded" : "ok";
+  let rlsPolicyCount: number | null = null;
+  let storagePolicyCount: number | null = null;
+  let anonRolesBlocked: boolean | null = null;
+
+  if (database === "connected") {
+    try {
+      const { prisma } = await import("@/server/db/prisma");
+      const [publicRows, storageRows] = await Promise.all([
+        prisma.$queryRaw<{ n: number }[]>`
+          SELECT count(*)::int AS n FROM pg_policies WHERE schemaname = 'public'
+        `,
+        prisma.$queryRaw<{ n: number }[]>`
+          SELECT count(*)::int AS n FROM pg_policies WHERE schemaname = 'storage'
+        `,
+      ]);
+      rlsPolicyCount = publicRows[0]?.n ?? 0;
+      storagePolicyCount = storageRows[0]?.n ?? 0;
+    } catch (error) {
+      console.error("[status] RLS policy probe failed:", error);
+    }
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+  const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (supabaseUrl && supabaseAnon) {
+    try {
+      const res = await fetch(`${supabaseUrl}/rest/v1/roles?select=slug&limit=1`, {
+        headers: {
+          apikey: supabaseAnon,
+          Authorization: `Bearer ${supabaseAnon}`,
+        },
+        cache: "no-store",
+      });
+      const text = await res.text();
+      anonRolesBlocked =
+        res.status === 401 ||
+        res.status === 403 ||
+        /permission denied|row-level security/i.test(text);
+    } catch (error) {
+      console.error("[status] anon RLS probe failed:", error);
+    }
+  }
+
+  const opsDegraded =
+    database === "error" ||
+    (rlsPolicyCount !== null && rlsPolicyCount < 1) ||
+    (storagePolicyCount !== null && storagePolicyCount < 1) ||
+    anonRolesBlocked === false ||
+    !isUpstashConfigured() ||
+    !isSentryConfigured() ||
+    !process.env.CRON_SECRET;
+
+  const status = opsDegraded ? "degraded" : "ok";
 
   return {
     status,
@@ -45,6 +100,9 @@ export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
       sentryConfigured: isSentryConfigured(),
       rateLimitMode: isUpstashConfigured() ? "upstash" : "in-memory",
       cronConfigured: Boolean(process.env.CRON_SECRET),
+      rlsPolicyCount,
+      storagePolicyCount,
+      anonRolesBlocked,
     },
     timestamp: new Date().toISOString(),
   };

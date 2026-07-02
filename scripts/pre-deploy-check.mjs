@@ -23,8 +23,10 @@ if (verify.status !== 0) {
 }
 
 console.log("\nManual release steps (production):");
-console.log("  1. npx prisma migrate deploy   # apply DB migrations");
-console.log("  2. npm run db:deploy-supabase  # RLS + storage policies (if changed)");
-console.log("  3. npm run smoke:prod          # post-deploy HTTP probes");
-console.log("  4. Confirm Brevo sender domain + Razorpay webhook + live keys on Vercel");
+console.log("  1. npm run db:migrate:deploy       # apply DB migrations");
+console.log("  2. npm run db:deploy-supabase -- --rls-only  # RLS + storage policies");
+console.log("  3. npm run smoke:prod              # post-deploy HTTP probes");
+console.log("  4. npm run verify:production-ops   # RLS counts + Upstash + Sentry + cron");
+console.log("  5. npm run certify:go-live:live    # full go-live bundle");
+console.log("  6. Confirm Brevo sender domain + Razorpay webhook + live keys on Vercel");
 console.log("\nPre-deploy env check passed.");

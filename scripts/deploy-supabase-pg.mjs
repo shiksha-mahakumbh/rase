@@ -129,6 +129,7 @@ async function verify(client) {
 }
 
 const RLS_FILES = [
+  "supabase/policies/rbac-tiered.sql",
   "supabase/policies/registrations.sql",
   "supabase/policies/production-hardening.sql",
   "supabase/policies/payments.sql",
@@ -136,6 +137,7 @@ const RLS_FILES = [
   "supabase/policies/cms.sql",
   "supabase/policies/analytics.sql",
   "supabase/policies/phase_b.sql",
+  "supabase/policies/storage.sql",
   "supabase/policies/storage-production.sql",
   "supabase/policies/storage-publications.sql",
 ];
