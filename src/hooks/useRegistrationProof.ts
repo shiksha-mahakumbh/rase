@@ -11,7 +11,7 @@ type ProofBundle = {
 const REFRESH_MS = 15 * 60 * 1000;
 
 async function fetchProofBundle(): Promise<ProofBundle> {
-  const res = await fetch("/api/v2/registration/proof", {
+  const res = await fetch("/api/v2/registration-session", {
     method: "GET",
     credentials: "same-origin",
     headers: { Accept: "application/json" },
