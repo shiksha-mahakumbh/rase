@@ -57,8 +57,9 @@ export async function handleRegistrationReceiptGet(request: NextRequest) {
   const receiptData = buildReceiptData(payload);
 
   if (format === "html") {
+    const autoPrint = request.nextUrl.searchParams.get("print") === "1";
     const html = buildRegistrationReceiptHtml(receiptData, SITE_URL, {
-      autoPrint: true,
+      autoPrint,
       embedLogos: true,
       qrDataUrl,
     });

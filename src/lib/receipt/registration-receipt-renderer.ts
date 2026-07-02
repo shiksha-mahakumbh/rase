@@ -1,8 +1,8 @@
 import { jsPDF } from "jspdf";
 import { type ReceiptData } from "@/lib/receipt/receipt-data";
-import { DONATION_RECEIPT_ORG } from "@/lib/receipt/donation-receipt-layout";
 import {
   getRegistrationReceiptRows,
+  REGISTRATION_RECEIPT_ORG_PDF,
   REGISTRATION_RECEIPT_THANKS_PDF,
   registrationReceiptTitle,
 } from "@/lib/receipt/registration-receipt-layout";
@@ -59,7 +59,7 @@ export function renderRegistrationReceiptPdf(
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const right = pageWidth - 36;
-  const org = DONATION_RECEIPT_ORG;
+  const org = REGISTRATION_RECEIPT_ORG_PDF;
   const logoSize = 60;
   let y = 20;
 

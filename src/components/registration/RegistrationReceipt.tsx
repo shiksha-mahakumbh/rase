@@ -2,6 +2,8 @@
 
 import ReceiptTemplate from "@/components/receipt/ReceiptTemplate";
 import { type ReceiptData } from "@/lib/receipt/receipt-data";
+import { buildRegistrationReceiptHtml } from "@/lib/receipt/registration-receipt";
+import { renderReceiptHtmlToPdfDownload } from "@/lib/receipt/download-receipt-pdf-client";
 import { printReceiptDocument } from "@/lib/receipt/print-receipt";
 
 export type { ReceiptData };
@@ -32,15 +34,49 @@ export function printRegistrationReceipt(data: ReceiptData, qrDataUrl?: string |
   printReceiptDocument(data, qrDataUrl);
 }
 
+function buildDownloadHtml(data: ReceiptData, qrDataUrl?: string | null) {
+  return buildRegistrationReceiptHtml(data, window.location.origin, {
+    autoPrint: false,
+    embedLogos: true,
+    qrDataUrl,
+  });
+}
+
+/** Download PDF — generated in-browser from the same HTML as print (Hindi + 6.0, one page). */
 export async function downloadRegistrationReceiptPdf(
   data: ReceiptData,
   options: { registrationId?: string; token?: string | null; qrDataUrl?: string | null } = {}
 ) {
   const id = options.registrationId ?? data.registrationId;
-  const params = new URLSearchParams({ id });
-  if (options.token) params.set("token", options.token);
+  const filename = `receipt-${id}.pdf`;
 
-  const res = await fetch(`/api/v2/registration/receipt?${params.toString()}`);
+  try {
+    const html = buildDownloadHtml(data, options.qrDataUrl);
+    await renderReceiptHtmlToPdfDownload(html, filename);
+    return;
+  } catch (clientError) {
+    console.warn("RECEIPT_CLIENT_PDF_FAILED", clientError);
+  }
+
+  if (!options.token) {
+    throw new Error("Unable to download receipt PDF");
+  }
+
+  const params = new URLSearchParams({ id, format: "html" });
+  params.set("token", options.token);
+
+  const htmlRes = await fetch(`/api/v2/registration/receipt?${params.toString()}`);
+  if (htmlRes.ok) {
+    try {
+      await renderReceiptHtmlToPdfDownload(await htmlRes.text(), filename);
+      return;
+    } catch {
+      /* fall through to server PDF */
+    }
+  }
+
+  const pdfParams = new URLSearchParams({ id, token: options.token });
+  const res = await fetch(`/api/v2/registration/receipt?${pdfParams.toString()}`);
   if (!res.ok) {
     throw new Error("Unable to download receipt PDF");
   }
@@ -48,7 +84,7 @@ export async function downloadRegistrationReceiptPdf(
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `receipt-${id}.pdf`;
+  anchor.download = filename;
   anchor.click();
   URL.revokeObjectURL(url);
 }

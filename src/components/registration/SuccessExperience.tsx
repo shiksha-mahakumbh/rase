@@ -124,7 +124,7 @@ function SuccessInner() {
       token: lookupToken,
       qrDataUrl,
     }).catch(() => {
-      window.alert("Unable to download receipt. Please try again or check your email.");
+      window.alert("Unable to download receipt. Please try again or use Print receipt.");
     });
   };
 
@@ -240,9 +240,9 @@ function SuccessInner() {
             <ActionCard
               title="Download receipt"
               onClick={handleDownloadReceipt}
-              disabled={!receiptData || !lookupToken}
+              disabled={!receiptData}
             >
-              PDF — same as print layout
+              PDF — same layout as print (one page)
             </ActionCard>
             <ActionCard
               title="Print receipt"

@@ -12,6 +12,12 @@ import {
   receiptLogoSrc,
 } from "@/lib/receipt/receipt-logos";
 
+/** Latin-script header for jsPDF (Helvetica cannot render Devanagari). */
+export const REGISTRATION_RECEIPT_ORG_PDF = {
+  ...DONATION_RECEIPT_ORG,
+  campaignHi: "Shiksha Mahakumbh Abhiyan",
+} as const;
+
 export const REGISTRATION_RECEIPT_THANKS = {
   heading: "हार्दिक धन्यवाद",
   lines: [
