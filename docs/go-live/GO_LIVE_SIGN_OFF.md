@@ -45,8 +45,10 @@ npm run certify:go-live
 With live probes against production:
 
 ```bash
-RUN_LIVE_GO_LIVE=1 npm run certify:go-live
+npm run certify:go-live:live
 ```
+
+PowerShell alternative: `$env:RUN_LIVE_GO_LIVE = "1"; npm run certify:go-live`
 
 ### Post sign-off
 

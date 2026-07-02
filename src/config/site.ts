@@ -1,5 +1,44 @@
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.rase.co.in";
+export const CANONICAL_SITE_URL = "https://www.rase.co.in";
+
+const LEGACY_SITE_HOSTS = new Set([
+  "www.shikshamahakumbh.com",
+  "shikshamahakumbh.com",
+]);
+
+/** Rewrite legacy marketing hostnames to the canonical public domain (SEO/sitemap). */
+export function toCanonicalSiteUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (LEGACY_SITE_HOSTS.has(parsed.hostname.toLowerCase())) {
+      return `${CANONICAL_SITE_URL}${parsed.pathname}${parsed.search}${parsed.hash}`;
+    }
+    return parsed.href.replace(/\/$/, "") === parsed.origin
+      ? parsed.origin
+      : parsed.href;
+  } catch {
+    return url;
+  }
+}
+
+function resolveSiteUrl(raw?: string): string {
+  const value = raw?.trim();
+  if (!value) return CANONICAL_SITE_URL;
+
+  try {
+    const normalized = value.replace(/\/$/, "");
+    const withProtocol = normalized.startsWith("http") ? normalized : `https://${normalized}`;
+    const host = new URL(withProtocol).hostname.toLowerCase();
+    if (LEGACY_SITE_HOSTS.has(host)) {
+      return CANONICAL_SITE_URL;
+    }
+    return normalized.startsWith("http") ? normalized : `https://${normalized}`;
+  } catch {
+    return CANONICAL_SITE_URL;
+  }
+}
+
+/** Public site origin for metadata, sitemap, emails, and JSON-LD. */
+export const SITE_URL = resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
 
 export const SITE_NAME = "Shiksha Mahakumbh Abhiyan";
 export const SITE_NAME_HINDI = "शिक्षा महाकुंभ अभियान";

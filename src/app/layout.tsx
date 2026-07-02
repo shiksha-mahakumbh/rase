@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientChrome from "./ClientChrome";
 import DocumentLangSync from "@/components/common/DocumentLangSync";
 import SiteJsonLd from "@/components/seo/SiteJsonLd";
+import { SITE_URL } from "@/config/site";
 import { ADSENSE_PUBLISHER_ID } from "@/lib/growth/adsense";
 
 const inter = Inter({
@@ -24,9 +25,7 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.rase.co.in"
-  ),
+  metadataBase: new URL(SITE_URL),
   title: {
     template: "%s | Shiksha Mahakumbh",
     default: "Shiksha Mahakumbh 6.0 — National Education Summit",

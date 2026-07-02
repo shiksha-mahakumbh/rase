@@ -1,6 +1,6 @@
 import type { ContentLocale, Prisma } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
-import { SITE_URL, DEFAULT_OG_IMAGE } from "@/config/site";
+import { SITE_URL, DEFAULT_OG_IMAGE, toCanonicalSiteUrl } from "@/config/site";
 import { validateSchemaJsonLd } from "@/lib/seo/schema-json-ld";
 import { ServiceError } from "@/server/lib/errors";
 import { purgeCmsContentCaches } from "@/server/lib/cms-cache-purge";
@@ -264,9 +264,11 @@ export async function getSitemapEntries(locale?: ContentLocale) {
   });
 
   return entries.map((e) => ({
-    url: e.canonicalUrl?.startsWith("http")
-      ? e.canonicalUrl
-      : `${SITE_URL}${e.canonicalUrl ?? "/"}`,
+    url: toCanonicalSiteUrl(
+      e.canonicalUrl?.startsWith("http")
+        ? e.canonicalUrl
+        : `${SITE_URL}${e.canonicalUrl ?? "/"}`
+    ),
     lastModified: e.updatedAt,
     changeFrequency: (e.sitemapChangefreq ?? "weekly") as
       | "always"

@@ -33,11 +33,12 @@ const nextConfig = readRepo("next.config.js");
 
 // 139 Domain
 if (
-  readSrc("config/site.ts").includes("www.rase.co.in") &&
-  readRepo(".env.example").includes("NEXT_PUBLIC_SITE_URL") &&
+  readSrc("config/site.ts").includes("CANONICAL_SITE_URL") &&
+  readSrc("config/site.ts").includes("toCanonicalSiteUrl") &&
+  readRepo(".env.example").includes("www.rase.co.in") &&
   readSrc("app/sitemap.ts").includes("SITE_URL")
 ) {
-  pass("domain_canonical", "SITE_URL default, env template, and sitemap use canonical domain");
+  pass("domain_canonical", "Canonical SITE_URL resolver, env template, and sitemap wired");
 } else {
   fail("domain_canonical", "Domain configuration incomplete");
 }

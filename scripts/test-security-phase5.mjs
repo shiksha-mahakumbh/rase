@@ -30,10 +30,11 @@ function existsRepo(rel) {
 
 // 63–66 Metadata / OG / Twitter
 if (
-  readRepo("src/config/site.ts").includes('?? "https://www.rase.co.in"') &&
+  readRepo("src/config/site.ts").includes("CANONICAL_SITE_URL") &&
+  readRepo("src/config/site.ts").includes("www.rase.co.in") &&
   readSrc("app/layout.tsx").includes("metadataBase")
 ) {
-  pass("seo_site_url_canonical", "SITE_URL default matches root metadataBase domain");
+  pass("seo_site_url_canonical", "Canonical SITE_URL helper matches root metadataBase");
 } else {
   fail("seo_site_url_canonical", "SITE_URL and metadataBase domain mismatch");
 }

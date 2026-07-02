@@ -49,7 +49,8 @@ Verify: `npm run verify:env` | `npm run audit:secrets`
 | `npm run test:integration` | Integration script contracts (+ optional live run) |
 | `npm run test:load` | Concurrent health load baseline |
 | `npm run audit:secrets` | Static scan for secret leaks and tracked `.env` files |
-| `npm run certify:go-live` | Final go-live certification bundle (set `RUN_LIVE_GO_LIVE=1` for live probes) |
+| `npm run certify:go-live` | Final go-live certification bundle (static checks) |
+| `npm run certify:go-live:live` | Same + live production HTTP probes (Windows-friendly) |
 | `npm run verify:rollback` | Static rollback readiness checks |
 | `npm run verify:monitoring` | Live `/status` and health monitoring probes |
 | `npm run validate:go-live` | HTTPS, HSTS, sitemap, and health go-live probes |

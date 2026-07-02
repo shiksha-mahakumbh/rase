@@ -1,13 +1,21 @@
 #!/usr/bin/env node
 /**
  * Go-live certification bundle (item 150).
- * Static checks always run; live HTTP probes when RUN_LIVE_GO_LIVE=1.
+ * Static checks always run; live HTTP probes with --live or RUN_LIVE_GO_LIVE=1.
+ *
+ * Usage:
+ *   node scripts/certify-go-live.mjs
+ *   node scripts/certify-go-live.mjs --live
+ *   node scripts/certify-go-live.mjs --live https://www.rase.co.in
  */
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 
 const repo = path.resolve(".");
-const base = (process.argv[2] || process.env.NEXT_PUBLIC_SITE_URL || "https://www.rase.co.in").replace(
+const args = process.argv.slice(2);
+const live = args.includes("--live") || process.env.RUN_LIVE_GO_LIVE === "1";
+const baseArg = args.find((arg) => !arg.startsWith("--"));
+const base = (baseArg || process.env.NEXT_PUBLIC_SITE_URL || "https://www.rase.co.in").replace(
   /\/$/,
   ""
 );
@@ -17,7 +25,7 @@ const steps = [
   { name: "rollback_readiness", cmd: ["node", "scripts/verify-rollback-readiness.mjs"] },
 ];
 
-if (process.env.RUN_LIVE_GO_LIVE === "1") {
+if (live) {
   steps.push(
     { name: "validate_go_live", cmd: ["node", "scripts/validate-go-live.mjs", base] },
     { name: "monitoring_live", cmd: ["node", "scripts/verify-monitoring-live.mjs", base] },
@@ -25,7 +33,7 @@ if (process.env.RUN_LIVE_GO_LIVE === "1") {
   );
 } else {
   console.log(
-    "SKIP live HTTP probes — set RUN_LIVE_GO_LIVE=1 to run validate-go-live, monitoring, and smoke against production.\n"
+    "SKIP live HTTP probes — use npm run certify:go-live:live (or --live / RUN_LIVE_GO_LIVE=1).\n"
   );
 }
 

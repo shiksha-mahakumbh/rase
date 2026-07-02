@@ -30,6 +30,7 @@
     "verify:rollback": "node scripts/verify-rollback-readiness.mjs",
     "verify:monitoring": "node scripts/verify-monitoring-live.mjs",
     "certify:go-live": "node scripts/certify-go-live.mjs",
+    "certify:go-live:live": "node scripts/certify-go-live.mjs --live",
     "analyze:bundle": "node scripts/analyze-bundle.mjs",
     "lighthouse:local": "node scripts/run-lighthouse.mjs",
     "validate:p3c": "node scripts/p3c-staging-validation.mjs",
