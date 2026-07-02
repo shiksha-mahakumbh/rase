@@ -9,29 +9,29 @@ import {
 describe("registration proof tokens", () => {
   it("issues and verifies a valid proof token", () => {
     process.env.REGISTRATION_LOOKUP_SECRET = "test-registration-proof-secret";
-    const token = createRegistrationProofToken("127.0.0.1");
-    const immediate = verifyRegistrationProofToken(token, "127.0.0.1");
+    const token = createRegistrationProofToken();
+    const immediate = verifyRegistrationProofToken(token);
     assert.equal(immediate.ok, false);
 
     const future = Date.now() + REGISTRATION_PROOF_MIN_DWELL_MS + 100;
     const originalNow = Date.now;
     Date.now = () => future;
     try {
-      const verified = verifyRegistrationProofToken(token, "127.0.0.1");
+      const verified = verifyRegistrationProofToken(token);
       assert.equal(verified.ok, true);
     } finally {
       Date.now = originalNow;
     }
   });
 
-  it("rejects tokens from a different IP", () => {
+  it("rejects expired tokens", () => {
     process.env.REGISTRATION_LOOKUP_SECRET = "test-registration-proof-secret";
-    const token = createRegistrationProofToken("10.0.0.1");
-    const future = Date.now() + REGISTRATION_PROOF_MIN_DWELL_MS + 100;
+    const token = createRegistrationProofToken();
+    const future = Date.now() + 21 * 60 * 1000;
     const originalNow = Date.now;
     Date.now = () => future;
     try {
-      const verified = verifyRegistrationProofToken(token, "10.0.0.2");
+      const verified = verifyRegistrationProofToken(token);
       assert.equal(verified.ok, false);
     } finally {
       Date.now = originalNow;

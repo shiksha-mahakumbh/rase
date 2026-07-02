@@ -1,8 +1,9 @@
-import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { REGISTRATION_PROOF_MIN_DWELL_MS } from "@/lib/security/registration-proof-constants";
+
+export { REGISTRATION_PROOF_MIN_DWELL_MS };
 
 const PROOF_TTL_MS = 20 * 60 * 1000;
-/** Minimum time on the form before submit — blocks instant bot posts. */
-export const REGISTRATION_PROOF_MIN_DWELL_MS = 3_000;
 
 function proofSecret(): string {
   const secret =
@@ -17,34 +18,27 @@ function sign(encoded: string): string {
   return createHmac("sha256", proofSecret()).update(encoded).digest("base64url");
 }
 
-function hashIp(ip: string): string {
-  return createHash("sha256").update(`${ip}:${proofSecret()}`).digest("base64url").slice(0, 16);
-}
-
 type ProofBody = {
   typ: "registration_proof";
   iat: number;
   exp: number;
   nonce: string;
-  ip?: string;
 };
 
-export function createRegistrationProofToken(clientIp?: string): string {
+export function createRegistrationProofToken(): string {
   const now = Date.now();
   const body: ProofBody = {
     typ: "registration_proof",
     iat: now,
     exp: now + PROOF_TTL_MS,
     nonce: randomBytes(12).toString("base64url"),
-    ...(clientIp ? { ip: hashIp(clientIp) } : {}),
   };
   const encoded = Buffer.from(JSON.stringify(body)).toString("base64url");
   return `${encoded}.${sign(encoded)}`;
 }
 
 export function verifyRegistrationProofToken(
-  token: string,
-  clientIp?: string
+  token: string
 ): { ok: true } | { ok: false; error: string } {
   try {
     const [encoded, sig] = token.split(".");
@@ -72,12 +66,8 @@ export function verifyRegistrationProofToken(
     if (now - parsed.iat < REGISTRATION_PROOF_MIN_DWELL_MS) {
       return {
         ok: false,
-        error: "Please complete the form before submitting",
+        error: "Please wait a moment and submit again",
       };
-    }
-
-    if (parsed.ip && clientIp && parsed.ip !== hashIp(clientIp)) {
-      return { ok: false, error: "Registration session mismatch — refresh and try again" };
     }
 
     return { ok: true };

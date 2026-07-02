@@ -19,7 +19,7 @@ export async function verifyRegistrationSubmitProtection(input: {
 
   const proof = String(input.registrationProof ?? "").trim();
   if (proof) {
-    const checked = verifyRegistrationProofToken(proof, input.clientIp);
+    const checked = verifyRegistrationProofToken(proof);
     if (checked.ok) {
       return { ok: true, method: "proof" };
     }

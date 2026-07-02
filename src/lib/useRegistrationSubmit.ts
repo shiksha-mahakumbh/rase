@@ -61,7 +61,7 @@ export function useRegistrationSubmit() {
   const router = useRouter();
   const flow = useRegistrationFlow();
   const [loading, setLoading] = useState(false);
-  const { ensureFresh } = useRegistrationProof(true);
+  const { prepareForSubmit } = useRegistrationProof(true);
 
   const submitRegistration = async ({
     registrationType,
@@ -86,11 +86,11 @@ export function useRegistrationSubmit() {
       let uploadToken: string | undefined;
 
       if (!hasVerifiedRazorpay) {
-        const proofBundle = await ensureFresh();
+        const proofBundle = await prepareForSubmit();
         registrationProof = proofBundle.proofToken;
         uploadToken = proofBundle.uploadToken;
       } else if (uploadEntries.length > 0) {
-        const proofBundle = await ensureFresh();
+        const proofBundle = await prepareForSubmit();
         uploadToken = proofBundle.uploadToken;
       }
 
@@ -168,18 +168,32 @@ export function useRegistrationSubmit() {
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
+        const raw = await res.text();
+        let err: { error?: string; code?: string } = {};
+        try {
+          err = raw ? (JSON.parse(raw) as { error?: string; code?: string }) : {};
+        } catch {
+          err = {};
+        }
         const message =
           typeof err.error === "string"
             ? err.error
-            : "Registration failed. Please try again.";
+            : res.status === 429
+              ? "Too many attempts. Please wait a minute and try again."
+              : res.status >= 500
+                ? "Our server is busy. Your details may still be saved — check your email or try again in a minute."
+                : "Registration could not be completed. Please check your details and try again.";
         if (res.status === 403 && message.toLowerCase().includes("session")) {
-          throw new Error(`${message} If this continues, wait a few seconds after opening the form.`);
+          throw new Error(`${message} If this continues, refresh the page and wait a few seconds before submitting.`);
         }
         throw new Error(message);
       }
 
-      const result = await res.json();
+      const result = (await res.json()) as {
+        duplicate?: boolean;
+        registrationId?: string;
+        lookupToken?: string;
+      };
 
       if (result.duplicate) {
         toast.success("Registration already completed for this payment.");
@@ -195,6 +209,10 @@ export function useRegistrationSubmit() {
       if (typeof window !== "undefined" && typeof data.email === "string") {
         sessionStorage.setItem("smk_registration_email", data.email.trim());
       }
+      if (!result.registrationId) {
+        throw new Error("Registration completed but no confirmation ID was returned. Please contact support.");
+      }
+
       const successParams = new URLSearchParams({
         id: result.registrationId,
       });

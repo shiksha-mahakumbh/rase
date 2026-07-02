@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { REGISTRATION_PROOF_MIN_DWELL_MS } from "@/lib/security/registration-proof-constants";
 
 type ProofBundle = {
   proofToken: string;
@@ -9,6 +10,12 @@ type ProofBundle = {
 };
 
 const REFRESH_MS = 15 * 60 * 1000;
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
 
 async function fetchProofBundle(): Promise<ProofBundle> {
   const res = await fetch("/api/v2/registration-session", {
@@ -63,5 +70,16 @@ export function useRegistrationProof(enabled: boolean) {
     return refresh();
   }, [bundle, refresh]);
 
-  return { bundle, loading, ensureFresh, refresh };
+  /** Ensures a valid proof token and waits out the anti-bot dwell window. */
+  const prepareForSubmit = useCallback(async (): Promise<ProofBundle> => {
+    const next = await ensureFresh();
+    const dwellRemaining =
+      REGISTRATION_PROOF_MIN_DWELL_MS - (Date.now() - next.issuedAt);
+    if (dwellRemaining > 0) {
+      await sleep(dwellRemaining);
+    }
+    return next;
+  }, [ensureFresh]);
+
+  return { bundle, loading, ensureFresh, prepareForSubmit, refresh };
 }

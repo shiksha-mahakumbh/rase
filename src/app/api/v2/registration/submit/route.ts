@@ -115,6 +115,11 @@ export const POST = createApiHandler(
       contact: guarded.contact,
       fee: guarded.fee,
       razorpayPaymentId: guarded.razorpayPaymentId,
+    }).catch((err) => {
+      console.error("REGISTRATION_POST_SUBMIT_FAILED", {
+        registrationId: result.registrationId,
+        error: err instanceof Error ? err.message : String(err),
+      });
     });
 
     return {
