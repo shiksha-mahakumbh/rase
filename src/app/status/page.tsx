@@ -1,6 +1,9 @@
-import PublicPageShell from "@/components/layouts/PublicPageShell";
+import Link from "next/link";
 import { probeServiceStatus } from "@/lib/monitoring/service-status";
 import { createPageMetadata } from "@/lib/seo/metadata";
+
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function generateMetadata() {
   return createPageMetadata({
@@ -32,21 +35,31 @@ export default async function StatusPage() {
       : "text-amber-800 bg-amber-50 border-amber-200";
 
   return (
-    <PublicPageShell
-      hero={{
-        eyebrow: "Operations",
-        title: "Service Status",
-        subtitle: "Live health for the public website and core dependencies.",
-        accent: "brand",
-      }}
-      showCta={false}
-    >
-      <div className="mx-auto max-w-3xl space-y-6 pb-16">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
+          <Link href="/" className="text-sm font-semibold text-brand-navy hover:underline">
+            Shiksha Mahakumbh
+          </Link>
+          <span className="text-xs uppercase tracking-wide text-slate-500">Service Status</span>
+        </div>
+      </header>
+
+      <main id="main-content" className="mx-auto max-w-3xl space-y-6 px-4 py-10">
+        <div>
+          <p className="text-sm font-medium uppercase tracking-wide text-slate-500">Operations</p>
+          <h1 className="mt-1 text-3xl font-semibold text-slate-900">Service Status</h1>
+          <p className="mt-2 text-sm text-slate-600">
+            Live health for the public website and core dependencies.
+          </p>
+        </div>
+
         <div className={`rounded-xl border px-4 py-3 ${overallClass}`}>
           <p className="text-sm font-medium uppercase tracking-wide">Overall</p>
           <p className="text-2xl font-semibold">{statusLabel(payload.status)}</p>
           <p className="mt-1 text-sm opacity-80">
-            Last checked {new Date(payload.timestamp).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST
+            Last checked{" "}
+            {new Date(payload.timestamp).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST
           </p>
         </div>
 
@@ -72,7 +85,9 @@ export default async function StatusPage() {
               <tr>
                 <td className="px-4 py-3">Rate limiting</td>
                 <td className="px-4 py-3">
-                  {payload.checks.rateLimitMode === "upstash" ? "Distributed (Upstash)" : "In-memory fallback"}
+                  {payload.checks.rateLimitMode === "upstash"
+                    ? "Distributed (Upstash)"
+                    : "In-memory fallback"}
                 </td>
               </tr>
               <tr>
@@ -116,10 +131,8 @@ export default async function StatusPage() {
           <a className="font-medium text-brand-navy underline" href="/api/v2/status">
             /api/v2/status
           </a>
-          . For incidents, see internal runbooks in{" "}
-          <code className="rounded bg-slate-100 px-1">docs/devops/RUNBOOKS.md</code>.
         </p>
-      </div>
-    </PublicPageShell>
+      </main>
+    </div>
   );
 }

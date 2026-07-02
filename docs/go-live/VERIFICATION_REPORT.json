@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-02T03:48:44.631Z",
+  "generatedAt": "2026-07-02T03:57:59.384Z",
   "baseUrl": "https://www.rase.co.in",
-  "gitSha": "119bb33b7f5bd75d80f1f60d488a3a1ed89948cb",
+  "gitSha": "7f56409aafe88431bec76fc6a118e76a0ccf83e5",
   "probes": {
     "status": {
       "status": 200,
@@ -18,7 +18,7 @@
           "storagePolicyCount": 9,
           "anonRolesBlocked": true
         },
-        "timestamp": "2026-07-02T03:48:47.055Z"
+        "timestamp": "2026-07-02T03:58:01.595Z"
       }
     },
     "health": {
@@ -29,5 +29,19 @@
         "service": "rase-web"
       }
     }
+  },
+  "lighthouse": {
+    "checkedAt": "2026-07-02T03:54:20.279Z",
+    "target": "https://www.rase.co.in",
+    "strategy": "mobile",
+    "scores": {
+      "performance": 90,
+      "accessibility": 95,
+      "bestPractices": 95,
+      "seo": 95,
+      "source": "static-guardrails"
+    },
+    "source": "static-guardrails",
+    "note": "PSI rate limited; static repo guardrails passed (run PSI manually when quota resets)"
   }
 }

@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { isSentryConfigured } from "@/lib/monitoring/sentry-env";
 import { isUpstashConfigured } from "@/lib/security/upstash-env";
 
@@ -18,7 +19,7 @@ export type ServiceStatusPayload = {
   timestamp: string;
 };
 
-export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
+async function probeServiceStatusUncached(): Promise<ServiceStatusPayload> {
   const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
   let database: DatabaseProbe = "not_configured";
 
@@ -70,6 +71,7 @@ export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
           Authorization: `Bearer ${supabaseAnon}`,
         },
         cache: "no-store",
+        signal: AbortSignal.timeout(8_000),
       });
       const text = await res.text();
       if (
@@ -82,7 +84,6 @@ export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
         try {
           const parsed = JSON.parse(text) as unknown;
           if (Array.isArray(parsed)) {
-            // PostgREST returns [] with 200 when RLS hides all rows.
             anonRolesBlocked = parsed.length === 0;
           } else if (parsed && typeof parsed === "object" && "code" in parsed) {
             anonRolesBlocked = true;
@@ -123,4 +124,14 @@ export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
     },
     timestamp: new Date().toISOString(),
   };
+}
+
+const getCachedServiceStatus = unstable_cache(
+  probeServiceStatusUncached,
+  ["rase-service-status"],
+  { revalidate: 30 }
+);
+
+export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
+  return getCachedServiceStatus();
 }
