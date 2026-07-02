@@ -56,24 +56,33 @@ export const POST = createApiHandler(
     const payment = reg.paymentRecords[0];
     const fee = Number(reg.registrationFee ?? payment?.amount ?? 0);
 
-    await resendRegistrationConfirmationEmail({
-      result: {
-        registrationId: reg.registrationId,
-        id: reg.id,
-        typeDocId: reg.id,
-      },
-      registrationType: displayRegistrationType(reg.registrationType),
-      data: metadata,
-      email: reg.email,
-      fullName: reg.fullName,
-      contact: reg.contactNumber,
-      fee,
-      razorpayPaymentId: String(reg.razorpayPaymentId ?? payment?.razorpayPaymentId ?? ""),
-    });
+    try {
+      await resendRegistrationConfirmationEmail({
+        result: {
+          registrationId: reg.registrationId,
+          id: reg.id,
+          typeDocId: reg.id,
+        },
+        registrationType: displayRegistrationType(reg.registrationType),
+        data: metadata,
+        email: reg.email,
+        fullName: reg.fullName,
+        contact: reg.contactNumber,
+        fee,
+        razorpayPaymentId: String(reg.razorpayPaymentId ?? payment?.razorpayPaymentId ?? ""),
+      });
+    } catch (error) {
+      if (error instanceof ServiceError) throw error;
+      throw new ServiceError(
+        error instanceof Error ? error.message : "Could not send confirmation email",
+        503,
+        "EMAIL_SEND_FAILED"
+      );
+    }
 
     return {
       success: true,
-      message: `Confirmation email sent to ${reg.email}. Check your inbox and spam folder.`,
+      message: `Confirmation email sent to ${reg.email}. Check inbox, spam, and promotions folders.`,
     };
   },
   { rateLimitKey: "v2-registration-email", limit: 5 }

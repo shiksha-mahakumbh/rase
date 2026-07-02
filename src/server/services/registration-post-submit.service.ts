@@ -1,11 +1,12 @@
 import type { EmailLogStatus } from "@prisma/client";
 import { prisma } from "@/server/db/prisma";
+import { ServiceError } from "@/server/lib/errors";
 import {
   sendRegistrationCompleteEmail,
   mapDeliveryStatus,
 } from "@/server/services/email.service";
 import {
-  buildRegistrationArtifacts,
+  generateRegistrationQrBuffer,
   receiptDownloadUrl,
   qrStoragePathFor,
 } from "@/server/services/receipt.service";
@@ -28,6 +29,8 @@ async function updateEmailStatus(
           : outcome,
       receiptSentAt: delivered ? sentNow : undefined,
       qrSentAt: delivered ? sentNow : undefined,
+      qrGeneratedAt: sentNow,
+      qrStoragePath: undefined,
     },
   });
 }
@@ -71,32 +74,24 @@ function buildReceiptPayload(input: RegistrationPostSubmitInput) {
   };
 }
 
-/** Build receipt/QR artifacts before returning the submit response. */
-export async function ensureRegistrationArtifacts(input: RegistrationPostSubmitInput) {
-  const built = buildReceiptPayload(input);
-  const { receiptPdf, qrPng } = await buildRegistrationArtifacts(built.receiptPayload, {
-    registrationType: input.registrationType,
-  });
-  const artifactNow = new Date();
-
-  await prisma.registration.update({
-    where: { id: input.result.id },
-    data: {
-      receiptGeneratedAt: artifactNow,
-      qrGeneratedAt: artifactNow,
-      qrStoragePath: qrStoragePathFor(input.result.registrationId),
-    },
-  });
-
-  return { receiptPdf, qrPng, ...built };
-}
-
-/** Send confirmation email after artifacts exist. */
-export async function sendRegistrationConfirmationEmail(
-  input: RegistrationPostSubmitInput,
-  artifacts: Awaited<ReturnType<typeof ensureRegistrationArtifacts>>
+/**
+ * Fast confirmation email — QR + success link only (no Chromium PDF).
+ * Called synchronously on submit so delivery completes before the response ends.
+ */
+export async function sendRegistrationConfirmationEmailFast(
+  input: RegistrationPostSubmitInput
 ) {
+  const built = buildReceiptPayload(input);
   const lookupToken = createRegistrationLookupToken(input.result.registrationId, input.email);
+
+  const qrPng = await generateRegistrationQrBuffer({
+    registrationId: built.receiptPayload.registrationId,
+    fullName: built.receiptPayload.fullName,
+    registrationType: input.registrationType,
+    category: built.receiptPayload.category,
+    institution: built.receiptPayload.institution,
+    email: built.receiptPayload.email,
+  });
 
   try {
     const emailLog = await sendRegistrationCompleteEmail({
@@ -104,15 +99,37 @@ export async function sendRegistrationConfirmationEmail(
       registrationUuid: input.result.id,
       fullName: input.fullName,
       email: input.email,
-      category: artifacts.categoryLabel,
+      category: built.categoryLabel,
       amountPaid: input.fee,
       transactionId: input.razorpayPaymentId || undefined,
       receiptUrl: receiptDownloadUrl(input.result.registrationId, lookupToken),
-      receiptPdf: artifacts.receiptPdf,
-      qrPng: artifacts.qrPng,
-      isPaid: artifacts.isPaidOnline,
+      qrPng,
+      isPaid: built.isPaidOnline,
     });
-    await updateEmailStatus(input.result.id, "sent", emailLog);
+
+    const logRow = await prisma.emailLog.findUnique({ where: { id: emailLog.id } });
+
+    await prisma.registration.update({
+      where: { id: input.result.id },
+      data: {
+        qrGeneratedAt: new Date(),
+        qrStoragePath: qrStoragePathFor(input.result.registrationId),
+        emailDeliveryStatus: mapDeliveryStatus(emailLog.status),
+        receiptSentAt: emailLog.status === "sent" ? new Date() : undefined,
+        qrSentAt: emailLog.status === "sent" ? new Date() : undefined,
+      },
+    });
+
+    if (emailLog.status === "skipped" || emailLog.status === "failed") {
+      throw new ServiceError(
+        logRow?.errorMessage ??
+          "Email delivery is not configured on the server. Please download your receipt from the success page.",
+        503,
+        "EMAIL_NOT_CONFIGURED"
+      );
+    }
+
+    return emailLog;
   } catch (err) {
     console.error("REGISTRATION_CONFIRMATION_EMAIL_FAILED", {
       registrationId: input.result.registrationId,
@@ -130,23 +147,19 @@ export async function sendRegistrationConfirmationEmail(
   }
 }
 
-/** @deprecated use sendRegistrationConfirmationEmail */
-export function queueRegistrationConfirmationEmail(
-  input: RegistrationPostSubmitInput,
-  artifacts: Awaited<ReturnType<typeof ensureRegistrationArtifacts>>
-) {
-  void sendRegistrationConfirmationEmail(input, artifacts);
+/** @deprecated use sendRegistrationConfirmationEmailFast */
+export async function ensureRegistrationArtifacts(input: RegistrationPostSubmitInput) {
+  return sendRegistrationConfirmationEmailFast(input);
 }
 
-/** Generate artifacts, then send the confirmation email (must complete on serverless). */
+/** @deprecated use sendRegistrationConfirmationEmailFast */
 export async function runRegistrationPostSubmit(input: RegistrationPostSubmitInput) {
-  const artifacts = await ensureRegistrationArtifacts(input);
-  await sendRegistrationConfirmationEmail(input, artifacts);
+  await sendRegistrationConfirmationEmailFast(input);
 }
 
 /** Resend confirmation for an existing registration (success page / support). */
 export async function resendRegistrationConfirmationEmail(
   input: RegistrationPostSubmitInput
 ) {
-  await runRegistrationPostSubmit(input);
+  return sendRegistrationConfirmationEmailFast(input);
 }

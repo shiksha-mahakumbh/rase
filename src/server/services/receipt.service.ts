@@ -23,16 +23,8 @@ async function generateEmailReceiptPdf(
   payload: ReceiptPayload,
   qrPng: Buffer
 ): Promise<Buffer> {
-  const { generateReceiptPdfBufferForEmail, generateReceiptPdfBufferFromData } = await import(
-    "@/lib/receipt/receipt-pdf-server"
-  );
-  const { buildReceiptData } = await import("@/lib/receipt/receipt-data");
-  const receiptData = buildReceiptData(payload);
-  try {
-    return await generateReceiptPdfBufferFromData(receiptData, qrPng);
-  } catch {
-    return generateReceiptPdfBufferForEmail(payload, qrPng);
-  }
+  const { generateReceiptPdfBufferForEmail } = await import("@/lib/receipt/receipt-pdf-server");
+  return generateReceiptPdfBufferForEmail(payload, qrPng);
 }
 
 export async function buildRegistrationArtifacts(

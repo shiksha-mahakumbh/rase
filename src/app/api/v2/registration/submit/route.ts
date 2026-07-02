@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { after } from "next/server";
 import { verifyRegistrationSubmitProtection } from "@/lib/security/registration-captcha";
 import { assertHoneypotEmpty } from "@/lib/security/honeypot";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
@@ -8,7 +7,7 @@ import { getRegistrationService } from "@/server/backend";
 import { isSupportedType } from "@/server/lib/registration-types";
 import { guardRegistrationSubmit } from "@/server/lib/registration-submit-guard";
 import { writeAuditLog } from "@/server/services/audit.service";
-import { runRegistrationPostSubmit } from "@/server/services/registration-post-submit.service";
+import { sendRegistrationConfirmationEmailFast } from "@/server/services/registration-post-submit.service";
 import { ServiceError } from "@/server/lib/errors";
 
 export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
@@ -118,16 +117,14 @@ export const POST = createApiHandler(
       razorpayPaymentId: guarded.razorpayPaymentId,
     };
 
-    after(async () => {
-      try {
-        await runRegistrationPostSubmit(postSubmitInput);
-      } catch (err) {
-        console.error("REGISTRATION_POST_SUBMIT_FAILED", {
-          registrationId: result.registrationId,
-          error: err instanceof Error ? err.message : String(err),
-        });
-      }
-    });
+    try {
+      await sendRegistrationConfirmationEmailFast(postSubmitInput);
+    } catch (err) {
+      console.error("REGISTRATION_CONFIRMATION_EMAIL_DEFERRED", {
+        registrationId: result.registrationId,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
 
     return {
       success: true,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, Suspense, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, Suspense, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { EVENT_NAME } from "@/types/registration";
@@ -66,6 +66,7 @@ function SuccessInner() {
   const [registrantEmail, setRegistrantEmail] = useState<string | null>(null);
   const [resendStatus, setResendStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [resendMessage, setResendMessage] = useState<string | null>(null);
+  const autoEmailAttemptedRef = useRef(false);
 
   useEffect(() => {
     if (!registrationId) {
@@ -133,7 +134,7 @@ function SuccessInner() {
     printRegistrationReceipt(receiptData, qrDataUrl);
   };
 
-  const handleResendEmail = async () => {
+  const handleResendEmail = useCallback(async () => {
     if (!registrationId || !lookupToken) return;
     setResendStatus("sending");
     setResendMessage(null);
@@ -148,17 +149,32 @@ function SuccessInner() {
       });
       const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string };
       if (!res.ok) {
-        throw new Error(body.error ?? "Could not resend email");
+        throw new Error(body.error ?? "Could not send email");
       }
       setResendStatus("sent");
-      setResendMessage(body.message ?? "Confirmation email sent. Check your inbox and spam folder.");
+      setResendMessage(
+        body.message ??
+          "Confirmation email sent. Check your inbox, spam, and promotions folders."
+      );
     } catch (error) {
       setResendStatus("error");
       setResendMessage(
-        error instanceof Error ? error.message : "Could not resend email. Try again in a minute."
+        error instanceof Error
+          ? error.message
+          : "Could not send email. Try again in a minute or contact support."
       );
     }
-  };
+  }, [registrationId, lookupToken]);
+
+  useEffect(() => {
+    if (loading || !registrationId || !lookupToken || autoEmailAttemptedRef.current) return;
+    const sessionKey = `smk_auto_confirmation_email_${registrationId}`;
+    if (sessionStorage.getItem(sessionKey)) return;
+
+    autoEmailAttemptedRef.current = true;
+    sessionStorage.setItem(sessionKey, "1");
+    void handleResendEmail();
+  }, [loading, registrationId, lookupToken, handleResendEmail]);
 
   if (loading) {
     return (
