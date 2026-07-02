@@ -19,53 +19,14 @@ import {
   isPaidCapableType,
   resolvePaymentStatus,
 } from "@/lib/registration/config";
+import { useRegistrationProof } from "@/hooks/useRegistrationProof";
+import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
 
 interface SubmitOptions {
   registrationType: RegistrationType;
   data: Record<string, unknown>;
   files?: Record<string, File | File[] | null | undefined>;
   paymentStatus?: PaymentStatus;
-}
-
-async function getCaptchaToken(action: string): Promise<string | null> {
-  const { executeRecaptcha, isRecaptchaConfigured, waitForRecaptcha } =
-    await import("@/lib/security/recaptcha-client");
-
-  if (!isRecaptchaConfigured()) {
-    return process.env.NODE_ENV !== "production" ? "dev-bypass" : null;
-  }
-
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const ready = await waitForRecaptcha(attempt === 0 ? 20_000 : 12_000);
-    if (!ready) {
-      await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
-      continue;
-    }
-    const token = await executeRecaptcha(action);
-    if (token) return token;
-    await new Promise((r) => setTimeout(r, 600));
-  }
-
-  return null;
-}
-
-async function getUploadToken(captchaToken: string): Promise<string> {
-  const res = await fetch("/api/v2/registration/verify-captcha", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token: captchaToken, action: "registration" }),
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(
-      typeof err.error === "string" ? err.error : "Security check failed"
-    );
-  }
-  const body = await res.json();
-  if (!body.uploadToken) {
-    throw new Error("Security check failed");
-  }
-  return body.uploadToken as string;
 }
 
 async function uploadRegistrationFile(
@@ -98,7 +59,9 @@ async function uploadRegistrationFile(
 
 export function useRegistrationSubmit() {
   const router = useRouter();
+  const flow = useRegistrationFlow();
   const [loading, setLoading] = useState(false);
+  const { ensureFresh } = useRegistrationProof(true);
 
   const submitRegistration = async ({
     registrationType,
@@ -108,26 +71,27 @@ export function useRegistrationSubmit() {
   }: SubmitOptions) => {
     setLoading(true);
     try {
-      const fee = data.registrationFee as number | undefined;
-      const uploadEntries = Object.entries(files).filter(([, v]) => v);
-      const captchaToken = await getCaptchaToken("registration");
-      const hasVerifiedRazorpay = Boolean(
-        (fee ?? 0) > 0 && String(data.razorpayPaymentId ?? "").trim()
-      );
-      if (!captchaToken && !hasVerifiedRazorpay) {
-        toast.error(
-          "Security check could not load. Disable ad blockers, allow Google reCAPTCHA, refresh the page, and try again."
-        );
+      if (flow?.honeypotValue?.trim()) {
+        toast.error("Submission blocked. Please try again or contact support.");
         return;
       }
 
+      const fee = data.registrationFee as number | undefined;
+      const uploadEntries = Object.entries(files).filter(([, v]) => v);
+      const hasVerifiedRazorpay = Boolean(
+        (fee ?? 0) > 0 && String(data.razorpayPaymentId ?? "").trim()
+      );
+
+      let registrationProof: string | undefined;
       let uploadToken: string | undefined;
-      if (uploadEntries.length > 0) {
-        if (!captchaToken) {
-          toast.error("Security check required before uploading files.");
-          return;
-        }
-        uploadToken = await getUploadToken(captchaToken);
+
+      if (!hasVerifiedRazorpay) {
+        const proofBundle = await ensureFresh();
+        registrationProof = proofBundle.proofToken;
+        uploadToken = proofBundle.uploadToken;
+      } else if (uploadEntries.length > 0) {
+        const proofBundle = await ensureFresh();
+        uploadToken = proofBundle.uploadToken;
       }
 
       const uploaded: Record<string, unknown> = {};
@@ -195,20 +159,24 @@ export function useRegistrationSubmit() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          captchaToken,
+          registrationProof,
           registrationType,
           data: payload,
           paymentStatus: resolvedPaymentStatus,
+          companyWebsite: flow?.honeypotValue ?? "",
         }),
       });
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(
+        const message =
           typeof err.error === "string"
             ? err.error
-            : "Registration failed. Please try again."
-        );
+            : "Registration failed. Please try again.";
+        if (res.status === 403 && message.toLowerCase().includes("session")) {
+          throw new Error(`${message} If this continues, wait a few seconds after opening the form.`);
+        }
+        throw new Error(message);
       }
 
       const result = await res.json();

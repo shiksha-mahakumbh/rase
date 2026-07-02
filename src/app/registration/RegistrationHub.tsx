@@ -9,8 +9,8 @@ import RegistrationProgress from "@/components/registration/RegistrationProgress
 import CategoryStep from "@/components/registration/CategoryStep";
 import CategoryInstructionsPanel from "@/components/registration/CategoryInstructionsPanel";
 import { loadMeta, saveMeta, switchRegistrationCategory, clearRegistrationMeta, clearDraft } from "@/lib/registration/draftStorage";
-import RecaptchaScript from "@/components/security/RecaptchaProvider";
 import { RegistrationFlowProvider } from "@/components/registration/RegistrationFlowContext";
+import RegistrationHoneypot from "@/components/registration/RegistrationHoneypot";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
 import RegistrationTrustBar from "@/components/registration/RegistrationTrustBar";
 import {
@@ -182,18 +182,6 @@ function RegistrationHubInner() {
     });
   }, [showPaymentStep, step]);
 
-  useEffect(() => {
-    if (step < 2) return;
-    void import("@/lib/security/recaptcha-client").then(
-      ({ isRecaptchaConfigured, waitForRecaptcha, executeRecaptcha }) => {
-        if (!isRecaptchaConfigured()) return;
-        void waitForRecaptcha(25_000).then((ready) => {
-          if (ready) void executeRecaptcha("registration");
-        });
-      }
-    );
-  }, [step]);
-
   const goToPayment = useCallback(async () => {
     const ok = (await flow?.requestPaymentStep()) ?? true;
     if (!ok) return;
@@ -203,7 +191,10 @@ function RegistrationHubInner() {
 
   return (
     <>
-      {step >= 2 && <RecaptchaScript />}
+      <RegistrationHoneypot
+        value={flow?.honeypotValue ?? ""}
+        onChange={(value) => flow?.setHoneypotValue(value)}
+      />
       <RegistrationShell
         title={EVENT_NAME}
         subtitle="Official registration — national education movement & global summit"

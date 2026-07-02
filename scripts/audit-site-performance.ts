@@ -109,12 +109,12 @@ if (regHubSrc.includes('import { Toaster } from "react-hot-toast"')) {
   issues.push("RegistrationHub must not mount duplicate Toaster");
 } else if (!regHubSrc.includes("dynamic(() => import")) {
   issues.push("RegistrationHub must dynamic-import registration forms");
-} else if (!regHubSrc.includes("step >= 2 && <RecaptchaScript")) {
-  issues.push("RegistrationHub must defer reCAPTCHA until step 2");
+} else if (!regHubSrc.includes("RegistrationHoneypot")) {
+  issues.push("RegistrationHub must include honeypot anti-bot field");
 } else if (!regHubSrc.includes("step !== 3")) {
   issues.push("RegistrationHub must load Razorpay only on payment step");
 } else {
-  ok("RegistrationHub: deferred forms, reCAPTCHA, Razorpay");
+  ok("RegistrationHub: deferred forms, honeypot, Razorpay");
 }
 
 const regPageSrc = read("src/app/registration/RegistrationPageView.tsx");

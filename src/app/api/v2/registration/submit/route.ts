@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
-import { verifyRegistrationSubmitCaptcha } from "@/lib/security/registration-captcha";
+import { verifyRegistrationSubmitProtection } from "@/lib/security/registration-captcha";
+import { assertHoneypotEmpty } from "@/lib/security/honeypot";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
 import { getRequestContext } from "@/server/lib/request";
 import { getRegistrationService } from "@/server/backend";
@@ -14,11 +15,15 @@ export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
 export const POST = createApiHandler(
   async (request: NextRequest) => {
     const body = assertBody<{
+      registrationProof?: string;
       captchaToken?: string;
+      companyWebsite?: string;
       registrationType?: string;
       data?: Record<string, unknown>;
       paymentStatus?: string;
     }>(await request.json());
+
+    assertHoneypotEmpty(body.companyWebsite);
 
     if (!body.registrationType || !isSupportedType(body.registrationType)) {
       throw new ServiceError("Invalid registration type", 400, "INVALID_TYPE");
@@ -34,12 +39,22 @@ export const POST = createApiHandler(
       body.data.razorpayPaymentId ?? paymentData?.razorpayPaymentId ?? ""
     ).trim();
 
-    const captcha = await verifyRegistrationSubmitCaptcha({
+    const ctx = getRequestContext(request);
+
+    const protection = await verifyRegistrationSubmitProtection({
+      registrationProof: body.registrationProof,
       captchaToken: body.captchaToken,
       fee,
       razorpayPaymentId: razorpayPaymentId || null,
+      clientIp: ctx.ip ?? undefined,
     });
-    if (!captcha.ok) throw new ServiceError("Security verification failed", 403, "CAPTCHA_FAILED");
+    if (!protection.ok) {
+      throw new ServiceError(
+        protection.error ?? "Security verification failed",
+        403,
+        "REGISTRATION_SESSION_INVALID"
+      );
+    }
 
     const guarded = await guardRegistrationSubmit({
       registrationType: body.registrationType,
@@ -57,7 +72,6 @@ export const POST = createApiHandler(
       };
     }
 
-    const ctx = getRequestContext(request);
     const service = getRegistrationService();
     const result = await service.saveRegistration({
       registrationType: guarded.type,

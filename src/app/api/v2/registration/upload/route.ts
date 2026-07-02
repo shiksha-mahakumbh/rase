@@ -18,7 +18,7 @@ export const POST = createApiHandler(
 
     if (!verifyUploadToken(uploadToken)) {
       throw new ServiceError(
-        "Valid upload authorization required — complete captcha verification first",
+        "Valid upload authorization required — refresh the registration page and try again",
         403,
         "UPLOAD_FORBIDDEN"
       );
