@@ -101,6 +101,16 @@ export async function handleCreateOrder(request: NextRequest) {
         : undefined;
 
     if (notes?.registrationType) {
+      if (notes.registrationType === "Accommodation") {
+        return NextResponse.json(
+          {
+            error:
+              "Accommodation registration opens in September. Please complete your programme registration and check back later.",
+          },
+          { status: 400 }
+        );
+      }
+
       const expectedPaise = expectedAmountPaiseFromOrderNotes(notes);
       if (expectedPaise != null && Math.abs(amount - expectedPaise) > 1) {
         paymentLog("order_amount_rejected", {
