@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-14T03:33:55.421Z",
+  "checkedAt": "2026-07-02T07:01:06.341Z",
   "baseUrl": "https://www.shikshamahakumbh.com",
   "security": [
     {
@@ -7,17 +7,14 @@
       "path": "/api/registration/SMK2026-000001",
       "status": 401,
       "body": {
-        "error": "Email or confirmation token required"
+        "error": "Confirmation token required"
       }
     },
     {
       "name": "admin_gateway",
       "path": "/api/admin/gateway/registrations",
-      "status": 401,
-      "body": {
-        "error": "Unauthorized",
-        "code": "UNAUTHORIZED"
-      }
+      "status": 500,
+      "body": ""
     },
     {
       "name": "webhook_unsigned",
@@ -32,47 +29,47 @@
     {
       "path": "/abstract",
       "status": 307,
-      "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+      "location": "/research/submit"
     },
     {
       "path": "/paper",
       "status": 307,
-      "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+      "location": "/research/submit"
     },
     {
       "path": "/fulllengthpaper",
       "status": 307,
-      "location": "https://cmt3.research.microsoft.com/ShikshaMahakumbh2025/"
+      "location": "/research/submit"
     }
   ],
   "bundleStrings": {
     "School Student": true,
     "College Student": true,
-    "Single Bed": true,
-    "Double Bed": true,
+    "Single Bed": false,
+    "Double Bed": false,
     "setCurrentFee": true,
     "Student (Free)": true,
-    "inputMode": true,
-    "ABCDE1234F": true,
+    "inputMode": false,
+    "ABCDE1234F": false,
     "Eligibility": true,
     "Documents Required": true,
     "Submit Paper": false,
     "Abstract Submission": false,
     "Paper Submission": false,
     "Call for Papers": false,
-    "ShikshaMahakumbh2025": true,
-    "SMK2026": false
+    "ShikshaMahakumbh2025": false,
+    "SMK2026": true
   },
   "ui": {
     "homepage": {
-      "hasSubmitPaper": false,
+      "hasSubmitPaper": true,
       "hasMultiTrack": true,
       "hasAbstractSubmission": false
     },
     "freeDelegate": {
       "paymentStepVisible": false,
-      "showsFreeFee": true,
-      "stepCount": "Step 2 of 2"
+      "showsFreeFee": false,
+      "stepCount": ""
     }
   },
   "performance": {},
@@ -80,13 +77,8 @@
     "locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Projects', exact: true })\n"
   ],
   "razorpayCreateOrder": {
-    "status": 200,
-    "body": {
-      "order_id": "order_T1MejyzYKR4EPt",
-      "amount": 20000,
-      "currency": "INR",
-      "key_id": "rzp_live_Sz5hsyGHWPtgbT"
-    }
+    "status": 500,
+    "body": {}
   },
   "error": "locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Projects', exact: true })\n"
 }
