@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-07-02T03:35:53.397Z",
+  "generatedAt": "2026-07-02T03:48:44.631Z",
   "baseUrl": "https://www.rase.co.in",
-  "gitSha": "1b555d55e5728eeffa4a6a64c0c40c1ac34bd809",
+  "gitSha": "119bb33b7f5bd75d80f1f60d488a3a1ed89948cb",
   "probes": {
     "status": {
       "status": 200,
       "ok": true,
       "body": {
-        "status": "degraded",
+        "status": "ok",
         "service": "rase-web",
         "checks": {
           "database": "connected",
           "sentryConfigured": true,
           "rateLimitMode": "upstash",
           "cronConfigured": true,
-          "rlsPolicyCount": 61,
+          "rlsPolicyCount": 65,
           "storagePolicyCount": 9,
-          "anonRolesBlocked": false
+          "anonRolesBlocked": true
         },
-        "timestamp": "2026-07-02T03:35:56.386Z"
+        "timestamp": "2026-07-02T03:48:47.055Z"
       }
     },
     "health": {

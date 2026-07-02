@@ -33,7 +33,7 @@ async function execSqlFile(label, relativePath) {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (
-        /already exists|duplicate key|policy .* already exists|must be owner of table/i.test(
+        /already exists|duplicate key|duplicate_object|42710|policy .* already exists|must be owner of table/i.test(
           msg
         )
       ) {

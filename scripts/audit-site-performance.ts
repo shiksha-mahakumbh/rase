@@ -148,6 +148,7 @@ if (navShellSrc.includes('"use client"')) {
 }
 
 const homePageSrc = read("src/components/home/HomePage.tsx");
+const homeBelowFoldSrc = read("src/components/home/HomeBelowFold.tsx");
 if (!homePageSrc.includes("AnnouncementsMarquee")) {
   issues.push("HomePage must SSR announcements via AnnouncementsMarquee");
 } else if (!homePageSrc.includes("NavBarShell")) {
@@ -158,7 +159,7 @@ if (!homePageSrc.includes("AnnouncementsMarquee")) {
   issues.push("HomePage should avoid client SectionShell in above-fold blocks");
 } else if (/import\s+WhyAttendSection\s+from/.test(homePageSrc)) {
   issues.push("HomePage must dynamic-import below-fold client sections (WhyAttendSection, etc.)");
-} else if (!homePageSrc.includes("idleFirst")) {
+} else if (!homePageSrc.includes("HomeBelowFold") || !homeBelowFoldSrc.includes("idleFirst")) {
   issues.push("HomePage below-fold LazySections should use idleFirst");
 } else {
   ok("HomePage: SSR nav/ticker + deferred sections");
