@@ -145,6 +145,14 @@ const nextConfig = {
   async redirects() {
     return LEGACY_REDIRECTS;
   },
+  async rewrites() {
+    return [
+      {
+        source: "/pay/v1/checkout.js",
+        destination: "https://checkout.razorpay.com/v1/checkout.js",
+      },
+    ];
+  },
 };
 
 module.exports = withNextIntl(nextConfig);

@@ -96,8 +96,11 @@ export default function RazorpayCheckout({
 
     try {
       if (!isRazorpayCheckoutReady()) {
-        console.info("RAZORPAY_SCRIPT_LOAD_START", { phase: "pay_click" });
-        await loadRazorpayCheckoutScript();
+        console.info("RAZORPAY_SCRIPT_LOAD_START", {
+          phase: "pay_click",
+          retry: scriptFailed,
+        });
+        await loadRazorpayCheckoutScript({ forceRetry: scriptFailed });
         setScriptReady(true);
         setScriptFailed(false);
       }
@@ -106,8 +109,11 @@ export default function RazorpayCheckout({
         phase: "pay_click",
         error: err instanceof Error ? err.message : String(err),
       });
-      toast.error("Payment gateway failed to load. Please refresh and try again.");
+      toast.error(
+        "Payment gateway could not load. Disable ad blockers for this site, refresh, then tap Retry."
+      );
       setScriptFailed(true);
+      setScriptReady(false);
       return;
     }
 
@@ -242,6 +248,7 @@ export default function RazorpayCheckout({
     onSuccess,
     orderNotes,
     receipt,
+    scriptFailed,
   ]);
 
   if (!keyId) {
@@ -275,8 +282,8 @@ export default function RazorpayCheckout({
       {!scriptReady && !verified && !loading && (
         <p className="text-xs text-slate-600">
           {scriptFailed
-            ? "Payment gateway could not load. Disable ad blockers, refresh, then tap Retry."
-            : "Preparing secure checkout… you can tap Pay to open Razorpay."}
+            ? "Payment gateway could not load. Allow scripts for this site, disable ad blockers, refresh, then tap Retry."
+            : "Preparing secure checkout… tap Pay when ready."}
         </p>
       )}
     </div>
