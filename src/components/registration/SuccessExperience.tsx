@@ -274,7 +274,9 @@ function SuccessInner() {
             >
               {resendStatus === "sending"
                 ? "Sending…"
-                : "Receipt PDF + QR to your inbox"}
+                : registrantEmail
+                  ? `Send to ${registrantEmail}`
+                  : "QR + receipt link to your inbox"}
             </ActionCard>
             <ActionCard title="Add to calendar" onClick={() => downloadSmk6Calendar()}>
               Download .ics for 9–11 Oct 2026
@@ -303,7 +305,11 @@ function SuccessInner() {
             <h2 className="font-bold text-brand-navy">Next steps</h2>
             <ul className="mt-2 list-disc space-y-1 pl-5">
               <li>Save your registration number and QR code for event check-in.</li>
-              <li>Check your email (and spam folder) for confirmation, receipt PDF, and QR attachment.</li>
+              <li>
+                Check <strong>{registrantEmail ?? "your email"}</strong> — inbox,{" "}
+                <strong>Spam</strong>, and <strong>Promotions</strong> — for
+                &quot;Shiksha Mahakumbh 6.0 — Registration Confirmed&quot;.
+              </li>
               <li>Didn&apos;t get the email? Use <strong>Resend confirmation email</strong> above.</li>
               <li>Accommodation registration opens in September — watch this page and your email.</li>
               <li>Download or print your receipt — both use the same official layout.</li>
