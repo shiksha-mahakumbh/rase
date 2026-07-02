@@ -34,6 +34,7 @@ export const FOOTER_QUICK_LINK_EXCLUDED = new Set([
   "/disclaimer",
   "/refund-policy",
   "/cookie-policy",
+  "/licenses",
   "/speakers/directory",
   "/conclave",
   "/past_event/Innovation_and_Entrepreneurship_Dhe_Workshop",

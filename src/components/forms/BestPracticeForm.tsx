@@ -22,6 +22,7 @@ import { formClasses } from "@/components/forms/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { resolvePaymentStatus } from "@/lib/registration/config";
 import { useState } from "react";
+import RegistrationLegalNotice from "@/components/forms/RegistrationLegalNotice";
 
 const AREAS = [
   "Education",
@@ -143,6 +144,8 @@ export default function BestPracticeForm() {
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
+
+      <RegistrationLegalNotice />
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

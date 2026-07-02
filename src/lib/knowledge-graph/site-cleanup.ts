@@ -153,6 +153,7 @@ export const SITEMAP_CORE_PATHS: readonly string[] = [
   "disclaimer",
   "refund-policy",
   "cookie-policy",
+  "licenses",
   "coming-soon",
   "abhiyaninphotoframe",
   "search",

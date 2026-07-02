@@ -23,6 +23,8 @@ export const ROUTES = {
   faq: "/faq",
   newsletterUnsubscribe: "/newsletter/unsubscribe",
   terms: "/terms-and-conditions",
+  cookiePolicy: "/cookie-policy",
+  licenses: "/licenses",
   disclaimer: "/disclaimer",
   refund: "/refund-policy",
   dashboard: "/dashboard",

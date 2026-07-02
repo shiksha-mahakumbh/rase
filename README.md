@@ -65,6 +65,7 @@ scripts/         # Audits, seeds, CI helpers
 tests/unit/      # Node native unit tests
 e2e/             # Playwright smoke and a11y specs
 docs/devops/     # Docker, secrets, alerting, runbooks
+docs/legal/       # Privacy, terms, cookies, licenses
 docs/            # Platform, deployment, conventions
 public/          # Static assets, ads.txt, manifest
 ```
@@ -75,7 +76,7 @@ See [docs/CODE_CONVENTIONS.md](docs/CODE_CONVENTIONS.md) for naming and API rule
 
 CI (`.github/workflows/ci.yml`) runs lint, typecheck, security tests, performance audit, and build on every push to `main`.
 
-Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase12.mjs` in the `test:security` chain.
+Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase13.mjs` in the `test:security` chain.
 
 ## Migrations
 

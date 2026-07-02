@@ -65,6 +65,7 @@ export const legalLinks: FooterLink[] = [
   { name: "Disclaimer", href: "/disclaimer" },
   { name: "Refund Policy", href: "/refund-policy" },
   { name: "Cookie Policy", href: "/cookie-policy" },
+  { name: "Open Source Licenses", href: "/licenses" },
   { name: "Sitemap", href: "/sitemap.xml" },
 ];
 

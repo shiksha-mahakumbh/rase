@@ -34,6 +34,7 @@ import { useRegisterPaymentGate } from "@/hooks/useRegisterPaymentGate";
 import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
 import { panRequiredForAmount } from "@/lib/registration/validation";
 import toast from "react-hot-toast";
+import RegistrationLegalNotice from "@/components/forms/RegistrationLegalNotice";
 
 interface GenericRegistrationFormProps {
   registrationType: RegistrationType;
@@ -325,6 +326,8 @@ export default function GenericRegistrationForm({
           />
         </FormSection>
       )}
+
+      <RegistrationLegalNotice />
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

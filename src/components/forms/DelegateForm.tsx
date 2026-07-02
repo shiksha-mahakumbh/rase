@@ -34,6 +34,7 @@ import { useRegisterPaymentGate } from "@/hooks/useRegisterPaymentGate";
 import { useRegistrationFlow } from "@/components/registration/RegistrationFlowContext";
 import { panRequiredForAmount } from "@/lib/registration/validation";
 import toast from "react-hot-toast";
+import RegistrationLegalNotice from "@/components/forms/RegistrationLegalNotice";
 
 const defaultValues: Partial<DelegateFormValues> = {
   accommodationRequired: "No",
@@ -266,6 +267,8 @@ export default function DelegateForm() {
           />
         </FormSection>
       )}
+
+      <RegistrationLegalNotice />
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

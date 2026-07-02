@@ -112,6 +112,30 @@ const tests = [
       res.ok && /faq|question|answer|सामान्य/i.test(text) ? null : `HTTP ${res.status}`,
   },
   {
+    name: "privacy-policy",
+    path: "/privacy-policy",
+    assert: async (res, text) =>
+      res.ok && /Privacy Policy|personal information/i.test(text) ? null : "privacy page missing",
+  },
+  {
+    name: "terms-and-conditions",
+    path: "/terms-and-conditions",
+    assert: async (res, text) =>
+      res.ok && /Terms and Conditions|Acceptance/i.test(text) ? null : "terms page missing",
+  },
+  {
+    name: "cookie-policy",
+    path: "/cookie-policy",
+    assert: async (res, text) =>
+      res.ok && /Cookie Policy|cookies/i.test(text) ? null : "cookie policy missing",
+  },
+  {
+    name: "licenses",
+    path: "/licenses",
+    assert: async (res, text) =>
+      res.ok && /Open Source Licenses|Third-party/i.test(text) ? null : "licenses page missing",
+  },
+  {
     name: "locale-hi-home",
     path: "/hi",
     assert: async (res, text) =>

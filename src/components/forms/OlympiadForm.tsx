@@ -28,6 +28,7 @@ import {
 } from "@/lib/parseStudentList";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import RegistrationLegalNotice from "@/components/forms/RegistrationLegalNotice";
 
 export default function OlympiadForm() {
   const { submitRegistration, loading } = useRegistrationSubmit();
@@ -208,6 +209,8 @@ export default function OlympiadForm() {
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
+
+      <RegistrationLegalNotice />
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}

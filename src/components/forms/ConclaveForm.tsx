@@ -20,6 +20,7 @@ import {
 import { formClasses } from "@/components/forms/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
 import { resolvePaymentStatus } from "@/lib/registration/config";
+import RegistrationLegalNotice from "@/components/forms/RegistrationLegalNotice";
 
 const CONCLAVE_OPTIONS = [
   "Vice Chancellor & Director Conclave",
@@ -88,6 +89,8 @@ export default function ConclaveForm() {
       </FormSection>
 
       <AccommodationSection register={reg} watch={watchShared} errors={errs} />
+
+      <RegistrationLegalNotice />
 
       <button type="submit" disabled={loading} className={formClasses.submitBtn}>
         {loading ? "Submitting..." : "Submit Registration"}
