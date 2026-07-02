@@ -9,40 +9,61 @@ const base = (process.argv[2] || process.env.NEXT_PUBLIC_SITE_URL || "https://ww
 );
 
 const paths = [
-  { name: "health", path: "/api/health", expectJson: true },
-  { name: "sitemap", path: "/sitemap.xml", expectXml: true },
-  { name: "robots", path: "/robots.txt", expectText: true },
+  {
+    name: "https-scheme",
+    path: "/",
+    assert: async (res) => (res.url.startsWith("https://") ? null : `final URL not HTTPS: ${res.url}`),
+  },
+  {
+    name: "hsts-header",
+    path: "/",
+    assert: async (res) =>
+      res.headers.get("strict-transport-security") ? null : "missing Strict-Transport-Security",
+  },
+  {
+    name: "health-v2",
+    path: "/api/v2/health",
+    assert: async (res, text) => {
+      if (!res.ok) return `HTTP ${res.status}`;
+      try {
+        const j = JSON.parse(text);
+        return j.status === "ok" || j.ok === true ? null : `status=${j.status}`;
+      } catch {
+        return "not JSON";
+      }
+    },
+  },
+  {
+    name: "sitemap",
+    path: "/sitemap.xml",
+    assert: async (res, text) =>
+      res.ok && (text.includes("<urlset") || text.includes("<?xml")) ? null : "invalid sitemap",
+  },
+  {
+    name: "robots",
+    path: "/robots.txt",
+    assert: async (res, text) =>
+      res.ok && /User-agent/i.test(text) ? null : "invalid robots.txt",
+  },
+  {
+    name: "canonical-host",
+    path: "/sitemap.xml",
+    assert: async (res, text) => {
+      if (!res.ok) return `HTTP ${res.status}`;
+      const host = new URL(base).host;
+      return text.includes(host) ? null : `sitemap missing canonical host ${host}`;
+    },
+  },
 ];
 
-async function probe({ name, path, expectJson, expectXml, expectText }) {
+async function probe({ name, path, assert }) {
   const url = `${base}${path}`;
   try {
     const res = await fetch(url, { redirect: "follow" });
     const text = await res.text();
-    const snippet = text.slice(0, 120).replace(/\s+/g, " ");
-    let bodyOk = true;
-    let note = "";
-
-    if (expectJson) {
-      try {
-        const j = JSON.parse(text);
-        bodyOk = j.status === "ok";
-        if (!bodyOk) note = `JSON status=${j.status}`;
-      } catch {
-        bodyOk = false;
-        note = "Response is not JSON (deploy /api/health or check routing)";
-      }
-    } else if (expectXml) {
-      bodyOk = text.includes("<urlset") || text.includes("<?xml");
-      if (!bodyOk) note = "Expected XML sitemap";
-    } else if (expectText) {
-      bodyOk = /User-agent/i.test(text) || /Sitemap/i.test(text);
-      if (!bodyOk) note = "Expected robots.txt directives";
-    }
-
-    const ok = res.ok && bodyOk;
-    console.log(`${ok ? "PASS" : "FAIL"} ${name} ${res.status} ${url}${note ? ` — ${note}` : ""}`);
-    if (!ok && snippet) console.log(`  snippet: ${snippet}…`);
+    const err = await assert(res, text);
+    const ok = !err;
+    console.log(`${ok ? "PASS" : "FAIL"} ${name} ${res.status} ${url}${err ? ` — ${err}` : ""}`);
     return ok;
   } catch (e) {
     console.log(`FAIL ${name} ${url} — ${e.message}`);
@@ -51,7 +72,10 @@ async function probe({ name, path, expectJson, expectXml, expectText }) {
 }
 
 console.log(`Go-live validation: ${base}\n`);
-const results = await Promise.all(paths.map(probe));
+const results = [];
+for (const p of paths) {
+  results.push(await probe(p));
+}
 const passed = results.filter(Boolean).length;
 console.log(`\n${passed}/${results.length} checks passed`);
 process.exit(passed === results.length ? 0 : 1);

@@ -49,7 +49,10 @@ Verify: `npm run verify:env` | `npm run audit:secrets`
 | `npm run test:integration` | Integration script contracts (+ optional live run) |
 | `npm run test:load` | Concurrent health load baseline |
 | `npm run audit:secrets` | Static scan for secret leaks and tracked `.env` files |
-| `npm run db:migrate:deploy` | Apply Prisma migrations (loads `.env`) |
+| `npm run certify:go-live` | Final go-live certification bundle (set `RUN_LIVE_GO_LIVE=1` for live probes) |
+| `npm run verify:rollback` | Static rollback readiness checks |
+| `npm run verify:monitoring` | Live `/status` and health monitoring probes |
+| `npm run validate:go-live` | HTTPS, HSTS, sitemap, and health go-live probes |
 | `npm run db:validate` | Validate Prisma schema |
 
 ## Project layout
@@ -65,6 +68,7 @@ scripts/         # Audits, seeds, CI helpers
 tests/unit/      # Node native unit tests
 e2e/             # Playwright smoke and a11y specs
 docs/devops/     # Docker, secrets, alerting, runbooks
+docs/go-live/     # DNS, sign-off, launch checklists
 docs/legal/       # Privacy, terms, cookies, licenses
 docs/            # Platform, deployment, conventions
 public/          # Static assets, ads.txt, manifest
@@ -76,7 +80,7 @@ See [docs/CODE_CONVENTIONS.md](docs/CODE_CONVENTIONS.md) for naming and API rule
 
 CI (`.github/workflows/ci.yml`) runs lint, typecheck, security tests, performance audit, and build on every push to `main`.
 
-Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase13.mjs` in the `test:security` chain.
+Enterprise audit progress is tracked via `scripts/test-security-phase1.mjs` through `phase14.mjs` in the `test:security` chain.
 
 ## Migrations
 
