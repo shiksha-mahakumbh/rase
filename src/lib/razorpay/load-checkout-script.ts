@@ -6,14 +6,41 @@ function razorpayReady(): boolean {
   return typeof window !== "undefined" && Boolean(window.Razorpay);
 }
 
+function waitForRazorpayGlobal(timeoutMs = 12_000): Promise<boolean> {
+  if (razorpayReady()) return Promise.resolve(true);
+
+  return new Promise((resolve) => {
+    const started = Date.now();
+    const tick = () => {
+      if (razorpayReady()) {
+        resolve(true);
+        return;
+      }
+      if (Date.now() - started >= timeoutMs) {
+        resolve(false);
+        return;
+      }
+      window.setTimeout(tick, 50);
+    };
+    tick();
+  });
+}
+
 function attachScriptListeners(
   script: HTMLScriptElement,
   resolve: () => void,
   reject: (error: Error) => void
 ) {
-  const onLoad = () => {
+  const onLoad = async () => {
     script.removeEventListener("load", onLoad);
     script.removeEventListener("error", onError);
+    const ready = await waitForRazorpayGlobal();
+    if (!ready) {
+      loadPromise = null;
+      console.error("RAZORPAY_SCRIPT_LOAD_FAILED", { reason: "window.Razorpay missing after load" });
+      reject(new Error("Razorpay checkout did not initialize"));
+      return;
+    }
     console.info("RAZORPAY_SCRIPT_LOAD_SUCCESS", { reused: true });
     resolve();
   };
@@ -61,7 +88,17 @@ export function loadRazorpayCheckoutScript(): Promise<void> {
     const script = document.createElement("script");
     script.src = CHECKOUT_SCRIPT;
     script.async = true;
-    script.onload = () => {
+    script.onload = async () => {
+      const ready = await waitForRazorpayGlobal();
+      if (!ready) {
+        loadPromise = null;
+        console.error("RAZORPAY_SCRIPT_LOAD_FAILED", {
+          injected: true,
+          reason: "window.Razorpay missing after load",
+        });
+        reject(new Error("Razorpay checkout did not initialize"));
+        return;
+      }
       console.info("RAZORPAY_SCRIPT_LOAD_SUCCESS", { injected: true });
       resolve();
     };

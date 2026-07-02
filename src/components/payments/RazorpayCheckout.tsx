@@ -63,6 +63,7 @@ export default function RazorpayCheckout({
 }: RazorpayCheckoutProps) {
   const [loading, setLoading] = useState(false);
   const [scriptReady, setScriptReady] = useState(false);
+  const [scriptFailed, setScriptFailed] = useState(false);
   const [verified, setVerified] = useState(false);
 
   const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
@@ -71,10 +72,16 @@ export default function RazorpayCheckout({
     let cancelled = false;
     void loadRazorpayCheckoutScript()
       .then(() => {
-        if (!cancelled) setScriptReady(isRazorpayCheckoutReady());
+        if (!cancelled) {
+          setScriptReady(isRazorpayCheckoutReady());
+          setScriptFailed(false);
+        }
       })
       .catch(() => {
-        if (!cancelled) setScriptReady(false);
+        if (!cancelled) {
+          setScriptReady(false);
+          setScriptFailed(true);
+        }
       });
     return () => {
       cancelled = true;
@@ -92,6 +99,7 @@ export default function RazorpayCheckout({
         console.info("RAZORPAY_SCRIPT_LOAD_START", { phase: "pay_click" });
         await loadRazorpayCheckoutScript();
         setScriptReady(true);
+        setScriptFailed(false);
       }
     } catch (err) {
       console.error("RAZORPAY_SCRIPT_LOAD_FAILED", {
@@ -99,6 +107,7 @@ export default function RazorpayCheckout({
         error: err instanceof Error ? err.message : String(err),
       });
       toast.error("Payment gateway failed to load. Please refresh and try again.");
+      setScriptFailed(true);
       return;
     }
 
@@ -245,22 +254,31 @@ export default function RazorpayCheckout({
   }
 
   return (
-    <button
-      type="button"
-      onClick={handlePay}
-      disabled={disabled || loading || verified}
-      className={
-        className ??
-        "inline-flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
-      }
-    >
-      {verified
-        ? "Payment verified ✓"
-        : loading
-          ? "Processing…"
-          : !scriptReady
-            ? "Loading payment…"
-            : `Pay ₹${amountInRupees.toLocaleString("en-IN")}`}
-    </button>
+    <div className="space-y-2">
+      <button
+        type="button"
+        onClick={handlePay}
+        disabled={disabled || loading || verified}
+        className={
+          className ??
+          "inline-flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+        }
+      >
+        {verified
+          ? "Payment verified ✓"
+          : loading
+            ? "Processing…"
+            : scriptFailed
+              ? `Retry payment · ₹${amountInRupees.toLocaleString("en-IN")}`
+              : `Pay ₹${amountInRupees.toLocaleString("en-IN")}`}
+      </button>
+      {!scriptReady && !verified && !loading && (
+        <p className="text-xs text-slate-600">
+          {scriptFailed
+            ? "Payment gateway could not load. Disable ad blockers, refresh, then tap Retry."
+            : "Preparing secure checkout… you can tap Pay to open Razorpay."}
+        </p>
+      )}
+    </div>
   );
 }

@@ -116,7 +116,7 @@ export function useRegistrationSubmit() {
       );
       if (!captchaToken && !hasVerifiedRazorpay) {
         toast.error(
-          "Security check could not load. Disable ad blockers, refresh the page, and try again."
+          "Security check could not load. Disable ad blockers, allow Google reCAPTCHA, refresh the page, and try again."
         );
         return;
       }
