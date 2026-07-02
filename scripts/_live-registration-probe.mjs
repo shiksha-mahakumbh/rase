@@ -30,7 +30,7 @@ async function runViewport(name, contextOptions) {
     septemberHub: /September/i.test(body),
   };
 
-  const projects = page.locator("button").filter({ hasText: /^Projects$/ });
+  const projects = page.getByRole("button", { name: /Projects/i }).first();
   await projects.scrollIntoViewIfNeeded();
   await projects.click({ timeout: 20_000 });
   await page.getByRole("button", { name: /Continue to details/i }).click();

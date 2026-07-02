@@ -2,14 +2,49 @@
 
 **Target:** https://www.rase.co.in/registration  
 **Audit date:** 2 July 2026  
-**Scope:** Real-user journey, payments, email, database, security, SEO, performance, accessibility, business rule changes (project pricing + accommodation closure)  
-**Codebase:** `rase` (Next.js 15, Supabase/Prisma, Razorpay)
+**Status:** **PRODUCTION SIGN-OFF PENDING** (Stage 3: Live Validation In Progress)
+
+**Deployments:**
+- `1b5e856` — Project fees + accommodation closure (Production ✅)
+- `8b65bca` — Block Razorpay create-order for Accommodation (Production ✅)
+
+---
+
+## Sign-off state machine
+
+| Stage | Status |
+|-------|--------|
+| 1. Local Code Audit Complete | ✅ |
+| 2. Deployment Pending | ✅ Completed |
+| 3. Live Validation In Progress | 🔄 **Current** |
+| 4. Production Certified | ❌ Blocked on manual payment + email |
+
+**Do not mark COMPLETE** until Stage 4.
+
+---
+
+## Live production validation (post-deploy)
+
+| Check | Result |
+|-------|--------|
+| Vercel deploy `1b5e856` + `8b65bca` | ✅ |
+| Hub: no Accommodation paid card | ✅ |
+| Projects badge ₹200–₹500 | ✅ |
+| Form: School ₹200 / College ₹500 / University ₹500 | ✅ desktop + tablet + mobile form |
+| September accommodation notice on forms | ✅ |
+| `certify:go-live:live` | ✅ 10/10 |
+| Playwright smoke + a11y on prod | ✅ 6/6 |
+| Razorpay API fee enforcement | ✅ ₹400 rejected; ₹500 accepted |
+| Accommodation create-order blocked | ✅ 400 after `8b65bca` |
+| Security headers, robots, sitemap | ✅ |
+| **Manual Razorpay payment E2E** | ⏳ **Operator required** |
+| Webhook, DB, emails, receipt, admin | ⏳ After payment |
 
 ---
 
 ## Executive Summary
 
-A full-stack audit of the SMK 6.0 registration system was performed across user journeys, backend logic, payments, email, database policies, security, SEO, and UX. **Two business changes were implemented in code:**
+A full-stack audit of the SMK 6.0 registration system was performed across user journeys, backend logic, payments, email, database policies, security, SEO, and UX. **Business changes are deployed to production:**
 
 | Change | Before | After |
 |--------|--------|-------|
@@ -18,9 +53,7 @@ A full-stack audit of the SMK 6.0 registration system was performed across user 
 | University Level Project | *(not offered)* | **₹500** (new tier) |
 | Accommodation registration | Paid flow (₹3000/₹6000) | **Closed** — September notice only |
 
-**Production status:** Live site at `rase.co.in/registration` still serves the **previous** build (Accommodation card, ₹200–₹400 badge, old FAQ). Local changes pass `typecheck`, **23/23 unit tests**, integration contract checks, and **production build**. **Deploy is required** before live user/payment/email re-verification.
-
-**Production readiness score (pre-deploy):** **82/100** — code complete; blocked on deploy + live payment sign-off + post-deploy smoke.
+**Production readiness score:** **88/100** — live UI and API validated; **manual payment + email sign-off still required**.
 
 ---
 
@@ -32,7 +65,7 @@ A full-stack audit of the SMK 6.0 registration system was performed across user 
 |------|---------|--------|
 | Page load | HTTP 200, CSP/HSTS/nosniff headers present | ✅ |
 | Category selection | 4 groups: Delegates, Programme tracks, Project displays, Research (CMT) | ✅ Fixed locally |
-| Accommodation card | Removed from hub; notice on all forms | ✅ Fixed locally |
+| Accommodation card | Removed from hub; notice on all forms | ✅ Live verified |
 | Multi-step flow | Details → Payment (if paid) → Submit | ✅ |
 | Draft persistence | `useRegistrationDraft` + localStorage | ✅ |
 | Back button | Hub state in React context; category preserved in draft | ✅ |
@@ -50,11 +83,11 @@ A full-stack audit of the SMK 6.0 registration system was performed across user 
 | Mobile / slow network | Responsive grid, 44px touch targets, step indicator | ✅ |
 | Returning visitor | Draft restore + dashboard lookup | ✅ |
 
-### Live production gaps (pre-deploy)
+### Live production verification (2 Jul 2026)
 
-- Accommodation category still visible on live hub
-- Project fee badge shows `₹200–₹400` on live site
-- SEO meta description still mentions “accommodation” as active category
+- Accommodation card removed from hub ✅
+- Project fee badge `₹200–₹500` on live site ✅
+- SEO meta: "project displays. Accommodation opens September" ✅
 
 ---
 
