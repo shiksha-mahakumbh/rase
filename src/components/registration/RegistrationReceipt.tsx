@@ -19,7 +19,10 @@ export default function RegistrationReceipt({
   visible = false,
 }: RegistrationReceiptProps) {
   return (
-    <div className={visible ? "mb-8 print:hidden" : "hidden"} id="registration-receipt-root">
+    <div
+      className={visible ? "mb-8 block print:block" : "hidden print:hidden"}
+      id="registration-receipt-root"
+    >
       <ReceiptTemplate data={data} qrDataUrl={qrDataUrl} />
     </div>
   );

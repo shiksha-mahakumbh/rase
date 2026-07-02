@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { after } from "next/server";
 import { verifyRegistrationSubmitProtection } from "@/lib/security/registration-captcha";
 import { assertHoneypotEmpty } from "@/lib/security/honeypot";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
@@ -106,7 +107,7 @@ export const POST = createApiHandler(
         ? createRegistrationLookupToken(result.registrationId, guarded.email)
         : undefined;
 
-    await runRegistrationPostSubmit({
+    const postSubmitInput = {
       result,
       registrationType: guarded.type,
       data: guarded.data,
@@ -115,11 +116,17 @@ export const POST = createApiHandler(
       contact: guarded.contact,
       fee: guarded.fee,
       razorpayPaymentId: guarded.razorpayPaymentId,
-    }).catch((err) => {
-      console.error("REGISTRATION_POST_SUBMIT_FAILED", {
-        registrationId: result.registrationId,
-        error: err instanceof Error ? err.message : String(err),
-      });
+    };
+
+    after(async () => {
+      try {
+        await runRegistrationPostSubmit(postSubmitInput);
+      } catch (err) {
+        console.error("REGISTRATION_POST_SUBMIT_FAILED", {
+          registrationId: result.registrationId,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
     });
 
     return {

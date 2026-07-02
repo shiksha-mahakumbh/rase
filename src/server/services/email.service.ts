@@ -458,15 +458,22 @@ export async function sendRegistrationCompleteEmail(options: {
   });
 
   if (attachments.length < 1) {
-    console.error("EMAIL_ATTACHMENT_MISSING", {
+    if (!options.receiptUrl?.trim()) {
+      console.error("EMAIL_ATTACHMENT_MISSING", {
+        registrationId: options.registrationId,
+        recipient: options.email,
+        present: attachments.map((a) => a.filename),
+        expected: ["receipt.pdf or qr.png"],
+      });
+      throw new Error(
+        `Registration email missing attachments for ${options.registrationId}`
+      );
+    }
+    console.warn("EMAIL_SENDING_WITHOUT_ATTACHMENTS", {
       registrationId: options.registrationId,
       recipient: options.email,
-      present: attachments.map((a) => a.filename),
-      expected: ["receipt.pdf"],
+      receiptUrl: options.receiptUrl,
     });
-    throw new Error(
-      `Registration email missing receipt attachment for ${options.registrationId}`
-    );
   }
 
   const subject = options.isPaid

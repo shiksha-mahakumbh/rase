@@ -64,6 +64,8 @@ function SuccessInner() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [registrantEmail, setRegistrantEmail] = useState<string | null>(null);
+  const [resendStatus, setResendStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [resendMessage, setResendMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!registrationId) {
@@ -129,6 +131,33 @@ function SuccessInner() {
   const handlePrintReceipt = () => {
     if (!receiptData) return;
     printRegistrationReceipt(receiptData, qrDataUrl);
+  };
+
+  const handleResendEmail = async () => {
+    if (!registrationId || !lookupToken) return;
+    setResendStatus("sending");
+    setResendMessage(null);
+    try {
+      const res = await fetch("/api/v2/registration/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          registrationId,
+          token: lookupToken,
+        }),
+      });
+      const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string };
+      if (!res.ok) {
+        throw new Error(body.error ?? "Could not resend email");
+      }
+      setResendStatus("sent");
+      setResendMessage(body.message ?? "Confirmation email sent. Check your inbox and spam folder.");
+    } catch (error) {
+      setResendStatus("error");
+      setResendMessage(
+        error instanceof Error ? error.message : "Could not resend email. Try again in a minute."
+      );
+    }
   };
 
   if (loading) {
@@ -220,7 +249,16 @@ function SuccessInner() {
               onClick={handlePrintReceipt}
               disabled={!receiptData}
             >
-              Opens print-friendly receipt
+              Uses your browser print dialog (no pop-up)
+            </ActionCard>
+            <ActionCard
+              title="Resend confirmation email"
+              onClick={() => void handleResendEmail()}
+              disabled={!lookupToken || resendStatus === "sending"}
+            >
+              {resendStatus === "sending"
+                ? "Sending…"
+                : "Receipt PDF + QR to your inbox"}
             </ActionCard>
             <ActionCard title="Add to calendar" onClick={() => downloadSmk6Calendar()}>
               Download .ics for 9–11 Oct 2026
@@ -233,11 +271,24 @@ function SuccessInner() {
             </ActionCard>
           </div>
 
+          {resendMessage ? (
+            <div
+              className={`rounded-2xl border p-4 text-sm ${
+                resendStatus === "sent"
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-950"
+                  : "border-amber-200 bg-amber-50 text-amber-950"
+              }`}
+            >
+              {resendMessage}
+            </div>
+          ) : null}
+
           <section className="rounded-2xl border border-amber-200 bg-amber-50/80 p-5 text-sm text-amber-950">
             <h2 className="font-bold text-brand-navy">Next steps</h2>
             <ul className="mt-2 list-disc space-y-1 pl-5">
               <li>Save your registration number and QR code for event check-in.</li>
-              <li>Check your email for confirmation, receipt PDF, and QR attachment.</li>
+              <li>Check your email (and spam folder) for confirmation, receipt PDF, and QR attachment.</li>
+              <li>Didn&apos;t get the email? Use <strong>Resend confirmation email</strong> above.</li>
               <li>Accommodation registration opens in September — watch this page and your email.</li>
               <li>Download or print your receipt — both use the same official layout.</li>
             </ul>
