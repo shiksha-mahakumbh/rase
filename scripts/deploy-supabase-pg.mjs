@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { splitSqlStatements, stripSqlLineComments } from "./lib/sql-split.mjs";
 
 const require = createRequire(import.meta.url);
 const pgPaths = [
@@ -66,25 +67,10 @@ function readSql(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), "utf8");
 }
 
-function stripSqlComments(sql) {
-  return sql
-    .split("\n")
-    .filter((line) => !line.trim().startsWith("--"))
-    .join("\n");
-}
-
-function splitSqlStatements(sql) {
-  const cleaned = stripSqlComments(sql);
-  if (cleaned.includes("$$")) return [cleaned];
-  return cleaned
-    .split(/;\s*\n/)
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0 && !s.startsWith("\\"));
-}
-
 async function execSqlFile(client, label, relativePath) {
-  const sql = readSql(relativePath);
+  const sql = stripSqlLineComments(readSql(relativePath));
   const statements = splitSqlStatements(sql);
+
   for (const stmt of statements) {
     const q = stmt.endsWith(";") ? stmt : `${stmt};`;
     try {
@@ -102,7 +88,7 @@ async function execSqlFile(client, label, relativePath) {
       throw new Error(`${label} failed: ${msg}`);
     }
   }
-  console.log(`[ok] ${label}`);
+  console.log(`[ok] ${label} (${statements.length} statement(s))`);
 }
 
 async function verify(client) {
@@ -112,6 +98,9 @@ async function verify(client) {
   const policies = await client.query(
     `SELECT count(*)::int AS n FROM pg_policies WHERE schemaname IN ('public','storage')`
   );
+  const rolePolicies = await client.query(
+    `SELECT policyname, roles::text FROM pg_policies WHERE schemaname = 'public' AND tablename = 'roles'`
+  );
   const storagePolicies = await client.query(
     `SELECT policyname, cmd FROM pg_policies WHERE schemaname = 'storage' ORDER BY policyname`
   );
@@ -120,6 +109,7 @@ async function verify(client) {
       {
         buckets: buckets.rows,
         policyCount: policies.rows[0]?.n,
+        rolePolicies: rolePolicies.rows,
         storagePolicies: storagePolicies.rows,
       },
       null,
@@ -129,9 +119,9 @@ async function verify(client) {
 }
 
 const RLS_FILES = [
-  "supabase/policies/rbac-tiered.sql",
   "supabase/policies/registrations.sql",
   "supabase/policies/production-hardening.sql",
+  "supabase/policies/rbac-tiered.sql",
   "supabase/policies/payments.sql",
   "supabase/policies/admin.sql",
   "supabase/policies/cms.sql",

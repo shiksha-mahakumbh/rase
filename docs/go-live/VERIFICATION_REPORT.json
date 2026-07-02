@@ -1,6 +1,33 @@
 {
-  "note": "Run npm run certify:go-live:live or npm run generate:go-live-report to populate this file.",
-  "generatedAt": null,
+  "generatedAt": "2026-07-02T03:35:53.397Z",
   "baseUrl": "https://www.rase.co.in",
-  "probes": {}
+  "gitSha": "1b555d55e5728eeffa4a6a64c0c40c1ac34bd809",
+  "probes": {
+    "status": {
+      "status": 200,
+      "ok": true,
+      "body": {
+        "status": "degraded",
+        "service": "rase-web",
+        "checks": {
+          "database": "connected",
+          "sentryConfigured": true,
+          "rateLimitMode": "upstash",
+          "cronConfigured": true,
+          "rlsPolicyCount": 61,
+          "storagePolicyCount": 9,
+          "anonRolesBlocked": false
+        },
+        "timestamp": "2026-07-02T03:35:56.386Z"
+      }
+    },
+    "health": {
+      "status": 200,
+      "ok": true,
+      "body": {
+        "status": "ok",
+        "service": "rase-web"
+      }
+    }
+  }
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /** Read-only Supabase audit via public APIs (no service role required). */
 import fs from "node:fs";
+import { isAnonRolesAccessBlocked } from "./lib/anon-roles-probe.mjs";
 
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) return {};
@@ -79,7 +80,7 @@ async function main() {
         const text = await res.text();
         return {
           status: res.status,
-          blocked: res.status === 401 || res.status === 403 || text.includes("permission denied"),
+          blocked: isAnonRolesAccessBlocked(res.status, text),
           sample: text.slice(0, 120),
         };
       })

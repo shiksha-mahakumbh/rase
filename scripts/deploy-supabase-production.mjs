@@ -8,6 +8,7 @@ import { PrismaClient } from "@prisma/client";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { splitSqlStatements, stripSqlLineComments } from "./lib/sql-split.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -22,22 +23,8 @@ function readSql(relativePath) {
   return readFileSync(join(root, relativePath), "utf8");
 }
 
-function splitSqlStatements(sql) {
-  if (sql.includes("$$")) {
-    return [sql];
-  }
-  const cleaned = sql
-    .split("\n")
-    .filter((line) => !line.trim().startsWith("--"))
-    .join("\n");
-  return cleaned
-    .split(/;\s*\n/)
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0 && !s.startsWith("\\"));
-}
-
 async function execSqlFile(label, relativePath) {
-  const sql = readSql(relativePath);
+  const sql = stripSqlLineComments(readSql(relativePath));
   const statements = splitSqlStatements(sql);
 
   for (const stmt of statements) {
@@ -56,7 +43,7 @@ async function execSqlFile(label, relativePath) {
       throw new Error(`${label} failed: ${msg}`);
     }
   }
-  console.log(`[ok] ${label}`);
+  console.log(`[ok] ${label} (${statements.length} statement(s))`);
 }
 
 async function applyBuckets() {
@@ -70,9 +57,9 @@ async function applySeed() {
 
 async function applyRls() {
   const files = [
-    "supabase/policies/rbac-tiered.sql",
     "supabase/policies/registrations.sql",
     "supabase/policies/production-hardening.sql",
+    "supabase/policies/rbac-tiered.sql",
     "supabase/policies/payments.sql",
     "supabase/policies/admin.sql",
     "supabase/policies/cms.sql",
@@ -94,11 +81,15 @@ async function verify() {
   const policies = await prisma.$queryRaw`
     SELECT count(*)::int AS n FROM pg_policies WHERE schemaname IN ('public','storage')
   `;
+  const rolePolicies = await prisma.$queryRaw`
+    SELECT policyname, roles::text FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'roles'
+  `;
   const counters = await prisma.$queryRaw`
     SELECT prefix, last_number FROM registration_counters
   `;
   const roles = await prisma.$queryRaw`SELECT count(*)::int AS n FROM roles`;
-  console.log(JSON.stringify({ buckets, policies, counters, roles }, null, 2));
+  console.log(JSON.stringify({ buckets, policies, rolePolicies, counters, roles }, null, 2));
 }
 
 const flag = process.argv[2];

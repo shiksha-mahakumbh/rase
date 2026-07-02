@@ -72,10 +72,27 @@ export async function probeServiceStatus(): Promise<ServiceStatusPayload> {
         cache: "no-store",
       });
       const text = await res.text();
-      anonRolesBlocked =
+      if (
         res.status === 401 ||
         res.status === 403 ||
-        /permission denied|row-level security/i.test(text);
+        /permission denied|row-level security|JWT/i.test(text)
+      ) {
+        anonRolesBlocked = true;
+      } else {
+        try {
+          const parsed = JSON.parse(text) as unknown;
+          if (Array.isArray(parsed)) {
+            // PostgREST returns [] with 200 when RLS hides all rows.
+            anonRolesBlocked = parsed.length === 0;
+          } else if (parsed && typeof parsed === "object" && "code" in parsed) {
+            anonRolesBlocked = true;
+          } else {
+            anonRolesBlocked = false;
+          }
+        } catch {
+          anonRolesBlocked = false;
+        }
+      }
     } catch (error) {
       console.error("[status] anon RLS probe failed:", error);
     }
