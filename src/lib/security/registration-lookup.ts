@@ -6,7 +6,11 @@ export const REG_ID_RE = new RegExp(`^${REGISTRATION_ID_PREFIX}-\\d{6}$`);
 const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days — post-registration confirmation window
 
 function lookupSecret(): string {
-  const secret = process.env.REGISTRATION_LOOKUP_SECRET;
+  const secret =
+    process.env.REGISTRATION_LOOKUP_SECRET?.trim() ??
+    process.env.REGISTRATION_UPLOAD_SECRET?.trim() ??
+    process.env.REGISTRATION_EMAIL_SECRET?.trim() ??
+    process.env.ADMIN_OPS_SECRET?.trim();
   if (!secret) {
     throw new Error("REGISTRATION_LOOKUP_SECRET is not configured");
   }
@@ -39,6 +43,22 @@ export function createRegistrationLookupToken(
   const encoded = Buffer.from(payload).toString("base64url");
   const sig = signPayload(encoded);
   return `${encoded}.${sig}`;
+}
+
+/** Never throw from submit — missing secret must not fail a saved registration. */
+export function tryCreateRegistrationLookupToken(
+  registrationId: string,
+  email: string
+): string | undefined {
+  try {
+    return createRegistrationLookupToken(registrationId, email);
+  } catch (error) {
+    console.error("LOOKUP_TOKEN_CREATE_FAILED", {
+      registrationId,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return undefined;
+  }
 }
 
 export function verifyRegistrationLookupToken(

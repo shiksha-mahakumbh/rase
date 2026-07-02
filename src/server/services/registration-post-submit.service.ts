@@ -82,7 +82,16 @@ export async function sendRegistrationConfirmationEmailFast(
   input: RegistrationPostSubmitInput
 ) {
   const built = buildReceiptPayload(input);
-  const lookupToken = createRegistrationLookupToken(input.result.registrationId, input.email);
+
+  let lookupToken: string | undefined;
+  try {
+    lookupToken = createRegistrationLookupToken(input.result.registrationId, input.email);
+  } catch (error) {
+    console.error("LOOKUP_TOKEN_CREATE_FAILED", {
+      registrationId: input.result.registrationId,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
 
   const qrPng = await generateRegistrationQrBuffer({
     registrationId: built.receiptPayload.registrationId,

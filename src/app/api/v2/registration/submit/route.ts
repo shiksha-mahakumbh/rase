@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
+import { after } from "next/server";
 import { verifyRegistrationSubmitProtection } from "@/lib/security/registration-captcha";
 import { assertHoneypotEmpty } from "@/lib/security/honeypot";
+import { tryCreateRegistrationLookupToken } from "@/lib/security/registration-lookup";
 import { createApiHandler, assertBody } from "@/server/lib/api-handler";
 import { getRequestContext } from "@/server/lib/request";
 import { getRegistrationService } from "@/server/backend";
@@ -10,7 +12,7 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { sendRegistrationConfirmationEmailFast } from "@/server/services/registration-post-submit.service";
 import { ServiceError } from "@/server/lib/errors";
 
-export { runtime, maxDuration } from "@/lib/server/pdf-api-route";
+export const runtime = "nodejs";
 
 export const POST = createApiHandler(
   async (request: NextRequest) => {
@@ -98,12 +100,9 @@ export const POST = createApiHandler(
       },
     });
 
-    const { createRegistrationLookupToken } = await import(
-      "@/lib/security/registration-lookup"
-    );
     const lookupToken =
       guarded.email && result.registrationId
-        ? createRegistrationLookupToken(result.registrationId, guarded.email)
+        ? tryCreateRegistrationLookupToken(result.registrationId, guarded.email)
         : undefined;
 
     const postSubmitInput = {
@@ -117,14 +116,14 @@ export const POST = createApiHandler(
       razorpayPaymentId: guarded.razorpayPaymentId,
     };
 
-    try {
-      await sendRegistrationConfirmationEmailFast(postSubmitInput);
-    } catch (err) {
-      console.error("REGISTRATION_CONFIRMATION_EMAIL_DEFERRED", {
-        registrationId: result.registrationId,
-        error: err instanceof Error ? err.message : String(err),
+    after(() => {
+      void sendRegistrationConfirmationEmailFast(postSubmitInput).catch((err) => {
+        console.error("REGISTRATION_CONFIRMATION_EMAIL_DEFERRED", {
+          registrationId: result.registrationId,
+          error: err instanceof Error ? err.message : String(err),
+        });
       });
-    }
+    });
 
     return {
       success: true,
