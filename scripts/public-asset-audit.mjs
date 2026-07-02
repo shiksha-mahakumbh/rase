@@ -14,7 +14,7 @@ const maxMbArg = process.argv.find((a) => a.startsWith("--max-mb="));
 const MAX_MB = maxMbArg ? Number(maxMbArg.split("=")[1]) : 250;
 
 const DELETE_DIRS = ["conference", path.join("2024K", "2024M")];
-const ALWAYS_KEEP = new Set(["/ads.txt", "/next.svg", "/vercel.svg"]);
+const ALWAYS_KEEP = new Set(["/next.svg", "/vercel.svg"]);
 const DYNAMIC_KEEP = [{ prefix: "/sm25printmedia/", from: 1, to: 85, ext: ".jpg" }];
 
 const exts = [".ts", ".tsx", ".js", ".jsx", ".mjs", ".json", ".md", ".css", ".html"];

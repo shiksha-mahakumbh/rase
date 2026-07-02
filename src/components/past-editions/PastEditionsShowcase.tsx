@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import { EDITION_YOUTUBE_URLS } from "@/data/gallery-hub";
 import { getSpeakersForEdition } from "@/data/mahakumbh-abhiyan-speakers";
@@ -46,8 +45,6 @@ export default function PastEditionsShowcase() {
           ))}
         </div>
       </section>
-
-      <ReservedAdSlot slotId="pastevent-mid" className="mx-auto max-w-5xl px-4 py-6" />
 
       <section
         aria-label="National reach"

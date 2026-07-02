@@ -7,7 +7,6 @@ import { searchEcosystem, getAllEcosystemTags } from "@/lib/ecosystem/search";
 import { kindLabel, type EcosystemKind } from "@/lib/ecosystem/types";
 import type { ContentCategory } from "@/lib/content/types";
 import { SectionHeader } from "@/components/ui";
-import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import { recordKnowledgeHubView } from "@/components/admin/AdminGrowthDashboard";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics/events";
 import { getCategoryLabel } from "@/lib/content/registry";
@@ -138,8 +137,6 @@ export default function ContentHubClient() {
           </select>
         </label>
       </div>
-
-      <ReservedAdSlot slotId="knowledge-inline" />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (

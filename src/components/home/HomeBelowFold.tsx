@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import { loadCmsPageData } from "@/lib/cms/server";
 import { loadCmsSpeakers, loadCmsPartners } from "@/lib/cms/organizational";
 import LazySection from "@/components/performance/LazySection";
@@ -65,10 +64,6 @@ export default async function HomeBelowFold({ locale = "en", homeSections }: Pro
         <EventTracksSection content={homeSections.eventTracks} />
       </LazySection>
 
-      <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <ReservedAdSlot slotId="home-mid" />
-      </div>
-
       <LazySection
         minHeight="28rem"
         rootMargin="0px 0px 200px 0px"
@@ -111,9 +106,6 @@ export default async function HomeBelowFold({ locale = "en", homeSections }: Pro
       <LazySection minHeight="24rem" rootMargin="0px 0px 200px 0px" idleFirst fallback={<SectionSkeleton lines={4} />}>
         <VenueTravelSection />
       </LazySection>
-      <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <ReservedAdSlot slotId="home-footer" />
-      </div>
       <LazySection minHeight="12rem" rootMargin="0px 0px 120px 0px" idleFirst fallback={<SectionSkeleton lines={2} />}>
         <TestimonialsStrip />
       </LazySection>

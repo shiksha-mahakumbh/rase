@@ -61,12 +61,6 @@ const tests = [
       /User-agent/i.test(text) ? null : "missing User-agent",
   },
   {
-    name: "ads-txt",
-    path: "/ads.txt",
-    assert: async (res, text) =>
-      res.ok && /google\.com,\s*pub-/i.test(text) ? null : "ads.txt missing or invalid",
-  },
-  {
     name: "sitemap-xml",
     path: "/sitemap.xml",
     assert: async (_res, text) =>

@@ -72,7 +72,7 @@ docs/devops/     # Docker, secrets, alerting, runbooks
 docs/go-live/     # DNS, sign-off, launch checklists
 docs/legal/       # Privacy, terms, cookies, licenses
 docs/            # Platform, deployment, conventions
-public/          # Static assets, ads.txt, manifest
+public/          # Static assets, manifest
 ```
 
 See [docs/CODE_CONVENTIONS.md](docs/CODE_CONVENTIONS.md) for naming and API rules.

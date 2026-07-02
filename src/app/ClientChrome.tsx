@@ -29,10 +29,6 @@ const CookiePreferences = dynamic(
   () => import("@/components/common/CookiePreferences"),
   { ssr: false }
 );
-const ConsentGatedAdSense = dynamic(
-  () => import("@/components/analytics/ConsentGatedAdSense"),
-  { ssr: false }
-);
 const ServiceWorkerRegister = dynamic(
   () => import("@/components/pwa/ServiceWorkerRegister"),
   { ssr: false }
@@ -92,7 +88,6 @@ export default function ClientChrome() {
           <TrafficSourceCapture />
           <VisitorPageTracker />
           <AnalyticsLoader />
-          <ConsentGatedAdSense />
           <ServiceWorkerRegister />
           {process.env.NEXT_PUBLIC_BOTPRESS_ENABLED === "true" ? (
             <>

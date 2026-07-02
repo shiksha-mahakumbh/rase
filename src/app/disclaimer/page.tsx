@@ -25,8 +25,8 @@ export default async function DisclaimerPage() {
       </p>
       <p>
         External links are provided for convenience; we do not endorse third-party
-        content. Google AdSense and other partners may display advertisements
-        subject to their own policies.
+        content. Third-party services linked from this site operate under their own
+        policies.
       </p>
     </LegalPageShell>
   );

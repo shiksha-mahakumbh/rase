@@ -83,11 +83,11 @@ export default async function PrivacyPolicyPage() {
       <p>
         With your consent, we use first-party visitor analytics (page views and
         traffic sources stored in our database), Google Analytics, Google Tag
-        Manager, Microsoft Clarity, Meta Pixel, and Google AdSense when enabled.
+        Manager, Microsoft Clarity, and Meta Pixel when configured.
       </p>
       <p>
         Analytics data is retained for up to 12 months, then aggregated or deleted.
-        Processors include Google (Analytics, Ads, reCAPTCHA), Microsoft (Clarity),
+        Processors include Google (Analytics, reCAPTCHA), Microsoft (Clarity),
         Meta, Razorpay (payments), Supabase (hosting/database), and Vercel
         (hosting).
       </p>

@@ -47,10 +47,10 @@ if (
 }
 
 const smokeSource = readRepo("scripts/production-smoke-test.mjs");
-if (smokeSource.includes("ads.txt") && smokeSource.includes("/api/v2/health")) {
-  pass("smoke_coverage", "Smoke suite covers health and ads.txt");
+if (smokeSource.includes("sitemap.xml") && smokeSource.includes("/api/v2/health")) {
+  pass("smoke_coverage", "Smoke suite covers health and sitemap");
 } else {
-  fail("smoke_coverage", "Smoke suite missing health or ads.txt checks");
+  fail("smoke_coverage", "Smoke suite missing health or sitemap checks");
 }
 
 // 121 Unit tests

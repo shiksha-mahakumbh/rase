@@ -5,7 +5,6 @@ import ClientChrome from "./ClientChrome";
 import DocumentLangSync from "@/components/common/DocumentLangSync";
 import SiteJsonLd from "@/components/seo/SiteJsonLd";
 import { SITE_URL } from "@/config/site";
-import { ADSENSE_PUBLISHER_ID } from "@/lib/growth/adsense";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,9 +39,6 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: "Shiksha Mahakumbh",
-  },
-  other: {
-    "google-adsense-account": ADSENSE_PUBLISHER_ID,
   },
   ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
     ? {

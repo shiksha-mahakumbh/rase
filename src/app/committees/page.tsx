@@ -1,6 +1,5 @@
 import PublicPageShell from "@/components/layouts/PublicPageShell";
 import { CommitteesShowcase } from "@/lib/perf/deferred-showcases";
-import AdSlotRegion from "@/components/showcase/AdSlotRegion";
 import { CANONICAL_ROUTES } from "@/constants/canonical-routes";
 import {
   COMMITTEES_BREADCRUMBS,
@@ -25,7 +24,6 @@ export default function CommitteesPage() {
       containerClassName="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14"
     >
       <CommitteesShowcase />
-      <AdSlotRegion label="Partner showcase" className="mt-12" />
     </PublicPageShell>
   );
 }

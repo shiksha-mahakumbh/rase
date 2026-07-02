@@ -65,7 +65,7 @@ export default async function CookiePolicyPage() {
         <h2>Analytics &amp; marketing (optional)</h2>
         <p>
           With your consent, we may load Google Tag Manager, Google Analytics,
-          Microsoft Clarity, Meta Pixel, and Google AdSense. These scripts are{" "}
+          Microsoft Clarity, and Meta Pixel. These scripts are{" "}
           <strong>not loaded</strong> until you choose &quot;Accept all&quot; on the
           cookie banner. We use Google Consent Mode v2 defaults until you accept.
         </p>
@@ -88,10 +88,6 @@ export default async function CookiePolicyPage() {
             <tr>
               <td>Meta Pixel</td>
               <td>Advertising attribution (when configured)</td>
-            </tr>
-            <tr>
-              <td>Google AdSense</td>
-              <td>Contextual advertising when enabled and consented</td>
             </tr>
           </tbody>
         </table>

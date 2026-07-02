@@ -71,8 +71,7 @@ export default function CookiePreferences() {
               <span>
                 <span className="block text-sm font-semibold text-brand-navy">Analytics</span>
                 <span className="text-xs text-slate-600">
-                  Google Analytics, Clarity, Meta Pixel, AdSense (when enabled), and
-                  first-party visitor stats.
+                  Google Analytics, Clarity, Meta Pixel, and first-party visitor stats.
                 </span>
               </span>
             </label>

@@ -91,10 +91,6 @@ const groups = {
     { key: "NEXT_PUBLIC_META_PIXEL_ID", required: false },
     { key: "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION", required: false },
   ],
-  ads: [
-    { key: "NEXT_PUBLIC_ADSENSE_ENABLED", required: false },
-    { key: "NEXT_PUBLIC_ADS_SLOTS_PREVIEW", required: false },
-  ],
   monitoring: [{ key: "NEXT_PUBLIC_SENTRY_DSN", required: false }],
   redis: [
     { key: "UPSTASH_REDIS_REST_URL", required: false, productionRecommended: true },

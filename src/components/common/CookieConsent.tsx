@@ -79,7 +79,7 @@ export default function CookieConsent() {
       <div className="mx-auto flex max-w-5xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p className="text-sm text-gray-700">
           We use essential cookies for site functionality. With your consent, we also use
-          analytics and advertising cookies (Google Analytics, AdSense when enabled) to
+          analytics and marketing cookies (Google Analytics, Microsoft Clarity, Meta Pixel) to
           improve the site. See our{" "}
           <Link href="/privacy-policy" className="font-semibold text-brand-navy underline">
             Privacy Policy

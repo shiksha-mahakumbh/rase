@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import ReservedAdSlot from "@/components/ads/ReservedAdSlot";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
 import HubGradientBanner from "@/components/ui/HubGradientBanner";
 import {
@@ -16,8 +15,6 @@ import { proceedingsPdfLinkProps } from "@/data/proceedings-pdfs";
 export default function ProceedingsShowcase() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
-      <ReservedAdSlot slotId="publications-top" />
-
       <BreadcrumbNav
         items={[
           { label: "Home", href: "/" },

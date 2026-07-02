@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Security checklist items 105–109 — AdSense, ads.txt, analytics, Search Console, cookie consent.
+ * Security checklist items 105–109 — analytics, Search Console, cookie consent.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -28,39 +28,28 @@ function existsRepo(rel) {
   return fs.existsSync(path.join(repo, rel));
 }
 
-// 105 AdSense
+// 105 No AdSense on site
+const layoutSrc = readSrc("app/layout.tsx");
+const clientChromeSrc = readSrc("app/ClientChrome.tsx");
 if (
-  readSrc("components/analytics/ConsentGatedAdSense.tsx").includes("NEXT_PUBLIC_ADSENSE_ENABLED") &&
-  readSrc("components/analytics/ConsentGatedAdSense.tsx").includes("hasAnalyticsConsent") &&
-  readSrc("app/layout.tsx").includes("google-adsense-account")
+  !layoutSrc.includes("google-adsense-account") &&
+  !layoutSrc.includes("adsense") &&
+  !clientChromeSrc.includes("AdSense") &&
+  !clientChromeSrc.includes("ConsentGatedAdSense") &&
+  !existsRepo("src/components/analytics/ConsentGatedAdSense.tsx")
 ) {
-  pass("adsense_consent_gated", "AdSense script gated by consent and env flag; publisher meta present");
+  pass("adsense_removed", "AdSense script, meta tag, and components removed");
 } else {
-  fail("adsense_consent_gated", "AdSense integration incomplete");
+  fail("adsense_removed", "AdSense references still present in app shell");
 }
 
-if (
-  readSrc("components/ads/ReservedAdSlot.tsx").includes("data-adsense-ready") &&
-  readSrc("lib/analytics/track-path.ts").includes('"/admin"')
-) {
-  pass("adsense_safe_placements", "CLS-safe reserved slots; admin paths excluded from tracking");
+if (!existsRepo("public/ads.txt") || !readRepo("public/ads.txt").includes("pub-")) {
+  pass("ads_txt_removed", "public/ads.txt absent or no AdSense publisher line");
 } else {
-  fail("adsense_safe_placements", "Ad slot or admin exclusion gaps");
+  fail("ads_txt_removed", "public/ads.txt still authorizes AdSense");
 }
 
-// 106 ads.txt
-if (existsRepo("public/ads.txt")) {
-  const adsTxt = readRepo("public/ads.txt");
-  if (adsTxt.includes("pub-4330032354977759") && adsTxt.includes("google.com")) {
-    pass("ads_txt_publisher", "public/ads.txt authorizes AdSense publisher");
-  } else {
-    fail("ads_txt_publisher", "ads.txt missing correct publisher line");
-  }
-} else {
-  fail("ads_txt_publisher", "public/ads.txt missing");
-}
-
-// 107 Analytics
+// 106 Analytics
 if (
   readSrc("components/analytics/AnalyticsLoader.tsx").includes("hasAnalyticsConsent") &&
   readSrc("components/analytics/VisitorPageTracker.tsx").includes("hasAnalyticsConsent") &&
@@ -109,7 +98,7 @@ if (
 
 if (
   readSrc("components/analytics/TrafficSourceCapture.tsx").includes("COOKIE_WITHDRAWN_EVENT") &&
-  readSrc("components/analytics/ConsentGatedAdSense.tsx").includes("COOKIE_WITHDRAWN_EVENT")
+  readSrc("components/analytics/AnalyticsLoader.tsx").includes("COOKIE_WITHDRAWN_EVENT")
 ) {
   pass("cookie_consent_growth_sync", "Growth scripts sync on accept and withdraw consent");
 } else {

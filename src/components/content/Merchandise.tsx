@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import SlideShow from "@/components/home/sections/SlideShow";
 import BreadcrumbNav from "@/components/ui/BreadcrumbNav";
-import AdSlotRegion from "@/components/showcase/AdSlotRegion";
 
 const merchandiseItems = [
   {
@@ -127,8 +126,6 @@ const Merchandise = () => {
             </motion.article>
           ))}
         </div>
-
-        <AdSlotRegion />
 
         <section className="mt-12 overflow-hidden rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-light px-6 py-10 text-center text-white md:px-10">
           <h3 className="text-2xl font-bold md:text-3xl">
