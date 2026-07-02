@@ -12,10 +12,27 @@ export async function generateReceiptPdfBuffer(
   data: ReceiptPayload,
   qrPng?: Buffer | null
 ): Promise<Buffer> {
-  const { generateReceiptPdfBuffer: generateReceiptPdfBufferShared } = await import(
+  const { generateReceiptPdfBufferFromData } = await import("@/lib/receipt/receipt-pdf-server");
+  return generateReceiptPdfBufferFromData(
+    (await import("@/lib/receipt/receipt-data")).buildReceiptData(data),
+    qrPng
+  );
+}
+
+async function generateEmailReceiptPdf(
+  payload: ReceiptPayload,
+  qrPng: Buffer
+): Promise<Buffer> {
+  const { generateReceiptPdfBufferForEmail, generateReceiptPdfBufferFromData } = await import(
     "@/lib/receipt/receipt-pdf-server"
   );
-  return generateReceiptPdfBufferShared(data, qrPng);
+  const { buildReceiptData } = await import("@/lib/receipt/receipt-data");
+  const receiptData = buildReceiptData(payload);
+  try {
+    return await generateReceiptPdfBufferFromData(receiptData, qrPng);
+  } catch {
+    return generateReceiptPdfBufferForEmail(payload, qrPng);
+  }
 }
 
 export async function buildRegistrationArtifacts(
@@ -30,7 +47,7 @@ export async function buildRegistrationArtifacts(
     institution: payload.institution,
     email: payload.email,
   });
-  const receiptPdf = await generateReceiptPdfBuffer(payload, qrPng);
+  const receiptPdf = await generateEmailReceiptPdf(payload, qrPng);
   const qrDataUrl = `data:image/png;base64,${qrPng.toString("base64")}`;
   return { qrPng, receiptPdf, qrDataUrl };
 }

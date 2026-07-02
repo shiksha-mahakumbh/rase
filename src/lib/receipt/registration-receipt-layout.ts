@@ -12,160 +12,187 @@ import {
   receiptLogoSrc,
 } from "@/lib/receipt/receipt-logos";
 
-
 export const REGISTRATION_RECEIPT_THANKS = {
   heading: "हार्दिक धन्यवाद",
   lines: [
-    "आपने शिक्षा महाकुंभ ६.० में पंजीकरण किया — हम आपके प्रति कृतज्ञ हैं।",
+    "आपने शिक्षा महाकुंभ 6.0 में पंजीकरण किया — हम आपके प्रति कृतज्ञ हैं।",
     "आपकी सहभागिता राष्ट्रीय शिक्षा आंदोलन को नई ऊर्जा देगी। कृपया कार्यक्रम स्थल पर अपना पंजीकरण संख्या एवं यह प्रमाण पत्र साथ लाएँ।",
   ],
 } as const;
 
+/** jsPDF cannot render Devanagari — same message in Latin script for PDF download. */
+export const REGISTRATION_RECEIPT_THANKS_PDF = {
+  heading: "Heartfelt Thanks",
+  lines: [
+    "Thank you for registering for Shiksha Mahakumbh 6.0 — we are grateful for your participation.",
+    "Your participation strengthens the national education movement. Please bring your registration ID and this receipt to the venue.",
+  ],
+} as const;
+
 export const REGISTRATION_RECEIPT_CSS = `
-  @page { size: A4 portrait; margin: 12mm; }
+  @page { size: A4 portrait; margin: 10mm; }
   * { box-sizing: border-box; }
-  body {
+  html, body {
     font-family: "Segoe UI", "Noto Sans Devanagari", Arial, Helvetica, sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     color: ${DONATION_RECEIPT_THEME.text};
     margin: 0;
-    padding: 16px;
-    background: ${DONATION_RECEIPT_THEME.surface};
+    padding: 0;
+    background: #fff;
   }
   .receipt {
-    max-width: 720px;
+    max-width: 190mm;
     margin: 0 auto;
     background: #fff;
     border: 2px solid ${DONATION_RECEIPT_THEME.navyLight};
     border-top: 4px solid ${DONATION_RECEIPT_THEME.saffron};
-    padding: 24px 28px;
+    padding: 14px 18px 12px;
     page-break-inside: avoid;
-    box-shadow: 0 4px 24px rgba(11, 31, 59, 0.08);
+    break-inside: avoid;
   }
   .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 14px;
-    padding-bottom: 16px;
+    gap: 10px;
+    padding-bottom: 10px;
     border-bottom: 2px solid ${DONATION_RECEIPT_THEME.navyLight};
   }
   .header-left, .header-right {
-    flex: 0 0 84px;
-    min-height: 84px;
+    flex: 0 0 72px;
+    min-height: 72px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .header-left img, .header-right img {
     display: block;
-    width: 84px;
-    height: 84px;
+    width: 72px;
+    height: 72px;
     object-fit: contain;
   }
-  .header-center { flex: 1; text-align: center; line-height: 1.45; min-width: 0; }
+  .header-center { flex: 1; text-align: center; line-height: 1.35; min-width: 0; }
   .header-meta {
-    font-size: 10px;
+    font-size: 9px;
     color: ${DONATION_RECEIPT_THEME.textMuted};
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
   .campaign-hi {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
     color: ${DONATION_RECEIPT_THEME.saffronDark};
-    margin: 2px 0;
+    margin: 1px 0;
     font-family: "Noto Sans Devanagari", "Mangal", "Nirmala UI", sans-serif;
   }
   .dept {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     color: ${DONATION_RECEIPT_THEME.navy};
-    letter-spacing: 0.4px;
+    letter-spacing: 0.3px;
   }
-  .unit { font-size: 9px; color: ${DONATION_RECEIPT_THEME.textMuted}; margin-top: 4px; letter-spacing: 0.5px; }
+  .unit { font-size: 8px; color: ${DONATION_RECEIPT_THEME.textMuted}; margin-top: 2px; letter-spacing: 0.4px; }
   .trust {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     color: ${DONATION_RECEIPT_THEME.navyLight};
-    margin-top: 2px;
-    line-height: 1.35;
+    margin-top: 1px;
+    line-height: 1.3;
   }
   .contact {
-    font-size: 9.5px;
+    font-size: 8.5px;
     color: ${DONATION_RECEIPT_THEME.textMuted};
-    margin-top: 6px;
-    line-height: 1.5;
+    margin-top: 4px;
+    line-height: 1.4;
   }
-  .title-wrap {
-    margin: 18px 0 14px;
-    text-align: center;
-    padding: 10px 12px;
+  .title-qr-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 10px 0 8px;
+  }
+  .title-wrap-inline {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    padding: 8px 10px;
     background: linear-gradient(135deg, ${DONATION_RECEIPT_THEME.navy} 0%, ${DONATION_RECEIPT_THEME.navyLight} 100%);
-    border-radius: 8px;
+    border-radius: 6px;
   }
   .title {
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 700;
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.5px;
     margin: 0;
+    line-height: 1.3;
   }
-  .details { width: 100%; border-collapse: collapse; }
+  .qr-side {
+    flex: 0 0 108px;
+    text-align: right;
+  }
+  .qr-side img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: inline-block;
+  }
+  .qr-caption {
+    margin: 4px 0 0;
+    font-size: 8.5px;
+    line-height: 1.35;
+    color: ${DONATION_RECEIPT_THEME.textMuted};
+    text-align: right;
+  }
+  .details { width: 100%; border-collapse: collapse; font-size: 11px; }
   .details tr { border-bottom: 1px dotted ${DONATION_RECEIPT_THEME.border}; }
-  .details td { padding: 8px 8px; vertical-align: top; }
+  .details td { padding: 4px 6px; vertical-align: top; line-height: 1.35; }
   .details td:first-child {
-    width: 38%;
+    width: 34%;
     font-weight: 600;
     color: ${DONATION_RECEIPT_THEME.navyLight};
     white-space: nowrap;
   }
   .details tr:nth-child(even) td { background: ${DONATION_RECEIPT_THEME.surfaceWarm}; }
-  .qr-wrap {
-    margin: 18px 0;
-    text-align: center;
-    padding: 14px;
-    border: 1px dashed ${DONATION_RECEIPT_THEME.border};
-    border-radius: 8px;
-    background: ${DONATION_RECEIPT_THEME.surface};
-  }
-  .qr-wrap img {
-    width: 160px;
-    height: 160px;
-    object-fit: contain;
-  }
-  .qr-wrap p {
-    margin: 8px 0 0;
-    font-size: 11px;
-    color: ${DONATION_RECEIPT_THEME.textMuted};
-  }
   .thanks {
-    margin: 20px 0 16px;
-    padding: 16px 18px;
+    margin: 10px 0 8px;
+    padding: 10px 12px;
     border: 1px solid ${DONATION_RECEIPT_THEME.saffron};
     border-left: 4px solid ${DONATION_RECEIPT_THEME.saffronDark};
-    border-radius: 8px;
+    border-radius: 6px;
     background: linear-gradient(135deg, ${DONATION_RECEIPT_THEME.surfaceWarm} 0%, #fff 100%);
     text-align: center;
     font-family: "Noto Sans Devanagari", "Mangal", "Nirmala UI", sans-serif;
   }
   .thanks h2 {
-    margin: 0 0 8px;
-    font-size: 16px;
+    margin: 0 0 4px;
+    font-size: 13px;
     color: ${DONATION_RECEIPT_THEME.navy};
     font-weight: 700;
   }
   .thanks p {
-    margin: 0 0 6px;
-    font-size: 12.5px;
-    line-height: 1.65;
+    margin: 0 0 3px;
+    font-size: 10.5px;
+    line-height: 1.45;
     color: ${DONATION_RECEIPT_THEME.text};
   }
   .footer-note {
-    margin-top: 18px;
-    font-size: 10px;
+    margin-top: 8px;
+    font-size: 9px;
     color: ${DONATION_RECEIPT_THEME.textMuted};
     text-align: center;
+  }
+  @media print {
+    html, body { background: #fff; }
+    .receipt {
+      border: 1px solid #ccc;
+      box-shadow: none;
+      max-width: none;
+      width: 100%;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+    }
   }
 `;
 
@@ -206,7 +233,7 @@ function logoImg(
         ? assets.eventDataUrl
         : null;
   const src = embedded ?? receiptLogoSrc(path, origin);
-  return `<img src="${src}" alt="${escapeHtml(alt)}" width="84" height="84" style="width:84px;height:84px;object-fit:contain" />`;
+  return `<img src="${src}" alt="${escapeHtml(alt)}" width="72" height="72" style="width:72px;height:72px;object-fit:contain" />`;
 }
 
 export function buildRegistrationReceiptHeaderHtml(
@@ -240,6 +267,23 @@ export function registrationReceiptTitle(amount: number): string {
   return amount > 0 ? "Registration Fee Receipt" : "Registration Confirmation";
 }
 
+export function buildRegistrationReceiptTitleQrHtml(
+  data: ReceiptData,
+  qrDataUrl?: string | null
+): string {
+  const qr = qrDataUrl
+    ? `<div class="qr-side">
+  <img src="${qrDataUrl}" alt="Registration QR code" width="100" height="100"/>
+  <p class="qr-caption">Venue check-in<br/>${escapeHtml(data.registrationId)}</p>
+</div>`
+    : "";
+
+  return `<div class="title-qr-row">
+  <div class="title-wrap-inline"><h1 class="title">${escapeHtml(registrationReceiptTitle(data.amount))}</h1></div>
+  ${qr}
+</div>`;
+}
+
 export function buildRegistrationReceiptBodyHtml(
   data: ReceiptData,
   options: {
@@ -255,17 +299,9 @@ export function buildRegistrationReceiptBodyHtml(
     )
     .join("");
 
-  const qrBlock = options.qrDataUrl
-    ? `<div class="qr-wrap">
-  <img src="${options.qrDataUrl}" alt="Registration QR code" width="160" height="160"/>
-  <p>Scan at venue check-in · ${escapeHtml(data.registrationId)} · ${escapeHtml(EVENT_NAME)}</p>
-</div>`
-    : "";
-
   return `${buildRegistrationReceiptHeaderHtml(options.logos, options.origin)}
-<div class="title-wrap"><h1 class="title">${escapeHtml(registrationReceiptTitle(data.amount))}</h1></div>
+${buildRegistrationReceiptTitleQrHtml(data, options.qrDataUrl)}
 <table class="details">${rows}</table>
-${qrBlock}
 ${buildRegistrationReceiptThanksHtml()}
 <p class="footer-note">This is a computer-generated receipt for ${escapeHtml(EVENT_NAME)}. No physical signature is required.</p>`;
 }

@@ -74,11 +74,6 @@ export async function generateReceiptPdfBufferFromData(
   data: ReceiptData,
   qrPng?: Buffer | null
 ): Promise<Buffer> {
-  // Chromium/Puppeteer is slow and unreliable on Vercel — jsPDF is fast and sufficient.
-  if (process.env.VERCEL) {
-    return generateReceiptPdfBufferFromDataJsPdf(data, qrPng);
-  }
-
   const qrDataUrl = qrDataUrlFromBuffer(qrPng);
   try {
     const { generateRegistrationReceiptPdfFromHtml } = await import(
@@ -95,10 +90,18 @@ export async function generateReceiptPdfBufferFromData(
 }
 
 export async function generateReceiptPdfBuffer(
-  payload: ReceiptPayload,
+  data: ReceiptPayload,
   qrPng?: Buffer | null
 ): Promise<Buffer> {
-  return generateReceiptPdfBufferFromData(buildReceiptData(payload), qrPng);
+  return generateReceiptPdfBufferFromData(buildReceiptData(data), qrPng);
+}
+
+/** Fast jsPDF path for email attachments when HTML rendering is unavailable. */
+export async function generateReceiptPdfBufferForEmail(
+  data: ReceiptPayload,
+  qrPng?: Buffer | null
+): Promise<Buffer> {
+  return generateReceiptPdfBufferFromDataJsPdf(buildReceiptData(data), qrPng);
 }
 
 export type { ReceiptData, ReceiptPayload } from "@/lib/receipt/receipt-data";

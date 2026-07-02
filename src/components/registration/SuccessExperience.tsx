@@ -171,7 +171,7 @@ function SuccessInner() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 md:py-14">
       {receiptData ? (
-        <RegistrationReceipt data={receiptData} qrDataUrl={qrDataUrl} visible />
+        <RegistrationReceipt data={receiptData} qrDataUrl={qrDataUrl} visible={false} />
       ) : null}
 
       <div className="overflow-hidden rounded-3xl border border-brand-emerald/30 bg-white shadow-xl print:hidden">
@@ -247,9 +247,9 @@ function SuccessInner() {
             <ActionCard
               title="Print receipt"
               onClick={handlePrintReceipt}
-              disabled={!receiptData}
+              disabled={!receiptData || !lookupToken}
             >
-              Uses your browser print dialog (no pop-up)
+              Same layout as PDF download (one page)
             </ActionCard>
             <ActionCard
               title="Resend confirmation email"
