@@ -1,9 +1,8 @@
 import { RegistrationType } from "@/types/registration";
 import {
-  ACCOMMODATION_DOUBLE_BED_FEE,
-  ACCOMMODATION_SINGLE_BED_FEE,
   PROJECT_COLLEGE_STUDENT_FEE,
   PROJECT_SCHOOL_STUDENT_FEE,
+  PROJECT_UNIVERSITY_STUDENT_FEE,
 } from "@/lib/registration/fees";
 import { DELEGATE_FEES } from "@/lib/registration/delegate-categories";
 import { CMT_SUBMISSION_URL } from "@/lib/registration/config";
@@ -83,12 +82,23 @@ const META: Record<RegistrationType, CategoryMeta> = {
     importantNotes: ["Space allocation subject to availability"],
   },
   Projects: {
-    description: "Register school or college project displays.",
-    instructions: ["Select student type for correct fee", "Pay via Razorpay before submit"],
-    eligibility: ["School students", "College students"],
-    fee: `School: ₹${PROJECT_SCHOOL_STUDENT_FEE} · College: ₹${PROJECT_COLLEGE_STUDENT_FEE}`,
-    documentsRequired: ["Razorpay receipt or uploaded payment proof", "PAN if fee ≥ ₹2000"],
-    importantNotes: ["Payment proof is mandatory"],
+    description: "Register school, college, or university project displays at SMK 6.0.",
+    instructions: [
+      "Select the correct project level — fees differ by level.",
+      "School Level Project: ₹200 · College / University Level: ₹500 each.",
+      "Pay via Razorpay before final submit; keep your SMK registration ID.",
+    ],
+    eligibility: ["School students", "College students", "University students"],
+    fee: `School Level: ₹${PROJECT_SCHOOL_STUDENT_FEE} · College Level: ₹${PROJECT_COLLEGE_STUDENT_FEE} · University Level: ₹${PROJECT_UNIVERSITY_STUDENT_FEE}`,
+    documentsRequired: [
+      "Razorpay payment confirmation or uploaded receipt",
+      "PAN if fee ≥ ₹2000",
+      "Project summary in the description field",
+    ],
+    importantNotes: [
+      "Payment proof is mandatory before submission",
+      "Accommodation booking opens separately in September",
+    ],
   },
   "Bal Shodh Patrika": {
     description: "Register for Bal Shodh Patrika contributions.",
@@ -107,12 +117,15 @@ const META: Record<RegistrationType, CategoryMeta> = {
     importantNotes: ["Schedule shared after curation"],
   },
   Accommodation: {
-    description: "Book accommodation for event dates at NIT Hamirpur.",
-    instructions: ["Select bed type", "Pay registration fee via Razorpay", "Upload receipt if manual payment"],
-    eligibility: ["Registered participants", "Delegates"],
-    fee: `Single Bed: ₹${ACCOMMODATION_SINGLE_BED_FEE} · Double Bed: ₹${ACCOMMODATION_DOUBLE_BED_FEE}`,
-    documentsRequired: ["Payment proof mandatory", "PAN if fee ≥ ₹2000"],
-    importantNotes: ["First-come, first-served", "Confirmation sent separately"],
+    description: "Accommodation registration is not open yet.",
+    instructions: [
+      "Accommodation registration will open from the beginning of September.",
+      "Further details will be shared on the registration page and by email.",
+    ],
+    eligibility: ["Registered SMK 6.0 participants"],
+    fee: "Opens September 2026",
+    documentsRequired: ["None at this time"],
+    importantNotes: ["Complete your programme registration first"],
   },
 };
 
@@ -130,10 +143,10 @@ const FEE_BADGES: Record<RegistrationType, { label: string; tone: FeeBadgeTone }
   Olympiad: { label: "₹200 / student", tone: "paid" },
   Awards: { label: "Free", tone: "free" },
   Exhibition: { label: "Free", tone: "free" },
-  Projects: { label: "₹200–₹400", tone: "paid" },
+  Projects: { label: "₹200–₹500", tone: "paid" },
   "Bal Shodh Patrika": { label: "Free", tone: "free" },
   "Cultural Program": { label: "Free", tone: "free" },
-  Accommodation: { label: "Paid · lodging", tone: "paid" },
+  Accommodation: { label: "Opens Sep", tone: "free" },
 };
 
 export function getCategoryFeeBadge(type: RegistrationType): {

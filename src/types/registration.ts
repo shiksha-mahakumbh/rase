@@ -240,7 +240,6 @@ export const REGISTRATION_TYPE_OPTIONS: RegistrationType[] = [
   "Best Practices",
   "Bal Shodh Patrika",
   "Cultural Program",
-  "Accommodation",
 ];
 
 export const TYPE_COLLECTION_MAP: Record<RegistrationType, string> = {
@@ -264,4 +263,4 @@ export const OLYMPIAD_FEE_PER_STUDENT = 200;
 
 /** @deprecated use PROJECT_SCHOOL_STUDENT_FEE / PROJECT_COLLEGE_STUDENT_FEE from @/lib/registration/fees */
 export const PROJECT_REGISTRATION_FEE = 200;
-export const PROJECT_COLLEGE_REGISTRATION_FEE = 400;
+export const PROJECT_COLLEGE_REGISTRATION_FEE = 500;

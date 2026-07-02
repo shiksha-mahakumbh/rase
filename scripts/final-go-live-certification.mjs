@@ -153,7 +153,8 @@ try {
   const projectsBody = await page.locator("body").innerText();
   report.ui.projects = {
     schoolStudentFee: /School Student.*₹?\s*200|₹200/i.test(projectsBody),
-    collegeStudentFee: /College Student.*₹?\s*400|₹400/i.test(projectsBody),
+    collegeStudentFee: /College Level.*₹?\s*500|University Level.*₹?\s*500|₹500/i.test(projectsBody),
+    universityStudentFee: /University Level|University Student/i.test(projectsBody),
   };
 
   await page.fill('input[name="fullName"]', "Cert Audit User");

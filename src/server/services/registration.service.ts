@@ -190,6 +190,14 @@ async function createTypeExtension(
 }
 
 export async function saveRegistration(input: SaveRegistrationInput): Promise<SaveRegistrationResult> {
+  if (input.registrationType === "Accommodation") {
+    throw new ServiceError(
+      "Accommodation registration opens in September. Please complete your programme registration and check back later.",
+      400,
+      "ACCOMMODATION_CLOSED"
+    );
+  }
+
   const prismaType = toPrismaRegistrationType(input.registrationType);
   const common = extractCommonFields(input.data);
 

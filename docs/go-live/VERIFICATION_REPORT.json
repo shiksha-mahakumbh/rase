@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-02T03:57:59.384Z",
+  "generatedAt": "2026-07-02T04:08:31.510Z",
   "baseUrl": "https://www.rase.co.in",
-  "gitSha": "7f56409aafe88431bec76fc6a118e76a0ccf83e5",
+  "gitSha": "07be2dee76d382d809c9f8735c4b00e3df33553f",
   "probes": {
     "status": {
       "status": 200,
@@ -18,7 +18,7 @@
           "storagePolicyCount": 9,
           "anonRolesBlocked": true
         },
-        "timestamp": "2026-07-02T03:58:01.595Z"
+        "timestamp": "2026-07-02T04:08:06.161Z"
       }
     },
     "health": {

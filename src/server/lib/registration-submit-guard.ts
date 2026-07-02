@@ -1,4 +1,5 @@
 import { normalizePhoneInput, validatePanForAmount } from "@/lib/registration/validation";
+import { parseProjectStudentType } from "@/lib/registration/project-student-type";
 import { resolveRegistrationFee } from "@/lib/registration/fees";
 import { validateDelegateRegistrationPayload } from "@/lib/registration/delegate-categories";
 import type { PaymentStatus, RegistrationType } from "@/types/registration";
@@ -65,21 +66,21 @@ export async function guardRegistrationSubmit(input: {
 
   const expectedFee = resolveRegistrationFee(type as RegistrationType, {
     delegateCategory: String(data.delegateCategory ?? ""),
-    projectStudentType:
-      data.projectStudentType === "College Student"
-        ? "College Student"
-        : data.projectStudentType === "School Student"
-          ? "School Student"
-          : String(data.category ?? "").includes("College")
-            ? "College Student"
-            : "School Student",
+    projectStudentType: parseProjectStudentType(
+      data.projectStudentType,
+      String(data.category ?? "")
+    ),
     accommodationBedType:
-      data.accommodationBedType === "Double Bed"
-        ? "Double Bed"
-        : String(data.title ?? "").includes("Double")
-          ? "Double Bed"
-          : "Single Bed",
+      data.accommodationBedType === "Double Bed" ? "Double Bed" : "Single Bed",
   });
+
+  if (type === "Accommodation") {
+    throw new ServiceError(
+      "Accommodation registration opens in September. Please complete your programme registration and check back later.",
+      400,
+      "ACCOMMODATION_CLOSED"
+    );
+  }
 
   if (type !== "Olympiad" && fee !== expectedFee) {
     throw new ServiceError(

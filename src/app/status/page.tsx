@@ -128,9 +128,9 @@ export default async function StatusPage() {
 
         <p className="text-sm text-slate-600">
           Machine-readable probe:{" "}
-          <a className="font-medium text-brand-navy underline" href="/api/v2/status">
+          <Link className="font-medium text-brand-navy underline" href="/api/v2/status">
             /api/v2/status
-          </a>
+          </Link>
         </p>
       </main>
     </div>

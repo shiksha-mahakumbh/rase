@@ -27,7 +27,6 @@ export const EXTERNAL_REDIRECT_TYPES = [
 /** Categories that may require payment (actual step depends on fee > 0) */
 export const PAID_CAPABLE_TYPES = [
   "Delegate Registration",
-  "Accommodation",
   "Projects",
 ] as const satisfies readonly RegistrationType[];
 
@@ -52,12 +51,12 @@ export function requiresPaymentStep(
   return requiresPaymentForFee(fee);
 }
 
-/** Projects & Accommodation always use the 3-step pay flow (fee is never 0). */
+/** Projects always use the 3-step pay flow when fee > 0. */
 export function usesMultiStepPaymentFlow(
   type: RegistrationType,
   fee = 0
 ): boolean {
-  if (type === "Projects" || type === "Accommodation") return true;
+  if (type === "Projects") return true;
   return requiresPaymentStep(type, fee);
 }
 

@@ -139,10 +139,6 @@ function SuccessInner() {
     );
   }
 
-  const accommodation =
-    record?.accommodationRequired === "Yes" ||
-    record?.accommodationStatus === "Requested";
-
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 md:py-14">
       {receiptData ? (
@@ -242,9 +238,7 @@ function SuccessInner() {
             <ul className="mt-2 list-disc space-y-1 pl-5">
               <li>Save your registration number and QR code for event check-in.</li>
               <li>Check your email for confirmation, receipt PDF, and QR attachment.</li>
-              {accommodation && (
-                <li>Accommodation requests are processed separately — you will be contacted.</li>
-              )}
+              <li>Accommodation registration opens in September — watch this page and your email.</li>
               <li>Download or print your receipt — both use the same official layout.</li>
             </ul>
           </section>

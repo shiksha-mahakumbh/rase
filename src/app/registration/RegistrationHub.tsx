@@ -89,14 +89,6 @@ function RegistrationFormRouter({
             sectionTitle="Cultural Program Registration"
           />
         );
-      case "Accommodation":
-        return (
-          <GenericRegistrationForm
-            registrationType="Accommodation"
-            sectionTitle="Accommodation Registration"
-            requiresPayment
-          />
-        );
       default:
         return null;
     }

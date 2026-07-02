@@ -5,6 +5,7 @@ import {
   isDelegateStudentCategory,
   validateDelegateStudentFields,
 } from "@/lib/registration/delegate-categories";
+import { projectStudentTypeSchema } from "@/lib/registration/project-student-type";
 import {
   isValidPan,
   isValidPhone,
@@ -78,27 +79,12 @@ export const accommodationSchema = z
   })
   .superRefine((data, ctx) => {
     if (data.accommodationRequired === "Yes") {
-      if (!data.accommodationDate) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Accommodation date is required",
-          path: ["accommodationDate"],
-        });
-      }
-      if (!data.accommodationType) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Accommodation type is required",
-          path: ["accommodationType"],
-        });
-      }
-      if (!data.participantCategory) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Participant category is required",
-          path: ["participantCategory"],
-        });
-      }
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Accommodation registration opens in September. Please select No — details will be announced on this page.",
+        path: ["accommodationRequired"],
+      });
     }
   });
 
@@ -244,7 +230,7 @@ export const genericSchema = commonParticipantSchema
   .extend({
     title: z.string().min(3, "Title is required"),
     description: z.string().min(10, "Description is required"),
-    projectStudentType: z.enum(["School Student", "College Student"]).optional(),
+    projectStudentType: projectStudentTypeSchema.optional(),
     accommodationBedType: z.enum(["Single Bed", "Double Bed"]).optional(),
     registrationFee: z.number().optional(),
     utrNumber: z.string().optional(),

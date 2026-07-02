@@ -9,8 +9,8 @@ import {
 } from "@/lib/schemas/registrationSchemas";
 import {
   CommonParticipantFields,
-  AccommodationSection,
 } from "@/components/forms/CommonParticipantFields";
+import AccommodationNotice from "@/components/forms/AccommodationNotice";
 import { DelegateStudentFields } from "@/components/forms/DelegateStudentFields";
 import {
   FormField,
@@ -198,7 +198,7 @@ export default function DelegateForm() {
         />
       ) : null}
 
-      <AccommodationSection register={sharedRegister(register)} watch={sharedWatch(watch)} errors={sharedErrors(errors)} />
+      <AccommodationNotice />
 
       {fee > 0 && (
         <FormSection title="Payment" className="registration-payment">

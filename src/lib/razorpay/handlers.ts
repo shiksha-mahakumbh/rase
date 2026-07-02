@@ -10,7 +10,8 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import { resolveRegistrationFee } from "@/lib/registration/fees";
 import { isSupportedType } from "@/server/lib/registration-types";
 import type { RegistrationType } from "@/types/registration";
-import type { AccommodationBedType, ProjectStudentType } from "@/lib/registration/fees";
+import { parseProjectStudentType } from "@/lib/registration/project-student-type";
+import type { AccommodationBedType } from "@/lib/registration/fees";
 
 const MIN_AMOUNT_PAISE = 100;
 
@@ -28,23 +29,17 @@ function expectedAmountPaiseFromOrderNotes(
 
   const category = notes.category ?? "";
 
-  const projectStudentType: ProjectStudentType | undefined =
-    category === "College Student"
-      ? "College Student"
-      : category === "School Student"
-        ? "School Student"
-        : registrationType === "Projects"
-          ? "School Student"
-          : undefined;
+  const projectStudentType =
+    registrationType === "Projects"
+      ? parseProjectStudentType(category, category)
+      : undefined;
 
   const accommodationBedType: AccommodationBedType | undefined =
     category === "Double Bed"
       ? "Double Bed"
       : category === "Single Bed"
         ? "Single Bed"
-        : registrationType === "Accommodation"
-          ? "Single Bed"
-          : undefined;
+        : undefined;
 
   const feeRupees = resolveRegistrationFee(registrationType as RegistrationType, {
     delegateCategory: category,

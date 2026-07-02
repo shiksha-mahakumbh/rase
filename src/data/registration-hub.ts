@@ -23,7 +23,7 @@ export const REGISTRATION_PAGE_HERO = {
   titleEn: "Register",
   titleHi: "आधिकारिक पंजीकरण",
   subtitle:
-    "Official registration for delegates, conclaves, olympiad, awards, exhibitions, research tracks, and accommodation — 9–11 October 2026.",
+    "Official registration for delegates, conclaves, olympiad, awards, exhibitions, research tracks, and project displays — 9–11 October 2026.",
 } as const;
 
 export const REGISTRATION_BREADCRUMBS = [
@@ -58,9 +58,9 @@ export const REGISTRATION_CATEGORY_GROUPS: {
     ],
   },
   {
-    title: "Paid add-ons",
-    hint: "Project displays and accommodation for event dates",
-    types: ["Projects", "Accommodation"],
+    title: "Project displays",
+    hint: "School, college, and university level projects (paid registration)",
+    types: ["Projects"],
   },
   {
     title: "Research papers",
@@ -100,7 +100,7 @@ export const REGISTRATION_SEO_KEYWORDS = [
 ] as const;
 
 export function registrationMetaDescription(): string {
-  return `Official registration for ${event.name} at ${event.venue}, 9–11 October 2026. Delegate, conclave, olympiad, awards, exhibitions, research tracks, and accommodation. Deadline ${REGISTRATION_DEADLINE}.`;
+  return `Official registration for ${event.name} at ${event.venue}, 9–11 October 2026. Delegate, conclave, olympiad, awards, exhibitions, research tracks, and project displays. Accommodation opens September 2026. Deadline ${REGISTRATION_DEADLINE}.`;
 }
 
 export const REGISTRATION_FAQ = [
@@ -119,7 +119,7 @@ export const REGISTRATION_FAQ = [
   {
     question: "What registration categories are available?",
     answer:
-      "Delegate, Conclave, Best Practices, Olympiad, Awards, Exhibition, Projects, Bal Shodh Patrika, Cultural Program, and Accommodation. Multi Track Conference papers are submitted via Microsoft CMT.",
+      "Delegate, Conclave, Best Practices, Olympiad, Awards, Exhibition, Projects, Bal Shodh Patrika, and Cultural Program. Multi Track Conference papers are submitted via Microsoft CMT. Accommodation booking opens in September 2026.",
   },
   {
     question: "How do I submit a research paper?",
@@ -132,6 +132,6 @@ export const REGISTRATION_FAQ = [
   {
     question: "Which categories require payment?",
     answer:
-      "Delegate registration may require payment depending on category and fee. Projects and Accommodation use the paid registration flow. Conclave, Olympiad, Awards, Exhibition, Best Practices, Bal Shodh Patrika, and Cultural Program are free on-site forms unless otherwise noted.",
+      "Delegate registration may require payment depending on category and fee. Projects use the paid registration flow (₹200 school level · ₹500 college/university level). Conclave, Olympiad, Awards, Exhibition, Best Practices, Bal Shodh Patrika, and Cultural Program are free on-site forms unless otherwise noted. Accommodation is not open for booking yet — details in September.",
   },
 ] as const;

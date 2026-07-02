@@ -7,10 +7,8 @@ import {
   genericSchema,
   GenericFormValues,
 } from "@/lib/schemas/registrationSchemas";
-import {
-  CommonParticipantFields,
-  AccommodationSection,
-} from "@/components/forms/CommonParticipantFields";
+import { CommonParticipantFields } from "@/components/forms/CommonParticipantFields";
+import AccommodationNotice from "@/components/forms/AccommodationNotice";
 import {
   FormField,
   FormSection,
@@ -18,7 +16,6 @@ import {
   PaymentBlock,
   sharedRegister,
   sharedErrors,
-  sharedWatch,
 } from "@/components/forms/FormField";
 import { formClasses } from "@/components/forms/formClasses";
 import { useRegistrationSubmit } from "@/lib/useRegistrationSubmit";
@@ -26,8 +23,9 @@ import { RegistrationType } from "@/types/registration";
 import { resolvePaymentStatus } from "@/lib/registration/config";
 import { buildRazorpayOrderNotes } from "@/lib/razorpay/order-notes";
 import {
-  accommodationFeeForBedType,
+  PROJECT_STUDENT_TYPE_LABELS,
   projectFeeForStudentType,
+  type ProjectStudentType,
 } from "@/lib/registration/fees";
 import { useRegistrationDraft } from "@/hooks/useRegistrationDraft";
 import { useRegisterPaymentGate } from "@/hooks/useRegisterPaymentGate";
@@ -41,6 +39,13 @@ interface GenericRegistrationFormProps {
   sectionTitle: string;
   requiresPayment?: boolean;
 }
+
+const PROJECT_OPTIONS = (
+  Object.entries(PROJECT_STUDENT_TYPE_LABELS) as [ProjectStudentType, { short: string; fee: number }][]
+).map(([value, { short, fee }]) => ({
+  value,
+  label: `${short} — ₹${fee.toLocaleString("en-IN")}`,
+}));
 
 export default function GenericRegistrationForm({
   registrationType,
@@ -66,14 +71,12 @@ export default function GenericRegistrationForm({
     defaultValues: {
       accommodationRequired: "No",
       projectStudentType: "School Student",
-      accommodationBedType: "Single Bed",
     },
   });
 
   useRegistrationDraft(registrationType, watch, reset);
 
   const projectStudentType = watch("projectStudentType");
-  const accommodationBedType = watch("accommodationBedType");
   const fullName = watch("fullName");
   const email = watch("email");
   const contactNumber = watch("contactNumber");
@@ -83,11 +86,8 @@ export default function GenericRegistrationForm({
     if (registrationType === "Projects") {
       return projectFeeForStudentType(projectStudentType ?? "School Student");
     }
-    if (registrationType === "Accommodation") {
-      return accommodationFeeForBedType(accommodationBedType ?? "Single Bed");
-    }
     return 0;
-  }, [registrationType, projectStudentType, accommodationBedType]);
+  }, [registrationType, projectStudentType]);
 
   useEffect(() => {
     flow?.setCurrentFee(requiresPayment ? fee : 0);
@@ -96,13 +96,6 @@ export default function GenericRegistrationForm({
   useEffect(() => {
     setValue("registrationFee", fee);
   }, [fee, setValue]);
-
-  useEffect(() => {
-    if (registrationType === "Accommodation") {
-      setValue("title", `Accommodation — ${accommodationBedType ?? "Single Bed"}`);
-      setValue("description", "Accommodation portal registration");
-    }
-  }, [registrationType, accommodationBedType, setValue]);
 
   const validateDetails = useCallback(async () => {
     const fields: (keyof GenericFormValues)[] = [
@@ -115,14 +108,10 @@ export default function GenericRegistrationForm({
       "country",
       "gender",
       "vidyaBharti",
-      "accommodationRequired",
+      "title",
+      "description",
     ];
     if (registrationType === "Projects") fields.push("projectStudentType");
-    if (registrationType === "Accommodation") {
-      fields.push("accommodationBedType");
-    } else {
-      fields.push("title", "description");
-    }
     return trigger(fields);
   }, [trigger, registrationType]);
 
@@ -130,7 +119,6 @@ export default function GenericRegistrationForm({
 
   const reg = sharedRegister(register);
   const errs = sharedErrors(errors);
-  const watchShared = sharedWatch(watch);
 
   const orderNotes = useMemo(
     () =>
@@ -143,21 +131,10 @@ export default function GenericRegistrationForm({
         category:
           registrationType === "Projects"
             ? projectStudentType ?? "School Student"
-            : registrationType === "Accommodation"
-              ? accommodationBedType ?? "Single Bed"
-              : registrationType,
+            : registrationType,
         amount: fee,
       }),
-    [
-      registrationType,
-      fullName,
-      email,
-      contactNumber,
-      institution,
-      projectStudentType,
-      accommodationBedType,
-      fee,
-    ]
+    [registrationType, fullName, email, contactNumber, institution, projectStudentType, fee]
   );
 
   const onSubmit = async (data: GenericFormValues) => {
@@ -175,17 +152,10 @@ export default function GenericRegistrationForm({
       registrationType,
       data: {
         ...data,
+        accommodationRequired: "No",
         category:
-          registrationType === "Projects"
-            ? data.projectStudentType
-            : registrationType === "Accommodation"
-              ? data.accommodationBedType
-              : data.title,
+          registrationType === "Projects" ? data.projectStudentType : data.title,
         registrationFee: fee,
-        title:
-          registrationType === "Accommodation"
-            ? `Accommodation — ${data.accommodationBedType}`
-            : data.title,
       },
       files: requiresPayment && receipt ? { receipt } : undefined,
       paymentStatus: resolvePaymentStatus(registrationType, {
@@ -203,66 +173,41 @@ export default function GenericRegistrationForm({
 
       <FormSection title={sectionTitle} className="registration-details">
         {registrationType === "Projects" && (
-          <FormField
-            label="Student Type"
-            name="projectStudentType"
-            as="select"
-            required
-            register={reg}
-            errors={errs}
-            options={[
-              { value: "School Student", label: "School Student — ₹200" },
-              { value: "College Student", label: "College Student — ₹400" },
-            ]}
-          />
-        )}
-
-        {registrationType === "Accommodation" && (
           <>
+            <p className="md:col-span-2 text-sm text-slate-600">
+              Select your project level. The registration fee is collected securely via Razorpay
+              on the next step. Keep your payment confirmation for check-in.
+            </p>
             <FormField
-              label="Bed Type"
-              name="accommodationBedType"
+              label="Project Level"
+              name="projectStudentType"
               as="select"
               required
               register={reg}
               errors={errs}
-              options={[
-                { value: "Single Bed", label: "Single Bed — ₹3,000" },
-                { value: "Double Bed", label: "Double Bed — ₹6,000" },
-              ]}
-            />
-            <FormField
-              label="Additional Notes"
-              name="description"
-              as="textarea"
-              rows={4}
-              register={reg}
-              errors={errs}
-              placeholder="Any special requirements"
+              options={PROJECT_OPTIONS}
             />
           </>
         )}
 
-        {registrationType !== "Accommodation" && (
-          <>
-            <FormField
-              label="Title / Subject"
-              name="title"
-              required
-              register={reg}
-              errors={errs}
-            />
-            <FormField
-              label="Description"
-              name="description"
-              as="textarea"
-              rows={6}
-              required
-              register={reg}
-              errors={errs}
-            />
-          </>
-        )}
+        <FormField
+          label={registrationType === "Projects" ? "Project Title" : "Title / Subject"}
+          name="title"
+          required
+          register={reg}
+          errors={errs}
+          placeholder="Short title of your project or display"
+        />
+        <FormField
+          label="Description"
+          name="description"
+          as="textarea"
+          rows={6}
+          required
+          register={reg}
+          errors={errs}
+          placeholder="Summarise your project, methodology, and what visitors will see at the exhibition."
+        />
 
         {requiresPayment && fee > 0 && (
           <div className="md:col-span-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm">
@@ -270,15 +215,14 @@ export default function GenericRegistrationForm({
               Registration Fee: ₹{fee.toLocaleString("en-IN")}
             </p>
             <p className="mt-1 text-slate-600">
-              Pay via Razorpay on the next step after confirming your details.
+              Pay via Razorpay on the next step after confirming your details. Paid registrations
+              are generally non-refundable once confirmed.
             </p>
           </div>
         )}
       </FormSection>
 
-      {registrationType !== "Accommodation" && (
-        <AccommodationSection register={reg} watch={watchShared} errors={errs} />
-      )}
+      <AccommodationNotice />
 
       {requiresPayment && fee > 0 && (
         <FormSection title="Payment" className="registration-payment">

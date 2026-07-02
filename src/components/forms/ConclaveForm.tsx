@@ -8,8 +8,8 @@ import {
 } from "@/lib/schemas/registrationSchemas";
 import {
   CommonParticipantFields,
-  AccommodationSection,
 } from "@/components/forms/CommonParticipantFields";
+import AccommodationNotice from "@/components/forms/AccommodationNotice";
 import {
   FormField,
   FormSection,
@@ -88,7 +88,7 @@ export default function ConclaveForm() {
         />
       </FormSection>
 
-      <AccommodationSection register={reg} watch={watchShared} errors={errs} />
+      <AccommodationNotice />
 
       <RegistrationLegalNotice />
 

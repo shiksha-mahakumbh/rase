@@ -20,8 +20,7 @@ const TYPE_HINTS: Partial<Record<RegistrationType, string>> = {
   Awards: "Recognition and excellence categories",
   "Best Practices": "Share institutional best practices (500+ words)",
   Exhibition: "Innovation and project exhibitions",
-  Projects: "School / HEI project displays (paid registration)",
-  Accommodation: "Lodging requests for event dates (paid registration)",
+  Projects: "School / college / university project displays (₹200–₹500)",
 };
 
 const BADGE_STYLES: Record<FeeBadgeTone, string> = {
